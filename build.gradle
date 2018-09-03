@@ -1,0 +1,101 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url = "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.1.0"
+    }
+}
+
+apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "com.matthewprenger.cursegradle"
+
+version = "${majorVersion}.${minorVersion}.${revisionVersion}"
+group = "com.gitlab.cdagaming"
+archivesBaseName = "${mod_name}-${mc_version}"
+
+allprojects {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+curseforge {
+    project {
+        apiKey = System.getenv("CF_APIKEY")
+        id = "297038"
+        changelog = file("Changes.md")
+        changelogType = "markdown"
+        releaseType = "release"
+        addGameVersion "${mc_version}"
+
+        mainArtifact(jar) {
+            displayName = "${mod_name} v${version} (${mc_version})"
+        }
+    }
+}
+
+minecraft {
+    version = "${mc_version}-${forge_version}"
+    runDir = "run"
+    mappings = "${mc_mappings}"
+
+    replace "GRADLE:majorVersion", majorVersion
+    replace "GRADLE:minorVersion", minorVersion
+    replace "GRADLE:revisionVersion", revisionVersion
+    replace "GRADLE:mod_name", mod_name
+    replace "GRADLE:certFingerprint", certfingerprint
+
+    replaceIn "Constants.java"
+    makeObfSourceJar = true
+}
+
+dependencies {
+    compile "net.java.dev.jna:jna:4.5.2"
+}
+
+jar {
+    from sourceSets.main.output
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+task signJar(type: SignJar, dependsOn: reobfJar) {
+    onlyIf {
+        System.getenv("key_MAINPASS") != null
+    }
+
+    keyStore = "keystore.jks"
+    alias = System.getenv("key_Alias")
+    storePass = System.getenv("key_MAINPASS")
+    keyPass = System.getenv("keyPass")
+
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
+}
+
+tasks.build.dependsOn signJar
+tasks.curseforge.dependsOn build
