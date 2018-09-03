@@ -31,12 +31,17 @@ your display depending on which GUI/Action your doing.
 Beginning in v1.3.0, CraftPresence now offers the following Commands:
 
 (Commands are prefixed by `/craftpresence` or `/cp`)
+(Commands Listed are the Syntax as of v1.4.0*)
 
-- `currentData` - Displays in Text Form, your Current RPC Data
-- `reload` - Reloads Mod Data based on which Settings you have enabled
-- `assets <large|small|all>` - Displays all Asset IconKeys available to you
-- `dimensions` - Displays all Dimension Names available for use
-- `help // ?` - Help Command to display the Above Commands and These Explanations
+- `/cp view` - View a Variety of Display Data
+- `/cp config` - Opens CraftPresence's Config GUI
+- `/cp reload` - Reloads Mod Data based on which Settings you have enabled
+- `/cp reboot` - Reboots RPC
+- `/cp shutdown` - Shutdown RPC (Can be turned on from `/cp reboot`)
+- `/cp view currentData` - Displays in Text Form, your Current RPC Data
+- `/cp view assets <large|small|all>` - Displays all Asset IconKeys available to you
+- `/cp view dimensions` - Displays all Dimension Names available for use
+- `/cp help // /cp ?` - Help Command to display the Above Commands and These Explanations
 
 ## Placeholders
 In some Configuration Areas, CraftPresence Provides some Placeholders to make things easier:
@@ -61,7 +66,7 @@ In some Configuration Areas, CraftPresence Provides some Placeholders to make th
 - &NAME& - The Current Server Name
 - &MOTD& - The Current Server MOTD (Message of The Day)
 - &ICON& - The Default Server Icon Name
-- &PLAYERS& - The Current Player Count (`"(10 / 100 Players)"`
+- &PLAYERS& - The Current Player Count `(10 / 100 Players)`
 
 #### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)
