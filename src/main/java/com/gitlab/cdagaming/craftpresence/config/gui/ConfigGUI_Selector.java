@@ -7,27 +7,30 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIScrollList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigGUI_Selector extends GuiScreen {
     private final GuiScreen parentscreen;
     private GuiButton proceedButton;
     private GUIScrollList scrollList;
+    private GuiTextField searchBox;
     private String configoption;
-    private String title, id;
-    private List<String> itemList;
+    private String title, id, searchTerm;
+    private List<String> itemList, originalList;
 
     ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String TITLE, List<String> list, @Nullable String ID) {
         mc = Minecraft.getMinecraft();
         parentscreen = parentScreen;
         configoption = configOption;
         title = TITLE;
-        itemList = list;
+        itemList = originalList = list;
         id = ID;
     }
 
@@ -35,8 +38,9 @@ public class ConfigGUI_Selector extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
+        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) + 60, (sr.getScaledHeight() - 30), 90, 20, "Back");
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight() - 45, 32, sr.getScaledHeight() - 45, 18, itemList);
-        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        searchBox = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) - 140, (sr.getScaledHeight() - 30), 120, 20);
 
         buttonList.add(proceedButton);
         super.initGui();
@@ -45,7 +49,30 @@ public class ConfigGUI_Selector extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         ScaledResolution sr = new ScaledResolution(mc);
+        List<String> modifiedList = new ArrayList<>();
         drawDefaultBackground();
+        drawString(fontRenderer, "Search:", ((sr.getScaledWidth() / 2) - 165) - (fontRenderer.getStringWidth("Search:") / 2), (sr.getScaledHeight() - 25), 0xFFFFFF);
+        searchBox.drawTextBox();
+
+        if (!searchBox.getText().isEmpty()) {
+            if (!searchBox.getText().equals(searchTerm)) {
+                searchTerm = searchBox.getText();
+                for (String item : originalList) {
+                    if (item.contains(searchTerm) && !modifiedList.contains(item)) {
+                        modifiedList.add(item);
+                    }
+                }
+                itemList = modifiedList;
+            }
+        } else {
+            itemList = originalList;
+        }
+
+        if (itemList != originalList && !itemList.contains(scrollList.currentValue)) {
+            scrollList.currentValue = null;
+        }
+
+        scrollList.list = itemList;
         scrollList.drawScreen(mouseX, mouseY, partialTicks);
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
@@ -103,6 +130,23 @@ public class ConfigGUI_Selector extends GuiScreen {
                 mc.displayGuiScreen(parentscreen);
             }
         }
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        super.keyTyped(typedChar, keyCode);
+        searchBox.textboxKeyTyped(typedChar, keyCode);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY, mouseButton);
+        searchBox.mouseClicked(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void updateScreen() {
+        searchBox.updateCursorCounter();
     }
 
     @Override

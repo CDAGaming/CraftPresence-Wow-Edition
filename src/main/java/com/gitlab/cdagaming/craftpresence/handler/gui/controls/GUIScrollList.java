@@ -8,7 +8,7 @@ import java.util.List;
 
 public class GUIScrollList extends GuiSlot {
     public String currentValue;
-    private List<String> list;
+    public List<String> list;
 
     public GUIScrollList(Minecraft mc, int width, int height, int topIn, int bottomIn, int slotHeightIn, List<String> itemList) {
         super(mc, width, height, topIn, bottomIn, slotHeightIn);
