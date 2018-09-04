@@ -12,6 +12,8 @@
 
   * Now Accessible via Keybind (Default: ] )
 
+  * Add Search Functionality to Scroll Lists
+
   * Implemented Advanced and Server Settings to GUI
 
   * Added New Menu in Config for Commands (Mostly for 1.13)
