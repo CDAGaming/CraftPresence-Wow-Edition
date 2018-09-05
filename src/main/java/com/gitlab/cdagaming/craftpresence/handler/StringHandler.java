@@ -111,7 +111,8 @@ public class StringHandler {
                 if (splitPart[searchIndex].equalsIgnoreCase(searchKey)) {
                     replacing = true;
                     if (elementExists(splitPart, resultIndex)) {
-                        formatted[indexNumber] = searchKey + splitCharacter + newMessage;
+                        final String formattedText = part.replace(splitPart[resultIndex], newMessage);
+                        formatted[indexNumber] = formattedText;
                     } else {
                         formatted[indexNumber] = part + splitCharacter + newMessage;
                     }
