@@ -131,6 +131,7 @@ public class ConfigGUI_Selector extends GuiScreen {
                             CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.SMALL);
                         }
                         CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
+                        mc.displayGuiScreen(parentscreen);
                     } else if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
                         mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, scrollList.currentValue));
                     } else {

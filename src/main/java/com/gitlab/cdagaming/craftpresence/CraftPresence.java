@@ -55,6 +55,9 @@ public class CraftPresence {
 
     @Mod.EventHandler
     public void init(final FMLInitializationEvent event) {
+        if (Constants.IS_DEV) {
+            Constants.LOG.warn(I18n.format("craftpresence.logger.warning.developermode"));
+        }
         CONFIG.initialize();
 
         CommandHandler.reloadData();

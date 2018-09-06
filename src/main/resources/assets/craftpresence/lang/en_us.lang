@@ -126,3 +126,4 @@ craftpresence.logger.warning.config.empty.clientid=Client ID is Empty, Things ma
 craftpresence.logger.warning.config.conflict.biomestate=showCurrentBiome and showGameState are both enabled, giving priority to showGameState
 craftpresence.logger.warning.config.conflict.pergui=enablePerGUI and showGameState are both enabled, giving priority to showGameState
 craftpresence.logger.warning.fingerprintviolation=Invalid Certificate Detected, this Build will not receive Support
+craftpresence.logger.warning.developermode=You are Running CraftPresence in a Developer/DeObfuscated Environment, some features may not function properly
