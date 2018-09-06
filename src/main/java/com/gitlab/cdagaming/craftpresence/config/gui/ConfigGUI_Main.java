@@ -115,7 +115,7 @@ public class ConfigGUI_Main extends GuiScreen {
         }
         // Server Settings
         if (button.id == serverSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_NullEntry(this));
+            mc.displayGuiScreen(new ConfigGUI_ServerSettings(this));
         }
         // Status Settings
         if (button.id == statusSet.id) {

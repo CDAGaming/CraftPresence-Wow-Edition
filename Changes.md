@@ -4,10 +4,6 @@
 
 ### Changes:
 
-* Build Changes (Code-Behind):
-
-  * Forge Version: `14.23.4.2759` >> `14.23.4.xxxx`
-
 * Config GUI Changes:
 
   * Now Accessible via Keybind (Default: ] )
@@ -21,6 +17,8 @@
 ### Fixes:
 
 * Fixes Shutdown Timing Issues (When Shutting down isn't that Fast)
+
+* Fixes Issues replacing Settings Multiple Times (Ex: Changing a specific Dimension Icon Multiple Times)
 
 * Minor Typo and Translation Fixes
 

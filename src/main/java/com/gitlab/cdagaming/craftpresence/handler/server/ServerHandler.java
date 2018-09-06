@@ -7,22 +7,28 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServerHandler {
-    private String server_IP;
-    private String server_Name;
-    private String server_MOTD;
+    public List<String> knownAddresses = new ArrayList<>();
+    private String currentServer_IP;
+    private String currentServer_Name;
+    private String currentServer_MOTD;
     private int currentPlayers;
     private int maxPlayers;
+    private int serverIndex;
 
     private void emptyServerData() {
-        server_IP = null;
-        server_MOTD = null;
-        server_Name = null;
+        currentServer_IP = null;
+        currentServer_MOTD = null;
+        currentServer_Name = null;
         currentPlayers = 0;
         maxPlayers = 0;
     }
@@ -31,6 +37,13 @@ public class ServerHandler {
     public void serverDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         emptyServerData();
         CommandHandler.setMainMenuPresence();
+
+        final ServerList serverList = new ServerList(Minecraft.getMinecraft());
+        serverList.loadServerList();
+
+        if (serverList.countServers() != serverIndex || CraftPresence.CONFIG.serverMessages.length != serverIndex) {
+            getServerAddresses();
+        }
     }
 
     @SubscribeEvent
@@ -58,14 +71,14 @@ public class ServerHandler {
         if (CraftPresence.CONFIG.showGameState && !minecraft.isSingleplayer()) {
             final ServerData serverData = minecraft.getCurrentServerData();
             if (serverData != null) {
-                server_IP = serverData.serverIP;
-                server_Name = serverData.serverName;
-                server_MOTD = StringHandler.stripColors(serverData.serverMOTD);
-                if (StringHandler.isNullOrEmpty(server_Name)) {
-                    server_Name = CraftPresence.CONFIG.defaultServerName;
+                currentServer_IP = serverData.serverIP;
+                currentServer_Name = serverData.serverName;
+                currentServer_MOTD = StringHandler.stripColors(serverData.serverMOTD);
+                if (StringHandler.isNullOrEmpty(currentServer_Name)) {
+                    currentServer_Name = CraftPresence.CONFIG.defaultServerName;
                 }
-                if (StringHandler.isNullOrEmpty(server_MOTD) || server_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || server_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) {
-                    server_MOTD = CraftPresence.CONFIG.defaultServerMOTD;
+                if (StringHandler.isNullOrEmpty(currentServer_MOTD) || currentServer_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || currentServer_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) {
+                    currentServer_MOTD = CraftPresence.CONFIG.defaultServerMOTD;
                 }
                 updateServerPresence();
             }
@@ -75,14 +88,14 @@ public class ServerHandler {
     private void updateServerPresence() {
         final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String defaultServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon);
-        final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, server_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
-        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, server_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, server_Name);
-        final String primaryServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(server_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
-        final String primaryServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(server_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, server_IP);
+        final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
+        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
+        final String primaryServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
+        final String primaryServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_IP);
         boolean matched = false;
 
-        CraftPresence.CLIENT.GAME_STATE = primaryServerMSG.replace("&ip&", StringHandler.formatIP(server_IP)).replace("&name&", server_Name).replace("&motd&", server_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers));
-        for (String ipPart : server_IP.split("\\.")) {
+        CraftPresence.CLIENT.GAME_STATE = primaryServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers));
+        for (String ipPart : currentServer_IP.split("\\.")) {
             final String formattedKey = StringHandler.formatPackIcon(ipPart);
             if (DiscordAssetHandler.contains(formattedKey)) {
                 matched = true;
@@ -106,5 +119,30 @@ public class ServerHandler {
 
         CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+    }
+
+    public void getServerAddresses() {
+        final ServerList serverList = new ServerList(Minecraft.getMinecraft());
+        serverList.loadServerList();
+        int currentIndex = -1;
+        serverIndex = serverList.countServers();
+
+        while (currentIndex != serverIndex) {
+            try {
+                currentIndex++;
+                final ServerData data = serverList.getServerData(currentIndex);
+                knownAddresses.add(data.serverIP);
+            } catch (Exception ignored) {
+            }
+        }
+
+        for (String serverMessage : CraftPresence.CONFIG.serverMessages) {
+            if (!StringHandler.isNullOrEmpty(serverMessage)) {
+                final String[] part = serverMessage.split(CraftPresence.CONFIG.splitCharacter);
+                if (!StringHandler.isNullOrEmpty(part[0]) && !knownAddresses.contains(part[0])) {
+                    knownAddresses.add(part[0]);
+                }
+            }
+        }
     }
 }

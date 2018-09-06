@@ -27,6 +27,9 @@ public class CommandHandler {
         if (CraftPresence.CONFIG.enablePERItem) {
             CraftPresence.ENTITIES.getEntities();
         }
+        if (CraftPresence.CONFIG.showGameState) {
+            CraftPresence.SERVER.getServerAddresses();
+        }
         if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState) {
             CraftPresence.GUIS.getGUIs();
         }

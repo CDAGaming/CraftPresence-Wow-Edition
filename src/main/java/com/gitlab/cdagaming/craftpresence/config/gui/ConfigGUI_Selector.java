@@ -79,6 +79,8 @@ public class ConfigGUI_Selector extends GuiScreen {
         if (scrollList.currentValue != null) {
             if (configoption.equals(CraftPresence.CONFIG.NAME_defaultIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultIcon)) {
                 proceedButton.displayString = "Continue";
+            } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultServerIcon)) {
+                proceedButton.displayString = "Continue";
             } else {
                 proceedButton.displayString = "Continue";
             }
@@ -107,23 +109,32 @@ public class ConfigGUI_Selector extends GuiScreen {
                             CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, id, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
                         }
                         mc.displayGuiScreen(parentscreen);
+                    } else {
+                        mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
                     }
                 } else {
                     if (configoption.equals(CraftPresence.CONFIG.NAME_defaultIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultIcon)) {
                         CraftPresence.CONFIG.hasChanged = true;
                         CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                        if (!CraftPresence.CLIENT.LARGEIMAGEKEY.equals(scrollList.currentValue) && CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)) {
+                        if (CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)) {
                             CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.LARGE);
                         }
-                        if (!CraftPresence.CLIENT.SMALLIMAGEKEY.equals(scrollList.currentValue) && CraftPresence.CLIENT.SMALLIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)) {
+                        if (CraftPresence.CLIENT.SMALLIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)) {
                             CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.SMALL);
                         }
                         CraftPresence.CONFIG.defaultIcon = scrollList.currentValue;
                         mc.displayGuiScreen(parentscreen);
-                    }
-
-                    if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
+                    } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultServerIcon)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        if (CraftPresence.CLIENT.SMALLIMAGEKEY.equals(CraftPresence.CONFIG.defaultServerIcon)) {
+                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.SMALL);
+                        }
+                        CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
+                    } else if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
                         mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, scrollList.currentValue));
+                    } else {
+                        mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
                     }
                 }
             } else {
