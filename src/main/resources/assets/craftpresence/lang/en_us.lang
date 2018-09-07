@@ -19,6 +19,7 @@ gui.config.name.default.exampletext=Input Message...
 gui.config.hoverMessage.access=**Enable "%1$s" to use this Menu**
 gui.config.title.biome.editspecificbiome=CraftPresence - Edit Biome (%1$s)
 gui.config.title.dimension.editspecificdimension=CraftPresence - Edit Dimension (%1$s)
+gui.config.title.server.editspecificserver=CraftPresence - Edit Server (%1$s)
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon

@@ -72,8 +72,18 @@ public class StringHandler {
         }
     }
 
-    public static String[] removeFromArray(final String[] originalArray, final String toRemove) {
-        return Arrays.stream(originalArray).filter(obj -> !obj.equals(toRemove)).toArray(String[]::new);
+    public static String[] removeFromArray(final String[] originalArray, final String searchTerm, final int searchIndex, final String splitCharacter) {
+        String[] formatted = originalArray;
+        if (!isNullOrEmpty(Arrays.toString(formatted))) {
+            for (String part : formatted) {
+                String[] splitPart = part.split(splitCharacter);
+                if (!StringHandler.isNullOrEmpty(splitPart[searchIndex]) && splitPart[searchIndex].equalsIgnoreCase(searchTerm)) {
+                    formatted = Arrays.stream(formatted).filter(obj -> !obj.equals(part)).toArray(String[]::new);
+                    break;
+                }
+            }
+        }
+        return formatted;
     }
 
     public static String getConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String alternativeMSG) {
