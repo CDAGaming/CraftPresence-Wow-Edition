@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
@@ -89,24 +91,48 @@ public class GUIHandler {
     public void getGUIs() {
         final ClassLoader LOADER = Thread.currentThread().getContextClassLoader();
         final String[] EXCLUSIONS = new String[]{
-                "net.minecraft.network",
-                "net.minecraft.server"
+                "net.minecraft.network", "net.minecraft.server",
+                "discord"
+        };
+        final Class[] allowedClasses = new Class[]{
+                GuiScreen.class, GuiContainer.class
         };
 
         try {
             for (final ClassPath.ClassInfo info : ClassPath.from(LOADER).getTopLevelClasses()) {
-                final boolean hasInclusions = info.getName().startsWith("net.minecraft.");
-                final boolean hasExclusions = !info.getName().startsWith(EXCLUSIONS[0]) &&
-                        !info.getName().startsWith(EXCLUSIONS[1]);
+                boolean hasExclusions = false;
+                for (String exclusion : EXCLUSIONS) {
+                    if (info.getName().startsWith(exclusion) || info.getName().contains(exclusion)) {
+                        hasExclusions = true;
+                        break;
+                    }
+                }
 
-                if (hasInclusions && hasExclusions) {
+                if (!hasExclusions && info.getName().startsWith("net.minecraft")) {
                     final Class guiClass = Class.forName(info.getName());
-                    if (guiClass.getSuperclass() != null && (guiClass.getSuperclass().equals(GuiScreen.class) || guiClass.getSuperclass().equals(GuiContainer.class))) {
-                        if (!GUI_NAMES.contains(info.getSimpleName())) {
+                    if (guiClass.getSuperclass() != null && Arrays.asList(allowedClasses).contains(guiClass.getSuperclass())) {
+                        if (!GUI_NAMES.contains(guiClass.getSimpleName())) {
                             GUI_NAMES.add(guiClass.getSimpleName());
                         }
                         if (!GUI_CLASSES.contains(guiClass)) {
                             GUI_CLASSES.add(guiClass);
+                        }
+                    }
+                }
+
+                for (ModContainer container : Loader.instance().getModList()) {
+                    final List<String> packages = container.getOwnedPackages();
+                    for (String packageString : packages) {
+                        if (!hasExclusions && info.getName().startsWith(packageString)) {
+                            final Class modGUIClass = Class.forName(info.getName());
+                            if (modGUIClass.getSuperclass() != null && (Arrays.asList(allowedClasses).contains(modGUIClass.getSuperclass()) || GUI_CLASSES.contains(modGUIClass.getSuperclass()))) {
+                                if (!GUI_NAMES.contains(modGUIClass.getSimpleName())) {
+                                    GUI_NAMES.add(modGUIClass.getSimpleName());
+                                }
+                                if (!GUI_CLASSES.contains(modGUIClass)) {
+                                    GUI_CLASSES.add(modGUIClass);
+                                }
+                            }
                         }
                     }
                 }
