@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_ServerSettings extends GuiScreen {
     private final GuiScreen parentscreen;
-    private GuiButton backButton, editSpecificServerButton, defaultIconButton;
+    private GuiButton proceedButton, editSpecificServerButton, defaultIconButton;
     private GuiTextField defaultMOTD, defaultName, defaultMSG;
 
     private String defaultServerMSG;
@@ -40,11 +40,11 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
         editSpecificServerButton = new GuiButton(130, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, I18n.format("gui.config.name.servermessages.servermessages"));
         defaultIconButton = new GuiButton(140, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(5), 180, 20, I18n.format("gui.config.name.servermessages.servericon"));
-        backButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
         buttonList.add(editSpecificServerButton);
         buttonList.add(defaultIconButton);
-        buttonList.add(backButton);
+        buttonList.add(proceedButton);
 
         super.initGui();
     }
@@ -64,7 +64,7 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         defaultMOTD.drawTextBox();
         defaultMSG.drawTextBox();
 
-        backButton.enabled = !StringHandler.isNullOrEmpty(defaultMSG.getText()) || !StringHandler.isNullOrEmpty(defaultName.getText()) || !StringHandler.isNullOrEmpty(defaultMOTD.getText());
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMSG.getText()) || !StringHandler.isNullOrEmpty(defaultName.getText()) || !StringHandler.isNullOrEmpty(defaultMOTD.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -74,14 +74,29 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         if (defaultIconButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servericon").split("\n")), mouseX, mouseY);
         }
-        if (backButton.isMouseOver() && !backButton.enabled) {
+        if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
         }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == backButton.id) {
+        if (button.id == proceedButton.id) {
+            if (!defaultName.getText().equals(CraftPresence.CONFIG.defaultServerName)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.defaultServerName = defaultName.getText();
+            }
+            if (!defaultMOTD.getText().equals(CraftPresence.CONFIG.defaultServerMOTD)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.defaultServerMOTD = defaultMOTD.getText();
+            }
+            if (!defaultMSG.getText().equals(defaultServerMSG)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG.getText());
+            }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == editSpecificServerButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
@@ -118,21 +133,5 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-
-        if (!defaultName.getText().equals(CraftPresence.CONFIG.defaultServerName)) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.defaultServerName = defaultName.getText();
-        }
-        if (!defaultMOTD.getText().equals(CraftPresence.CONFIG.defaultServerMOTD)) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.defaultServerMOTD = defaultMOTD.getText();
-        }
-        if (!defaultMSG.getText().equals(defaultServerMSG)) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG.getText());
-        }
     }
 }

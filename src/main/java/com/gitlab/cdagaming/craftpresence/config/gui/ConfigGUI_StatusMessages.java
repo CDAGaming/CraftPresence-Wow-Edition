@@ -62,6 +62,17 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == proceedButton.id) {
+            if (!mainMenuMSG.getText().equals(CraftPresence.CONFIG.mainmenuMSG)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.mainmenuMSG = mainMenuMSG.getText();
+            }
+
+            if (!singleplayerMSG.getText().equals(CraftPresence.CONFIG.singleplayerMSG)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.singleplayerMSG = singleplayerMSG.getText();
+            }
             mc.displayGuiScreen(parentscreen);
         } else {
             mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
@@ -91,17 +102,5 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-
-        if (!mainMenuMSG.getText().equals(CraftPresence.CONFIG.mainmenuMSG)) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.mainmenuMSG = mainMenuMSG.getText();
-        }
-
-        if (!singleplayerMSG.getText().equals(CraftPresence.CONFIG.singleplayerMSG)) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.singleplayerMSG = singleplayerMSG.getText();
-        }
     }
 }

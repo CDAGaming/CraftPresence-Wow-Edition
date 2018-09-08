@@ -108,6 +108,55 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == proceedButton.id) {
+            if (!clientID.getText().equals(CraftPresence.CONFIG.clientID)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.clientID = clientID.getText();
+                CraftPresence.CLIENT = new DiscordHandler(!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.clientID) ? CraftPresence.CONFIG.clientID : "450485984333660181");
+            }
+            if (detectCurseManifestButton.isChecked() != CraftPresence.CONFIG.detectCurseManifest) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.detectCurseManifest = detectCurseManifestButton.isChecked();
+            }
+            if (detectMultiMCManifestButton.isChecked() != CraftPresence.CONFIG.detectMultiMCManifest) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.detectMultiMCManifest = detectMultiMCManifestButton.isChecked();
+            }
+            if (detectTechnicPackButton.isChecked() != CraftPresence.CONFIG.detectTechnicPack) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.detectTechnicPack = detectTechnicPackButton.isChecked();
+            }
+            if (showTimeButton.isChecked() != CraftPresence.CONFIG.showTime) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.showTime = showTimeButton.isChecked();
+            }
+            if (showBiomeButton.isChecked() != CraftPresence.CONFIG.showCurrentBiome) {
+                CraftPresence.CONFIG.hasChanged = true;
+                if (CraftPresence.BIOMES.BIOME_NAMES == null) {
+                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                } else {
+                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
+                }
+                CraftPresence.CONFIG.showCurrentBiome = showBiomeButton.isChecked();
+            }
+            if (showDimensionButton.isChecked() != CraftPresence.CONFIG.showCurrentDimension) {
+                CraftPresence.CONFIG.hasChanged = true;
+                if (CraftPresence.DIMENSIONS.DIMENSION_NAMES == null) {
+                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                } else {
+                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
+                }
+                CraftPresence.CONFIG.showCurrentDimension = showDimensionButton.isChecked();
+            }
+            if (showStateButton.isChecked() != CraftPresence.CONFIG.showGameState) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
+            }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == defaultIconButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
@@ -136,55 +185,5 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-
-        if (!clientID.getText().equals(CraftPresence.CONFIG.clientID)) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.clientID = clientID.getText();
-            CraftPresence.CLIENT = new DiscordHandler(!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.clientID) ? CraftPresence.CONFIG.clientID : "450485984333660181");
-        }
-        if (detectCurseManifestButton.isChecked() != CraftPresence.CONFIG.detectCurseManifest) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.detectCurseManifest = detectCurseManifestButton.isChecked();
-        }
-        if (detectMultiMCManifestButton.isChecked() != CraftPresence.CONFIG.detectMultiMCManifest) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.detectMultiMCManifest = detectMultiMCManifestButton.isChecked();
-        }
-        if (detectTechnicPackButton.isChecked() != CraftPresence.CONFIG.detectTechnicPack) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.detectTechnicPack = detectTechnicPackButton.isChecked();
-        }
-        if (showTimeButton.isChecked() != CraftPresence.CONFIG.showTime) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.showTime = showTimeButton.isChecked();
-        }
-        if (showBiomeButton.isChecked() != CraftPresence.CONFIG.showCurrentBiome) {
-            CraftPresence.CONFIG.hasChanged = true;
-            if (CraftPresence.BIOMES.BIOME_NAMES == null) {
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            } else {
-                CraftPresence.CONFIG.rebootOnWorldLoad = true;
-            }
-            CraftPresence.CONFIG.showCurrentBiome = showBiomeButton.isChecked();
-        }
-        if (showDimensionButton.isChecked() != CraftPresence.CONFIG.showCurrentDimension) {
-            CraftPresence.CONFIG.hasChanged = true;
-            if (CraftPresence.DIMENSIONS.DIMENSION_NAMES == null) {
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            } else {
-                CraftPresence.CONFIG.rebootOnWorldLoad = true;
-            }
-            CraftPresence.CONFIG.showCurrentDimension = showDimensionButton.isChecked();
-        }
-        if (showStateButton.isChecked() != CraftPresence.CONFIG.showGameState) {
-            CraftPresence.CONFIG.hasChanged = true;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-            CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
-        }
     }
 }
