@@ -53,12 +53,9 @@ public class ConfigGUI_About extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Done button
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentscreen);
-        }
-        // View Source button
-        if (button.id == viewSource.id) {
+        } else if (button.id == viewSource.id) {
             try {
                 Desktop.getDesktop().browse(new URI(SOURCE_URL));
             } catch (Exception ex) {

@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -49,14 +50,21 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         mainMenuMSG.drawTextBox();
         singleplayerMSG.drawTextBox();
 
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(mainMenuMSG.getText()) || !StringHandler.isNullOrEmpty(singleplayerMSG.getText());
+
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        if (proceedButton.isMouseOver() && !proceedButton.enabled) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
+        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Back button
         if (button.id == proceedButton.id) {
             mc.displayGuiScreen(parentscreen);
+        } else {
+            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 

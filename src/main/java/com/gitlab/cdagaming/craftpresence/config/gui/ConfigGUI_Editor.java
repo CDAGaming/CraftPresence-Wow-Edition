@@ -73,24 +73,30 @@ public class ConfigGUI_Editor extends GuiScreen {
         } else {
             proceedButton.displayString = "Back";
         }
+
+        proceedButton.enabled = !selecteditem.equals("default") && !StringHandler.isNullOrEmpty(specificMessage.getText());
+
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        if (proceedButton.isMouseOver() && !proceedButton.enabled) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
+        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Back button
         if (button.id == proceedButton.id) {
             mc.displayGuiScreen(parentscreen);
-        }
-        if (parentscreen instanceof ConfigGUI_DimensionSettings) {
+        } else if (parentscreen instanceof ConfigGUI_DimensionSettings) {
             if (button.id == specificIconButton.id) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
-        }
-        if (parentscreen instanceof ConfigGUI_ServerSettings) {
+        } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
             if (button.id == specificIconButton.id) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
+        } else {
+            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 

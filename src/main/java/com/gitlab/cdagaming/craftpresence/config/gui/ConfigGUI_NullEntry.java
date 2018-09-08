@@ -41,7 +41,6 @@ public class ConfigGUI_NullEntry extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Back button
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentscreen);
         }

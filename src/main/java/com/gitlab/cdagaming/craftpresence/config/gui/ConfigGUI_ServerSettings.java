@@ -64,6 +64,8 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         defaultMOTD.drawTextBox();
         defaultMSG.drawTextBox();
 
+        backButton.enabled = !StringHandler.isNullOrEmpty(defaultMSG.getText()) || !StringHandler.isNullOrEmpty(defaultName.getText()) || !StringHandler.isNullOrEmpty(defaultMOTD.getText());
+
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (editSpecificServerButton.isMouseOver()) {
@@ -72,19 +74,21 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         if (defaultIconButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servericon").split("\n")), mouseX, mouseY);
         }
+        if (backButton.isMouseOver() && !backButton.enabled) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
+        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Back button
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentscreen);
-        }
-        if (button.id == editSpecificServerButton.id) {
+        } else if (button.id == editSpecificServerButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
-        }
-        if (button.id == defaultIconButton.id) {
+        } else if (button.id == defaultIconButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
+        } else {
+            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 

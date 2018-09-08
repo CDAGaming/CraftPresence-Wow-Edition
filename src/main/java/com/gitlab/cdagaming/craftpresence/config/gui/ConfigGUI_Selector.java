@@ -81,8 +81,10 @@ public class ConfigGUI_Selector extends GuiScreen {
                 proceedButton.displayString = "Continue";
             } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultServerIcon)) {
                 proceedButton.displayString = "Continue";
-            } else {
+            } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultDimensionIcon)) {
                 proceedButton.displayString = "Continue";
+            } else {
+                proceedButton.displayString = "Back";
             }
         } else {
             proceedButton.displayString = "Back";
@@ -93,7 +95,6 @@ public class ConfigGUI_Selector extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Back button
         if (button.id == proceedButton.id) {
             if (scrollList.currentValue != null) {
                 if (currentValue != null) {

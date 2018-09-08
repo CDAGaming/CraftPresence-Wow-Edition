@@ -72,6 +72,8 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         drawString(fontRenderer, I18n.format("gui.config.name.general.clientid"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
 
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && !(clientID.getText().length() + 1 <= 18);
+
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (defaultIconButton.isMouseOver()) {
@@ -98,16 +100,19 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         if (showStateButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showstate").split("\n")), mouseX, mouseY);
         }
+        if (proceedButton.isMouseOver() && !proceedButton.enabled) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
+        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // Back button
         if (button.id == proceedButton.id) {
             mc.displayGuiScreen(parentscreen);
-        }
-        if (button.id == defaultIconButton.id) {
+        } else if (button.id == defaultIconButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
+        } else {
+            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 

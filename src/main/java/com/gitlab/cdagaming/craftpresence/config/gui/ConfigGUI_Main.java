@@ -101,32 +101,19 @@ public class ConfigGUI_Main extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        // General Settings
         if (button.id == generalSet.id) {
             mc.displayGuiScreen(new ConfigGUI_GeneralSettings(this));
-        }
-        // Biome Settings
-        if (button.id == biomeSet.id) {
+        } else if (button.id == biomeSet.id) {
             mc.displayGuiScreen(new ConfigGUI_BiomeSettings(this));
-        }
-        // Dimension Settings
-        if (button.id == dimensionSet.id) {
+        } else if (button.id == dimensionSet.id) {
             mc.displayGuiScreen(new ConfigGUI_DimensionSettings(this));
-        }
-        // Server Settings
-        if (button.id == serverSet.id) {
+        } else if (button.id == serverSet.id) {
             mc.displayGuiScreen(new ConfigGUI_ServerSettings(this));
-        }
-        // Status Settings
-        if (button.id == statusSet.id) {
+        } else if (button.id == statusSet.id) {
             mc.displayGuiScreen(new ConfigGUI_StatusMessages(this));
-        }
-        // Advanced Settings
-        if (button.id == advancedSet.id) {
+        } else if (button.id == advancedSet.id) {
             mc.displayGuiScreen(new ConfigGUI_NullEntry(this));
-        }
-        // Done Button
-        if (button.id == proceedButton.id) {
+        } else if (button.id == proceedButton.id) {
             boolean rebooted = false;
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
@@ -150,10 +137,10 @@ public class ConfigGUI_Main extends GuiScreen {
             } else {
                 mc.displayGuiScreen(parentscreen);
             }
-        }
-        // About Button
-        if (button.id == aboutButton.id) {
+        } else if (button.id == aboutButton.id) {
             mc.displayGuiScreen(new ConfigGUI_About(this));
+        } else {
+            mc.displayGuiScreen(new ConfigGUI_NullEntry(this));
         }
     }
 
