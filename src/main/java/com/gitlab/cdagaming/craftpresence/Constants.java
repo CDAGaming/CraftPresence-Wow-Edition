@@ -2,7 +2,7 @@ package com.gitlab.cdagaming.craftpresence;
 
 import com.google.common.collect.Lists;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraft.realms.RealmsSharedConstants;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +20,7 @@ public class Constants {
     public static final String VERSION_ID = "v" + majorVersion + "." + minorVersion + "." + revisionVersion;
     public static final String MODID = "craftpresence";
     public static final String GUI_FACTORY = "com.gitlab.cdagaming.craftpresence.config.ConfigGUIFactoryDS";
-    public static final String MCVersion = Loader.instance().getMinecraftModContainer().getVersion();
+    public static final String MCVersion = RealmsSharedConstants.VERSION_STRING;
     public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
     public static final Logger LOG = LogManager.getLogger(MODID);
