@@ -95,7 +95,7 @@ public class ConfigGUI_Editor extends GuiScreen {
                 if (parentscreen instanceof ConfigGUI_DimensionSettings) {
                     CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                 }
-                if (parentscreen instanceof  ConfigGUI_ServerSettings) {
+                if (parentscreen instanceof ConfigGUI_ServerSettings) {
                     CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                 }
             }

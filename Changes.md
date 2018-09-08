@@ -12,11 +12,19 @@
 
   * Implemented Advanced and Server Settings to GUI
 
+  * Added Mod Support to Per-GUI System
+
   * Added New Menu in Config for Commands (Mostly for 1.13)
 
 ### Fixes:
 
-* Fixes Shutdown Timing Issues (When Shutting down isn't that Fast)
+* Fixes some Missing Options in Config GUI
+
+* Fixes Cases of Null/Empty/Invalid Default Messages being allowed in GUI
+
+* Fixes Removing Values from Selector Settings
+
+* Fixes False-Positive Saving Scenarios
 
 * Fixes Issues replacing Settings Multiple Times (Ex: Changing a specific Dimension Icon Multiple Times)
 
