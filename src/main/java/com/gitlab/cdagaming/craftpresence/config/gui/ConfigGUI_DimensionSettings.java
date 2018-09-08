@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_DimensionSettings extends GuiScreen {
     private final GuiScreen parentscreen;
-    private GuiButton proceedButton, editSpecificDimensionButton;
+    private GuiButton proceedButton, editSpecificDimensionButton, defaultIconButton;
     private GuiTextField defaultMessage;
 
     private String defaultDimensionMSG;
@@ -34,9 +35,11 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         defaultMessage.setText(defaultDimensionMSG);
 
         editSpecificDimensionButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionmessages"));
+        defaultIconButton = new GuiButton(110, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionicon"));
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
         buttonList.add(editSpecificDimensionButton);
+        buttonList.add(defaultIconButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -58,6 +61,9 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         if (editSpecificDimensionButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionmessages").split("\n")), mouseX, mouseY);
         }
+        if (defaultIconButton.isMouseOver()) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionicon").split("\n")), mouseX, mouseY);
+        }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
         }
@@ -74,6 +80,8 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == editSpecificDimensionButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select Dimension", CraftPresence.DIMENSIONS.DIMENSION_NAMES, null));
+        } else if (button.id == defaultIconButton.id) {
+            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultDimensionIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
         } else {
             mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
