@@ -74,8 +74,6 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == editSpecificBiomeButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null));
-        } else {
-            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 

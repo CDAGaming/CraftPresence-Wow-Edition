@@ -121,8 +121,6 @@ public class ConfigGUI_Editor extends GuiScreen {
             if (button.id == specificIconButton.id) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
-        } else {
-            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 

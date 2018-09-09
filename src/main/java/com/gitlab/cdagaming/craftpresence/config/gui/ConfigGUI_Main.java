@@ -139,8 +139,6 @@ public class ConfigGUI_Main extends GuiScreen {
             }
         } else if (button.id == aboutButton.id) {
             mc.displayGuiScreen(new ConfigGUI_About(this));
-        } else {
-            mc.displayGuiScreen(new ConfigGUI_NullEntry(this));
         }
     }
 

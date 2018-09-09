@@ -74,8 +74,6 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
                 CraftPresence.CONFIG.singleplayerMSG = singleplayerMSG.getText();
             }
             mc.displayGuiScreen(parentscreen);
-        } else {
-            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
         }
     }
 
