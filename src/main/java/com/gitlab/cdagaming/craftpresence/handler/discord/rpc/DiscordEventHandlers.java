@@ -6,38 +6,95 @@ import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * Struct containing handlers for RPC events
+ * <br>Provided handlers can be null.
+ */
 public class DiscordEventHandlers extends Structure {
-    private static final List<String> FIELD_ORDER;
-
-    static {
-        FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("ready", "disconnected", "errored", "joinGame", "spectateGame", "joinRequest"));
-    }
-
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList(
+            "ready",
+            "disconnected",
+            "errored",
+            "joinGame",
+            "spectateGame",
+            "joinRequest"
+    ));
+    /**
+     * Called when the RPC connection has been established
+     */
     public OnReady ready;
+    /**
+     * Called when the RPC connection has been severed
+     */
     public OnStatus disconnected;
+    /**
+     * Called when an internal error is caught within the SDK
+     */
     public OnStatus errored;
+    /**
+     * Called when the logged in user joined a game
+     */
     public OnGameUpdate joinGame;
+    /**
+     * Called when the logged in user joined to spectate a game
+     */
     public OnGameUpdate spectateGame;
+    /**
+     * Called when another discord user wants to join the game of the logged in user
+     */
     public OnJoinRequest joinRequest;
 
-    protected List<String> getFieldOrder() {
-        return DiscordEventHandlers.FIELD_ORDER;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof DiscordEventHandlers))
+            return false;
+        DiscordEventHandlers that = (DiscordEventHandlers) o;
+        return Objects.equals(ready, that.ready)
+                && Objects.equals(disconnected, that.disconnected)
+                && Objects.equals(errored, that.errored)
+                && Objects.equals(joinGame, that.joinGame)
+                && Objects.equals(spectateGame, that.spectateGame)
+                && Objects.equals(joinRequest, that.joinRequest);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(ready, disconnected, errored, joinGame, spectateGame, joinRequest);
+    }
+
+    @Override
+    protected List<String> getFieldOrder() {
+        return FIELD_ORDER;
+    }
+    /**
+     * Handler function for the ready event
+     */
     public interface OnReady extends Callback {
         void accept(DiscordUser user);
     }
 
+    /**
+     * Handler function for the exceptional events (error, disconnect)
+     */
     public interface OnStatus extends Callback {
-        void accept(final int errorCode, final String message);
+        void accept(int errorCode, String message);
     }
 
+    /**
+     * Handler function for game update events (joinGame, spectateGame)
+     */
     public interface OnGameUpdate extends Callback {
-        void accept(final String secret);
+        void accept(String secret);
     }
 
+    /**
+     * Handler function for user join requests
+     */
     public interface OnJoinRequest extends Callback {
-        void accept(final DiscordUser request);
+        void accept(DiscordUser request);
     }
 }

@@ -16,7 +16,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nonnull;
-import java.time.Instant;
 
 public class DiscordHandler {
     public String GAME_STATE;
@@ -50,7 +49,7 @@ public class DiscordHandler {
 
     public void updateTimestamp() {
         if (CraftPresence.CONFIG.showTime) {
-            START_TIMESTAMP = Instant.now().getEpochSecond();
+            START_TIMESTAMP = System.currentTimeMillis() / 1000;
         }
     }
 

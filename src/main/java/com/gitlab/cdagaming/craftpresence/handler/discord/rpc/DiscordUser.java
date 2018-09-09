@@ -7,34 +7,62 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Struct binding for a discord join request.
+ */
 public class DiscordUser extends Structure {
-    private static final List<String> FIELD_ORDER;
-
-    static {
-        FIELD_ORDER = Collections.unmodifiableList(Arrays.asList("userId", "username", "discriminator", "avatar"));
-    }
-
+    private static final List<String> FIELD_ORDER = Collections.unmodifiableList(Arrays.asList(
+            "userId",
+            "username",
+            "discriminator",
+            "avatar"
+    ));
+    /**
+     * The userId for the user that requests to join
+     */
     public String userId;
+    /**
+     * The username of the user that requests to join
+     */
     public String username;
+    /**
+     * The discriminator of the user that requests to join
+     */
     public String discriminator;
+    /**
+     * The avatar of the user that requests to join
+     */
     public String avatar;
 
-    public boolean equals(final Object o) {
-        if (this == o) {
+    public DiscordUser(String encoding) {
+        super();
+        setStringEncoding(encoding);
+    }
+
+    public DiscordUser() {
+        this("UTF-8");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
             return true;
-        }
-        if (!(o instanceof DiscordUser)) {
+        if (!(o instanceof DiscordUser))
             return false;
-        }
-        final DiscordUser that = (DiscordUser) o;
-        return Objects.equals(this.userId, that.userId) && Objects.equals(this.username, that.username) && Objects.equals(this.discriminator, that.discriminator) && Objects.equals(this.avatar, that.avatar);
+        DiscordUser that = (DiscordUser) o;
+        return Objects.equals(userId, that.userId)
+                && Objects.equals(username, that.username)
+                && Objects.equals(discriminator, that.discriminator)
+                && Objects.equals(avatar, that.avatar);
     }
 
+    @Override
     public int hashCode() {
-        return Objects.hash(this.userId, this.username, this.discriminator, this.avatar);
+        return Objects.hash(userId, username, discriminator, avatar);
     }
 
+    @Override
     protected List<String> getFieldOrder() {
-        return DiscordUser.FIELD_ORDER;
+        return FIELD_ORDER;
     }
 }

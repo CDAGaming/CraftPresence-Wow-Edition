@@ -50,8 +50,8 @@ public interface DiscordRPC extends Library {
      * <br><b>Before closing the application it is recommended to call {@link #Discord_Shutdown()}</b>
      *
      * @param applicationId The ID for this RPC application,
-     *                      retrieved from the <a href="https://discordappc.com/developers/applications/me" target="_blank">developer dashboard</a>
-     * @param handlers      Nullable instance of {@link com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordEventHandlers}
+     *                      retrieved from the <a href="https://discordapp.com/developers/applications/me" target="_blank">developer dashboard</a>
+     * @param handlers      Nullable instance of {@link DiscordEventHandlers}
      * @param autoRegister  {@code true} to automatically call {@link #Discord_RegisterSteamGame(String, String)} or {@link #Discord_Register(String, String)}
      * @param steamId       Possible steam ID of the running game
      */
@@ -110,7 +110,7 @@ public interface DiscordRPC extends Library {
      *
      * @param userid The id of the user to respond to
      * @param reply  The reply type
-     * @see com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordUser#userId DiscordUser.userId
+     * @see DiscordUser#userId DiscordUser.userId
      */
     void Discord_Respond(@Nonnull String userid, int reply);
 
