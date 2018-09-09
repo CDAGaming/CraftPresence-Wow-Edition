@@ -40,6 +40,9 @@ public class StringHandler {
             if (BRACKET_PATTERN.matcher(formattedKey).find()) {
                 formattedKey = BRACKET_PATTERN.matcher(formattedKey).replaceAll("");
             }
+            if (STRIP_COLOR_PATTERN.matcher(formattedKey).find()) {
+                formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
+            }
             return formattedKey.toLowerCase();
         }
     }
@@ -149,6 +152,9 @@ public class StringHandler {
             }
             if (BRACKET_PATTERN.matcher(formattedKey).find()) {
                 formattedKey = BRACKET_PATTERN.matcher(formattedKey).replaceAll("");
+            }
+            if (STRIP_COLOR_PATTERN.matcher(formattedKey).find()) {
+                formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
             }
             return WordUtils.capitalizeFully(formattedKey);
         }
