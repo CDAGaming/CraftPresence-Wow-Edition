@@ -36,8 +36,6 @@ public class DiscordHandler {
     private String SPECTATE_SECRET;
     private byte INSTANCE;
 
-    private boolean SHUTDOWN = false;
-
     public DiscordHandler(final String clientID) {
         CLIENT_ID = clientID;
     }
@@ -47,7 +45,6 @@ public class DiscordHandler {
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutDown));
 
-        SHUTDOWN = false;
         Constants.LOG.info(I18n.format("craftpresence.logger.info.load", !StringHandler.isNullOrEmpty(CLIENT_ID) ? CLIENT_ID : "450485984333660181"));
     }
 
@@ -97,18 +94,15 @@ public class DiscordHandler {
     }
 
     public synchronized void shutDown() {
-        if (!SHUTDOWN) {
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
+        CraftPresence.BIOMES.emptyData();
+        CraftPresence.DIMENSIONS.emptyData();
+        CraftPresence.ENTITIES.emptyData();
+        CraftPresence.GUIS.emptyData();
 
-            CraftPresence.BIOMES.emptyData();
-            CraftPresence.DIMENSIONS.emptyData();
-            CraftPresence.ENTITIES.emptyData();
-            CraftPresence.GUIS.emptyData();
+        DiscordRPC.INSTANCE.Discord_ClearPresence();
+        DiscordRPC.INSTANCE.Discord_Shutdown();
 
-            DiscordRPC.INSTANCE.Discord_ClearPresence();
-            DiscordRPC.INSTANCE.Discord_Shutdown();
-            SHUTDOWN = true;
-        }
+        Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
     }
 
     public void setImage(@Nonnull final String key, @Nonnull final DiscordAsset.AssetType type) {
@@ -125,7 +119,7 @@ public class DiscordHandler {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.empty", formattedKey, type.name()));
             final Minecraft mc = Minecraft.getMinecraft();
             final EntityPlayer player = mc.player;
-            if (type.equals(DiscordAsset.AssetType.LARGE) && player.world != null) {
+            if (type.equals(DiscordAsset.AssetType.LARGE) && player != null) {
                 final String dimIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
                 if (DiscordAssetHandler.contains(dimIcon)) {
                     LARGEIMAGEKEY = dimIcon;
@@ -134,7 +128,7 @@ public class DiscordHandler {
                 }
             }
 
-            if (type.equals(DiscordAsset.AssetType.SMALL) && !mc.isSingleplayer()) {
+            if (type.equals(DiscordAsset.AssetType.SMALL) && !mc.isSingleplayer() && player != null) {
                 final String serverIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultServerIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
                 if (DiscordAssetHandler.contains(serverIcon)) {
                     SMALLIMAGEKEY = serverIcon;
