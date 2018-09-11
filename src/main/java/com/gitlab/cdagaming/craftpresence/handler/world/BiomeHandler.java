@@ -56,5 +56,14 @@ public class BiomeHandler {
                 BIOME_IDS.add(Biome.getIdForBiome(biome));
             }
         }
+
+        for (String biomeMessage : CraftPresence.CONFIG.biomeMessages) {
+            if (!StringHandler.isNullOrEmpty(biomeMessage)) {
+                final String[] part = biomeMessage.split(CraftPresence.CONFIG.splitCharacter);
+                if (!StringHandler.isNullOrEmpty(part[0]) && !BIOME_NAMES.contains(part[0])) {
+                    BIOME_NAMES.add(part[0]);
+                }
+            }
+        }
     }
 }

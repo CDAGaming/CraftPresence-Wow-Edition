@@ -113,5 +113,19 @@ public class EntityHandler {
                 ITEM_CLASSES.add(item.getClass().getName());
             }
         }
+
+        for (String dimensionMessage : CraftPresence.CONFIG.itemMessages) {
+            if (!StringHandler.isNullOrEmpty(dimensionMessage)) {
+                final String[] part = dimensionMessage.split(CraftPresence.CONFIG.splitCharacter);
+                if (!StringHandler.isNullOrEmpty(part[0])) {
+                    if (!ITEM_NAMES.contains(part[0])) {
+                        ITEM_NAMES.add(part[0]);
+                    }
+                    if (!BLOCK_NAMES.contains(part[0])) {
+                        BLOCK_NAMES.add(part[0]);
+                    }
+                }
+            }
+        }
     }
 }

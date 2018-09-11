@@ -74,7 +74,7 @@ public class ConfigGUI_Editor extends GuiScreen {
             proceedButton.displayString = "Back";
         }
 
-        proceedButton.enabled = !selecteditem.equals("default") && !StringHandler.isNullOrEmpty(specificMessage.getText());
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(specificMessage.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

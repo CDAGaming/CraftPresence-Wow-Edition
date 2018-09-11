@@ -136,6 +136,15 @@ public class GUIHandler {
                         }
                     }
                 }
+
+                for (String guiMessage : CraftPresence.CONFIG.guiMessages) {
+                    if (!StringHandler.isNullOrEmpty(guiMessage)) {
+                        final String[] part = guiMessage.split(CraftPresence.CONFIG.splitCharacter);
+                        if (!StringHandler.isNullOrEmpty(part[0]) && !GUI_NAMES.contains(part[0])) {
+                            GUI_NAMES.add(part[0]);
+                        }
+                    }
+                }
             }
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.gui.failure"));

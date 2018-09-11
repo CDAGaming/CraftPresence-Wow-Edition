@@ -108,5 +108,14 @@ public class DimensionHandler {
                 DIMENSION_IDS.add(TYPE.getId());
             }
         }
+
+        for (String dimensionMessage : CraftPresence.CONFIG.dimensionMessages) {
+            if (!StringHandler.isNullOrEmpty(dimensionMessage)) {
+                final String[] part = dimensionMessage.split(CraftPresence.CONFIG.splitCharacter);
+                if (!StringHandler.isNullOrEmpty(part[0]) && !DIMENSION_NAMES.contains(part[0])) {
+                    DIMENSION_NAMES.add(part[0]);
+                }
+            }
+        }
     }
 }
