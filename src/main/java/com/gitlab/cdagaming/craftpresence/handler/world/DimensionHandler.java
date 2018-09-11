@@ -69,16 +69,27 @@ public class DimensionHandler {
     private void updateDimensionPresence() {
         final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
-
         final String defaultDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
-        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME);
-        final String formattedDimensionIcon = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
+        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultDimensionIcon);
+        final String formattedDimensionIcon = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
         CraftPresence.CLIENT.DETAILS = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());
-        if (DiscordAssetHandler.contains(formattedDimensionIcon)) {
+
+        if (DiscordAssetHandler.contains(formattedDimensionIcon) && !currentDimensionIcon.equals(defaultDimensionIcon)) {
             CraftPresence.CLIENT.setImage(formattedDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
         } else {
-            CraftPresence.CLIENT.setImage(defaultDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon), DiscordAsset.AssetType.LARGE);
+            boolean matched = false;
+            for (String dimension : DIMENSION_NAMES) {
+                final String formattedKey = StringHandler.formatPackIcon(dimension);
+                if (DiscordAssetHandler.contains(formattedKey)) {
+                    CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.LARGE);
+                    matched = true;
+                    break;
+                }
+            }
+            if (!matched) {
+                CraftPresence.CLIENT.setImage(formattedDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
+            }
         }
 
         if (!CraftPresence.CONFIG.enablePERItem) {

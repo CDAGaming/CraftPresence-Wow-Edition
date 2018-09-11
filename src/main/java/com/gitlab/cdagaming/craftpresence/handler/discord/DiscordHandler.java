@@ -11,11 +11,13 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresence;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
+import com.sun.jna.NativeLibrary;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 
 public class DiscordHandler {
     public String GAME_STATE;
@@ -41,6 +43,7 @@ public class DiscordHandler {
 
     public synchronized void init() {
         final DiscordEventHandlers handlers = new DiscordEventHandlers();
+        NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutDown));
 

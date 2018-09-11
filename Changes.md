@@ -1,32 +1,40 @@
 # CraftPresence Changes
 
-## v1.4.2 (09/??/2018)
+## v1.4.2 (09/14/2018)
 
 ### Changes:
 
-* Config GUI Changes:
+* Build Changes (Code-Behind):
 
-  * Now Accessible via Keybind (Default: ] )
+  * Forge Build Version (1.12.2): `14.23.4.2759` >> `14.23.4.2760`
+
+  * MCP Snapshot Version (1.13): `snapshot_20180903` >> `snapshot_20180914`
+
+* Config GUI Changes:
 
   * Add Search Functionality to Scroll Lists
 
-  * Implemented Advanced and Server Settings to GUI
+  * Implemented Server Settings to GUI
 
   * Added Mod Support to Per-GUI System
 
-  * Added New Menu in Config for Commands (Mostly for 1.13)
-
 ### Fixes:
 
-* Fixes some Missing Options in Config GUI
+* Fixes & Re-Adds some Missing Options in Config
 
 * Fixes Cases of Null/Empty/Invalid Default Messages being allowed in GUI
+
+* Fixes Linux & MacOS Compatibility (Again)
+
+* Fixes Cases where CraftPresence's Auto Server Icon Finder overwrote your Config Selection
 
 * Fixes Removing Values from Selector Settings
 
 * Fixes False-Positive Saving Scenarios
 
-* Fixes Issues replacing Settings Multiple Times (Ex: Changing a specific Dimension Icon Multiple Times)
+* Fixes `&icon&` Placeholder Support in Server IconKeys
+
+* Fixes Issues involving the Config GUI replacing Settings after multiple edits in one instance (Ex: Changing a specific Dimension Icon Multiple Times)
 
 * Minor Typo and Translation Fixes
 

@@ -89,31 +89,27 @@ public class ServerHandler {
         final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String defaultServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon);
         final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
-        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
-        final String primaryServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
-        final String primaryServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_IP);
-        boolean matched = false;
+        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultServerIcon);
 
-        CraftPresence.CLIENT.GAME_STATE = primaryServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers));
-        for (String ipPart : currentServer_IP.split("\\.")) {
-            final String formattedKey = StringHandler.formatPackIcon(ipPart);
-            if (DiscordAssetHandler.contains(formattedKey)) {
-                matched = true;
-                CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.SMALL);
-                break;
+        final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
+        final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+        final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
+        CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers));
+
+        if (DiscordAssetHandler.contains(formattedServerIconKey) && !currentServerIcon.equals(defaultServerIcon)) {
+            CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
+        } else {
+            boolean matched = false;
+            for (String ipPart : currentServer_IP.split("\\.")) {
+                final String formattedKey = StringHandler.formatPackIcon(ipPart);
+                if (DiscordAssetHandler.contains(formattedKey)) {
+                    CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.SMALL);
+                    matched = true;
+                    break;
+                }
             }
-        }
-
-        if (!matched) {
-            final String formattedPrimaryKey = StringHandler.formatPackIcon(primaryServerIcon.replace(" ", "_"));
-            final String formattedAlternateKey = StringHandler.formatPackIcon(alternateServerIcon.replace(" ", "_"));
-            final String formattedDefaultKey = StringHandler.formatPackIcon(defaultServerIcon.replace(" ", "_"));
-            if (DiscordAssetHandler.contains(formattedPrimaryKey)) {
-                CraftPresence.CLIENT.setImage(formattedPrimaryKey, DiscordAsset.AssetType.SMALL);
-            } else if (DiscordAssetHandler.contains(formattedAlternateKey)) {
-                CraftPresence.CLIENT.setImage(formattedAlternateKey, DiscordAsset.AssetType.SMALL);
-            } else {
-                CraftPresence.CLIENT.setImage(formattedDefaultKey, DiscordAsset.AssetType.SMALL);
+            if (!matched) {
+                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
             }
         }
 
