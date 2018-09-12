@@ -176,7 +176,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     @Override
     public void updateScreen() {
         specificMessage.updateCursorCounter();
-        if (StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
             newValueName.updateCursorCounter();
         }
     }
