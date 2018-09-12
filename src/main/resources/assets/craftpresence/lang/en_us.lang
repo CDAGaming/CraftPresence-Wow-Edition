@@ -21,6 +21,7 @@ gui.config.hoverMessage.defaultempty=**Default Info cannot be Empty and Must be 
 gui.config.title.biome.editspecificbiome=CraftPresence - Edit Biome (%1$s)
 gui.config.title.dimension.editspecificdimension=CraftPresence - Edit Dimension (%1$s)
 gui.config.title.server.editspecificserver=CraftPresence - Edit Server (%1$s)
+gui.config.title.editor.addnew=CraftPresence - Add New Value
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon

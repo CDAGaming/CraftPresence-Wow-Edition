@@ -12,7 +12,7 @@
 
 * Config GUI Changes:
 
-  * Add Search Functionality to Scroll Lists
+  * Add Search & Add New Functionality to Scroll Lists
 
   * Implemented Server Settings to GUI
 

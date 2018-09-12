@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ConfigGUI_Selector extends GuiScreen {
     private final GuiScreen parentscreen;
-    private GuiButton proceedButton;
+    private GuiButton proceedButton, addNewButton;
     private GUIScrollList scrollList;
     private GuiTextField searchBox;
     private String configoption;
@@ -38,10 +38,12 @@ public class ConfigGUI_Selector extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
-        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) + 60, (sr.getScaledHeight() - 30), 90, 20, "Back");
+        addNewButton = new GuiButton(600, (sr.getScaledWidth() / 2) + 10, (sr.getScaledHeight() - 30), 90, 20, "Add New");
+        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) + 105, (sr.getScaledHeight() - 30), 90, 20, "Back");
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight() - 45, 32, sr.getScaledHeight() - 45, 18, itemList);
         searchBox = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) - 140, (sr.getScaledHeight() - 30), 120, 20);
 
+        buttonList.add(addNewButton);
         buttonList.add(proceedButton);
         super.initGui();
     }
@@ -87,7 +89,9 @@ public class ConfigGUI_Selector extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == proceedButton.id) {
+        if (button.id == addNewButton.id) {
+            mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, null));
+        } else if (button.id == proceedButton.id) {
             if (scrollList.currentValue != null) {
                 if (currentValue != null) {
                     if (configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
