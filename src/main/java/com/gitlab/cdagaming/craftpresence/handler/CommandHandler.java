@@ -72,7 +72,7 @@ public class CommandHandler {
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
         CraftPresence.CLIENT.GAME_STATE = I18n.format("craftpresence.defaults.state.loading.status", state);
-        //CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.loadingMSG;
+        CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.loadingMSG;
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
         CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.loading.status", state);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());

@@ -15,7 +15,7 @@ import java.io.IOException;
 public class ConfigGUI_StatusMessages extends GuiScreen {
     private final GuiScreen parentscreen;
     private GuiButton proceedButton;
-    private GuiTextField mainMenuMSG, singleplayerMSG;
+    private GuiTextField mainMenuMSG, singleplayerMSG, loadingMSG;
 
     ConfigGUI_StatusMessages(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
@@ -29,9 +29,11 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         singleplayerMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        loadingMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
 
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
         singleplayerMSG.setText(CraftPresence.CONFIG.singleplayerMSG);
+        loadingMSG.setText(CraftPresence.CONFIG.loadingMSG);
 
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
         buttonList.add(proceedButton);
@@ -47,10 +49,12 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, I18n.format("gui.config.name.statusmessages.mainmenumsg"), (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         drawString(fontRenderer, I18n.format("gui.config.name.statusmessages.singleplayermsg"), (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+        drawString(fontRenderer, I18n.format("gui.config.name.statusmessages.loadingmsg"), (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
         mainMenuMSG.drawTextBox();
         singleplayerMSG.drawTextBox();
+        loadingMSG.drawTextBox();
 
-        proceedButton.enabled = !StringHandler.isNullOrEmpty(mainMenuMSG.getText()) || !StringHandler.isNullOrEmpty(singleplayerMSG.getText());
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(mainMenuMSG.getText()) || !StringHandler.isNullOrEmpty(singleplayerMSG.getText()) || !StringHandler.isNullOrEmpty(loadingMSG.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -67,11 +71,15 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.mainmenuMSG = mainMenuMSG.getText();
             }
-
             if (!singleplayerMSG.getText().equals(CraftPresence.CONFIG.singleplayerMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.singleplayerMSG = singleplayerMSG.getText();
+            }
+            if (!loadingMSG.getText().equals(CraftPresence.CONFIG.loadingMSG)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.loadingMSG = loadingMSG.getText();
             }
             mc.displayGuiScreen(parentscreen);
         }
@@ -82,6 +90,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         super.keyTyped(typedChar, keyCode);
         mainMenuMSG.textboxKeyTyped(typedChar, keyCode);
         singleplayerMSG.textboxKeyTyped(typedChar, keyCode);
+        loadingMSG.textboxKeyTyped(typedChar, keyCode);
     }
 
     @Override
@@ -89,12 +98,14 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         mainMenuMSG.mouseClicked(mouseX, mouseY, mouseButton);
         singleplayerMSG.mouseClicked(mouseX, mouseY, mouseButton);
+        loadingMSG.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void updateScreen() {
         mainMenuMSG.updateCursorCounter();
         singleplayerMSG.updateCursorCounter();
+        loadingMSG.updateCursorCounter();
     }
 
     @Override

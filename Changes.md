@@ -10,13 +10,15 @@
 
   * MCP Snapshot Version (1.13): `snapshot_20180903` >> `snapshot_20180914`
 
-* Config GUI Changes:
+* Config & Config GUI Changes:
 
   * Add Search & Add New Functionality to Scroll Lists
 
   * Implemented Server Settings to GUI
 
   * Added Mod Support to Per-GUI System
+
+  * Implement Config Verification System to prevent Invalid/Empty Settings
 
 ### Fixes:
 

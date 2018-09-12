@@ -7,7 +7,10 @@ import net.minecraft.client.resources.I18n;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class ConfigHandler {
@@ -34,7 +37,8 @@ public class ConfigHandler {
             NAME_serverMessages;
     // STATUS MESSAGES
     public String NAME_mainmenuMSG,
-            NAME_singleplayerMSG;
+            NAME_singleplayerMSG,
+            NAME_loadingMSG;
     // ADVANCED
     public String NAME_enableCommands,
             NAME_enablePERGUI,
@@ -64,7 +68,8 @@ public class ConfigHandler {
     public String[] serverMessages = new String[]{"default;Playing on &motd&"};
     // STATUS MESSAGES
     public String mainmenuMSG = I18n.format("craftpresence.defaults.state.mainmenu"),
-            singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer");
+            singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer"),
+            loadingMSG = I18n.format("craftpresence.defaults.state.loading");
     // ADVANCED
     public boolean enableCommands = true,
             enablePERGUI = false,
@@ -107,6 +112,7 @@ public class ConfigHandler {
         // STATUS MESSAGES
         NAME_mainmenuMSG = I18n.format("gui.config.name.statusmessages.mainmenumsg").replaceAll(" ", "_");
         NAME_singleplayerMSG = I18n.format("gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
+        NAME_loadingMSG = I18n.format("gui.config.name.statusmessages.loadingmsg").replaceAll(" ", "_");
         // ADVANCED
         NAME_enableCommands = I18n.format("gui.config.name.advanced.enablecommands").replaceAll(" ", "_");
         NAME_enablePERGUI = I18n.format("gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
@@ -173,6 +179,7 @@ public class ConfigHandler {
         // STATUS MESSAGES
         mainmenuMSG = properties.getProperty(NAME_mainmenuMSG);
         singleplayerMSG = properties.getProperty(NAME_singleplayerMSG);
+        loadingMSG = properties.getProperty(NAME_loadingMSG);
         // ADVANCED
         enableCommands = Boolean.parseBoolean(properties.getProperty(NAME_enableCommands));
         enablePERGUI = Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI));
@@ -180,6 +187,39 @@ public class ConfigHandler {
         splitCharacter = properties.getProperty(NAME_splitCharacter);
         guiMessages = properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
         itemMessages = properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
+
+        List<String> validProperties = new ArrayList<>();
+        List<String> removedProperties = new ArrayList<>();
+        // Check and Verify Config
+        for (Field field : getClass().getFields()) {
+            if (field.getName().contains("NAME_")) {
+                try {
+                    field.setAccessible(true);
+                    Object value = field.get(this);
+                    validProperties.add(value.toString());
+                    if (!properties.stringPropertyNames().contains(value.toString()) && validProperties.contains(value.toString())) {
+                        updateConfig();
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", value.toString()));
+                        break;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        for (String property : properties.stringPropertyNames()) {
+            if (!validProperties.contains(property)) {
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                removedProperties.add(property);
+                properties.remove(property);
+                save(properties);
+            }
+            if (StringHandler.isNullOrEmpty(properties.getProperty(property)) && !removedProperties.contains(property)) {
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
+                updateConfig();
+                break;
+            }
+        }
     }
 
     public void updateConfig() {
@@ -196,25 +236,26 @@ public class ConfigHandler {
         properties.setProperty(NAME_clientID, !StringHandler.isNullOrEmpty(clientID) ? clientID : "450485984333660181");
         properties.setProperty(NAME_defaultIcon, !StringHandler.isNullOrEmpty(defaultIcon) ? defaultIcon : "grass");
         // BIOME MESSAGES
-        properties.setProperty(NAME_biomeMessages, !StringHandler.isNullOrEmpty(Arrays.toString(biomeMessages)) ? Arrays.toString(biomeMessages) : "default;Playing in &biome&");
+        properties.setProperty(NAME_biomeMessages, !StringHandler.isNullOrEmpty(Arrays.toString(biomeMessages)) ? Arrays.toString(biomeMessages) : "default" + splitCharacter + "Playing in &biome&");
         // DIMENSION MESSAGES
         properties.setProperty(NAME_defaultDimensionIcon, !StringHandler.isNullOrEmpty(defaultDimensionIcon) ? defaultDimensionIcon : "unknown");
-        properties.setProperty(NAME_dimensionMessages, !StringHandler.isNullOrEmpty(Arrays.toString(dimensionMessages)) ? Arrays.toString(dimensionMessages) : "default;In The &dimension&");
+        properties.setProperty(NAME_dimensionMessages, !StringHandler.isNullOrEmpty(Arrays.toString(dimensionMessages)) ? Arrays.toString(dimensionMessages) : "default" + splitCharacter + "In The &dimension&");
         // SERVER MESSAGES
         properties.setProperty(NAME_defaultServerIcon, !StringHandler.isNullOrEmpty(defaultServerIcon) ? defaultServerIcon : "default");
         properties.setProperty(NAME_defaultServerName, !StringHandler.isNullOrEmpty(defaultServerName) ? defaultServerName : I18n.format("selectServer.defaultName"));
         properties.setProperty(NAME_defaultServerMOTD, !StringHandler.isNullOrEmpty(defaultServerMOTD) ? defaultServerMOTD : I18n.format("craftpresence.defaults.servermessages.servermotd"));
-        properties.setProperty(NAME_serverMessages, !StringHandler.isNullOrEmpty(Arrays.toString(serverMessages)) ? Arrays.toString(serverMessages) : "default;Playing on &motd&");
+        properties.setProperty(NAME_serverMessages, !StringHandler.isNullOrEmpty(Arrays.toString(serverMessages)) ? Arrays.toString(serverMessages) : "default" + splitCharacter + "Playing on &motd&");
         // STATUS MESSAGES
         properties.setProperty(NAME_mainmenuMSG, !StringHandler.isNullOrEmpty(mainmenuMSG) ? mainmenuMSG : I18n.format("craftpresence.defaults.state.mainmenu"));
         properties.setProperty(NAME_singleplayerMSG, !StringHandler.isNullOrEmpty(singleplayerMSG) ? singleplayerMSG : I18n.format("craftpresence.defaults.state.singleplayer"));
+        properties.setProperty(NAME_loadingMSG, !StringHandler.isNullOrEmpty(loadingMSG) ? loadingMSG : I18n.format("craftpresence.defaults.state.loading"));
         // ADVANCED
         properties.setProperty(NAME_enableCommands, enableCommands ? "true" : "false");
         properties.setProperty(NAME_enablePERGUI, enablePERGUI ? "true" : "false");
         properties.setProperty(NAME_enablePERItem, enablePERItem ? "true" : "false");
         properties.setProperty(NAME_splitCharacter, !StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";");
-        properties.setProperty(NAME_guiMessages, !StringHandler.isNullOrEmpty(Arrays.toString(guiMessages)) ? Arrays.toString(guiMessages) : "default;In &gui&");
-        properties.setProperty(NAME_itemMessages, !StringHandler.isNullOrEmpty(Arrays.toString(itemMessages)) ? Arrays.toString(itemMessages) : "default;Holding &main&");
+        properties.setProperty(NAME_guiMessages, !StringHandler.isNullOrEmpty(Arrays.toString(guiMessages)) ? Arrays.toString(guiMessages) : "default" + splitCharacter + "In &gui&");
+        properties.setProperty(NAME_itemMessages, !StringHandler.isNullOrEmpty(Arrays.toString(itemMessages)) ? Arrays.toString(itemMessages) : "default" + splitCharacter + "Holding &main&");
 
         // Check for Conflicts before Saving
         if (showCurrentBiome && showGameState) {
@@ -222,13 +263,16 @@ public class ConfigHandler {
             showCurrentBiome = false;
             properties.setProperty(NAME_showCurrentBiome, "false");
         }
-
         if (enablePERGUI && showGameState) {
             Constants.LOG.warn(I18n.format("craftpresence.logger.warning.config.conflict.pergui"));
             enablePERGUI = false;
             properties.setProperty(NAME_enablePERGUI, "false");
         }
 
+        save(properties);
+    }
+
+    private void save(final Properties properties) {
         try {
             FileWriter configWriter = new FileWriter(new File(fileName));
             properties.store(configWriter, null);
