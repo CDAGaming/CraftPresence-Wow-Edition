@@ -19,13 +19,14 @@ public class ConfigGUI_Editor extends GuiScreen {
     private GuiButton proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
     private String selecteditem, specificMSG, defaultMSG, title;
-    private boolean isNewValue;
+    private boolean isNewValue, isDefaultValue;
 
     ConfigGUI_Editor(GuiScreen parentScreen, String selectedItem) {
         mc = Minecraft.getMinecraft();
         parentscreen = parentScreen;
         selecteditem = selectedItem;
         isNewValue = StringHandler.isNullOrEmpty(selectedItem);
+        isDefaultValue = !StringHandler.isNullOrEmpty(selectedItem) && selectedItem.equals("default");
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue) {
             title = I18n.format("gui.config.title.editor.addnew");
             if (parentscreen instanceof ConfigGUI_BiomeSettings) {
                 specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
@@ -65,7 +66,7 @@ public class ConfigGUI_Editor extends GuiScreen {
             specificIconButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, "Change Icon");
             buttonList.add(specificIconButton);
         }
-        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue) {
             newValueName = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
         }
 
@@ -81,17 +82,19 @@ public class ConfigGUI_Editor extends GuiScreen {
         drawDefaultBackground();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, "Message:", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue) {
             drawString(fontRenderer, "Value Name:", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
             newValueName.drawTextBox();
         }
         specificMessage.drawTextBox();
 
-        if (!specificMessage.getText().equals(specificMSG) || (StringHandler.isNullOrEmpty(selecteditem) && !StringHandler.isNullOrEmpty(newValueName.getText()))) {
+        if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG))) {
             proceedButton.displayString = "Continue";
         } else {
             proceedButton.displayString = "Back";
         }
+
+        proceedButton.enabled = !(StringHandler.isNullOrEmpty(specificMessage.getText()) && isDefaultValue);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -103,7 +106,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == proceedButton.id) {
-            if (!specificMessage.getText().equals(specificMSG) || (StringHandler.isNullOrEmpty(selecteditem) && !StringHandler.isNullOrEmpty(newValueName.getText()))) {
+            if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()))) {
                 if (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) {
                     selecteditem = newValueName.getText();
                 }
@@ -111,11 +114,9 @@ public class ConfigGUI_Editor extends GuiScreen {
                 CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 if (parentscreen instanceof ConfigGUI_BiomeSettings) {
                     CraftPresence.CONFIG.biomeMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.biomeMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
-                }
-                if (parentscreen instanceof ConfigGUI_DimensionSettings) {
+                } else if (parentscreen instanceof ConfigGUI_DimensionSettings) {
                     CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
-                }
-                if (parentscreen instanceof ConfigGUI_ServerSettings) {
+                } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
                     CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                 }
 
@@ -123,7 +124,7 @@ public class ConfigGUI_Editor extends GuiScreen {
                     CommandHandler.reloadData();
                 }
             }
-            if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !StringHandler.isNullOrEmpty(selecteditem))) {
+            if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !isNewValue && !isDefaultValue)) {
                 if (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) {
                     selecteditem = newValueName.getText();
                 }
@@ -159,7 +160,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         super.keyTyped(typedChar, keyCode);
         specificMessage.textboxKeyTyped(typedChar, keyCode);
-        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue) {
             newValueName.textboxKeyTyped(typedChar, keyCode);
         }
     }
@@ -168,7 +169,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         specificMessage.mouseClicked(mouseX, mouseY, mouseButton);
-        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue) {
             newValueName.mouseClicked(mouseX, mouseY, mouseButton);
         }
     }
@@ -176,7 +177,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     @Override
     public void updateScreen() {
         specificMessage.updateCursorCounter();
-        if (isNewValue && StringHandler.isNullOrEmpty(selecteditem)) {
+        if (isNewValue) {
             newValueName.updateCursorCounter();
         }
     }
