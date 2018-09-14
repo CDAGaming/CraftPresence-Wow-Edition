@@ -77,9 +77,9 @@ public class CraftPresence {
             CLIENT.init();
             CLIENT.updateTimestamp();
             CommandHandler.setLoadingPresence(event.getModState());
-        } catch (Exception e) {
+        } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.load"));
-            e.printStackTrace();
+            ex.printStackTrace();
         }
     }
 

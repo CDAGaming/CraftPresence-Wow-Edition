@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,10 @@ public class BiomeHandler {
     public void emptyData() {
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
+    }
+
+    @SubscribeEvent
+    public void onDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         CURRENT_BIOME_NAME = null;
         CURRENT_BIOME_ID = null;
     }

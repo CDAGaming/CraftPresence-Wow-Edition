@@ -25,17 +25,17 @@ public class ServerHandler {
     private int maxPlayers;
     private int serverIndex;
 
-    private void emptyServerData() {
+    public void emptyData() {
+        knownAddresses.clear();
+    }
+
+    @SubscribeEvent
+    public void onDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         currentServer_IP = null;
         currentServer_MOTD = null;
         currentServer_Name = null;
         currentPlayers = 0;
         maxPlayers = 0;
-    }
-
-    @SubscribeEvent
-    public void serverDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        emptyServerData();
         CommandHandler.setMainMenuPresence();
 
         final ServerList serverList = new ServerList(Minecraft.getMinecraft());

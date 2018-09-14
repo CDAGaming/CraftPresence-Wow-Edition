@@ -33,7 +33,10 @@ public class EntityHandler {
         BLOCK_CLASSES.clear();
         ITEM_NAMES.clear();
         ITEM_CLASSES.clear();
+    }
 
+    @SubscribeEvent
+    public void onDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
         CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
         CURRENT_MAINHAND_ITEM_NAME = null;

@@ -46,6 +46,7 @@ public class ConfigHandler {
             NAME_splitCharacter,
             NAME_guiMessages,
             NAME_itemMessages;
+    // Config Variables
     // GENERAL
     public boolean detectCurseManifest = true,
             detectMultiMCManifest = true,
@@ -190,7 +191,7 @@ public class ConfigHandler {
 
         List<String> validProperties = new ArrayList<>();
         List<String> removedProperties = new ArrayList<>();
-        // Check and Verify Config
+        // Config Verification Checks
         for (Field field : getClass().getFields()) {
             if (field.getName().contains("NAME_")) {
                 try {
@@ -214,10 +215,19 @@ public class ConfigHandler {
                 properties.remove(property);
                 save(properties);
             }
-            if (StringHandler.isNullOrEmpty(properties.getProperty(property)) && !removedProperties.contains(property)) {
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
-                updateConfig();
-                break;
+            if (!removedProperties.contains(property)) {
+                if (StringHandler.isNullOrEmpty(properties.getProperty(property))) {
+                    Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
+                    updateConfig();
+                    break;
+                } else {
+                    if (property.equals(NAME_clientID) && properties.getProperty(property).length() < 18) {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                        properties.setProperty(property, "450485984333660181");
+                        save(properties);
+                        break;
+                    }
+                }
             }
         }
     }

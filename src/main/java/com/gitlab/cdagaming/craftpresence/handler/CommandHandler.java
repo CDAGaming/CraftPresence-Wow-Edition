@@ -20,25 +20,39 @@ public class CommandHandler {
     public static void reloadData() {
         if (CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState) {
             CraftPresence.BIOMES.getBiomes();
+        } else {
+            CraftPresence.BIOMES.emptyData();
         }
+
         if (CraftPresence.CONFIG.showCurrentDimension) {
             CraftPresence.DIMENSIONS.getDimensions();
+        } else {
+            CraftPresence.DIMENSIONS.emptyData();
         }
+
         if (CraftPresence.CONFIG.enablePERItem) {
             CraftPresence.ENTITIES.getEntities();
+        } else {
+            CraftPresence.ENTITIES.emptyData();
         }
+
         if (CraftPresence.CONFIG.showGameState) {
             CraftPresence.SERVER.getServerAddresses();
+        } else {
+            CraftPresence.SERVER.emptyData();
         }
+
         if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState) {
             CraftPresence.GUIS.getGUIs();
+        } else {
+            CraftPresence.GUIS.emptyData();
         }
     }
 
     public static void rebootRPC() {
         CraftPresence.CLIENT.shutDown();
-        reloadData();
         CraftPresence.CLIENT.init();
+        reloadData();
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

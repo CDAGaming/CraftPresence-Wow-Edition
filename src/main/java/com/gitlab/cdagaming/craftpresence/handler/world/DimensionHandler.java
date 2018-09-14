@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,10 @@ public class DimensionHandler {
     public void emptyData() {
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
+    }
+
+    @SubscribeEvent
+    public void onDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         CURRENT_DIMENSION_NAME = null;
         CURRENT_DIMENSION_ID = null;
     }
@@ -70,7 +75,6 @@ public class DimensionHandler {
         final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
         final String defaultDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
-
         final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultDimensionIcon);
         final String formattedDimensionIcon = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
         CraftPresence.CLIENT.DETAILS = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());
@@ -81,7 +85,7 @@ public class DimensionHandler {
             boolean matched = false;
             for (String dimension : DIMENSION_NAMES) {
                 final String formattedKey = StringHandler.formatPackIcon(dimension);
-                if (DiscordAssetHandler.contains(formattedKey)) {
+                if (DiscordAssetHandler.contains(formattedKey) && CURRENT_DIMENSION_NAME.equalsIgnoreCase(dimension)) {
                     CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.LARGE);
                     matched = true;
                     break;

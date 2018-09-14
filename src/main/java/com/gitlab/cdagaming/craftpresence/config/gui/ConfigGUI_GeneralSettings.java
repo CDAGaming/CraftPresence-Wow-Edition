@@ -72,7 +72,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         drawString(fontRenderer, I18n.format("gui.config.name.general.clientid"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
 
-        proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && !(clientID.getText().length() + 1 <= 18);
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && !(clientID.getText().length() < 18);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
