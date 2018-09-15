@@ -9,6 +9,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHan
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordEventHandlers;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresence;
+import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordUser;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
@@ -43,9 +44,25 @@ public class DiscordHandler {
 
     public synchronized void init() {
         final DiscordEventHandlers handlers = new DiscordEventHandlers();
+        handlers.errored = (err, err1) -> handlers.errored.accept(err, err1);
+        handlers.disconnected = (err, err1) -> handlers.disconnected.accept(err, err1);
+        handlers.ready = (user) -> handlers.ready.accept(user);
+        handlers.joinGame = (secret) -> handlers.joinGame.accept(secret);
+        handlers.joinRequest = (user) -> handlers.joinRequest.accept(user);
+        handlers.spectateGame = (secret) -> handlers.spectateGame.accept(secret);
+
         NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutDown));
+
+        new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                DiscordRPC.INSTANCE.Discord_RunCallbacks();
+                try {
+                    Thread.sleep(2000);
+                } catch (Exception ignored) {}
+            }
+        }, "RPC-Callback-Handler").start();
 
         Constants.LOG.info(I18n.format("craftpresence.logger.info.load", !StringHandler.isNullOrEmpty(CLIENT_ID) ? CLIENT_ID : "450485984333660181"));
     }

@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.4.2 (09/14/2018)
+## v1.4.2 (09/16/2018)
 
 ### Changes:
 
@@ -27,6 +27,8 @@
 * Fixes Cases of Null/Empty/Invalid Default Messages being allowed in GUI
 
 * Fixes Linux & MacOS Compatibility (Again)
+
+* Fixes Multi-Lingual RPC Support (Logging is Bugged)
 
 * Fixes Cases where CraftPresence's Auto Server Icon Finder overwrote your Config Selection
 

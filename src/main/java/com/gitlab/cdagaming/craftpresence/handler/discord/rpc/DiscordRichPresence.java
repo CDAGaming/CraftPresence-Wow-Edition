@@ -143,6 +143,7 @@ public class DiscordRichPresence extends Structure {
     public byte instance;
 
     public DiscordRichPresence(final String state, final String details, final long startTimestamp, final long endTimestamp, final String largeImageKey, final String largeImageText, final String smallImageKey, final String smallImageText, final String partyId, final int partySize, final int partyMax, final String matchSecret, final String joinSecret, final String spectateSecret, final byte instance) {
+        setStringEncoding("UTF-8");
         this.state = state;
         this.details = details;
         this.startTimestamp = startTimestamp;

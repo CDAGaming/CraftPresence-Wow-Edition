@@ -26,7 +26,7 @@ public class DiscordAsset {
 
     @Override
     public String toString() {
-        return "DiscordAsset{" + "type=" + type + ", id='" + id + '\'' + ", name='" + name + '\'' + '}';
+        return "DiscordAsset{" + "type=" + getType() + ", id='" + getId() + '\'' + ", name='" + getName() + '\'' + '}';
     }
 
     public enum AssetType {

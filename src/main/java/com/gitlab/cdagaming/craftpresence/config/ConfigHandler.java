@@ -4,10 +4,9 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.resources.I18n;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -149,7 +148,7 @@ public class ConfigHandler {
         Properties properties = new Properties();
 
         try {
-            FileReader configReader = new FileReader(fileName);
+            Reader configReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
             properties.load(configReader);
             configReader.close();
         } catch (Exception ex) {
@@ -284,7 +283,7 @@ public class ConfigHandler {
 
     private void save(final Properties properties) {
         try {
-            FileWriter configWriter = new FileWriter(new File(fileName));
+            Writer configWriter = new OutputStreamWriter(new FileOutputStream(new File(fileName)), StandardCharsets.UTF_8);
             properties.store(configWriter, null);
             configWriter.close();
             Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));

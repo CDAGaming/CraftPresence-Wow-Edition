@@ -117,9 +117,9 @@ public class EntityHandler {
             }
         }
 
-        for (String dimensionMessage : CraftPresence.CONFIG.itemMessages) {
-            if (!StringHandler.isNullOrEmpty(dimensionMessage)) {
-                final String[] part = dimensionMessage.split(CraftPresence.CONFIG.splitCharacter);
+        for (String itemMessage : CraftPresence.CONFIG.itemMessages) {
+            if (!StringHandler.isNullOrEmpty(itemMessage)) {
+                final String[] part = itemMessage.split(CraftPresence.CONFIG.splitCharacter);
                 if (!StringHandler.isNullOrEmpty(part[0])) {
                     if (!ITEM_NAMES.contains(part[0])) {
                         ITEM_NAMES.add(part[0]);
