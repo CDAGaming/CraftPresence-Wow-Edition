@@ -1,11 +1,14 @@
 package com.gitlab.cdagaming.craftpresence.handler.server;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.I18n;
@@ -57,10 +60,12 @@ public class ServerHandler {
                 if (CraftPresence.CLIENT.GAME_STATE.contains(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers))) {
                     CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers), I18n.format("craftpresence.defaults.placeholder.players", newCurrentPlayers, newMaxPlayers));
                     CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
-                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
                 currentPlayers = newCurrentPlayers;
                 maxPlayers = newMaxPlayers;
+                CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
+                CraftPresence.CLIENT.PARTY_MAX = maxPlayers > 0 ? maxPlayers : 100;
+                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             }
         }
     }
@@ -85,6 +90,46 @@ public class ServerHandler {
         }
     }
 
+    private String makeSecret() {
+        long currentTimeStamp = System.currentTimeMillis() / 1000;
+        String formattedKey = currentTimeStamp + "";
+        boolean containsServerName;
+        boolean containsServerIP;
+
+        if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
+            formattedKey += "-" + currentServer_Name.toLowerCase();
+            containsServerName = true;
+            containsServerIP = false;
+        } else {
+            formattedKey += "-" + currentServer_IP.toLowerCase();
+            containsServerName = false;
+            containsServerIP = true;
+        }
+        formattedKey += ";" + containsServerName + ";" + containsServerIP;
+        return formattedKey;
+    }
+
+    // TODO: Verify that this Works once Discord allows all javaw.exe's for MC
+    public void verifyAndJoin(final String secret) {
+        String[] boolParts = secret.split(";");
+        String[] stringParts = secret.split("-");
+        boolean containsValidTimeStamp = StringHandler.elementExists(stringParts, 0) && stringParts[0].length() <= 11;
+        boolean containsServerName = StringHandler.elementExists(boolParts, 1) && StringHandler.elementExists(stringParts, 1) && Boolean.parseBoolean(boolParts[1]);
+        boolean containsServerIP = StringHandler.elementExists(boolParts, 2) && StringHandler.elementExists(stringParts, 1) && Boolean.parseBoolean(boolParts[2]);
+        String serverName = containsServerName && !containsServerIP ? stringParts[1] : CraftPresence.CONFIG.defaultServerName;
+        String serverIP = containsServerIP && !containsServerName ? stringParts[1] : "";
+        boolean isValidSecret = boolParts.length <= 4 && stringParts.length <= 3 && maxPlayers != 0 && containsValidTimeStamp;
+
+        if (isValidSecret) {
+            ServerData serverData = new ServerData(serverName, serverIP, false);
+            Minecraft mc = Minecraft.getMinecraft();
+
+            mc.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), mc, serverData));
+        } else {
+            Constants.LOG.error("Secret Key Invalid, Join Request Rejected: " + secret);
+        }
+    }
+
     private void updateServerPresence() {
         final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String defaultServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon);
@@ -94,7 +139,14 @@ public class ServerHandler {
         final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
         final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
         final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
+
         CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers));
+        if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
+            CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
+        } else {
+            CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+        }
+        CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
 
         if (DiscordAssetHandler.contains(formattedServerIconKey) && !currentServerIcon.equals(defaultServerIcon)) {
             CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
@@ -124,12 +176,9 @@ public class ServerHandler {
         serverIndex = serverList.countServers();
 
         while (currentIndex != serverIndex) {
-            try {
-                currentIndex++;
-                final ServerData data = serverList.getServerData(currentIndex);
-                knownAddresses.add(data.serverIP);
-            } catch (Exception ignored) {
-            }
+            currentIndex++;
+            final ServerData data = serverList.getServerData(currentIndex);
+            knownAddresses.add(data.serverIP);
         }
 
         for (String serverMessage : CraftPresence.CONFIG.serverMessages) {

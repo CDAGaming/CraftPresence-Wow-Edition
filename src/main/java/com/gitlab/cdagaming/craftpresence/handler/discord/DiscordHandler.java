@@ -9,7 +9,6 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHan
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordEventHandlers;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresence;
-import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordUser;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
@@ -29,12 +28,12 @@ public class DiscordHandler {
     public String LARGEIMAGETEXT;
     public String CLIENT_ID;
     public long START_TIMESTAMP;
+    public String PARTY_ID;
+    public int PARTY_SIZE;
+    public int PARTY_MAX;
+    public String JOIN_SECRET;
     private long END_TIMESTAMP;
-    private String PARTY_ID;
-    private int PARTY_SIZE;
-    private int PARTY_MAX;
     private String MATCH_SECRET;
-    private String JOIN_SECRET;
     private String SPECTATE_SECRET;
     private byte INSTANCE;
 
@@ -47,7 +46,7 @@ public class DiscordHandler {
         handlers.errored = (err, err1) -> handlers.errored.accept(err, err1);
         handlers.disconnected = (err, err1) -> handlers.disconnected.accept(err, err1);
         handlers.ready = (user) -> handlers.ready.accept(user);
-        handlers.joinGame = (secret) -> handlers.joinGame.accept(secret);
+        handlers.joinGame = (secret) -> CraftPresence.SERVER.verifyAndJoin(secret);
         handlers.joinRequest = (user) -> handlers.joinRequest.accept(user);
         handlers.spectateGame = (secret) -> handlers.spectateGame.accept(secret);
 
@@ -60,7 +59,8 @@ public class DiscordHandler {
                 DiscordRPC.INSTANCE.Discord_RunCallbacks();
                 try {
                     Thread.sleep(2000);
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }, "RPC-Callback-Handler").start();
 

@@ -76,6 +76,10 @@ public class CommandHandler {
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
         CraftPresence.CLIENT.GAME_STATE = "";
+        CraftPresence.CLIENT.PARTY_ID = "";
+        CraftPresence.CLIENT.PARTY_SIZE = 0;
+        CraftPresence.CLIENT.PARTY_MAX = 0;
+        CraftPresence.CLIENT.JOIN_SECRET = "";
         CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.mainmenuMSG;
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
         CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);

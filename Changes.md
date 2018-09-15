@@ -20,6 +20,8 @@
 
   * Implement Config Verification System to prevent Invalid/Empty Settings
 
+* Added Join Request Support (Joining from Invite Only, not Ask to Join)
+
 ### Fixes:
 
 * Fixes & Re-Adds some Missing Options in Config
@@ -53,3 +55,12 @@ The Config GUI has now been overhauled to provide a more User-Friendly Experienc
 * Migrating from `1.13.x` (v1.3.x and Lower) - Rename `craftpresence.cfg` to `craftpresence.properties`
 
 Over time, this GUI will be edited and add new Options to customize your experience.
+
+#### Inviting Others to Join Info:
+
+This Feature is currently in-dev, and somethings may not work relating to Joining your friends such as:
+
+* Minecraft may not launch if you click Join on an Invite
+
+    * This is due to an Issue with how Minecraft is detected in Discord where it only detects certain javaw.exe's, Not all of them
+    * Possible Workaround: Set your Client's Java Version to Java 8 Update 172 (Discord only Detects this version of javaw.exe)
