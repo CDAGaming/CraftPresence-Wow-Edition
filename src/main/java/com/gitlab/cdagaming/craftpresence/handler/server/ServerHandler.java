@@ -172,13 +172,15 @@ public class ServerHandler {
     public void getServerAddresses() {
         final ServerList serverList = new ServerList(Minecraft.getMinecraft());
         serverList.loadServerList();
-        int currentIndex = -1;
+        int currentIndex = 0;
         serverIndex = serverList.countServers();
 
-        while (currentIndex != serverIndex) {
-            currentIndex++;
+        while (currentIndex < serverIndex) {
             final ServerData data = serverList.getServerData(currentIndex);
-            knownAddresses.add(data.serverIP);
+            if (!StringHandler.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(StringHandler.formatIP(data.serverIP))) {
+                knownAddresses.add(StringHandler.formatIP(data.serverIP));
+            }
+            currentIndex++;
         }
 
         for (String serverMessage : CraftPresence.CONFIG.serverMessages) {
