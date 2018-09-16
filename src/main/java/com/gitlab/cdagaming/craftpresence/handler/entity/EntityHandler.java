@@ -56,14 +56,6 @@ public class EntityHandler {
         return itemStack.isEmpty() || itemStack.getItem() == Items.AIR;
     }
 
-    @SubscribeEvent
-    public void onLeave(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
-        CURRENT_MAINHAND_ITEM_NAME = null;
-        CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
-        CURRENT_OFFHAND_ITEM_NAME = null;
-    }
-
     private void getCurrentlyHeldItem(final EntityPlayer player) {
         if (player != null) {
             final ItemStack NEW_CURRENT_MAINHAND_ITEM = player.getHeldItemMainhand();

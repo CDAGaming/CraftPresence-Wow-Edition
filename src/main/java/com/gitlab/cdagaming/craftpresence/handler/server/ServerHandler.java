@@ -43,7 +43,6 @@ public class ServerHandler {
 
         final ServerList serverList = new ServerList(Minecraft.getMinecraft());
         serverList.loadServerList();
-
         if (serverList.countServers() != serverIndex || CraftPresence.CONFIG.serverMessages.length != serverIndex) {
             getServerAddresses();
         }
@@ -125,6 +124,7 @@ public class ServerHandler {
             Minecraft mc = Minecraft.getMinecraft();
 
             mc.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), mc, serverData));
+            CraftPresence.CLIENT.handlers.joinGame.accept(secret);
         } else {
             Constants.LOG.error("Secret Key Invalid, Join Request Rejected: " + secret);
         }

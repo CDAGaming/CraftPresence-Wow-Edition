@@ -37,15 +37,16 @@ public class DiscordHandler {
     private String SPECTATE_SECRET;
     private byte INSTANCE;
 
+    public final DiscordEventHandlers handlers = new DiscordEventHandlers();
+
     public DiscordHandler(final String clientID) {
         CLIENT_ID = clientID;
     }
 
     public synchronized void init() {
-        final DiscordEventHandlers handlers = new DiscordEventHandlers();
         handlers.errored = (err, err1) -> handlers.errored.accept(err, err1);
         handlers.disconnected = (err, err1) -> handlers.disconnected.accept(err, err1);
-        handlers.ready = (user) -> handlers.ready.accept(user);
+        //handlers.ready = (user) -> handlers.ready.accept(user);
         handlers.joinGame = (secret) -> CraftPresence.SERVER.verifyAndJoin(secret);
         handlers.joinRequest = (user) -> handlers.joinRequest.accept(user);
         handlers.spectateGame = (secret) -> handlers.spectateGame.accept(secret);
@@ -58,7 +59,7 @@ public class DiscordHandler {
             while (!Thread.currentThread().isInterrupted()) {
                 DiscordRPC.INSTANCE.Discord_RunCallbacks();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(2000L);
                 } catch (Exception ignored) {
                 }
             }
@@ -69,7 +70,7 @@ public class DiscordHandler {
 
     public void updateTimestamp() {
         if (CraftPresence.CONFIG.showTime) {
-            START_TIMESTAMP = System.currentTimeMillis() / 1000;
+            START_TIMESTAMP = System.currentTimeMillis() / 1000L;
         }
     }
 
