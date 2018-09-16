@@ -20,6 +20,7 @@ import javax.annotation.Nonnull;
 import java.io.File;
 
 public class DiscordHandler {
+    public final DiscordEventHandlers handlers = new DiscordEventHandlers();
     public String GAME_STATE;
     public String DETAILS;
     public String SMALLIMAGEKEY;
@@ -36,8 +37,6 @@ public class DiscordHandler {
     private String MATCH_SECRET;
     private String SPECTATE_SECRET;
     private byte INSTANCE;
-
-    public final DiscordEventHandlers handlers = new DiscordEventHandlers();
 
     public DiscordHandler(final String clientID) {
         CLIENT_ID = clientID;
@@ -84,7 +83,10 @@ public class DiscordHandler {
         }
 
         if (StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) {
-            if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
+            if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
+                presence.smallImageKey = "vivecraft";
+                presence.smallImageText = "Vivecraft is a VR mod supporting many headsets via OpenVR";
+            } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
                 final String iconKey = StringHandler.formatPackIcon(ManifestHandler.manifest.name);
                 if (DiscordAssetHandler.contains(iconKey)) {
                     presence.smallImageKey = iconKey;
