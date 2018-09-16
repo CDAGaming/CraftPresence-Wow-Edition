@@ -65,4 +65,7 @@ This Feature is currently in-dev, and somethings may not work relating to Joinin
 * Minecraft may not launch if you click Join on an Invite
 
     * This is due to an Issue with how Minecraft is detected in Discord where it only detects certain javaw.exe's, Not all of them
+
     * Possible Workaround: Set your Client's Java Version to Java 8 Update 172 (Discord only Detects this version of javaw.exe)
+
+    * If things still do not work after this workaround, Please submit an Issue
