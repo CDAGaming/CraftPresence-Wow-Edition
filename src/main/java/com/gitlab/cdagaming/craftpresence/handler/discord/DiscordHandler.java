@@ -74,7 +74,9 @@ public class DiscordHandler {
     }
 
     public void updatePresence(@Nonnull final DiscordRichPresence presence) {
-        if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
+        if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
+            presence.details = presence.details + " with Vivecraft";
+        } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
             presence.details = presence.details + " | " + StringHandler.formatWord(ManifestHandler.manifest.name);
         } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name"))) {
             presence.details = presence.details + " | " + StringHandler.formatWord(InstanceHandler.get("name"));

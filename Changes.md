@@ -22,6 +22,8 @@
 
 * Added Join Request Support (Joining from Invite Only, not Ask to Join)
 
+* Added Temporary ViveCraft Compatibility (Will be Customizable in v1.4.5)
+
 ### Fixes:
 
 * Fixes & Re-Adds some Missing Options in Config

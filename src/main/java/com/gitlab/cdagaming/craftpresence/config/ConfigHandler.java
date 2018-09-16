@@ -146,6 +146,7 @@ public class ConfigHandler {
 
     public void read() {
         Properties properties = new Properties();
+        boolean verified = false;
 
         try {
             Reader configReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
@@ -156,78 +157,46 @@ public class ConfigHandler {
             ex.printStackTrace();
         }
 
-        // GENERAL
-        detectCurseManifest = Boolean.parseBoolean(properties.getProperty(NAME_detectCurseManifest));
-        detectMultiMCManifest = Boolean.parseBoolean(properties.getProperty(NAME_detectMultiMCManifest));
-        detectTechnicPack = Boolean.parseBoolean(properties.getProperty(NAME_detectTechnicPack));
-        showTime = Boolean.parseBoolean(properties.getProperty(NAME_showTime));
-        showCurrentBiome = Boolean.parseBoolean(properties.getProperty(NAME_showCurrentBiome));
-        showCurrentDimension = Boolean.parseBoolean(properties.getProperty(NAME_showCurrentDimension));
-        showGameState = Boolean.parseBoolean(properties.getProperty(NAME_showGameState));
-        clientID = properties.getProperty(NAME_clientID);
-        defaultIcon = properties.getProperty(NAME_defaultIcon);
-        // BIOME MESSAGES
-        biomeMessages = properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
-        // DIMENSION MESSAGES
-        defaultDimensionIcon = properties.getProperty(NAME_defaultDimensionIcon);
-        dimensionMessages = properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
-        // SERVER MESSAGES
-        defaultServerIcon = properties.getProperty(NAME_defaultServerIcon);
-        defaultServerName = properties.getProperty(NAME_defaultServerName);
-        defaultServerMOTD = properties.getProperty(NAME_defaultServerMOTD);
-        serverMessages = properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
-        // STATUS MESSAGES
-        mainmenuMSG = properties.getProperty(NAME_mainmenuMSG);
-        singleplayerMSG = properties.getProperty(NAME_singleplayerMSG);
-        loadingMSG = properties.getProperty(NAME_loadingMSG);
-        // ADVANCED
-        enableCommands = Boolean.parseBoolean(properties.getProperty(NAME_enableCommands));
-        enablePERGUI = Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI));
-        enablePERItem = Boolean.parseBoolean(properties.getProperty(NAME_enablePERItem));
-        splitCharacter = properties.getProperty(NAME_splitCharacter);
-        guiMessages = properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
-        itemMessages = properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
-
-        List<String> validProperties = new ArrayList<>();
-        List<String> removedProperties = new ArrayList<>();
-        // Config Verification Checks
-        for (Field field : getClass().getFields()) {
-            if (field.getName().contains("NAME_")) {
-                try {
-                    field.setAccessible(true);
-                    Object value = field.get(this);
-                    validProperties.add(value.toString());
-                    if (!properties.stringPropertyNames().contains(value.toString()) && validProperties.contains(value.toString())) {
-                        updateConfig();
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", value.toString()));
-                        break;
-                    }
-                } catch (Exception ignored) {
-                }
+        try {
+            // GENERAL
+            detectCurseManifest = Boolean.parseBoolean(properties.getProperty(NAME_detectCurseManifest));
+            detectMultiMCManifest = Boolean.parseBoolean(properties.getProperty(NAME_detectMultiMCManifest));
+            detectTechnicPack = Boolean.parseBoolean(properties.getProperty(NAME_detectTechnicPack));
+            showTime = Boolean.parseBoolean(properties.getProperty(NAME_showTime));
+            showCurrentBiome = Boolean.parseBoolean(properties.getProperty(NAME_showCurrentBiome));
+            showCurrentDimension = Boolean.parseBoolean(properties.getProperty(NAME_showCurrentDimension));
+            showGameState = Boolean.parseBoolean(properties.getProperty(NAME_showGameState));
+            clientID = properties.getProperty(NAME_clientID);
+            defaultIcon = properties.getProperty(NAME_defaultIcon);
+            // BIOME MESSAGES
+            biomeMessages = properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            // DIMENSION MESSAGES
+            defaultDimensionIcon = properties.getProperty(NAME_defaultDimensionIcon);
+            dimensionMessages = properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            // SERVER MESSAGES
+            defaultServerIcon = properties.getProperty(NAME_defaultServerIcon);
+            defaultServerName = properties.getProperty(NAME_defaultServerName);
+            defaultServerMOTD = properties.getProperty(NAME_defaultServerMOTD);
+            serverMessages = properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            // STATUS MESSAGES
+            mainmenuMSG = properties.getProperty(NAME_mainmenuMSG);
+            singleplayerMSG = properties.getProperty(NAME_singleplayerMSG);
+            loadingMSG = properties.getProperty(NAME_loadingMSG);
+            // ADVANCED
+            enableCommands = Boolean.parseBoolean(properties.getProperty(NAME_enableCommands));
+            enablePERGUI = Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI));
+            enablePERItem = Boolean.parseBoolean(properties.getProperty(NAME_enablePERItem));
+            splitCharacter = properties.getProperty(NAME_splitCharacter);
+            guiMessages = properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            itemMessages = properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
+        } catch (NullPointerException ex) {
+            verifyConfig(properties);
+            verified = true;
+        } finally {
+            if (!verified) {
+                verifyConfig(properties);
             }
-        }
-
-        for (String property : properties.stringPropertyNames()) {
-            if (!validProperties.contains(property)) {
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
-                removedProperties.add(property);
-                properties.remove(property);
-                save(properties);
-            }
-            if (!removedProperties.contains(property)) {
-                if (StringHandler.isNullOrEmpty(properties.getProperty(property))) {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
-                    updateConfig();
-                    break;
-                } else {
-                    if (property.equals(NAME_clientID) && properties.getProperty(property).length() < 18) {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
-                        properties.setProperty(property, "450485984333660181");
-                        save(properties);
-                        break;
-                    }
-                }
-            }
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
         }
     }
 
@@ -245,15 +214,15 @@ public class ConfigHandler {
         properties.setProperty(NAME_clientID, !StringHandler.isNullOrEmpty(clientID) ? clientID : "450485984333660181");
         properties.setProperty(NAME_defaultIcon, !StringHandler.isNullOrEmpty(defaultIcon) ? defaultIcon : "grass");
         // BIOME MESSAGES
-        properties.setProperty(NAME_biomeMessages, !StringHandler.isNullOrEmpty(Arrays.toString(biomeMessages)) ? Arrays.toString(biomeMessages) : "default" + splitCharacter + "Playing in &biome&");
+        properties.setProperty(NAME_biomeMessages, !StringHandler.isNullOrEmpty(Arrays.toString(biomeMessages)) ? Arrays.toString(biomeMessages) : Arrays.toString(new String[]{"default" + splitCharacter + "Playing in &biome&"}));
         // DIMENSION MESSAGES
         properties.setProperty(NAME_defaultDimensionIcon, !StringHandler.isNullOrEmpty(defaultDimensionIcon) ? defaultDimensionIcon : "unknown");
-        properties.setProperty(NAME_dimensionMessages, !StringHandler.isNullOrEmpty(Arrays.toString(dimensionMessages)) ? Arrays.toString(dimensionMessages) : "default" + splitCharacter + "In The &dimension&");
+        properties.setProperty(NAME_dimensionMessages, !StringHandler.isNullOrEmpty(Arrays.toString(dimensionMessages)) ? Arrays.toString(dimensionMessages) : Arrays.toString(new String[]{"default" + splitCharacter + "In The &dimension&"}));
         // SERVER MESSAGES
         properties.setProperty(NAME_defaultServerIcon, !StringHandler.isNullOrEmpty(defaultServerIcon) ? defaultServerIcon : "default");
         properties.setProperty(NAME_defaultServerName, !StringHandler.isNullOrEmpty(defaultServerName) ? defaultServerName : I18n.format("selectServer.defaultName"));
         properties.setProperty(NAME_defaultServerMOTD, !StringHandler.isNullOrEmpty(defaultServerMOTD) ? defaultServerMOTD : I18n.format("craftpresence.defaults.servermessages.servermotd"));
-        properties.setProperty(NAME_serverMessages, !StringHandler.isNullOrEmpty(Arrays.toString(serverMessages)) ? Arrays.toString(serverMessages) : "default" + splitCharacter + "Playing on &motd&");
+        properties.setProperty(NAME_serverMessages, !StringHandler.isNullOrEmpty(Arrays.toString(serverMessages)) ? Arrays.toString(serverMessages) : Arrays.toString(new String[]{"default" + splitCharacter + "Playing on &motd&"}));
         // STATUS MESSAGES
         properties.setProperty(NAME_mainmenuMSG, !StringHandler.isNullOrEmpty(mainmenuMSG) ? mainmenuMSG : I18n.format("craftpresence.defaults.state.mainmenu"));
         properties.setProperty(NAME_singleplayerMSG, !StringHandler.isNullOrEmpty(singleplayerMSG) ? singleplayerMSG : I18n.format("craftpresence.defaults.state.singleplayer"));
@@ -263,8 +232,8 @@ public class ConfigHandler {
         properties.setProperty(NAME_enablePERGUI, enablePERGUI ? "true" : "false");
         properties.setProperty(NAME_enablePERItem, enablePERItem ? "true" : "false");
         properties.setProperty(NAME_splitCharacter, !StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";");
-        properties.setProperty(NAME_guiMessages, !StringHandler.isNullOrEmpty(Arrays.toString(guiMessages)) ? Arrays.toString(guiMessages) : "default" + splitCharacter + "In &gui&");
-        properties.setProperty(NAME_itemMessages, !StringHandler.isNullOrEmpty(Arrays.toString(itemMessages)) ? Arrays.toString(itemMessages) : "default" + splitCharacter + "Holding &main&");
+        properties.setProperty(NAME_guiMessages, !StringHandler.isNullOrEmpty(Arrays.toString(guiMessages)) ? Arrays.toString(guiMessages) : Arrays.toString(new String[]{"default" + splitCharacter + "In &gui&"}));
+        properties.setProperty(NAME_itemMessages, !StringHandler.isNullOrEmpty(Arrays.toString(itemMessages)) ? Arrays.toString(itemMessages) : Arrays.toString(new String[]{"default" + splitCharacter + "Holding &main&"}));
 
         // Check for Conflicts before Saving
         if (showCurrentBiome && showGameState) {
@@ -281,12 +250,52 @@ public class ConfigHandler {
         save(properties);
     }
 
+    private void verifyConfig(final Properties properties) {
+        List<String> validProperties = new ArrayList<>();
+        List<String> removedProperties = new ArrayList<>();
+
+        for (Field field : getClass().getFields()) {
+            if (field.getName().contains("NAME_")) {
+                try {
+                    field.setAccessible(true);
+                    Object value = field.get(this);
+                    validProperties.add(value.toString());
+                    if (!properties.stringPropertyNames().contains(value.toString()) && validProperties.contains(value.toString())) {
+                        updateConfig();
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", value.toString()));
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+        }
+
+        for (String property : properties.stringPropertyNames()) {
+            if (!validProperties.contains(property)) {
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                removedProperties.add(property);
+                properties.remove(property);
+                save(properties);
+            }
+            if (!removedProperties.contains(property)) {
+                if (StringHandler.isNullOrEmpty(properties.getProperty(property))) {
+                    Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
+                    updateConfig();
+                } else {
+                    if (property.equals(NAME_clientID) && properties.getProperty(property).length() < 18) {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                        properties.setProperty(property, "450485984333660181");
+                        save(properties);
+                    }
+                }
+            }
+        }
+    }
+
     private void save(final Properties properties) {
         try {
             Writer configWriter = new OutputStreamWriter(new FileOutputStream(new File(fileName)), StandardCharsets.UTF_8);
             properties.store(configWriter, null);
             configWriter.close();
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.config.save"));
             ex.printStackTrace();
