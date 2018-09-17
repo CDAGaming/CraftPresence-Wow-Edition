@@ -50,7 +50,7 @@ public class CraftPresence {
         MinecraftForge.EVENT_BUS.register(GUIS);
         MinecraftForge.EVENT_BUS.register(SERVER);
 
-        CONFIG = new ConfigHandler(event.getModConfigurationDirectory().getAbsolutePath() + File.separator + Constants.MODID + ".properties");
+        CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
     }
 
     @Mod.EventHandler

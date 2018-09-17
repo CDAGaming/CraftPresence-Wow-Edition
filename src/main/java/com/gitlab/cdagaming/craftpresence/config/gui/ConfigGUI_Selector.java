@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
+import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIScrollList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -38,12 +39,15 @@ public class ConfigGUI_Selector extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
-        addNewButton = new GuiButton(600, (sr.getScaledWidth() / 2) + 10, (sr.getScaledHeight() - 30), 90, 20, "Add New");
         proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) + 105, (sr.getScaledHeight() - 30), 90, 20, "Back");
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight() - 45, 32, sr.getScaledHeight() - 45, 18, itemList);
         searchBox = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) - 140, (sr.getScaledHeight() - 30), 120, 20);
 
-        buttonList.add(addNewButton);
+        if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
+            addNewButton = new GuiButton(600, (sr.getScaledWidth() / 2) + 10, (sr.getScaledHeight() - 30), 90, 20, "Add New");
+            buttonList.add(addNewButton);
+        }
+
         buttonList.add(proceedButton);
         super.initGui();
     }
@@ -89,7 +93,7 @@ public class ConfigGUI_Selector extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == addNewButton.id) {
+        if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, null));
         } else if (button.id == proceedButton.id) {
             if (scrollList.currentValue != null) {

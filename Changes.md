@@ -1,48 +1,26 @@
 # CraftPresence Changes
 
-## v1.4.2 (09/16/2018)
+## v1.4.5 (09/28/2018)
 
 ### Changes:
 
-* Build Changes (Code-Behind):
-
-  * Forge Build Version (1.12.2): `14.23.4.2759` >> `14.23.4.2760`
-
-  * MCP Snapshot Version (1.13): `snapshot_20180903` >> `snapshot_20180914`
-
 * Config & Config GUI Changes:
 
-  * Add Search & Add New Functionality to Scroll Lists
+  * Removed Icon Selection from New Values [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
 
-  * Implemented Server Settings to GUI
+  * No longer Allow Client IDs with Letters in Config GUI
 
-  * Added Mod Support to Per-GUI System
+  * Removed "Add New" Option when Selecting an Icon
 
   * Implement Config Verification System to prevent Invalid/Empty Settings
 
-* Added Join Request Support (Joining from Invite Only, not Ask to Join)
-
-* Added Temporary ViveCraft Compatibility (Will be Customizable in v1.4.5)
-
 ### Fixes:
 
-* Fixes & Re-Adds some Missing Options in Config
+* Re-Do Mod GUI Class Detection for Per-GUI System (Universal)
 
-* Fixes Cases of Null/Empty/Invalid Default Messages being allowed in GUI
+* Fixes setImage() for defaultIcon & Else Cases
 
-* Fixes Linux & MacOS Compatibility (Again)
-
-* Fixes Multi-Lingual RPC Support (Logging is Bugged)
-
-* Fixes Cases where CraftPresence's Auto Server Icon Finder overwrote your Config Selection
-
-* Fixes Removing Values from Selector Settings
-
-* Fixes False-Positive Saving Scenarios
-
-* Fixes `&icon&` Placeholder Support in Server IconKeys
-
-* Fixes Issues involving the Config GUI replacing Settings after multiple edits in one instance (Ex: Changing a specific Dimension Icon Multiple Times)
+* Fixes an NPE in Some Cases when Setting an Icon [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
 
 * Minor Typo and Translation Fixes
 

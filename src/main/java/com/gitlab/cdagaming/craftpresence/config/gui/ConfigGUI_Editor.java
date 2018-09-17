@@ -62,7 +62,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         specificMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         specificMessage.setText(specificMSG);
 
-        if (parentscreen instanceof ConfigGUI_DimensionSettings || parentscreen instanceof ConfigGUI_ServerSettings) {
+        if ((parentscreen instanceof ConfigGUI_DimensionSettings || parentscreen instanceof ConfigGUI_ServerSettings) && !isNewValue) {
             specificIconButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, "Change Icon");
             buttonList.add(specificIconButton);
         }
@@ -88,7 +88,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         }
         specificMessage.drawTextBox();
 
-        if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG))) {
+        if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG))) {
             proceedButton.displayString = "Continue";
         } else {
             proceedButton.displayString = "Back";
@@ -106,7 +106,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == proceedButton.id) {
-            if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()))) {
+            if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG))) {
                 if (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) {
                     selecteditem = newValueName.getText();
                 }
@@ -124,7 +124,7 @@ public class ConfigGUI_Editor extends GuiScreen {
                     CommandHandler.reloadData();
                 }
             }
-            if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !isNewValue && !isDefaultValue)) {
+            if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !isDefaultValue)) {
                 if (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) {
                     selecteditem = newValueName.getText();
                 }
@@ -146,11 +146,11 @@ public class ConfigGUI_Editor extends GuiScreen {
             }
             mc.displayGuiScreen(parentscreen);
         } else if (parentscreen instanceof ConfigGUI_DimensionSettings) {
-            if (button.id == specificIconButton.id) {
+            if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
         } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
-            if (button.id == specificIconButton.id) {
+            if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
         }

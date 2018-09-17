@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.handler.gui;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
+import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.reflect.ClassPath;
 import net.minecraft.client.Minecraft;
@@ -15,8 +16,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
@@ -119,30 +118,35 @@ public class GUIHandler {
                         }
                     }
                 }
+            }
 
-                for (ModContainer container : Loader.instance().getModList()) {
-                    final List<String> packages = container.getOwnedPackages();
-                    for (String packageString : packages) {
-                        if (!hasExclusions && info.getName().startsWith(packageString)) {
-                            final Class modGUIClass = Class.forName(info.getName());
-                            if (modGUIClass.getSuperclass() != null && (Arrays.asList(allowedClasses).contains(modGUIClass.getSuperclass()) || GUI_CLASSES.contains(modGUIClass.getSuperclass()))) {
-                                if (!GUI_NAMES.contains(modGUIClass.getSimpleName())) {
-                                    GUI_NAMES.add(modGUIClass.getSimpleName());
-                                }
-                                if (!GUI_CLASSES.contains(modGUIClass)) {
-                                    GUI_CLASSES.add(modGUIClass);
-                                }
-                            }
-                        }
+            for (String modClass : FileHandler.getModClassNames()) {
+                boolean hasExclusions = false;
+                for (String exclusion : EXCLUSIONS) {
+                    if (modClass.contains(exclusion)) {
+                        hasExclusions = true;
+                        break;
                     }
                 }
 
-                for (String guiMessage : CraftPresence.CONFIG.guiMessages) {
-                    if (!StringHandler.isNullOrEmpty(guiMessage)) {
-                        final String[] part = guiMessage.split(CraftPresence.CONFIG.splitCharacter);
-                        if (!StringHandler.isNullOrEmpty(part[0]) && !GUI_NAMES.contains(part[0])) {
-                            GUI_NAMES.add(part[0]);
+                if (!hasExclusions) {
+                    final Class modGUIClass = Class.forName(modClass);
+                    if (modGUIClass.getSuperclass() != null && (Arrays.asList(allowedClasses).contains(modGUIClass.getSuperclass()) || GUI_CLASSES.contains(modGUIClass.getSuperclass()))) {
+                        if (!GUI_NAMES.contains(modGUIClass.getSimpleName())) {
+                            GUI_NAMES.add(modGUIClass.getSimpleName());
                         }
+                        if (!GUI_CLASSES.contains(modGUIClass)) {
+                            GUI_CLASSES.add(modGUIClass);
+                        }
+                    }
+                }
+            }
+
+            for (String guiMessage : CraftPresence.CONFIG.guiMessages) {
+                if (!StringHandler.isNullOrEmpty(guiMessage)) {
+                    final String[] part = guiMessage.split(CraftPresence.CONFIG.splitCharacter);
+                    if (!StringHandler.isNullOrEmpty(part[0]) && !GUI_NAMES.contains(part[0])) {
+                        GUI_NAMES.add(part[0]);
                     }
                 }
             }

@@ -281,7 +281,7 @@ public class ConfigHandler {
                     Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
                     updateConfig();
                 } else {
-                    if (property.equals(NAME_clientID) && properties.getProperty(property).length() < 18) {
+                    if (property.equals(NAME_clientID) && (properties.getProperty(property).length() < 18 || properties.getProperty(property).matches(".*[a-z].*"))) {
                         Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
                         properties.setProperty(property, "450485984333660181");
                         save(properties);

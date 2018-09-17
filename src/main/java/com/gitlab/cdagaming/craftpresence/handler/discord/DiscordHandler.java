@@ -143,21 +143,30 @@ public class DiscordHandler {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.empty", formattedKey, type.name()));
             final Minecraft mc = Minecraft.getMinecraft();
             final EntityPlayer player = mc.player;
-            if (type.equals(DiscordAsset.AssetType.LARGE) && player != null) {
-                final String dimIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
-                if (DiscordAssetHandler.contains(dimIcon)) {
-                    LARGEIMAGEKEY = dimIcon;
+            final String defaultIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
+            if (type.equals(DiscordAsset.AssetType.LARGE)) {
+                if (player != null) {
+                    final String dimIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
+                    if (DiscordAssetHandler.contains(dimIcon)) {
+                        LARGEIMAGEKEY = dimIcon;
+                    } else {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.asset.failure"));
+                    }
                 } else {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.asset.failure"));
+                    LARGEIMAGEKEY = defaultIcon;
                 }
             }
 
-            if (type.equals(DiscordAsset.AssetType.SMALL) && !mc.isSingleplayer() && player != null) {
-                final String serverIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultServerIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
-                if (DiscordAssetHandler.contains(serverIcon)) {
-                    SMALLIMAGEKEY = serverIcon;
+            if (type.equals(DiscordAsset.AssetType.SMALL)) {
+                if (!mc.isSingleplayer() && player != null) {
+                    final String serverIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultServerIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
+                    if (DiscordAssetHandler.contains(serverIcon)) {
+                        SMALLIMAGEKEY = serverIcon;
+                    } else {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.asset.failure"));
+                    }
                 } else {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.asset.failure"));
+                    SMALLIMAGEKEY = defaultIcon;
                 }
             }
         }
