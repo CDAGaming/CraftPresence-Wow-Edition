@@ -12,11 +12,13 @@
 
   * Removed "Add New" Option when Selecting an Icon
 
-  * Implement Config Verification System to prevent Invalid/Empty Settings
-
 ### Fixes:
 
-* Re-Do Mod GUI Class Detection for Per-GUI System (Universal)
+* Fixes Mod GUI Class Detection for Per-GUI System (Now Universal)
+
+* Fixes "Unrecognized Command" with `/cp view assets large`
+
+* Fixes an NPE when Editing a Previously Missing Value in Config GUI
 
 * Fixes setImage() for defaultIcon & Else Cases
 

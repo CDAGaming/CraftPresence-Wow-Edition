@@ -83,6 +83,7 @@ public class ConfigHandler {
     public boolean rebootOnWorldLoad = false;
     // CLASS-SPECIFIC - PRIVATE
     private String fileName;
+    private boolean verified = false;
 
     public ConfigHandler(String fileName) {
         this.fileName = fileName;
@@ -146,7 +147,6 @@ public class ConfigHandler {
 
     public void read() {
         Properties properties = new Properties();
-        boolean verified = false;
 
         try {
             Reader configReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
@@ -191,12 +191,12 @@ public class ConfigHandler {
             itemMessages = properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ");
         } catch (NullPointerException ex) {
             verifyConfig(properties);
-            verified = true;
         } finally {
             if (!verified) {
                 verifyConfig(properties);
+            } else {
+                Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
             }
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
         }
     }
 
@@ -253,6 +253,7 @@ public class ConfigHandler {
     private void verifyConfig(final Properties properties) {
         List<String> validProperties = new ArrayList<>();
         List<String> removedProperties = new ArrayList<>();
+        boolean needsFullUpdate = false;
 
         for (Field field : getClass().getFields()) {
             if (field.getName().contains("NAME_")) {
@@ -261,8 +262,8 @@ public class ConfigHandler {
                     Object value = field.get(this);
                     validProperties.add(value.toString());
                     if (!properties.stringPropertyNames().contains(value.toString()) && validProperties.contains(value.toString())) {
-                        updateConfig();
                         Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", value.toString()));
+                        needsFullUpdate = true;
                     }
                 } catch (Exception ignored) {
                 }
@@ -279,7 +280,7 @@ public class ConfigHandler {
             if (!removedProperties.contains(property)) {
                 if (StringHandler.isNullOrEmpty(properties.getProperty(property))) {
                     Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
-                    updateConfig();
+                    needsFullUpdate = true;
                 } else {
                     if (property.equals(NAME_clientID) && (properties.getProperty(property).length() < 18 || properties.getProperty(property).matches(".*[a-z].*"))) {
                         Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
@@ -288,6 +289,14 @@ public class ConfigHandler {
                     }
                 }
             }
+        }
+
+        if (needsFullUpdate) {
+            updateConfig();
+            verified = true;
+            read();
+        } else {
+            verified = true;
         }
     }
 

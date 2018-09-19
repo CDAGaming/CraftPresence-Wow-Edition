@@ -130,8 +130,6 @@ public class CPCommands extends CommandBase implements IClientCommand {
                                 }
                                 if (args[2].equalsIgnoreCase("small") || args[2].equalsIgnoreCase("all")) {
                                     sender.sendMessage(new TextComponentTranslation("craftpresence.command.assets.small.header", DiscordAssetHandler.SMALL_ICONS));
-                                } else {
-                                    sender.sendMessage(new TextComponentTranslation("craftpresence.command.unrecognized"));
                                 }
                             }
                         } else {
