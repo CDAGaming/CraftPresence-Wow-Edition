@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.handler;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class StringHandler {
@@ -100,11 +101,7 @@ public class StringHandler {
                 break;
             }
         }
-        if (!matched && alternativeMSG != null) {
-            return alternativeMSG;
-        } else {
-            return formattedKey;
-        }
+        return !matched && !isNullOrEmpty(alternativeMSG) ? alternativeMSG : formattedKey;
     }
 
     public static String[] setConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String newMessage) {
@@ -161,11 +158,13 @@ public class StringHandler {
     }
 
     public static boolean elementExists(final String[] data, final int index) {
-        boolean result = false;
+        return elementExists(Arrays.asList(data), index);
+    }
+
+    public static boolean elementExists(final List<String> data, final int index) {
+        boolean result;
         try {
-            if (data.length >= index & data[index] != null) {
-                result = true;
-            }
+            result = data.size() >= index && !isNullOrEmpty(data.get(index));
         } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             result = false;
         }

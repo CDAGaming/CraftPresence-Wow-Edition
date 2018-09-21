@@ -15,17 +15,11 @@ public class InstanceHandler {
     private static String instanceFile = new File(System.getProperty("user.dir")).getParent() + "/instance.cfg";
 
     public static boolean contains(String key) {
-        if (configFile != null) {
-            return configFile.containsKey(key);
-        }
-        return false;
+        return configFile != null && configFile.containsKey(key);
     }
 
     public static String get(String key) {
-        if (configFile != null && contains(key)) {
-            return configFile.getProperty(key);
-        }
-        return null;
+        return contains(key) ? configFile.getProperty(key) : null;
     }
 
     public static void loadInstance() {

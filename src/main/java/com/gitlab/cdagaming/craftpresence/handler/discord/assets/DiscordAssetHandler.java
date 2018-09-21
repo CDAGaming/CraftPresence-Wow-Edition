@@ -5,11 +5,9 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.math.MathHelper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DiscordAssetHandler {
     public static List<String> SMALL_ICONS = new ArrayList<>();
@@ -29,34 +27,28 @@ public class DiscordAssetHandler {
 
     public static DiscordAsset get(final String key) {
         final String formattedKey = StringHandler.formatPackIcon(key.replace(" ", "_"));
-        if (contains(formattedKey))
-            return ASSET_LIST.get(formattedKey);
-
-        return null;
+        return contains(formattedKey) ? ASSET_LIST.get(formattedKey) : null;
     }
 
     public static String getKey(final String key) {
         final String formattedKey = StringHandler.formatPackIcon(key.replace(" ", "_"));
-        if (contains(formattedKey))
-            return ASSET_LIST.get(formattedKey).getName();
-
-        return null;
+        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getName() : null;
     }
 
     public static String getID(final String key) {
         final String formattedKey = StringHandler.formatPackIcon(key.replace(" ", "_"));
-        if (contains(formattedKey))
-            return ASSET_LIST.get(formattedKey).getId();
-
-        return null;
+        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getId() : null;
     }
 
     public static DiscordAsset.AssetType getType(final String key) {
         final String formattedKey = key.replace(" ", "_").toLowerCase();
-        if (contains(formattedKey))
-            return ASSET_LIST.get(formattedKey).getType();
+        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getType() : DiscordAsset.AssetType.LARGE;
+    }
 
-        return DiscordAsset.AssetType.LARGE;
+    public static String getRandomAsset(final String alternativeKey) {
+        final String formattedKey = StringHandler.formatPackIcon(alternativeKey);
+        int randomInteger = MathHelper.getInt(new Random(), 0, ICON_LIST.size());
+        return StringHandler.elementExists(ICON_LIST, randomInteger) ? ICON_LIST.get(randomInteger) : formattedKey;
     }
 
     public static void loadAssets() {
@@ -96,11 +88,32 @@ public class DiscordAssetHandler {
                         ICON_IDS.add(asset.getId());
                     }
                 }
-                Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.detected", String.valueOf(ASSET_LIST.size())));
             }
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load"));
             ex.printStackTrace();
+        } finally {
+            verifyConfigAssets();
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.detected", String.valueOf(ASSET_LIST.size())));
+        }
+    }
+
+    private static void verifyConfigAssets() {
+        boolean needsFullUpdate = false;
+        for (String property : CraftPresence.CONFIG.properties.stringPropertyNames()) {
+            if ((property.equals(CraftPresence.CONFIG.NAME_defaultIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) && !contains(CraftPresence.CONFIG.properties.getProperty(property))) {
+                final String alternateKey = !property.equals(CraftPresence.CONFIG.NAME_defaultIcon) ? CraftPresence.CONFIG.properties.getProperty(CraftPresence.CONFIG.NAME_defaultIcon) : null;
+                final String newAsset = getRandomAsset(alternateKey);
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.pre", CraftPresence.CONFIG.properties.getProperty(property), property));
+                CraftPresence.CONFIG.properties.setProperty(property, newAsset);
+                needsFullUpdate = true;
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.post", property, newAsset));
+            }
+        }
+
+        if (needsFullUpdate) {
+            CraftPresence.CONFIG.save(CraftPresence.CONFIG.properties);
+            CraftPresence.CONFIG.read();
         }
     }
 }

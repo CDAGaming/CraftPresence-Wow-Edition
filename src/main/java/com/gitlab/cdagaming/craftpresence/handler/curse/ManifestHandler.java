@@ -15,10 +15,7 @@ public class ManifestHandler {
     private static Map<String, Manifest> manifests = new HashMap<>();
 
     public static boolean contains(String key) {
-        if (manifest != null) {
-            return manifests.containsKey(key);
-        }
-        return false;
+        return manifest != null && manifests.containsKey(key);
     }
 
     public static void loadManifest() {

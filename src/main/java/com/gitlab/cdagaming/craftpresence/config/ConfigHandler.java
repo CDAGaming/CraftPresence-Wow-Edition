@@ -81,6 +81,8 @@ public class ConfigHandler {
     public boolean hasChanged = false;
     public boolean hasClientPropertiesChanged = false;
     public boolean rebootOnWorldLoad = false;
+    // CLASS-SPECIFIC - PUBLIC
+    public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE
     private String fileName;
     private boolean verified = false;
@@ -146,8 +148,6 @@ public class ConfigHandler {
     }
 
     public void read() {
-        Properties properties = new Properties();
-
         try {
             Reader configReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
             properties.load(configReader);
@@ -286,6 +286,7 @@ public class ConfigHandler {
                         Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
                         properties.setProperty(property, "450485984333660181");
                         save(properties);
+                        clientID = properties.getProperty(property);
                     }
                 }
             }
@@ -300,7 +301,7 @@ public class ConfigHandler {
         }
     }
 
-    private void save(final Properties properties) {
+    public void save(final Properties properties) {
         try {
             Writer configWriter = new OutputStreamWriter(new FileOutputStream(new File(fileName)), StandardCharsets.UTF_8);
             properties.store(configWriter, null);
