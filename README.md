@@ -77,7 +77,7 @@ In some Configuration Areas, CraftPresence Provides some Placeholders to make th
 - &MAIN& - The Current Item your Main Hand is Holding
 - &OFFHAND& - The Current Item your Off Hand is Holding*
 
-(In v1.4.0, this is your OffHand Item's Message*)
+(Starting in v1.4.0, this is your OffHand Item's Message*)
 
 ## Disclaimer
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party

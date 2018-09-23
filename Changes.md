@@ -24,6 +24,8 @@
 
 * Fixes an NPE in Some Cases when Setting an Icon [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
 
+* Fixes Issues with Getting Biome Information [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/4)
+
 * Minor Typo and Translation Fixes
 
 ### More Information:

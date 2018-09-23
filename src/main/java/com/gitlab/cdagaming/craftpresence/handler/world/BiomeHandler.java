@@ -5,7 +5,6 @@ import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -34,13 +33,13 @@ public class BiomeHandler {
     public void onChunkChange(final ChunkEvent.Load chunk) {
         final EntityPlayer player = Minecraft.getMinecraft().player;
         if (player != null && CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState) {
-            getCurrentBiomeData(player, chunk.getChunk());
+            getCurrentBiomeData(player);
             updateBiomePresence();
         }
     }
 
-    private void getCurrentBiomeData(final EntityPlayer player, final Chunk chunk) {
-        final Biome CURRENT_BIOME = chunk.getBiome(player.getPosition(), chunk.getWorld().getBiomeProvider());
+    private void getCurrentBiomeData(final EntityPlayer player) {
+        final Biome CURRENT_BIOME = player.world.getBiome(player.getPosition());
         CURRENT_BIOME_NAME = CURRENT_BIOME.getBiomeName();
         CURRENT_BIOME_ID = Biome.getIdForBiome(CURRENT_BIOME);
     }
@@ -54,11 +53,13 @@ public class BiomeHandler {
 
     public void getBiomes() {
         for (Biome biome : Biome.REGISTRY) {
-            if (!BIOME_NAMES.contains(biome.getBiomeName())) {
-                BIOME_NAMES.add(biome.getBiomeName());
-            }
-            if (!BIOME_IDS.contains(Biome.getIdForBiome(biome))) {
-                BIOME_IDS.add(Biome.getIdForBiome(biome));
+            if (biome != null) {
+                if (!BIOME_NAMES.contains(biome.getBiomeName())) {
+                    BIOME_NAMES.add(biome.getBiomeName());
+                }
+                if (!BIOME_IDS.contains(Biome.getIdForBiome(biome))) {
+                    BIOME_IDS.add(Biome.getIdForBiome(biome));
+                }
             }
         }
 
