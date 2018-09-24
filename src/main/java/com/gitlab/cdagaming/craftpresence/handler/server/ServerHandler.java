@@ -12,6 +12,8 @@ import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -51,46 +53,61 @@ public class ServerHandler {
     @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent event) {
         final Minecraft minecraft = Minecraft.getMinecraft();
-        if (CraftPresence.CONFIG.showGameState && !minecraft.isSingleplayer() && minecraft.getConnection() != null) {
-            int newCurrentPlayers = minecraft.getConnection().getPlayerInfoMap().size();
-            int newMaxPlayers = minecraft.getConnection().currentServerMaxPlayers;
+        if (CraftPresence.CONFIG.showGameState) {
+            if (!minecraft.isSingleplayer() && minecraft.getConnection() != null) {
+                final int newCurrentPlayers = minecraft.getConnection().getPlayerInfoMap().size();
+                final int newMaxPlayers = minecraft.getConnection().currentServerMaxPlayers;
 
-            if (newCurrentPlayers != currentPlayers || newMaxPlayers != maxPlayers) {
-                if (CraftPresence.CLIENT.GAME_STATE.contains(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers))) {
-                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers), I18n.format("craftpresence.defaults.placeholder.players", newCurrentPlayers, newMaxPlayers));
-                    CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
+                if (newCurrentPlayers != currentPlayers || newMaxPlayers != maxPlayers) {
+                    if (CraftPresence.CLIENT.GAME_STATE.contains(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers))) {
+                        CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers), I18n.format("craftpresence.defaults.placeholder.players", newCurrentPlayers, newMaxPlayers));
+                        CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
+                    }
+                    currentPlayers = newCurrentPlayers;
+                    maxPlayers = newMaxPlayers;
+                    CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
+                    CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
+                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
-                currentPlayers = newCurrentPlayers;
-                maxPlayers = newMaxPlayers;
-                CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
-                CraftPresence.CLIENT.PARTY_MAX = maxPlayers > 0 ? maxPlayers : 100;
-                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             }
+        }
+        if (CraftPresence.CONFIG.rebootOnWorldLoad) {
+            CommandHandler.rebootRPC();
+            CraftPresence.CONFIG.rebootOnWorldLoad = false;
         }
     }
 
     @SubscribeEvent
-    public void serverConnect(final FMLNetworkEvent.ClientConnectedToServerEvent event) {
+    public void serverConnect(final EntityJoinWorldEvent event) {
         final Minecraft minecraft = Minecraft.getMinecraft();
-        if (CraftPresence.CONFIG.showGameState && !minecraft.isSingleplayer()) {
-            final ServerData serverData = minecraft.getCurrentServerData();
-            if (serverData != null) {
-                currentServer_IP = serverData.serverIP;
-                currentServer_Name = serverData.serverName;
-                currentServer_MOTD = StringHandler.stripColors(serverData.serverMOTD);
-                if (StringHandler.isNullOrEmpty(currentServer_Name)) {
-                    currentServer_Name = CraftPresence.CONFIG.defaultServerName;
+        final EntityPlayer player = minecraft.player;
+
+        if (player != null && event.getEntity() == player) {
+            if (CraftPresence.CONFIG.showGameState) {
+                if (!minecraft.isSingleplayer()) {
+                    final ServerData serverData = minecraft.getCurrentServerData();
+                    if (serverData != null) {
+                        currentServer_IP = serverData.serverIP;
+                        currentServer_Name = serverData.serverName;
+                        currentServer_MOTD = StringHandler.stripColors(serverData.serverMOTD);
+                        if (StringHandler.isNullOrEmpty(currentServer_Name)) {
+                            currentServer_Name = CraftPresence.CONFIG.defaultServerName;
+                        }
+                        if (StringHandler.isNullOrEmpty(currentServer_MOTD) || currentServer_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || currentServer_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) {
+                            currentServer_MOTD = CraftPresence.CONFIG.defaultServerMOTD;
+                        }
+                        updateServerPresence();
+                    }
+                } else {
+                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", I18n.format("craftpresence.defaults.placeholder.ign", minecraft.getSession().getUsername()));
+                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
-                if (StringHandler.isNullOrEmpty(currentServer_MOTD) || currentServer_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || currentServer_MOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) {
-                    currentServer_MOTD = CraftPresence.CONFIG.defaultServerMOTD;
-                }
-                updateServerPresence();
             }
         }
     }
 
     private String makeSecret() {
-        long currentTimeStamp = System.currentTimeMillis() / 1000;
+        long currentTimeStamp = System.currentTimeMillis() / 1000L;
         String formattedKey = currentTimeStamp + "";
         boolean containsServerName;
         boolean containsServerIP;
@@ -140,7 +157,7 @@ public class ServerHandler {
         final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
         final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
 
-        CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers));
+        CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers)).replace("&ign&", I18n.format("craftpresence.defaults.placeholder.ign", Minecraft.getMinecraft().getSession().getUsername()));
         if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
             CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
         } else {

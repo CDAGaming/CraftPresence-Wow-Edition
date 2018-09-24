@@ -67,6 +67,10 @@ In some Configuration Areas, CraftPresence Provides some Placeholders to make th
 - &MOTD& - The Current Server MOTD (Message of The Day)
 - &ICON& - The Default Server Icon Name
 - &PLAYERS& - The Current Player Count `(10 / 100 Players)`
+- &IGN& - Your Minecraft Username
+
+#### SinglePlayer Placeholders
+- &IGN& - Your Minecraft Username
 
 #### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)

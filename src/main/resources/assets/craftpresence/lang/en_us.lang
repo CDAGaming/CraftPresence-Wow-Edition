@@ -65,7 +65,7 @@ gui.config.comment.dimensionmessages.dimensionmessages=Dimension Messages Data \
 gui.config.comment.servermessages.servericon=Server Icon to default to when in an Unsupported Server
 gui.config.comment.servermessages.servermotd=Server MOTD to default to, in the case of a null MOTD \n (And in Direct Connects)
 gui.config.comment.servermessages.servername=Server Display Name to default to, in the case of a null Name \n (And in Direct Connects)
-gui.config.comment.servermessages.servermessages=Server Messages Data \n (Format: server_IP;message;icon or default;message;icon) \n &ip& = Server IP \n &name& = Server List Name \n &motd& = Server MOTD \n &icon& = Default Server Icon
+gui.config.comment.servermessages.servermessages=Server Messages Data \n (Format: server_IP;message;icon or default;message;icon) \n &ip& = Server IP \n &name& = Server List Name \n &motd& = Server MOTD \n &icon& = Default Server Icon \n &ign& = Your Minecraft Username
 gui.config.comment.statusmessages.loadingmsg=Message to Display when Loading the Game
 gui.config.comment.statusmessages.mainmenumsg=Message to Display when on the Main Menu
 gui.config.comment.statusmessages.lanmsg=Message to Display when joining a LAN Game \n (Will only show if Status is Enabled)
@@ -85,6 +85,7 @@ craftpresence.defaults.state.mcversion=Minecraft %1$s
 craftpresence.defaults.state.lan=Playing on a LAN Server
 craftpresence.defaults.state.singleplayer=Playing Singleplayer
 craftpresence.defaults.placeholder.players=%1$s / %2$s Players
+craftpresence.defaults.placeholder.ign=Name: %1$s
 ## COMMAND MESSAGES ##
 craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lconfig §r- Open CraftPresence's Config GUI \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page
 craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands: \n §6§lcurrentData §r- Shows your Current RPC Data, in text \n §6§lassets §r- Displays all Asset Icons available \n §6§ldimensions §r- Displays all Dimension Names

@@ -1,7 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
-import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
@@ -39,13 +38,6 @@ public class DimensionHandler {
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
         if (player != null && event.getEntity() == player) {
-            if (CraftPresence.CONFIG.showGameState && !CraftPresence.CONFIG.enablePERItem && minecraft.isSingleplayer()) {
-                CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG;
-            }
-            if (CraftPresence.CONFIG.rebootOnWorldLoad) {
-                CommandHandler.rebootRPC();
-                CraftPresence.CONFIG.rebootOnWorldLoad = false;
-            }
             updateDimensionData(player.world);
         }
     }
