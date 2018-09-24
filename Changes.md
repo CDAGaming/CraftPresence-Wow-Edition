@@ -12,6 +12,8 @@
 
   * Removed "Add New" Option when Selecting an Icon
 
+* Added `&ign&` Placeholder for Server and SinglePlayer Messages
+
 ### Fixes:
 
 * Fixes Mod GUI Class Detection for Per-GUI System (Now Universal)
@@ -25,6 +27,8 @@
 * Fixes an NPE in Some Cases when Setting an Icon [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
 
 * Fixes Issues with Getting Biome Information [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/4)
+
+* Fixes Possible NPE Scenarios with Dimension and Entity Getters
 
 * Minor Typo and Translation Fixes
 

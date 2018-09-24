@@ -92,20 +92,24 @@ public class EntityHandler {
 
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
-            if (!BLOCK_NAMES.contains(block.getLocalizedName())) {
-                BLOCK_NAMES.add(block.getLocalizedName());
-            }
-            if (!BLOCK_CLASSES.contains(block.getClass().getName())) {
-                BLOCK_CLASSES.add(block.getClass().getName());
+            if (block != null) {
+                if (!BLOCK_NAMES.contains(block.getLocalizedName())) {
+                    BLOCK_NAMES.add(block.getLocalizedName());
+                }
+                if (!BLOCK_CLASSES.contains(block.getClass().getName())) {
+                    BLOCK_CLASSES.add(block.getClass().getName());
+                }
             }
         }
 
         for (Item item : Item.REGISTRY) {
-            if (item.getRegistryName() != null && !ITEM_NAMES.contains(item.getRegistryName().toString())) {
-                ITEM_NAMES.add(item.getRegistryName().toString());
-            }
-            if (!ITEM_CLASSES.contains(item.getClass().getName())) {
-                ITEM_CLASSES.add(item.getClass().getName());
+            if (item != null) {
+                if (!ITEM_NAMES.contains(item.getItemStackDisplayName(item.getDefaultInstance()))) {
+                    ITEM_NAMES.add(item.getItemStackDisplayName(item.getDefaultInstance()));
+                }
+                if (!ITEM_CLASSES.contains(item.getClass().getName())) {
+                    ITEM_CLASSES.add(item.getClass().getName());
+                }
             }
         }
 

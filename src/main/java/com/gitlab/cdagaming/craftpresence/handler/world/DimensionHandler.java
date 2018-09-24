@@ -97,11 +97,13 @@ public class DimensionHandler {
 
     public void getDimensions() {
         for (DimensionType TYPE : DimensionType.values()) {
-            if (!DIMENSION_NAMES.contains(TYPE.getName())) {
-                DIMENSION_NAMES.add(TYPE.getName());
-            }
-            if (!DIMENSION_IDS.contains(TYPE.getId())) {
-                DIMENSION_IDS.add(TYPE.getId());
+            if (TYPE != null) {
+                if (!DIMENSION_NAMES.contains(TYPE.getName())) {
+                    DIMENSION_NAMES.add(TYPE.getName());
+                }
+                if (!DIMENSION_IDS.contains(TYPE.getId())) {
+                    DIMENSION_IDS.add(TYPE.getId());
+                }
             }
         }
 
