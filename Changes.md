@@ -12,6 +12,8 @@
 
   * Removed "Add New" Option when Selecting an Icon
 
+  * Added Advanced Settings GUI (GUI and Item Messages WIP)
+
 * Added `&ign&` Placeholder for Server and SinglePlayer Messages
 
 ### Fixes:

@@ -50,8 +50,6 @@ In some Configuration Areas, CraftPresence Provides some Placeholders to make th
 
 (If Connecting to a Server via Direct Connect, CraftPresence will use the Default MOTD and Name, If you use those placeholders in your config*)
 
-(* = Coming Soon)
-
 #### Biome Placeholders
 - &BIOME& - The Current Biome Name
 - &ID& - The Current Biome ID
