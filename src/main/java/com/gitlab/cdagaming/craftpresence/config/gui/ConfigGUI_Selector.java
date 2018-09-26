@@ -64,7 +64,8 @@ public class ConfigGUI_Selector extends GuiScreen {
             if (!searchBox.getText().equals(searchTerm)) {
                 searchTerm = searchBox.getText();
                 for (String item : originalList) {
-                    if (item.contains(searchTerm) && !modifiedList.contains(item)) {
+                    String formattedItem = item.toLowerCase();
+                    if (formattedItem.contains(searchTerm.toLowerCase()) && !modifiedList.contains(formattedItem)) {
                         modifiedList.add(item);
                     }
                 }

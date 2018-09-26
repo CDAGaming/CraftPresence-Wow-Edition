@@ -28,6 +28,10 @@
 
 * Fixes Issues with Getting Biome Information [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/4)
 
+* Fixes Case-Sensitive Issues with Search Functions
+
+* Fixes Retrieving Sub Items and Blocks
+
 * Fixes Possible NPE Scenarios with Dimension and Entity Getters
 
 * Minor Typo and Translation Fixes

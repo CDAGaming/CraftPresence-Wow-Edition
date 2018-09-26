@@ -1,13 +1,16 @@
 package com.gitlab.cdagaming.craftpresence.handler.entity;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -16,13 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
+    public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> BLOCK_NAMES = new ArrayList<>();
     private List<String> BLOCK_CLASSES = new ArrayList<>();
-
     private List<String> ITEM_NAMES = new ArrayList<>();
     private List<String> ITEM_CLASSES = new ArrayList<>();
-
-    public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> ENTITY_CLASSES = new ArrayList<>();
 
     private String CURRENT_MAINHAND_ITEM_NAME;
@@ -98,22 +99,58 @@ public class EntityHandler {
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
             if (block != null) {
+                NonNullList<ItemStack> subtypes = NonNullList.create();
+                for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
+                    if (tab != null) {
+                        block.getSubBlocks(tab, subtypes);
+                    }
+                }
+
                 if (!BLOCK_NAMES.contains(block.getLocalizedName())) {
                     BLOCK_NAMES.add(block.getLocalizedName());
                 }
                 if (!BLOCK_CLASSES.contains(block.getClass().getName())) {
                     BLOCK_CLASSES.add(block.getClass().getName());
                 }
+
+                if (!subtypes.isEmpty()) {
+                    for (ItemStack itemStack : subtypes) {
+                        if (!BLOCK_NAMES.contains(itemStack.getDisplayName())) {
+                            BLOCK_NAMES.add(itemStack.getDisplayName());
+                        }
+                        if (!BLOCK_CLASSES.contains(itemStack.getItem().getClass().getName())) {
+                            BLOCK_CLASSES.add(itemStack.getItem().getClass().getName());
+                        }
+                    }
+                }
             }
         }
 
         for (Item item : Item.REGISTRY) {
             if (item != null) {
+                NonNullList<ItemStack> subtypes = NonNullList.create();
+                for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
+                    if (tab != null) {
+                        item.getSubItems(tab, subtypes);
+                    }
+                }
+
                 if (!ITEM_NAMES.contains(item.getItemStackDisplayName(item.getDefaultInstance()))) {
                     ITEM_NAMES.add(item.getItemStackDisplayName(item.getDefaultInstance()));
                 }
                 if (!ITEM_CLASSES.contains(item.getClass().getName())) {
                     ITEM_CLASSES.add(item.getClass().getName());
+                }
+
+                if (!subtypes.isEmpty()) {
+                    for (ItemStack itemStack : subtypes) {
+                        if (!ITEM_NAMES.contains(itemStack.getDisplayName())) {
+                            ITEM_NAMES.add(itemStack.getDisplayName());
+                        }
+                        if (!ITEM_CLASSES.contains(itemStack.getItem().getClass().getName())) {
+                            ITEM_CLASSES.add(itemStack.getItem().getClass().getName());
+                        }
+                    }
                 }
             }
         }
@@ -132,9 +169,31 @@ public class EntityHandler {
             }
         }
 
-        ENTITY_NAMES.addAll(ITEM_NAMES);
+        verifyEntities();
+    }
+
+    private void verifyEntities() {
+        List<String> removingBlocks = new ArrayList<>();
+        List<String> removingItems = new ArrayList<>();
+        for (String itemName : ITEM_NAMES) {
+            if (itemName.contains("tile.") || itemName.contains("item.") || itemName.contains(".") || itemName.contains(".name")) {
+                removingItems.add(itemName);
+            }
+        }
+
+        for (String blockName : BLOCK_NAMES) {
+            if (blockName.contains("tile.") || blockName.contains("item.") || blockName.contains(".") || blockName.contains(".name")) {
+                removingBlocks.add(blockName);
+            }
+        }
+
+        Constants.LOG.error(" " + removingBlocks + " " + removingItems);
+        ITEM_NAMES.removeAll(removingItems);
+        BLOCK_NAMES.removeAll(removingBlocks);
+
         ENTITY_NAMES.addAll(BLOCK_NAMES);
-        ENTITY_CLASSES.addAll(ITEM_CLASSES);
+        ENTITY_NAMES.addAll(ITEM_NAMES);
         ENTITY_CLASSES.addAll(BLOCK_CLASSES);
+        ENTITY_CLASSES.addAll(ITEM_CLASSES);
     }
 }
