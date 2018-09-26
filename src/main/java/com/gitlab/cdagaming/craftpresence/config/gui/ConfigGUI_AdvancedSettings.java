@@ -64,7 +64,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         drawString(fontRenderer, I18n.format("gui.config.name.advanced.splitcharacter"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         splitCharacter.drawTextBox();
 
-        proceedButton.enabled = !StringHandler.isNullOrEmpty(splitCharacter.getText()) && !(splitCharacter.getText().length() < 1) && !splitCharacter.getText().matches(".*[a-z].*");
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

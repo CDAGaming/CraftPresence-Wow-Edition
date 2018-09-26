@@ -1,6 +1,5 @@
 package com.gitlab.cdagaming.craftpresence.handler.entity;
 
-import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
@@ -187,7 +186,6 @@ public class EntityHandler {
             }
         }
 
-        Constants.LOG.error(" " + removingBlocks + " " + removingItems);
         ITEM_NAMES.removeAll(removingItems);
         BLOCK_NAMES.removeAll(removingBlocks);
 

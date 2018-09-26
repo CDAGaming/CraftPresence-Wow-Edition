@@ -71,7 +71,7 @@ gui.config.comment.statusmessages.mainmenumsg=Message to Display when on the Mai
 gui.config.comment.statusmessages.lanmsg=Message to Display when joining a LAN Game \n (Will only show if Status is Enabled)
 gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer \n (Will only show if Status is Enabled)
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs \n (You'll need to change each of your variables manually)
-gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands
+gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Takes Effect after Restarting Minecraft)
 gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - This can be a performance downgrade \n - Requires an Option in GUI Messages
 gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding \n Note the Following: \n - Overwrites Server & Biomes \n - Requires an Option in Item Messages
 gui.config.comment.advanced.guimessages=GUI Messages Data \n (Format: gui;message) \n &gui& = Current GUI \n (Requires Enable Per-GUI)
