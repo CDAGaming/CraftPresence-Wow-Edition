@@ -30,7 +30,7 @@ public class GUIHandler {
     private String CURRENT_GUI_NAME;
     private Class CURRENT_GUI_CLASS;
     private GuiScreen CURRENT_SCREEN;
-    private List<String> GUI_NAMES = new ArrayList<>();
+    public List<String> GUI_NAMES = new ArrayList<>();
     private List<Class> GUI_CLASSES = new ArrayList<>();
 
     private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, float zLevel) {

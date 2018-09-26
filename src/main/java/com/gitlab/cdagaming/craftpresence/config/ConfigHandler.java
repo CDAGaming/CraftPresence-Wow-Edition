@@ -288,6 +288,12 @@ public class ConfigHandler {
                         save(properties);
                         clientID = properties.getProperty(property);
                     }
+                    if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() > 1 || properties.getProperty(property).matches(".*[a-z].*"))) {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                        properties.setProperty(property, ";");
+                        save(properties);
+                        splitCharacter = properties.getProperty(property);
+                    }
                 }
             }
         }

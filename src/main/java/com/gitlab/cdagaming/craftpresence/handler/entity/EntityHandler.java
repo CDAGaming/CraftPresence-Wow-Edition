@@ -22,6 +22,9 @@ public class EntityHandler {
     private List<String> ITEM_NAMES = new ArrayList<>();
     private List<String> ITEM_CLASSES = new ArrayList<>();
 
+    public List<String> ENTITY_NAMES = new ArrayList<>();
+    private List<String> ENTITY_CLASSES = new ArrayList<>();
+
     private String CURRENT_MAINHAND_ITEM_NAME;
     private String CURRENT_OFFHAND_ITEM_NAME;
 
@@ -33,6 +36,8 @@ public class EntityHandler {
         BLOCK_CLASSES.clear();
         ITEM_NAMES.clear();
         ITEM_CLASSES.clear();
+        ENTITY_NAMES.clear();
+        ENTITY_CLASSES.clear();
     }
 
     @SubscribeEvent
@@ -126,5 +131,10 @@ public class EntityHandler {
                 }
             }
         }
+
+        ENTITY_NAMES.addAll(ITEM_NAMES);
+        ENTITY_NAMES.addAll(BLOCK_NAMES);
+        ENTITY_CLASSES.addAll(ITEM_CLASSES);
+        ENTITY_CLASSES.addAll(BLOCK_CLASSES);
     }
 }

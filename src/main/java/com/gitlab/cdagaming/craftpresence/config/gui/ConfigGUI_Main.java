@@ -112,7 +112,7 @@ public class ConfigGUI_Main extends GuiScreen {
         } else if (button.id == statusSet.id) {
             mc.displayGuiScreen(new ConfigGUI_StatusMessages(this));
         } else if (button.id == advancedSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_NullEntry(this));
+            mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(this));
         } else if (button.id == proceedButton.id) {
             boolean rebooted = false;
             if (CraftPresence.CONFIG.hasChanged) {
