@@ -44,7 +44,7 @@ public class FileHandler {
 
         if (mods != null) {
             for (File modFile : mods) {
-                if (FileHandler.getFileExtension(modFile).equals(".jar")) {
+                if (getFileExtension(modFile).equals(".jar")) {
                     try {
                         JarFile jarFile = new JarFile(modFile.getAbsolutePath());
                         Enumeration allEntries = jarFile.entries();
