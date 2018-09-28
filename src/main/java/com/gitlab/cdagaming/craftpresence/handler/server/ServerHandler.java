@@ -26,6 +26,7 @@ public class ServerHandler {
     private String currentServer_IP;
     private String currentServer_Name;
     private String currentServer_MOTD;
+    private String timeString;
     private int currentPlayers;
     private int maxPlayers;
     private int serverIndex;
@@ -39,6 +40,7 @@ public class ServerHandler {
         currentServer_IP = null;
         currentServer_MOTD = null;
         currentServer_Name = null;
+        timeString = null;
         currentPlayers = 0;
         maxPlayers = 0;
         CommandHandler.setMainMenuPresence();
@@ -53,6 +55,7 @@ public class ServerHandler {
     @SubscribeEvent
     public void onPlayerTick(final TickEvent.PlayerTickEvent event) {
         final Minecraft minecraft = Minecraft.getMinecraft();
+        final EntityPlayer player = minecraft.player;
         if (CraftPresence.CONFIG.showGameState) {
             if (!minecraft.isSingleplayer() && minecraft.getConnection() != null) {
                 final int newCurrentPlayers = minecraft.getConnection().getPlayerInfoMap().size();
@@ -62,12 +65,22 @@ public class ServerHandler {
                     if (CraftPresence.CLIENT.GAME_STATE.contains(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers))) {
                         CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers), I18n.format("craftpresence.defaults.placeholder.players", newCurrentPlayers, newMaxPlayers));
                         CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
+                        CraftPresence.CLIENT.PARTY_SIZE = newCurrentPlayers;
+                        CraftPresence.CLIENT.PARTY_MAX = newMaxPlayers;
+                        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                     }
                     currentPlayers = newCurrentPlayers;
                     maxPlayers = newMaxPlayers;
-                    CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
-                    CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
-                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+                }
+            }
+            if (player != null) {
+                final String gameTime = getTimeString(player.world.getWorldTime());
+                if (!gameTime.equals(timeString)) {
+                    if (CraftPresence.CLIENT.GAME_STATE.contains(I18n.format("craftpresence.defaults.placeholder.time", timeString))) {
+                        CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(I18n.format("craftpresence.defaults.placeholder.time", timeString), I18n.format("craftpresence.defaults.placeholder.time", gameTime));
+                        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+                    }
+                    timeString = gameTime;
                 }
             }
         }
@@ -75,6 +88,30 @@ public class ServerHandler {
             CommandHandler.rebootRPC();
             CraftPresence.CONFIG.rebootOnWorldLoad = false;
         }
+    }
+
+    private String getTimeString(long worldTime) {
+        long hour = 0;
+        long minute = 0;
+        long dayLength = 24000;
+        long remainingTicks = worldTime % dayLength;
+
+        while (remainingTicks >= 1000) {
+            remainingTicks -= 1000;
+            hour++;
+            if (hour > 24)
+                hour -= 24;
+        }
+        remainingTicks *= 3;
+        while (remainingTicks >= 50) {
+            remainingTicks -= 50;
+            minute++;
+        }
+
+        String formattedHour = String.valueOf(hour).length() == 1 ? String.format("%02d", hour) : String.valueOf(hour);
+        String formattedMinute = String.valueOf(minute).length() == 1 ? String.format("%02d", minute) : String.valueOf(minute);
+
+        return formattedHour + ":" + formattedMinute;
     }
 
     @SubscribeEvent
@@ -99,7 +136,7 @@ public class ServerHandler {
                         updateServerPresence();
                     }
                 } else {
-                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", I18n.format("craftpresence.defaults.placeholder.ign", minecraft.getSession().getUsername()));
+                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", I18n.format("craftpresence.defaults.placeholder.ign", minecraft.getSession().getUsername())).replace("&time&", I18n.format("craftpresence.defaults.placeholder.time", timeString));
                     CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
             }
@@ -157,7 +194,7 @@ public class ServerHandler {
         final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
         final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
 
-        CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers)).replace("&ign&", I18n.format("craftpresence.defaults.placeholder.ign", Minecraft.getMinecraft().getSession().getUsername()));
+        CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", I18n.format("craftpresence.defaults.placeholder.players", currentPlayers, maxPlayers)).replace("&ign&", I18n.format("craftpresence.defaults.placeholder.ign", Minecraft.getMinecraft().getSession().getUsername())).replace("&time&", I18n.format("craftpresence.defaults.placeholder.time", timeString));
         if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
             CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
         } else {

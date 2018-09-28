@@ -4,6 +4,14 @@
 
 ### Changes:
 
+* Build Changes (Code-Behind):
+
+  * Forge Version (1.12.2): `14.23.4.2660` >> `14.23.4.2664`
+
+  * Gradle Version (1.8.X+): `4.10.1` >> `4.10.2`
+
+  * MCP Mappings Version (1.13): `snapshot_20180916` >> `snapshot_20181001`
+
 * Config & Config GUI Changes:
 
   * Removed Icon Selection from New Values [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
@@ -14,7 +22,7 @@
 
   * Added Advanced Settings GUI (GUI and Item Messages WIP)
 
-* Added `&ign&` Placeholder for Server and SinglePlayer Messages
+* Added `&ign&` and `&time&` Placeholder for Server and SinglePlayer Messages
 
 ### Fixes:
 
