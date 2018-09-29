@@ -65,8 +65,8 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         splitCharacter.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*");
-        guiMessagesButton.enabled = !CraftPresence.GUIS.GUI_NAMES.isEmpty() && CraftPresence.CONFIG.enablePERGUI;
-        itemMessagesButton.enabled = !CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty() && CraftPresence.CONFIG.enablePERItem;
+        guiMessagesButton.enabled = CraftPresence.CONFIG.enablePERGUI;
+        itemMessagesButton.enabled = CraftPresence.CONFIG.enablePERItem;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

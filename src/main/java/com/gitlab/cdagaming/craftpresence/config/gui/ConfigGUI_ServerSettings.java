@@ -65,7 +65,7 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         defaultMSG.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMSG.getText()) || !StringHandler.isNullOrEmpty(defaultName.getText()) || !StringHandler.isNullOrEmpty(defaultMOTD.getText());
-        serverMessagesButton.enabled = !CraftPresence.SERVER.knownAddresses.isEmpty() && CraftPresence.CONFIG.showGameState;
+        serverMessagesButton.enabled = CraftPresence.CONFIG.showGameState;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

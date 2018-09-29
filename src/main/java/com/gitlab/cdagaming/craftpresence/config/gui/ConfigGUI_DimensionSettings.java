@@ -55,7 +55,7 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         defaultMessage.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMessage.getText());
-        dimensionMessagesButton.enabled = !CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty() && CraftPresence.CONFIG.showCurrentDimension;
+        dimensionMessagesButton.enabled = CraftPresence.CONFIG.showCurrentDimension;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
