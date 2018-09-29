@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_DimensionSettings extends GuiScreen {
     private final GuiScreen parentscreen;
-    private GuiButton proceedButton, editSpecificDimensionButton, defaultIconButton;
+    private GuiButton proceedButton, dimensionMessagesButton, defaultIconButton;
     private GuiTextField defaultMessage;
 
     private String defaultDimensionMSG;
@@ -34,11 +34,11 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         defaultMessage.setText(defaultDimensionMSG);
 
-        editSpecificDimensionButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionmessages"));
+        dimensionMessagesButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionmessages"));
         defaultIconButton = new GuiButton(110, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionicon"));
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
-        buttonList.add(editSpecificDimensionButton);
+        buttonList.add(dimensionMessagesButton);
         buttonList.add(defaultIconButton);
         buttonList.add(proceedButton);
 
@@ -55,11 +55,16 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         defaultMessage.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMessage.getText());
+        dimensionMessagesButton.enabled = !CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty() && CraftPresence.CONFIG.showCurrentDimension;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (editSpecificDimensionButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionmessages").split("\n")), mouseX, mouseY);
+        if (dimensionMessagesButton.isMouseOver()) {
+            if (!dimensionMessagesButton.enabled) {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.dimensionmessages.dimensionmessages")).split("\n")), mouseX, mouseY);
+            } else {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionmessages").split("\n")), mouseX, mouseY);
+            }
         }
         if (defaultIconButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionicon").split("\n")), mouseX, mouseY);
@@ -78,7 +83,7 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
                 StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage.getText());
             }
             mc.displayGuiScreen(parentscreen);
-        } else if (button.id == editSpecificDimensionButton.id) {
+        } else if (button.id == dimensionMessagesButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select Dimension", CraftPresence.DIMENSIONS.DIMENSION_NAMES, null));
         } else if (button.id == defaultIconButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultDimensionIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));

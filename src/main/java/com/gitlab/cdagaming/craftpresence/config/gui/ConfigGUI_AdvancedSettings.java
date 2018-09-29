@@ -65,6 +65,8 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         splitCharacter.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*");
+        guiMessagesButton.enabled = !CraftPresence.GUIS.GUI_NAMES.isEmpty() && CraftPresence.CONFIG.enablePERGUI;
+        itemMessagesButton.enabled = !CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty() && CraftPresence.CONFIG.enablePERItem;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -78,10 +80,18 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enableperitem").split("\n")), mouseX, mouseY);
         }
         if (guiMessagesButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.guimessages").split("\n")), mouseX, mouseY);
+            if (!guiMessagesButton.enabled) {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages")).split("\n")), mouseX, mouseY);
+            } else {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.guimessages").split("\n")), mouseX, mouseY);
+            }
         }
         if (itemMessagesButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.itemmessages").split("\n")), mouseX, mouseY);
+            if (!itemMessagesButton.enabled) {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages")).split("\n")), mouseX, mouseY);
+            } else {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.itemmessages").split("\n")), mouseX, mouseY);
+            }
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
@@ -103,13 +113,23 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             if (enablePerGUIButton.isChecked() != CraftPresence.CONFIG.enablePERGUI) {
                 CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                if (CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
+                    CraftPresence.GUIS.getGUIs();
+                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                } else {
+                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
+                }
                 CraftPresence.CONFIG.enablePERGUI = enablePerGUIButton.isChecked();
                 CraftPresence.CONFIG.showGameState = !CraftPresence.CONFIG.enablePERGUI;
             }
             if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePERItem) {
                 CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                if (CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
+                    CraftPresence.ENTITIES.getEntities();
+                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                } else {
+                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
+                }
                 CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
             }
             mc.displayGuiScreen(parentscreen);

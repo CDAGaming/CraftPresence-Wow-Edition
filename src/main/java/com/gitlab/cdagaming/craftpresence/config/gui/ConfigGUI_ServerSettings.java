@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_ServerSettings extends GuiScreen {
     private final GuiScreen parentscreen;
-    private GuiButton proceedButton, editSpecificServerButton, defaultIconButton;
+    private GuiButton proceedButton, serverMessagesButton, defaultIconButton;
     private GuiTextField defaultMOTD, defaultName, defaultMSG;
 
     private String defaultServerMSG;
@@ -38,11 +38,11 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         defaultMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
         defaultMSG.setText(defaultServerMSG);
 
-        editSpecificServerButton = new GuiButton(130, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, I18n.format("gui.config.name.servermessages.servermessages"));
+        serverMessagesButton = new GuiButton(130, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, I18n.format("gui.config.name.servermessages.servermessages"));
         defaultIconButton = new GuiButton(140, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(5), 180, 20, I18n.format("gui.config.name.servermessages.servericon"));
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
-        buttonList.add(editSpecificServerButton);
+        buttonList.add(serverMessagesButton);
         buttonList.add(defaultIconButton);
         buttonList.add(proceedButton);
 
@@ -65,11 +65,16 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         defaultMSG.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMSG.getText()) || !StringHandler.isNullOrEmpty(defaultName.getText()) || !StringHandler.isNullOrEmpty(defaultMOTD.getText());
+        serverMessagesButton.enabled = !CraftPresence.SERVER.knownAddresses.isEmpty() && CraftPresence.CONFIG.showGameState;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (editSpecificServerButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servermessages").split("\n")), mouseX, mouseY);
+        if (serverMessagesButton.isMouseOver()) {
+            if (!serverMessagesButton.enabled) {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.servermessages.servermessages")).split("\n")), mouseX, mouseY);
+            } else {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servermessages").split("\n")), mouseX, mouseY);
+            }
         }
         if (defaultIconButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servericon").split("\n")), mouseX, mouseY);
@@ -98,7 +103,7 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
                 StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG.getText());
             }
             mc.displayGuiScreen(parentscreen);
-        } else if (button.id == editSpecificServerButton.id) {
+        } else if (button.id == serverMessagesButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
         } else if (button.id == defaultIconButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));

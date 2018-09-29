@@ -136,7 +136,8 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
             }
             if (showBiomeButton.isChecked() != CraftPresence.CONFIG.showCurrentBiome) {
                 CraftPresence.CONFIG.hasChanged = true;
-                if (CraftPresence.BIOMES.BIOME_NAMES == null) {
+                if (CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
+                    CraftPresence.BIOMES.getBiomes();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 } else {
                     CraftPresence.CONFIG.rebootOnWorldLoad = true;
@@ -146,7 +147,8 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
             }
             if (showDimensionButton.isChecked() != CraftPresence.CONFIG.showCurrentDimension) {
                 CraftPresence.CONFIG.hasChanged = true;
-                if (CraftPresence.DIMENSIONS.DIMENSION_NAMES == null) {
+                if (CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
+                    CraftPresence.DIMENSIONS.getDimensions();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 } else {
                     CraftPresence.CONFIG.rebootOnWorldLoad = true;
@@ -157,6 +159,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
+                CraftPresence.CONFIG.showCurrentBiome = CraftPresence.CONFIG.enablePERGUI = !CraftPresence.CONFIG.showGameState;
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == defaultIconButton.id) {

@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigGUI_BiomeSettings extends GuiScreen {
     private final GuiScreen parentscreen;
-    private GuiButton proceedButton, editSpecificBiomeButton;
+    private GuiButton proceedButton, biomeMessagesButton;
     private GuiTextField defaultMessage;
 
     private String defaultBiomeMSG;
@@ -33,10 +33,10 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         defaultMessage.setText(defaultBiomeMSG);
 
-        editSpecificBiomeButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.biomemessages.biomemessages"));
+        biomeMessagesButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.biomemessages.biomemessages"));
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
-        buttonList.add(editSpecificBiomeButton);
+        buttonList.add(biomeMessagesButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -52,11 +52,16 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         defaultMessage.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMessage.getText());
+        biomeMessagesButton.enabled = !CraftPresence.BIOMES.BIOME_NAMES.isEmpty() && CraftPresence.CONFIG.showCurrentBiome;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (editSpecificBiomeButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.biomemessages.biomemessages").split("\n")), mouseX, mouseY);
+        if (biomeMessagesButton.isMouseOver()) {
+            if (!biomeMessagesButton.enabled) {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.biomemessages.biomemessages")).split("\n")), mouseX, mouseY);
+            } else {
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.biomemessages.biomemessages").split("\n")), mouseX, mouseY);
+            }
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
@@ -72,7 +77,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
                 StringHandler.setConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage.getText());
             }
             mc.displayGuiScreen(parentscreen);
-        } else if (button.id == editSpecificBiomeButton.id) {
+        } else if (button.id == biomeMessagesButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null));
         }
     }

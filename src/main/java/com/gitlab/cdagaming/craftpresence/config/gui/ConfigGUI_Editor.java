@@ -155,17 +155,25 @@ public class ConfigGUI_Editor extends GuiScreen {
                 CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 if (parentscreen instanceof ConfigGUI_BiomeSettings) {
                     CraftPresence.CONFIG.biomeMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.biomeMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
-                }
-                if (parentscreen instanceof ConfigGUI_DimensionSettings) {
+                    CraftPresence.BIOMES.emptyData();
+                    CraftPresence.BIOMES.getBiomes();
+                } else if (parentscreen instanceof ConfigGUI_DimensionSettings) {
                     CraftPresence.CONFIG.dimensionMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.dimensionMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
-                }
-                if (parentscreen instanceof ConfigGUI_ServerSettings) {
+                    CraftPresence.DIMENSIONS.emptyData();
+                    CraftPresence.DIMENSIONS.getDimensions();
+                } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
                     CraftPresence.CONFIG.serverMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.serverMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
+                    CraftPresence.SERVER.emptyData();
+                    CraftPresence.SERVER.getServerAddresses();
                 } else if (parentscreen instanceof ConfigGUI_AdvancedSettings) {
                     if (configoption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
                         CraftPresence.CONFIG.guiMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.guiMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
+                        CraftPresence.GUIS.emptyData();
+                        CraftPresence.GUIS.getGUIs();
                     } else if (configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                         CraftPresence.CONFIG.itemMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.itemMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
+                        CraftPresence.ENTITIES.emptyData();
+                        CraftPresence.ENTITIES.getEntities();
                     }
                 }
 
