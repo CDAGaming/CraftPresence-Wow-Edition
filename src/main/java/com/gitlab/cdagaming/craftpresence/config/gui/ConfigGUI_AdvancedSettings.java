@@ -105,6 +105,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.enablePERGUI = enablePerGUIButton.isChecked();
+                CraftPresence.CONFIG.showGameState = !CraftPresence.CONFIG.enablePERGUI;
             }
             if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePERItem) {
                 CraftPresence.CONFIG.hasChanged = true;

@@ -45,10 +45,9 @@ public class DiscordAssetHandler {
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getType() : DiscordAsset.AssetType.LARGE;
     }
 
-    public static String getRandomAsset(final String alternativeKey) {
-        final String formattedKey = StringHandler.formatPackIcon(alternativeKey);
+    public static String getRandomAsset() {
         int randomInteger = MathHelper.getInt(new Random(), 0, ICON_LIST.size());
-        return StringHandler.elementExists(ICON_LIST, randomInteger) ? ICON_LIST.get(randomInteger) : formattedKey;
+        return ICON_LIST.get(randomInteger);
     }
 
     public static void loadAssets() {
@@ -102,8 +101,7 @@ public class DiscordAssetHandler {
         boolean needsFullUpdate = false;
         for (String property : CraftPresence.CONFIG.properties.stringPropertyNames()) {
             if ((property.equals(CraftPresence.CONFIG.NAME_defaultIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) && !contains(CraftPresence.CONFIG.properties.getProperty(property))) {
-                final String alternateKey = !property.equals(CraftPresence.CONFIG.NAME_defaultIcon) ? CraftPresence.CONFIG.properties.getProperty(CraftPresence.CONFIG.NAME_defaultIcon) : null;
-                final String newAsset = getRandomAsset(alternateKey);
+                final String newAsset = contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : getRandomAsset();
                 Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.pre", CraftPresence.CONFIG.properties.getProperty(property), property));
                 CraftPresence.CONFIG.properties.setProperty(property, newAsset);
                 needsFullUpdate = true;

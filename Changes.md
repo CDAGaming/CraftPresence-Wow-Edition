@@ -6,7 +6,7 @@
 
 * Build Changes (Code-Behind):
 
-  * Forge Version (1.12.2): `14.23.4.2660` >> `14.23.4.2664`
+  * Forge Version (1.12.2): `14.23.4.2760` >> `14.23.4.2765`
 
   * Gradle Version (1.8.X+): `4.10.1` >> `4.10.2`
 
@@ -20,9 +20,11 @@
 
   * Removed "Add New" Option when Selecting an Icon
 
-  * Added Advanced Settings GUI (GUI and Item Messages WIP)
+  * Added Advanced, GUI, and Item Settings GUI
 
 * Added `&ign&` and `&time&` Placeholder for Server and SinglePlayer Messages
+
+* Improve Config Verification to now identify and fill in Missing Default Settings on Array Properties
 
 ### Fixes:
 
@@ -52,9 +54,9 @@
 
 The Config GUI has now been overhauled to provide a more User-Friendly Experience
 
-* Migrating from `1.7.10 - 1.12.2` (v1.3.x and Lower) - Manual Migrate
+* Migrating on `1.7.10 - 1.12.2` (From v1.3.x and Below) - Remove `craftpresence.cfg` and Regenerate or Manually Migrate
 
-* Migrating from `1.13.x` (v1.3.x and Lower) - Rename `craftpresence.cfg` to `craftpresence.properties`
+* Migrating on `1.13.x` (From v1.3.x and Below) - Rename `craftpresence.cfg` to `craftpresence.properties` or Regenerate Config
 
 Over time, this GUI will be edited and add new Options to customize your experience.
 

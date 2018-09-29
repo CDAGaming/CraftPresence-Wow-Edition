@@ -282,17 +282,63 @@ public class ConfigHandler {
                     Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
                     needsFullUpdate = true;
                 } else {
-                    if (property.equals(NAME_clientID) && (properties.getProperty(property).length() < 18 || properties.getProperty(property).matches(".*[a-z].*"))) {
+                    if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
                         Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
-                        properties.setProperty(property, "450485984333660181");
+                        clientID = "450485984333660181";
+                        properties.setProperty(property, clientID);
                         save(properties);
-                        clientID = properties.getProperty(property);
                     }
-                    if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() > 1 || properties.getProperty(property).matches(".*[a-z].*"))) {
+                    if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
                         Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
-                        properties.setProperty(property, ";");
+                        splitCharacter = ";";
+                        properties.setProperty(property, splitCharacter);
                         save(properties);
-                        splitCharacter = properties.getProperty(property);
+                    }
+
+                    if (property.equals(NAME_biomeMessages)) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            biomeMessages = StringHandler.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
+                            properties.setProperty(property, Arrays.toString(biomeMessages));
+                            save(properties);
+                        }
+                    }
+                    if (property.equals(NAME_dimensionMessages)) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            dimensionMessages = StringHandler.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
+                            properties.setProperty(property, Arrays.toString(dimensionMessages));
+                            save(properties);
+                        }
+                    }
+                    if (property.equals(NAME_serverMessages)) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            serverMessages = StringHandler.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
+                            properties.setProperty(property, Arrays.toString(serverMessages));
+                            save(properties);
+                        }
+                    }
+                    if (property.equals(NAME_guiMessages)) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            guiMessages = StringHandler.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
+                            properties.setProperty(property, Arrays.toString(guiMessages));
+                            save(properties);
+                        }
+                    }
+                    if (property.equals(NAME_itemMessages)) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            itemMessages = StringHandler.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
+                            properties.setProperty(property, Arrays.toString(itemMessages));
+                            save(properties);
+                        }
                     }
                 }
             }

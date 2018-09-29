@@ -94,7 +94,7 @@ public class ConfigGUI_Selector extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, null));
+            mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, null, configoption));
         } else if (button.id == proceedButton.id) {
             if (scrollList.currentValue != null) {
                 if (currentValue != null) {
@@ -161,8 +161,8 @@ public class ConfigGUI_Selector extends GuiScreen {
                         }
                         CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
                         mc.displayGuiScreen(parentscreen);
-                    } else if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configoption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
-                        mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, scrollList.currentValue));
+                    } else if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configoption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configoption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                        mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, scrollList.currentValue, configoption));
                     } else {
                         mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
                     }

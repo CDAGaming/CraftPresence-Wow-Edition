@@ -18,12 +18,13 @@ public class ConfigGUI_Editor extends GuiScreen {
     private final GuiScreen parentscreen;
     private GuiButton proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
-    private String selecteditem, specificMSG, defaultMSG, title;
+    private String selecteditem, configoption, specificMSG, defaultMSG, title;
     private boolean isNewValue, isDefaultValue;
 
-    ConfigGUI_Editor(GuiScreen parentScreen, String selectedItem) {
+    ConfigGUI_Editor(GuiScreen parentScreen, String selectedItem, String configOption) {
         mc = Minecraft.getMinecraft();
         parentscreen = parentScreen;
+        configoption = configOption;
         selecteditem = selectedItem;
         isNewValue = StringHandler.isNullOrEmpty(selectedItem);
         isDefaultValue = !StringHandler.isNullOrEmpty(selectedItem) && selectedItem.equals("default");
@@ -42,6 +43,12 @@ public class ConfigGUI_Editor extends GuiScreen {
                 specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
             } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
                 specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+            } else if (parentscreen instanceof ConfigGUI_AdvancedSettings) {
+                if (configoption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
+                    specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                } else if (configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                    specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                }
             }
         } else {
             if (parentscreen instanceof ConfigGUI_BiomeSettings) {
@@ -56,6 +63,16 @@ public class ConfigGUI_Editor extends GuiScreen {
                 title = I18n.format("gui.config.title.server.editspecificserver", selecteditem);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
+            } else if (parentscreen instanceof ConfigGUI_AdvancedSettings) {
+                if (configoption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
+                    title = I18n.format("gui.config.title.gui.editspecificgui", selecteditem);
+                    defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                    specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
+                } else if (configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                    title = I18n.format("gui.config.title.gui.editspecificitem", selecteditem);
+                    defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                    specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
+                }
             }
         }
 
@@ -118,6 +135,12 @@ public class ConfigGUI_Editor extends GuiScreen {
                     CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                 } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
                     CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
+                } else if (parentscreen instanceof ConfigGUI_AdvancedSettings) {
+                    if (configoption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
+                        CraftPresence.CONFIG.guiMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.guiMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
+                    } else if (configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                        CraftPresence.CONFIG.itemMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.itemMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
+                    }
                 }
 
                 if (isNewValue) {
@@ -138,6 +161,12 @@ public class ConfigGUI_Editor extends GuiScreen {
                 }
                 if (parentscreen instanceof ConfigGUI_ServerSettings) {
                     CraftPresence.CONFIG.serverMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.serverMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
+                } else if (parentscreen instanceof ConfigGUI_AdvancedSettings) {
+                    if (configoption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
+                        CraftPresence.CONFIG.guiMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.guiMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
+                    } else if (configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                        CraftPresence.CONFIG.itemMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.itemMessages, selecteditem, 0, CraftPresence.CONFIG.splitCharacter);
+                    }
                 }
 
                 if (isNewValue) {

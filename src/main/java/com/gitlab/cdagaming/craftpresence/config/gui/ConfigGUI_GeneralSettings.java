@@ -142,6 +142,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                     CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.showCurrentBiome = showBiomeButton.isChecked();
+                CraftPresence.CONFIG.showGameState = !CraftPresence.CONFIG.showCurrentBiome;
             }
             if (showDimensionButton.isChecked() != CraftPresence.CONFIG.showCurrentDimension) {
                 CraftPresence.CONFIG.hasChanged = true;
