@@ -16,6 +16,7 @@ gui.config.comment.title.statusmessages=Customize Other Status Messages such as:
 gui.config.comment.title.advanced=Customize More Technical Details of the Mod such as: \n Split Character, Debug Features \n And Enable More Specific Display Updates
 ## CONFIG GUI - BUTTONS AND NAMES ##
 gui.config.name.default.exampletext=Input Message...
+gui.config.message.remove=**Remove Message Text to Remove this Value**
 gui.config.hoverMessage.access=**Enable "%1$s" to use this Menu**
 gui.config.hoverMessage.defaultempty=**Default Info cannot be Empty and Must be Valid**
 gui.config.title.biome.editspecificbiome=CraftPresence - Edit Biome (%1$s)

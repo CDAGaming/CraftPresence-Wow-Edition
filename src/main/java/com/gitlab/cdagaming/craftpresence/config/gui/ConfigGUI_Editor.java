@@ -18,7 +18,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     private final GuiScreen parentscreen;
     private GuiButton proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
-    private String selecteditem, configoption, specificMSG, defaultMSG, title;
+    private String selecteditem, configoption, specificMSG, defaultMSG, title, removeMSG;
     private boolean isNewValue, isDefaultValue;
 
     ConfigGUI_Editor(GuiScreen parentScreen, String selectedItem, String configOption) {
@@ -76,6 +76,8 @@ public class ConfigGUI_Editor extends GuiScreen {
             }
         }
 
+        removeMSG = I18n.format("gui.config.message.remove");
+
         specificMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         specificMessage.setText(specificMSG);
 
@@ -102,6 +104,8 @@ public class ConfigGUI_Editor extends GuiScreen {
         if (isNewValue) {
             drawString(fontRenderer, "Value Name:", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
             newValueName.drawTextBox();
+        } else {
+            drawString(fontRenderer, removeMSG, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(removeMSG) / 2), (sr.getScaledHeight() - 45), 0xFFFFFF);
         }
         specificMessage.drawTextBox();
 
