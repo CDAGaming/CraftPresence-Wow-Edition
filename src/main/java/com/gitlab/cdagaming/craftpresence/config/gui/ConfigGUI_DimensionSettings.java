@@ -48,10 +48,11 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         String title = "CraftPresence - " + I18n.format("gui.config.title.dimensionmessages");
+        String defaultMessageText = "Default Dimension Message";
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, "Default Message", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         defaultMessage.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMessage.getText());
@@ -59,6 +60,10 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        // Hovering over Default Dimension Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.dimensionmessages").split("\n")), mouseX, mouseY);
+        }
         if (dimensionMessagesButton.isMouseOver()) {
             if (!dimensionMessagesButton.enabled) {
                 drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.dimensionmessages.dimensionmessages")).split("\n")), mouseX, mouseY);

@@ -11,9 +11,7 @@ import com.gitlab.cdagaming.craftpresence.handler.server.ServerHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
 
@@ -63,14 +61,9 @@ public class CraftPresence {
         CommandHandler.reloadData();
         CommandHandler.init();
 
-        final ForgeVersion.Status UPDATE_STATUS = ForgeVersion.getResult(Loader.instance().activeModContainer()).status;
         final File CP_DIR = new File(Constants.MODID);
         URLHandler.acceptCertificates();
-        if (UPDATE_STATUS == ForgeVersion.Status.OUTDATED || UPDATE_STATUS == ForgeVersion.Status.BETA_OUTDATED || (!CP_DIR.exists() || CP_DIR.listFiles() == null)) {
-            Constants.loadDLL(true);
-        } else {
-            Constants.loadDLL(false);
-        }
+        Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         try {
             CLIENT = new DiscordHandler(!StringHandler.isNullOrEmpty(CONFIG.clientID) ? CONFIG.clientID : "450485984333660181");

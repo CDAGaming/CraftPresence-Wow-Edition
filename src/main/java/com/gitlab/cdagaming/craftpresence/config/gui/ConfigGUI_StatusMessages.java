@@ -27,9 +27,9 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
-        singleplayerMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
-        loadingMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 15);
+        singleplayerMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 15);
+        loadingMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 15);
 
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
         singleplayerMSG.setText(CraftPresence.CONFIG.singleplayerMSG);
@@ -44,12 +44,15 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         String title = "CraftPresence - " + I18n.format("gui.config.title.statusmessages");
+        String mainMenuText = I18n.format("gui.config.name.statusmessages.mainmenumsg");
+        String singlePlayerText = I18n.format("gui.config.name.statusmessages.singleplayermsg");
+        String loadingText = I18n.format("gui.config.name.statusmessages.loadingmsg");
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.statusmessages.mainmenumsg"), (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.statusmessages.singleplayermsg"), (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.statusmessages.loadingmsg"), (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 2, 0xFFFFFF);
+        drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 2, 0xFFFFFF);
+        drawString(fontRenderer, loadingText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 2, 0xFFFFFF);
         mainMenuMSG.drawTextBox();
         singleplayerMSG.drawTextBox();
         loadingMSG.drawTextBox();
@@ -58,6 +61,18 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        // Hovering over Main Menu Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 2, fontRenderer.getStringWidth(mainMenuText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.mainmenumsg").split("\n")), mouseX, mouseY);
+        }
+        // Hovering over Single Player Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 2, fontRenderer.getStringWidth(singlePlayerText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.singleplayermsg").split("\n")), mouseX, mouseY);
+        }
+        // Hovering over Loading Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 2, fontRenderer.getStringWidth(loadingText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.loadingmsg").split("\n")), mouseX, mouseY);
+        }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
         }

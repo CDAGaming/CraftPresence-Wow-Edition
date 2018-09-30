@@ -47,6 +47,10 @@ public class GUIHandler {
         tessellator.draw();
     }
 
+    public boolean isMouseOverElement(final int mouseX, final int mouseY, final int elementX, final int elementY, final int elementWidth, final int elementHeight) {
+        return mouseX >= elementX && mouseX <= elementX + elementWidth && mouseY >= elementY && mouseY <= elementY + elementHeight;
+    }
+
     private void getGUIData(final GuiScreen gui) {
         if (gui != null) {
             CURRENT_GUI_NAME = gui.getClass().getSimpleName();

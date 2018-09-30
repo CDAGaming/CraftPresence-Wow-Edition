@@ -26,6 +26,7 @@ public class Constants {
     public static final String BRAND = ClientBrandRetriever.getClientModName();
     public static final String configDir = Minecraft.getMinecraft().gameDir + File.separator + "config";
     public static final String modsDir = Minecraft.getMinecraft().gameDir + File.separator + "mods";
+    public static final String USERNAME = Minecraft.getMinecraft().getSession().getUsername();
     public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
     public static final Logger LOG = LogManager.getLogger(MODID);

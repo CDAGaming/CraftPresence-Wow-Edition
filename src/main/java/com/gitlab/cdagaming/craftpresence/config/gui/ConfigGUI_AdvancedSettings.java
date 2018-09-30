@@ -58,10 +58,11 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         String title = "CraftPresence - " + I18n.format("gui.config.title.advanced");
+        String splitCharacterText = I18n.format("gui.config.name.advanced.splitcharacter");
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.advanced.splitcharacter"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, splitCharacterText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         splitCharacter.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*");
@@ -70,6 +71,10 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        // Hovering over Split Character Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.splitcharacter").split("\n")), mouseX, mouseY);
+        }
         if (enableCommandsButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablecommands").split("\n")), mouseX, mouseY);
         }

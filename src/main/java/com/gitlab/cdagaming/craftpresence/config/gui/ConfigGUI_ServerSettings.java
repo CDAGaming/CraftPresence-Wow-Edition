@@ -52,13 +52,16 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         String title = "CraftPresence - " + I18n.format("gui.config.title.servermessages");
+        String serverNameText = I18n.format("gui.config.name.servermessages.servername");
+        String serverMOTDText = I18n.format("gui.config.name.servermessages.servermotd");
+        String defaultMessageText = "Default Server Message";
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.servermessages.servername"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.servermessages.servermotd"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-        drawString(fontRenderer, "Default Server Message", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        drawString(fontRenderer, serverNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, serverMOTDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+        drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
         defaultName.drawTextBox();
         defaultMOTD.drawTextBox();
@@ -69,6 +72,18 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        // Hovering over Default Server Name Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servername").split("\n")), mouseX, mouseY);
+        }
+        // Hovering over Default Server MOTD Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servermotd").split("\n")), mouseX, mouseY);
+        }
+        // Hovering over Default Server Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.servermessages").split("\n")), mouseX, mouseY);
+        }
         if (serverMessagesButton.isMouseOver()) {
             if (!serverMessagesButton.enabled) {
                 drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.servermessages.servermessages")).split("\n")), mouseX, mouseY);

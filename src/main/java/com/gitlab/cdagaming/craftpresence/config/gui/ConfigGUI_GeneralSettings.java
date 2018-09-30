@@ -66,16 +66,21 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         String title = "CraftPresence - " + I18n.format("gui.config.title.general");
+        String clientIDText = I18n.format("gui.config.name.general.clientid");
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, I18n.format("gui.config.name.general.clientid"), (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, clientIDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && clientID.getText().length() == 18 && !clientID.getText().matches(".*[a-z].*") && !clientID.getText().matches(".*[A-Z].*");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        // Hovering over Client ID Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.clientid").split("\n")), mouseX, mouseY);
+        }
         if (defaultIconButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.defaulticon").split("\n")), mouseX, mouseY);
         }

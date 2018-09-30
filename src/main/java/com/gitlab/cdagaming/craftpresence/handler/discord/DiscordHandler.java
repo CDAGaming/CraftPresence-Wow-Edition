@@ -75,24 +75,24 @@ public class DiscordHandler {
 
     public void updatePresence(@Nonnull final DiscordRichPresence presence) {
         if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
-            presence.details = presence.details + " with Vivecraft";
+            presence.details = presence.details + " | " + "Vivecraft";
         } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
-            presence.details = presence.details + " | " + StringHandler.formatWord(ManifestHandler.manifest.name);
+            presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
         } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name"))) {
-            presence.details = presence.details + " | " + StringHandler.formatWord(InstanceHandler.get("name"));
+            presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
         } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME)) {
-            presence.details = presence.details + " | " + StringHandler.formatWord(PackHandler.PACK_NAME);
+            presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
         }
 
         if (StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) {
             if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
                 presence.smallImageKey = "vivecraft";
-                presence.smallImageText = "Vivecraft is a VR mod supporting many headsets via OpenVR";
+                presence.smallImageText = CraftPresence.CONFIG.vivecraftMessage;
             } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
                 final String iconKey = StringHandler.formatPackIcon(ManifestHandler.manifest.name);
                 if (DiscordAssetHandler.contains(iconKey)) {
                     presence.smallImageKey = iconKey;
-                    presence.smallImageText = StringHandler.formatWord(ManifestHandler.manifest.name);
+                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
                 } else {
                     Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load.null", iconKey));
                 }
@@ -100,14 +100,14 @@ public class DiscordHandler {
                 final String iconKey = StringHandler.formatPackIcon(InstanceHandler.get("iconKey"));
                 if (DiscordAssetHandler.contains(iconKey)) {
                     presence.smallImageKey = iconKey;
-                    presence.smallImageText = StringHandler.formatWord(InstanceHandler.get("name"));
+                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
                 } else {
                     Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load.null", iconKey));
                 }
             } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME) && !StringHandler.isNullOrEmpty(PackHandler.ICON_NAME)) {
                 if (DiscordAssetHandler.contains(PackHandler.ICON_NAME)) {
                     presence.smallImageKey = PackHandler.ICON_NAME;
-                    presence.smallImageText = PackHandler.PACK_NAME;
+                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", PackHandler.PACK_NAME);
                 } else {
                     Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load.null", PackHandler.ICON_NAME));
                 }
