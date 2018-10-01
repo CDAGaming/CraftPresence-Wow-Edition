@@ -35,7 +35,7 @@ public class ConfigHandler {
 
     // Config Variables
     // GENERAL
-    public boolean detectCurseManifest, detectMultiMCManifest, detectTechnicPack, showTime,
+    public Boolean detectCurseManifest, detectMultiMCManifest, detectTechnicPack, showTime,
             showCurrentBiome, showCurrentDimension, showGameState;
     public String clientID, defaultIcon;
     // BIOME MESSAGES
@@ -51,23 +51,22 @@ public class ConfigHandler {
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
             gameTimePlaceholderMSG, vivecraftMessage;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem;
+    public Boolean enableCommands, enablePERGUI, enablePERItem;
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // CLASS-SPECIFIC - PUBLIC
-    public boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false;
+    public Boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false;
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE
     private String fileName;
-    private boolean verified = false;
+    private Boolean verified = false;
 
     public ConfigHandler(String fileName) {
         this.fileName = fileName;
     }
 
-    private void setupInitialValues() {
-        // Setup Config Names
+    private void setupNames() {
         // GENERAL
         NAME_detectCurseManifest = I18n.format("gui.config.name.general.detectcursemanifest").replaceAll(" ", "_");
         NAME_detectMultiMCManifest = I18n.format("gui.config.name.general.detectmultimcmanifest").replaceAll(" ", "_");
@@ -104,44 +103,6 @@ public class ConfigHandler {
         NAME_splitCharacter = I18n.format("gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
         NAME_guiMessages = I18n.format("gui.config.name.advanced.guimessages").replaceAll(" ", "_");
         NAME_itemMessages = I18n.format("gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
-
-        // Setup Config Values
-        splitCharacter = ";";
-        // GENERAL
-        detectCurseManifest = true;
-        detectMultiMCManifest = true;
-        detectTechnicPack = true;
-        showTime = true;
-        showCurrentBiome = false;
-        showCurrentDimension = true;
-        showGameState = true;
-        clientID = "450485984333660181";
-        defaultIcon = "grass";
-        // BIOME MESSAGES
-        biomeMessages = new String[]{"default" + splitCharacter + "Playing in &biome&"};
-        // DIMENSION MESSAGES
-        defaultDimensionIcon = "unknown";
-        dimensionMessages = new String[]{"default" + splitCharacter + "In The &dimension&"};
-        // SERVER MESSAGES
-        defaultServerIcon = "default";
-        defaultServerName = I18n.format("selectServer.defaultName");
-        defaultServerMOTD = I18n.format("craftpresence.defaults.servermessages.servermotd");
-        serverMessages = new String[]{"default" + splitCharacter + "Playing on &motd&"};
-        // STATUS MESSAGES
-        mainmenuMSG = I18n.format("craftpresence.defaults.state.mainmenu");
-        singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer");
-        loadingMSG = I18n.format("craftpresence.defaults.state.loading");
-        packPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.pack");
-        playerPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.ign");
-        playerAmountPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.players");
-        gameTimePlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.time");
-        vivecraftMessage = I18n.format("craftpresence.defaults.special.vivecraft");
-        // ADVANCED
-        enableCommands = true;
-        enablePERGUI = false;
-        enablePERItem = false;
-        guiMessages = new String[]{"default" + splitCharacter + "In &gui&"};
-        itemMessages = new String[]{"default" + splitCharacter + "Holding &main&"};
     }
 
     public void initialize() {
@@ -149,16 +110,16 @@ public class ConfigHandler {
             File configFile = new File(fileName);
             File parentDir = configFile.getParentFile();
             boolean isConfigNew = (!parentDir.exists() && parentDir.mkdirs()) || (!configFile.exists() && configFile.createNewFile());
-            setupInitialValues();
+
+            setupNames();
 
             if (isConfigNew) {
                 updateConfig();
             }
+            read();
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.config.save"));
             ex.printStackTrace();
-        } finally {
-            read();
         }
     }
 
@@ -223,42 +184,42 @@ public class ConfigHandler {
     public void updateConfig() {
         Properties properties = new Properties();
 
-        properties.setProperty(NAME_splitCharacter, splitCharacter);
         // GENERAL
-        properties.setProperty(NAME_detectCurseManifest, Boolean.toString(detectCurseManifest));
-        properties.setProperty(NAME_detectMultiMCManifest, Boolean.toString(detectMultiMCManifest));
-        properties.setProperty(NAME_detectTechnicPack, Boolean.toString(detectTechnicPack));
-        properties.setProperty(NAME_showTime, Boolean.toString(showTime));
-        properties.setProperty(NAME_showCurrentBiome, Boolean.toString(showCurrentBiome));
-        properties.setProperty(NAME_showCurrentDimension, Boolean.toString(showCurrentDimension));
-        properties.setProperty(NAME_showGameState, Boolean.toString(showGameState));
-        properties.setProperty(NAME_clientID, clientID);
-        properties.setProperty(NAME_defaultIcon, defaultIcon);
+        properties.setProperty(NAME_detectCurseManifest, !StringHandler.isNullOrEmpty(Boolean.toString(detectCurseManifest)) ? Boolean.toString(detectCurseManifest) : "true");
+        properties.setProperty(NAME_detectMultiMCManifest, !StringHandler.isNullOrEmpty(Boolean.toString(detectMultiMCManifest)) ? Boolean.toString(detectMultiMCManifest) : "true");
+        properties.setProperty(NAME_detectTechnicPack, !StringHandler.isNullOrEmpty(Boolean.toString(detectTechnicPack)) ? Boolean.toString(detectTechnicPack) : "true");
+        properties.setProperty(NAME_showTime, !StringHandler.isNullOrEmpty(Boolean.toString(showTime)) ? Boolean.toString(showTime) : "true");
+        properties.setProperty(NAME_showCurrentBiome, !StringHandler.isNullOrEmpty(Boolean.toString(showCurrentBiome)) ? Boolean.toString(showCurrentBiome) : "false");
+        properties.setProperty(NAME_showCurrentDimension, !StringHandler.isNullOrEmpty(Boolean.toString(showCurrentDimension)) ? Boolean.toString(showCurrentDimension) : "true");
+        properties.setProperty(NAME_showGameState, !StringHandler.isNullOrEmpty(Boolean.toString(showGameState)) ? Boolean.toString(showGameState) : "true");
+        properties.setProperty(NAME_clientID, !StringHandler.isNullOrEmpty(clientID) ? clientID : "450485984333660181");
+        properties.setProperty(NAME_defaultIcon, !StringHandler.isNullOrEmpty(defaultIcon) ? defaultIcon : "grass");
         // BIOME MESSAGES
-        properties.setProperty(NAME_biomeMessages, Arrays.toString(biomeMessages));
+        properties.setProperty(NAME_biomeMessages, !StringHandler.isNullOrEmpty(Arrays.toString(biomeMessages)) ? Arrays.toString(biomeMessages) : Arrays.toString(new String[]{"default" + (!StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Playing in &biome&"}));
         // DIMENSION MESSAGES
-        properties.setProperty(NAME_defaultDimensionIcon, defaultDimensionIcon);
-        properties.setProperty(NAME_dimensionMessages, Arrays.toString(dimensionMessages));
+        properties.setProperty(NAME_defaultDimensionIcon, !StringHandler.isNullOrEmpty(defaultDimensionIcon) ? defaultDimensionIcon : "unknown");
+        properties.setProperty(NAME_dimensionMessages, !StringHandler.isNullOrEmpty(Arrays.toString(dimensionMessages)) ? Arrays.toString(dimensionMessages) : Arrays.toString(new String[]{"default" + (!StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In The &dimension&"}));
         // SERVER MESSAGES
-        properties.setProperty(NAME_defaultServerIcon, defaultServerIcon);
-        properties.setProperty(NAME_defaultServerName, defaultServerName);
-        properties.setProperty(NAME_defaultServerMOTD, defaultServerMOTD);
-        properties.setProperty(NAME_serverMessages, Arrays.toString(serverMessages));
+        properties.setProperty(NAME_defaultServerIcon, !StringHandler.isNullOrEmpty(defaultServerIcon) ? defaultServerIcon : "default");
+        properties.setProperty(NAME_defaultServerName, !StringHandler.isNullOrEmpty(defaultServerName) ? defaultServerName : I18n.format("selectServer.defaultName"));
+        properties.setProperty(NAME_defaultServerMOTD, !StringHandler.isNullOrEmpty(defaultServerMOTD) ? defaultServerMOTD : I18n.format("craftpresence.defaults.servermessages.servermotd"));
+        properties.setProperty(NAME_serverMessages, !StringHandler.isNullOrEmpty(Arrays.toString(serverMessages)) ? Arrays.toString(serverMessages) : Arrays.toString(new String[]{"default" + (!StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Playing on &motd&"}));
         // STATUS MESSAGES
-        properties.setProperty(NAME_mainmenuMSG, mainmenuMSG);
-        properties.setProperty(NAME_singleplayerMSG, singleplayerMSG);
-        properties.setProperty(NAME_loadingMSG, loadingMSG);
-        properties.setProperty(NAME_packPlaceholderMSG, packPlaceholderMSG);
-        properties.setProperty(NAME_playerPlaceholderMSG, playerPlaceholderMSG);
-        properties.setProperty(NAME_playerAmountPlaceholderMSG, playerAmountPlaceholderMSG);
-        properties.setProperty(NAME_gameTimePlaceholderMSG, gameTimePlaceholderMSG);
-        properties.setProperty(NAME_vivecraftMessage, vivecraftMessage);
+        properties.setProperty(NAME_mainmenuMSG, !StringHandler.isNullOrEmpty(mainmenuMSG) ? mainmenuMSG : I18n.format("craftpresence.defaults.state.mainmenu"));
+        properties.setProperty(NAME_singleplayerMSG, !StringHandler.isNullOrEmpty(singleplayerMSG) ? singleplayerMSG : I18n.format("craftpresence.defaults.state.singleplayer"));
+        properties.setProperty(NAME_loadingMSG, !StringHandler.isNullOrEmpty(loadingMSG) ? loadingMSG : I18n.format("craftpresence.defaults.state.loading"));
+        properties.setProperty(NAME_packPlaceholderMSG, !StringHandler.isNullOrEmpty(packPlaceholderMSG) ? packPlaceholderMSG : I18n.format("craftpresence.defaults.placeholder.pack"));
+        properties.setProperty(NAME_playerPlaceholderMSG, !StringHandler.isNullOrEmpty(playerPlaceholderMSG) ? playerPlaceholderMSG : I18n.format("craftpresence.defaults.placeholder.ign"));
+        properties.setProperty(NAME_playerAmountPlaceholderMSG, !StringHandler.isNullOrEmpty(playerAmountPlaceholderMSG) ? playerAmountPlaceholderMSG : I18n.format("craftpresence.defaults.placeholder.players"));
+        properties.setProperty(NAME_gameTimePlaceholderMSG, !StringHandler.isNullOrEmpty(gameTimePlaceholderMSG) ? gameTimePlaceholderMSG : I18n.format("craftpresence.defaults.placeholder.time"));
+        properties.setProperty(NAME_vivecraftMessage, !StringHandler.isNullOrEmpty(vivecraftMessage) ? vivecraftMessage : I18n.format("craftpresence.defaults.special.vivecraft"));
         // ADVANCED
-        properties.setProperty(NAME_enableCommands, Boolean.toString(enableCommands));
-        properties.setProperty(NAME_enablePERGUI, Boolean.toString(enablePERGUI));
-        properties.setProperty(NAME_enablePERItem, Boolean.toString(enablePERItem));
-        properties.setProperty(NAME_guiMessages, Arrays.toString(guiMessages));
-        properties.setProperty(NAME_itemMessages, Arrays.toString(itemMessages));
+        properties.setProperty(NAME_enableCommands, !StringHandler.isNullOrEmpty(Boolean.toString(enableCommands)) ? Boolean.toString(enableCommands) : "true");
+        properties.setProperty(NAME_enablePERGUI, !StringHandler.isNullOrEmpty(Boolean.toString(enablePERGUI)) ? Boolean.toString(enablePERGUI) : "false");
+        properties.setProperty(NAME_enablePERItem, !StringHandler.isNullOrEmpty(Boolean.toString(enablePERItem)) ? Boolean.toString(enablePERItem) : "false");
+        properties.setProperty(NAME_splitCharacter, !StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";");
+        properties.setProperty(NAME_guiMessages, !StringHandler.isNullOrEmpty(Arrays.toString(guiMessages)) ? Arrays.toString(guiMessages) : Arrays.toString(new String[]{"default" + (!StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In &gui&"}));
+        properties.setProperty(NAME_itemMessages, !StringHandler.isNullOrEmpty(Arrays.toString(itemMessages)) ? Arrays.toString(itemMessages) : Arrays.toString(new String[]{"default" + (!StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Holding &main&"}));
 
         // Check for Conflicts before Saving
         if (showCurrentBiome && showGameState) {

@@ -97,12 +97,14 @@ public class ConfigGUI_Editor extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        String messageText = "Message:";
+        String valueNameText = "Value Name:";
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, "Message:", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, messageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         if (isNewValue) {
-            drawString(fontRenderer, "Value Name:", (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, valueNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
             newValueName.drawTextBox();
         } else {
             drawString(fontRenderer, removeMSG, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(removeMSG) / 2), (sr.getScaledHeight() - 45), 0xFFFFFF);
@@ -119,6 +121,14 @@ public class ConfigGUI_Editor extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
+        // Hovering over Message Label
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(messageText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.message.remove").split("\n")), mouseX, mouseY);
+        }
+        // Hovering over Value Name Label
+        if (isNewValue && CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(valueNameText), 20)) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.valuename").split("\n")), mouseX, mouseY);
+        }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
         }

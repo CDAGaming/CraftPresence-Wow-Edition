@@ -24,6 +24,7 @@ gui.config.comment.title.advanced=Customize Specific Details of the Mod
 gui.config.message.remove=**Remove Message Text to Remove this Value**
 gui.config.hoverMessage.access=**Enable "%1$s" to use this Menu**
 gui.config.hoverMessage.defaultempty=**Default Info cannot be Empty and Must be Valid**
+gui.config.hoverMessage.valuename=Name to Identify this Value
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon
