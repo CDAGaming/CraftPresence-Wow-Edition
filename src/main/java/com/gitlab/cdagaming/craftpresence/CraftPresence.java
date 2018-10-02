@@ -2,7 +2,6 @@ package com.gitlab.cdagaming.craftpresence;
 
 import com.gitlab.cdagaming.craftpresence.config.ConfigHandler;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
-import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
 import com.gitlab.cdagaming.craftpresence.handler.entity.EntityHandler;
@@ -66,7 +65,7 @@ public class CraftPresence {
         Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         try {
-            CLIENT = new DiscordHandler(!StringHandler.isNullOrEmpty(CONFIG.clientID) ? CONFIG.clientID : "450485984333660181");
+            CLIENT = new DiscordHandler(CONFIG.clientID);
             CLIENT.init();
             CLIENT.updateTimestamp();
             CommandHandler.setLoadingPresence(event.getModState());

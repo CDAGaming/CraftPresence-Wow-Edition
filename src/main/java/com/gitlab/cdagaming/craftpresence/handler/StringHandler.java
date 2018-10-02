@@ -12,7 +12,11 @@ public class StringHandler {
     private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
 
     public static boolean isNullOrEmpty(final String entry) {
-        return entry == null || entry.isEmpty();
+        return entry == null || entry.isEmpty() || entry.equalsIgnoreCase("null");
+    }
+
+    public static boolean isValidBoolean(final String entry) {
+        return !isNullOrEmpty(entry) && (entry.equalsIgnoreCase("true") || entry.equalsIgnoreCase("false"));
     }
 
     public static String formatIP(final String input) {

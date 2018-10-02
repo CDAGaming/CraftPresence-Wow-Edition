@@ -77,6 +77,9 @@ public class ServerHandler {
             }
             if (player != null) {
                 final String gameTime = getTimeString(player.world.getWorldTime());
+                if (StringHandler.isNullOrEmpty(timeString)) {
+                    timeString = gameTime;
+                }
                 if (!gameTime.equals(timeString)) {
                     final String currentGameTimeMessage = CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString);
                     final String newGameTimeMessage = CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", gameTime);
@@ -140,7 +143,7 @@ public class ServerHandler {
                         updateServerPresence();
                     }
                 } else {
-                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString));
+                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", !StringHandler.isNullOrEmpty(timeString) ? timeString : getTimeString(player.world.getWorldTime())));
                     CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
             }

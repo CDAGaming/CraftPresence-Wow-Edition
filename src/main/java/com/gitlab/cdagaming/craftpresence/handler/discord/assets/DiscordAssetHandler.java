@@ -110,7 +110,7 @@ public class DiscordAssetHandler {
         }
 
         if (needsFullUpdate) {
-            CraftPresence.CONFIG.save(CraftPresence.CONFIG.properties);
+            CraftPresence.CONFIG.save();
             CraftPresence.CONFIG.read();
         }
     }

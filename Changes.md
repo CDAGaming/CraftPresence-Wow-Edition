@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.4.5 (10/01/2018)
+## v1.4.5 (10/02/2018)
 
 ### Changes:
 
@@ -45,6 +45,8 @@
 * Fixes Retrieving Sub Items and Blocks
 
 * Fixes Possible NPE Scenarios with Dimension and Entity Getters
+
+* Multiple ConfigHandler Fixes (If your having Issues with NPE's on the Config, try upgrading to this version)
 
 * Minor Typo and Translation Fixes
 

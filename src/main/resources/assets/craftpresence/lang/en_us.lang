@@ -79,7 +79,7 @@ gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Ma
 gui.config.comment.statusmessages.lanmsg=Message to Display while in a LAN Game \n (Will only show if Status is Enabled)
 gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer \n (Will only show if Status is Enabled) \n &ign& = Your Minecraft Username \n &time& = Your World Game Time
 gui.config.comment.statusmessages.placeholder.packmsg=Message to display in Rich Presence when using a valid ModPack \n (Curse, Twitch, Technic, or MultiMC) \n Available Placeholders: \n - &name& = The Pack's Name
-gui.config.comment.statusmessages.placeholder.playermsg=Message to use for the &ign& Placeholder \n Available Placeholders: \n - &name& = Your In Game Name / Username
+gui.config.comment.statusmessages.placeholder.playermsg=Message to use for the &ign& Placeholder \n Available Placeholders: \n - &name& = Your Username
 gui.config.comment.statusmessages.placeholder.playeramountmsg=Message to use for the &players& Placeholder \n Available Placeholders: \n - &current& = Current Player Count \n - &max& = Maximum Player Count
 gui.config.comment.statusmessages.placeholder.gametimemsg=Message to use for the &time& Placeholder \n Available Placeholders: \n - &worldtime& = The Current World Time, in format of HH:MM
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using ViveCraft
@@ -97,11 +97,11 @@ craftpresence.defaults.state.mainmenu=In the Main Menu
 craftpresence.defaults.state.mcversion=Minecraft %1$s
 craftpresence.defaults.state.lan=Playing on a LAN Server
 craftpresence.defaults.state.singleplayer=Playing Singleplayer
-craftpresence.defaults.placeholder.pack=Pack - &name&
+craftpresence.defaults.placeholder.pack=&name&
 craftpresence.defaults.placeholder.players=&current& / &max& Players
-craftpresence.defaults.placeholder.ign=Name - &name&
-craftpresence.defaults.placeholder.time=Time - &worldtime&
-craftpresence.defaults.special.vivecraft=Vivecraft is a VR mod supporting many headsets via OpenVR
+craftpresence.defaults.placeholder.ign=&name&
+craftpresence.defaults.placeholder.time=&worldtime&
+craftpresence.defaults.special.vivecraft=Playing in VR via Vivecraft
 ## COMMAND MESSAGES ##
 craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lconfig §r- Open CraftPresence's Config GUI \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page
 craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands: \n §6§lcurrentData §r- Shows your Current RPC Data, in text \n §6§lassets §r- Displays all Asset Icons available \n §6§ldimensions §r- Displays all Dimension Names
