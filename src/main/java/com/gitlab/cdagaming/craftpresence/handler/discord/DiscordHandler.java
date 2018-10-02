@@ -75,7 +75,7 @@ public class DiscordHandler {
 
     public void updatePresence(@Nonnull final DiscordRichPresence presence) {
         if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
-            presence.details = presence.details + " | " + "Vivecraft";
+            presence.details = presence.details + " | " + CraftPresence.CONFIG.vivecraftMessage;
         } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
             presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
         } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name"))) {

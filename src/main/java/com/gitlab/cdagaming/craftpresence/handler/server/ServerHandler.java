@@ -85,6 +85,7 @@ public class ServerHandler {
                     final String newGameTimeMessage = CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", gameTime);
                     if (CraftPresence.CLIENT.GAME_STATE.contains(currentGameTimeMessage)) {
                         CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(currentGameTimeMessage, newGameTimeMessage);
+                        CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
                         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                     }
                     timeString = gameTime;
@@ -128,6 +129,7 @@ public class ServerHandler {
 
         if (player != null && event.getEntity() == player) {
             if (CraftPresence.CONFIG.showGameState) {
+                timeString = getTimeString(player.world.getWorldTime());
                 if (!minecraft.isSingleplayer()) {
                     final ServerData serverData = minecraft.getCurrentServerData();
                     if (serverData != null) {
@@ -143,7 +145,7 @@ public class ServerHandler {
                         updateServerPresence();
                     }
                 } else {
-                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", !StringHandler.isNullOrEmpty(timeString) ? timeString : getTimeString(player.world.getWorldTime())));
+                    CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString));
                     CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
             }

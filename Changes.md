@@ -10,7 +10,7 @@
 
   * Gradle Version (1.8.X+): `4.10.1` >> `4.10.2`
 
-  * MCP Mappings Version (1.13): `snapshot_20180916` >> `snapshot_20181001`
+  * MCP Mappings Version (1.13): `snapshot_20180916` >> `snapshot_20181002`
 
 * Config & Config GUI Changes:
 
@@ -24,7 +24,7 @@
 
 * Added `&ign&` and `&time&` Placeholder for Server and SinglePlayer Messages
 
-* Improve Config Verification to now identify and fill in Missing Default Settings on Array Properties
+* Improve Config Verification to now identify and fill in Missing Default Settings on Array Properties and Boolean Verification
 
 ### Fixes:
 
@@ -56,15 +56,15 @@
 
 The Config GUI has now been overhauled to provide a more User-Friendly Experience
 
-* Migrating on `1.7.10 - 1.12.2` (From v1.3.x and Below) - Remove `craftpresence.cfg` and Regenerate or Manually Migrate
+* Migrating on `1.7.10 - 1.12.2` (From v1.3.x and Below) - Remove `craftpresence.cfg` and either Regenerate or Manually Migrate
 
 * Migrating on `1.13.x` (From v1.3.x and Below) - Rename `craftpresence.cfg` to `craftpresence.properties` or Regenerate Config
 
-Over time, this GUI will be edited and add new Options to customize your experience.
+Over time, this GUI will be edited and add new Options to further customize your experience.
 
 #### Inviting Others to Join Info:
 
-This Feature is currently in-dev, and somethings may not work relating to Joining your friends such as:
+This Feature is currently in-dev, and some things may not work relating to Joining your friends such as:
 
 * Minecraft may not launch if you click Join on an Invite
 
