@@ -177,15 +177,15 @@ public class ConfigHandler {
                 clientID = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_clientID)) ? properties.getProperty(NAME_clientID) : clientID;
                 defaultIcon = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_defaultIcon)) ? properties.getProperty(NAME_defaultIcon) : defaultIcon;
                 // BIOME MESSAGES
-                biomeMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_biomeMessages)) ? properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : biomeMessages;
+                biomeMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : biomeMessages;
                 // DIMENSION MESSAGES
                 defaultDimensionIcon = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_defaultDimensionIcon)) ? properties.getProperty(NAME_defaultDimensionIcon) : defaultDimensionIcon;
-                dimensionMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_dimensionMessages)) ? properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : dimensionMessages;
+                dimensionMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : dimensionMessages;
                 // SERVER MESSAGES
                 defaultServerIcon = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_defaultServerIcon)) ? properties.getProperty(NAME_defaultServerIcon) : defaultServerIcon;
                 defaultServerName = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_defaultServerName)) ? properties.getProperty(NAME_defaultServerName) : defaultServerName;
                 defaultServerMOTD = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_defaultServerMOTD)) ? properties.getProperty(NAME_defaultServerMOTD) : defaultServerMOTD;
-                serverMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_serverMessages)) ? properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : serverMessages;
+                serverMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : serverMessages;
                 // STATUS MESSAGES
                 mainmenuMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_mainmenuMSG)) ? properties.getProperty(NAME_mainmenuMSG) : mainmenuMSG;
                 singleplayerMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_singleplayerMSG)) ? properties.getProperty(NAME_singleplayerMSG) : singleplayerMSG;
@@ -200,8 +200,8 @@ public class ConfigHandler {
                 enablePERGUI = StringHandler.isValidBoolean(properties.getProperty(NAME_enablePERGUI)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI)) : enablePERGUI;
                 enablePERItem = StringHandler.isValidBoolean(properties.getProperty(NAME_enablePERItem)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERItem)) : enablePERItem;
                 splitCharacter = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_splitCharacter)) ? properties.getProperty(NAME_splitCharacter) : splitCharacter;
-                guiMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiMessages)) ? properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : guiMessages;
-                itemMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_itemMessages)) ? properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : itemMessages;
+                guiMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : guiMessages;
+                itemMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : itemMessages;
             } catch (NullPointerException ex) {
                 verifyConfig();
             } finally {
