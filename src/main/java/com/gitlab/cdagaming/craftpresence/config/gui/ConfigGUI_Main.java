@@ -64,38 +64,38 @@ public class ConfigGUI_Main extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (generalSet.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.general").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.general")), mouseX, mouseY);
         }
         if (biomeSet.isMouseOver()) {
             if (!biomeSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome")).split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.biomemessages").split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
             }
         }
         if (dimensionSet.isMouseOver()) {
             if (!dimensionSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension")).split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.dimensionmessages").split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
             }
         }
         if (serverSet.isMouseOver()) {
             if (!serverSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate")).split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.servermessages").split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
             }
         }
         if (statusSet.isMouseOver()) {
             if (!statusSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate")).split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.statusmessages").split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.statusmessages")), mouseX, mouseY);
             }
         }
         if (advancedSet.isMouseOver()) {
-            drawHoveringText(I18n.format("gui.config.comment.title.advanced"), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.advanced")), mouseX, mouseY);
         }
     }
 

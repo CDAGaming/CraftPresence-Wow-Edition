@@ -79,34 +79,34 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
         // Hovering over Client ID Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.clientid").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.clientid")), mouseX, mouseY);
         }
         if (defaultIconButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.defaulticon").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.defaulticon")), mouseX, mouseY);
         }
         if (detectCurseManifestButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detectcursemanifest").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detectcursemanifest")), mouseX, mouseY);
         }
         if (detectMultiMCManifestButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detectmultimcmanifest").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detectmultimcmanifest")), mouseX, mouseY);
         }
         if (detectTechnicPackButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detecttechnicpack").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detecttechnicpack")), mouseX, mouseY);
         }
         if (showTimeButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showtime").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showtime")), mouseX, mouseY);
         }
         if (showBiomeButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showbiome").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showbiome")), mouseX, mouseY);
         }
         if (showDimensionButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showdimension").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showdimension")), mouseX, mouseY);
         }
         if (showStateButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showstate").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showstate")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 
@@ -148,7 +148,6 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                     CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.showCurrentBiome = showBiomeButton.isChecked();
-                CraftPresence.CONFIG.showGameState = !CraftPresence.CONFIG.showCurrentBiome;
             }
             if (showDimensionButton.isChecked() != CraftPresence.CONFIG.showCurrentDimension) {
                 CraftPresence.CONFIG.hasChanged = true;
@@ -164,7 +163,6 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
-                CraftPresence.CONFIG.showCurrentBiome = CraftPresence.CONFIG.enablePERGUI = !CraftPresence.CONFIG.showGameState;
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == defaultIconButton.id) {

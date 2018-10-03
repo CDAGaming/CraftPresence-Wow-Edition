@@ -73,33 +73,33 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
         // Hovering over Split Character Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.splitcharacter").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY);
         }
         if (enableCommandsButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablecommands").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablecommands")), mouseX, mouseY);
         }
         if (enablePerGUIButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablepergui").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablepergui")), mouseX, mouseY);
         }
         if (enablePerItemButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enableperitem").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY);
         }
         if (guiMessagesButton.isMouseOver()) {
             if (!guiMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages")).split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.guimessages").split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.guimessages")), mouseX, mouseY);
             }
         }
         if (itemMessagesButton.isMouseOver()) {
             if (!itemMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages")).split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.itemmessages").split("\n")), mouseX, mouseY);
+                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.itemmessages")), mouseX, mouseY);
             }
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty").split("\n")), mouseX, mouseY);
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 
@@ -125,7 +125,6 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                     CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.enablePERGUI = enablePerGUIButton.isChecked();
-                CraftPresence.CONFIG.showGameState = !CraftPresence.CONFIG.enablePERGUI;
             }
             if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePERItem) {
                 CraftPresence.CONFIG.hasChanged = true;

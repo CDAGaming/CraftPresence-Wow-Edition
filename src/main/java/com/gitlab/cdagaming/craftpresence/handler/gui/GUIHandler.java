@@ -216,8 +216,8 @@ public class GUIHandler {
         }
     }
 
-    public List<String> formatText(String[] original) {
-        return new ArrayList<>(Arrays.asList(original));
+    public List<String> formatText(String original) {
+        return new ArrayList<>(Arrays.asList(original.split("\\\\n+")));
     }
 
     public int getButtonY(int order) {

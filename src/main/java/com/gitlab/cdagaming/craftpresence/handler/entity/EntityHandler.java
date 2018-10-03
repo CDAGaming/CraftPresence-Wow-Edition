@@ -65,16 +65,27 @@ public class EntityHandler {
         if (player != null) {
             final ItemStack NEW_CURRENT_MAINHAND_ITEM = player.getHeldItemMainhand();
             final ItemStack NEW_CURRENT_OFFHAND_ITEM = player.getHeldItemOffhand();
-            final String NEW_CURRENT_MAINHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName());
-            final String NEW_CURRENT_OFFHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName());
 
-            if (!NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) && !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) {
-                CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
-                CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
+            if (!isEmpty(NEW_CURRENT_MAINHAND_ITEM)) {
+                final String NEW_CURRENT_MAINHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName());
+                if (!NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) && !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) {
+                    CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
+                    CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
+                }
+            } else {
+                CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
+                CURRENT_MAINHAND_ITEM_NAME = null;
             }
-            if (!NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) && !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) {
-                CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
-                CURRENT_OFFHAND_ITEM_NAME = NEW_CURRENT_OFFHAND_ITEM_NAME;
+
+            if (!isEmpty(NEW_CURRENT_OFFHAND_ITEM)) {
+                final String NEW_CURRENT_OFFHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName());
+                if (!NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) && !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) {
+                    CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
+                    CURRENT_OFFHAND_ITEM_NAME = NEW_CURRENT_OFFHAND_ITEM_NAME;
+                }
+            } else {
+                CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
+                CURRENT_OFFHAND_ITEM_NAME = null;
             }
         }
     }
@@ -107,11 +118,13 @@ public class EntityHandler {
 
                 if (!subtypes.isEmpty()) {
                     for (ItemStack itemStack : subtypes) {
-                        if (!BLOCK_NAMES.contains(itemStack.getDisplayName())) {
-                            BLOCK_NAMES.add(itemStack.getDisplayName());
-                        }
-                        if (!BLOCK_CLASSES.contains(itemStack.getItem().getClass().getName())) {
-                            BLOCK_CLASSES.add(itemStack.getItem().getClass().getName());
+                        if (!isEmpty(itemStack)) {
+                            if (!BLOCK_NAMES.contains(itemStack.getDisplayName())) {
+                                BLOCK_NAMES.add(itemStack.getDisplayName());
+                            }
+                            if (!BLOCK_CLASSES.contains(itemStack.getItem().getClass().getName())) {
+                                BLOCK_CLASSES.add(itemStack.getItem().getClass().getName());
+                            }
                         }
                     }
                 } else {
@@ -136,11 +149,13 @@ public class EntityHandler {
 
                 if (!subtypes.isEmpty()) {
                     for (ItemStack itemStack : subtypes) {
-                        if (!ITEM_NAMES.contains(itemStack.getDisplayName())) {
-                            ITEM_NAMES.add(itemStack.getDisplayName());
-                        }
-                        if (!ITEM_CLASSES.contains(itemStack.getItem().getClass().getName())) {
-                            ITEM_CLASSES.add(itemStack.getItem().getClass().getName());
+                        if (!isEmpty(itemStack)) {
+                            if (!ITEM_NAMES.contains(itemStack.getDisplayName())) {
+                                ITEM_NAMES.add(itemStack.getDisplayName());
+                            }
+                            if (!ITEM_CLASSES.contains(itemStack.getItem().getClass().getName())) {
+                                ITEM_CLASSES.add(itemStack.getItem().getClass().getName());
+                            }
                         }
                     }
                 } else {

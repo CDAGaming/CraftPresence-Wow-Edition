@@ -1,54 +1,16 @@
 # CraftPresence Changes
 
-## v1.4.5 (10/02/2018)
-
-### Changes:
-
-* Build Changes (Code-Behind):
-
-  * Forge Version (1.12.2): `14.23.4.2760` >> `14.23.4.2765`
-
-  * Gradle Version (1.8.X+): `4.10.1` >> `4.10.2`
-
-  * MCP Mappings Version (1.13): `snapshot_20180916` >> `snapshot_20181002`
-
-* Config & Config GUI Changes:
-
-  * Removed Icon Selection from New Values [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
-
-  * No longer Allow Client IDs with Letters in Config GUI
-
-  * Removed "Add New" Option when Selecting an Icon
-
-  * Added Advanced, GUI, and Item Settings GUI
-
-* Added `&ign&` and `&time&` Placeholder for Server and SinglePlayer Messages
-
-* Improve Config Verification to now identify and fill in Missing Default Settings on Array Properties and Boolean Verification
+## v1.4.8 (10/??/2018)
 
 ### Fixes:
 
-* Fixes Mod GUI Class Detection for Per-GUI System (Now Universal)
+* Fixes NPE Scenarios in Item Getters
 
-* Fixes "Unrecognized Command" with `/cp view assets large`
+* Revert Auto-Setting Options in the Config GUI
 
-* Fixes an NPE when Editing a Previously Missing Value in Config GUI
+* Fixes `\n` Escape Parsing
 
-* Fixes setImage() for defaultIcon & Else Cases
-
-* Fixes an NPE in Some Cases when Setting an Icon [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/3)
-
-* Fixes Issues with Getting Biome Information [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/4)
-
-* Fixes Case-Sensitive Issues with Search Functions
-
-* Fixes Retrieving Sub Items and Blocks
-
-* Fixes Possible NPE Scenarios with Dimension and Entity Getters
-
-* Multiple ConfigHandler Fixes (If your having Issues with NPE's on the Config, try upgrading to this version)
-
-* Minor Typo and Translation Fixes
+* Fixes Back Button Enable Conditions in Status Messages GUI
 
 ### More Information:
 
