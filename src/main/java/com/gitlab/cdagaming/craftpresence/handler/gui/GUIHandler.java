@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -78,7 +79,8 @@ public class GUIHandler {
     @SubscribeEvent
     public void onTick(final TickEvent.PlayerTickEvent event) {
         final Minecraft mc = Minecraft.getMinecraft();
-        if (event.player != null && event.player == mc.player) {
+        final EntityPlayer player = mc.player;
+        if (event.player != null && event.player == player) {
             if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState && mc.currentScreen == null) {
                 CraftPresence.CLIENT.GAME_STATE = "";
             }

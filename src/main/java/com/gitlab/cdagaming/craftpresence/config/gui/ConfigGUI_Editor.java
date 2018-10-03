@@ -15,7 +15,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_Editor extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
     private String selecteditem, configoption, specificMSG, defaultMSG, title, removeMSG;
@@ -23,6 +23,7 @@ public class ConfigGUI_Editor extends GuiScreen {
 
     ConfigGUI_Editor(GuiScreen parentScreen, String selectedItem, String configOption) {
         mc = Minecraft.getMinecraft();
+        currentscreen = this;
         parentscreen = parentScreen;
         configoption = configOption;
         selecteditem = selectedItem;
@@ -198,11 +199,11 @@ public class ConfigGUI_Editor extends GuiScreen {
             mc.displayGuiScreen(parentscreen);
         } else if (parentscreen instanceof ConfigGUI_DimensionSettings) {
             if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
-                mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
+                mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
         } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
             if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
-                mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
+                mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
         }
     }

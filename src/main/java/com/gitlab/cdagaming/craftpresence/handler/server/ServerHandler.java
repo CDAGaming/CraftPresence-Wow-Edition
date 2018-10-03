@@ -75,7 +75,7 @@ public class ServerHandler {
                     maxPlayers = newMaxPlayers;
                 }
             }
-            if (player != null) {
+            if (event.player != null && event.player == player) {
                 final String gameTime = getTimeString(player.world.getWorldTime());
                 if (StringHandler.isNullOrEmpty(timeString)) {
                     timeString = gameTime;

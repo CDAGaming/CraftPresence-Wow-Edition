@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_AdvancedSettings extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, guiMessagesButton, itemMessagesButton;
     private GUICheckBox enableCommandsButton, enablePerGUIButton,
             enablePerItemButton;
@@ -22,6 +22,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
     ConfigGUI_AdvancedSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        currentscreen = this;
         parentscreen = parentScreen;
     }
 
@@ -138,9 +139,9 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_guiMessages, "CraftPresence - Select a GUI", CraftPresence.GUIS.GUI_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_guiMessages, "CraftPresence - Select a GUI", CraftPresence.GUIS.GUI_NAMES, null));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_itemMessages, "CraftPresence - Select an Entity/Item", CraftPresence.ENTITIES.ENTITY_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_itemMessages, "CraftPresence - Select an Entity/Item", CraftPresence.ENTITIES.ENTITY_NAMES, null));
         }
     }
 

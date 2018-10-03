@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_DimensionSettings extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, dimensionMessagesButton, defaultIconButton;
     private GuiTextField defaultMessage;
 
@@ -22,6 +22,7 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
 
     ConfigGUI_DimensionSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        currentscreen = this;
         parentscreen = parentScreen;
     }
 
@@ -89,9 +90,9 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == dimensionMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select Dimension", CraftPresence.DIMENSIONS.DIMENSION_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select Dimension", CraftPresence.DIMENSIONS.DIMENSION_NAMES, null));
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultDimensionIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
         }
     }
 

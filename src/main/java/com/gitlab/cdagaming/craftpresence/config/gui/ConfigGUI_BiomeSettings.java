@@ -13,7 +13,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_BiomeSettings extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, biomeMessagesButton;
     private GuiTextField defaultMessage;
 
@@ -21,6 +21,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
     ConfigGUI_BiomeSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        currentscreen = this;
         parentscreen = parentScreen;
     }
 
@@ -83,7 +84,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == biomeMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null));
         }
     }
 

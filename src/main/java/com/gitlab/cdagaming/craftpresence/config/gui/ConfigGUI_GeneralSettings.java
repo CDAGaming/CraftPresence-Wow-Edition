@@ -16,7 +16,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_GeneralSettings extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, defaultIconButton;
     private GUICheckBox detectCurseManifestButton, detectMultiMCManifestButton,
             detectTechnicPackButton, showTimeButton,
@@ -25,6 +25,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
     ConfigGUI_GeneralSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        currentscreen = this;
         parentscreen = parentScreen;
     }
 
@@ -166,7 +167,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
         }
     }
 

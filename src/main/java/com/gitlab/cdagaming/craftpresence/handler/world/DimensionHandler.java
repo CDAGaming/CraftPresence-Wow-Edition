@@ -37,14 +37,15 @@ public class DimensionHandler {
     public void worldLoad(final EntityJoinWorldEvent event) {
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
-        if (player != null && event.getEntity() == player) {
-            updateDimensionData(player.world);
+        if (event.getEntity() != null && event.getEntity() == player) {
+            updateDimensionData(event.getEntity().world);
         }
     }
 
     @SubscribeEvent
     public void onDimensionChange(final PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (event.player != null && event.player == Minecraft.getMinecraft().player) {
+        final EntityPlayer player = Minecraft.getMinecraft().player;
+        if (event.player != null && event.player == player) {
             updateDimensionData(event.player.world);
         }
     }

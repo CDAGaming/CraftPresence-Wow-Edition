@@ -7,14 +7,18 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
 public class ConfigGUI_Main extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
+    private EntityPlayer player;
     private GuiButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        player = mc.player;
+        currentscreen = this;
         parentscreen = parentScreen;
     }
 
@@ -102,17 +106,17 @@ public class ConfigGUI_Main extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == generalSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_GeneralSettings(this));
+            mc.displayGuiScreen(new ConfigGUI_GeneralSettings(currentscreen));
         } else if (button.id == biomeSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_BiomeSettings(this));
+            mc.displayGuiScreen(new ConfigGUI_BiomeSettings(currentscreen));
         } else if (button.id == dimensionSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_DimensionSettings(this));
+            mc.displayGuiScreen(new ConfigGUI_DimensionSettings(currentscreen));
         } else if (button.id == serverSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_ServerSettings(this));
+            mc.displayGuiScreen(new ConfigGUI_ServerSettings(currentscreen));
         } else if (button.id == statusSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_StatusMessages(this));
+            mc.displayGuiScreen(new ConfigGUI_StatusMessages(currentscreen));
         } else if (button.id == advancedSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(this));
+            mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(currentscreen));
         } else if (button.id == proceedButton.id) {
             boolean rebooted = false;
             if (CraftPresence.CONFIG.hasChanged) {
@@ -123,7 +127,7 @@ public class ConfigGUI_Main extends GuiScreen {
                     rebooted = true;
                     CraftPresence.CONFIG.hasClientPropertiesChanged = false;
                 }
-                if (mc.player != null && CraftPresence.CONFIG.rebootOnWorldLoad) {
+                if (player != null && CraftPresence.CONFIG.rebootOnWorldLoad) {
                     if (!rebooted) {
                         CommandHandler.rebootRPC();
                     }
@@ -132,13 +136,13 @@ public class ConfigGUI_Main extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = false;
             }
 
-            if (mc.player != null) {
-                mc.player.closeScreen();
+            if (player != null) {
+                player.closeScreen();
             } else {
                 mc.displayGuiScreen(parentscreen);
             }
         } else if (button.id == aboutButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_About(this));
+            mc.displayGuiScreen(new ConfigGUI_About(currentscreen));
         }
     }
 

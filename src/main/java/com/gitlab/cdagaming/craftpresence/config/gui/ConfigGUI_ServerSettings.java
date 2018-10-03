@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_ServerSettings extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, serverMessagesButton, defaultIconButton;
     private GuiTextField defaultMOTD, defaultName, defaultMSG;
 
@@ -22,6 +22,7 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
     ConfigGUI_ServerSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        currentscreen = this;
         parentscreen = parentScreen;
     }
 
@@ -119,9 +120,9 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == serverMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(this, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
         }
     }
 
