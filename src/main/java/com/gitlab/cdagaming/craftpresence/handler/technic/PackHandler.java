@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler.technic;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.resources.I18n;
@@ -23,6 +24,7 @@ public class PackHandler {
                 if (System.getProperty("user.dir").contains(pack.selected)) {
                     PACK_NAME = StringHandler.formatWord(pack.selected);
                     ICON_NAME = StringHandler.formatPackIcon(pack.selected);
+                    CraftPresence.packFound = true;
 
                     Constants.LOG.info(I18n.format("craftpresence.logger.info.technic.loaded", PACK_NAME, ICON_NAME));
                 } else {

@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler.multimc;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.resources.I18n;
 
@@ -34,6 +35,7 @@ public class InstanceHandler {
                 } else {
                     Constants.LOG.info(I18n.format("craftpresence.logger.info.instance.loaded", get("name"), "NONE"));
                 }
+                CraftPresence.packFound = true;
             }
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.file.instance"));

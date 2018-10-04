@@ -75,6 +75,7 @@ public class DiscordHandler {
 
     public void updatePresence(@Nonnull final DiscordRichPresence presence) {
         if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
+            CraftPresence.packFound = true;
             presence.details = presence.details + " | " + CraftPresence.CONFIG.vivecraftMessage;
         } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
             presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
@@ -86,6 +87,7 @@ public class DiscordHandler {
 
         if (StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) {
             if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
+                CraftPresence.packFound = true;
                 presence.smallImageKey = "vivecraft";
                 presence.smallImageText = CraftPresence.CONFIG.vivecraftMessage;
             } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {

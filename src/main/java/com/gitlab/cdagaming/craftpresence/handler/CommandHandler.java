@@ -60,13 +60,13 @@ public class CommandHandler {
         if (CraftPresence.CONFIG.enableCommands) {
             registerCommands();
         }
-        if (CraftPresence.CONFIG.detectCurseManifest) {
+        if (CraftPresence.CONFIG.detectCurseManifest && !CraftPresence.packFound) {
             ManifestHandler.loadManifest();
         }
-        if (CraftPresence.CONFIG.detectMultiMCManifest) {
+        if (CraftPresence.CONFIG.detectMultiMCManifest && !CraftPresence.packFound) {
             InstanceHandler.loadInstance();
         }
-        if (CraftPresence.CONFIG.detectTechnicPack) {
+        if (CraftPresence.CONFIG.detectTechnicPack && !CraftPresence.packFound) {
             PackHandler.loadPack();
         }
         DiscordAssetHandler.loadAssets();

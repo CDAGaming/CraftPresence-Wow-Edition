@@ -30,7 +30,7 @@ public class ConfigHandler {
             NAME_packPlaceholderMSG, NAME_playerPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
             NAME_gameTimePlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem,
+    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
 
     // Config Variables
@@ -51,7 +51,7 @@ public class ConfigHandler {
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
             gameTimePlaceholderMSG, vivecraftMessage;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem;
+    public boolean enableCommands, enablePERGUI, enablePERItem, overwriteServerIcon;
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // CLASS-SPECIFIC - PUBLIC
@@ -124,12 +124,14 @@ public class ConfigHandler {
         NAME_enableCommands = I18n.format("gui.config.name.advanced.enablecommands").replaceAll(" ", "_");
         NAME_enablePERGUI = I18n.format("gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
         NAME_enablePERItem = I18n.format("gui.config.name.advanced.enableperitem").replaceAll(" ", "_");
+        NAME_overwriteServerIcon = I18n.format("gui.config.name.advanced.overwriteservericon").replaceAll(" ", "_");
         NAME_splitCharacter = I18n.format("gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
         NAME_guiMessages = I18n.format("gui.config.name.advanced.guimessages").replaceAll(" ", "_");
         NAME_itemMessages = I18n.format("gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
         enableCommands = true;
         enablePERGUI = false;
         enablePERItem = false;
+        overwriteServerIcon = false;
         splitCharacter = ";";
         guiMessages = new String[]{"default;In &gui&"};
         itemMessages = new String[]{"default;Holding &main&"};
@@ -199,6 +201,7 @@ public class ConfigHandler {
                 enableCommands = StringHandler.isValidBoolean(properties.getProperty(NAME_enableCommands)) ? Boolean.parseBoolean(properties.getProperty(NAME_enableCommands)) : enableCommands;
                 enablePERGUI = StringHandler.isValidBoolean(properties.getProperty(NAME_enablePERGUI)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI)) : enablePERGUI;
                 enablePERItem = StringHandler.isValidBoolean(properties.getProperty(NAME_enablePERItem)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERItem)) : enablePERItem;
+                overwriteServerIcon = StringHandler.isValidBoolean(properties.getProperty(NAME_overwriteServerIcon)) ? Boolean.parseBoolean(properties.getProperty(NAME_overwriteServerIcon)) : overwriteServerIcon;
                 splitCharacter = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_splitCharacter)) ? properties.getProperty(NAME_splitCharacter) : splitCharacter;
                 guiMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : guiMessages;
                 itemMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : itemMessages;
@@ -248,6 +251,7 @@ public class ConfigHandler {
         properties.setProperty(NAME_enableCommands, Boolean.toString(enableCommands));
         properties.setProperty(NAME_enablePERGUI, Boolean.toString(enablePERGUI));
         properties.setProperty(NAME_enablePERItem, Boolean.toString(enablePERItem));
+        properties.setProperty(NAME_overwriteServerIcon, Boolean.toString(overwriteServerIcon));
         properties.setProperty(NAME_splitCharacter, splitCharacter);
         properties.setProperty(NAME_guiMessages, Arrays.toString(guiMessages));
         properties.setProperty(NAME_itemMessages, Arrays.toString(itemMessages));

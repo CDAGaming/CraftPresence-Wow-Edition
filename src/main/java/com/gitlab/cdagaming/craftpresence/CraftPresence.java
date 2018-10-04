@@ -19,6 +19,7 @@ import java.io.File;
 @Mod(modid = Constants.MODID, name = Constants.NAME, version = Constants.VERSION_ID, clientSideOnly = true, guiFactory = Constants.GUI_FACTORY, canBeDeactivated = true, updateJSON = Constants.UPDATE_JSON, certificateFingerprint = Constants.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
     public static DiscordHandler CLIENT;
+    public static boolean packFound = false;
 
     public static ConfigHandler CONFIG;
     public static ServerHandler SERVER = new ServerHandler();

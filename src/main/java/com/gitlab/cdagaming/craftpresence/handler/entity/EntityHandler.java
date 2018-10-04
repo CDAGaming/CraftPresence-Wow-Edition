@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler.entity;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
@@ -31,6 +32,16 @@ public class EntityHandler {
     private ItemStack CURRENT_MAINHAND_ITEM;
     private ItemStack CURRENT_OFFHAND_ITEM;
 
+    private ItemStack CURRENT_HELMET;
+    private ItemStack CURRENT_CHEST;
+    private ItemStack CURRENT_LEGS;
+    private ItemStack CURRENT_BOOTS;
+
+    private String CURRENT_HELMET_NAME;
+    private String CURRENT_CHEST_NAME;
+    private String CURRENT_LEGS_NAME;
+    private String CURRENT_BOOTS_NAME;
+
     public void emptyData() {
         BLOCK_NAMES.clear();
         BLOCK_CLASSES.clear();
@@ -46,6 +57,15 @@ public class EntityHandler {
         CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
         CURRENT_MAINHAND_ITEM_NAME = null;
         CURRENT_OFFHAND_ITEM_NAME = null;
+
+        CURRENT_HELMET = ItemStack.EMPTY;
+        CURRENT_CHEST = ItemStack.EMPTY;
+        CURRENT_LEGS = ItemStack.EMPTY;
+        CURRENT_BOOTS = ItemStack.EMPTY;
+        CURRENT_HELMET_NAME = null;
+        CURRENT_CHEST_NAME = null;
+        CURRENT_LEGS_NAME = null;
+        CURRENT_BOOTS_NAME = null;
     }
 
     @SubscribeEvent
@@ -66,9 +86,14 @@ public class EntityHandler {
             final ItemStack NEW_CURRENT_MAINHAND_ITEM = player.getHeldItemMainhand();
             final ItemStack NEW_CURRENT_OFFHAND_ITEM = player.getHeldItemOffhand();
 
+            final ItemStack NEW_CURRENT_HELMET = player.inventory.armorInventory.get(3);
+            final ItemStack NEW_CURRENT_CHEST = player.inventory.armorInventory.get(2);
+            final ItemStack NEW_CURRENT_LEGS = player.inventory.armorInventory.get(1);
+            final ItemStack NEW_CURRENT_BOOTS = player.inventory.armorInventory.get(0);
+
             if (!isEmpty(NEW_CURRENT_MAINHAND_ITEM)) {
                 final String NEW_CURRENT_MAINHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName());
-                if (!NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) && !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) {
+                if (!NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) && !StringHandler.isNullOrEmpty(NEW_CURRENT_MAINHAND_ITEM_NAME)) {
                     CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
                     CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
                 }
@@ -79,7 +104,7 @@ public class EntityHandler {
 
             if (!isEmpty(NEW_CURRENT_OFFHAND_ITEM)) {
                 final String NEW_CURRENT_OFFHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName());
-                if (!NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) && !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) {
+                if (!NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) && !StringHandler.isNullOrEmpty(NEW_CURRENT_OFFHAND_ITEM_NAME)) {
                     CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
                     CURRENT_OFFHAND_ITEM_NAME = NEW_CURRENT_OFFHAND_ITEM_NAME;
                 }
@@ -87,21 +112,83 @@ public class EntityHandler {
                 CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
                 CURRENT_OFFHAND_ITEM_NAME = null;
             }
+
+            if (!isEmpty(NEW_CURRENT_HELMET)) {
+                final String NEW_CURRENT_HELMET_NAME = StringHandler.stripColors(NEW_CURRENT_HELMET.getDisplayName());
+                if (!NEW_CURRENT_HELMET.equals(CURRENT_HELMET) && !StringHandler.isNullOrEmpty(NEW_CURRENT_HELMET_NAME)) {
+                    CURRENT_HELMET = NEW_CURRENT_HELMET;
+                    CURRENT_HELMET_NAME = NEW_CURRENT_HELMET_NAME;
+                }
+            } else {
+                CURRENT_HELMET = ItemStack.EMPTY;
+                CURRENT_HELMET_NAME = null;
+            }
+
+            if (!isEmpty(NEW_CURRENT_CHEST)) {
+                final String NEW_CURRENT_CHEST_NAME = StringHandler.stripColors(NEW_CURRENT_CHEST.getDisplayName());
+                if (!NEW_CURRENT_CHEST.equals(CURRENT_CHEST) && !StringHandler.isNullOrEmpty(NEW_CURRENT_CHEST_NAME)) {
+                    CURRENT_CHEST = NEW_CURRENT_CHEST;
+                    CURRENT_CHEST_NAME = NEW_CURRENT_CHEST_NAME;
+                }
+            } else {
+                CURRENT_CHEST = ItemStack.EMPTY;
+                CURRENT_CHEST_NAME = null;
+            }
+
+            if (!isEmpty(NEW_CURRENT_LEGS)) {
+                final String NEW_CURRENT_LEGS_NAME = StringHandler.stripColors(NEW_CURRENT_LEGS.getDisplayName());
+                if (!NEW_CURRENT_LEGS.equals(CURRENT_LEGS) && !StringHandler.isNullOrEmpty(NEW_CURRENT_LEGS_NAME)) {
+                    CURRENT_LEGS = NEW_CURRENT_LEGS;
+                    CURRENT_LEGS_NAME = NEW_CURRENT_LEGS_NAME;
+                }
+            } else {
+                CURRENT_LEGS = ItemStack.EMPTY;
+                CURRENT_LEGS_NAME = null;
+            }
+
+            if (!isEmpty(NEW_CURRENT_BOOTS)) {
+                final String NEW_CURRENT_BOOTS_NAME = StringHandler.stripColors(NEW_CURRENT_BOOTS.getDisplayName());
+                if (!NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) && !StringHandler.isNullOrEmpty(NEW_CURRENT_BOOTS_NAME)) {
+                    CURRENT_BOOTS = NEW_CURRENT_BOOTS;
+                    CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
+                }
+            } else {
+                CURRENT_BOOTS = ItemStack.EMPTY;
+                CURRENT_BOOTS_NAME = null;
+            }
         }
     }
 
     private void updateEntityPresence() {
         final String defaultItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String offHandItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultItemMSG);
-        final String offHandSelector = !isEmpty(CURRENT_OFFHAND_ITEM) || !StringHandler.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ? CURRENT_OFFHAND_ITEM_NAME : "";
-        final String mainHandSelector = !isEmpty(CURRENT_MAINHAND_ITEM) || !StringHandler.isNullOrEmpty(CURRENT_MAINHAND_ITEM_NAME) ? CURRENT_MAINHAND_ITEM_NAME : offHandSelector;
-        final String mainItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_MAINHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultItemMSG);
-        final String formattedOffHandItemMSG = offHandItemMSG.replace("&main&", offHandSelector).replace("&offhand&", "");
 
-        if (CraftPresence.CONFIG.showCurrentDimension && (isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM))) {
+        final String offHandItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_OFFHAND_ITEM_NAME);
+        final String offHandSelector = !isEmpty(CURRENT_OFFHAND_ITEM) && !StringHandler.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ? CURRENT_OFFHAND_ITEM_NAME : "";
+        final String formattedOffHandItemMSG = offHandItemMSG.replace("&main&", offHandSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
+
+        final String mainHandSelector = !isEmpty(CURRENT_MAINHAND_ITEM) && !StringHandler.isNullOrEmpty(CURRENT_MAINHAND_ITEM_NAME) ? CURRENT_MAINHAND_ITEM_NAME : offHandSelector;
+        final String mainItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_MAINHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultItemMSG);
+
+        final String helmetSelector = !isEmpty(CURRENT_HELMET) && !StringHandler.isNullOrEmpty(CURRENT_HELMET_NAME) ? CURRENT_HELMET_NAME : "";
+        final String helmetMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_HELMET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_HELMET_NAME);
+        final String formattedHelmetMSG = helmetMSG.replace("&main&", helmetSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
+
+        final String chestSelector = !isEmpty(CURRENT_CHEST) && !StringHandler.isNullOrEmpty(CURRENT_CHEST_NAME) ? CURRENT_CHEST_NAME : "";
+        final String chestMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_CHEST_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_CHEST_NAME);
+        final String formattedChestMSG = chestMSG.replace("&main&", chestSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
+
+        final String legsSelector = !isEmpty(CURRENT_LEGS) && !StringHandler.isNullOrEmpty(CURRENT_LEGS_NAME) ? CURRENT_LEGS_NAME : "";
+        final String legsMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_LEGS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_LEGS_NAME);
+        final String formattedLegsMSG = legsMSG.replace("&main&", legsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
+
+        final String bootsSelector = !isEmpty(CURRENT_BOOTS) && !StringHandler.isNullOrEmpty(CURRENT_BOOTS_NAME) ? CURRENT_BOOTS_NAME : "";
+        final String bootsMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_BOOTS_NAME);
+        final String formattedBootsMSG = bootsMSG.replace("&main&", bootsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
+
+        if (CraftPresence.CONFIG.showCurrentDimension && (isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS))) {
             CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
         } else {
-            CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG);
+            CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
         }
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
@@ -190,13 +277,15 @@ public class EntityHandler {
         List<String> removingBlocks = new ArrayList<>();
         List<String> removingItems = new ArrayList<>();
         for (String itemName : ITEM_NAMES) {
-            if (itemName.contains("tile.") || itemName.contains("item.") || itemName.contains(".") || itemName.contains(".name")) {
+            final String lowerItemName = itemName.toLowerCase();
+            if (lowerItemName.contains("tile.") || lowerItemName.contains("item.") || lowerItemName.contains(".") || lowerItemName.contains(".name")) {
                 removingItems.add(itemName);
             }
         }
 
         for (String blockName : BLOCK_NAMES) {
-            if (blockName.contains("tile.") || blockName.contains("item.") || blockName.contains(".") || blockName.contains(".name")) {
+            final String lowerBlockName = blockName.toLowerCase();
+            if (lowerBlockName.contains("tile.") || lowerBlockName.contains("item.") || lowerBlockName.contains(".") || lowerBlockName.contains(".name")) {
                 removingBlocks.add(blockName);
             }
         }

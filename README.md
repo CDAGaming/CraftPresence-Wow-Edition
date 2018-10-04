@@ -22,15 +22,10 @@ As an example, this is how the mod will convert the pack name to an iconKey:
 
 (Note the above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)
 
-#### Advanced Settings
-This section of the Config holds more technical settings such as Debug Logging,
-Split Characters for other config sections, as well as a Per-Event System to change
-your display depending on which GUI/Action your doing.
-
 ## Commands
 Beginning in v1.3.0, CraftPresence now offers the following Commands:
 
-(Commands are prefixed by `/craftpresence` or `/cp`)
+(Commands can be prefixed by `/craftpresence` or `/cp`)
 (Commands Listed are the Syntax as of v1.4.0*)
 
 - `/cp view` - View a Variety of Display Data
@@ -41,12 +36,12 @@ Beginning in v1.3.0, CraftPresence now offers the following Commands:
 - `/cp view currentData` - Displays in Text Form, your Current RPC Data
 - `/cp view assets <large|small|all>` - Displays all Asset IconKeys available to you
 - `/cp view dimensions` - Displays all Dimension Names available for use
-- `/cp help // /cp ?` - Help Command to display the Above Commands and These Explanations
+- `/cp <help|?` - Help Command to display the Above Commands and These Explanations
 
 ## Placeholders
-In some Configuration Areas, CraftPresence Provides some Placeholders to make things easier:
+In some Configuration Areas, CraftPresence provides Placeholders to make things easier:
 
-(Placeholders are also not Case-Sensitive, but should be entered lowercase*)
+(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them*)
 
 (If Connecting to a Server via Direct Connect, CraftPresence will use the Default MOTD and Name, If you use those placeholders in your config*)
 
@@ -60,15 +55,17 @@ In some Configuration Areas, CraftPresence Provides some Placeholders to make th
 - &ID& - The Current Dimension ID
 
 #### Server Placeholders
-- &IP& - The Current Server IP
+- &IP& - The Current Server IP Address
 - &NAME& - The Current Server Name
 - &MOTD& - The Current Server MOTD (Message of The Day)
 - &ICON& - The Default Server Icon Name
 - &PLAYERS& - The Current Player Count `(10 / 100 Players)`
 - &IGN& - Your Minecraft Username
+- &TIME& - The Current World Time
 
 #### SinglePlayer Placeholders
 - &IGN& - Your Minecraft Username
+- &TIME& - The Current World Time
 
 #### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)
@@ -78,8 +75,12 @@ In some Configuration Areas, CraftPresence Provides some Placeholders to make th
 #### Item/Entity Placeholders
 - &MAIN& - The Current Item your Main Hand is Holding
 - &OFFHAND& - The Current Item your Off Hand is Holding*
+- &HELMET& - The Current Helmet Armor Piece you have Equipped
+- &CHEST& - The Current Chest Armor Piece you have Equipped
+- &LEGS& - The Current Leggings Armor Piece you have Equipped
+- &BOOTS& - The Current Boots Armor Piece you have Equipped
 
-(Starting in v1.4.0, this is your OffHand Item's Message*)
+(Starting in v1.4.0, this can either be just the Item Name or your OffHand Item's Message, if present*)
 
 ## Disclaimer
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party

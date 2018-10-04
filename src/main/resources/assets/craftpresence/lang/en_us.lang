@@ -55,6 +55,7 @@ gui.config.name.advanced.splitcharacter=Split Character
 gui.config.name.advanced.enablecommands=Enable Commands
 gui.config.name.advanced.enablepergui=Enable Per-GUI System
 gui.config.name.advanced.enableperitem=Enable Per-Item System
+gui.config.name.advanced.overwriteservericon=Overwrite Server Icon
 gui.config.name.advanced.guimessages=GUI Messages
 gui.config.name.advanced.itemmessages=Item Messages
 ## CONFIG MESSAGES - COMMENTS ##
@@ -87,8 +88,9 @@ gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in
 gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Takes Effect after Restarting Minecraft)
 gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - This can be a performance downgrade \n - Requires an Option in GUI Messages
 gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding \n Note the Following: \n - Overwrites Server & Biomes \n - Requires an Option in Item Messages
+gui.config.comment.advanced.overwriteservericon=Allows CraftPresence to overwrite the Server Icon and Text if a Pack is in use
 gui.config.comment.advanced.guimessages=GUI Messages Data \n (Format: gui;message) \n &gui& = Current GUI \n (Requires Enable Per-GUI)
-gui.config.comment.advanced.itemmessages=Item Messages Data \n (Format: item;message) \n &main& = Current Main Hand Item \n &offhand& = Current OffHand Item \n (Requires Enable Per-Item)
+gui.config.comment.advanced.itemmessages=Item Messages Data \n (Format: item;message) \n &main& = Current Main Hand Item \n &offhand& = Current OffHand Item \n &helmet& = Currently Equipped Helmet \n &chest& = Currently Equipped ChestPiece \n &legs& = Currently Equipped Leggings \n &boots& = Currently Equipped Boots \n (Requires Enable Per-Item)
 ## DEFAULT MESSAGES ##
 craftpresence.defaults.servermessages.servermotd=A Minecraft Server
 craftpresence.defaults.state.loading=Loading the Game

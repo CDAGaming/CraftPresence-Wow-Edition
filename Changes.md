@@ -2,6 +2,12 @@
 
 ## v1.4.8 (10/??/2018)
 
+### Changes:
+
+* Added `&helmet&`, `&chest&`, `&legs&`, and `&boots&` in Item Messages for Equipped Armor
+
+* Added an `overwriteServerIcon` Config Option to allow a Pack Icon to take Priority over a Server Icon
+
 ### Fixes:
 
 * Fixes NPE Scenarios in Item Getters

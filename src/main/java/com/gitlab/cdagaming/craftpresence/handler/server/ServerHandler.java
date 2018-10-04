@@ -211,24 +211,26 @@ public class ServerHandler {
         }
         CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
 
-        if (DiscordAssetHandler.contains(formattedServerIconKey) && !currentServerIcon.equals(defaultServerIcon)) {
-            CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-        } else {
-            boolean matched = false;
-            for (String ipPart : currentServer_IP.split("\\.")) {
-                final String formattedKey = StringHandler.formatPackIcon(ipPart);
-                if (DiscordAssetHandler.contains(formattedKey)) {
-                    CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.SMALL);
-                    matched = true;
-                    break;
+        if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
+            if (DiscordAssetHandler.contains(formattedServerIconKey) && !currentServerIcon.equals(defaultServerIcon)) {
+                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
+            } else {
+                boolean matched = false;
+                for (String ipPart : currentServer_IP.split("\\.")) {
+                    final String formattedKey = StringHandler.formatPackIcon(ipPart);
+                    if (DiscordAssetHandler.contains(formattedKey)) {
+                        CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.SMALL);
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) {
+                    CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
                 }
             }
-            if (!matched) {
-                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-            }
+            CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
         }
 
-        CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

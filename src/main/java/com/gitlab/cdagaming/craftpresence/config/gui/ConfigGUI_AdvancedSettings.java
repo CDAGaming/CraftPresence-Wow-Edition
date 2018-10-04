@@ -17,7 +17,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
     private final GuiScreen parentscreen, currentscreen;
     private GuiButton proceedButton, guiMessagesButton, itemMessagesButton;
     private GUICheckBox enableCommandsButton, enablePerGUIButton,
-            enablePerItemButton;
+            enablePerItemButton, overwriteServerIconButton;
     private GuiTextField splitCharacter;
 
     ConfigGUI_AdvancedSettings(GuiScreen parentScreen) {
@@ -44,6 +44,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
         enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
+        overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
         buttonList.add(guiMessagesButton);
@@ -51,6 +52,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         buttonList.add(enableCommandsButton);
         buttonList.add(enablePerGUIButton);
         buttonList.add(enablePerItemButton);
+        buttonList.add(overwriteServerIconButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -84,6 +86,9 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         }
         if (enablePerItemButton.isMouseOver()) {
             drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY);
+        }
+        if (overwriteServerIconButton.isMouseOver()) {
+            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY);
         }
         if (guiMessagesButton.isMouseOver()) {
             if (!guiMessagesButton.enabled) {
@@ -136,6 +141,11 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                     CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
+            }
+            if (overwriteServerIconButton.isChecked() != CraftPresence.CONFIG.overwriteServerIcon) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.overwriteServerIcon = overwriteServerIconButton.isChecked();
             }
             mc.displayGuiScreen(parentscreen);
         } else if (button.id == guiMessagesButton.id) {
