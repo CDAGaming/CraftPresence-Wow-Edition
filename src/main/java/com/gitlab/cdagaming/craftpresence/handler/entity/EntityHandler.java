@@ -1,6 +1,5 @@
 package com.gitlab.cdagaming.craftpresence.handler.entity;
 
-import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
@@ -77,8 +76,12 @@ public class EntityHandler {
         }
     }
 
+    private boolean isEmpty(final Item item) {
+        return item == null || item == Items.AIR;
+    }
+
     private boolean isEmpty(final ItemStack itemStack) {
-        return itemStack.isEmpty() || itemStack.getItem() == Items.AIR;
+        return itemStack.isEmpty() || isEmpty(itemStack.getItem());
     }
 
     private void getCurrentlyHeldItem(final EntityPlayer player) {
@@ -195,7 +198,7 @@ public class EntityHandler {
 
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
-            if (block != null) {
+            if (!isEmpty(Item.getItemFromBlock(block))) {
                 NonNullList<ItemStack> subtypes = NonNullList.create();
                 for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                     if (tab != null) {
@@ -226,7 +229,7 @@ public class EntityHandler {
         }
 
         for (Item item : Item.REGISTRY) {
-            if (item != null) {
+            if (!isEmpty(item)) {
                 NonNullList<ItemStack> subtypes = NonNullList.create();
                 for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                     if (tab != null) {
