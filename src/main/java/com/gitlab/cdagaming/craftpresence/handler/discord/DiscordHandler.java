@@ -85,7 +85,7 @@ public class DiscordHandler {
             presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
         }
 
-        if (StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) {
+        if ((StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {
             if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
                 CraftPresence.packFound = true;
                 presence.smallImageKey = "vivecraft";
