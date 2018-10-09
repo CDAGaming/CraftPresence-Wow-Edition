@@ -76,13 +76,13 @@ public class DiscordHandler {
     public void updatePresence(@Nonnull final DiscordRichPresence presence) {
         if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
             CraftPresence.packFound = true;
-            presence.details = presence.details + " | " + CraftPresence.CONFIG.vivecraftMessage;
+            presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.vivecraftMessage;
         } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
-            presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
+            presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
         } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name"))) {
-            presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
+            presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
         } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME)) {
-            presence.details = presence.details + " | " + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
+            presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
         }
 
         if ((StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {

@@ -47,6 +47,13 @@ public class ConfigGUI_NullEntry extends GuiScreen {
     }
 
     @Override
+    protected void keyTyped(char typedChar, int keyCode) {
+        if (keyCode == 1) {
+            mc.displayGuiScreen(parentscreen);
+        }
+    }
+
+    @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
     }

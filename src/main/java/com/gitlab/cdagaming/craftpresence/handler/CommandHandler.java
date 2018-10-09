@@ -80,7 +80,14 @@ public class CommandHandler {
         CraftPresence.CLIENT.PARTY_SIZE = 0;
         CraftPresence.CLIENT.PARTY_MAX = 0;
         CraftPresence.CLIENT.JOIN_SECRET = "";
-        CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.mainmenuMSG;
+
+        if (!CraftPresence.CONFIG.hasChanged) {
+            if (CraftPresence.CONFIG.showGameState) {
+                CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.mainmenuMSG;
+            } else {
+                CraftPresence.CLIENT.DETAILS = "";
+            }
+        }
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
         CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
@@ -89,10 +96,19 @@ public class CommandHandler {
     public static void setLoadingPresence(final LoaderState.ModState state) {
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
-        CraftPresence.CLIENT.GAME_STATE = I18n.format("craftpresence.defaults.state.loading.status", state);
-        CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.loadingMSG;
+
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
-        CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.loading.status", state);
+        if (!CraftPresence.CONFIG.hasChanged) {
+            if (CraftPresence.CONFIG.showGameState) {
+                CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.loadingMSG;
+                CraftPresence.CLIENT.GAME_STATE = I18n.format("craftpresence.defaults.state.loading.status", state);
+                CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
+            } else {
+                CraftPresence.CLIENT.DETAILS = "";
+                CraftPresence.CLIENT.GAME_STATE = "";
+                CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
+            }
+        }
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 }

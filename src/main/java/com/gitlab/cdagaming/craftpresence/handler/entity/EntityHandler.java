@@ -70,7 +70,7 @@ public class EntityHandler {
     @SubscribeEvent
     public void updateEntityData(final TickEvent.PlayerTickEvent event) {
         final EntityPlayer player = Minecraft.getMinecraft().player;
-        if (CraftPresence.CONFIG.enablePERItem && player != null) {
+        if (CraftPresence.CONFIG.enablePERItem && (event.player != null && event.player == player)) {
             getCurrentlyHeldItem(player);
             updateEntityPresence();
         }
@@ -188,9 +188,7 @@ public class EntityHandler {
         final String bootsMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_BOOTS_NAME);
         final String formattedBootsMSG = bootsMSG.replace("&main&", bootsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
 
-        if (CraftPresence.CONFIG.showCurrentDimension && (isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS))) {
-            CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
-        } else {
+        if (!CraftPresence.CONFIG.showCurrentDimension || !(isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS))) {
             CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
         }
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());

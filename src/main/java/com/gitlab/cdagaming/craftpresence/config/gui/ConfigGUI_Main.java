@@ -10,6 +10,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
+import java.io.IOException;
+
 public class ConfigGUI_Main extends GuiScreen {
     private final GuiScreen parentscreen, currentscreen;
     private EntityPlayer player;
@@ -144,6 +146,17 @@ public class ConfigGUI_Main extends GuiScreen {
         } else if (button.id == aboutButton.id) {
             mc.displayGuiScreen(new ConfigGUI_About(currentscreen));
         }
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (keyCode == 1) {
+            CraftPresence.CONFIG.read();
+            CraftPresence.CONFIG.hasChanged = false;
+            CraftPresence.CONFIG.hasClientPropertiesChanged = false;
+            CraftPresence.CONFIG.rebootOnWorldLoad = false;
+        }
+        super.keyTyped(typedChar, keyCode);
     }
 
     @Override

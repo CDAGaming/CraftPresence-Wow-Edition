@@ -172,8 +172,10 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
+    protected void keyTyped(char typedChar, int keyCode) {
+        if (keyCode == 1) {
+            mc.displayGuiScreen(parentscreen);
+        }
         mainMenuMSG.textboxKeyTyped(typedChar, keyCode);
         singleplayerMSG.textboxKeyTyped(typedChar, keyCode);
         loadingMSG.textboxKeyTyped(typedChar, keyCode);
@@ -186,7 +188,6 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
         mainMenuMSG.mouseClicked(mouseX, mouseY, mouseButton);
         singleplayerMSG.mouseClicked(mouseX, mouseY, mouseButton);
         loadingMSG.mouseClicked(mouseX, mouseY, mouseButton);
@@ -195,6 +196,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         playerAmountMSG.mouseClicked(mouseX, mouseY, mouseButton);
         gameTimeMSG.mouseClicked(mouseX, mouseY, mouseButton);
         viveCraftMSG.mouseClicked(mouseX, mouseY, mouseButton);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override

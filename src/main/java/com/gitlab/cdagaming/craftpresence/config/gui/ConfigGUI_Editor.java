@@ -209,8 +209,10 @@ public class ConfigGUI_Editor extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
+    protected void keyTyped(char typedChar, int keyCode) {
+        if (keyCode == 1) {
+            mc.displayGuiScreen(parentscreen);
+        }
         specificMessage.textboxKeyTyped(typedChar, keyCode);
         if (isNewValue) {
             newValueName.textboxKeyTyped(typedChar, keyCode);
@@ -219,11 +221,11 @@ public class ConfigGUI_Editor extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
         specificMessage.mouseClicked(mouseX, mouseY, mouseButton);
         if (isNewValue) {
             newValueName.mouseClicked(mouseX, mouseY, mouseButton);
         }
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override

@@ -127,8 +127,10 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        super.keyTyped(typedChar, keyCode);
+    protected void keyTyped(char typedChar, int keyCode) {
+        if (keyCode == 1) {
+            mc.displayGuiScreen(parentscreen);
+        }
         defaultName.textboxKeyTyped(typedChar, keyCode);
         defaultMOTD.textboxKeyTyped(typedChar, keyCode);
         defaultMSG.textboxKeyTyped(typedChar, keyCode);
@@ -136,10 +138,10 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
         defaultName.mouseClicked(mouseX, mouseY, mouseButton);
         defaultMOTD.mouseClicked(mouseX, mouseY, mouseButton);
         defaultMSG.mouseClicked(mouseX, mouseY, mouseButton);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
