@@ -219,7 +219,14 @@ public class GUIHandler {
     }
 
     public List<String> formatText(String original) {
-        return new ArrayList<>(Arrays.asList(original.split("\\\\n+")));
+        String formattedText = original;
+        if (formattedText.contains("\n")) {
+            formattedText = original.replace("\n", "&newline&");
+        }
+        if (formattedText.contains("\\\\n+")) {
+            formattedText = original.replace("\\\\n+", "&newline&");
+        }
+        return new ArrayList<>(Arrays.asList(formattedText.split("&newline&")));
     }
 
     public int getButtonY(int order) {

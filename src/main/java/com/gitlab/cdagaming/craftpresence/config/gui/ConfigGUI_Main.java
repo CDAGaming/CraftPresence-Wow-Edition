@@ -29,12 +29,16 @@ public class ConfigGUI_Main extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        generalSet = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.general"));
-        biomeSet = new GuiButton(200, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.biomemessages"));
-        dimensionSet = new GuiButton(300, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.dimensionmessages"));
-        serverSet = new GuiButton(400, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, I18n.format("gui.config.title.servermessages"));
-        statusSet = new GuiButton(500, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(5), 180, 20, I18n.format("gui.config.title.statusmessages"));
-        advancedSet = new GuiButton(600, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(6), 180, 20, I18n.format("gui.config.title.advanced"));
+        int calc1 = (sr.getScaledWidth() / 2) - 183;
+        int calc2 = (sr.getScaledWidth() / 2) + 3;
+
+        generalSet = new GuiButton(100, calc1, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.general"));
+        biomeSet = new GuiButton(200, calc2, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.biomemessages"));
+        dimensionSet = new GuiButton(300, calc1, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.dimensionmessages"));
+        serverSet = new GuiButton(400, calc2, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.servermessages"));
+        statusSet = new GuiButton(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.statusmessages"));
+        advancedSet = new GuiButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.advanced"));
+
         proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
         aboutButton = new GuiButton(800, 10, (sr.getScaledHeight() - 30), 20, 20, "?");
 
@@ -150,7 +154,8 @@ public class ConfigGUI_Main extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == 1) {
+        if (keyCode == 1 && (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged || CraftPresence.CONFIG.rebootOnWorldLoad)) {
+            CraftPresence.CONFIG.setupInitialValues();
             CraftPresence.CONFIG.read();
             CraftPresence.CONFIG.hasChanged = false;
             CraftPresence.CONFIG.hasClientPropertiesChanged = false;

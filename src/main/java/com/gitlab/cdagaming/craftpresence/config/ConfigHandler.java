@@ -66,7 +66,7 @@ public class ConfigHandler {
         this.fileName = fileName;
     }
 
-    private void setupInitialValues() {
+    public void setupInitialValues() {
         // GENERAL
         NAME_detectCurseManifest = I18n.format("gui.config.name.general.detectcursemanifest").replaceAll(" ", "_");
         NAME_detectMultiMCManifest = I18n.format("gui.config.name.general.detectmultimcmanifest").replaceAll(" ", "_");
