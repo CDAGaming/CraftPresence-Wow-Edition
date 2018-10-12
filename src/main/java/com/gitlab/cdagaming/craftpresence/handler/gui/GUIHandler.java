@@ -75,11 +75,7 @@ public class GUIHandler {
         final Minecraft mc = Minecraft.getMinecraft();
         final EntityPlayer player = mc.player;
         final boolean isPlayerAvailable = player != null;
-        final boolean needsUpdate = enabled &&
-                (StringHandler.isNullOrEmpty(CURRENT_GUI_NAME) ||
-                        CURRENT_GUI_CLASS == null || CURRENT_SCREEN == null ||
-                        GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty()
-                );
+        final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
         final boolean isIncorrectPresence = enabled && !CraftPresence.CLIENT.GAME_STATE.equals(formattedGUIMSG);
         final boolean removeGUIData = !enabled && CraftPresence.CLIENT.GAME_STATE.equals(formattedGUIMSG);
 
@@ -88,9 +84,15 @@ public class GUIHandler {
                 if (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty()) {
                     getGUIs();
                 }
-                if (isPlayerAvailable) {
+            }
+            if (isPlayerAvailable) {
+                if (mc.currentScreen != null) {
                     getGUIData(mc.currentScreen);
                     updateGUIPresence();
+                } else {
+                    formattedGUIMSG = null;
+                    CraftPresence.CLIENT.GAME_STATE = "";
+                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 }
             }
         } else if (removeGUIData) {
@@ -100,14 +102,9 @@ public class GUIHandler {
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         }
 
-        if (player != null) {
-            if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState && mc.currentScreen == null) {
-                CraftPresence.CLIENT.GAME_STATE = "";
-            }
-            if (openConfigGUI) {
-                mc.displayGuiScreen(new ConfigGUI_Main(mc.currentScreen));
-                openConfigGUI = false;
-            }
+        if (openConfigGUI) {
+            mc.displayGuiScreen(new ConfigGUI_Main(mc.currentScreen));
+            openConfigGUI = false;
         }
     }
 
