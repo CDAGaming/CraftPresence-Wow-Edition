@@ -18,13 +18,13 @@ public class CommandHandler {
     }
 
     public static void reloadData() {
-        if (CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState) {
+        if (CraftPresence.BIOMES.enabled) {
             CraftPresence.BIOMES.getBiomes();
         } else {
             CraftPresence.BIOMES.emptyData();
         }
 
-        if (CraftPresence.CONFIG.showCurrentDimension) {
+        if (CraftPresence.DIMENSIONS.enabled) {
             CraftPresence.DIMENSIONS.getDimensions();
         } else {
             CraftPresence.DIMENSIONS.emptyData();
@@ -42,7 +42,7 @@ public class CommandHandler {
             CraftPresence.SERVER.emptyData();
         }
 
-        if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState) {
+        if (CraftPresence.GUIS.enabled) {
             CraftPresence.GUIS.getGUIs();
         } else {
             CraftPresence.GUIS.emptyData();

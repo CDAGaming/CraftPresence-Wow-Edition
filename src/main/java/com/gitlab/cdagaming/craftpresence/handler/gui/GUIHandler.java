@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
@@ -28,8 +27,9 @@ import java.util.List;
 
 public class GUIHandler {
     public boolean openConfigGUI = false;
+    public boolean enabled = false;
     public List<String> GUI_NAMES = new ArrayList<>();
-    private String CURRENT_GUI_NAME;
+    private String CURRENT_GUI_NAME, formattedGUIMSG;
     private Class CURRENT_GUI_CLASS;
     private GuiScreen CURRENT_SCREEN;
     private List<Class> GUI_CLASSES = new ArrayList<>();
@@ -64,23 +64,43 @@ public class GUIHandler {
         CURRENT_GUI_NAME = null;
         CURRENT_GUI_CLASS = null;
         CURRENT_SCREEN = null;
+
         GUI_NAMES.clear();
         GUI_CLASSES.clear();
     }
 
     @SubscribeEvent
-    public void onGUIChange(final GuiOpenEvent event) {
-        if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState) {
-            getGUIData(event.getGui());
-            updateGUIPresence();
-        }
-    }
-
-    @SubscribeEvent
-    public void onTick(final TickEvent.PlayerTickEvent event) {
+    public void onTick(final TickEvent.ClientTickEvent event) {
+        enabled = !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState;
         final Minecraft mc = Minecraft.getMinecraft();
         final EntityPlayer player = mc.player;
-        if (event.player != null && event.player == player) {
+        final boolean isPlayerAvailable = player != null;
+        final boolean needsUpdate = enabled &&
+                (StringHandler.isNullOrEmpty(CURRENT_GUI_NAME) ||
+                        CURRENT_GUI_CLASS == null || CURRENT_SCREEN == null ||
+                        GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty()
+                );
+        final boolean isIncorrectPresence = enabled && !CraftPresence.CLIENT.GAME_STATE.equals(formattedGUIMSG);
+        final boolean removeGUIData = !enabled && CraftPresence.CLIENT.GAME_STATE.equals(formattedGUIMSG);
+
+        if (enabled) {
+            if (needsUpdate || isIncorrectPresence) {
+                if (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty()) {
+                    getGUIs();
+                }
+                if (isPlayerAvailable) {
+                    getGUIData(mc.currentScreen);
+                    updateGUIPresence();
+                }
+            }
+        } else if (removeGUIData) {
+            emptyData();
+            formattedGUIMSG = null;
+            CraftPresence.CLIENT.GAME_STATE = "";
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        }
+
+        if (player != null) {
             if (CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState && mc.currentScreen == null) {
                 CraftPresence.CLIENT.GAME_STATE = "";
             }
@@ -165,8 +185,9 @@ public class GUIHandler {
     private void updateGUIPresence() {
         final String defaultGUIMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentGUIMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
+        formattedGUIMSG = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
 
-        CraftPresence.CLIENT.GAME_STATE = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
+        CraftPresence.CLIENT.GAME_STATE = formattedGUIMSG;
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

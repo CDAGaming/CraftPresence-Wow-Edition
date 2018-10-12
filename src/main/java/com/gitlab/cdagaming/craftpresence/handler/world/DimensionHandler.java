@@ -10,88 +10,88 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DimensionHandler {
+    public boolean enabled = false;
     public List<String> DIMENSION_NAMES = new ArrayList<>();
     private List<Integer> DIMENSION_IDS = new ArrayList<>();
+    private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
     private String CURRENT_DIMENSION_NAME, formattedMSG, formattedIconKey;
     private Integer CURRENT_DIMENSION_ID;
 
     public void emptyData() {
+        CURRENT_DIMENSION_NAME = null;
+        CURRENT_DIMENSION_ID = null;
+
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
+        DIMENSION_TYPES.clear();
     }
 
     @SubscribeEvent
-    public void onDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        CURRENT_DIMENSION_NAME = null;
-        formattedMSG = null;
-        formattedIconKey = null;
-        CURRENT_DIMENSION_ID = null;
-    }
-
-    @SubscribeEvent
-    public void worldLoad(final EntityJoinWorldEvent event) {
+    public void onTick(final TickEvent.ClientTickEvent event) {
+        enabled = !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.showCurrentDimension;
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
-        final boolean isPlayerAvailable = event.getEntity() != null && event.getEntity() == player;
-
-        if (isPlayerAvailable && !CraftPresence.CONFIG.hasChanged) {
-            if (CraftPresence.CONFIG.showCurrentDimension) {
-                updateDimensionData(event.getEntity().world);
-            } else {
-                CraftPresence.CLIENT.DETAILS = "";
-                CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CONFIG.defaultIcon;
-                CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
-                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onTick(final TickEvent.PlayerTickEvent event) {
-        final Minecraft minecraft = Minecraft.getMinecraft();
-        final EntityPlayer player = minecraft.player;
-        final boolean isPlayerAvailable = event.player != null && event.player == player;
-        final boolean isIncorrectPresence = CraftPresence.CONFIG.showCurrentDimension &&
+        final boolean isPlayerAvailable = player != null;
+        final boolean needsUpdate = enabled &&
+                (StringHandler.isNullOrEmpty(CURRENT_DIMENSION_NAME) ||
+                        StringHandler.isNullOrEmpty(CURRENT_DIMENSION_ID.toString()) ||
+                        DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty()
+                );
+        final boolean isIncorrectPresence = enabled &&
                 (!CraftPresence.CLIENT.DETAILS.equals(formattedMSG) ||
                         !CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey) ||
                         !CraftPresence.CLIENT.LARGEIMAGETEXT.equals(formattedMSG)
                 );
-        final boolean removeDimensionData = !CraftPresence.CONFIG.showCurrentDimension &&
+        final boolean removeDimensionData = !enabled &&
                 (CraftPresence.CLIENT.DETAILS.equals(formattedMSG) &&
                         CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey) &&
                         CraftPresence.CLIENT.LARGEIMAGETEXT.equals(formattedMSG)
                 );
 
-        if (isPlayerAvailable && !CraftPresence.CONFIG.hasChanged) {
-            if (isIncorrectPresence) {
-                updateDimensionData(event.player.world);
-            } else if (removeDimensionData) {
-                CraftPresence.CLIENT.DETAILS = "";
-                CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CONFIG.defaultIcon;
-                CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
-                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        if (enabled) {
+            if (needsUpdate || isIncorrectPresence) {
+                if (getDimensionTypes() != DIMENSION_TYPES) {
+                    getDimensions();
+                }
+                if (isPlayerAvailable) {
+                    updateDimensionData(player.world);
+                }
             }
+        } else if (removeDimensionData) {
+            emptyData();
+            formattedMSG = null;
+            formattedIconKey = null;
+            CraftPresence.CLIENT.DETAILS = "";
+            CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CONFIG.defaultIcon;
+            CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         }
     }
 
+    private List<DimensionType> getDimensionTypes() {
+        List<DimensionType> dimensionTypes = new ArrayList<>();
+        Collections.addAll(dimensionTypes, DimensionType.values());
+
+        return dimensionTypes;
+    }
+
     private void getCurrentDimensionData(final World world) {
-        if (CraftPresence.CONFIG.showCurrentDimension && !CraftPresence.CONFIG.hasChanged && world != null) {
+        if (world != null) {
             CURRENT_DIMENSION_NAME = world.provider.getDimensionType().getName();
             CURRENT_DIMENSION_ID = world.provider.getDimensionType().getId();
         }
     }
 
     private void updateDimensionData(final World world) {
-        if (CraftPresence.CONFIG.showCurrentDimension && !CraftPresence.CONFIG.hasChanged && world != null) {
+        if (world != null) {
             getCurrentDimensionData(world);
             updateDimensionPresence();
         }
@@ -133,13 +133,16 @@ public class DimensionHandler {
     }
 
     public void getDimensions() {
-        for (DimensionType TYPE : DimensionType.values()) {
+        for (DimensionType TYPE : getDimensionTypes()) {
             if (TYPE != null) {
                 if (!DIMENSION_NAMES.contains(TYPE.getName())) {
                     DIMENSION_NAMES.add(TYPE.getName());
                 }
                 if (!DIMENSION_IDS.contains(TYPE.getId())) {
                     DIMENSION_IDS.add(TYPE.getId());
+                }
+                if (!DIMENSION_TYPES.contains(TYPE)) {
+                    DIMENSION_TYPES.add(TYPE);
                 }
             }
         }
