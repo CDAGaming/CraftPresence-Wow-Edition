@@ -71,7 +71,7 @@ public class GUIHandler {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        enabled = !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
         final Minecraft mc = Minecraft.getMinecraft();
         final EntityPlayer player = mc.player;
         final boolean isPlayerAvailable = player != null;

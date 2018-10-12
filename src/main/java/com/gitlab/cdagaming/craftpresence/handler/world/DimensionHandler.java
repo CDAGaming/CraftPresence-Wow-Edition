@@ -36,7 +36,7 @@ public class DimensionHandler {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        enabled = !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.showCurrentDimension;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
         final boolean isPlayerAvailable = player != null;

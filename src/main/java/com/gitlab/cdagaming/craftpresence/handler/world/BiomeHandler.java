@@ -30,7 +30,7 @@ public class BiomeHandler {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        enabled = !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
         final boolean isPlayerAvailable = player != null;
