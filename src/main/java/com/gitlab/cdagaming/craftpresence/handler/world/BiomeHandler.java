@@ -20,9 +20,6 @@ public class BiomeHandler {
     private Integer CURRENT_BIOME_ID;
 
     public void emptyData() {
-        CURRENT_BIOME_NAME = null;
-        CURRENT_BIOME_ID = null;
-
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
         BIOME_TYPES.clear();
@@ -39,24 +36,39 @@ public class BiomeHandler {
                         StringHandler.isNullOrEmpty(CURRENT_BIOME_ID.toString()) ||
                         BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty()
                 );
-        final boolean isIncorrectPresence = enabled && !CraftPresence.CLIENT.GAME_STATE.equals(formattedBiomeMSG);
-        final boolean removeBiomeData = !enabled && CraftPresence.CLIENT.GAME_STATE.equals(formattedBiomeMSG);
+        final boolean isIncorrectPresence = enabled && (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) || !CraftPresence.CLIENT.GAME_STATE.contains(formattedBiomeMSG));
+        final boolean removeBiomeData = (!enabled || !isPlayerAvailable) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) && CraftPresence.CLIENT.GAME_STATE.contains(formattedBiomeMSG));
 
         if (enabled) {
             if (needsUpdate || isIncorrectPresence) {
                 if (getBiomeTypes() != BIOME_TYPES) {
                     getBiomes();
                 }
-                if (isPlayerAvailable) {
-                    getCurrentBiomeData(player);
+            }
+
+            if (isPlayerAvailable) {
+                final Biome CURRENT_BIOME = player.world.getBiome(player.getPosition());
+                final String newBiomeName = CURRENT_BIOME.getBiomeName();
+                final Integer newBiomeID = Biome.getIdForBiome(CURRENT_BIOME);
+                if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
+                    CURRENT_BIOME_NAME = newBiomeName;
+                    CURRENT_BIOME_ID = newBiomeID;
                     updateBiomePresence();
+
+                    if (!BIOME_TYPES.contains(CURRENT_BIOME)) {
+                        getBiomes();
+                    }
                 }
             }
-        } else if (removeBiomeData) {
-            emptyData();
-            formattedBiomeMSG = null;
-            CraftPresence.CLIENT.GAME_STATE = "";
+        }
+
+        if (removeBiomeData) {
+            CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedBiomeMSG, "");
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+
+            CURRENT_BIOME_NAME = null;
+            CURRENT_BIOME_ID = null;
+            formattedBiomeMSG = null;
         }
     }
 
@@ -69,14 +81,6 @@ public class BiomeHandler {
         }
 
         return biomeTypes;
-    }
-
-    private void getCurrentBiomeData(final EntityPlayer player) {
-        if (player != null) {
-            final Biome CURRENT_BIOME = player.world.getBiome(player.getPosition());
-            CURRENT_BIOME_NAME = CURRENT_BIOME.getBiomeName();
-            CURRENT_BIOME_ID = Biome.getIdForBiome(CURRENT_BIOME);
-        }
     }
 
     private void updateBiomePresence() {

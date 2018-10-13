@@ -43,7 +43,6 @@ public class ServerHandler {
         timeString = null;
         currentPlayers = 0;
         maxPlayers = 0;
-        CommandHandler.setMainMenuPresence();
 
         final ServerList serverList = new ServerList(Minecraft.getMinecraft());
         serverList.loadServerList();

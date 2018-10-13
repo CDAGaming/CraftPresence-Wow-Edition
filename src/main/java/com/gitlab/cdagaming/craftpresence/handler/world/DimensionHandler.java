@@ -1,15 +1,12 @@
 package com.gitlab.cdagaming.craftpresence.handler.world;
 
-import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -26,9 +23,6 @@ public class DimensionHandler {
     private Integer CURRENT_DIMENSION_ID;
 
     public void emptyData() {
-        CURRENT_DIMENSION_NAME = null;
-        CURRENT_DIMENSION_ID = null;
-
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
         DIMENSION_TYPES.clear();
@@ -43,36 +37,53 @@ public class DimensionHandler {
         final boolean needsUpdate = enabled &&
                 (StringHandler.isNullOrEmpty(CURRENT_DIMENSION_NAME) ||
                         StringHandler.isNullOrEmpty(CURRENT_DIMENSION_ID.toString()) ||
-                        DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty()
-                );
-        final boolean isIncorrectPresence = enabled &&
-                (!CraftPresence.CLIENT.DETAILS.equals(formattedMSG) ||
-                        !CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey) ||
-                        !CraftPresence.CLIENT.LARGEIMAGETEXT.equals(formattedMSG)
-                );
-        final boolean removeDimensionData = !enabled &&
-                (CraftPresence.CLIENT.DETAILS.equals(formattedMSG) &&
-                        CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey) &&
-                        CraftPresence.CLIENT.LARGEIMAGETEXT.equals(formattedMSG)
-                );
+                        DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty());
+        final boolean isIncorrectPresence = enabled && (
+                (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) || !CraftPresence.CLIENT.DETAILS.contains(formattedMSG)) ||
+                        (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) || !CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey)) ||
+                        (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) || !CraftPresence.CLIENT.LARGEIMAGETEXT.contains(formattedMSG)));
+        final boolean removeDimensionData = (!enabled || !isPlayerAvailable) && (
+                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) &&
+                        CraftPresence.CLIENT.DETAILS.contains(formattedMSG)
+                ) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
+                        CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey)
+                ) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) &&
+                        CraftPresence.CLIENT.LARGEIMAGETEXT.contains(formattedMSG)
+                ));
 
         if (enabled) {
             if (needsUpdate || isIncorrectPresence) {
                 if (getDimensionTypes() != DIMENSION_TYPES) {
                     getDimensions();
                 }
-                if (isPlayerAvailable) {
-                    updateDimensionData(player.world);
+            }
+
+            if (isPlayerAvailable) {
+                final DimensionType newDimensionType = player.world.provider.getDimensionType();
+                final String newDimensionName = newDimensionType.getName();
+                final Integer newDimensionID = newDimensionType.getId();
+                if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
+                    CURRENT_DIMENSION_NAME = newDimensionName;
+                    CURRENT_DIMENSION_ID = newDimensionID;
+                    updateDimensionPresence();
+                }
+
+                if (!DIMENSION_TYPES.contains(newDimensionType)) {
+                    getDimensions();
                 }
             }
-        } else if (removeDimensionData) {
-            emptyData();
+        }
+
+        if (removeDimensionData) {
+            CraftPresence.CLIENT.DETAILS = CraftPresence.CLIENT.DETAILS.replace(formattedMSG, "");
+            CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CLIENT.LARGEIMAGEKEY.replace(formattedIconKey, "");
+            CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.LARGEIMAGETEXT.replace(formattedMSG, "");
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+
+            CURRENT_DIMENSION_NAME = null;
+            CURRENT_DIMENSION_ID = null;
             formattedMSG = null;
             formattedIconKey = null;
-            CraftPresence.CLIENT.DETAILS = "";
-            CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CONFIG.defaultIcon;
-            CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         }
     }
 
@@ -81,20 +92,6 @@ public class DimensionHandler {
         Collections.addAll(dimensionTypes, DimensionType.values());
 
         return dimensionTypes;
-    }
-
-    private void getCurrentDimensionData(final World world) {
-        if (world != null) {
-            CURRENT_DIMENSION_NAME = world.provider.getDimensionType().getName();
-            CURRENT_DIMENSION_ID = world.provider.getDimensionType().getId();
-        }
-    }
-
-    private void updateDimensionData(final World world) {
-        if (world != null) {
-            getCurrentDimensionData(world);
-            updateDimensionPresence();
-        }
     }
 
     private void updateDimensionPresence() {

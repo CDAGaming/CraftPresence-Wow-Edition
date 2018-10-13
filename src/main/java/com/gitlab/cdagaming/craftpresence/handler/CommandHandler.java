@@ -93,6 +93,26 @@ public class CommandHandler {
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
+    public static Boolean isOnMainMenuPresence() {
+        return !CraftPresence.CONFIG.hasChanged &&
+                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGEKEY) &&
+                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGETEXT) &&
+                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) &&
+                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) &&
+                CraftPresence.CLIENT.PARTY_SIZE == 0 &&
+                CraftPresence.CLIENT.PARTY_MAX == 0 &&
+                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) &&
+                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) &&
+                        CraftPresence.CLIENT.DETAILS.equals(CraftPresence.CONFIG.showGameState ? CraftPresence.CONFIG.mainmenuMSG : "")
+                ) &&
+                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
+                        CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)
+                ) &&
+                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) &&
+                        CraftPresence.CLIENT.LARGEIMAGETEXT.equals(I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion))
+                );
+    }
+
     public static void setLoadingPresence(final LoaderState.ModState state) {
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";

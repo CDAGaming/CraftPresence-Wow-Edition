@@ -9,10 +9,14 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.GUIHandler;
 import com.gitlab.cdagaming.craftpresence.handler.server.ServerHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
 
@@ -78,6 +82,16 @@ public class CraftPresence {
 
     @Mod.EventHandler
     public void postInit(final FMLPostInitializationEvent event) {
-        CommandHandler.setMainMenuPresence();
+        Constants.LOG.error(event.toString() + " - " + event.getEventType() + " - " + event.description());
+        CommandHandler.setLoadingPresence(event.getModState());
+    }
+
+    @SubscribeEvent
+    public void onTick(final TickEvent.ClientTickEvent event) {
+        final Minecraft minecraft = Minecraft.getMinecraft();
+        final EntityPlayer player = minecraft.player;
+        if (!CommandHandler.isOnMainMenuPresence() && player == null) {
+            CommandHandler.setMainMenuPresence();
+        }
     }
 }
