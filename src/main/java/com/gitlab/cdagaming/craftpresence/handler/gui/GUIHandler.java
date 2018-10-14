@@ -61,20 +61,14 @@ public class GUIHandler {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
         final Minecraft mc = Minecraft.getMinecraft();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
-        final boolean isIncorrectPresence = enabled && (
-                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) ||
-                        !CraftPresence.CLIENT.GAME_STATE.contains(formattedGUIMSG)
-        );
         final boolean removeGUIData = (!enabled || mc.currentScreen == null) && (
-                !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) &&
-                        CraftPresence.CLIENT.GAME_STATE.contains(formattedGUIMSG)
+                !StringHandler.isNullOrEmpty(CURRENT_GUI_NAME) ||
+                        CURRENT_GUI_CLASS != null || CURRENT_SCREEN != null
         );
 
         if (enabled) {
-            if (needsUpdate || isIncorrectPresence) {
-                if (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty()) {
-                    getGUIs();
-                }
+            if (needsUpdate) {
+                getGUIs();
             }
 
             final GuiScreen newScreen = mc.currentScreen;

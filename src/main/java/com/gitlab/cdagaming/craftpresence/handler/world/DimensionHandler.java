@@ -34,28 +34,17 @@ public class DimensionHandler {
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
         final boolean isPlayerAvailable = player != null;
-        final boolean needsUpdate = enabled &&
-                (StringHandler.isNullOrEmpty(CURRENT_DIMENSION_NAME) ||
-                        StringHandler.isNullOrEmpty(CURRENT_DIMENSION_ID.toString()) ||
-                        DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty());
-        final boolean isIncorrectPresence = enabled && (
-                (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) || !CraftPresence.CLIENT.DETAILS.contains(formattedMSG)) ||
-                        (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) || !CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey)) ||
-                        (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) || !CraftPresence.CLIENT.LARGEIMAGETEXT.contains(formattedMSG)));
+        final boolean needsUpdate = enabled && (DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()) || getDimensionTypes() != DIMENSION_TYPES;
         final boolean removeDimensionData = (!enabled || !isPlayerAvailable) && (
-                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) &&
-                        CraftPresence.CLIENT.DETAILS.contains(formattedMSG)
-                ) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
-                        CraftPresence.CLIENT.LARGEIMAGEKEY.equals(formattedIconKey)
-                ) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) &&
-                        CraftPresence.CLIENT.LARGEIMAGETEXT.contains(formattedMSG)
-                ));
+                !StringHandler.isNullOrEmpty(CURRENT_DIMENSION_NAME) ||
+                        CURRENT_DIMENSION_ID != null ||
+                        !StringHandler.isNullOrEmpty(formattedMSG) ||
+                        !StringHandler.isNullOrEmpty(formattedIconKey)
+        );
 
         if (enabled) {
-            if (needsUpdate || isIncorrectPresence) {
-                if (getDimensionTypes() != DIMENSION_TYPES) {
-                    getDimensions();
-                }
+            if (needsUpdate) {
+                getDimensions();
             }
 
             if (isPlayerAvailable) {

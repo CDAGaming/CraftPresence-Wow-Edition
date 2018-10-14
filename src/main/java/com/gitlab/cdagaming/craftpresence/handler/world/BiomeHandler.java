@@ -31,31 +31,28 @@ public class BiomeHandler {
         final Minecraft minecraft = Minecraft.getMinecraft();
         final EntityPlayer player = minecraft.player;
         final boolean isPlayerAvailable = player != null;
-        final boolean needsUpdate = enabled &&
-                (StringHandler.isNullOrEmpty(CURRENT_BIOME_NAME) ||
-                        StringHandler.isNullOrEmpty(CURRENT_BIOME_ID.toString()) ||
-                        BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty()
-                );
-        final boolean isIncorrectPresence = enabled && (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) || !CraftPresence.CLIENT.GAME_STATE.contains(formattedBiomeMSG));
-        final boolean removeBiomeData = (!enabled || !isPlayerAvailable) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) && CraftPresence.CLIENT.GAME_STATE.contains(formattedBiomeMSG));
+        final boolean needsUpdate = enabled && (BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()) || getBiomeTypes() != BIOME_TYPES;
+        final boolean removeBiomeData = (!enabled || !isPlayerAvailable) && (
+                !StringHandler.isNullOrEmpty(CURRENT_BIOME_NAME) ||
+                        CURRENT_BIOME_ID != null ||
+                        !StringHandler.isNullOrEmpty(formattedBiomeMSG)
+        );
 
         if (enabled) {
-            if (needsUpdate || isIncorrectPresence) {
-                if (getBiomeTypes() != BIOME_TYPES) {
-                    getBiomes();
-                }
+            if (needsUpdate) {
+                getBiomes();
             }
 
             if (isPlayerAvailable) {
-                final Biome CURRENT_BIOME = player.world.getBiome(player.getPosition());
-                final String newBiomeName = CURRENT_BIOME.getBiomeName();
-                final Integer newBiomeID = Biome.getIdForBiome(CURRENT_BIOME);
+                final Biome newBiome = player.world.getBiome(player.getPosition());
+                final String newBiomeName = newBiome.getBiomeName();
+                final Integer newBiomeID = Biome.getIdForBiome(newBiome);
                 if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
                     CURRENT_BIOME_NAME = newBiomeName;
                     CURRENT_BIOME_ID = newBiomeID;
                     updateBiomePresence();
 
-                    if (!BIOME_TYPES.contains(CURRENT_BIOME)) {
+                    if (!BIOME_TYPES.contains(newBiome)) {
                         getBiomes();
                     }
                 }
