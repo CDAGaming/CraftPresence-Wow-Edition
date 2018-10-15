@@ -13,8 +13,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
@@ -56,12 +54,10 @@ public class GUIHandler {
         GUI_CLASSES.clear();
     }
 
-    @SubscribeEvent
-    public void onTick(final TickEvent.ClientTickEvent event) {
+    public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
-        final Minecraft mc = Minecraft.getMinecraft();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
-        final boolean removeGUIData = (!enabled || mc.currentScreen == null) && (
+        final boolean removeGUIData = (!enabled || CraftPresence.mc.currentScreen == null) && (
                 !StringHandler.isNullOrEmpty(CURRENT_GUI_NAME) ||
                         CURRENT_GUI_CLASS != null || CURRENT_SCREEN != null
         );
@@ -71,7 +67,7 @@ public class GUIHandler {
                 getGUIs();
             }
 
-            final GuiScreen newScreen = mc.currentScreen;
+            final GuiScreen newScreen = CraftPresence.mc.currentScreen;
             if (newScreen != null) {
                 final Class newScreenClass = newScreen.getClass();
                 final String newScreenName = newScreenClass.getSimpleName();
@@ -96,7 +92,7 @@ public class GUIHandler {
         }
 
         if (openConfigGUI) {
-            mc.displayGuiScreen(new ConfigGUI_Main(mc.currentScreen));
+            CraftPresence.mc.displayGuiScreen(new ConfigGUI_Main(CraftPresence.mc.currentScreen));
             openConfigGUI = false;
         }
     }

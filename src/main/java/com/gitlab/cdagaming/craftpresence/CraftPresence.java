@@ -24,6 +24,8 @@ import java.io.File;
 public class CraftPresence {
     public static DiscordHandler CLIENT;
     public static boolean packFound = false;
+    public static Minecraft mc;
+    public static EntityPlayer player;
 
     public static ConfigHandler CONFIG;
     public static ServerHandler SERVER = new ServerHandler();
@@ -88,10 +90,15 @@ public class CraftPresence {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        final Minecraft minecraft = Minecraft.getMinecraft();
-        final EntityPlayer player = minecraft.player;
+        mc = Minecraft.getMinecraft();
+        player = mc.player;
+
         if (!CommandHandler.isOnMainMenuPresence() && player == null) {
             CommandHandler.setMainMenuPresence();
         }
+
+        DIMENSIONS.onTick();
+        BIOMES.onTick();
+        GUIS.onTick();
     }
 }

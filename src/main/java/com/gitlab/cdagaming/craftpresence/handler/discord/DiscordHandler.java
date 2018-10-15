@@ -116,6 +116,9 @@ public class DiscordHandler {
             }
         }
 
+        presence.largeImageKey = StringHandler.isNullOrEmpty(presence.largeImageKey) ? CraftPresence.CONFIG.defaultIcon : presence.largeImageKey;
+        presence.largeImageText = StringHandler.isNullOrEmpty(presence.largeImageText) ? I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion) : presence.largeImageText;
+
         DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
     }
 

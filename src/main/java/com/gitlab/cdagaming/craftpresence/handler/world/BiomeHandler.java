@@ -2,11 +2,7 @@ package com.gitlab.cdagaming.craftpresence.handler.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +21,14 @@ public class BiomeHandler {
         BIOME_TYPES.clear();
     }
 
-    @SubscribeEvent
-    public void onTick(final TickEvent.ClientTickEvent event) {
+    public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
-        final Minecraft minecraft = Minecraft.getMinecraft();
-        final EntityPlayer player = minecraft.player;
-        final boolean isPlayerAvailable = player != null;
-        final boolean needsUpdate = enabled && (BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()) || getBiomeTypes() != BIOME_TYPES;
-        final boolean removeBiomeData = (!enabled || !isPlayerAvailable) && (
+        final boolean needsUpdate = enabled && (
+                BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()
+        ) || (
+                !BIOME_TYPES.isEmpty() && getBiomeTypes() != BIOME_TYPES
+        );
+        final boolean removeBiomeData = (!enabled || CraftPresence.player == null) && (
                 !StringHandler.isNullOrEmpty(CURRENT_BIOME_NAME) ||
                         CURRENT_BIOME_ID != null ||
                         !StringHandler.isNullOrEmpty(formattedBiomeMSG)
@@ -43,8 +39,8 @@ public class BiomeHandler {
                 getBiomes();
             }
 
-            if (isPlayerAvailable) {
-                final Biome newBiome = player.world.getBiome(player.getPosition());
+            if (CraftPresence.player != null) {
+                final Biome newBiome = CraftPresence.player.world.getBiome(CraftPresence.player.getPosition());
                 final String newBiomeName = newBiome.getBiomeName();
                 final Integer newBiomeID = Biome.getIdForBiome(newBiome);
                 if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {

@@ -4,11 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.DimensionType;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,14 +24,14 @@ public class DimensionHandler {
         DIMENSION_TYPES.clear();
     }
 
-    @SubscribeEvent
-    public void onTick(final TickEvent.ClientTickEvent event) {
+    public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
-        final Minecraft minecraft = Minecraft.getMinecraft();
-        final EntityPlayer player = minecraft.player;
-        final boolean isPlayerAvailable = player != null;
-        final boolean needsUpdate = enabled && (DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()) || getDimensionTypes() != DIMENSION_TYPES;
-        final boolean removeDimensionData = (!enabled || !isPlayerAvailable) && (
+        final boolean needsUpdate = enabled && (
+                DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()
+        ) || (
+                !DIMENSION_TYPES.isEmpty() && getDimensionTypes() != DIMENSION_TYPES
+        );
+        final boolean removeDimensionData = (!enabled || CraftPresence.player == null) && (
                 !StringHandler.isNullOrEmpty(CURRENT_DIMENSION_NAME) ||
                         CURRENT_DIMENSION_ID != null ||
                         !StringHandler.isNullOrEmpty(formattedMSG) ||
@@ -47,8 +43,8 @@ public class DimensionHandler {
                 getDimensions();
             }
 
-            if (isPlayerAvailable) {
-                final DimensionType newDimensionType = player.world.provider.getDimensionType();
+            if (CraftPresence.player != null) {
+                final DimensionType newDimensionType = CraftPresence.player.world.provider.getDimensionType();
                 final String newDimensionName = newDimensionType.getName();
                 final Integer newDimensionID = newDimensionType.getId();
                 if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
