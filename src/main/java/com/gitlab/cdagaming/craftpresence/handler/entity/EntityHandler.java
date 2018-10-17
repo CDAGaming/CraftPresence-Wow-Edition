@@ -4,13 +4,10 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +38,7 @@ public class EntityHandler {
     private String CURRENT_BOOTS_NAME;
 
     public void emptyData() {
+        clearClientData();
         BLOCK_NAMES.clear();
         BLOCK_CLASSES.clear();
         ITEM_NAMES.clear();
@@ -49,8 +47,7 @@ public class EntityHandler {
         ENTITY_CLASSES.clear();
     }
 
-    @SubscribeEvent
-    public void onDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+    private void clearClientData() {
         CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
         CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
         CURRENT_MAINHAND_ITEM_NAME = null;
@@ -64,6 +61,7 @@ public class EntityHandler {
         CURRENT_CHEST_NAME = null;
         CURRENT_LEGS_NAME = null;
         CURRENT_BOOTS_NAME = null;
+        isInUse = false;
     }
 
     public void onTick() {
@@ -78,19 +76,13 @@ public class EntityHandler {
 
             if (CraftPresence.player != null) {
                 isInUse = true;
-                // TODO
+                updateEntityData();
             }
         }
 
         if (removeEntityData) {
-            // TODO
+            clearClientData();
         }
-
-        /*
-        if (CraftPresence.CONFIG.enablePERItem && (event.player != null && event.player == player)) {
-            getCurrentlyHeldItem(player);
-            updateEntityPresence();
-        }*/
     }
 
     private boolean isEmpty(final Item item) {
@@ -101,81 +93,50 @@ public class EntityHandler {
         return itemStack.isEmpty() || isEmpty(itemStack.getItem());
     }
 
-    private void getCurrentlyHeldItem(final EntityPlayer player) {
-        if (player != null) {
-            final ItemStack NEW_CURRENT_MAINHAND_ITEM = player.getHeldItemMainhand();
-            final ItemStack NEW_CURRENT_OFFHAND_ITEM = player.getHeldItemOffhand();
+    private void updateEntityData() {
+        final ItemStack NEW_CURRENT_MAINHAND_ITEM = CraftPresence.player.getHeldItemMainhand();
+        final ItemStack NEW_CURRENT_OFFHAND_ITEM = CraftPresence.player.getHeldItemOffhand();
+        final ItemStack NEW_CURRENT_HELMET = CraftPresence.player.inventory.armorInventory.get(3);
+        final ItemStack NEW_CURRENT_CHEST = CraftPresence.player.inventory.armorInventory.get(2);
+        final ItemStack NEW_CURRENT_LEGS = CraftPresence.player.inventory.armorInventory.get(1);
+        final ItemStack NEW_CURRENT_BOOTS = CraftPresence.player.inventory.armorInventory.get(0);
 
-            final ItemStack NEW_CURRENT_HELMET = player.inventory.armorInventory.get(3);
-            final ItemStack NEW_CURRENT_CHEST = player.inventory.armorInventory.get(2);
-            final ItemStack NEW_CURRENT_LEGS = player.inventory.armorInventory.get(1);
-            final ItemStack NEW_CURRENT_BOOTS = player.inventory.armorInventory.get(0);
+        final String NEW_CURRENT_MAINHAND_ITEM_NAME = !isEmpty(NEW_CURRENT_MAINHAND_ITEM) ?
+                StringHandler.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName()) : "";
+        final String NEW_CURRENT_OFFHAND_ITEM_NAME = !isEmpty(NEW_CURRENT_OFFHAND_ITEM) ?
+                StringHandler.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName()) : "";
+        final String NEW_CURRENT_HELMET_NAME = !isEmpty(NEW_CURRENT_HELMET) ?
+                StringHandler.stripColors(NEW_CURRENT_HELMET.getDisplayName()) : "";
+        final String NEW_CURRENT_CHEST_NAME = !isEmpty(NEW_CURRENT_CHEST) ?
+                StringHandler.stripColors(NEW_CURRENT_CHEST.getDisplayName()) : "";
+        final String NEW_CURRENT_LEGS_NAME = !isEmpty(NEW_CURRENT_LEGS) ?
+                StringHandler.stripColors(NEW_CURRENT_LEGS.getDisplayName()) : "";
+        final String NEW_CURRENT_BOOTS_NAME = !isEmpty(NEW_CURRENT_BOOTS) ?
+                StringHandler.stripColors(NEW_CURRENT_BOOTS.getDisplayName()) : "";
 
-            if (!isEmpty(NEW_CURRENT_MAINHAND_ITEM)) {
-                final String NEW_CURRENT_MAINHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName());
-                if (!NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) && !StringHandler.isNullOrEmpty(NEW_CURRENT_MAINHAND_ITEM_NAME)) {
-                    CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
-                    CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
-                }
-            } else {
-                CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
-                CURRENT_MAINHAND_ITEM_NAME = null;
-            }
+        final boolean hasMainHandChanged = !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME);
+        final boolean hasOffHandChanged = !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME);
+        final boolean hasHelmetChanged = !NEW_CURRENT_HELMET.equals(CURRENT_HELMET) || !NEW_CURRENT_HELMET_NAME.equals(CURRENT_HELMET_NAME);
+        final boolean hasChestChanged = !NEW_CURRENT_CHEST.equals(CURRENT_CHEST) || !NEW_CURRENT_CHEST_NAME.equals(CURRENT_CHEST_NAME);
+        final boolean hasLegsChanged = !NEW_CURRENT_LEGS.equals(CURRENT_LEGS) || !NEW_CURRENT_LEGS_NAME.equals(CURRENT_LEGS_NAME);
+        final boolean hasBootsChanged = !NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) || !NEW_CURRENT_BOOTS_NAME.equals(CURRENT_BOOTS_NAME);
 
-            if (!isEmpty(NEW_CURRENT_OFFHAND_ITEM)) {
-                final String NEW_CURRENT_OFFHAND_ITEM_NAME = StringHandler.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName());
-                if (!NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) && !StringHandler.isNullOrEmpty(NEW_CURRENT_OFFHAND_ITEM_NAME)) {
-                    CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
-                    CURRENT_OFFHAND_ITEM_NAME = NEW_CURRENT_OFFHAND_ITEM_NAME;
-                }
-            } else {
-                CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
-                CURRENT_OFFHAND_ITEM_NAME = null;
-            }
+        if (hasMainHandChanged || hasOffHandChanged || hasHelmetChanged || hasChestChanged || hasLegsChanged || hasBootsChanged) {
+            CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
+            CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
+            CURRENT_HELMET = NEW_CURRENT_HELMET;
+            CURRENT_CHEST = NEW_CURRENT_CHEST;
+            CURRENT_LEGS = NEW_CURRENT_LEGS;
+            CURRENT_BOOTS = NEW_CURRENT_BOOTS;
 
-            if (!isEmpty(NEW_CURRENT_HELMET)) {
-                final String NEW_CURRENT_HELMET_NAME = StringHandler.stripColors(NEW_CURRENT_HELMET.getDisplayName());
-                if (!NEW_CURRENT_HELMET.equals(CURRENT_HELMET) && !StringHandler.isNullOrEmpty(NEW_CURRENT_HELMET_NAME)) {
-                    CURRENT_HELMET = NEW_CURRENT_HELMET;
-                    CURRENT_HELMET_NAME = NEW_CURRENT_HELMET_NAME;
-                }
-            } else {
-                CURRENT_HELMET = ItemStack.EMPTY;
-                CURRENT_HELMET_NAME = null;
-            }
+            CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
+            CURRENT_OFFHAND_ITEM_NAME = NEW_CURRENT_OFFHAND_ITEM_NAME;
+            CURRENT_HELMET_NAME = NEW_CURRENT_HELMET_NAME;
+            CURRENT_CHEST_NAME = NEW_CURRENT_CHEST_NAME;
+            CURRENT_LEGS_NAME = NEW_CURRENT_LEGS_NAME;
+            CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
 
-            if (!isEmpty(NEW_CURRENT_CHEST)) {
-                final String NEW_CURRENT_CHEST_NAME = StringHandler.stripColors(NEW_CURRENT_CHEST.getDisplayName());
-                if (!NEW_CURRENT_CHEST.equals(CURRENT_CHEST) && !StringHandler.isNullOrEmpty(NEW_CURRENT_CHEST_NAME)) {
-                    CURRENT_CHEST = NEW_CURRENT_CHEST;
-                    CURRENT_CHEST_NAME = NEW_CURRENT_CHEST_NAME;
-                }
-            } else {
-                CURRENT_CHEST = ItemStack.EMPTY;
-                CURRENT_CHEST_NAME = null;
-            }
-
-            if (!isEmpty(NEW_CURRENT_LEGS)) {
-                final String NEW_CURRENT_LEGS_NAME = StringHandler.stripColors(NEW_CURRENT_LEGS.getDisplayName());
-                if (!NEW_CURRENT_LEGS.equals(CURRENT_LEGS) && !StringHandler.isNullOrEmpty(NEW_CURRENT_LEGS_NAME)) {
-                    CURRENT_LEGS = NEW_CURRENT_LEGS;
-                    CURRENT_LEGS_NAME = NEW_CURRENT_LEGS_NAME;
-                }
-            } else {
-                CURRENT_LEGS = ItemStack.EMPTY;
-                CURRENT_LEGS_NAME = null;
-            }
-
-            if (!isEmpty(NEW_CURRENT_BOOTS)) {
-                final String NEW_CURRENT_BOOTS_NAME = StringHandler.stripColors(NEW_CURRENT_BOOTS.getDisplayName());
-                if (!NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) && !StringHandler.isNullOrEmpty(NEW_CURRENT_BOOTS_NAME)) {
-                    CURRENT_BOOTS = NEW_CURRENT_BOOTS;
-                    CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
-                }
-            } else {
-                CURRENT_BOOTS = ItemStack.EMPTY;
-                CURRENT_BOOTS_NAME = null;
-            }
+            updateEntityPresence();
         }
     }
 
