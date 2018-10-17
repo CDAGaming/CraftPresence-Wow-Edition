@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
+    public boolean enabled = false, isInUse = false;
     public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> BLOCK_NAMES = new ArrayList<>();
     private List<String> BLOCK_CLASSES = new ArrayList<>();

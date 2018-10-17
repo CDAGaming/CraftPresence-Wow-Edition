@@ -30,7 +30,7 @@ public class CommandHandler {
             CraftPresence.DIMENSIONS.emptyData();
         }
 
-        if (CraftPresence.CONFIG.enablePERItem) {
+        if (CraftPresence.ENTITIES.enabled) {
             CraftPresence.ENTITIES.getEntities();
         } else {
             CraftPresence.ENTITIES.emptyData();

@@ -21,8 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GUIHandler {
-    public boolean openConfigGUI = false;
-    public boolean enabled = false;
+    public boolean openConfigGUI = false, enabled = false, isInUse = false;
     public List<String> GUI_NAMES = new ArrayList<>();
     private List<String> EXCLUSIONS = new ArrayList<>();
     private List<Class> allowedClasses = new ArrayList<>();
@@ -50,50 +49,59 @@ public class GUIHandler {
     }
 
     public void emptyData() {
+        clearClientData();
         GUI_NAMES.clear();
         GUI_CLASSES.clear();
+    }
+
+    private void clearClientData() {
+        CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedGUIMSG, "");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+
+        CURRENT_GUI_NAME = null;
+        CURRENT_SCREEN = null;
+        CURRENT_GUI_CLASS = null;
+        formattedGUIMSG = null;
+        isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
-        final boolean removeGUIData = (!enabled || CraftPresence.mc.currentScreen == null) && (
-                !StringHandler.isNullOrEmpty(CURRENT_GUI_NAME) ||
-                        CURRENT_GUI_CLASS != null || CURRENT_SCREEN != null
-        );
+        final boolean removeGUIData = (!enabled || CraftPresence.mc.currentScreen == null) && isInUse;
 
         if (enabled) {
             if (needsUpdate) {
                 getGUIs();
             }
 
-            final GuiScreen newScreen = CraftPresence.mc.currentScreen;
-            if (newScreen != null) {
-                final Class newScreenClass = newScreen.getClass();
-                final String newScreenName = newScreenClass.getSimpleName();
-
-                if (!newScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
-                    CURRENT_SCREEN = newScreen;
-                    CURRENT_GUI_CLASS = newScreenClass;
-                    CURRENT_GUI_NAME = newScreenName;
-                    updateGUIPresence();
-                }
+            if (CraftPresence.mc.currentScreen != null) {
+                isInUse = true;
+                updateGUIData();
             }
         }
 
         if (removeGUIData) {
-            CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedGUIMSG, "");
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-
-            CURRENT_GUI_NAME = null;
-            CURRENT_SCREEN = null;
-            CURRENT_GUI_CLASS = null;
-            formattedGUIMSG = null;
+            clearClientData();
         }
 
         if (openConfigGUI) {
             CraftPresence.mc.displayGuiScreen(new ConfigGUI_Main(CraftPresence.mc.currentScreen));
             openConfigGUI = false;
+        }
+    }
+
+    private void updateGUIData() {
+        if (CraftPresence.mc.currentScreen != null) {
+            final Class newScreenClass = CraftPresence.mc.currentScreen.getClass();
+            final String newScreenName = newScreenClass.getSimpleName();
+
+            if (!CraftPresence.mc.currentScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
+                CURRENT_SCREEN = CraftPresence.mc.currentScreen;
+                CURRENT_GUI_CLASS = newScreenClass;
+                CURRENT_GUI_NAME = newScreenName;
+                updateGUIPresence();
+            }
         }
     }
 

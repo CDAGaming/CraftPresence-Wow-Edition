@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.4.8 (10/??/2018)
+## v1.4.8 (10/22/2018)
 
 ### Changes:
 
@@ -8,11 +8,13 @@
 
 * Added an `overwriteServerIcon` Config Option to allow a Pack Icon to take Priority over a Server Icon
 
+* Consolidate Codebase! Things should run a lot smoother and with less errors
+
 ### Fixes:
 
-* Fixes NPE Scenarios in Item Getters
+* Fixes Quite a Few NPE Scenarios
 
-* Revert Auto-Setting Options in the Config GUI
+* Revert Auto-Setting Options in the Config GUI (Will Reintroduce in a Better Way later)
 
 * Fixes `\n` Escape Parsing
 

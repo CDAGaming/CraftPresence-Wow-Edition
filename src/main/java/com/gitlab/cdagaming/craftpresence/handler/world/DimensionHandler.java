@@ -7,11 +7,10 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHan
 import net.minecraft.world.DimensionType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class DimensionHandler {
-    public boolean enabled = false;
+    public boolean enabled = false, isInUse = false;
     public List<String> DIMENSION_NAMES = new ArrayList<>();
     private List<Integer> DIMENSION_IDS = new ArrayList<>();
     private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
@@ -19,24 +18,31 @@ public class DimensionHandler {
     private Integer CURRENT_DIMENSION_ID;
 
     public void emptyData() {
+        clearClientData();
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
         DIMENSION_TYPES.clear();
+    }
+
+    private void clearClientData() {
+        CraftPresence.CLIENT.DETAILS = CraftPresence.CLIENT.DETAILS.replace(formattedMSG, "");
+        CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CLIENT.LARGEIMAGEKEY.replace(formattedIconKey, "");
+        CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.LARGEIMAGETEXT.replace(formattedMSG, "");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+
+        CURRENT_DIMENSION_NAME = null;
+        CURRENT_DIMENSION_ID = null;
+        formattedMSG = null;
+        formattedIconKey = null;
+        isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
         final boolean needsUpdate = enabled && (
                 DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()
-        ) || (
-                !DIMENSION_TYPES.isEmpty() && getDimensionTypes() != DIMENSION_TYPES
         );
-        final boolean removeDimensionData = (!enabled || CraftPresence.player == null) && (
-                !StringHandler.isNullOrEmpty(CURRENT_DIMENSION_NAME) ||
-                        CURRENT_DIMENSION_ID != null ||
-                        !StringHandler.isNullOrEmpty(formattedMSG) ||
-                        !StringHandler.isNullOrEmpty(formattedIconKey)
-        );
+        final boolean removeDimensionData = (!enabled || CraftPresence.player == null) && isInUse;
 
         if (enabled) {
             if (needsUpdate) {
@@ -44,39 +50,29 @@ public class DimensionHandler {
             }
 
             if (CraftPresence.player != null) {
-                final DimensionType newDimensionType = CraftPresence.player.world.provider.getDimensionType();
-                final String newDimensionName = newDimensionType.getName();
-                final Integer newDimensionID = newDimensionType.getId();
-                if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
-                    CURRENT_DIMENSION_NAME = newDimensionName;
-                    CURRENT_DIMENSION_ID = newDimensionID;
-                    updateDimensionPresence();
-                }
-
-                if (!DIMENSION_TYPES.contains(newDimensionType)) {
-                    getDimensions();
-                }
+                isInUse = true;
+                updateDimensionData();
             }
         }
 
         if (removeDimensionData) {
-            CraftPresence.CLIENT.DETAILS = CraftPresence.CLIENT.DETAILS.replace(formattedMSG, "");
-            CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CLIENT.LARGEIMAGEKEY.replace(formattedIconKey, "");
-            CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.LARGEIMAGETEXT.replace(formattedMSG, "");
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-
-            CURRENT_DIMENSION_NAME = null;
-            CURRENT_DIMENSION_ID = null;
-            formattedMSG = null;
-            formattedIconKey = null;
+            clearClientData();
         }
     }
 
-    private List<DimensionType> getDimensionTypes() {
-        List<DimensionType> dimensionTypes = new ArrayList<>();
-        Collections.addAll(dimensionTypes, DimensionType.values());
+    private void updateDimensionData() {
+        final DimensionType newDimensionType = CraftPresence.player.world.provider.getDimensionType();
+        final String newDimensionName = newDimensionType.getName();
+        final Integer newDimensionID = newDimensionType.getId();
+        if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
+            CURRENT_DIMENSION_NAME = newDimensionName;
+            CURRENT_DIMENSION_ID = newDimensionID;
+            updateDimensionPresence();
+        }
 
-        return dimensionTypes;
+        if (!DIMENSION_TYPES.contains(newDimensionType)) {
+            getDimensions();
+        }
     }
 
     private void updateDimensionPresence() {
@@ -115,7 +111,7 @@ public class DimensionHandler {
     }
 
     public void getDimensions() {
-        for (DimensionType TYPE : getDimensionTypes()) {
+        for (DimensionType TYPE : DimensionType.values()) {
             if (TYPE != null) {
                 if (!DIMENSION_NAMES.contains(TYPE.getName())) {
                     DIMENSION_NAMES.add(TYPE.getName());

@@ -84,7 +84,6 @@ public class CraftPresence {
 
     @Mod.EventHandler
     public void postInit(final FMLPostInitializationEvent event) {
-        Constants.LOG.error(event.toString() + " - " + event.getEventType() + " - " + event.description());
         CommandHandler.setLoadingPresence(event.getModState());
     }
 
@@ -93,12 +92,13 @@ public class CraftPresence {
         mc = Minecraft.getMinecraft();
         player = mc.player;
 
-        if (!CommandHandler.isOnMainMenuPresence() && player == null) {
+        if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse)) {
             CommandHandler.setMainMenuPresence();
         }
 
         DIMENSIONS.onTick();
         BIOMES.onTick();
         GUIS.onTick();
+        ENTITIES.onTick();
     }
 }

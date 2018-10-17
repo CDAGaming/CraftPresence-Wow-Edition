@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BiomeHandler {
-    public boolean enabled = false;
+    public boolean enabled = false, isInUse = false;
     public List<String> BIOME_NAMES = new ArrayList<>();
     private List<Integer> BIOME_IDS = new ArrayList<>();
     private List<Biome> BIOME_TYPES = new ArrayList<>();
@@ -16,23 +16,28 @@ public class BiomeHandler {
     private Integer CURRENT_BIOME_ID;
 
     public void emptyData() {
+        clearClientData();
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
         BIOME_TYPES.clear();
+    }
+
+    private void clearClientData() {
+        CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedBiomeMSG, "");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+
+        CURRENT_BIOME_NAME = null;
+        CURRENT_BIOME_ID = null;
+        formattedBiomeMSG = null;
+        isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
         final boolean needsUpdate = enabled && (
                 BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()
-        ) || (
-                !BIOME_TYPES.isEmpty() && getBiomeTypes() != BIOME_TYPES
         );
-        final boolean removeBiomeData = (!enabled || CraftPresence.player == null) && (
-                !StringHandler.isNullOrEmpty(CURRENT_BIOME_NAME) ||
-                        CURRENT_BIOME_ID != null ||
-                        !StringHandler.isNullOrEmpty(formattedBiomeMSG)
-        );
+        final boolean removeBiomeData = (!enabled || CraftPresence.player == null) && isInUse;
 
         if (enabled) {
             if (needsUpdate) {
@@ -40,40 +45,29 @@ public class BiomeHandler {
             }
 
             if (CraftPresence.player != null) {
-                final Biome newBiome = CraftPresence.player.world.getBiome(CraftPresence.player.getPosition());
-                final String newBiomeName = newBiome.getBiomeName();
-                final Integer newBiomeID = Biome.getIdForBiome(newBiome);
-                if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
-                    CURRENT_BIOME_NAME = newBiomeName;
-                    CURRENT_BIOME_ID = newBiomeID;
-                    updateBiomePresence();
-
-                    if (!BIOME_TYPES.contains(newBiome)) {
-                        getBiomes();
-                    }
-                }
+                isInUse = true;
+                updateBiomeData();
             }
         }
 
         if (removeBiomeData) {
-            CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedBiomeMSG, "");
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-
-            CURRENT_BIOME_NAME = null;
-            CURRENT_BIOME_ID = null;
-            formattedBiomeMSG = null;
+            clearClientData();
         }
     }
 
-    private List<Biome> getBiomeTypes() {
-        List<Biome> biomeTypes = new ArrayList<>();
-        for (Biome biome : Biome.REGISTRY) {
-            if (biome != null) {
-                biomeTypes.add(biome);
+    private void updateBiomeData() {
+        final Biome newBiome = CraftPresence.player.world.getBiome(CraftPresence.player.getPosition());
+        final String newBiomeName = newBiome.getBiomeName();
+        final Integer newBiomeID = Biome.getIdForBiome(newBiome);
+        if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
+            CURRENT_BIOME_NAME = newBiomeName;
+            CURRENT_BIOME_ID = newBiomeID;
+            updateBiomePresence();
+
+            if (!BIOME_TYPES.contains(newBiome)) {
+                getBiomes();
             }
         }
-
-        return biomeTypes;
     }
 
     private void updateBiomePresence() {
@@ -85,7 +79,7 @@ public class BiomeHandler {
     }
 
     public void getBiomes() {
-        for (Biome biome : getBiomeTypes()) {
+        for (Biome biome : Biome.REGISTRY) {
             if (biome != null) {
                 if (!BIOME_NAMES.contains(biome.getBiomeName())) {
                     BIOME_NAMES.add(biome.getBiomeName());
