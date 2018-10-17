@@ -3,7 +3,6 @@ package com.gitlab.cdagaming.craftpresence.handler.entity;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -11,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.ArrayList;
@@ -68,13 +66,31 @@ public class EntityHandler {
         CURRENT_BOOTS_NAME = null;
     }
 
-    @SubscribeEvent
-    public void updateEntityData(final TickEvent.PlayerTickEvent event) {
-        final EntityPlayer player = Minecraft.getMinecraft().player;
+    public void onTick() {
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
+        final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
+        final boolean removeEntityData = (!enabled || CraftPresence.player == null) && isInUse;
+
+        if (enabled) {
+            if (needsUpdate) {
+                getEntities();
+            }
+
+            if (CraftPresence.player != null) {
+                isInUse = true;
+                // TODO
+            }
+        }
+
+        if (removeEntityData) {
+            // TODO
+        }
+
+        /*
         if (CraftPresence.CONFIG.enablePERItem && (event.player != null && event.player == player)) {
             getCurrentlyHeldItem(player);
             updateEntityPresence();
-        }
+        }*/
     }
 
     private boolean isEmpty(final Item item) {
