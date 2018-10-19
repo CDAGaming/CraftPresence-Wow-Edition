@@ -8,50 +8,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BiomeHandler {
-    public boolean enabled = false, isInUse = false;
+    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
     public List<String> BIOME_NAMES = new ArrayList<>();
-    private List<Integer> BIOME_IDS = new ArrayList<>();
     private List<Biome> BIOME_TYPES = new ArrayList<>();
-    private String CURRENT_BIOME_NAME, formattedBiomeMSG;
+    private List<Integer> BIOME_IDS = new ArrayList<>();
+    private String CURRENT_BIOME_NAME;
     private Integer CURRENT_BIOME_ID;
 
     public void emptyData() {
-        clearClientData();
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
         BIOME_TYPES.clear();
+        clearClientData();
     }
 
     private void clearClientData() {
-        CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedBiomeMSG, "");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-
         CURRENT_BIOME_NAME = null;
         CURRENT_BIOME_ID = null;
-        formattedBiomeMSG = null;
+
+        queuedForUpdate = false;
         isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
-        final boolean needsUpdate = enabled && (
+        needsUpdate = enabled && (
                 BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()
         );
-        final boolean removeBiomeData = (!enabled || CraftPresence.player == null) && isInUse;
 
-        if (enabled) {
-            if (needsUpdate) {
-                getBiomes();
-            }
-
-            if (CraftPresence.player != null) {
-                isInUse = true;
-                updateBiomeData();
-            }
+        if (needsUpdate) {
+            getBiomes();
         }
 
-        if (removeBiomeData) {
-            clearClientData();
+        if (enabled && CraftPresence.player != null) {
+            updateBiomeData();
+            isInUse = true;
+        }
+
+        if (isInUse) {
+            if (enabled && CraftPresence.player == null) {
+                clearClientData();
+            } else if (!enabled) {
+                emptyData();
+            }
         }
     }
 
@@ -62,20 +61,30 @@ public class BiomeHandler {
         if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
             CURRENT_BIOME_NAME = newBiomeName;
             CURRENT_BIOME_ID = newBiomeID;
-            updateBiomePresence();
+            queuedForUpdate = true;
 
             if (!BIOME_TYPES.contains(newBiome)) {
                 getBiomes();
             }
+        }
+
+        if (queuedForUpdate || !CraftPresence.GUIS.isInUse) {
+            updateBiomePresence();
         }
     }
 
     private void updateBiomePresence() {
         final String defaultBiomeMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentBiomeMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMSG);
-        formattedBiomeMSG = currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString());
-        CraftPresence.CLIENT.GAME_STATE = formattedBiomeMSG;
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        final String formattedBiomeMSG = currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString());
+
+        if (!CraftPresence.GUIS.isInUse) {
+            CraftPresence.CLIENT.GAME_STATE = formattedBiomeMSG;
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+            queuedForUpdate = false;
+        } else {
+            queuedForUpdate = true;
+        }
     }
 
     public void getBiomes() {

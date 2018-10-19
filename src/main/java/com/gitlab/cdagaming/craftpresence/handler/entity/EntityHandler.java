@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
-    public boolean enabled = false, isInUse = false;
+    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
     public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> BLOCK_NAMES = new ArrayList<>();
     private List<String> BLOCK_CLASSES = new ArrayList<>();
@@ -38,13 +38,13 @@ public class EntityHandler {
     private String CURRENT_BOOTS_NAME;
 
     public void emptyData() {
-        clearClientData();
         BLOCK_NAMES.clear();
         BLOCK_CLASSES.clear();
         ITEM_NAMES.clear();
         ITEM_CLASSES.clear();
         ENTITY_NAMES.clear();
         ENTITY_CLASSES.clear();
+        clearClientData();
     }
 
     private void clearClientData() {
@@ -61,27 +61,32 @@ public class EntityHandler {
         CURRENT_CHEST_NAME = null;
         CURRENT_LEGS_NAME = null;
         CURRENT_BOOTS_NAME = null;
+
+        queuedForUpdate = false;
         isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
-        final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
-        final boolean removeEntityData = (!enabled || CraftPresence.player == null) && isInUse;
+        needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
+
+        if (needsUpdate) {
+            getEntities();
+        }
 
         if (enabled) {
-            if (needsUpdate) {
-                getEntities();
-            }
-
             if (CraftPresence.player != null) {
-                isInUse = true;
                 updateEntityData();
+                isInUse = true;
             }
         }
 
-        if (removeEntityData) {
-            clearClientData();
+        if (isInUse) {
+            if (enabled && CraftPresence.player == null) {
+                clearClientData();
+            } else if (!enabled) {
+                emptyData();
+            }
         }
     }
 
@@ -136,6 +141,10 @@ public class EntityHandler {
             CURRENT_LEGS_NAME = NEW_CURRENT_LEGS_NAME;
             CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
 
+            queuedForUpdate = true;
+        }
+
+        if (queuedForUpdate || !CraftPresence.DIMENSIONS.isInUse) {
             updateEntityPresence();
         }
     }
@@ -166,10 +175,10 @@ public class EntityHandler {
         final String bootsMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_BOOTS_NAME);
         final String formattedBootsMSG = bootsMSG.replace("&main&", bootsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
 
-        if (!CraftPresence.CONFIG.showCurrentDimension || !(isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS))) {
-            CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
-        }
+        // NOTE: Overrides Dimensions
+        CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        queuedForUpdate = false;
     }
 
     public void getEntities() {

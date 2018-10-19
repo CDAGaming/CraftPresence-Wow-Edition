@@ -21,11 +21,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GUIHandler {
-    public boolean openConfigGUI = false, enabled = false, isInUse = false;
+    public boolean openConfigGUI = false, enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
     public List<String> GUI_NAMES = new ArrayList<>();
     private List<String> EXCLUSIONS = new ArrayList<>();
     private List<Class> allowedClasses = new ArrayList<>();
-    private String CURRENT_GUI_NAME, formattedGUIMSG;
+    private String CURRENT_GUI_NAME;
     private Class CURRENT_GUI_CLASS;
     private GuiScreen CURRENT_SCREEN;
     private List<Class> GUI_CLASSES = new ArrayList<>();
@@ -49,59 +49,64 @@ public class GUIHandler {
     }
 
     public void emptyData() {
-        clearClientData();
         GUI_NAMES.clear();
         GUI_CLASSES.clear();
+        clearClientData();
     }
 
     private void clearClientData() {
-        CraftPresence.CLIENT.GAME_STATE = CraftPresence.CLIENT.GAME_STATE.replace(formattedGUIMSG, "");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-
         CURRENT_GUI_NAME = null;
         CURRENT_SCREEN = null;
         CURRENT_GUI_CLASS = null;
-        formattedGUIMSG = null;
+
+        queuedForUpdate = false;
         isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
-        final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
-        final boolean removeGUIData = (!enabled || CraftPresence.mc.currentScreen == null) && isInUse;
+        needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
+
+        if (needsUpdate) {
+            getGUIs();
+        }
 
         if (enabled) {
-            if (needsUpdate) {
-                getGUIs();
-            }
-
-            if (CraftPresence.mc.currentScreen != null) {
-                isInUse = true;
+            if (CraftPresence.instance.currentScreen != null) {
                 updateGUIData();
+                isInUse = true;
             }
         }
 
-        if (removeGUIData) {
-            clearClientData();
+        if (isInUse) {
+            if (enabled && CraftPresence.instance.currentScreen == null) {
+                clearClientData();
+            } else if (!enabled) {
+                emptyData();
+            }
         }
 
         if (openConfigGUI) {
-            CraftPresence.mc.displayGuiScreen(new ConfigGUI_Main(CraftPresence.mc.currentScreen));
+            CraftPresence.instance.displayGuiScreen(new ConfigGUI_Main(CraftPresence.instance.currentScreen));
             openConfigGUI = false;
         }
     }
 
     private void updateGUIData() {
-        if (CraftPresence.mc.currentScreen != null) {
-            final Class newScreenClass = CraftPresence.mc.currentScreen.getClass();
+        if (CraftPresence.instance.currentScreen != null) {
+            final Class newScreenClass = CraftPresence.instance.currentScreen.getClass();
             final String newScreenName = newScreenClass.getSimpleName();
 
-            if (!CraftPresence.mc.currentScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
-                CURRENT_SCREEN = CraftPresence.mc.currentScreen;
+            if (!CraftPresence.instance.currentScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
+                CURRENT_SCREEN = CraftPresence.instance.currentScreen;
                 CURRENT_GUI_CLASS = newScreenClass;
                 CURRENT_GUI_NAME = newScreenName;
-                updateGUIPresence();
+                queuedForUpdate = true;
             }
+        }
+
+        if (queuedForUpdate || !CraftPresence.BIOMES.isInUse) {
+            updateGUIPresence();
         }
     }
 
@@ -135,9 +140,8 @@ public class GUIHandler {
             ex.printStackTrace();
         }
 
-        for (final ClassPath.ClassInfo info : classes) {
+        for (ClassPath.ClassInfo info : classes) {
             boolean hasExclusions = false;
-
             for (String exclusion : EXCLUSIONS) {
                 if (info.getName().startsWith(exclusion) || info.getName().contains(exclusion) || info.getName().equals(exclusion)) {
                     hasExclusions = true;
@@ -145,20 +149,22 @@ public class GUIHandler {
                 }
             }
 
-            if (!hasExclusions && info.getName().startsWith("net.minecraft")) {
+            if (!hasExclusions && info.getName().startsWith("net.minecraft.")) {
+                Class guiClass;
                 try {
-                    final Class guiClass = Class.forName(info.getName());
-
-                    if (guiClass != null && guiClass.getSuperclass() != null && (allowedClasses.contains(guiClass.getSuperclass()) || GUI_CLASSES.contains(guiClass.getSuperclass()))) {
-                        if (!GUI_NAMES.contains(guiClass.getSimpleName())) {
-                            GUI_NAMES.add(guiClass.getSimpleName());
-                        }
-                        if (!GUI_CLASSES.contains(guiClass)) {
-                            GUI_CLASSES.add(guiClass);
-                        }
-                    }
+                    guiClass = Class.forName(info.getName());
                 } catch (NoClassDefFoundError | ExceptionInInitializerError | ClassNotFoundException ex) {
                     EXCLUSIONS.add(info.getName());
+                    continue;
+                }
+
+                if (guiClass != null && guiClass.getSuperclass() != null && (allowedClasses.contains(guiClass.getSuperclass()) || GUI_CLASSES.contains(guiClass.getSuperclass()))) {
+                    if (!GUI_NAMES.contains(guiClass.getSimpleName())) {
+                        GUI_NAMES.add(guiClass.getSimpleName());
+                    }
+                    if (!GUI_CLASSES.contains(guiClass)) {
+                        GUI_CLASSES.add(guiClass);
+                    }
                 }
             }
         }
@@ -174,19 +180,21 @@ public class GUIHandler {
             }
 
             if (!hasExclusions) {
+                Class modGUIClass;
                 try {
-                    final Class modGUIClass = Class.forName(modClass);
-
-                    if (modGUIClass != null && modGUIClass.getSuperclass() != null && (allowedClasses.contains(modGUIClass.getSuperclass()) || GUI_CLASSES.contains(modGUIClass.getSuperclass()))) {
-                        if (!GUI_NAMES.contains(modGUIClass.getSimpleName())) {
-                            GUI_NAMES.add(modGUIClass.getSimpleName());
-                        }
-                        if (!GUI_CLASSES.contains(modGUIClass)) {
-                            GUI_CLASSES.add(modGUIClass);
-                        }
-                    }
+                    modGUIClass = Class.forName(modClass);
                 } catch (NoClassDefFoundError | ExceptionInInitializerError | ClassNotFoundException ex) {
                     EXCLUSIONS.add(modClass);
+                    continue;
+                }
+
+                if (modGUIClass != null && modGUIClass.getSuperclass() != null && (allowedClasses.contains(modGUIClass.getSuperclass()) || GUI_CLASSES.contains(modGUIClass.getSuperclass()))) {
+                    if (!GUI_NAMES.contains(modGUIClass.getSimpleName())) {
+                        GUI_NAMES.add(modGUIClass.getSimpleName());
+                    }
+                    if (!GUI_CLASSES.contains(modGUIClass)) {
+                        GUI_CLASSES.add(modGUIClass);
+                    }
                 }
             }
         }
@@ -204,10 +212,11 @@ public class GUIHandler {
     private void updateGUIPresence() {
         final String defaultGUIMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentGUIMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
-        formattedGUIMSG = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
 
-        CraftPresence.CLIENT.GAME_STATE = formattedGUIMSG;
+        // NOTE: Overrides Biomes
+        CraftPresence.CLIENT.GAME_STATE = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        queuedForUpdate = false;
     }
 
     public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,

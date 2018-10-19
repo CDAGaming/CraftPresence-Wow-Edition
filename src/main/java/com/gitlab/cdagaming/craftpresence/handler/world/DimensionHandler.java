@@ -10,53 +10,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DimensionHandler {
-    public boolean enabled = false, isInUse = false;
+    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
     public List<String> DIMENSION_NAMES = new ArrayList<>();
     private List<Integer> DIMENSION_IDS = new ArrayList<>();
     private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
-    private String CURRENT_DIMENSION_NAME, formattedMSG, formattedIconKey;
+    private String CURRENT_DIMENSION_NAME;
     private Integer CURRENT_DIMENSION_ID;
 
     public void emptyData() {
-        clearClientData();
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
         DIMENSION_TYPES.clear();
+        clearClientData();
     }
 
     private void clearClientData() {
-        CraftPresence.CLIENT.DETAILS = CraftPresence.CLIENT.DETAILS.replace(formattedMSG, "");
-        CraftPresence.CLIENT.LARGEIMAGEKEY = CraftPresence.CLIENT.LARGEIMAGEKEY.replace(formattedIconKey, "");
-        CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.LARGEIMAGETEXT.replace(formattedMSG, "");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-
         CURRENT_DIMENSION_NAME = null;
         CURRENT_DIMENSION_ID = null;
-        formattedMSG = null;
-        formattedIconKey = null;
+
+        queuedForUpdate = false;
         isInUse = false;
     }
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
-        final boolean needsUpdate = enabled && (
+        needsUpdate = enabled && (
                 DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()
         );
-        final boolean removeDimensionData = (!enabled || CraftPresence.player == null) && isInUse;
 
-        if (enabled) {
-            if (needsUpdate) {
-                getDimensions();
-            }
-
-            if (CraftPresence.player != null) {
-                isInUse = true;
-                updateDimensionData();
-            }
+        if (needsUpdate) {
+            getDimensions();
         }
 
-        if (removeDimensionData) {
-            clearClientData();
+        if (enabled && CraftPresence.player != null) {
+            updateDimensionData();
+            isInUse = true;
+        }
+
+        if (isInUse) {
+            if (enabled && CraftPresence.player == null) {
+                clearClientData();
+            } else if (!enabled) {
+                emptyData();
+            }
         }
     }
 
@@ -67,11 +63,15 @@ public class DimensionHandler {
         if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
             CURRENT_DIMENSION_NAME = newDimensionName;
             CURRENT_DIMENSION_ID = newDimensionID;
-            updateDimensionPresence();
+            queuedForUpdate = true;
         }
 
         if (!DIMENSION_TYPES.contains(newDimensionType)) {
             getDimensions();
+        }
+
+        if (queuedForUpdate || !CraftPresence.ENTITIES.isInUse) {
+            updateDimensionPresence();
         }
     }
 
@@ -81,9 +81,7 @@ public class DimensionHandler {
         final String defaultDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
         final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultDimensionIcon);
 
-        formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
-        formattedMSG = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());
-        CraftPresence.CLIENT.DETAILS = formattedMSG;
+        String formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
         if (DiscordAssetHandler.contains(formattedIconKey) && !currentDimensionIcon.equals(defaultDimensionIcon)) {
             CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
@@ -103,10 +101,13 @@ public class DimensionHandler {
             }
         }
 
-        if (!CraftPresence.CONFIG.enablePERItem) {
+        CraftPresence.CLIENT.DETAILS = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());
+        if (!CraftPresence.ENTITIES.isInUse) {
             CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
+            queuedForUpdate = false;
+        } else {
+            queuedForUpdate = true;
         }
-
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

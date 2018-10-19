@@ -22,12 +22,12 @@ import java.io.File;
 
 @Mod(modid = Constants.MODID, name = Constants.NAME, version = Constants.VERSION_ID, clientSideOnly = true, guiFactory = Constants.GUI_FACTORY, canBeDeactivated = true, updateJSON = Constants.UPDATE_JSON, certificateFingerprint = Constants.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
-    public static DiscordHandler CLIENT;
     public static boolean packFound = false;
-    public static Minecraft mc;
+    public static Minecraft instance;
     public static EntityPlayer player;
 
     public static ConfigHandler CONFIG;
+    public static DiscordHandler CLIENT = new DiscordHandler();
     public static ServerHandler SERVER = new ServerHandler();
     public static BiomeHandler BIOMES = new BiomeHandler();
     public static DimensionHandler DIMENSIONS = new DimensionHandler();
@@ -64,15 +64,16 @@ public class CraftPresence {
         }
         CONFIG.initialize();
 
-        CommandHandler.reloadData();
         CommandHandler.init();
+        CommandHandler.reloadData();
 
         final File CP_DIR = new File(Constants.MODID);
         URLHandler.acceptCertificates();
         Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         try {
-            CLIENT = new DiscordHandler(CONFIG.clientID);
+            CLIENT.CLIENT_ID = CONFIG.clientID;
+            CLIENT.setup();
             CLIENT.init();
             CLIENT.updateTimestamp();
             CommandHandler.setLoadingPresence(event.getModState());
@@ -89,16 +90,10 @@ public class CraftPresence {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        mc = Minecraft.getMinecraft();
-        player = mc.player;
+        CommandHandler.reloadData();
 
         if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse)) {
             CommandHandler.setMainMenuPresence();
         }
-
-        DIMENSIONS.onTick();
-        BIOMES.onTick();
-        GUIS.onTick();
-        ENTITIES.onTick();
     }
 }

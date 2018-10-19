@@ -8,6 +8,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.fml.common.LoaderState;
@@ -18,41 +19,19 @@ public class CommandHandler {
     }
 
     public static void reloadData() {
-        if (CraftPresence.BIOMES.enabled) {
-            CraftPresence.BIOMES.getBiomes();
-        } else {
-            CraftPresence.BIOMES.emptyData();
-        }
+        CraftPresence.instance = Minecraft.getMinecraft();
+        CraftPresence.player = CraftPresence.instance.player;
 
-        if (CraftPresence.DIMENSIONS.enabled) {
-            CraftPresence.DIMENSIONS.getDimensions();
-        } else {
-            CraftPresence.DIMENSIONS.emptyData();
-        }
-
-        if (CraftPresence.ENTITIES.enabled) {
-            CraftPresence.ENTITIES.getEntities();
-        } else {
-            CraftPresence.ENTITIES.emptyData();
-        }
-
-        if (CraftPresence.CONFIG.showGameState) {
-            CraftPresence.SERVER.getServerAddresses();
-        } else {
-            CraftPresence.SERVER.emptyData();
-        }
-
-        if (CraftPresence.GUIS.enabled) {
-            CraftPresence.GUIS.getGUIs();
-        } else {
-            CraftPresence.GUIS.emptyData();
-        }
+        CraftPresence.BIOMES.onTick();
+        CraftPresence.DIMENSIONS.onTick();
+        CraftPresence.GUIS.onTick();
+        CraftPresence.ENTITIES.onTick();
     }
 
     public static void rebootRPC() {
         CraftPresence.CLIENT.shutDown();
+        CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientID;
         CraftPresence.CLIENT.init();
-        reloadData();
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

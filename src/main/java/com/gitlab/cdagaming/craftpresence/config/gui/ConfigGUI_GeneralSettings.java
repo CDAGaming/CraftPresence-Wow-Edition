@@ -2,7 +2,6 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
 import net.minecraft.client.Minecraft;
@@ -118,7 +117,6 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.clientID = clientID.getText();
-                CraftPresence.CLIENT = new DiscordHandler(!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.clientID) ? CraftPresence.CONFIG.clientID : "450485984333660181");
             }
             if (detectCurseManifestButton.isChecked() != CraftPresence.CONFIG.detectCurseManifest) {
                 CraftPresence.CONFIG.hasChanged = true;

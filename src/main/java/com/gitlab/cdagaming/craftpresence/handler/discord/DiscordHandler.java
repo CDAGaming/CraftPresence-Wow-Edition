@@ -38,8 +38,26 @@ public class DiscordHandler {
     private String SPECTATE_SECRET;
     private byte INSTANCE;
 
-    public DiscordHandler(final String clientID) {
-        CLIENT_ID = clientID;
+    private Thread callbackThread = null;
+
+    public synchronized void setup() {
+        NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
+        Thread shutdownThread = new Thread(this::shutDown);
+        shutdownThread.setName("CraftPresence-Shutdown-Handler");
+        Runtime.getRuntime().addShutdownHook(shutdownThread);
+    }
+
+    private synchronized void setupThreads() {
+        callbackThread = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                DiscordRPC.INSTANCE.Discord_RunCallbacks();
+                try {
+                    Thread.sleep(2000L);
+                } catch (Exception ignored) {
+                }
+            }
+        }, "RPC-Callback-Handler");
+        callbackThread.start();
     }
 
     public synchronized void init() {
@@ -50,20 +68,8 @@ public class DiscordHandler {
         handlers.joinRequest = (user) -> handlers.joinRequest.accept(user);
         handlers.spectateGame = (secret) -> handlers.spectateGame.accept(secret);
 
-        NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
-        Runtime.getRuntime().addShutdownHook(new Thread(this::shutDown));
-
-        new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                DiscordRPC.INSTANCE.Discord_RunCallbacks();
-                try {
-                    Thread.sleep(2000L);
-                } catch (Exception ignored) {
-                }
-            }
-        }, "RPC-Callback-Handler").start();
-
+        setupThreads();
         Constants.LOG.info(I18n.format("craftpresence.logger.info.load", !StringHandler.isNullOrEmpty(CLIENT_ID) ? CLIENT_ID : "450485984333660181"));
     }
 
@@ -123,14 +129,9 @@ public class DiscordHandler {
     }
 
     public synchronized void shutDown() {
-        CraftPresence.BIOMES.emptyData();
-        CraftPresence.DIMENSIONS.emptyData();
-        CraftPresence.ENTITIES.emptyData();
-        CraftPresence.GUIS.emptyData();
-
+        callbackThread.interrupt();
         DiscordRPC.INSTANCE.Discord_ClearPresence();
         DiscordRPC.INSTANCE.Discord_Shutdown();
-
         Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
     }
 

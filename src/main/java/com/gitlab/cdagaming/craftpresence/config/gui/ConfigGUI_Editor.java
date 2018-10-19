@@ -1,7 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
-import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.client.Minecraft;
@@ -157,10 +156,6 @@ public class ConfigGUI_Editor extends GuiScreen {
                         CraftPresence.CONFIG.itemMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.itemMessages, selecteditem, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                     }
                 }
-
-                if (isNewValue) {
-                    CommandHandler.reloadData();
-                }
             }
             if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !isDefaultValue)) {
                 if (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) {
@@ -190,10 +185,6 @@ public class ConfigGUI_Editor extends GuiScreen {
                         CraftPresence.ENTITIES.emptyData();
                         CraftPresence.ENTITIES.getEntities();
                     }
-                }
-
-                if (isNewValue) {
-                    CommandHandler.reloadData();
                 }
             }
             mc.displayGuiScreen(parentscreen);
