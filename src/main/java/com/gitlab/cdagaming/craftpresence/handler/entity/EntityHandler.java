@@ -74,11 +74,9 @@ public class EntityHandler {
             getEntities();
         }
 
-        if (enabled) {
-            if (CraftPresence.player != null) {
-                updateEntityData();
-                isInUse = true;
-            }
+        if (enabled && CraftPresence.player != null) {
+            updateEntityData();
+            isInUse = true;
         }
 
         if (isInUse) {

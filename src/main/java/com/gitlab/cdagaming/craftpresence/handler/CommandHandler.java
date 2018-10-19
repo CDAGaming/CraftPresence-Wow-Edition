@@ -26,6 +26,7 @@ public class CommandHandler {
         CraftPresence.DIMENSIONS.onTick();
         CraftPresence.GUIS.onTick();
         CraftPresence.ENTITIES.onTick();
+        CraftPresence.SERVER.onTick();
     }
 
     public static void rebootRPC() {
@@ -59,14 +60,7 @@ public class CommandHandler {
         CraftPresence.CLIENT.PARTY_SIZE = 0;
         CraftPresence.CLIENT.PARTY_MAX = 0;
         CraftPresence.CLIENT.JOIN_SECRET = "";
-
-        if (!CraftPresence.CONFIG.hasChanged) {
-            if (CraftPresence.CONFIG.showGameState) {
-                CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.mainmenuMSG;
-            } else {
-                CraftPresence.CLIENT.DETAILS = "";
-            }
-        }
+        CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.mainmenuMSG : "";
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
         CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
@@ -82,7 +76,7 @@ public class CommandHandler {
                 CraftPresence.CLIENT.PARTY_MAX == 0 &&
                 StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) &&
-                        CraftPresence.CLIENT.DETAILS.equals(CraftPresence.CONFIG.showGameState ? CraftPresence.CONFIG.mainmenuMSG : "")
+                        CraftPresence.CLIENT.DETAILS.equals(CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.mainmenuMSG : "")
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
                         CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)
@@ -95,19 +89,10 @@ public class CommandHandler {
     public static void setLoadingPresence(final LoaderState.ModState state) {
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
-
+        CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.loadingMSG : "";
+        CraftPresence.CLIENT.GAME_STATE = CraftPresence.SERVER.enabled ? I18n.format("craftpresence.defaults.state.loading.status", state) : "";
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
-        if (!CraftPresence.CONFIG.hasChanged) {
-            if (CraftPresence.CONFIG.showGameState) {
-                CraftPresence.CLIENT.DETAILS = CraftPresence.CONFIG.loadingMSG;
-                CraftPresence.CLIENT.GAME_STATE = I18n.format("craftpresence.defaults.state.loading.status", state);
-                CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
-            } else {
-                CraftPresence.CLIENT.DETAILS = "";
-                CraftPresence.CLIENT.GAME_STATE = "";
-                CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
-            }
-        }
+        CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.SERVER.enabled ? CraftPresence.CLIENT.GAME_STATE : I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 }
