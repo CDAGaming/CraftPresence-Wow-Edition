@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
-    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
+    public boolean isInUse = false;
+
     public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> BLOCK_NAMES = new ArrayList<>();
     private List<String> BLOCK_CLASSES = new ArrayList<>();
@@ -36,6 +37,8 @@ public class EntityHandler {
     private String CURRENT_CHEST_NAME;
     private String CURRENT_LEGS_NAME;
     private String CURRENT_BOOTS_NAME;
+
+    private boolean enabled = false, queuedForUpdate = false, allItemsEmpty = false;
 
     public void emptyData() {
         BLOCK_NAMES.clear();
@@ -68,7 +71,7 @@ public class EntityHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
-        needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
+        final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
 
         if (needsUpdate) {
             getEntities();
@@ -80,7 +83,7 @@ public class EntityHandler {
         }
 
         if (isInUse) {
-            if (enabled && CraftPresence.player == null) {
+            if (enabled && (CraftPresence.player == null || allItemsEmpty)) {
                 clearClientData();
             } else if (!enabled) {
                 emptyData();
@@ -139,10 +142,11 @@ public class EntityHandler {
             CURRENT_LEGS_NAME = NEW_CURRENT_LEGS_NAME;
             CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
 
+            allItemsEmpty = isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS);
             queuedForUpdate = true;
         }
 
-        if (queuedForUpdate || !CraftPresence.DIMENSIONS.isInUse) {
+        if (queuedForUpdate && !allItemsEmpty) {
             updateEntityPresence();
         }
     }

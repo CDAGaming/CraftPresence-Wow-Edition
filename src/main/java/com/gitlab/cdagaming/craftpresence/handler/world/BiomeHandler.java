@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BiomeHandler {
-    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
+    public boolean isInUse = false;
+
     public List<String> BIOME_NAMES = new ArrayList<>();
     private List<Biome> BIOME_TYPES = new ArrayList<>();
     private List<Integer> BIOME_IDS = new ArrayList<>();
     private String CURRENT_BIOME_NAME;
     private Integer CURRENT_BIOME_ID;
+
+    private boolean enabled = false, queuedForUpdate = false;
 
     public void emptyData() {
         BIOME_NAMES.clear();
@@ -32,7 +35,7 @@ public class BiomeHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
-        needsUpdate = enabled && (
+        final boolean needsUpdate = enabled && (
                 BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()
         );
 

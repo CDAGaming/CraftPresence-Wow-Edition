@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServerHandler {
-    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
+    public boolean enabled = false, isInUse = false;
+
     public List<String> knownAddresses = new ArrayList<>();
     private String currentServer_IP;
     private String currentServer_Name;
@@ -26,6 +27,8 @@ public class ServerHandler {
     private int currentPlayers;
     private int maxPlayers;
     private int serverIndex;
+
+    private boolean queuedForUpdate = false;
 
     public void emptyData() {
         knownAddresses.clear();
@@ -46,7 +49,7 @@ public class ServerHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showGameState : enabled;
-        needsUpdate = enabled && knownAddresses.isEmpty();
+        final boolean needsUpdate = enabled && knownAddresses.isEmpty();
 
         if (needsUpdate) {
             getServerAddresses();

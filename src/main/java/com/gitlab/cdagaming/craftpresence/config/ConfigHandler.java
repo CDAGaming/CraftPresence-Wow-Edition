@@ -55,12 +55,12 @@ public class ConfigHandler {
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // CLASS-SPECIFIC - PUBLIC
-    public boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false, initialized = false, isConfigNew = false;
+    public boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false;
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE
     private String fileName;
-    private boolean verified = false;
+    private boolean verified = false, initialized = false, isConfigNew = false;
 
     public ConfigHandler(String fileName) {
         this.fileName = fileName;
@@ -316,59 +316,49 @@ public class ConfigHandler {
                         save();
                     }
 
-                    if (property.equals(NAME_biomeMessages)) {
-                        if (biomeMessages != null) {
-                            boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
-                            if (!defaultFound) {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
-                                biomeMessages = StringHandler.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
-                                properties.setProperty(property, Arrays.toString(biomeMessages));
-                                save();
-                            }
+                    if (property.equals(NAME_biomeMessages) && biomeMessages != null) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            biomeMessages = StringHandler.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
+                            properties.setProperty(property, Arrays.toString(biomeMessages));
+                            save();
                         }
                     }
-                    if (property.equals(NAME_dimensionMessages)) {
-                        if (dimensionMessages != null) {
-                            boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
-                            if (!defaultFound) {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
-                                dimensionMessages = StringHandler.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
-                                properties.setProperty(property, Arrays.toString(dimensionMessages));
-                                save();
-                            }
+                    if (property.equals(NAME_dimensionMessages) && dimensionMessages != null) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            dimensionMessages = StringHandler.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
+                            properties.setProperty(property, Arrays.toString(dimensionMessages));
+                            save();
                         }
                     }
-                    if (property.equals(NAME_serverMessages)) {
-                        if (serverMessages != null) {
-                            boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
-                            if (!defaultFound) {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
-                                serverMessages = StringHandler.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
-                                properties.setProperty(property, Arrays.toString(serverMessages));
-                                save();
-                            }
+                    if (property.equals(NAME_serverMessages) && serverMessages != null) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            serverMessages = StringHandler.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
+                            properties.setProperty(property, Arrays.toString(serverMessages));
+                            save();
                         }
                     }
-                    if (property.equals(NAME_guiMessages)) {
-                        if (guiMessages != null) {
-                            boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
-                            if (!defaultFound) {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
-                                guiMessages = StringHandler.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
-                                properties.setProperty(property, Arrays.toString(guiMessages));
-                                save();
-                            }
+                    if (property.equals(NAME_guiMessages) && guiMessages != null) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            guiMessages = StringHandler.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
+                            properties.setProperty(property, Arrays.toString(guiMessages));
+                            save();
                         }
                     }
-                    if (property.equals(NAME_itemMessages)) {
-                        if (itemMessages != null) {
-                            boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
-                            if (!defaultFound) {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
-                                itemMessages = StringHandler.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
-                                properties.setProperty(property, Arrays.toString(itemMessages));
-                                save();
-                            }
+                    if (property.equals(NAME_itemMessages) && itemMessages != null) {
+                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
+                        if (!defaultFound) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            itemMessages = StringHandler.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
+                            properties.setProperty(property, Arrays.toString(itemMessages));
+                            save();
                         }
                     }
                 }

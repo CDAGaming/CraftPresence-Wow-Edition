@@ -10,12 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DimensionHandler {
-    public boolean enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
+    public boolean isInUse = false;
+
     public List<String> DIMENSION_NAMES = new ArrayList<>();
     private List<Integer> DIMENSION_IDS = new ArrayList<>();
     private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
     private String CURRENT_DIMENSION_NAME;
     private Integer CURRENT_DIMENSION_ID;
+
+    private boolean enabled = false, queuedForUpdate = false;
 
     public void emptyData() {
         DIMENSION_NAMES.clear();
@@ -34,7 +37,7 @@ public class DimensionHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
-        needsUpdate = enabled && (
+        final boolean needsUpdate = enabled && (
                 DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()
         );
 

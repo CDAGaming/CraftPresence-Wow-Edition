@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GUIHandler {
-    public boolean openConfigGUI = false, enabled = false, isInUse = false, needsUpdate = false, queuedForUpdate = false;
+    public boolean openConfigGUI = false, isInUse = false;
+
     public List<String> GUI_NAMES = new ArrayList<>();
     private List<String> EXCLUSIONS = new ArrayList<>();
     private List<Class> allowedClasses = new ArrayList<>();
@@ -27,6 +28,8 @@ public class GUIHandler {
     private Class CURRENT_GUI_CLASS;
     private GuiScreen CURRENT_SCREEN;
     private List<Class> GUI_CLASSES = new ArrayList<>();
+
+    private boolean enabled = false, queuedForUpdate = false;
 
     private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, float zLevel) {
         final float uScale = 1f / 0x100;
@@ -63,7 +66,7 @@ public class GUIHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
-        needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
+        final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
         if (needsUpdate) {
             getGUIs();
