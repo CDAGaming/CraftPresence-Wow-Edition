@@ -1,5 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Arrays;
@@ -158,6 +160,29 @@ public class StringHandler {
                 formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
             }
             return WordUtils.capitalizeFully(formattedKey);
+        }
+    }
+
+    public static List<String> splitTextByNewLine(final String original) {
+        String formattedText = original;
+        if (formattedText.contains("\n")) {
+            formattedText = original.replace("\n", "&newline&");
+        }
+        if (formattedText.contains("\\n")) {
+            formattedText = original.replace("\\n", "&newline&");
+        }
+        if (formattedText.contains("\\\\n+")) {
+            formattedText = original.replace("\\\\n+", "&newline&");
+        }
+        return Arrays.asList(formattedText.split("&newline&"));
+    }
+
+    public static void sendMessageToPlayer(final Entity sender, final String message) {
+        final List<String> lines = splitTextByNewLine(message);
+        int currentLine = 0;
+        while (lines.size() > currentLine) {
+            sender.sendMessage(new TextComponentString(lines.get(currentLine)));
+            currentLine++;
         }
     }
 

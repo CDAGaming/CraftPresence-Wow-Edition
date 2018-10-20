@@ -5,7 +5,6 @@ import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.reflect.ClassPath;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -17,7 +16,6 @@ import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GUIHandler {
@@ -222,7 +220,7 @@ public class GUIHandler {
     public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
                                           int topBorder, int bottomBorder, int leftBorder, int rightBorder, float zLevel, @Nullable ResourceLocation res) {
         if (res != null) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(res);
+            CraftPresence.instance.getTextureManager().bindTexture(res);
         }
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.enableBlend();
@@ -265,17 +263,6 @@ public class GUIHandler {
             // Right Border
             drawTexturedModalRect(x + leftBorder + canvasWidth, y + topBorder + (j * fillerHeight), u + leftBorder + fillerWidth, v + topBorder, rightBorder, (j == yPasses ? remainderHeight : fillerHeight), zLevel);
         }
-    }
-
-    public List<String> formatText(String original) {
-        String formattedText = original;
-        if (formattedText.contains("\n")) {
-            formattedText = original.replace("\n", "&newline&");
-        }
-        if (formattedText.contains("\\\\n+")) {
-            formattedText = original.replace("\\\\n+", "&newline&");
-        }
-        return new ArrayList<>(Arrays.asList(formattedText.split("&newline&")));
     }
 
     public int getButtonY(int order) {

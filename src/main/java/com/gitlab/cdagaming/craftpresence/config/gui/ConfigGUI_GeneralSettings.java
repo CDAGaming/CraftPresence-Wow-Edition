@@ -79,34 +79,34 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
         // Hovering over Client ID Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.clientid")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.clientid")), mouseX, mouseY);
         }
         if (defaultIconButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.defaulticon")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.defaulticon")), mouseX, mouseY);
         }
         if (detectCurseManifestButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detectcursemanifest")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectcursemanifest")), mouseX, mouseY);
         }
         if (detectMultiMCManifestButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detectmultimcmanifest")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectmultimcmanifest")), mouseX, mouseY);
         }
         if (detectTechnicPackButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.detecttechnicpack")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detecttechnicpack")), mouseX, mouseY);
         }
         if (showTimeButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showtime")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showtime")), mouseX, mouseY);
         }
         if (showBiomeButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showbiome")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showbiome")), mouseX, mouseY);
         }
         if (showDimensionButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showdimension")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showdimension")), mouseX, mouseY);
         }
         if (showStateButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.general.showstate")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showstate")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 

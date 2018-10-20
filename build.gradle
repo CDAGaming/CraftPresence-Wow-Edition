@@ -52,10 +52,6 @@ minecraft {
     makeObfSourceJar = true
 }
 
-dependencies {
-    compile "net.java.dev.jna:jna:5.0.0"
-}
-
 jar {
     from sourceSets.main.output
 }

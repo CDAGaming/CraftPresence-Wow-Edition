@@ -76,36 +76,36 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
         // Hovering over Split Character Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY);
         }
         if (enableCommandsButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablecommands")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablecommands")), mouseX, mouseY);
         }
         if (enablePerGUIButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enablepergui")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablepergui")), mouseX, mouseY);
         }
         if (enablePerItemButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY);
         }
         if (overwriteServerIconButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY);
         }
         if (guiMessagesButton.isMouseOver()) {
             if (!guiMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.guimessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.guimessages")), mouseX, mouseY);
             }
         }
         if (itemMessagesButton.isMouseOver()) {
             if (!itemMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.advanced.itemmessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.itemmessages")), mouseX, mouseY);
             }
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 

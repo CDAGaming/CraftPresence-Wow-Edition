@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -74,38 +75,38 @@ public class ConfigGUI_Main extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         if (generalSet.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.general")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.general")), mouseX, mouseY);
         }
         if (biomeSet.isMouseOver()) {
             if (!biomeSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
             }
         }
         if (dimensionSet.isMouseOver()) {
             if (!dimensionSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
             }
         }
         if (serverSet.isMouseOver()) {
             if (!serverSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
             }
         }
         if (statusSet.isMouseOver()) {
             if (!statusSet.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.statusmessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.statusmessages")), mouseX, mouseY);
             }
         }
         if (advancedSet.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.advanced")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.advanced")), mouseX, mouseY);
         }
     }
 

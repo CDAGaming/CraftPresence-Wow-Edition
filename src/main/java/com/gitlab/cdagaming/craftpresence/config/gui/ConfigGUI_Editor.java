@@ -123,14 +123,14 @@ public class ConfigGUI_Editor extends GuiScreen {
 
         // Hovering over Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(messageText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.message.remove")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.message.remove")), mouseX, mouseY);
         }
         // Hovering over Value Name Label
         if (isNewValue && CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(valueNameText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.valuename")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.valuename")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 

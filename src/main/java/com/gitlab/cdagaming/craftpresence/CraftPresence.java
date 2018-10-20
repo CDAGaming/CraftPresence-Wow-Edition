@@ -48,12 +48,6 @@ public class CraftPresence {
     @Mod.EventHandler
     public void preInit(final FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(BIOMES);
-        MinecraftForge.EVENT_BUS.register(DIMENSIONS);
-        MinecraftForge.EVENT_BUS.register(ENTITIES);
-        MinecraftForge.EVENT_BUS.register(GUIS);
-        MinecraftForge.EVENT_BUS.register(SERVER);
-
         CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
     }
 

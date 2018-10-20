@@ -75,28 +75,28 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
         // Hovering over Default Server Name Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servername")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servername")), mouseX, mouseY);
         }
         // Hovering over Default Server MOTD Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servermotd")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermotd")), mouseX, mouseY);
         }
         // Hovering over Default Server Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
         }
         if (serverMessagesButton.isMouseOver()) {
             if (!serverMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.servermessages.servermessages"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.servermessages.servermessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servermessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermessages")), mouseX, mouseY);
             }
         }
         if (defaultIconButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.servermessages.servericon")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servericon")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 

@@ -89,38 +89,38 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         // Hovering over Main Menu Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) - 16, fontRenderer.getStringWidth(mainMenuText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.mainmenumsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.mainmenumsg")), mouseX, mouseY);
         }
         // Hovering over Single Player Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) - 16, fontRenderer.getStringWidth(singlePlayerText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.singleplayermsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.singleplayermsg")), mouseX, mouseY);
         }
         // Hovering over Loading Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) - 16, fontRenderer.getStringWidth(loadingText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY);
         }
         // Hovering over Pack Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) - 16, fontRenderer.getStringWidth(packText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.placeholder.packmsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.packmsg")), mouseX, mouseY);
         }
         // Hovering over Player Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(5) - 16, fontRenderer.getStringWidth(playerText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.placeholder.playermsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.playermsg")), mouseX, mouseY);
         }
         // Hovering over Player Amount Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(6) - 16, fontRenderer.getStringWidth(playerAmountText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.placeholder.playeramountmsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.playeramountmsg")), mouseX, mouseY);
         }
         // Hovering over Game Time Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(7) - 16, fontRenderer.getStringWidth(gameTimeText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.placeholder.gametimemsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.gametimemsg")), mouseX, mouseY);
         }
         // Hovering over Vivecraft Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(8) - 16, fontRenderer.getStringWidth(viveCraftText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.statusmessages.special.vivecraftmsg")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.special.vivecraftmsg")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 

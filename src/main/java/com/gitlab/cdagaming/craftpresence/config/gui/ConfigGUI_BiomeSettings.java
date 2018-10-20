@@ -60,17 +60,17 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
         // Hovering over Default Biome Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
         }
         if (biomeMessagesButton.isMouseOver()) {
             if (!biomeMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.biomemessages.biomemessages"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.biomemessages.biomemessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.biomemessages.biomemessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.biomemessages.biomemessages")), mouseX, mouseY);
             }
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 

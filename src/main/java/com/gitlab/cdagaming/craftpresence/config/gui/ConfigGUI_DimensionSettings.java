@@ -63,20 +63,20 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
 
         // Hovering over Default Dimension Message Label
         if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
         }
         if (dimensionMessagesButton.isMouseOver()) {
             if (!dimensionMessagesButton.enabled) {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.dimensionmessages.dimensionmessages"))), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.dimensionmessages.dimensionmessages"))), mouseX, mouseY);
             } else {
-                drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionmessages")), mouseX, mouseY);
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.dimensionmessages.dimensionmessages")), mouseX, mouseY);
             }
         }
         if (defaultIconButton.isMouseOver()) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.comment.dimensionmessages.dimensionicon")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.dimensionmessages.dimensionicon")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
-            drawHoveringText(CraftPresence.GUIS.formatText(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
     }
 
