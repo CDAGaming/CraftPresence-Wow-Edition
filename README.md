@@ -28,15 +28,15 @@ Beginning in v1.3.0, CraftPresence now offers the following Commands:
 (Commands can be prefixed by `/craftpresence` or `/cp`)
 (Commands Listed are the Syntax as of v1.4.0*)
 
-- `/cp view` - View a Variety of Display Data
+- `/cp view` - Help Command to display Commands available to view a variety of Display Data
 - `/cp config` - Opens CraftPresence's Config GUI
-- `/cp reload` - Reloads Mod Data based on which Settings you have enabled
+- `/cp reload` - Reloads Mod Data (In v1.4.8, forces a Tick Event)
 - `/cp reboot` - Reboots RPC
 - `/cp shutdown` - Shutdown RPC (Can be turned on from `/cp reboot`)
 - `/cp view currentData` - Displays in Text Form, your Current RPC Data
 - `/cp view assets <large|small|all>` - Displays all Asset IconKeys available to you
 - `/cp view dimensions` - Displays all Dimension Names available for use
-- `/cp <help|?` - Help Command to display the Above Commands and These Explanations
+- `/cp <help|?>` - Help Command to display the Above Commands and These Explanations
 
 ## Placeholders
 In some Configuration Areas, CraftPresence provides Placeholders to make things easier:

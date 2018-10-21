@@ -44,8 +44,8 @@ public class BiomeHandler {
         }
 
         if (enabled && CraftPresence.player != null) {
-            updateBiomeData();
             isInUse = true;
+            updateBiomeData();
         }
 
         if (isInUse) {

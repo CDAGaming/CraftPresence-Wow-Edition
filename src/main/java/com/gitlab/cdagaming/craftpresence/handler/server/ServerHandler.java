@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
-import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -20,7 +19,7 @@ public class ServerHandler {
     public boolean enabled = false, isInUse = false;
 
     public List<String> knownAddresses = new ArrayList<>();
-    private String currentServer_IP;
+    public String currentServer_IP;
     private String currentServer_Name;
     private String currentServer_MOTD;
     private String timeString;
@@ -110,7 +109,7 @@ public class ServerHandler {
             }
         }
 
-        // NOTE: Universal Events
+        // NOTE: Universal Events (SinglePlayer and MultiPlayer)
         if (CraftPresence.player != null) {
             final String gameTime = getTimeString(CraftPresence.player.world.getWorldTime());
 
@@ -198,9 +197,8 @@ public class ServerHandler {
 
     private void updateServerPresence() {
         final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String defaultServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon);
         final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
-        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultServerIcon);
+        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
 
         final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
         final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
@@ -215,22 +213,7 @@ public class ServerHandler {
         CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
 
         if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
-            if (DiscordAssetHandler.contains(formattedServerIconKey) && !currentServerIcon.equals(defaultServerIcon)) {
-                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-            } else {
-                boolean matched = false;
-                for (String ipPart : currentServer_IP.split("\\.")) {
-                    final String formattedKey = StringHandler.formatPackIcon(ipPart);
-                    if (DiscordAssetHandler.contains(formattedKey)) {
-                        CraftPresence.CLIENT.setImage(formattedKey, DiscordAsset.AssetType.SMALL);
-                        matched = true;
-                        break;
-                    }
-                }
-                if (!matched) {
-                    CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-                }
-            }
+            CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
             CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
         }
 

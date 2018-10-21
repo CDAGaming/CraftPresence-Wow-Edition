@@ -8,15 +8,35 @@
 
 * Added an `overwriteServerIcon` Config Option to allow a Pack Icon to take Priority over a Server Icon
 
+* Added Remaining RPC Info to `/cp view CurrentData`:
+
+  * PARTY_ID
+
+  * PARTY_SIZE
+
+  * PARTY_MAX
+
+  * JOIN_SECRET
+
+  * END_TIMESTAMP
+
+  * MATCH_SECRET
+
+  * SPECTATE_SECRET
+
+  * INSTANCE
+
 * Consolidate Codebase! Things should run a lot smoother and with less errors
 
 ### Fixes:
 
 * Fixes Quite a Few NPE Scenarios
 
+* Fixes Inconsistent Logging when CraftPresence couldn't find an Icon
+
 * Revert Auto-Setting Options in the Config GUI (Will Reintroduce in a Better Way later)
 
-* Fixes `\n` Escape Parsing
+* Fixes `\n` Escape Parsing in Commands and Hover Text
 
 * Fixes Back Button Enable Conditions in Status Messages GUI
 
@@ -30,7 +50,7 @@ The Config GUI has now been overhauled to provide a more User-Friendly Experienc
 
 * Migrating on `1.13.x` (From v1.3.x and Below) - Rename `craftpresence.cfg` to `craftpresence.properties` or Regenerate Config
 
-Over time, this GUI will be edited and add new Options to further customize your experience.
+Over time, this GUI will be edited and change and improve to further customize your experience.
 
 #### Inviting Others to Join Info:
 

@@ -3,7 +3,6 @@ package com.gitlab.cdagaming.craftpresence.handler.world;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
-import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import net.minecraft.world.DimensionType;
 
 import java.util.ArrayList;
@@ -12,10 +11,10 @@ import java.util.List;
 public class DimensionHandler {
     public boolean isInUse = false;
 
+    public String CURRENT_DIMENSION_NAME;
     public List<String> DIMENSION_NAMES = new ArrayList<>();
     private List<Integer> DIMENSION_IDS = new ArrayList<>();
     private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
-    private String CURRENT_DIMENSION_NAME;
     private Integer CURRENT_DIMENSION_ID;
 
     private boolean enabled = false, queuedForUpdate = false;
@@ -46,8 +45,8 @@ public class DimensionHandler {
         }
 
         if (enabled && CraftPresence.player != null) {
-            updateDimensionData();
             isInUse = true;
+            updateDimensionData();
         }
 
         if (isInUse) {
@@ -73,7 +72,7 @@ public class DimensionHandler {
             getDimensions();
         }
 
-        if (queuedForUpdate || !CraftPresence.ENTITIES.isInUse) {
+        if (queuedForUpdate && (!CraftPresence.ENTITIES.isInUse || CraftPresence.ENTITIES.allItemsEmpty)) {
             updateDimensionPresence();
         }
     }
@@ -81,31 +80,13 @@ public class DimensionHandler {
     private void updateDimensionPresence() {
         final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
-        final String defaultDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
-        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultDimensionIcon);
+        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME);
 
         String formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
-
-        if (DiscordAssetHandler.contains(formattedIconKey) && !currentDimensionIcon.equals(defaultDimensionIcon)) {
-            CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
-        } else {
-            boolean matched = false;
-            for (String dimension : DIMENSION_NAMES) {
-                formattedIconKey = StringHandler.formatPackIcon(dimension);
-                if (DiscordAssetHandler.contains(formattedIconKey) && CURRENT_DIMENSION_NAME.equalsIgnoreCase(dimension)) {
-                    CraftPresence.CLIENT.setImage(formattedIconKey, DiscordAsset.AssetType.LARGE);
-                    matched = true;
-                    break;
-                }
-            }
-            if (!matched) {
-                formattedIconKey = defaultDimensionIcon;
-                CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultIcon), DiscordAsset.AssetType.LARGE);
-            }
-        }
+        CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
 
         CraftPresence.CLIENT.DETAILS = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());
-        if (!CraftPresence.ENTITIES.isInUse) {
+        if (!CraftPresence.ENTITIES.isInUse || CraftPresence.ENTITIES.allItemsEmpty) {
             CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
             queuedForUpdate = false;
         } else {

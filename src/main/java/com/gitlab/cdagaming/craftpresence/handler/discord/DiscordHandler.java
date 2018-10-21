@@ -12,9 +12,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresenc
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -147,16 +145,18 @@ public class DiscordHandler {
             }
         } else {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.empty", formattedKey, type.name()));
-            final Minecraft mc = Minecraft.getMinecraft();
-            final EntityPlayer player = mc.player;
             final String defaultIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
+            final String defaultDimensionIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon).replace("&icon&", defaultIcon));
+            final String defaultServerIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon).replace("&icon&", defaultIcon));
+
             if (type.equals(DiscordAsset.AssetType.LARGE)) {
-                if (player != null) {
-                    final String dimIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultDimensionIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
-                    if (DiscordAssetHandler.contains(dimIcon)) {
-                        LARGEIMAGEKEY = dimIcon;
+                if (CraftPresence.DIMENSIONS.isInUse) {
+                    // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name
+                    final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME);
+                    if (DiscordAssetHandler.contains(formattedCurrentDIMNameIcon)) {
+                        LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
                     } else {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.asset.failure"));
+                        LARGEIMAGEKEY = DiscordAssetHandler.contains(defaultDimensionIcon) ? defaultDimensionIcon : defaultIcon;
                     }
                 } else {
                     LARGEIMAGEKEY = defaultIcon;
@@ -164,12 +164,20 @@ public class DiscordHandler {
             }
 
             if (type.equals(DiscordAsset.AssetType.SMALL)) {
-                if (!mc.isSingleplayer() && player != null) {
-                    final String serverIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultServerIcon.replace("&icon&", CraftPresence.CONFIG.defaultIcon));
-                    if (DiscordAssetHandler.contains(serverIcon)) {
-                        SMALLIMAGEKEY = serverIcon;
-                    } else {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.asset.failure"));
+                if (CraftPresence.SERVER.isInUse) {
+                    // NOTE: Fallback for when On a Server is The Parts of Your IP
+                    boolean matched = false;
+                    for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
+                        final String formattedIPPart = StringHandler.formatPackIcon(ipPart);
+                        if (DiscordAssetHandler.contains(formattedIPPart)) {
+                            SMALLIMAGEKEY = formattedIPPart;
+                            matched = true;
+                            break;
+                        }
+                    }
+
+                    if (!matched) {
+                        SMALLIMAGEKEY = DiscordAssetHandler.contains(defaultServerIcon) ? defaultServerIcon : defaultIcon;
                     }
                 } else {
                     SMALLIMAGEKEY = defaultIcon;

@@ -74,8 +74,8 @@ public class GUIHandler {
 
         if (enabled) {
             if (CraftPresence.instance.currentScreen != null) {
-                updateGUIData();
                 isInUse = true;
+                updateGUIData();
             }
         }
 

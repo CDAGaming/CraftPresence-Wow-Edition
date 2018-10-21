@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
-    public boolean isInUse = false;
+    public boolean isInUse = false, allItemsEmpty = false;
 
     public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> BLOCK_NAMES = new ArrayList<>();
@@ -22,23 +22,21 @@ public class EntityHandler {
     private List<String> ITEM_CLASSES = new ArrayList<>();
     private List<String> ENTITY_CLASSES = new ArrayList<>();
 
-    private String CURRENT_MAINHAND_ITEM_NAME;
-    private String CURRENT_OFFHAND_ITEM_NAME;
-
     private ItemStack CURRENT_MAINHAND_ITEM;
     private ItemStack CURRENT_OFFHAND_ITEM;
-
     private ItemStack CURRENT_HELMET;
     private ItemStack CURRENT_CHEST;
     private ItemStack CURRENT_LEGS;
     private ItemStack CURRENT_BOOTS;
 
+    private String CURRENT_MAINHAND_ITEM_NAME;
+    private String CURRENT_OFFHAND_ITEM_NAME;
     private String CURRENT_HELMET_NAME;
     private String CURRENT_CHEST_NAME;
     private String CURRENT_LEGS_NAME;
     private String CURRENT_BOOTS_NAME;
 
-    private boolean enabled = false, queuedForUpdate = false, allItemsEmpty = false;
+    private boolean enabled = false, queuedForUpdate = false;
 
     public void emptyData() {
         BLOCK_NAMES.clear();
@@ -66,6 +64,7 @@ public class EntityHandler {
         CURRENT_BOOTS_NAME = null;
 
         queuedForUpdate = false;
+        allItemsEmpty = true;
         isInUse = false;
     }
 
@@ -78,8 +77,8 @@ public class EntityHandler {
         }
 
         if (enabled && CraftPresence.player != null) {
-            updateEntityData();
             isInUse = true;
+            updateEntityData();
         }
 
         if (isInUse) {
