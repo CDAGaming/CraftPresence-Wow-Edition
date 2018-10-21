@@ -48,7 +48,7 @@ public class EntityHandler {
         clearClientData();
     }
 
-    private void clearClientData() {
+    public void clearClientData() {
         CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
         CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
         CURRENT_MAINHAND_ITEM_NAME = null;

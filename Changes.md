@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.4.8 (10/22/2018)
+## v1.4.8 (10/26/2018)
 
 ### Changes:
 

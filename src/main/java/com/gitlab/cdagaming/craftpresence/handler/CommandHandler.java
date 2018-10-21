@@ -31,7 +31,11 @@ public class CommandHandler {
 
     public static void rebootRPC() {
         CraftPresence.CLIENT.shutDown();
-        CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientID;
+        if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientID)) {
+            DiscordAssetHandler.emptyData();
+            CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientID;
+        }
+        DiscordAssetHandler.loadAssets();
         CraftPresence.CLIENT.init();
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }

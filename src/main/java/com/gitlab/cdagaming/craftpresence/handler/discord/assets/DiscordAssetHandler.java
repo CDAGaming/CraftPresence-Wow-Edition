@@ -45,18 +45,28 @@ public class DiscordAssetHandler {
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getType() : DiscordAsset.AssetType.LARGE;
     }
 
+    public static void emptyData() {
+        ASSET_LIST.clear();
+        SMALL_ICONS.clear();
+        SMALL_IDS.clear();
+        LARGE_ICONS.clear();
+        LARGE_IDS.clear();
+        ICON_LIST.clear();
+        ICON_IDS.clear();
+    }
+
     public static String getRandomAsset() {
         int randomInteger = MathHelper.getInt(new Random(), 0, ICON_LIST.size());
         return ICON_LIST.get(randomInteger);
     }
 
     public static void loadAssets() {
-        Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load", !StringHandler.isNullOrEmpty(CraftPresence.CONFIG.clientID) ? CraftPresence.CONFIG.clientID : "450485984333660181"));
+        Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load", CraftPresence.CONFIG.clientID));
         Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load.credits"));
         ASSET_LIST = new HashMap<>();
 
         try {
-            final String url = "https://discordapp.com/api/oauth2/applications/" + (!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.clientID) ? CraftPresence.CONFIG.clientID : "450485984333660181") + "/assets";
+            final String url = "https://discordapp.com/api/oauth2/applications/" + CraftPresence.CONFIG.clientID + "/assets";
             final DiscordAsset[] assets = URLHandler.getJSONFromURL(url, DiscordAsset[].class);
 
             if (assets != null) {

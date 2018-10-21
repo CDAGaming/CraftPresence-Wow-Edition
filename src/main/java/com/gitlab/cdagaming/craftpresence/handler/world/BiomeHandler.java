@@ -25,7 +25,7 @@ public class BiomeHandler {
         clearClientData();
     }
 
-    private void clearClientData() {
+    public void clearClientData() {
         CURRENT_BIOME_NAME = null;
         CURRENT_BIOME_ID = null;
 
@@ -71,7 +71,7 @@ public class BiomeHandler {
             }
         }
 
-        if (queuedForUpdate || !CraftPresence.GUIS.isInUse) {
+        if (queuedForUpdate) {
             updateBiomePresence();
         }
     }
@@ -81,7 +81,7 @@ public class BiomeHandler {
         final String currentBiomeMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMSG);
         final String formattedBiomeMSG = currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString());
 
-        if (!CraftPresence.GUIS.isInUse) {
+        if (!CraftPresence.GUIS.isInUse && !CraftPresence.SERVER.isInUse) {
             CraftPresence.CLIENT.GAME_STATE = formattedBiomeMSG;
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;

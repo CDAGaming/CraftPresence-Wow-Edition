@@ -34,7 +34,7 @@ public class ServerHandler {
         clearClientData();
     }
 
-    private void clearClientData() {
+    public void clearClientData() {
         currentServer_IP = null;
         currentServer_MOTD = null;
         currentServer_Name = null;

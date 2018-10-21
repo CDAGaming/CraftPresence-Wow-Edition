@@ -36,6 +36,7 @@ public class DiscordHandler {
     private String SPECTATE_SECRET;
     private byte INSTANCE;
 
+    private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private Thread callbackThread = null;
 
     public synchronized void setup() {
@@ -78,7 +79,7 @@ public class DiscordHandler {
     }
 
     public void updatePresence(@Nonnull final DiscordRichPresence presence) {
-        if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
+        if (Constants.BRAND.contains("vivecraft")) {
             CraftPresence.packFound = true;
             presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.vivecraftMessage;
         } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
@@ -99,23 +100,17 @@ public class DiscordHandler {
                 if (DiscordAssetHandler.contains(iconKey)) {
                     presence.smallImageKey = iconKey;
                     presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
-                } else {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load.null", iconKey));
                 }
             } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name")) && !StringHandler.isNullOrEmpty(InstanceHandler.get("iconKey"))) {
                 final String iconKey = StringHandler.formatPackIcon(InstanceHandler.get("iconKey"));
                 if (DiscordAssetHandler.contains(iconKey)) {
                     presence.smallImageKey = iconKey;
                     presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
-                } else {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load.null", iconKey));
                 }
             } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME) && !StringHandler.isNullOrEmpty(PackHandler.ICON_NAME)) {
                 if (DiscordAssetHandler.contains(PackHandler.ICON_NAME)) {
                     presence.smallImageKey = PackHandler.ICON_NAME;
                     presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", PackHandler.PACK_NAME);
-                } else {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load.null", PackHandler.ICON_NAME));
                 }
             }
         }
@@ -130,59 +125,78 @@ public class DiscordHandler {
         callbackThread.interrupt();
         DiscordRPC.INSTANCE.Discord_ClearPresence();
         DiscordRPC.INSTANCE.Discord_Shutdown();
+
+        CraftPresence.DIMENSIONS.clearClientData();
+        CraftPresence.ENTITIES.clearClientData();
+        CraftPresence.BIOMES.clearClientData();
+        CraftPresence.SERVER.clearClientData();
+        CraftPresence.GUIS.clearClientData();
+
         Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
     }
 
     public void setImage(@Nonnull final String key, @Nonnull final DiscordAsset.AssetType type) {
         final String formattedKey = StringHandler.formatPackIcon(key);
-        if (DiscordAssetHandler.contains(formattedKey)) {
-            if (type.equals(DiscordAsset.AssetType.LARGE)) {
-                LARGEIMAGEKEY = formattedKey;
-            }
 
-            if (type.equals(DiscordAsset.AssetType.SMALL)) {
-                SMALLIMAGEKEY = formattedKey;
-            }
-        } else {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.empty", formattedKey, type.name()));
-            final String defaultIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
-            final String defaultDimensionIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon).replace("&icon&", defaultIcon));
-            final String defaultServerIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon).replace("&icon&", defaultIcon));
-
-            if (type.equals(DiscordAsset.AssetType.LARGE)) {
-                if (CraftPresence.DIMENSIONS.isInUse) {
-                    // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name
-                    final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME);
-                    if (DiscordAssetHandler.contains(formattedCurrentDIMNameIcon)) {
-                        LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
-                    } else {
-                        LARGEIMAGEKEY = DiscordAssetHandler.contains(defaultDimensionIcon) ? defaultDimensionIcon : defaultIcon;
-                    }
-                } else {
-                    LARGEIMAGEKEY = defaultIcon;
+        if (((StringHandler.isNullOrEmpty(lastImageRequested) || !lastImageRequested.equals(key)) || (StringHandler.isNullOrEmpty(lastImageTypeRequested) || !lastImageTypeRequested.equals(type.name()))) || (StringHandler.isNullOrEmpty(lastClientIDRequested) || !lastClientIDRequested.equals(CLIENT_ID))) {
+            if (DiscordAssetHandler.contains(formattedKey)) {
+                if (type.equals(DiscordAsset.AssetType.LARGE)) {
+                    LARGEIMAGEKEY = formattedKey;
                 }
-            }
 
-            if (type.equals(DiscordAsset.AssetType.SMALL)) {
-                if (CraftPresence.SERVER.isInUse) {
-                    // NOTE: Fallback for when On a Server is The Parts of Your IP
-                    boolean matched = false;
-                    for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
-                        final String formattedIPPart = StringHandler.formatPackIcon(ipPart);
-                        if (DiscordAssetHandler.contains(formattedIPPart)) {
-                            SMALLIMAGEKEY = formattedIPPart;
-                            matched = true;
-                            break;
+                if (type.equals(DiscordAsset.AssetType.SMALL)) {
+                    SMALLIMAGEKEY = formattedKey;
+                }
+            } else {
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.fallback", formattedKey, type.name()));
+                Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.request", formattedKey, type.name()));
+
+                final String defaultIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
+                final String defaultDimensionIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon).replace("&icon&", defaultIcon));
+                final String defaultServerIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon).replace("&icon&", defaultIcon));
+
+                if (type.equals(DiscordAsset.AssetType.LARGE)) {
+                    if (CraftPresence.DIMENSIONS.isInUse) {
+                        // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name
+                        final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME);
+                        if (DiscordAssetHandler.contains(formattedCurrentDIMNameIcon)) {
+                            LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
+                        } else {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                            LARGEIMAGEKEY = DiscordAssetHandler.contains(defaultDimensionIcon) ? defaultDimensionIcon : defaultIcon;
                         }
+                    } else {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                        LARGEIMAGEKEY = defaultIcon;
                     }
+                }
 
-                    if (!matched) {
-                        SMALLIMAGEKEY = DiscordAssetHandler.contains(defaultServerIcon) ? defaultServerIcon : defaultIcon;
+                if (type.equals(DiscordAsset.AssetType.SMALL)) {
+                    if (CraftPresence.SERVER.isInUse) {
+                        // NOTE: Fallback for when On a Server is The Parts of Your IP
+                        boolean matched = false;
+                        for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
+                            final String formattedIPPart = StringHandler.formatPackIcon(ipPart);
+                            if (DiscordAssetHandler.contains(formattedIPPart)) {
+                                SMALLIMAGEKEY = formattedIPPart;
+                                matched = true;
+                                break;
+                            }
+                        }
+
+                        if (!matched) {
+                            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                            SMALLIMAGEKEY = DiscordAssetHandler.contains(defaultServerIcon) ? defaultServerIcon : defaultIcon;
+                        }
+                    } else {
+                        Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                        SMALLIMAGEKEY = defaultIcon;
                     }
-                } else {
-                    SMALLIMAGEKEY = defaultIcon;
                 }
             }
+            lastClientIDRequested = CLIENT_ID;
+            lastImageRequested = key;
+            lastImageTypeRequested = type.name();
         }
     }
 

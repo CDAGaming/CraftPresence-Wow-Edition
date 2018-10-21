@@ -26,7 +26,7 @@ public class DimensionHandler {
         clearClientData();
     }
 
-    private void clearClientData() {
+    public void clearClientData() {
         CURRENT_DIMENSION_NAME = null;
         CURRENT_DIMENSION_ID = null;
 
@@ -72,7 +72,7 @@ public class DimensionHandler {
             getDimensions();
         }
 
-        if (queuedForUpdate && (!CraftPresence.ENTITIES.isInUse || CraftPresence.ENTITIES.allItemsEmpty)) {
+        if (queuedForUpdate) {
             updateDimensionPresence();
         }
     }
@@ -81,8 +81,8 @@ public class DimensionHandler {
         final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
         final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME);
+        final String formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
-        String formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
         CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
 
         CraftPresence.CLIENT.DETAILS = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());

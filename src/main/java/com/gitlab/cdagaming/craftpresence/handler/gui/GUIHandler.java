@@ -55,7 +55,7 @@ public class GUIHandler {
         clearClientData();
     }
 
-    private void clearClientData() {
+    public void clearClientData() {
         CURRENT_GUI_NAME = null;
         CURRENT_SCREEN = null;
         CURRENT_GUI_CLASS = null;
@@ -106,7 +106,7 @@ public class GUIHandler {
             }
         }
 
-        if (queuedForUpdate || !CraftPresence.BIOMES.isInUse) {
+        if (queuedForUpdate) {
             updateGUIPresence();
         }
     }
