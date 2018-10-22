@@ -2,7 +2,6 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIScrollList;
 import net.minecraft.client.Minecraft;
