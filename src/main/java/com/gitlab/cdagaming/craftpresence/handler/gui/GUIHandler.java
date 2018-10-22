@@ -72,11 +72,9 @@ public class GUIHandler {
             getGUIs();
         }
 
-        if (enabled) {
-            if (CraftPresence.instance.currentScreen != null) {
-                isInUse = true;
-                updateGUIData();
-            }
+        if (enabled && CraftPresence.instance.currentScreen != null) {
+            isInUse = true;
+            updateGUIData();
         }
 
         if (isInUse) {

@@ -27,7 +27,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         configoption = configOption;
         selecteditem = selectedItem;
         isNewValue = StringHandler.isNullOrEmpty(selectedItem);
-        isDefaultValue = !StringHandler.isNullOrEmpty(selectedItem) && selectedItem.equals("default");
+        isDefaultValue = !StringHandler.isNullOrEmpty(selectedItem) && "default".equals(selectedItem);
     }
 
     @Override
@@ -188,12 +188,10 @@ public class ConfigGUI_Editor extends GuiScreen {
                 }
             }
             mc.displayGuiScreen(parentscreen);
-        } else if (parentscreen instanceof ConfigGUI_DimensionSettings) {
-            if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
+        } else if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
+            if (parentscreen instanceof ConfigGUI_DimensionSettings) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
-            }
-        } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
-            if (buttonList.contains(specificIconButton) && button.id == specificIconButton.id) {
+            } else if (parentscreen instanceof ConfigGUI_ServerSettings) {
                 mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, selecteditem));
             }
         }

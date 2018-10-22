@@ -92,7 +92,6 @@ public class DiscordHandler {
 
         if ((StringHandler.isNullOrEmpty(presence.smallImageKey) && StringHandler.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {
             if (Constants.BRAND.contains("vivecraft") && DiscordAssetHandler.contains("vivecraft")) {
-                CraftPresence.packFound = true;
                 presence.smallImageKey = "vivecraft";
                 presence.smallImageText = CraftPresence.CONFIG.vivecraftMessage;
             } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
@@ -107,11 +106,9 @@ public class DiscordHandler {
                     presence.smallImageKey = iconKey;
                     presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
                 }
-            } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME) && !StringHandler.isNullOrEmpty(PackHandler.ICON_NAME)) {
-                if (DiscordAssetHandler.contains(PackHandler.ICON_NAME)) {
-                    presence.smallImageKey = PackHandler.ICON_NAME;
-                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", PackHandler.PACK_NAME);
-                }
+            } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME) && !StringHandler.isNullOrEmpty(PackHandler.ICON_NAME) && DiscordAssetHandler.contains(PackHandler.ICON_NAME)) {
+                presence.smallImageKey = PackHandler.ICON_NAME;
+                presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", PackHandler.PACK_NAME);
             }
         }
 
