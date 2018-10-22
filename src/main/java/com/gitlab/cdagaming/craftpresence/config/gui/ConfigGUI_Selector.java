@@ -39,9 +39,9 @@ public class ConfigGUI_Selector extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
-        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) + 105, (sr.getScaledHeight() - 30), 90, 20, "Back");
+        proceedButton = new GuiButton(700, (sr.getScaledWidth() - 100), (sr.getScaledHeight() - 30), 90, 20, "Back");
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight() - 45, 32, sr.getScaledHeight() - 45, 18, itemList);
-        searchBox = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) - 140, (sr.getScaledHeight() - 30), 120, 20);
+        searchBox = new GuiTextField(110, fontRenderer, 60, (sr.getScaledHeight() - 30), 120, 20);
 
         if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
             addNewButton = new GuiButton(600, (sr.getScaledWidth() / 2) + 10, (sr.getScaledHeight() - 30), 90, 20, "Add New");
@@ -57,7 +57,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         List<String> modifiedList = new ArrayList<>();
         drawDefaultBackground();
-        drawString(fontRenderer, "Search:", ((sr.getScaledWidth() / 2) - 165) - (fontRenderer.getStringWidth("Search:") / 2), (sr.getScaledHeight() - 25), 0xFFFFFF);
+        drawString(fontRenderer, "Search:", (30 - (fontRenderer.getStringWidth("Search:") / 2)), (sr.getScaledHeight() - 25), 0xFFFFFF);
         searchBox.drawTextBox();
 
         if (!searchBox.getText().isEmpty()) {
@@ -131,34 +131,16 @@ public class ConfigGUI_Selector extends GuiScreen {
                     if (configoption.equals(CraftPresence.CONFIG.NAME_defaultIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultIcon)) {
                         CraftPresence.CONFIG.hasChanged = true;
                         CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                        if (CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)) {
-                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.LARGE);
-                        }
-                        if (CraftPresence.CLIENT.SMALLIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)) {
-                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.SMALL);
-                        }
                         CraftPresence.CONFIG.defaultIcon = scrollList.currentValue;
                         mc.displayGuiScreen(parentscreen);
                     } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultServerIcon)) {
                         CraftPresence.CONFIG.hasChanged = true;
                         CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                        if (CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultServerIcon)) {
-                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.LARGE);
-                        }
-                        if (CraftPresence.CLIENT.SMALLIMAGEKEY.equals(CraftPresence.CONFIG.defaultServerIcon)) {
-                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.SMALL);
-                        }
                         CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
                         mc.displayGuiScreen(parentscreen);
                     } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon) && !scrollList.currentValue.equals(CraftPresence.CONFIG.defaultDimensionIcon)) {
                         CraftPresence.CONFIG.hasChanged = true;
                         CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                        if (CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultDimensionIcon)) {
-                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.LARGE);
-                        }
-                        if (CraftPresence.CLIENT.SMALLIMAGEKEY.equals(CraftPresence.CONFIG.defaultDimensionIcon)) {
-                            CraftPresence.CLIENT.setImage(scrollList.currentValue, DiscordAsset.AssetType.SMALL);
-                        }
                         CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
                         mc.displayGuiScreen(parentscreen);
                     } else if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configoption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configoption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {

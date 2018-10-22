@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence;
 
 import com.gitlab.cdagaming.craftpresence.config.ConfigHandler;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
+import com.gitlab.cdagaming.craftpresence.handler.KeyHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
 import com.gitlab.cdagaming.craftpresence.handler.entity.EntityHandler;
@@ -23,10 +24,11 @@ import java.io.File;
 @Mod(modid = Constants.MODID, name = Constants.NAME, version = Constants.VERSION_ID, clientSideOnly = true, guiFactory = Constants.GUI_FACTORY, canBeDeactivated = true, updateJSON = Constants.UPDATE_JSON, certificateFingerprint = Constants.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
     public static boolean packFound = false;
-    public static Minecraft instance;
-    public static EntityPlayer player;
+    public static Minecraft instance = Minecraft.getMinecraft();
+    public static EntityPlayer player = instance.player;
 
     public static ConfigHandler CONFIG;
+    public static KeyHandler KEYBINDINGS = new KeyHandler();
     public static DiscordHandler CLIENT = new DiscordHandler();
     public static ServerHandler SERVER = new ServerHandler();
     public static BiomeHandler BIOMES = new BiomeHandler();
@@ -70,7 +72,7 @@ public class CraftPresence {
             CLIENT.setup();
             CLIENT.init();
             CLIENT.updateTimestamp();
-            CommandHandler.setLoadingPresence(event.getModState());
+            CommandHandler.setLoadingPresence(event.description());
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.load"));
             ex.printStackTrace();
@@ -79,7 +81,7 @@ public class CraftPresence {
 
     @Mod.EventHandler
     public void postInit(final FMLPostInitializationEvent event) {
-        CommandHandler.setLoadingPresence(event.getModState());
+        CommandHandler.setLoadingPresence(event.description());
     }
 
     @SubscribeEvent

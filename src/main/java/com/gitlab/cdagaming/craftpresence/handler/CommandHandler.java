@@ -11,10 +11,10 @@ import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.fml.common.LoaderState;
 
 public class CommandHandler {
-    private static void registerCommands() {
+    private static void registerData() {
+        CraftPresence.KEYBINDINGS.register();
         ClientCommandHandler.instance.registerCommand(new CPCommands());
     }
 
@@ -22,6 +22,7 @@ public class CommandHandler {
         CraftPresence.instance = Minecraft.getMinecraft();
         CraftPresence.player = CraftPresence.instance.player;
 
+        CraftPresence.KEYBINDINGS.onTick();
         CraftPresence.BIOMES.onTick();
         CraftPresence.DIMENSIONS.onTick();
         CraftPresence.GUIS.onTick();
@@ -42,7 +43,7 @@ public class CommandHandler {
 
     public static void init() {
         if (CraftPresence.CONFIG.enableCommands) {
-            registerCommands();
+            registerData();
         }
         if (CraftPresence.CONFIG.detectCurseManifest && !CraftPresence.packFound) {
             ManifestHandler.loadManifest();
@@ -90,7 +91,7 @@ public class CommandHandler {
                 );
     }
 
-    public static void setLoadingPresence(final LoaderState.ModState state) {
+    public static void setLoadingPresence(final String state) {
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
         CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.loadingMSG : "";

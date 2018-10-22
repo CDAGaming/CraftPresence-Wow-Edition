@@ -10,27 +10,17 @@
 
 * Added Remaining RPC Info to `/cp view CurrentData`:
 
-  * PARTY_ID
+  * PARTY_ID, PARTY_SIZE, PARTY_MAX, JOIN_SECRET, END_TIMESTAMP, MATCH_SECRET, SPECTATE_SECRET, INSTANCE
 
-  * PARTY_SIZE
-
-  * PARTY_MAX
-
-  * JOIN_SECRET
-
-  * END_TIMESTAMP
-
-  * MATCH_SECRET
-
-  * SPECTATE_SECRET
-
-  * INSTANCE
+* Added KeyBind Support for Accessing CraftPresence Commands (Mostly for 1.13 Users)
 
 * Consolidate Codebase! Things should run a lot smoother and with less errors
 
 ### Fixes:
 
 * Fixes Quite a Few NPE Scenarios
+
+* Fixes some DPI-Awareness Issues in some Config GUI Screens
 
 * Fixes Inconsistent Logging when CraftPresence couldn't find an Icon
 

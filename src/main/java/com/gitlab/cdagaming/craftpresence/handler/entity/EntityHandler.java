@@ -145,7 +145,7 @@ public class EntityHandler {
             queuedForUpdate = true;
         }
 
-        if (queuedForUpdate && !allItemsEmpty) {
+        if (queuedForUpdate) {
             updateEntityPresence();
         }
     }
@@ -176,8 +176,12 @@ public class EntityHandler {
         final String bootsMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_BOOTS_NAME);
         final String formattedBootsMSG = bootsMSG.replace("&main&", bootsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
 
-        // NOTE: Overrides Dimensions
-        CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
+        // NOTE: Overrides Dimensions unless All Items are Empty
+        if (!allItemsEmpty) {
+            CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
+        } else if (CraftPresence.DIMENSIONS.isInUse) {
+            CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
+        }
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         queuedForUpdate = false;
     }
