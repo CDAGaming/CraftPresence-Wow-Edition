@@ -44,7 +44,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         searchBox = new GuiTextField(110, fontRenderer, 60, (sr.getScaledHeight() - 30), 120, 20);
 
         if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
-            addNewButton = new GuiButton(600, (sr.getScaledWidth() / 2) + 10, (sr.getScaledHeight() - 30), 90, 20, "Add New");
+            addNewButton = new GuiButton(600, (sr.getScaledWidth() - 195), (sr.getScaledHeight() - 30), 90, 20, "Add New");
             buttonList.add(addNewButton);
         }
 
