@@ -46,6 +46,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         viveCraftMSG.setText(CraftPresence.CONFIG.vivecraftMessage);
 
         proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 25), 180, 20, "Back");
+
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -53,6 +54,9 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        ScaledResolution sr = new ScaledResolution(mc);
+        drawDefaultBackground();
+
         String title = "CraftPresence - " + I18n.format("gui.config.title.statusmessages");
         String mainMenuText = I18n.format("gui.config.name.statusmessages.mainmenumsg");
         String singlePlayerText = I18n.format("gui.config.name.statusmessages.singleplayermsg");
@@ -62,8 +66,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         String playerAmountText = I18n.format("gui.config.name.statusmessages.placeholder.playeramountmsg");
         String gameTimeText = I18n.format("gui.config.name.statusmessages.placeholder.gametimemsg");
         String viveCraftText = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg");
-        ScaledResolution sr = new ScaledResolution(mc);
-        drawDefaultBackground();
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 5, 0xFFFFFF);
         drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) - 16, 0xFFFFFF);
         drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) - 16, 0xFFFFFF);

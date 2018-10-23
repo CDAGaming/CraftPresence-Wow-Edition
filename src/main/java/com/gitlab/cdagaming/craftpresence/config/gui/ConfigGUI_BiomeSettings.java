@@ -13,7 +13,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_BiomeSettings extends GuiScreen {
-    private final GuiScreen parentscreen, currentscreen;
+    private final GuiScreen parentScreen, currentScreen;
     private GuiButton proceedButton, biomeMessagesButton;
     private GuiTextField defaultMessage;
 
@@ -21,14 +21,15 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
     ConfigGUI_BiomeSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        currentscreen = this;
-        parentscreen = parentScreen;
+        currentScreen = this;
+        this.parentScreen = parentScreen;
     }
 
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
+
         defaultBiomeMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
@@ -45,10 +46,12 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        String title = "CraftPresence - " + I18n.format("gui.config.title.biomemessages");
-        String defaultMessageText = "Default Biome Message";
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
+
+        String title = "CraftPresence - " + I18n.format("gui.config.title.biomemessages");
+        String defaultMessageText = "Default Biome Message";
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         defaultMessage.drawTextBox();
@@ -82,16 +85,16 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 StringHandler.setConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage.getText());
             }
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (button.id == biomeMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null, null));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         defaultMessage.textboxKeyTyped(typedChar, keyCode);
     }

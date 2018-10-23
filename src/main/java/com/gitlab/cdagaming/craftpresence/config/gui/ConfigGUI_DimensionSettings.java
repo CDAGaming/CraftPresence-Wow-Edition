@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_DimensionSettings extends GuiScreen {
-    private final GuiScreen parentscreen, currentscreen;
+    private final GuiScreen parentScreen, currentScreen;
     private GuiButton proceedButton, dimensionMessagesButton, defaultIconButton;
     private GuiTextField defaultMessage;
 
@@ -22,14 +22,15 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
 
     ConfigGUI_DimensionSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        currentscreen = this;
-        parentscreen = parentScreen;
+        currentScreen = this;
+        this.parentScreen = parentScreen;
     }
 
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
+
         defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
@@ -48,10 +49,12 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        String title = "CraftPresence - " + I18n.format("gui.config.title.dimensionmessages");
-        String defaultMessageText = "Default Dimension Message";
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
+
+        String title = "CraftPresence - " + I18n.format("gui.config.title.dimensionmessages");
+        String defaultMessageText = "Default Dimension Message";
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         defaultMessage.drawTextBox();
@@ -88,18 +91,18 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage.getText());
             }
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (button.id == dimensionMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select Dimension", CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, "CraftPresence - Select Dimension", CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null));
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultDimensionIcon, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultDimensionIcon, null));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         defaultMessage.textboxKeyTyped(typedChar, keyCode);
     }

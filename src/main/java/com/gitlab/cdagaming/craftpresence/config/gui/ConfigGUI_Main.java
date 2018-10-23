@@ -14,15 +14,15 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_Main extends GuiScreen {
-    private final GuiScreen parentscreen, currentscreen;
+    private final GuiScreen parentScreen, currentScreen;
     private EntityPlayer player;
     private GuiButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
         player = mc.player;
-        currentscreen = this;
-        parentscreen = parentScreen;
+        currentScreen = this;
+        this.parentScreen = parentScreen;
     }
 
     @Override
@@ -51,14 +51,17 @@ public class ConfigGUI_Main extends GuiScreen {
         buttonList.add(advancedSet);
         buttonList.add(proceedButton);
         buttonList.add(aboutButton);
+
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        String title = I18n.format("gui.config.title");
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
+
+        String title = I18n.format("gui.config.title");
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
         biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
@@ -113,17 +116,17 @@ public class ConfigGUI_Main extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == generalSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_GeneralSettings(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_GeneralSettings(currentScreen));
         } else if (button.id == biomeSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_BiomeSettings(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_BiomeSettings(currentScreen));
         } else if (button.id == dimensionSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_DimensionSettings(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_DimensionSettings(currentScreen));
         } else if (button.id == serverSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_ServerSettings(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_ServerSettings(currentScreen));
         } else if (button.id == statusSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_StatusMessages(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_StatusMessages(currentScreen));
         } else if (button.id == advancedSet.id) {
-            mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(currentScreen));
         } else if (button.id == proceedButton.id) {
             boolean rebooted = false;
             if (CraftPresence.CONFIG.hasChanged) {
@@ -146,10 +149,10 @@ public class ConfigGUI_Main extends GuiScreen {
             if (player != null) {
                 player.closeScreen();
             } else {
-                mc.displayGuiScreen(parentscreen);
+                mc.displayGuiScreen(parentScreen);
             }
         } else if (button.id == aboutButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_About(currentscreen));
+            mc.displayGuiScreen(new ConfigGUI_About(currentScreen));
         }
     }
 

@@ -12,28 +12,33 @@ import java.net.URI;
 
 public class ConfigGUI_About extends GuiScreen {
     private static final String SOURCE_URL = "https://gitlab.com/CDAGaming/CraftPresence";
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentScreen;
     private GuiButton viewSource, backButton;
 
     ConfigGUI_About(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        parentscreen = parentScreen;
+        this.parentScreen = parentScreen;
     }
 
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
+
         backButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
         viewSource = new GuiButton(810, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 55), 180, 20, "View Source");
 
         buttonList.add(backButton);
         buttonList.add(viewSource);
+
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        ScaledResolution sr = new ScaledResolution(mc);
+        drawDefaultBackground();
+
         String title = "About this Configuration GUI";
         String[] notice = ("This Configuration GUI was made from scratch by\n" +
                 "Jonathing, and will continue to be maintained by\n" +
@@ -41,8 +46,7 @@ public class ConfigGUI_About extends GuiScreen {
                 "custom GUI, so show him some support! Thanks.\n\n" +
                 "Feel free to learn from this GUI's code on\n" +
                 "the CraftPresence GitLab repository.").split("\n");
-        ScaledResolution sr = new ScaledResolution(mc);
-        drawDefaultBackground();
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         for (int i = 0; i < notice.length; i++) {
             String string = notice[i];
@@ -54,7 +58,7 @@ public class ConfigGUI_About extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == backButton.id) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (button.id == viewSource.id) {
             try {
                 Desktop.getDesktop().browse(new URI(SOURCE_URL));
@@ -68,7 +72,7 @@ public class ConfigGUI_About extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
     }
 

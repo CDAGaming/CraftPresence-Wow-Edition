@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigGUI_Selector extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentScreen;
     private GuiButton proceedButton, addNewButton;
     private GUIScrollList scrollList;
     private GuiTextField searchBox;
@@ -25,13 +25,13 @@ public class ConfigGUI_Selector extends GuiScreen {
     private String title, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
 
-    ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String TITLE, List<String> list, @Nullable String currentValue, @Nullable String attributeName) {
+    ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, @Nullable String currentValue, @Nullable String attributeName) {
         mc = Minecraft.getMinecraft();
-        parentscreen = parentScreen;
         configoption = configOption;
-        title = TITLE;
         itemList = originalList = list;
         originalValue = currentValue;
+        this.title = title;
+        this.parentScreen = parentScreen;
         this.attributeName = attributeName;
     }
 
@@ -39,6 +39,7 @@ public class ConfigGUI_Selector extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
+
         proceedButton = new GuiButton(700, (sr.getScaledWidth() - 100), (sr.getScaledHeight() - 30), 90, 20, "Back");
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight(), 32, sr.getScaledHeight() - 45, 18, itemList, originalValue);
         searchBox = new GuiTextField(110, fontRenderer, 60, (sr.getScaledHeight() - 30), 120, 20);
@@ -49,14 +50,16 @@ public class ConfigGUI_Selector extends GuiScreen {
         }
 
         buttonList.add(proceedButton);
+
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         ScaledResolution sr = new ScaledResolution(mc);
-        List<String> modifiedList = new ArrayList<>();
         drawDefaultBackground();
+
+        List<String> modifiedList = new ArrayList<>();
 
         if (!searchBox.getText().isEmpty()) {
             if (!searchBox.getText().equals(searchTerm)) {
@@ -94,7 +97,7 @@ public class ConfigGUI_Selector extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, null, configoption));
+            mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, null, configoption));
         } else if (button.id == proceedButton.id) {
             if (scrollList.currentValue != null) {
                 if (originalValue != null) {
@@ -103,17 +106,17 @@ public class ConfigGUI_Selector extends GuiScreen {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultIcon = scrollList.currentValue;
-                            mc.displayGuiScreen(parentscreen);
+                            mc.displayGuiScreen(parentScreen);
                         } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
-                            mc.displayGuiScreen(parentscreen);
+                            mc.displayGuiScreen(parentScreen);
                         } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
-                            mc.displayGuiScreen(parentscreen);
+                            mc.displayGuiScreen(parentScreen);
                         } else if (configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
                             final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                             final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
@@ -124,7 +127,7 @@ public class ConfigGUI_Selector extends GuiScreen {
                                 CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
                             }
                             CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                            mc.displayGuiScreen(parentscreen);
+                            mc.displayGuiScreen(parentScreen);
                         } else if (configoption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
                             final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                             final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
@@ -135,22 +138,22 @@ public class ConfigGUI_Selector extends GuiScreen {
                                 CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
                             }
                             CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                            mc.displayGuiScreen(parentscreen);
+                            mc.displayGuiScreen(parentScreen);
                         } else {
-                            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
+                            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentScreen));
                         }
                     } else {
-                        mc.displayGuiScreen(parentscreen);
+                        mc.displayGuiScreen(parentScreen);
                     }
                 } else {
                     if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configoption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configoption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                        mc.displayGuiScreen(new ConfigGUI_Editor(parentscreen, scrollList.currentValue, configoption));
+                        mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, scrollList.currentValue, configoption));
                     } else {
-                        mc.displayGuiScreen(new ConfigGUI_NullEntry(parentscreen));
+                        mc.displayGuiScreen(new ConfigGUI_NullEntry(parentScreen));
                     }
                 }
             } else {
-                mc.displayGuiScreen(parentscreen);
+                mc.displayGuiScreen(parentScreen);
             }
         }
     }
@@ -158,7 +161,7 @@ public class ConfigGUI_Selector extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         searchBox.textboxKeyTyped(typedChar, keyCode);
     }

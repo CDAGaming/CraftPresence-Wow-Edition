@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_ServerSettings extends GuiScreen {
-    private final GuiScreen parentscreen, currentscreen;
+    private final GuiScreen parentScreen, currentScreen;
     private GuiButton proceedButton, serverMessagesButton, defaultIconButton;
     private GuiTextField defaultMOTD, defaultName, defaultMSG;
 
@@ -22,14 +22,15 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
     ConfigGUI_ServerSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        currentscreen = this;
-        parentscreen = parentScreen;
+        currentScreen = this;
+        this.parentScreen = parentScreen;
     }
 
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
+
         defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         defaultName = new GuiTextField(100, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
@@ -52,12 +53,13 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        ScaledResolution sr = new ScaledResolution(mc);
+        drawDefaultBackground();
+
         String title = "CraftPresence - " + I18n.format("gui.config.title.servermessages");
         String serverNameText = I18n.format("gui.config.name.servermessages.servername");
         String serverMOTDText = I18n.format("gui.config.name.servermessages.servermotd");
         String defaultMessageText = "Default Server Message";
-        ScaledResolution sr = new ScaledResolution(mc);
-        drawDefaultBackground();
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, serverNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -118,18 +120,18 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG.getText());
             }
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (button.id == serverMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null, null));
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultServerIcon));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultServerIcon, null));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         defaultName.textboxKeyTyped(typedChar, keyCode);
         defaultMOTD.textboxKeyTyped(typedChar, keyCode);

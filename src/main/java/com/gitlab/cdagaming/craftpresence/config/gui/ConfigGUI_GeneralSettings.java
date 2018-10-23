@@ -15,7 +15,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_GeneralSettings extends GuiScreen {
-    private final GuiScreen parentscreen, currentscreen;
+    private final GuiScreen parentScreen, currentScreen;
     private GuiButton proceedButton, defaultIconButton;
     private GUICheckBox detectCurseManifestButton, detectMultiMCManifestButton,
             detectTechnicPackButton, showTimeButton,
@@ -24,8 +24,8 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
     ConfigGUI_GeneralSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        currentscreen = this;
-        parentscreen = parentScreen;
+        currentScreen = this;
+        this.parentScreen = parentScreen;
     }
 
     @Override
@@ -65,10 +65,12 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        String title = "CraftPresence - " + I18n.format("gui.config.title.general");
-        String clientIDText = I18n.format("gui.config.name.general.clientid");
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
+
+        String title = "CraftPresence - " + I18n.format("gui.config.title.general");
+        String clientIDText = I18n.format("gui.config.name.general.clientid");
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, clientIDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
@@ -163,16 +165,16 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
             }
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         clientID.textboxKeyTyped(typedChar, keyCode);
     }

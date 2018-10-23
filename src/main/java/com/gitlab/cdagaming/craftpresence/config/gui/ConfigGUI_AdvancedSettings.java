@@ -14,7 +14,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_AdvancedSettings extends GuiScreen {
-    private final GuiScreen parentscreen, currentscreen;
+    private final GuiScreen parentScreen, currentScreen;
     private GuiButton proceedButton, guiMessagesButton, itemMessagesButton;
     private GUICheckBox enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, overwriteServerIconButton;
@@ -22,8 +22,8 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
     ConfigGUI_AdvancedSettings(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        currentscreen = this;
-        parentscreen = parentScreen;
+        currentScreen = this;
+        this.parentScreen = parentScreen;
     }
 
     @Override
@@ -60,10 +60,12 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        String title = "CraftPresence - " + I18n.format("gui.config.title.advanced");
-        String splitCharacterText = I18n.format("gui.config.name.advanced.splitcharacter");
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
+
+        String title = "CraftPresence - " + I18n.format("gui.config.title.advanced");
+        String splitCharacterText = I18n.format("gui.config.name.advanced.splitcharacter");
+
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, splitCharacterText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         splitCharacter.drawTextBox();
@@ -147,18 +149,18 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.overwriteServerIcon = overwriteServerIconButton.isChecked();
             }
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_guiMessages, "CraftPresence - Select a GUI", CraftPresence.GUIS.GUI_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, "CraftPresence - Select a GUI", CraftPresence.GUIS.GUI_NAMES, null, null));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_itemMessages, "CraftPresence - Select an Entity/Item", CraftPresence.ENTITIES.ENTITY_NAMES, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, "CraftPresence - Select an Entity/Item", CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         splitCharacter.textboxKeyTyped(typedChar, keyCode);
     }
