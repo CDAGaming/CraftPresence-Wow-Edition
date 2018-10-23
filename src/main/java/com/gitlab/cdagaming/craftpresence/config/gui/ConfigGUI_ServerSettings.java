@@ -122,7 +122,7 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         } else if (button.id == serverMessagesButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_serverMessages, "CraftPresence - Select Server IP", CraftPresence.SERVER.knownAddresses, null));
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentscreen, CraftPresence.CONFIG.NAME_defaultServerIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultServerIcon));
         }
     }
 

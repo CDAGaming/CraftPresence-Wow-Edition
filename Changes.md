@@ -20,7 +20,7 @@
 
 * Fixes Quite a Few NPE Scenarios
 
-* Fixes some DPI-Awareness Issues in some Config GUI Screens
+* Fixes some DPI-Awareness and Rendering Issues in some Config GUI Screens
 
 * Fixes Inconsistent Logging when CraftPresence couldn't find an Icon
 
