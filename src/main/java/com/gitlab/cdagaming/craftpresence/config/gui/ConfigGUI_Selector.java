@@ -76,7 +76,13 @@ public class ConfigGUI_Selector extends GuiScreen {
         }
 
         if (!itemList.equals(originalList) && !itemList.contains(scrollList.currentValue)) {
-            scrollList.currentValue = null;
+            if (originalValue != null && itemList.contains(originalValue)) {
+                scrollList.currentValue = originalValue;
+            } else {
+                scrollList.currentValue = null;
+            }
+        } else if (scrollList.currentValue == null && originalValue != null) {
+            scrollList.currentValue = originalValue;
         }
 
         scrollList.itemList = itemList;
