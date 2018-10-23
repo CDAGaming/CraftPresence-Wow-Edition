@@ -113,7 +113,7 @@ public class CPCommands extends CommandBase {
                     if (args[1].equalsIgnoreCase("dimensions")) {
                         StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.dimensions.header", CraftPresence.DIMENSIONS.DIMENSION_NAMES));
                     } else if (args[1].equalsIgnoreCase("currentData")) {
-                        StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.currentdata", CraftPresence.CLIENT.DETAILS, CraftPresence.CLIENT.GAME_STATE, CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, CraftPresence.CLIENT.LARGEIMAGEKEY, CraftPresence.CLIENT.LARGEIMAGETEXT, CraftPresence.CLIENT.SMALLIMAGEKEY, CraftPresence.CLIENT.SMALLIMAGETEXT));
+                        StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.currentdata", CraftPresence.CLIENT.DETAILS, CraftPresence.CLIENT.GAME_STATE, CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, CraftPresence.CLIENT.LARGEIMAGEKEY, CraftPresence.CLIENT.LARGEIMAGETEXT, CraftPresence.CLIENT.SMALLIMAGEKEY, CraftPresence.CLIENT.SMALLIMAGETEXT, CraftPresence.CLIENT.PARTY_ID, CraftPresence.CLIENT.PARTY_SIZE, CraftPresence.CLIENT.PARTY_MAX, CraftPresence.CLIENT.JOIN_SECRET, CraftPresence.CLIENT.END_TIMESTAMP, CraftPresence.CLIENT.MATCH_SECRET, CraftPresence.CLIENT.SPECTATE_SECRET, CraftPresence.CLIENT.INSTANCE));
                     } else if (args[1].equalsIgnoreCase("assets")) {
                         if (args.length == 2) {
                             StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.usage.assets"));

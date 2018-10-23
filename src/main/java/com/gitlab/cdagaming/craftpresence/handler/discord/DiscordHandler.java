@@ -31,10 +31,10 @@ public class DiscordHandler {
     public int PARTY_SIZE;
     public int PARTY_MAX;
     public String JOIN_SECRET;
-    private long END_TIMESTAMP;
-    private String MATCH_SECRET;
-    private String SPECTATE_SECRET;
-    private byte INSTANCE;
+    public long END_TIMESTAMP;
+    public String MATCH_SECRET;
+    public String SPECTATE_SECRET;
+    public byte INSTANCE;
 
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private Thread callbackThread = null;
