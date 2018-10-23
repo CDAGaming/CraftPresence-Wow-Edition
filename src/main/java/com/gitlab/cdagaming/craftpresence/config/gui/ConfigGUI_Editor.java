@@ -160,7 +160,7 @@ public class ConfigGUI_Editor extends GuiScreen {
                     }
                 }
             }
-            if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !isDefaultValue)) {
+            if (StringHandler.isNullOrEmpty(specificMessage.getText()) || (specificMessage.getText().equalsIgnoreCase(defaultMSG) && !specificMSG.equals(defaultMSG) && !isDefaultValue)) {
                 if (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText())) {
                     attributeName = newValueName.getText();
                 }
