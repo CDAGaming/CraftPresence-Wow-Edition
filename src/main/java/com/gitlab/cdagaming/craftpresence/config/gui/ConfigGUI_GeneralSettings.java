@@ -80,7 +80,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Client ID Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.clientid")), mouseX, mouseY);
         }
         if (defaultIconButton.isMouseOver()) {

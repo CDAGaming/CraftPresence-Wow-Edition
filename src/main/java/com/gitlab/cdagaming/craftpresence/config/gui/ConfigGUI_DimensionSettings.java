@@ -65,7 +65,7 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Default Dimension Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
         }
         if (dimensionMessagesButton.isMouseOver()) {

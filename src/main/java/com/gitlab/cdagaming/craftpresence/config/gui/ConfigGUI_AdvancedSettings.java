@@ -77,7 +77,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Split Character Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY);
         }
         if (enableCommandsButton.isMouseOver()) {

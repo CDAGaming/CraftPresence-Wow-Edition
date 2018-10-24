@@ -62,7 +62,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Default Biome Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
         }
         if (biomeMessagesButton.isMouseOver()) {

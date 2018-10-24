@@ -76,15 +76,15 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Default Server Name Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servername")), mouseX, mouseY);
         }
         // Hovering over Default Server MOTD Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermotd")), mouseX, mouseY);
         }
         // Hovering over Default Server Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), 20)) {
+        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
         }
         if (serverMessagesButton.isMouseOver()) {
