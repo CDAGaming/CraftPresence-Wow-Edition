@@ -1,14 +1,17 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.List;
 
 public class ConfigGUI_About extends GuiScreen {
     private static final String SOURCE_URL = "https://gitlab.com/CDAGaming/CraftPresence";
@@ -39,19 +42,15 @@ public class ConfigGUI_About extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = "About this Configuration GUI";
-        String[] notice = ("This Configuration GUI was made from scratch by\n" +
-                "Jonathing, and will continue to be maintained by\n" +
-                "CDAGaming. A lot of effort went into making this\n" +
-                "custom GUI, so show him some support! Thanks.\n\n" +
-                "Feel free to learn from this GUI's code on\n" +
-                "the CraftPresence GitLab repository.").split("\n");
+        final String title = I18n.format("gui.config.title.about.config");
+        final List<String> notice = StringHandler.splitTextByNewLine(I18n.format("gui.config.message.credits"));
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        for (int i = 0; i < notice.length; i++) {
-            String string = notice[i];
+        for (int i = 0; i < notice.size(); i++) {
+            final String string = notice.get(i);
             drawString(fontRenderer, string, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
         }
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

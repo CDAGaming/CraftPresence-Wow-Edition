@@ -57,15 +57,15 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = "CraftPresence - " + I18n.format("gui.config.title.statusmessages");
-        String mainMenuText = I18n.format("gui.config.name.statusmessages.mainmenumsg");
-        String singlePlayerText = I18n.format("gui.config.name.statusmessages.singleplayermsg");
-        String loadingText = I18n.format("gui.config.name.statusmessages.loadingmsg");
-        String packText = I18n.format("gui.config.name.statusmessages.placeholder.packmsg");
-        String playerText = I18n.format("gui.config.name.statusmessages.placeholder.playermsg");
-        String playerAmountText = I18n.format("gui.config.name.statusmessages.placeholder.playeramountmsg");
-        String gameTimeText = I18n.format("gui.config.name.statusmessages.placeholder.gametimemsg");
-        String viveCraftText = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg");
+        final String title = "CraftPresence - " + I18n.format("gui.config.title.statusmessages");
+        final String mainMenuText = I18n.format("gui.config.name.statusmessages.mainmenumsg");
+        final String singlePlayerText = I18n.format("gui.config.name.statusmessages.singleplayermsg");
+        final String loadingText = I18n.format("gui.config.name.statusmessages.loadingmsg");
+        final String packText = I18n.format("gui.config.name.statusmessages.placeholder.packmsg");
+        final String playerText = I18n.format("gui.config.name.statusmessages.placeholder.playermsg");
+        final String playerAmountText = I18n.format("gui.config.name.statusmessages.placeholder.playeramountmsg");
+        final String gameTimeText = I18n.format("gui.config.name.statusmessages.placeholder.gametimemsg");
+        final String viveCraftText = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 5, 0xFFFFFF);
         drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) - 16, 0xFFFFFF);

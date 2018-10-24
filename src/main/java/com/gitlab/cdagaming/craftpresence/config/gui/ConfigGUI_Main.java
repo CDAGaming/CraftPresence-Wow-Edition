@@ -60,7 +60,7 @@ public class ConfigGUI_Main extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = I18n.format("gui.config.title");
+        final String title = I18n.format("gui.config.title");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
@@ -69,11 +69,7 @@ public class ConfigGUI_Main extends GuiScreen {
         serverSet.enabled = CraftPresence.CONFIG.showGameState;
         statusSet.enabled = CraftPresence.CONFIG.showGameState;
 
-        if (CraftPresence.CONFIG.hasChanged) {
-            proceedButton.displayString = "Save";
-        } else {
-            proceedButton.displayString = "Back";
-        }
+        proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? I18n.format("gui.config.buttonMessage.save") : I18n.format("gui.config.buttonMessage.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

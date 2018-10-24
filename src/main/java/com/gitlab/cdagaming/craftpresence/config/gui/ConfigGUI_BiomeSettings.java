@@ -49,8 +49,8 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = "CraftPresence - " + I18n.format("gui.config.title.biomemessages");
-        String defaultMessageText = "Default Biome Message";
+        final String title = "CraftPresence - " + I18n.format("gui.config.title.biomemessages");
+        final String defaultMessageText = I18n.format("gui.config.defaultMessage.biome");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);

@@ -56,10 +56,10 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = "CraftPresence - " + I18n.format("gui.config.title.servermessages");
-        String serverNameText = I18n.format("gui.config.name.servermessages.servername");
-        String serverMOTDText = I18n.format("gui.config.name.servermessages.servermotd");
-        String defaultMessageText = "Default Server Message";
+        final String title = "CraftPresence - " + I18n.format("gui.config.title.servermessages");
+        final String serverNameText = I18n.format("gui.config.name.servermessages.servername");
+        final String serverMOTDText = I18n.format("gui.config.name.servermessages.servermotd");
+        final String defaultMessageText = I18n.format("gui.config.defaultMessage.server");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, serverNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);

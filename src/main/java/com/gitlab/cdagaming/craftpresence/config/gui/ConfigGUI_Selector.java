@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
@@ -59,6 +60,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
+        final String searchText = I18n.format("gui.config.editorMessage.search");
         List<String> modifiedList = new ArrayList<>();
 
         if (!searchBox.getText().isEmpty()) {
@@ -87,15 +89,11 @@ public class ConfigGUI_Selector extends GuiScreen {
 
         scrollList.itemList = itemList;
         scrollList.drawScreen(mouseX, mouseY, partialTicks);
-        drawString(fontRenderer, "Search:", (30 - (fontRenderer.getStringWidth("Search:") / 2)), (sr.getScaledHeight() - 25), 0xFFFFFF);
+        drawString(fontRenderer, searchText, (30 - (fontRenderer.getStringWidth(searchText) / 2)), (sr.getScaledHeight() - 25), 0xFFFFFF);
         searchBox.drawTextBox();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
-        if (scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue)))) {
-            proceedButton.displayString = "Continue";
-        } else {
-            proceedButton.displayString = "Back";
-        }
+        proceedButton.displayString = scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? I18n.format("gui.config.buttonMessage.continue") : I18n.format("gui.config.buttonMessage.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

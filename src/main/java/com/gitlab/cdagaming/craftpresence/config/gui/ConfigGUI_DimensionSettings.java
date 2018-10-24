@@ -52,8 +52,8 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = "CraftPresence - " + I18n.format("gui.config.title.dimensionmessages");
-        String defaultMessageText = "Default Dimension Message";
+        final String title = "CraftPresence - " + I18n.format("gui.config.title.dimensionmessages");
+        final String defaultMessageText = I18n.format("gui.config.defaultMessage.dimension");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);

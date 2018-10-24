@@ -101,8 +101,8 @@ public class ConfigGUI_Editor extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String messageText = "Message:";
-        String valueNameText = "Value Name:";
+        final String messageText = I18n.format("gui.config.editorMessage.message");
+        final String valueNameText = I18n.format("gui.config.editorMessage.valuename");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, messageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -114,11 +114,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         }
         specificMessage.drawTextBox();
 
-        if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG))) {
-            proceedButton.displayString = "Continue";
-        } else {
-            proceedButton.displayString = "Back";
-        }
+        proceedButton.displayString = !specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG)) ? I18n.format("gui.config.buttonMessage.continue") : I18n.format("gui.config.buttonMessage.back");
 
         proceedButton.enabled = !(StringHandler.isNullOrEmpty(specificMessage.getText()) && isDefaultValue);
 

@@ -1,10 +1,14 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
+
+import java.util.List;
 
 public class ConfigGUI_NullEntry extends GuiScreen {
     private final GuiScreen parentScreen;
@@ -32,15 +36,15 @@ public class ConfigGUI_NullEntry extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        String title = "CraftPresence - Error";
-        String[] notice = ("This GUI is not Implemented just yet!\n\n" +
-                "Please Check Back Later..").split("\n");
+        final String title = I18n.format("gui.config.title.error");
+        final List<String> notice = StringHandler.splitTextByNewLine(I18n.format("gui.config.errorMessage.null"));
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        for (int i = 0; i < notice.length; i++) {
-            String string = notice[i];
+        for (int i = 0; i < notice.size(); i++) {
+            final String string = notice.get(i);
             drawString(fontRenderer, string, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
         }
+
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
