@@ -13,13 +13,13 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_StatusMessages extends GuiScreen {
-    private final GuiScreen parentscreen;
+    private final GuiScreen parentScreen;
     private GuiButton proceedButton;
     private GuiTextField mainMenuMSG, singleplayerMSG, loadingMSG, packMSG, playerMSG, playerAmountMSG, gameTimeMSG, viveCraftMSG;
 
     ConfigGUI_StatusMessages(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
-        parentscreen = parentScreen;
+        this.parentScreen = parentScreen;
     }
 
     @Override
@@ -170,14 +170,14 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.vivecraftMessage = viveCraftMSG.getText();
             }
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            mc.displayGuiScreen(parentscreen);
+            mc.displayGuiScreen(parentScreen);
         }
         mainMenuMSG.textboxKeyTyped(typedChar, keyCode);
         singleplayerMSG.textboxKeyTyped(typedChar, keyCode);
