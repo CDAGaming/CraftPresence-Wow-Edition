@@ -63,7 +63,8 @@ gui.config.name.statusmessages.placeholder.packmsg=ModPack Message
 gui.config.name.statusmessages.placeholder.playermsg=Player Name Placeholder
 gui.config.name.statusmessages.placeholder.playeramountmsg=Player List Placeholder
 gui.config.name.statusmessages.placeholder.gametimemsg=Game Time Placeholder
-gui.config.name.statusmessages.special.vivecraftmsg=ViveCraft Message
+gui.config.name.statusmessages.placeholder.modsmsg=Mods Placeholder
+gui.config.name.statusmessages.special.vivecraftmsg=Vivecraft Message
 gui.config.name.advanced.splitcharacter=Split Character
 gui.config.name.advanced.enablecommands=Enable Commands
 gui.config.name.advanced.enablepergui=Enable Per-GUI System
@@ -96,7 +97,8 @@ gui.config.comment.statusmessages.placeholder.packmsg=Message to display in Rich
 gui.config.comment.statusmessages.placeholder.playermsg=Message to use for the &ign& Placeholder \n Available Placeholders: \n - &name& = Your Username
 gui.config.comment.statusmessages.placeholder.playeramountmsg=Message to use for the &players& Placeholder \n Available Placeholders: \n - &current& = Current Player Count \n - &max& = Maximum Player Count
 gui.config.comment.statusmessages.placeholder.gametimemsg=Message to use for the &time& Placeholder \n Available Placeholders: \n - &worldtime& = The Current World Time, in format of HH:MM
-gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using ViveCraft
+gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder \n Available Placeholders: \n - &modcount& = The Amount of Mods currently in your Mods Folder
+gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs \n (You'll need to change each of your variables manually)
 gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Takes Effect after Restarting Minecraft)
 gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - Overwrites Biomes \n - Requires an Option in GUI Messages
@@ -119,6 +121,7 @@ craftpresence.defaults.placeholder.pack=&name&
 craftpresence.defaults.placeholder.players=&current& / &max& Players
 craftpresence.defaults.placeholder.ign=&name&
 craftpresence.defaults.placeholder.time=&worldtime&
+craftpresence.defaults.placeholder.mods=&modcount& Mods
 craftpresence.defaults.special.vivecraft=Playing in VR via Vivecraft
 ## COMMAND MESSAGES ##
 craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lconfig §r- Open CraftPresence's Config GUI \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page

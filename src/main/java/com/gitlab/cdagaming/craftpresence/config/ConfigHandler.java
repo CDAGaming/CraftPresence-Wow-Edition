@@ -28,7 +28,7 @@ public class ConfigHandler {
     // STATUS MESSAGES
     public String NAME_mainmenuMSG, NAME_singleplayerMSG, NAME_loadingMSG,
             NAME_packPlaceholderMSG, NAME_playerPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
-            NAME_gameTimePlaceholderMSG, NAME_vivecraftMessage;
+            NAME_gameTimePlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
@@ -49,7 +49,7 @@ public class ConfigHandler {
     // STATUS MESSAGES
     public String mainmenuMSG, singleplayerMSG, loadingMSG, packPlaceholderMSG,
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
-            gameTimePlaceholderMSG, vivecraftMessage;
+            gameTimePlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
     public boolean enableCommands, enablePERGUI, enablePERItem, overwriteServerIcon;
     public String splitCharacter;
@@ -111,6 +111,7 @@ public class ConfigHandler {
         NAME_playerPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.playermsg").replaceAll(" ", "_");
         NAME_playerAmountPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.playeramountmsg").replaceAll(" ", "_");
         NAME_gameTimePlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.gametimemsg").replaceAll(" ", "_");
+        NAME_modsPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.modsmsg").replaceAll(" ", "_");
         NAME_vivecraftMessage = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg").replaceAll(" ", "_");
         mainmenuMSG = I18n.format("craftpresence.defaults.state.mainmenu");
         singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer");
@@ -119,6 +120,7 @@ public class ConfigHandler {
         playerPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.ign");
         playerAmountPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.players");
         gameTimePlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.time");
+        modsPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.mods");
         vivecraftMessage = I18n.format("craftpresence.defaults.special.vivecraft");
         // ADVANCED
         NAME_enableCommands = I18n.format("gui.config.name.advanced.enablecommands").replaceAll(" ", "_");
@@ -196,6 +198,7 @@ public class ConfigHandler {
                 playerPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_playerPlaceholderMSG)) ? properties.getProperty(NAME_playerPlaceholderMSG) : playerPlaceholderMSG;
                 playerAmountPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_playerAmountPlaceholderMSG)) ? properties.getProperty(NAME_playerAmountPlaceholderMSG) : playerAmountPlaceholderMSG;
                 gameTimePlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_gameTimePlaceholderMSG)) ? properties.getProperty(NAME_gameTimePlaceholderMSG) : gameTimePlaceholderMSG;
+                modsPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_modsPlaceholderMSG)) ? properties.getProperty(NAME_modsPlaceholderMSG) : modsPlaceholderMSG;
                 vivecraftMessage = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_vivecraftMessage)) ? properties.getProperty(NAME_vivecraftMessage) : vivecraftMessage;
                 // ADVANCED
                 enableCommands = StringHandler.isValidBoolean(properties.getProperty(NAME_enableCommands)) ? Boolean.parseBoolean(properties.getProperty(NAME_enableCommands)) : enableCommands;
@@ -246,6 +249,7 @@ public class ConfigHandler {
         properties.setProperty(NAME_playerPlaceholderMSG, playerPlaceholderMSG);
         properties.setProperty(NAME_playerAmountPlaceholderMSG, playerAmountPlaceholderMSG);
         properties.setProperty(NAME_gameTimePlaceholderMSG, gameTimePlaceholderMSG);
+        properties.setProperty(NAME_modsPlaceholderMSG, modsPlaceholderMSG);
         properties.setProperty(NAME_vivecraftMessage, vivecraftMessage);
         // ADVANCED
         properties.setProperty(NAME_enableCommands, Boolean.toString(enableCommands));

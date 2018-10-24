@@ -38,6 +38,20 @@ public class FileHandler {
         return name.substring(lastIndexOf);
     }
 
+    public static int getModCount() {
+        int modCount = 0;
+        final File[] mods = new File(Constants.modsDir).listFiles();
+
+        if (mods != null) {
+            for (File modFile : mods) {
+                if (getFileExtension(modFile).equals(".jar")) {
+                    modCount++;
+                }
+            }
+        }
+        return modCount;
+    }
+
     public static List<String> getModClassNames() {
         List<String> classNames = new ArrayList<>();
         final File[] mods = new File(Constants.modsDir).listFiles();
