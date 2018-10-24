@@ -13,12 +13,14 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_StatusMessages extends GuiScreen {
+    private int pageNumber;
     private final GuiScreen parentScreen;
-    private GuiButton proceedButton;
+    private GuiButton proceedButton, nextPageButton, previousPageButton;
     private GuiTextField mainMenuMSG, singleplayerMSG, loadingMSG, packMSG, playerMSG, playerAmountMSG, gameTimeMSG, viveCraftMSG;
 
     ConfigGUI_StatusMessages(GuiScreen parentScreen) {
         mc = Minecraft.getMinecraft();
+        pageNumber = 0;
         this.parentScreen = parentScreen;
     }
 
@@ -27,14 +29,17 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1) - 18, 180, 15);
-        singleplayerMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2) - 18, 180, 15);
-        loadingMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3) - 18, 180, 15);
-        packMSG = new GuiTextField(140, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(4) - 18, 180, 15);
-        playerMSG = new GuiTextField(150, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(5) - 18, 180, 15);
-        playerAmountMSG = new GuiTextField(160, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(6) - 18, 180, 15);
-        gameTimeMSG = new GuiTextField(170, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(7) - 18, 180, 15);
-        viveCraftMSG = new GuiTextField(180, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(8) - 18, 180, 15);
+        // Page 1 Items
+        mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        singleplayerMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        loadingMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+
+        // Page 2 Items
+        packMSG = new GuiTextField(140, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        playerMSG = new GuiTextField(150, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        playerAmountMSG = new GuiTextField(160, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        gameTimeMSG = new GuiTextField(170, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
+        viveCraftMSG = new GuiTextField(180, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
 
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
         singleplayerMSG.setText(CraftPresence.CONFIG.singleplayerMSG);
@@ -45,8 +50,12 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         gameTimeMSG.setText(CraftPresence.CONFIG.gameTimePlaceholderMSG);
         viveCraftMSG.setText(CraftPresence.CONFIG.vivecraftMessage);
 
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 25), 180, 20, "Back");
+        previousPageButton = new GuiButton(700, 5, (sr.getScaledHeight() - 30), 20, 20, "<");
+        nextPageButton = new GuiButton(800, (sr.getScaledWidth() - 25), (sr.getScaledHeight() - 30), 20, 20, ">");
+        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
+        buttonList.add(previousPageButton);
+        buttonList.add(nextPageButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -67,61 +76,76 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         final String gameTimeText = I18n.format("gui.config.name.statusmessages.placeholder.gametimemsg");
         final String viveCraftText = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg");
 
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 5, 0xFFFFFF);
-        drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) - 16, 0xFFFFFF);
-        drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) - 16, 0xFFFFFF);
-        drawString(fontRenderer, loadingText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) - 16, 0xFFFFFF);
-        drawString(fontRenderer, packText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) - 16, 0xFFFFFF);
-        drawString(fontRenderer, playerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(5) - 16, 0xFFFFFF);
-        drawString(fontRenderer, playerAmountText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(6) - 16, 0xFFFFFF);
-        drawString(fontRenderer, gameTimeText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(7) - 16, 0xFFFFFF);
-        drawString(fontRenderer, viveCraftText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(8) - 16, 0xFFFFFF);
+        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
-        mainMenuMSG.drawTextBox();
-        singleplayerMSG.drawTextBox();
-        loadingMSG.drawTextBox();
-        packMSG.drawTextBox();
-        playerMSG.drawTextBox();
-        playerAmountMSG.drawTextBox();
-        gameTimeMSG.drawTextBox();
-        viveCraftMSG.drawTextBox();
+        if (pageNumber == 0) {
+            drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            drawString(fontRenderer, loadingText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringHandler.isNullOrEmpty(mainMenuMSG.getText()) || !StringHandler.isNullOrEmpty(singleplayerMSG.getText()) || !StringHandler.isNullOrEmpty(loadingMSG.getText()) || !StringHandler.isNullOrEmpty(packMSG.getText()) || !StringHandler.isNullOrEmpty(playerMSG.getText()) || !StringHandler.isNullOrEmpty(playerAmountMSG.getText()) || !StringHandler.isNullOrEmpty(gameTimeMSG.getText()) || !StringHandler.isNullOrEmpty(viveCraftMSG.getText());
+            mainMenuMSG.drawTextBox();
+            singleplayerMSG.drawTextBox();
+            loadingMSG.drawTextBox();
+        }
+
+        if (pageNumber == 1) {
+            drawString(fontRenderer, packText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(fontRenderer, playerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            drawString(fontRenderer, playerAmountText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, gameTimeText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            drawString(fontRenderer, viveCraftText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
+
+            packMSG.drawTextBox();
+            playerMSG.drawTextBox();
+            playerAmountMSG.drawTextBox();
+            gameTimeMSG.drawTextBox();
+            viveCraftMSG.drawTextBox();
+        }
+
+        previousPageButton.enabled = pageNumber != 0;
+        nextPageButton.enabled = pageNumber != 1;
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(mainMenuMSG.getText()) && !StringHandler.isNullOrEmpty(singleplayerMSG.getText()) && !StringHandler.isNullOrEmpty(loadingMSG.getText()) && !StringHandler.isNullOrEmpty(packMSG.getText()) && !StringHandler.isNullOrEmpty(playerMSG.getText()) && !StringHandler.isNullOrEmpty(playerAmountMSG.getText()) && !StringHandler.isNullOrEmpty(gameTimeMSG.getText()) && !StringHandler.isNullOrEmpty(viveCraftMSG.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        // Hovering over Main Menu Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) - 16, fontRenderer.getStringWidth(mainMenuText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.mainmenumsg")), mouseX, mouseY);
+        if (pageNumber == 0) {
+            // Hovering over Main Menu Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(mainMenuText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.mainmenumsg")), mouseX, mouseY);
+            }
+            // Hovering over Single Player Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(singlePlayerText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.singleplayermsg")), mouseX, mouseY);
+            }
+            // Hovering over Loading Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(loadingText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY);
+            }
         }
-        // Hovering over Single Player Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) - 16, fontRenderer.getStringWidth(singlePlayerText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.singleplayermsg")), mouseX, mouseY);
+
+        if (pageNumber == 1) {
+            // Hovering over Pack Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(packText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.packmsg")), mouseX, mouseY);
+            }
+            // Hovering over Player Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(playerText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.playermsg")), mouseX, mouseY);
+            }
+            // Hovering over Player Amount Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(playerAmountText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.playeramountmsg")), mouseX, mouseY);
+            }
+            // Hovering over Game Time Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, fontRenderer.getStringWidth(gameTimeText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.gametimemsg")), mouseX, mouseY);
+            }
+            // Hovering over Vivecraft Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(5) + 5, fontRenderer.getStringWidth(viveCraftText), 20)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.special.vivecraftmsg")), mouseX, mouseY);
+            }
         }
-        // Hovering over Loading Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) - 16, fontRenderer.getStringWidth(loadingText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY);
-        }
-        // Hovering over Pack Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) - 16, fontRenderer.getStringWidth(packText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.packmsg")), mouseX, mouseY);
-        }
-        // Hovering over Player Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(5) - 16, fontRenderer.getStringWidth(playerText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.playermsg")), mouseX, mouseY);
-        }
-        // Hovering over Player Amount Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(6) - 16, fontRenderer.getStringWidth(playerAmountText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.playeramountmsg")), mouseX, mouseY);
-        }
-        // Hovering over Game Time Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(7) - 16, fontRenderer.getStringWidth(gameTimeText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.placeholder.gametimemsg")), mouseX, mouseY);
-        }
-        // Hovering over Vivecraft Message Label
-        if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(8) - 16, fontRenderer.getStringWidth(viveCraftText), 20)) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.special.vivecraftmsg")), mouseX, mouseY);
-        }
+
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
         }
@@ -129,6 +153,13 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        if (button.id == previousPageButton.id && pageNumber != 0) {
+            pageNumber--;
+        }
+        if (button.id == nextPageButton.id && pageNumber != 1) {
+            pageNumber++;
+        }
+
         if (button.id == proceedButton.id) {
             if (!mainMenuMSG.getText().equals(CraftPresence.CONFIG.mainmenuMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
@@ -179,39 +210,64 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         if (keyCode == 1) {
             mc.displayGuiScreen(parentScreen);
         }
-        mainMenuMSG.textboxKeyTyped(typedChar, keyCode);
-        singleplayerMSG.textboxKeyTyped(typedChar, keyCode);
-        loadingMSG.textboxKeyTyped(typedChar, keyCode);
-        packMSG.textboxKeyTyped(typedChar, keyCode);
-        playerMSG.textboxKeyTyped(typedChar, keyCode);
-        playerAmountMSG.textboxKeyTyped(typedChar, keyCode);
-        gameTimeMSG.textboxKeyTyped(typedChar, keyCode);
-        viveCraftMSG.textboxKeyTyped(typedChar, keyCode);
+
+        if (keyCode == 203 && pageNumber != 0) {
+            pageNumber--;
+        }
+
+        if (keyCode == 205 && pageNumber != 1) {
+            pageNumber++;
+        }
+
+        if (pageNumber == 0) {
+            mainMenuMSG.textboxKeyTyped(typedChar, keyCode);
+            singleplayerMSG.textboxKeyTyped(typedChar, keyCode);
+            loadingMSG.textboxKeyTyped(typedChar, keyCode);
+        }
+
+        if (pageNumber == 1) {
+            packMSG.textboxKeyTyped(typedChar, keyCode);
+            playerMSG.textboxKeyTyped(typedChar, keyCode);
+            playerAmountMSG.textboxKeyTyped(typedChar, keyCode);
+            gameTimeMSG.textboxKeyTyped(typedChar, keyCode);
+            viveCraftMSG.textboxKeyTyped(typedChar, keyCode);
+        }
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        mainMenuMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        singleplayerMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        loadingMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        packMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        playerMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        playerAmountMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        gameTimeMSG.mouseClicked(mouseX, mouseY, mouseButton);
-        viveCraftMSG.mouseClicked(mouseX, mouseY, mouseButton);
+        if (pageNumber == 0) {
+            mainMenuMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            singleplayerMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            loadingMSG.mouseClicked(mouseX, mouseY, mouseButton);
+        }
+
+        if (pageNumber == 1) {
+            packMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            playerMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            playerAmountMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            gameTimeMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            viveCraftMSG.mouseClicked(mouseX, mouseY, mouseButton);
+        }
+
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void updateScreen() {
-        mainMenuMSG.updateCursorCounter();
-        singleplayerMSG.updateCursorCounter();
-        loadingMSG.updateCursorCounter();
-        packMSG.updateCursorCounter();
-        playerMSG.updateCursorCounter();
-        playerAmountMSG.updateCursorCounter();
-        gameTimeMSG.updateCursorCounter();
-        viveCraftMSG.updateCursorCounter();
+        if (pageNumber == 0) {
+            mainMenuMSG.updateCursorCounter();
+            singleplayerMSG.updateCursorCounter();
+            loadingMSG.updateCursorCounter();
+        }
+
+        if (pageNumber == 1) {
+            packMSG.updateCursorCounter();
+            playerMSG.updateCursorCounter();
+            playerAmountMSG.updateCursorCounter();
+            gameTimeMSG.updateCursorCounter();
+            viveCraftMSG.updateCursorCounter();
+        }
     }
 
     @Override
