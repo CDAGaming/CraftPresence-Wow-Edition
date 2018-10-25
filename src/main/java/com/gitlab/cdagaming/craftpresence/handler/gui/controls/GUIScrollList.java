@@ -37,6 +37,6 @@ public class GUIScrollList extends GuiSlot {
 
     @Override
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-        mc.fontRenderer.drawStringWithShadow(itemList.get(slotIndex), xPos, yPos + 1, 16777215);
+        mc.fontRenderer.drawStringWithShadow(itemList.get(slotIndex), xPos, yPos, 0xFFFFFF);
     }
 }

@@ -1,8 +1,8 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -19,7 +19,7 @@ public class ConfigGUI_About extends GuiScreen {
     private GuiButton viewSource, backButton;
 
     ConfigGUI_About(GuiScreen parentScreen) {
-        mc = Minecraft.getMinecraft();
+        mc = CraftPresence.instance;
         this.parentScreen = parentScreen;
     }
 

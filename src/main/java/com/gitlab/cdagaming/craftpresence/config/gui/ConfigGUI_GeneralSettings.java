@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -23,7 +22,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     private GuiTextField clientID;
 
     ConfigGUI_GeneralSettings(GuiScreen parentScreen) {
-        mc = Minecraft.getMinecraft();
+        mc = CraftPresence.instance;
         currentScreen = this;
         this.parentScreen = parentScreen;
     }

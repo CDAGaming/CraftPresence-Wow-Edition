@@ -3,7 +3,6 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -21,7 +20,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     private boolean isNewValue, isDefaultValue;
 
     ConfigGUI_Editor(GuiScreen parentScreen, String attributeName, String configOption) {
-        mc = Minecraft.getMinecraft();
+        mc = CraftPresence.instance;
         currentScreen = this;
         this.parentScreen = parentScreen;
         this.configOption = configOption;

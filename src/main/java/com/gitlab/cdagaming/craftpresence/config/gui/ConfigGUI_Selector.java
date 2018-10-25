@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIScrollList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -22,18 +21,17 @@ public class ConfigGUI_Selector extends GuiScreen {
     private GuiButton proceedButton, addNewButton;
     private GUIScrollList scrollList;
     private GuiTextField searchBox;
-    private String configoption;
-    private String title, attributeName, originalValue, searchTerm;
+    private String title, configOption, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
 
     ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, @Nullable String currentValue, @Nullable String attributeName) {
-        mc = Minecraft.getMinecraft();
-        configoption = configOption;
+        mc = CraftPresence.instance;
         itemList = originalList = list;
         originalValue = currentValue;
         this.title = title;
         this.parentScreen = parentScreen;
         this.attributeName = attributeName;
+        this.configOption = configOption;
     }
 
     @Override
@@ -101,27 +99,27 @@ public class ConfigGUI_Selector extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, null, configoption));
+            mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, null, configOption));
         } else if (button.id == proceedButton.id) {
             if (scrollList.currentValue != null) {
                 if (originalValue != null) {
                     if (!scrollList.currentValue.equals(originalValue)) {
-                        if (configoption.equals(CraftPresence.CONFIG.NAME_defaultIcon)) {
+                        if (configOption.equals(CraftPresence.CONFIG.NAME_defaultIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultIcon = scrollList.currentValue;
                             mc.displayGuiScreen(parentScreen);
-                        } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) {
+                        } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
                             mc.displayGuiScreen(parentScreen);
-                        } else if (configoption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon)) {
+                        } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
                             mc.displayGuiScreen(parentScreen);
-                        } else if (configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
+                        } else if (configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
                             final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                             final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
@@ -132,7 +130,7 @@ public class ConfigGUI_Selector extends GuiScreen {
                             }
                             CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
                             mc.displayGuiScreen(parentScreen);
-                        } else if (configoption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
+                        } else if (configOption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
                             final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                             final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
@@ -150,8 +148,8 @@ public class ConfigGUI_Selector extends GuiScreen {
                         mc.displayGuiScreen(parentScreen);
                     }
                 } else {
-                    if (configoption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configoption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configoption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configoption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configoption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                        mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, scrollList.currentValue, configoption));
+                    if (configOption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configOption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configOption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                        mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, scrollList.currentValue, configOption));
                     } else {
                         mc.displayGuiScreen(new ConfigGUI_NullEntry(parentScreen));
                     }

@@ -1,7 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -15,7 +15,7 @@ public class ConfigGUI_NullEntry extends GuiScreen {
     private GuiButton backButton;
 
     ConfigGUI_NullEntry(GuiScreen parentScreen) {
-        mc = Minecraft.getMinecraft();
+        mc = CraftPresence.instance;
         this.parentScreen = parentScreen;
     }
 

@@ -58,8 +58,4 @@ public class GUICheckBox extends GuiButton {
     public boolean isChecked() {
         return is_Checked;
     }
-
-    public void setIsChecked(boolean isChecked) {
-        is_Checked = isChecked;
-    }
 }

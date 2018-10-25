@@ -5,7 +5,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
@@ -187,9 +186,8 @@ public class ServerHandler {
 
         if (isValidSecret) {
             ServerData serverData = new ServerData(serverName, serverIP, false);
-            Minecraft mc = Minecraft.getMinecraft();
 
-            mc.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), mc, serverData));
+            CraftPresence.instance.displayGuiScreen(new GuiConnecting(new GuiMainMenu(), CraftPresence.instance, serverData));
             CraftPresence.CLIENT.handlers.joinGame.accept(secret);
         } else {
             Constants.LOG.error("Secret Key Invalid, Join Request Rejected: " + secret);
@@ -223,7 +221,7 @@ public class ServerHandler {
     }
 
     public void getServerAddresses() {
-        final ServerList serverList = new ServerList(Minecraft.getMinecraft());
+        final ServerList serverList = new ServerList(CraftPresence.instance);
         serverList.loadServerList();
         int currentIndex = 0;
         serverIndex = serverList.countServers();

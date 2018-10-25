@@ -19,7 +19,7 @@ public class ConfigGUI_Main extends GuiScreen {
     private GuiButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
-        mc = Minecraft.getMinecraft();
+        mc = CraftPresence.instance;
         player = mc.player;
         currentScreen = this;
         this.parentScreen = parentScreen;
