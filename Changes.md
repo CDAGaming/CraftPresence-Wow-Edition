@@ -6,13 +6,15 @@
 
 * Added `&helmet&`, `&chest&`, `&legs&`, and `&boots&` in Item Messages for Equipped Armor
 
+* Added `&mods&` Placeholder to display the Amount of Mods in your mods folder
+
 * Added an `overwriteServerIcon` Config Option to allow a Pack Icon to take Priority over a Server Icon
 
 * Added Remaining RPC Info to `/cp view CurrentData`:
 
   * PARTY_ID, PARTY_SIZE, PARTY_MAX, JOIN_SECRET, END_TIMESTAMP, MATCH_SECRET, SPECTATE_SECRET, INSTANCE
 
-* Added KeyBind Support for Accessing CraftPresence Commands (Mostly for 1.13 Users)
+* Added Initial KeyBind Support for Accessing CraftPresence Commands (Mostly for 1.13 Users)
 
 * Consolidate Codebase! Things should run a lot smoother and with less errors
 
@@ -29,6 +31,8 @@
 * Fixes `\n` Escape Parsing in Commands and Hover Text
 
 * Fixes Back Button Enable Conditions in Status Messages GUI
+
+* Translation Fixes (And More Translatable Strings!)
 
 ### More Information:
 

@@ -88,11 +88,11 @@ gui.config.comment.dimensionmessages.dimensionmessages=Dimension Messages Data \
 gui.config.comment.servermessages.servericon=Server Icon to default to when in an Unsupported Server
 gui.config.comment.servermessages.servermotd=Server MOTD to default to, in the case of a null MOTD \n (And in Direct Connects)
 gui.config.comment.servermessages.servername=Server Display Name to default to, in the case of a null Name \n (And in Direct Connects)
-gui.config.comment.servermessages.servermessages=Server Messages Data \n (Format: server_IP;message;icon) \n &ip& = Server IP \n &name& = Server List Name \n &motd& = Server MOTD \n &icon& = Default Server Icon \n &players& = Server Player Counter \n &ign& = Your Minecraft Username \n &time& = Your World Game Time
-gui.config.comment.statusmessages.loadingmsg=Message to Display while Loading the Game
-gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Main Menu
+gui.config.comment.servermessages.servermessages=Server Messages Data \n (Format: server_IP;message;icon) \n &ip& = Server IP \n &name& = Server List Name \n &motd& = Server MOTD \n &icon& = Default Server Icon \n &players& = Server Player Counter \n &ign& = Your Minecraft Username \n &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
+gui.config.comment.statusmessages.loadingmsg=Message to Display while Loading the Game \n Available Placeholders: \n - &mods& = The Amount of Mods currently in your Mods Folder
+gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Main Menu \n Available Placeholders: \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.lanmsg=Message to Display while in a LAN Game \n (Will only show if Status is Enabled)
-gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer \n (Will only show if Status is Enabled) \n &ign& = Your Minecraft Username \n &time& = Your World Game Time
+gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer \n (Will only show if Status is Enabled) \n &ign& = Your Minecraft Username \n &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.placeholder.packmsg=Message to display in Rich Presence when using a valid ModPack \n (Curse, Twitch, Technic, or MultiMC) \n Available Placeholders: \n - &name& = The Pack's Name
 gui.config.comment.statusmessages.placeholder.playermsg=Message to use for the &ign& Placeholder \n Available Placeholders: \n - &name& = Your Username
 gui.config.comment.statusmessages.placeholder.playeramountmsg=Message to use for the &players& Placeholder \n Available Placeholders: \n - &current& = Current Player Count \n - &max& = Maximum Player Count
