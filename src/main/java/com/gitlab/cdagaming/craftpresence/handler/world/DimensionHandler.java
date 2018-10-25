@@ -6,6 +6,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import net.minecraft.world.DimensionType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DimensionHandler {
@@ -95,8 +96,16 @@ public class DimensionHandler {
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
+    private List<DimensionType> getDimensionTypes() {
+        List<DimensionType> dimensionTypes = new ArrayList<>();
+
+        Collections.addAll(dimensionTypes, DimensionType.values());
+
+        return dimensionTypes;
+    }
+
     public void getDimensions() {
-        for (DimensionType TYPE : DimensionType.values()) {
+        for (DimensionType TYPE : getDimensionTypes()) {
             if (TYPE != null) {
                 if (!DIMENSION_NAMES.contains(TYPE.getName())) {
                     DIMENSION_NAMES.add(TYPE.getName());

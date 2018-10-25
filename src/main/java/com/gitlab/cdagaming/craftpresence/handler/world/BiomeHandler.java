@@ -90,8 +90,20 @@ public class BiomeHandler {
         }
     }
 
-    public void getBiomes() {
+    private List<Biome> getBiomeTypes() {
+        List<Biome> biomeTypes = new ArrayList<>();
+
         for (Biome biome : Biome.REGISTRY) {
+            if (biome != null) {
+                biomeTypes.add(biome);
+            }
+        }
+
+        return biomeTypes;
+    }
+
+    public void getBiomes() {
+        for (Biome biome : getBiomeTypes()) {
             if (biome != null) {
                 if (!BIOME_NAMES.contains(biome.getBiomeName())) {
                     BIOME_NAMES.add(biome.getBiomeName());
