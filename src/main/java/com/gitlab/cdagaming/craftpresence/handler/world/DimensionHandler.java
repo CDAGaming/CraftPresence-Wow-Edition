@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class DimensionHandler {
-    public boolean isInUse = false;
+    public boolean isInUse = false, enabled = false;
 
     public String CURRENT_DIMENSION_NAME;
     public List<String> DIMENSION_NAMES = new ArrayList<>();
@@ -18,7 +18,7 @@ public class DimensionHandler {
     private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
     private Integer CURRENT_DIMENSION_ID;
 
-    private boolean enabled = false, queuedForUpdate = false;
+    private boolean queuedForUpdate = false;
 
     public void emptyData() {
         DIMENSION_NAMES.clear();

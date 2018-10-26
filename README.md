@@ -26,7 +26,7 @@ As an example, this is how the mod will convert the pack name to an iconKey:
 Beginning in v1.3.0, CraftPresence now offers the following Commands:
 
 (Commands can be prefixed by `/craftpresence` or `/cp`)
-(Commands Listed are the Syntax as of v1.4.0*)
+(Commands Listed are the Syntax as of v1.4.8*)
 
 - `/cp view` - Help Command to display Commands available to view a variety of Display Data
 - `/cp config` - Opens CraftPresence's Config GUI
@@ -35,7 +35,11 @@ Beginning in v1.3.0, CraftPresence now offers the following Commands:
 - `/cp shutdown` - Shutdown RPC (Can be turned on from `/cp reboot`)
 - `/cp view currentData` - Displays in Text Form, your Current RPC Data
 - `/cp view assets <large|small|all>` - Displays all Asset IconKeys available to you
-- `/cp view dimensions` - Displays all Dimension Names available for use
+- `/cp view dimensions` - Displays all Dimension Names available for use, if Showing Current Dimension is enabled
+- `/cp view biomes` - Displays all Biome Names available for use, if Showing Current Biome is enabled
+- `/cp view servers` - Displays all Server Addresses available for use, if Show Game State is enabled
+- `/cp view guis` - Displays all GUI Names available for use, if Per-GUI is Enabled
+- `/cp view items` - Displays all Item Names available for use, if Per-Item is Enabled
 - `/cp <help|?>` - Help Command to display the Above Commands and These Explanations
 
 ## Placeholders
@@ -44,6 +48,10 @@ In some Configuration Areas, CraftPresence provides Placeholders to make things 
 (Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them*)
 
 (If Connecting to a Server via Direct Connect, CraftPresence will use the Default MOTD and Name, If you use those placeholders in your config*)
+
+#### Main Menu/Loading Message Placeholders
+- &IGN& - Your Minecraft Username
+- &MODS& = The Amount of Mods currently in your Mods Folder
 
 #### Biome Placeholders
 - &BIOME& - The Current Biome Name
@@ -62,10 +70,12 @@ In some Configuration Areas, CraftPresence provides Placeholders to make things 
 - &PLAYERS& - The Current Player Count `(10 / 100 Players)`
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
+- &MODS& = The Amount of Mods currently in your Mods Folder
 
-#### SinglePlayer Placeholders
+#### SinglePlayer/LAN Placeholders
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
+- &MODS& = The Amount of Mods currently in your Mods Folder
 
 #### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)

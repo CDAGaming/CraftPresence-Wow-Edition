@@ -12,8 +12,8 @@ import org.lwjgl.input.Keyboard;
 import java.io.IOException;
 
 public class ConfigGUI_StatusMessages extends GuiScreen {
-    private int pageNumber;
     private final GuiScreen parentScreen;
+    private int pageNumber;
     private GuiButton proceedButton, nextPageButton, previousPageButton;
     private GuiTextField mainMenuMSG, singleplayerMSG, loadingMSG,
             packMSG, playerMSG, playerAmountMSG, gameTimeMSG, modsMSG, viveCraftMSG;

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
-    public boolean isInUse = false, allItemsEmpty = false;
+    public boolean isInUse = false, allItemsEmpty = false, enabled = false;
 
     public List<String> ENTITY_NAMES = new ArrayList<>();
     private List<String> BLOCK_NAMES = new ArrayList<>();
@@ -36,7 +36,7 @@ public class EntityHandler {
     private String CURRENT_LEGS_NAME;
     private String CURRENT_BOOTS_NAME;
 
-    private boolean enabled = false, queuedForUpdate = false;
+    private boolean queuedForUpdate = false;
 
     public void emptyData() {
         BLOCK_NAMES.clear();

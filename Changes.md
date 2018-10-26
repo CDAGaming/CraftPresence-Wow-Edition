@@ -8,6 +8,10 @@
 
 * Added `&mods&` Placeholder to display the Amount of Mods in your mods folder
 
+* Now Allow `&ign&` on Loading and Main Menu Messages
+
+* Added `/cp view <biomes|items|servers|guis>` Commands
+
 * Added an `overwriteServerIcon` Config Option to allow a Pack Icon to take Priority over a Server Icon
 
 * Added Remaining RPC Info to `/cp view CurrentData`:
@@ -26,13 +30,15 @@
 
 * Fixes Inconsistent Logging when CraftPresence couldn't find an Icon
 
+* Fixes Empty Lists in Commands as a result of allowing commands to be accessed without proper options enabled
+
 * Revert Auto-Setting Options in the Config GUI (Will Reintroduce in a Better Way later)
 
 * Fixes `\n` Escape Parsing in Commands and Hover Text
 
 * Fixes Back Button Enable Conditions in Status Messages GUI
 
-* Translation Fixes (And More Translatable Strings!)
+* Translation Fixes (And Much More Translated and Localized Strings!)
 
 ### More Information:
 

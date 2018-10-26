@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BiomeHandler {
-    public boolean isInUse = false;
+    public boolean isInUse = false, enabled = false;
 
     public List<String> BIOME_NAMES = new ArrayList<>();
     private List<Biome> BIOME_TYPES = new ArrayList<>();
@@ -16,7 +16,7 @@ public class BiomeHandler {
     private String CURRENT_BIOME_NAME;
     private Integer CURRENT_BIOME_ID;
 
-    private boolean enabled = false, queuedForUpdate = false;
+    private boolean queuedForUpdate = false;
 
     public void emptyData() {
         BIOME_NAMES.clear();

@@ -54,6 +54,10 @@ public class CPCommands extends CommandBase {
         viewCompletions.add("currentData");
         viewCompletions.add("assets");
         viewCompletions.add("dimensions");
+        viewCompletions.add("biomes");
+        viewCompletions.add("guis");
+        viewCompletions.add("items");
+        viewCompletions.add("servers");
 
         assetsCompletions.add("all");
         assetsCompletions.add("large");
@@ -110,8 +114,36 @@ public class CPCommands extends CommandBase {
                 if (args.length == 1) {
                     StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.usage.view"));
                 } else if (!StringHandler.isNullOrEmpty(args[1])) {
-                    if (args[1].equalsIgnoreCase("dimensions")) {
-                        StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.dimensions.header", CraftPresence.DIMENSIONS.DIMENSION_NAMES));
+                    if (args[1].equalsIgnoreCase("items")) {
+                        if (CraftPresence.ENTITIES.enabled) {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.items.header", CraftPresence.ENTITIES.ENTITY_NAMES));
+                        } else {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages")));
+                        }
+                    } else if (args[1].equalsIgnoreCase("servers")) {
+                        if (CraftPresence.SERVER.enabled) {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.servers.header", CraftPresence.SERVER.knownAddresses));
+                        } else {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate")));
+                        }
+                    } else if (args[1].equalsIgnoreCase("guis")) {
+                        if (CraftPresence.GUIS.enabled) {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.guis.header", CraftPresence.GUIS.GUI_NAMES));
+                        } else {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages")));
+                        }
+                    } else if (args[1].equalsIgnoreCase("biomes")) {
+                        if (CraftPresence.BIOMES.enabled) {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.biomes.header", CraftPresence.BIOMES.BIOME_NAMES));
+                        } else {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome")));
+                        }
+                    } else if (args[1].equalsIgnoreCase("dimensions")) {
+                        if (CraftPresence.DIMENSIONS.enabled) {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.dimensions.header", CraftPresence.DIMENSIONS.DIMENSION_NAMES));
+                        } else {
+                            StringHandler.sendMessageToPlayer(commandSender, I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension")));
+                        }
                     } else if (args[1].equalsIgnoreCase("currentData")) {
                         StringHandler.sendMessageToPlayer(commandSender, I18n.format("craftpresence.command.currentdata", CraftPresence.CLIENT.DETAILS, CraftPresence.CLIENT.GAME_STATE, CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, CraftPresence.CLIENT.LARGEIMAGEKEY, CraftPresence.CLIENT.LARGEIMAGETEXT, CraftPresence.CLIENT.SMALLIMAGEKEY, CraftPresence.CLIENT.SMALLIMAGETEXT, CraftPresence.CLIENT.PARTY_ID, CraftPresence.CLIENT.PARTY_SIZE, CraftPresence.CLIENT.PARTY_MAX, CraftPresence.CLIENT.JOIN_SECRET, CraftPresence.CLIENT.END_TIMESTAMP, CraftPresence.CLIENT.MATCH_SECRET, CraftPresence.CLIENT.SPECTATE_SECRET, CraftPresence.CLIENT.INSTANCE));
                     } else if (args[1].equalsIgnoreCase("assets")) {

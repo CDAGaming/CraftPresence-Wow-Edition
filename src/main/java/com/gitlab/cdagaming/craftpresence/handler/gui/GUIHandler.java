@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GUIHandler {
-    public boolean openConfigGUI = false, isInUse = false;
+    public boolean openConfigGUI = false, isInUse = false, enabled = false;
 
     public List<String> GUI_NAMES = new ArrayList<>();
     private List<String> EXCLUSIONS = new ArrayList<>();
@@ -29,7 +29,7 @@ public class GUIHandler {
     private GuiScreen CURRENT_SCREEN;
     private List<Class> GUI_CLASSES = new ArrayList<>();
 
-    private boolean enabled = false, queuedForUpdate = false;
+    private boolean queuedForUpdate = false;
 
     private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, float zLevel) {
         final float uScale = 1f / 0x100;
