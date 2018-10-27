@@ -134,12 +134,12 @@ public class EntityHandler {
         final String NEW_CURRENT_BOOTS_NAME = !isEmpty(NEW_CURRENT_BOOTS) ?
                 StringHandler.stripColors(NEW_CURRENT_BOOTS.getDisplayName()) : "";
 
-        final boolean hasMainHandChanged = !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME);
-        final boolean hasOffHandChanged = !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME);
-        final boolean hasHelmetChanged = !NEW_CURRENT_HELMET.equals(CURRENT_HELMET) || !NEW_CURRENT_HELMET_NAME.equals(CURRENT_HELMET_NAME);
-        final boolean hasChestChanged = !NEW_CURRENT_CHEST.equals(CURRENT_CHEST) || !NEW_CURRENT_CHEST_NAME.equals(CURRENT_CHEST_NAME);
-        final boolean hasLegsChanged = !NEW_CURRENT_LEGS.equals(CURRENT_LEGS) || !NEW_CURRENT_LEGS_NAME.equals(CURRENT_LEGS_NAME);
-        final boolean hasBootsChanged = !NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) || !NEW_CURRENT_BOOTS_NAME.equals(CURRENT_BOOTS_NAME);
+        final boolean hasMainHandChanged = (!isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) || (isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !isEmpty(CURRENT_MAINHAND_ITEM));
+        final boolean hasOffHandChanged = (!isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) || (isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !isEmpty(CURRENT_OFFHAND_ITEM));
+        final boolean hasHelmetChanged = (!isEmpty(NEW_CURRENT_HELMET) && !NEW_CURRENT_HELMET.equals(CURRENT_HELMET) || !NEW_CURRENT_HELMET_NAME.equals(CURRENT_HELMET_NAME)) || (isEmpty(NEW_CURRENT_HELMET) && !isEmpty(CURRENT_HELMET));
+        final boolean hasChestChanged = (!isEmpty(NEW_CURRENT_CHEST) && !NEW_CURRENT_CHEST.equals(CURRENT_CHEST) || !NEW_CURRENT_CHEST_NAME.equals(CURRENT_CHEST_NAME)) || (isEmpty(NEW_CURRENT_CHEST) && !isEmpty(CURRENT_CHEST));
+        final boolean hasLegsChanged = (!isEmpty(NEW_CURRENT_LEGS) && !NEW_CURRENT_LEGS.equals(CURRENT_LEGS) || !NEW_CURRENT_LEGS_NAME.equals(CURRENT_LEGS_NAME)) || (isEmpty(NEW_CURRENT_LEGS) && !isEmpty(CURRENT_LEGS));
+        final boolean hasBootsChanged = (!isEmpty(NEW_CURRENT_BOOTS) && !NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) || !NEW_CURRENT_BOOTS_NAME.equals(CURRENT_BOOTS_NAME)) || (isEmpty(NEW_CURRENT_BOOTS) && !isEmpty(CURRENT_BOOTS));
 
         if (hasMainHandChanged || hasOffHandChanged || hasHelmetChanged || hasChestChanged || hasLegsChanged || hasBootsChanged) {
             CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
