@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -91,7 +90,7 @@ public class EntityHandler {
     }
 
     private boolean isEmpty(final Item item) {
-        return item == null || item == Items.AIR;
+        return item == null;
     }
 
     private boolean isEmpty(final ItemStack itemStack) {

@@ -88,13 +88,15 @@ public class CraftPresence {
     public void onTick(final TickEvent.ClientTickEvent event) {
         CommandHandler.reloadData();
 
-        if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
-            CommandHandler.setMainMenuPresence();
-        }
+        if (!CraftPresence.CONFIG.hasChanged) {
+            if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                CommandHandler.setMainMenuPresence();
+            }
 
-        if (CraftPresence.CONFIG.rebootOnWorldLoad && player != null) {
-            CommandHandler.rebootRPC();
-            CraftPresence.CONFIG.rebootOnWorldLoad = false;
+            if (CraftPresence.CONFIG.rebootOnWorldLoad && player != null) {
+                CommandHandler.rebootRPC();
+                CraftPresence.CONFIG.rebootOnWorldLoad = false;
+            }
         }
     }
 }

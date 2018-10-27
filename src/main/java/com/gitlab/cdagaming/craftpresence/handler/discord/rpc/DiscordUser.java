@@ -34,15 +34,6 @@ public class DiscordUser extends Structure {
      */
     public String avatar;
 
-    public DiscordUser(String encoding) {
-        super();
-        setStringEncoding(encoding);
-    }
-
-    public DiscordUser() {
-        this("UTF-8");
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o)

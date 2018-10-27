@@ -1,7 +1,9 @@
 package com.gitlab.cdagaming.craftpresence.handler.discord.rpc;
 
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.sun.jna.Structure;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -143,21 +145,20 @@ public class DiscordRichPresence extends Structure {
     public byte instance;
 
     public DiscordRichPresence(final String state, final String details, final long startTimestamp, final long endTimestamp, final String largeImageKey, final String largeImageText, final String smallImageKey, final String smallImageText, final String partyId, final int partySize, final int partyMax, final String matchSecret, final String joinSecret, final String spectateSecret, final byte instance) {
-        setStringEncoding("UTF-8");
-        this.state = state;
-        this.details = details;
+        this.state = !StringHandler.isNullOrEmpty(state) ? new String(state.getBytes(StandardCharsets.UTF_8)) : state;
+        this.details = !StringHandler.isNullOrEmpty(details) ? new String(details.getBytes(StandardCharsets.UTF_8)) : details;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
-        this.largeImageKey = largeImageKey;
-        this.largeImageText = largeImageText;
-        this.smallImageKey = smallImageKey;
-        this.smallImageText = smallImageText;
-        this.partyId = partyId;
+        this.largeImageKey = !StringHandler.isNullOrEmpty(largeImageKey) ? new String(largeImageKey.getBytes(StandardCharsets.UTF_8)) : largeImageKey;
+        this.largeImageText = !StringHandler.isNullOrEmpty(largeImageText) ? new String(largeImageText.getBytes(StandardCharsets.UTF_8)) : largeImageText;
+        this.smallImageKey = !StringHandler.isNullOrEmpty(smallImageKey) ? new String(smallImageKey.getBytes(StandardCharsets.UTF_8)) : smallImageKey;
+        this.smallImageText = !StringHandler.isNullOrEmpty(smallImageText) ? new String(smallImageText.getBytes(StandardCharsets.UTF_8)) : smallImageText;
+        this.partyId = !StringHandler.isNullOrEmpty(partyId) ? new String(partyId.getBytes(StandardCharsets.UTF_8)) : partyId;
         this.partySize = partySize;
         this.partyMax = partyMax;
-        this.matchSecret = matchSecret;
-        this.joinSecret = joinSecret;
-        this.spectateSecret = spectateSecret;
+        this.matchSecret = !StringHandler.isNullOrEmpty(matchSecret) ? new String(matchSecret.getBytes(StandardCharsets.UTF_8)) : matchSecret;
+        this.joinSecret = !StringHandler.isNullOrEmpty(joinSecret) ? new String(joinSecret.getBytes(StandardCharsets.UTF_8)) : joinSecret;
+        this.spectateSecret = !StringHandler.isNullOrEmpty(spectateSecret) ? new String(spectateSecret.getBytes(StandardCharsets.UTF_8)) : spectateSecret;
         this.instance = instance;
     }
 
