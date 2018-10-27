@@ -8,6 +8,8 @@
 
 ### Fixes:
 
+* Fixes Rapid RPC Updates for if Show Game State and Per-Item are both Enabled
+
 * Fixes Some CommandSender Reference Issues
 
 ### More Information:

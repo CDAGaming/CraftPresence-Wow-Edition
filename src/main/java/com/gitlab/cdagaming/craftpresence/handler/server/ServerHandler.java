@@ -20,12 +20,8 @@ public class ServerHandler {
 
     public List<String> knownAddresses = new ArrayList<>();
     public String currentServer_IP;
-    private String currentServer_Name;
-    private String currentServer_MOTD;
-    private String timeString;
-    private int currentPlayers;
-    private int maxPlayers;
-    private int serverIndex;
+    private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
+    private int currentPlayers, maxPlayers, serverIndex;
 
     private boolean queuedForUpdate = false;
 
@@ -115,7 +111,9 @@ public class ServerHandler {
 
             if (!gameTime.equals(timeString)) {
                 timeString = gameTime;
-                queuedForUpdate = true;
+                if (currentServerMSG.toLowerCase().contains("&time&")) {
+                    queuedForUpdate = true;
+                }
             }
         }
 
@@ -199,7 +197,7 @@ public class ServerHandler {
         final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
         final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
 
-        final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
+        currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
         final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
         final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
 
