@@ -1,5 +1,5 @@
 # CraftPresence
-Completely customize the way others see you play Minecraft via Discord's Rich Presence API & JNA (Java Native Access) API!
+Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the JNA (Java Native Access) API!
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/af71fdc17825460abdfd562777ac5133)](https://www.codacy.com/app/CDAGaming/CraftPresence?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=CDAGaming/CraftPresence&amp;utm_campaign=Badge_Grade)
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
@@ -10,7 +10,7 @@ Completely customize the way others see you play Minecraft via Discord's Rich Pr
 Besides having the Ability to Change your Discord Status from "Playing Minecraft",
 This Mod offers plenty of Customization options to specify entirely how others see you play.
 From Having Your Current Biome Show Up, To which Dimension you in, as well as which server your in,
-The Customization Possibilities are limitless, with the only real limit being how creative you customize your display
+The Customization Possibilities are limitless, with the only real limit being how creative you customize your display.
 
 #### Twitch // CursePack // MultiMC // Technic Support
 At this time, CraftPresence will detect whether your Launch Directory contains a Valid Twitch Manifest (manifest.json), a MultiMC Instance (instance.cfg), or a Technic installedPacks File (installedPacks).
@@ -25,7 +25,7 @@ As an example, this is how the mod will convert the pack name to an iconKey:
 ## Commands
 Beginning in v1.3.0, CraftPresence now offers the following Commands:
 
-(Commands can be prefixed by `/craftpresence` or `/cp`)
+(Commands can be prefixed by either `/craftpresence` or `/cp`)
 (Commands Listed are the Syntax as of v1.4.8*)
 
 - `/cp view` - Help Command to display Commands available to view a variety of Display Data
@@ -43,15 +43,13 @@ Beginning in v1.3.0, CraftPresence now offers the following Commands:
 - `/cp <help|?>` - Help Command to display the Above Commands and These Explanations
 
 ## Placeholders
-In some Configuration Areas, CraftPresence provides Placeholders to make things easier:
+In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
 
 (Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them*)
 
-(If Connecting to a Server via Direct Connect, CraftPresence will use the Default MOTD and Name, If you use those placeholders in your config*)
-
 #### Main Menu/Loading Message Placeholders
 - &IGN& - Your Minecraft Username
-- &MODS& = The Amount of Mods currently in your Mods Folder
+- &MODS& - The Amount of Mods currently in your Mods Folder
 
 #### Biome Placeholders
 - &BIOME& - The Current Biome Name
@@ -70,12 +68,12 @@ In some Configuration Areas, CraftPresence provides Placeholders to make things 
 - &PLAYERS& - The Current Player Count `(10 / 100 Players)`
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
-- &MODS& = The Amount of Mods currently in your Mods Folder
+- &MODS& - The Amount of Mods currently in your Mods Folder
 
 #### SinglePlayer/LAN Placeholders
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
-- &MODS& = The Amount of Mods currently in your Mods Folder
+- &MODS& - The Amount of Mods currently in your Mods Folder
 
 #### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)
@@ -89,8 +87,6 @@ In some Configuration Areas, CraftPresence provides Placeholders to make things 
 - &CHEST& - The Current Chest Armor Piece you have Equipped
 - &LEGS& - The Current Leggings Armor Piece you have Equipped
 - &BOOTS& - The Current Boots Armor Piece you have Equipped
-
-(Starting in v1.4.0, this can either be just the Item Name or your OffHand Item's Message, if present*)
 
 ## Disclaimer
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
