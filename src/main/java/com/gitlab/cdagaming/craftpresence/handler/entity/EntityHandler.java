@@ -4,6 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -21,6 +22,7 @@ public class EntityHandler {
     private List<String> ITEM_CLASSES = new ArrayList<>();
     private List<String> ENTITY_CLASSES = new ArrayList<>();
 
+    private ItemStack EMPTY = new ItemStack((Item) null);
     private ItemStack CURRENT_MAINHAND_ITEM;
     private ItemStack CURRENT_OFFHAND_ITEM;
     private ItemStack CURRENT_HELMET;
@@ -48,15 +50,15 @@ public class EntityHandler {
     }
 
     public void clearClientData() {
-        CURRENT_MAINHAND_ITEM = ItemStack.EMPTY;
-        CURRENT_OFFHAND_ITEM = ItemStack.EMPTY;
+        CURRENT_MAINHAND_ITEM = EMPTY;
+        CURRENT_OFFHAND_ITEM = EMPTY;
         CURRENT_MAINHAND_ITEM_NAME = null;
         CURRENT_OFFHAND_ITEM_NAME = null;
 
-        CURRENT_HELMET = ItemStack.EMPTY;
-        CURRENT_CHEST = ItemStack.EMPTY;
-        CURRENT_LEGS = ItemStack.EMPTY;
-        CURRENT_BOOTS = ItemStack.EMPTY;
+        CURRENT_HELMET = EMPTY;
+        CURRENT_CHEST = EMPTY;
+        CURRENT_LEGS = EMPTY;
+        CURRENT_BOOTS = EMPTY;
         CURRENT_HELMET_NAME = null;
         CURRENT_CHEST_NAME = null;
         CURRENT_LEGS_NAME = null;
@@ -90,11 +92,25 @@ public class EntityHandler {
     }
 
     private boolean isEmpty(final Item item) {
-        return item == null;
+        return item == null || isEmpty(item.getDefaultInstance());
+    }
+
+    private boolean isEmpty(final Block block) {
+        return block == null || isEmpty(Item.getItemFromBlock(block));
     }
 
     private boolean isEmpty(final ItemStack itemStack) {
-        return itemStack.isEmpty();
+        if (itemStack == null || itemStack == EMPTY) {
+            return true;
+        } else if (itemStack.getItem() != Items.AIR) {
+            if (itemStack.getCount() <= 0) {
+                return true;
+            } else {
+                return itemStack.getItemDamage() < -32768 || itemStack.getItemDamage() > 65535;
+            }
+        } else {
+            return true;
+        }
     }
 
     private void updateEntityData() {
@@ -187,7 +203,7 @@ public class EntityHandler {
 
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
-            if (block != null) {
+            if (!isEmpty(block)) {
                 NonNullList<ItemStack> subtypes = NonNullList.create();
                 for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                     if (tab != null) {
