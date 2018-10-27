@@ -56,8 +56,13 @@ public class DiscordAssetHandler {
     }
 
     public static String getRandomAsset() {
-        int randomInteger = MathHelper.getInt(new Random(), 0, ICON_LIST.size());
-        return ICON_LIST.get(randomInteger);
+        if (ICON_LIST.size() > 0) {
+            int randomInteger = MathHelper.getInt(new Random(), 0, ICON_LIST.size());
+            return ICON_LIST.get(randomInteger);
+        } else {
+            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.empty"));
+            return "";
+        }
     }
 
     public static void loadAssets() {
