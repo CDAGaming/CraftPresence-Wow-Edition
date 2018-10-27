@@ -94,7 +94,7 @@ public class EntityHandler {
     }
 
     private boolean isEmpty(final ItemStack itemStack) {
-        return itemStack.isEmpty() || isEmpty(itemStack.getItem());
+        return itemStack.isEmpty();
     }
 
     private void updateEntityData() {
@@ -187,7 +187,7 @@ public class EntityHandler {
 
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
-            if (!isEmpty(Item.getItemFromBlock(block))) {
+            if (block != null) {
                 NonNullList<ItemStack> subtypes = NonNullList.create();
                 for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
                     if (tab != null) {
