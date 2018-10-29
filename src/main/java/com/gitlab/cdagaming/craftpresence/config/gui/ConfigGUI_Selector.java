@@ -162,7 +162,7 @@ public class ConfigGUI_Selector extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parentScreen);
         }
         searchBox.textboxKeyTyped(typedChar, keyCode);

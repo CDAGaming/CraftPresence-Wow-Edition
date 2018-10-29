@@ -153,7 +153,7 @@ public class ConfigGUI_Main extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == 1 && (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged || CraftPresence.CONFIG.rebootOnWorldLoad)) {
+        if (keyCode == Keyboard.KEY_ESCAPE && (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged || CraftPresence.CONFIG.rebootOnWorldLoad)) {
             CraftPresence.CONFIG.setupInitialValues();
             CraftPresence.CONFIG.read();
             CraftPresence.CONFIG.hasChanged = false;

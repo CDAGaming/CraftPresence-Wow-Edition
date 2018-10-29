@@ -221,15 +221,15 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parentScreen);
         }
 
-        if (keyCode == 203 && pageNumber != 0) {
+        if (keyCode == Keyboard.KEY_LEFT && pageNumber != 0) {
             pageNumber--;
         }
 
-        if (keyCode == 205 && pageNumber != 1) {
+        if (keyCode == Keyboard.KEY_RIGHT && pageNumber != 1) {
             pageNumber++;
         }
 

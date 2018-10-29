@@ -92,7 +92,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == 1) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parentScreen);
         }
         defaultMessage.textboxKeyTyped(typedChar, keyCode);
