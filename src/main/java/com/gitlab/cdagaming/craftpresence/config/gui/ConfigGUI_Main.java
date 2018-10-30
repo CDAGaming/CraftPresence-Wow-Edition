@@ -7,19 +7,16 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 
 public class ConfigGUI_Main extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private EntityPlayer player;
     private GuiButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
-        player = mc.player;
         currentScreen = this;
         this.parentScreen = parentScreen;
     }
@@ -132,7 +129,7 @@ public class ConfigGUI_Main extends GuiScreen {
                     rebooted = true;
                     CraftPresence.CONFIG.hasClientPropertiesChanged = false;
                 }
-                if (player != null && CraftPresence.CONFIG.rebootOnWorldLoad) {
+                if (mc.player != null && CraftPresence.CONFIG.rebootOnWorldLoad) {
                     if (!rebooted) {
                         CommandHandler.rebootRPC();
                     }
@@ -141,8 +138,8 @@ public class ConfigGUI_Main extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = false;
             }
 
-            if (player != null) {
-                player.closeScreen();
+            if (mc.player != null) {
+                mc.player.closeScreen();
             } else {
                 mc.displayGuiScreen(parentScreen);
             }

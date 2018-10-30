@@ -15,7 +15,7 @@ public class GUICheckBox extends GuiButton {
         is_Checked = isChecked;
         boxWidth = 11;
         height = 11;
-        width = boxWidth + 2 + Minecraft.getMinecraft().fontRenderer.getStringWidth(displayString);
+        width = boxWidth + 2 + CraftPresence.instance.fontRenderer.getStringWidth(displayString);
     }
 
     /**
@@ -27,13 +27,7 @@ public class GUICheckBox extends GuiButton {
             hovered = mouseX >= x && mouseY >= y && mouseX < x + boxWidth && mouseY < y + height;
             CraftPresence.GUIS.drawContinuousTexturedBox(x, y, 0, 46, boxWidth, height, 200, 20, 2, 3, 2, 2, zLevel, BUTTON_TEXTURES);
             mouseDragged(mc, mouseX, mouseY);
-            int color = 14737632;
-
-            if (packedFGColour != 0) {
-                color = packedFGColour;
-            } else if (!enabled) {
-                color = 10526880;
-            }
+            int color = !enabled ? 10526880 : 14737632;
 
             if (is_Checked)
                 drawCenteredString(mc.fontRenderer, "x", x + boxWidth / 2 + 1, y + 1, 14737632);

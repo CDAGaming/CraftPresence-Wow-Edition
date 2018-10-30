@@ -21,12 +21,12 @@ public class StringHandler {
         return !isNullOrEmpty(entry) && (entry.equalsIgnoreCase("true") || entry.equalsIgnoreCase("false"));
     }
 
-    public static String formatIP(final String input) {
-        if (input.contains(":")) {
+    public static String formatIP(final String input, final boolean returnPort) {
+        if (!isNullOrEmpty(input) && input.contains(":")) {
             final String[] formatted = input.split(":");
-            return formatted[0];
+            return !returnPort ? formatted[0] : formatted[1];
         } else {
-            return input;
+            return !returnPort ? input : "25565";
         }
     }
 
