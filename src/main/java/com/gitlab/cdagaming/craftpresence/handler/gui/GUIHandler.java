@@ -66,18 +66,15 @@ public class GUIHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
+        isInUse = enabled && CraftPresence.instance.currentScreen != null;
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
         if (needsUpdate) {
             getGUIs();
         }
 
-        if (enabled && CraftPresence.instance.currentScreen != null) {
-            isInUse = true;
-            updateGUIData();
-        }
-
         if (isInUse) {
+            updateGUIData();
             if (enabled && CraftPresence.instance.currentScreen == null) {
                 clearClientData();
             } else if (!enabled) {

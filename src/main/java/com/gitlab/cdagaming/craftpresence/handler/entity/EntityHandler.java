@@ -71,18 +71,15 @@ public class EntityHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
+        isInUse = enabled && CraftPresence.player != null;
         final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
 
         if (needsUpdate) {
             getEntities();
         }
 
-        if (enabled && CraftPresence.player != null) {
-            isInUse = true;
-            updateEntityData();
-        }
-
         if (isInUse) {
+            updateEntityData();
             if (enabled && (CraftPresence.player == null || allItemsEmpty)) {
                 clearClientData();
             } else if (!enabled) {

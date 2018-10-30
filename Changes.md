@@ -9,7 +9,12 @@
   * `enableJoinRequest` - Available in General Config GUI and allows Enabling or Disabling Discord Join Requests
 
 * Added Some Additional Translations, mostly those missed in v1.4.8
+
 ### Fixes:
+
+* Fixes some Minor NPE Scenarios
+
+* Fixes Issues with Fallback Icon Setting
 
 * Fixes Rapid RPC Update Scenarios
 

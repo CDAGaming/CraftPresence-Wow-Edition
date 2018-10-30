@@ -44,18 +44,15 @@ public class ServerHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showGameState : enabled;
+        isInUse = enabled && CraftPresence.player != null && !connectToServer;
         final boolean needsUpdate = enabled && knownAddresses.isEmpty();
 
         if (needsUpdate) {
             getServerAddresses();
         }
 
-        if (enabled && CraftPresence.player != null && !connectToServer) {
-            updateServerData();
-            isInUse = true;
-        }
-
         if (isInUse) {
+            updateServerData();
             if (enabled && CraftPresence.player == null) {
                 clearClientData();
             } else if (!enabled) {
