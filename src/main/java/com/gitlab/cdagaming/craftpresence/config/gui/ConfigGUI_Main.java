@@ -36,7 +36,7 @@ public class ConfigGUI_Main extends GuiScreen {
         statusSet = new GuiButton(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.statusmessages"));
         advancedSet = new GuiButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.advanced"));
 
-        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
         aboutButton = new GuiButton(800, 10, (sr.getScaledHeight() - 30), 20, 20, "?");
 
         buttonList.add(generalSet);

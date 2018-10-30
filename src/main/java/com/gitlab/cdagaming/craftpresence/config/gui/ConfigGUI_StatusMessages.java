@@ -54,7 +54,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         previousPageButton = new GuiButton(700, 5, (sr.getScaledHeight() - 30), 20, 20, "<");
         nextPageButton = new GuiButton(800, (sr.getScaledWidth() - 25), (sr.getScaledHeight() - 30), 20, 20, ">");
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(previousPageButton);
         buttonList.add(nextPageButton);

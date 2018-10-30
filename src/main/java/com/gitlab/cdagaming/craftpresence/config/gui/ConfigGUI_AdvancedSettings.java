@@ -44,7 +44,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
         overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
         buttonList.add(itemMessagesButton);
@@ -150,9 +150,9 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, "CraftPresence - Select a GUI", CraftPresence.GUIS.GUI_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, I18n.format("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, "CraftPresence - Select an Entity/Item", CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, I18n.format("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
         }
     }
 

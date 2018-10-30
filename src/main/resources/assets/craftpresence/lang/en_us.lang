@@ -15,6 +15,12 @@ gui.config.title.server.editspecificserver=CraftPresence - Edit Server (%1$s)
 gui.config.title.gui.editspecificgui=CraftPresence - Edit GUI (%1$s)
 gui.config.title.gui.editspecificitem=CraftPresence - Edit Item (%1$s)
 gui.config.title.editor.addnew=CraftPresence - Add New Value
+gui.config.title.selector.dimension=CraftPresence - Select a Dimension
+gui.config.title.selector.biome=CraftPresence - Select a Biome
+gui.config.title.selector.server=CraftPresence - Select Server IP
+gui.config.title.selector.gui=CraftPresence - Select a GUI
+gui.config.title.selector.item=CraftPresence - Select an Item
+gui.config.title.selector.icon=CraftPresence - Select an Icon
 ## CONFIG MESSAGES - TITLE COMMENTS ##
 gui.config.comment.title.general=General Settings for Displaying Info
 gui.config.comment.title.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n &id& = Biome ID
@@ -26,6 +32,9 @@ gui.config.comment.title.advanced=Customize Additional Settings of the Mod
 gui.config.buttonMessage.back=Back
 gui.config.buttonMessage.save=Save
 gui.config.buttonMessage.continue=Continue
+gui.config.buttonMessage.viewsource=View Source
+gui.config.buttonMessage.addnew=Add New
+gui.config.buttonMessage.iconchange=Change Icon
 gui.config.defaultMessage.biome=Default Biome Message
 gui.config.defaultMessage.dimension=Default Dimension Message
 gui.config.defaultMessage.server=Default Server Message

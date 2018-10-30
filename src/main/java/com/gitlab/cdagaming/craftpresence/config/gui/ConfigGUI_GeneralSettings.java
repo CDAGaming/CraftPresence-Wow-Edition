@@ -48,7 +48,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         showDimensionButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
         showStateButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
         enableJoinRequestButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
-        proceedButton = new GuiButton(1000, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        proceedButton = new GuiButton(1000, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(defaultIconButton);
         buttonList.add(detectCurseManifestButton);

@@ -35,7 +35,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         defaultMessage.setText(defaultBiomeMSG);
 
         biomeMessagesButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.biomemessages.biomemessages"));
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(biomeMessagesButton);
         buttonList.add(proceedButton);
@@ -86,7 +86,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == biomeMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, "CraftPresence - Select a Biome", CraftPresence.BIOMES.BIOME_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, I18n.format("gui.config.title.selector.biome"), CraftPresence.BIOMES.BIOME_NAMES, null, null));
         }
     }
 
