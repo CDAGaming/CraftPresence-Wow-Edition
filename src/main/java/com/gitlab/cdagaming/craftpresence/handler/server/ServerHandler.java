@@ -92,7 +92,9 @@ public class ServerHandler {
                 if (newCurrentPlayers != currentPlayers || newMaxPlayers != maxPlayers) {
                     currentPlayers = newCurrentPlayers;
                     maxPlayers = newMaxPlayers;
-                    queuedForUpdate = true;
+                    if ((!StringHandler.isNullOrEmpty(currentServerMSG) && currentServerMSG.toLowerCase().contains("&players&")) || CraftPresence.CONFIG.enableJoinRequest) {
+                        queuedForUpdate = true;
+                    }
                 }
 
                 final ServerList serverList = new ServerList(CraftPresence.instance);
@@ -180,10 +182,14 @@ public class ServerHandler {
         boolean isValidSecret = boolParts.length <= 4 && stringParts.length <= 3 && containsValidClientID;
 
         if (isValidSecret) {
-            currentServerData = new ServerData(serverName, serverIP, false);
-            connectToServer = true;
+            if (CraftPresence.CONFIG.enableJoinRequest) {
+                currentServerData = new ServerData(serverName, serverIP, false);
+                connectToServer = true;
+            } else {
+                Constants.LOG.error(I18n.format("craftpresence.logger.warning.config.disabled.enablejoinrequest"));
+            }
         } else {
-            Constants.LOG.error("Secret Key Invalid, Join Request Rejected: " + secret);
+            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.join", secret));
         }
     }
 
@@ -207,14 +213,16 @@ public class ServerHandler {
         final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
 
         CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP, false)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", CraftPresence.CONFIG.playerAmountPlaceholderMSG.replace("&current&", Integer.toString(currentPlayers)).replace("&max&", Integer.toString(maxPlayers))).replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
-        if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
-            CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
-        } else {
-            CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+        if (CraftPresence.CONFIG.enableJoinRequest) {
+            if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
+                CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
+            } else {
+                CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+            }
+            CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
+            CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
+            CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
         }
-        CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
-        CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
-        CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
 
         if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
             CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);

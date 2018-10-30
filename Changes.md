@@ -4,11 +4,14 @@
 
 ### Changes:
 
-* ???
+* Added New Config Option:
 
+  * `enableJoinRequest` - Available in General Config GUI and allows Enabling or Disabling Discord Join Requests
+
+* Added Some Additional Translations, mostly those missed in v1.4.8
 ### Fixes:
 
-* Fixes Rapid RPC Updates for if Show Game State and Per-Item are both Enabled
+* Fixes Rapid RPC Update Scenarios
 
 * Fixes and Completes Join Request Functionality
 

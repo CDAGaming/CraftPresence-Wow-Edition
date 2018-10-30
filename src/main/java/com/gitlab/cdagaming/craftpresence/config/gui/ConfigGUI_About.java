@@ -62,7 +62,7 @@ public class ConfigGUI_About extends GuiScreen {
             try {
                 Desktop.getDesktop().browse(new URI(SOURCE_URL));
             } catch (Exception ex) {
-                Constants.LOG.error("Couldn't open link");
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.web"));
                 ex.printStackTrace();
             }
         }

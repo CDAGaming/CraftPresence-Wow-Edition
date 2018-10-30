@@ -17,7 +17,7 @@ public class ConfigHandler {
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectTechnicPack,
             NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
-            NAME_showGameState, NAME_clientID, NAME_defaultIcon;
+            NAME_showGameState, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest;
     // BIOME MESSAGES
     public String NAME_biomeMessages;
     // DIMENSION MESSAGES
@@ -36,7 +36,7 @@ public class ConfigHandler {
     // Config Variables
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectTechnicPack, showTime,
-            showCurrentBiome, showCurrentDimension, showGameState;
+            showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
     public String clientID, defaultIcon;
     // BIOME MESSAGES
     public String[] biomeMessages;
@@ -77,6 +77,7 @@ public class ConfigHandler {
         NAME_showGameState = I18n.format("gui.config.name.general.showstate").replaceAll(" ", "_");
         NAME_clientID = I18n.format("gui.config.name.general.clientid").replaceAll(" ", "_");
         NAME_defaultIcon = I18n.format("gui.config.name.general.defaulticon").replaceAll(" ", "_");
+        NAME_enableJoinRequest = I18n.format("gui.config.name.general.enablejoinrequest").replaceAll(" ", "_");
         detectCurseManifest = true;
         detectMultiMCManifest = true;
         detectTechnicPack = true;
@@ -86,6 +87,7 @@ public class ConfigHandler {
         showGameState = true;
         clientID = "450485984333660181";
         defaultIcon = "grass";
+        enableJoinRequest = true;
         // BIOME MESSAGES
         NAME_biomeMessages = I18n.format("gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
         biomeMessages = new String[]{"default;Playing in &biome&"};
@@ -180,6 +182,7 @@ public class ConfigHandler {
                 showGameState = StringHandler.isValidBoolean(properties.getProperty(NAME_showGameState)) ? Boolean.parseBoolean(properties.getProperty(NAME_showGameState)) : showGameState;
                 clientID = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_clientID)) ? properties.getProperty(NAME_clientID) : clientID;
                 defaultIcon = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_defaultIcon)) ? properties.getProperty(NAME_defaultIcon) : defaultIcon;
+                enableJoinRequest = StringHandler.isValidBoolean(properties.getProperty(NAME_enableJoinRequest)) ? Boolean.parseBoolean(properties.getProperty(NAME_enableJoinRequest)) : enableJoinRequest;
                 // BIOME MESSAGES
                 biomeMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : biomeMessages;
                 // DIMENSION MESSAGES
@@ -231,6 +234,7 @@ public class ConfigHandler {
         properties.setProperty(NAME_showGameState, Boolean.toString(showGameState));
         properties.setProperty(NAME_clientID, clientID);
         properties.setProperty(NAME_defaultIcon, defaultIcon);
+        properties.setProperty(NAME_enableJoinRequest, Boolean.toString(enableJoinRequest));
         // BIOME MESSAGES
         properties.setProperty(NAME_biomeMessages, Arrays.toString(biomeMessages));
         // DIMENSION MESSAGES

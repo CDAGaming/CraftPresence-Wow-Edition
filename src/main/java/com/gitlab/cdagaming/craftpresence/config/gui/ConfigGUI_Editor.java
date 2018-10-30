@@ -222,10 +222,10 @@ public class ConfigGUI_Editor extends GuiScreen {
 
     @Override
     public void updateScreen() {
-        specificMessage.updateCursorCounter();
         if (isNewValue) {
             newValueName.updateCursorCounter();
         }
+        specificMessage.updateCursorCounter();
     }
 
     @Override

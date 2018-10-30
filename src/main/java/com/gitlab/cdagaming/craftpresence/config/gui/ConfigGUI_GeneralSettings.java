@@ -18,7 +18,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     private GuiButton proceedButton, defaultIconButton;
     private GUICheckBox detectCurseManifestButton, detectMultiMCManifestButton,
             detectTechnicPackButton, showTimeButton,
-            showBiomeButton, showDimensionButton, showStateButton;
+            showBiomeButton, showDimensionButton, showStateButton, enableJoinRequestButton;
     private GuiTextField clientID;
 
     ConfigGUI_GeneralSettings(GuiScreen parentScreen) {
@@ -47,7 +47,8 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         showBiomeButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showbiome"), CraftPresence.CONFIG.showCurrentBiome);
         showDimensionButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
         showStateButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
+        enableJoinRequestButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
+        proceedButton = new GuiButton(1000, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, "Back");
 
         buttonList.add(defaultIconButton);
         buttonList.add(detectCurseManifestButton);
@@ -57,6 +58,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         buttonList.add(showBiomeButton);
         buttonList.add(showDimensionButton);
         buttonList.add(showStateButton);
+        buttonList.add(enableJoinRequestButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -105,6 +107,9 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         }
         if (showStateButton.isMouseOver()) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showstate")), mouseX, mouseY);
+        }
+        if (enableJoinRequestButton.isMouseOver()) {
+            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.enablejoinrequest")), mouseX, mouseY);
         }
         if (proceedButton.isMouseOver() && !proceedButton.enabled) {
             drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY);
