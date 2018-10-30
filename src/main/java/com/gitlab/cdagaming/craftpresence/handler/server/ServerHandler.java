@@ -78,7 +78,7 @@ public class ServerHandler {
             if (currentServerData != null && connection != null) {
                 final String newServer_IP = currentServerData.serverIP;
                 final String newServer_Name = !StringHandler.isNullOrEmpty(currentServerData.serverName) ? currentServerData.serverName : CraftPresence.CONFIG.defaultServerName;
-                final String newServer_MOTD = !StringHandler.isNullOrEmpty(currentServerData.serverMOTD) && (currentServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || currentServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(currentServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
+                final String newServer_MOTD = !StringHandler.isNullOrEmpty(currentServerData.serverMOTD) && !(currentServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || currentServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(currentServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
                 final int newCurrentPlayers = CraftPresence.instance.getConnection().getPlayerInfoMap().size();
                 final int newMaxPlayers = CraftPresence.instance.getConnection().currentServerMaxPlayers;
 
