@@ -21,6 +21,7 @@ import java.io.File;
 public class DiscordHandler {
     public final DiscordEventHandlers handlers = new DiscordEventHandlers();
     public DiscordUser CURRENT_USER;
+    public String STATUS;
 
     public String GAME_STATE;
     public String DETAILS;
@@ -39,8 +40,8 @@ public class DiscordHandler {
     public String SPECTATE_SECRET;
     public byte INSTANCE;
 
-    private String STATUS, lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
-    private int lastErrorCode;
+    private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
+    private int lastErrorCode, lastDisconnectErrorCode;
     private Thread callbackThread = null;
 
     public synchronized void setup() {
@@ -83,11 +84,32 @@ public class DiscordHandler {
     }
 
     private synchronized void onDisconnect(final int errorCode, final String message) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("disconnected") || lastErrorCode != errorCode)) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode)) {
             STATUS = "disconnected";
-            lastErrorCode = errorCode;
+            lastDisconnectErrorCode = errorCode;
             shutDown();
             handlers.disconnected.accept(errorCode, message);
+        }
+    }
+
+    private synchronized void onJoinGame(final String secret) {
+        if (StringHandler.isNullOrEmpty(STATUS) || !STATUS.equalsIgnoreCase("joinGame")) {
+            STATUS = "joinGame";
+            CraftPresence.SERVER.verifyAndJoin(secret);
+        }
+    }
+
+    private synchronized void onJoinRequest(final DiscordUser user) {
+        if (StringHandler.isNullOrEmpty(STATUS) || !STATUS.equalsIgnoreCase("joinRequest")) {
+            STATUS = "joinRequest";
+            handlers.joinRequest.accept(user);
+        }
+    }
+
+    private synchronized void onSpectateGame(final String secret) {
+        if (StringHandler.isNullOrEmpty(STATUS) || !STATUS.equalsIgnoreCase("spectateGame")) {
+            STATUS = "spectateGame";
+            handlers.spectateGame.accept(secret);
         }
     }
 
@@ -95,11 +117,12 @@ public class DiscordHandler {
         handlers.errored = this::onError;
         handlers.disconnected = this::onDisconnect;
         handlers.ready = this::onReady;
-        handlers.joinGame = (secret) -> CraftPresence.SERVER.verifyAndJoin(secret);
-        handlers.joinRequest = (user) -> handlers.joinRequest.accept(user);
-        handlers.spectateGame = (secret) -> handlers.spectateGame.accept(secret);
+        handlers.joinGame = this::onJoinGame;
+        handlers.joinRequest = this::onJoinRequest;
+        handlers.spectateGame = this::onSpectateGame;
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
+        DiscordRPC.INSTANCE.Discord_UpdateHandlers(handlers);
         setupThreads();
     }
 
@@ -161,6 +184,7 @@ public class DiscordHandler {
         CraftPresence.GUIS.clearClientData();
 
         STATUS = null;
+        CURRENT_USER = null;
 
         Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
     }

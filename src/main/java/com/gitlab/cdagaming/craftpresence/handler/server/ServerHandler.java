@@ -63,6 +63,8 @@ public class ServerHandler {
         if (connectToServer) {
             joinServer();
             connectToServer = false;
+        } else if (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame")) {
+            CraftPresence.CLIENT.STATUS = "ready";
         }
     }
 

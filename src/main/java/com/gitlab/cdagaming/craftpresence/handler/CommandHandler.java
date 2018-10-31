@@ -58,6 +58,7 @@ public class CommandHandler {
     }
 
     public static void setMainMenuPresence() {
+        CraftPresence.CLIENT.STATUS = "ready";
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
         CraftPresence.CLIENT.GAME_STATE = "";
@@ -88,10 +89,12 @@ public class CommandHandler {
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) &&
                         CraftPresence.CLIENT.LARGEIMAGETEXT.equals(I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion))
-                );
+                ) &&
+                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"));
     }
 
     public static void setLoadingPresence(final String state) {
+        CraftPresence.CLIENT.STATUS = "ready";
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
         CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.loadingMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "";
