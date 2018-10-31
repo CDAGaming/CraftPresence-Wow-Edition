@@ -21,6 +21,32 @@ public class StringHandler {
         return !isNullOrEmpty(entry) && (entry.equalsIgnoreCase("true") || entry.equalsIgnoreCase("false"));
     }
 
+    public static boolean isValidInteger(final String entry) {
+        if (!isNullOrEmpty(entry)) {
+            try {
+                Integer.parseInt(entry);
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isValidLong(final String entry) {
+        if (!isNullOrEmpty(entry)) {
+            try {
+                Long.parseLong(entry);
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public static String formatIP(final String input, final boolean returnPort) {
         if (!isNullOrEmpty(input) && input.contains(":")) {
             final String[] formatted = input.split(":");

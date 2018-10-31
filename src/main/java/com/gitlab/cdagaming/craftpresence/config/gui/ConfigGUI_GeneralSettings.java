@@ -76,7 +76,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         drawString(fontRenderer, clientIDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
 
-        proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && clientID.getText().length() == 18 && !clientID.getText().matches(".*[a-z].*") && !clientID.getText().matches(".*[A-Z].*");
+        proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && clientID.getText().length() == 18 && StringHandler.isValidInteger(clientID.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

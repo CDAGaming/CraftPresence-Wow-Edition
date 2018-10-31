@@ -9,6 +9,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHan
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordEventHandlers;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresence;
+import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordUser;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
@@ -19,6 +20,8 @@ import java.io.File;
 
 public class DiscordHandler {
     public final DiscordEventHandlers handlers = new DiscordEventHandlers();
+    public DiscordUser CURRENT_USER;
+
     public String GAME_STATE;
     public String DETAILS;
     public String SMALLIMAGEKEY;
@@ -36,7 +39,8 @@ public class DiscordHandler {
     public String SPECTATE_SECRET;
     public byte INSTANCE;
 
-    private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
+    private String STATUS, lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
+    private int lastErrorCode;
     private Thread callbackThread = null;
 
     public synchronized void setup() {
@@ -59,17 +63,44 @@ public class DiscordHandler {
         callbackThread.start();
     }
 
+    private synchronized void onReady(final DiscordUser user) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("ready") || CURRENT_USER != user)) {
+            STATUS = "ready";
+            CURRENT_USER = user;
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
+            handlers.ready.accept(user);
+        }
+    }
+
+    private synchronized void onError(final int errorCode, final String message) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode)) {
+            STATUS = "errored";
+            lastErrorCode = errorCode;
+            shutDown();
+            Constants.LOG.error(I18n.format("craftpresence.logger.error.rpc", errorCode, message));
+            handlers.errored.accept(errorCode, message);
+        }
+    }
+
+    private synchronized void onDisconnect(final int errorCode, final String message) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("disconnected") || lastErrorCode != errorCode)) {
+            STATUS = "disconnected";
+            lastErrorCode = errorCode;
+            shutDown();
+            handlers.disconnected.accept(errorCode, message);
+        }
+    }
+
     public synchronized void init() {
-        handlers.errored = (err, err1) -> handlers.errored.accept(err, err1);
-        handlers.disconnected = (err, err1) -> handlers.disconnected.accept(err, err1);
-        //handlers.ready = (user) -> handlers.ready.accept(user);
+        handlers.errored = this::onError;
+        handlers.disconnected = this::onDisconnect;
+        handlers.ready = this::onReady;
         handlers.joinGame = (secret) -> CraftPresence.SERVER.verifyAndJoin(secret);
         handlers.joinRequest = (user) -> handlers.joinRequest.accept(user);
         handlers.spectateGame = (secret) -> handlers.spectateGame.accept(secret);
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
         setupThreads();
-        Constants.LOG.info(I18n.format("craftpresence.logger.info.load", !StringHandler.isNullOrEmpty(CLIENT_ID) ? CLIENT_ID : "450485984333660181"));
     }
 
     public void updateTimestamp() {
@@ -128,6 +159,8 @@ public class DiscordHandler {
         CraftPresence.BIOMES.clearClientData();
         CraftPresence.SERVER.clearClientData();
         CraftPresence.GUIS.clearClientData();
+
+        STATUS = null;
 
         Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
     }
