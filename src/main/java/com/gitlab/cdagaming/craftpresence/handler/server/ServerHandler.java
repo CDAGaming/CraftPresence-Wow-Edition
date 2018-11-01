@@ -5,12 +5,14 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.resources.I18n;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,11 +21,11 @@ public class ServerHandler {
 
     public List<String> knownAddresses = new ArrayList<>();
     public String currentServer_IP;
-    private String lastAttemptedSecret, currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
+    private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString, requestedSecret;
     private int currentPlayers, maxPlayers, serverIndex;
-    private ServerData currentServerData;
+    private ServerData currentServerData, requestedServerData;
 
-    private boolean queuedForUpdate = false, connectToServer = false;
+    private boolean queuedForUpdate = false, joinInProgress = false;
 
     public void emptyData() {
         knownAddresses.clear();
@@ -34,17 +36,24 @@ public class ServerHandler {
         currentServer_IP = null;
         currentServer_MOTD = null;
         currentServer_Name = null;
+        currentServerData = null;
         timeString = null;
         currentPlayers = 0;
         maxPlayers = 0;
 
         queuedForUpdate = false;
         isInUse = false;
+
+        if (!joinInProgress) {
+            requestedSecret = null;
+            requestedServerData = null;
+        }
     }
 
     public void onTick() {
+        joinInProgress = StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame") || CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame"));
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showGameState : enabled;
-        isInUse = enabled && CraftPresence.player != null && !connectToServer;
+        isInUse = enabled && CraftPresence.player != null && !joinInProgress;
         final boolean needsUpdate = enabled && knownAddresses.isEmpty();
 
         if (needsUpdate) {
@@ -60,31 +69,29 @@ public class ServerHandler {
             }
         }
 
-        if (connectToServer) {
-            joinServer();
-            connectToServer = false;
-        } else if (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame")) {
-            CraftPresence.CLIENT.STATUS = "ready";
+        if (joinInProgress && requestedServerData != null) {
+            joinServer(requestedServerData, requestedSecret);
         }
     }
 
     private void updateServerData() {
         // NOTE: Server-Only Events
-        if (!CraftPresence.instance.isSingleplayer() && !connectToServer) {
-            currentServerData = CraftPresence.instance.getCurrentServerData();
+        if (!CraftPresence.instance.isSingleplayer() && !joinInProgress) {
+            final ServerData serverData = CraftPresence.instance.getCurrentServerData();
             final NetHandlerPlayClient connection = CraftPresence.instance.getConnection();
 
-            if (currentServerData != null && connection != null) {
-                final String newServer_IP = currentServerData.serverIP;
-                final String newServer_Name = !StringHandler.isNullOrEmpty(currentServerData.serverName) ? currentServerData.serverName : CraftPresence.CONFIG.defaultServerName;
-                final String newServer_MOTD = !StringHandler.isNullOrEmpty(currentServerData.serverMOTD) && !(currentServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || currentServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(currentServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
-                final int newCurrentPlayers = CraftPresence.instance.getConnection().getPlayerInfoMap().size();
-                final int newMaxPlayers = CraftPresence.instance.getConnection().currentServerMaxPlayers;
+            if (serverData != null && connection != null) {
+                final String newServer_IP = serverData.serverIP;
+                final String newServer_Name = !StringHandler.isNullOrEmpty(serverData.serverName) ? serverData.serverName : CraftPresence.CONFIG.defaultServerName;
+                final String newServer_MOTD = !StringHandler.isNullOrEmpty(serverData.serverMOTD) && !(serverData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || serverData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(serverData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
+                final int newCurrentPlayers = connection.getPlayerInfoMap().size();
+                final int newMaxPlayers = connection.currentServerMaxPlayers;
 
-                if (!newServer_IP.equals(currentServer_IP) || !newServer_MOTD.equals(currentServer_MOTD) || !newServer_Name.equals(currentServer_Name)) {
+                if (!serverData.equals(currentServerData) || !newServer_IP.equals(currentServer_IP) || !newServer_MOTD.equals(currentServer_MOTD) || !newServer_Name.equals(currentServer_Name)) {
                     currentServer_IP = newServer_IP;
                     currentServer_MOTD = newServer_MOTD;
                     currentServer_Name = newServer_Name;
+                    currentServerData = serverData;
                     queuedForUpdate = true;
                 }
 
@@ -170,10 +177,9 @@ public class ServerHandler {
     }
 
     public void verifyAndJoin(final String secret) {
-        lastAttemptedSecret = secret;
         String[] boolParts = secret.split(";");
         String[] stringParts = boolParts[0].split("-");
-        boolean containsValidClientID = StringHandler.elementExists(stringParts, 0) && (stringParts[0].length() == 18 && !stringParts[0].matches(".*[a-z].*") && !stringParts[0].matches(".*[A-Z].*"));
+        boolean containsValidClientID = StringHandler.elementExists(stringParts, 0) && (stringParts[0].length() == 18 && StringHandler.isValidLong(stringParts[0]));
         boolean containsServerName = StringHandler.elementExists(boolParts, 1) && StringHandler.elementExists(stringParts, 1) && Boolean.parseBoolean(boolParts[1]);
         boolean containsServerIP = StringHandler.elementExists(boolParts, 2) && StringHandler.elementExists(stringParts, 2) && Boolean.parseBoolean(boolParts[2]);
         String serverName = containsServerName ? stringParts[1] : CraftPresence.CONFIG.defaultServerName;
@@ -182,8 +188,8 @@ public class ServerHandler {
 
         if (isValidSecret) {
             if (CraftPresence.CONFIG.enableJoinRequest) {
-                currentServerData = new ServerData(serverName, serverIP, false);
-                connectToServer = true;
+                requestedServerData = new ServerData(serverName, serverIP, false);
+                requestedSecret = secret;
             } else {
                 Constants.LOG.error(I18n.format("craftpresence.logger.warning.config.disabled.enablejoinrequest"));
             }
@@ -192,13 +198,23 @@ public class ServerHandler {
         }
     }
 
-    private void joinServer() {
+    private void joinServer(final ServerData serverData, @Nullable final String secret) {
         try {
-            CraftPresence.instance.displayGuiScreen(new GuiConnecting(CraftPresence.instance.currentScreen, CraftPresence.instance, currentServerData));
+            CraftPresence.instance.displayGuiScreen(new GuiConnecting(CraftPresence.instance.currentScreen != null ? CraftPresence.instance.currentScreen : new GuiMainMenu(), CraftPresence.instance, serverData));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            CraftPresence.CLIENT.handlers.joinGame.accept(lastAttemptedSecret);
+            if (!StringHandler.isNullOrEmpty(secret)) {
+                if (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame")) {
+                    CraftPresence.CLIENT.handlers.joinGame.accept(secret);
+                }
+
+                if (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame")) {
+                    CraftPresence.CLIENT.handlers.spectateGame.accept(secret);
+                }
+            }
+            requestedSecret = null;
+            requestedServerData = null;
         }
     }
 

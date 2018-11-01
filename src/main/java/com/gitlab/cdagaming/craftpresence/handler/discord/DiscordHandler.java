@@ -20,7 +20,7 @@ import java.io.File;
 
 public class DiscordHandler {
     public final DiscordEventHandlers handlers = new DiscordEventHandlers();
-    public DiscordUser CURRENT_USER;
+    public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
 
     public String GAME_STATE;
@@ -65,7 +65,7 @@ public class DiscordHandler {
     }
 
     private synchronized void onReady(final DiscordUser user) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user))) {
+        if ((StringHandler.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
             STATUS = "ready";
             CURRENT_USER = user;
             Constants.LOG.info(I18n.format("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
@@ -74,7 +74,7 @@ public class DiscordHandler {
     }
 
     private synchronized void onError(final int errorCode, final String message) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode)) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
             STATUS = "errored";
             lastErrorCode = errorCode;
             shutDown();
@@ -84,7 +84,7 @@ public class DiscordHandler {
     }
 
     private synchronized void onDisconnect(final int errorCode, final String message) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode)) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
             STATUS = "disconnected";
             lastDisconnectErrorCode = errorCode;
             shutDown();
@@ -93,21 +93,22 @@ public class DiscordHandler {
     }
 
     private synchronized void onJoinGame(final String secret) {
-        if (StringHandler.isNullOrEmpty(STATUS) || !STATUS.equalsIgnoreCase("joinGame")) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
             STATUS = "joinGame";
             CraftPresence.SERVER.verifyAndJoin(secret);
         }
     }
 
     private synchronized void onJoinRequest(final DiscordUser user) {
-        if (StringHandler.isNullOrEmpty(STATUS) || !STATUS.equalsIgnoreCase("joinRequest")) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(user)))) {
             STATUS = "joinRequest";
+            REQUESTER_USER = user;
             handlers.joinRequest.accept(user);
         }
     }
 
     private synchronized void onSpectateGame(final String secret) {
-        if (StringHandler.isNullOrEmpty(STATUS) || !STATUS.equalsIgnoreCase("spectateGame")) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
             STATUS = "spectateGame";
             handlers.spectateGame.accept(secret);
         }
@@ -185,6 +186,7 @@ public class DiscordHandler {
 
         STATUS = null;
         CURRENT_USER = null;
+        REQUESTER_USER = null;
 
         Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
     }
