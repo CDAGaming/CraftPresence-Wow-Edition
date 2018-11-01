@@ -214,6 +214,7 @@ public class DiscordHandler {
                         // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name
                         final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME);
                         if (DiscordAssetHandler.contains(formattedCurrentDIMNameIcon)) {
+                            Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedCurrentDIMNameIcon));
                             LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
                         } else {
                             Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
@@ -232,6 +233,7 @@ public class DiscordHandler {
                         for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
                             final String formattedIPPart = StringHandler.formatPackIcon(ipPart);
                             if (DiscordAssetHandler.contains(formattedIPPart)) {
+                                Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedIPPart));
                                 SMALLIMAGEKEY = formattedIPPart;
                                 matched = true;
                                 break;

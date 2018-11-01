@@ -167,6 +167,7 @@ craftpresence.logger.info.discord.assets.load=Checking Discord for Available Ass
 craftpresence.logger.info.discord.assets.detected=%1$s Total Assets Detected!
 craftpresence.logger.info.discord.assets.load.credits=Coded by ItsDizzy - https://github.com/ItsDizzy
 craftpresence.logger.info.discord.assets.request=To Add Support for this Icon, Please Request for this Icon to be Added to the Default Client ID or Add the Icon under the following Name: "%1$s".
+craftpresence.logger.info.discord.assets.fallback=Fallback Icon for "%1$s" Found! Using %2$s Icon with Name "%3$s"!
 craftpresence.logger.error.rpc=CraftPresence has encountered the following RPC Error (Code: %1$s), and has been Shut Down to prevent a crash: %2$s
 craftpresence.logger.error.web=Failed to Go to Page: %1$s
 craftpresence.logger.error.https=Failed to Sign SSL Certificates for HTTPS, Any External Libraries required by CraftPresence may fail to download...
