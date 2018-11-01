@@ -5,6 +5,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
+import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -18,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class CPCommands extends CommandBase {
+    boolean awaitingReply = false;
+
     @Nonnull
     @Override
     public String getName() {
@@ -41,11 +44,13 @@ public class CPCommands extends CommandBase {
         List<String> baseCompletions = new ArrayList<>();
         List<String> assetsCompletions = new ArrayList<>();
         List<String> viewCompletions = new ArrayList<>();
+        List<String> requestCompletions = new ArrayList<>();
 
         baseCompletions.add("?");
         baseCompletions.add("help");
         baseCompletions.add("config");
         baseCompletions.add("reload");
+        baseCompletions.add("request");
         baseCompletions.add("view");
         baseCompletions.add("reboot");
         baseCompletions.add("shutdown");
@@ -61,6 +66,9 @@ public class CPCommands extends CommandBase {
         assetsCompletions.add("all");
         assetsCompletions.add("large");
         assetsCompletions.add("small");
+
+        requestCompletions.add("accept");
+        requestCompletions.add("deny");
 
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, baseCompletions);
@@ -94,7 +102,31 @@ public class CPCommands extends CommandBase {
         if (args.length == 0 || (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"))) {
             StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.usage.main"));
         } else if (!StringHandler.isNullOrEmpty(args[0])) {
-            if (args[0].equalsIgnoreCase("reload")) {
+            if (args[0].equalsIgnoreCase("request")) {
+                if (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
+                    StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER));
+                    awaitingReply = true;
+                } else {
+                    StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.none"));
+                    awaitingReply = false;
+                }
+
+                if (awaitingReply && args.length == 2 && !StringHandler.isNullOrEmpty(args[1])) {
+                    if (args[1].equalsIgnoreCase("accept")) {
+                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER));
+                        DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
+                        awaitingReply = false;
+                        CraftPresence.CLIENT.handlers.joinRequest.accept(CraftPresence.CLIENT.REQUESTER_USER);
+                    } else if (args[1].equalsIgnoreCase("deny")) {
+                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.denied"));
+                        DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
+                        awaitingReply = false;
+                        CraftPresence.CLIENT.handlers.joinRequest.accept(CraftPresence.CLIENT.REQUESTER_USER);
+                    } else {
+                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.unrecognized"));
+                    }
+                }
+            } else if (args[0].equalsIgnoreCase("reload")) {
                 StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.reload"));
                 CommandHandler.reloadData();
                 StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.reload.complete"));

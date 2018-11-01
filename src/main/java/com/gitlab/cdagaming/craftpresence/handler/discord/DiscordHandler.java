@@ -14,6 +14,7 @@ import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.client.ClientCommandHandler;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -103,7 +104,7 @@ public class DiscordHandler {
         if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(user)))) {
             STATUS = "joinRequest";
             REQUESTER_USER = user;
-            handlers.joinRequest.accept(user);
+            ClientCommandHandler.instance.executeCommand(CraftPresence.player, "/" + Constants.MODID + " request");
         }
     }
 
