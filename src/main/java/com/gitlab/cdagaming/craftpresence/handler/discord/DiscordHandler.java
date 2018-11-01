@@ -65,7 +65,7 @@ public class DiscordHandler {
     }
 
     private synchronized void onReady(final DiscordUser user) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("ready") || CURRENT_USER != user)) {
+        if (StringHandler.isNullOrEmpty(STATUS) || (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user))) {
             STATUS = "ready";
             CURRENT_USER = user;
             Constants.LOG.info(I18n.format("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
