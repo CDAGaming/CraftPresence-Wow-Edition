@@ -35,7 +35,6 @@ public class BiomeHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
-        isInUse = enabled && CraftPresence.player != null;
         final boolean needsUpdate = enabled && (
                 BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()
         );
@@ -44,13 +43,15 @@ public class BiomeHandler {
             getBiomes();
         }
 
-        if (isInUse) {
-            updateBiomeData();
-            if (enabled && CraftPresence.player == null) {
+        if (enabled) {
+            if (CraftPresence.player != null) {
+                isInUse = true;
+                updateBiomeData();
+            } else {
                 clearClientData();
-            } else if (!enabled) {
-                emptyData();
             }
+        } else {
+            emptyData();
         }
     }
 

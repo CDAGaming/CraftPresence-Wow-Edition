@@ -53,20 +53,21 @@ public class ServerHandler {
     public void onTick() {
         joinInProgress = StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame") || CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame"));
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showGameState : enabled;
-        isInUse = enabled && CraftPresence.player != null && !joinInProgress;
         final boolean needsUpdate = enabled && knownAddresses.isEmpty();
 
         if (needsUpdate) {
             getServerAddresses();
         }
 
-        if (isInUse) {
-            updateServerData();
-            if (enabled && CraftPresence.player == null) {
+        if (enabled) {
+            if (CraftPresence.player != null && !joinInProgress) {
+                isInUse = true;
+                updateServerData();
+            } else {
                 clearClientData();
-            } else if (!enabled) {
-                emptyData();
             }
+        } else {
+            emptyData();
         }
 
         if (joinInProgress && requestedServerData != null) {
