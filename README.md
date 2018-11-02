@@ -26,13 +26,15 @@ As an example, this is how the mod will convert the pack name to an iconKey:
 Beginning in v1.3.0, CraftPresence now offers the following Commands:
 
 (Commands can be prefixed by either `/craftpresence` or `/cp`)
-(Commands Listed are the Syntax as of v1.4.8*)
+
+(Commands Listed are the Syntax as of v1.4.9*)
 
 - `/cp view` - Help Command to display Commands available to view a variety of Display Data
 - `/cp config` - Opens CraftPresence's Config GUI
 - `/cp reload` - Reloads Mod Data (In v1.4.8, forces a Tick Event)
 - `/cp reboot` - Reboots RPC
 - `/cp shutdown` - Shutdown RPC (Can be turned on from `/cp reboot`)
+- `/cp request` - View Join Request Info
 - `/cp view currentData` - Displays in Text Form, your Current RPC Data
 - `/cp view assets <large|small|all>` - Displays all Asset IconKeys available to you
 - `/cp view dimensions` - Displays all Dimension Names available for use, if Showing Current Dimension is enabled

@@ -1,12 +1,14 @@
 # CraftPresence Changes
 
-## v1.4.9 (11/??/2018)
+## v1.4.9 (11/09/2018)
 
 ### Changes:
 
 * Added New Config Option:
 
   * `enableJoinRequest` - Available in General Config GUI and allows Enabling or Disabling Discord Join Requests
+
+* Added Ask To Join and Join Request Support
 
 * Added Some Additional Translations, mostly those missed in v1.4.8
 
@@ -18,7 +20,7 @@
 
 * Fixes Rapid RPC Update Scenarios
 
-* Fixes and Completes Join Request Functionality
+* Fixes RPC Tick Issues
 
 * Fixes Some CommandSender Reference Issues
 
@@ -33,3 +35,21 @@ The Config GUI has now been overhauled to provide a more User-Friendly Experienc
 * Migrating on `1.13.x` (From v1.3.x and Below) - Rename `craftpresence.cfg` to `craftpresence.properties` or Regenerate Config
 
 Over time, this GUI will be edited and change and improve to further customize your experience.
+
+#### Ask to Join // Join Request Info:
+
+In v1.4.9, Join Request and "Ask to Join" are now supported!
+
+These Features are both in-development, so although most Issues have been fixed, you may/may not run into major issues.
+
+If You happen to have a major Issue occur relating to this, Do not hesitate to make an Issue on our Issue Tracker!
+
+#### 1.13 Build Info:
+
+The 1.13 Port of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift)
+
+The 1.13 Port of this Mod also contains the following differences to take Note of:
+
+* KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
+
+* Commands have been changed slightly to be compliant with [Brigadier's Command Parse](https://github.com/Mojang/brigadier) in 1.13
