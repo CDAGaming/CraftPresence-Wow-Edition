@@ -46,10 +46,8 @@ If You happen to have a major Issue occur relating to this, Do not hesitate to m
 
 #### 1.13 Build Info:
 
-The 1.13 Port of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift)
-
-The 1.13 Port of this Mod also contains the following differences to take Note of:
+The 1.13 Port of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
 
 * KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
 
-* Commands have been changed slightly to be compliant with [Brigadier's Command Parse](https://github.com/Mojang/brigadier) in 1.13
+* Commands have been changed slightly to be compliant with [Brigadier's Command Parser](https://github.com/Mojang/brigadier) in 1.13
