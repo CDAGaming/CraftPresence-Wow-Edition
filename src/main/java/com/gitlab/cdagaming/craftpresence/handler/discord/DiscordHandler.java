@@ -23,6 +23,7 @@ public class DiscordHandler {
     public final DiscordEventHandlers handlers = new DiscordEventHandlers();
     public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
+    public int timer = 0;
 
     public String GAME_STATE;
     public String DETAILS;
@@ -44,7 +45,6 @@ public class DiscordHandler {
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private int lastErrorCode;
     private int lastDisconnectErrorCode;
-    public int timer = 0;
     private Thread callbackThread = null, timerThread = null;
 
     public synchronized void setup() {

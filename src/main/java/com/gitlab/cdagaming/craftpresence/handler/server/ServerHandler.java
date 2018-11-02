@@ -200,6 +200,10 @@ public class ServerHandler {
 
     private void joinServer(final ServerData serverData, @Nullable final String secret) {
         try {
+            if (CraftPresence.player != null) {
+                CraftPresence.player.world.sendQuittingDisconnectingPacket();
+                CraftPresence.instance.loadWorld(null);
+            }
             CraftPresence.instance.displayGuiScreen(new GuiConnecting(CraftPresence.instance.currentScreen != null ? CraftPresence.instance.currentScreen : new GuiMainMenu(), CraftPresence.instance, serverData));
         } catch (Exception ex) {
             ex.printStackTrace();
