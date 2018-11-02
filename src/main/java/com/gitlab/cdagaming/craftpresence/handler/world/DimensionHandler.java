@@ -5,9 +5,8 @@ import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import net.minecraft.world.DimensionType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class DimensionHandler {
     public boolean isInUse = false, enabled = false;
@@ -96,8 +95,22 @@ public class DimensionHandler {
 
     private List<DimensionType> getDimensionTypes() {
         List<DimensionType> dimensionTypes = new ArrayList<>();
+        Map<Integer, DimensionType> reflectedDimensionTypes = new TreeMap<>();
 
         Collections.addAll(dimensionTypes, DimensionType.values());
+
+        try {
+            Field dimensionTypesField = DimensionType.class.getDeclaredField("dimensionTypes");
+            dimensionTypesField.setAccessible(true);
+            reflectedDimensionTypes = (Map<Integer, DimensionType>) dimensionTypesField.get(null);
+        } catch (Exception ignored) {
+        }
+
+        for (DimensionType type : reflectedDimensionTypes.values()) {
+            if (type != null && !dimensionTypes.contains(type)) {
+                dimensionTypes.add(type);
+            }
+        }
 
         return dimensionTypes;
     }
