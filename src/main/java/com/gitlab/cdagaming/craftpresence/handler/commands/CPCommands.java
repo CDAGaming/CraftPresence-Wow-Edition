@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class CPCommands extends CommandBase {
-    boolean awaitingReply = false;
-
     @Nonnull
     @Override
     public String getName() {
@@ -75,6 +73,8 @@ public class CPCommands extends CommandBase {
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("view")) {
                 return getListOfStringsMatchingLastWord(args, viewCompletions);
+            } else if (args[0].equalsIgnoreCase("request")) {
+                return getListOfStringsMatchingLastWord(args, requestCompletions);
             } else {
                 return Collections.emptyList();
             }
@@ -103,27 +103,35 @@ public class CPCommands extends CommandBase {
             StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.usage.main"));
         } else if (!StringHandler.isNullOrEmpty(args[0])) {
             if (args[0].equalsIgnoreCase("request")) {
-                if (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
-                    StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER));
-                    awaitingReply = true;
-                } else {
-                    StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.none"));
-                    awaitingReply = false;
-                }
-
-                if (awaitingReply && args.length == 2 && !StringHandler.isNullOrEmpty(args[1])) {
-                    if (args[1].equalsIgnoreCase("accept")) {
-                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER));
-                        DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
-                        awaitingReply = false;
-                        CraftPresence.CLIENT.handlers.joinRequest.accept(CraftPresence.CLIENT.REQUESTER_USER);
-                    } else if (args[1].equalsIgnoreCase("deny")) {
-                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.denied"));
-                        DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
-                        awaitingReply = false;
-                        CraftPresence.CLIENT.handlers.joinRequest.accept(CraftPresence.CLIENT.REQUESTER_USER);
+                if (args.length == 1) {
+                    if (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
+                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.username, CraftPresence.CLIENT.timer));
+                        CraftPresence.awaitingReply = true;
                     } else {
-                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.unrecognized"));
+                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.none"));
+                        CraftPresence.awaitingReply = false;
+                    }
+                } else if (!StringHandler.isNullOrEmpty(args[1])) {
+                    if (CraftPresence.awaitingReply) {
+                        if (args[1].equalsIgnoreCase("accept")) {
+                            StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.username));
+                            DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
+                            CraftPresence.CLIENT.handlers.joinRequest.accept(CraftPresence.CLIENT.REQUESTER_USER);
+                            CraftPresence.CLIENT.STATUS = "ready";
+                            CraftPresence.CLIENT.timer = 0;
+                            CraftPresence.awaitingReply = false;
+                        } else if (args[1].equalsIgnoreCase("deny")) {
+                            StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.username));
+                            DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
+                            CraftPresence.CLIENT.handlers.joinRequest.accept(CraftPresence.CLIENT.REQUESTER_USER);
+                            CraftPresence.CLIENT.STATUS = "ready";
+                            CraftPresence.CLIENT.timer = 0;
+                            CraftPresence.awaitingReply = false;
+                        } else {
+                            StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.unrecognized"));
+                        }
+                    } else {
+                        StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.request.none"));
                     }
                 }
             } else if (args[0].equalsIgnoreCase("reload")) {

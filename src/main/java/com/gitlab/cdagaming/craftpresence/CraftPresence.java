@@ -3,8 +3,10 @@ package com.gitlab.cdagaming.craftpresence;
 import com.gitlab.cdagaming.craftpresence.config.ConfigHandler;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.KeyHandler;
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
+import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.entity.EntityHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.GUIHandler;
 import com.gitlab.cdagaming.craftpresence.handler.server.ServerHandler;
@@ -23,7 +25,7 @@ import java.io.File;
 
 @Mod(modid = Constants.MODID, name = Constants.NAME, version = Constants.VERSION_ID, clientSideOnly = true, guiFactory = Constants.GUI_FACTORY, canBeDeactivated = true, updateJSON = Constants.UPDATE_JSON, certificateFingerprint = Constants.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
-    public static boolean packFound = false;
+    public static boolean packFound = false, awaitingReply = false;
     public static Minecraft instance = Minecraft.getMinecraft();
     public static EntityPlayer player = instance.player;
 
@@ -88,14 +90,24 @@ public class CraftPresence {
     public void onTick(final TickEvent.ClientTickEvent event) {
         CommandHandler.reloadData();
 
-        if (!CraftPresence.CONFIG.hasChanged) {
+        if (!CONFIG.hasChanged) {
             if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                 CommandHandler.setMainMenuPresence();
             }
 
-            if (CraftPresence.CONFIG.rebootOnWorldLoad && player != null) {
+            if (CONFIG.rebootOnWorldLoad && player != null) {
                 CommandHandler.rebootRPC();
-                CraftPresence.CONFIG.rebootOnWorldLoad = false;
+                CONFIG.rebootOnWorldLoad = false;
+            }
+
+            if (awaitingReply && CLIENT.timer == 0) {
+                StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CraftPresence.CLIENT.REQUESTER_USER.username));
+                DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
+                awaitingReply = false;
+                CLIENT.STATUS = "ready";
+            } else if (!awaitingReply && CLIENT.REQUESTER_USER != null) {
+                CLIENT.REQUESTER_USER = null;
+                CLIENT.STATUS = "ready";
             }
         }
     }

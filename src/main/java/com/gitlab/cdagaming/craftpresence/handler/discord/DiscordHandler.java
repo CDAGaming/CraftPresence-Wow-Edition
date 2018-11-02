@@ -42,8 +42,10 @@ public class DiscordHandler {
     public byte INSTANCE;
 
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
-    private int lastErrorCode, lastDisconnectErrorCode;
-    private Thread callbackThread = null;
+    private int lastErrorCode;
+    private int lastDisconnectErrorCode;
+    public int timer = 0;
+    private Thread callbackThread = null, timerThread = null;
 
     public synchronized void setup() {
         NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
@@ -63,6 +65,19 @@ public class DiscordHandler {
             }
         }, "RPC-Callback-Handler");
         callbackThread.start();
+
+        timerThread = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                if (timer > 0) {
+                    timer--;
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        }, "Timer-Thread");
+        timerThread.start();
     }
 
     private synchronized void onReady(final DiscordUser user) {
@@ -102,6 +117,7 @@ public class DiscordHandler {
 
     private synchronized void onJoinRequest(final DiscordUser user) {
         if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(user)))) {
+            timer = 30;
             STATUS = "joinRequest";
             REQUESTER_USER = user;
             ClientCommandHandler.instance.executeCommand(CraftPresence.player, "/" + Constants.MODID + " request");
@@ -176,6 +192,8 @@ public class DiscordHandler {
 
     public synchronized void shutDown() {
         callbackThread.interrupt();
+        timerThread.interrupt();
+
         DiscordRPC.INSTANCE.Discord_ClearPresence();
         DiscordRPC.INSTANCE.Discord_Shutdown();
 
@@ -185,7 +203,10 @@ public class DiscordHandler {
         CraftPresence.SERVER.clearClientData();
         CraftPresence.GUIS.clearClientData();
 
-        STATUS = null;
+        STATUS = "disconnected";
+        lastDisconnectErrorCode = 0;
+        lastErrorCode = 0;
+        timer = 0;
         CURRENT_USER = null;
         REQUESTER_USER = null;
 
