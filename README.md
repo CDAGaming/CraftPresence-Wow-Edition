@@ -62,7 +62,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &ICON& - The Default Dimension Icon Name
 - &ID& - The Current Dimension ID
 
-#### Server Placeholders
+#### Server/LAN Message Placeholders
 - &IP& - The Current Server IP Address
 - &NAME& - The Current Server Name
 - &MOTD& - The Current Server MOTD (Message of The Day)
@@ -72,7 +72,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &TIME& - The Current World Time
 - &MODS& - The Amount of Mods currently in your Mods Folder
 
-#### SinglePlayer/LAN Placeholders
+#### SinglePlayer Placeholders
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
 - &MODS& - The Amount of Mods currently in your Mods Folder

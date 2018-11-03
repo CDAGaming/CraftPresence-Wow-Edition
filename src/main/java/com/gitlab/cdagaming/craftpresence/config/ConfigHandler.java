@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.config;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.resources.I18n;
 
@@ -26,7 +27,7 @@ public class ConfigHandler {
     public String NAME_defaultServerIcon, NAME_defaultServerName,
             NAME_defaultServerMOTD, NAME_serverMessages;
     // STATUS MESSAGES
-    public String NAME_mainmenuMSG, NAME_singleplayerMSG, NAME_loadingMSG,
+    public String NAME_mainmenuMSG, NAME_lanMSG, NAME_singleplayerMSG, NAME_loadingMSG,
             NAME_packPlaceholderMSG, NAME_playerPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
             NAME_gameTimePlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
@@ -47,7 +48,7 @@ public class ConfigHandler {
     public String defaultServerIcon, defaultServerName, defaultServerMOTD;
     public String[] serverMessages;
     // STATUS MESSAGES
-    public String mainmenuMSG, singleplayerMSG, loadingMSG, packPlaceholderMSG,
+    public String mainmenuMSG, lanMSG, singleplayerMSG, loadingMSG, packPlaceholderMSG,
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
             gameTimePlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
@@ -107,6 +108,7 @@ public class ConfigHandler {
         serverMessages = new String[]{"default;Playing on &motd&"};
         // STATUS MESSAGES
         NAME_mainmenuMSG = I18n.format("gui.config.name.statusmessages.mainmenumsg").replaceAll(" ", "_");
+        NAME_lanMSG = I18n.format("gui.config.name.statusmessages.lanmsg").replaceAll(" ", "_");
         NAME_singleplayerMSG = I18n.format("gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
         NAME_loadingMSG = I18n.format("gui.config.name.statusmessages.loadingmsg").replaceAll(" ", "_");
         NAME_packPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.packmsg").replaceAll(" ", "_");
@@ -116,6 +118,7 @@ public class ConfigHandler {
         NAME_modsPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.modsmsg").replaceAll(" ", "_");
         NAME_vivecraftMessage = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg").replaceAll(" ", "_");
         mainmenuMSG = I18n.format("craftpresence.defaults.state.mainmenu");
+        lanMSG = I18n.format("craftpresence.defaults.state.lan");
         singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer");
         loadingMSG = I18n.format("craftpresence.defaults.state.loading");
         packPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.pack");
@@ -195,6 +198,7 @@ public class ConfigHandler {
                 serverMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : serverMessages;
                 // STATUS MESSAGES
                 mainmenuMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_mainmenuMSG)) ? properties.getProperty(NAME_mainmenuMSG) : mainmenuMSG;
+                lanMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_lanMSG)) ? properties.getProperty(NAME_lanMSG) : lanMSG;
                 singleplayerMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_singleplayerMSG)) ? properties.getProperty(NAME_singleplayerMSG) : singleplayerMSG;
                 loadingMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_loadingMSG)) ? properties.getProperty(NAME_loadingMSG) : loadingMSG;
                 packPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_packPlaceholderMSG)) ? properties.getProperty(NAME_packPlaceholderMSG) : packPlaceholderMSG;
@@ -247,6 +251,7 @@ public class ConfigHandler {
         properties.setProperty(NAME_serverMessages, Arrays.toString(serverMessages));
         // STATUS MESSAGES
         properties.setProperty(NAME_mainmenuMSG, mainmenuMSG);
+        properties.setProperty(NAME_lanMSG, lanMSG);
         properties.setProperty(NAME_singleplayerMSG, singleplayerMSG);
         properties.setProperty(NAME_loadingMSG, loadingMSG);
         properties.setProperty(NAME_packPlaceholderMSG, packPlaceholderMSG);
@@ -322,6 +327,16 @@ public class ConfigHandler {
                         splitCharacter = ";";
                         properties.setProperty(property, splitCharacter);
                         save();
+                    }
+                    if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.CLIENT.timer != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
+                        CraftPresence.awaitingReply = false;
+                        CraftPresence.CLIENT.REQUESTER_USER = null;
+                        CraftPresence.CLIENT.JOIN_SECRET = null;
+                        CraftPresence.CLIENT.PARTY_ID = null;
+                        CraftPresence.CLIENT.PARTY_SIZE = 0;
+                        CraftPresence.CLIENT.PARTY_MAX = 0;
+                        CraftPresence.CLIENT.timer = 0;
+                        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                     }
 
                     if (property.equals(NAME_biomeMessages) && biomeMessages != null) {

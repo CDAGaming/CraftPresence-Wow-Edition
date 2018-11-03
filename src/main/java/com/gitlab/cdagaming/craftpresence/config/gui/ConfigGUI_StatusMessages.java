@@ -15,7 +15,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     private final GuiScreen parentScreen;
     private int pageNumber;
     private GuiButton proceedButton, nextPageButton, previousPageButton;
-    private GuiTextField mainMenuMSG, singleplayerMSG, loadingMSG,
+    private GuiTextField mainMenuMSG, lanMSG, singleplayerMSG, loadingMSG,
             packMSG, playerMSG, playerAmountMSG, gameTimeMSG, modsMSG, viveCraftMSG;
 
     ConfigGUI_StatusMessages(GuiScreen parentScreen) {
@@ -31,18 +31,20 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         // Page 1 Items
         mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
-        singleplayerMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
-        loadingMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        lanMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        singleplayerMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        loadingMSG = new GuiTextField(140, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
 
         // Page 2 Items
-        packMSG = new GuiTextField(140, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
-        playerMSG = new GuiTextField(150, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
-        playerAmountMSG = new GuiTextField(160, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
-        gameTimeMSG = new GuiTextField(170, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
-        modsMSG = new GuiTextField(180, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
-        viveCraftMSG = new GuiTextField(190, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
+        packMSG = new GuiTextField(150, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        playerMSG = new GuiTextField(160, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        playerAmountMSG = new GuiTextField(170, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        gameTimeMSG = new GuiTextField(180, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
+        modsMSG = new GuiTextField(190, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
+        viveCraftMSG = new GuiTextField(200, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
 
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
+        lanMSG.setText(CraftPresence.CONFIG.lanMSG);
         singleplayerMSG.setText(CraftPresence.CONFIG.singleplayerMSG);
         loadingMSG.setText(CraftPresence.CONFIG.loadingMSG);
         packMSG.setText(CraftPresence.CONFIG.packPlaceholderMSG);
@@ -70,6 +72,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         final String title = "CraftPresence - " + I18n.format("gui.config.title.statusmessages");
         final String mainMenuText = I18n.format("gui.config.name.statusmessages.mainmenumsg");
+        final String lanText = I18n.format("gui.config.name.statusmessages.lanmsg");
         final String singlePlayerText = I18n.format("gui.config.name.statusmessages.singleplayermsg");
         final String loadingText = I18n.format("gui.config.name.statusmessages.loadingmsg");
         final String packText = I18n.format("gui.config.name.statusmessages.placeholder.packmsg");
@@ -83,10 +86,12 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         if (pageNumber == 0) {
             drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            drawString(fontRenderer, loadingText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, lanText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, loadingText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
 
             mainMenuMSG.drawTextBox();
+            lanMSG.drawTextBox();
             singleplayerMSG.drawTextBox();
             loadingMSG.drawTextBox();
         }
@@ -118,12 +123,16 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
             if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(mainMenuText), fontRenderer.FONT_HEIGHT)) {
                 drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.mainmenumsg")), mouseX, mouseY);
             }
+            //Hovering over LAN Message Label
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(lanText), fontRenderer.FONT_HEIGHT)) {
+                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.lanmsg")), mouseX, mouseY);
+            }
             // Hovering over Single Player Message Label
-            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(singlePlayerText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(singlePlayerText), fontRenderer.FONT_HEIGHT)) {
                 drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.singleplayermsg")), mouseX, mouseY);
             }
             // Hovering over Loading Message Label
-            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(loadingText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOverElement(mouseX, mouseY, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, fontRenderer.getStringWidth(loadingText), fontRenderer.FONT_HEIGHT)) {
                 drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY);
             }
         }
@@ -174,6 +183,11 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.mainmenuMSG = mainMenuMSG.getText();
+            }
+            if (!lanMSG.getText().equals(CraftPresence.CONFIG.lanMSG)) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.lanMSG = lanMSG.getText();
             }
             if (!singleplayerMSG.getText().equals(CraftPresence.CONFIG.singleplayerMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
@@ -235,6 +249,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         if (pageNumber == 0) {
             mainMenuMSG.textboxKeyTyped(typedChar, keyCode);
+            lanMSG.textboxKeyTyped(typedChar, keyCode);
             singleplayerMSG.textboxKeyTyped(typedChar, keyCode);
             loadingMSG.textboxKeyTyped(typedChar, keyCode);
         }
@@ -253,6 +268,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (pageNumber == 0) {
             mainMenuMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            lanMSG.mouseClicked(mouseX, mouseY, mouseButton);
             singleplayerMSG.mouseClicked(mouseX, mouseY, mouseButton);
             loadingMSG.mouseClicked(mouseX, mouseY, mouseButton);
         }
@@ -273,6 +289,7 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     public void updateScreen() {
         if (pageNumber == 0) {
             mainMenuMSG.updateCursorCounter();
+            lanMSG.updateCursorCounter();
             singleplayerMSG.updateCursorCounter();
             loadingMSG.updateCursorCounter();
         }

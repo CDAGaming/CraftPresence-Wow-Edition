@@ -24,8 +24,9 @@ public class ServerHandler {
     private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString, requestedSecret;
     private int currentPlayers, maxPlayers, serverIndex;
     private ServerData currentServerData, requestedServerData;
+    private NetHandlerPlayClient currentConnection;
 
-    private boolean queuedForUpdate = false, joinInProgress = false;
+    private boolean queuedForUpdate = false, joinInProgress = false, isOnLAN = false;
 
     public void emptyData() {
         knownAddresses.clear();
@@ -37,11 +38,13 @@ public class ServerHandler {
         currentServer_MOTD = null;
         currentServer_Name = null;
         currentServerData = null;
+        currentConnection = null;
         timeString = null;
         currentPlayers = 0;
         maxPlayers = 0;
 
         queuedForUpdate = false;
+        isOnLAN = false;
         isInUse = false;
 
         if (!joinInProgress) {
@@ -76,33 +79,25 @@ public class ServerHandler {
     }
 
     private void updateServerData() {
-        // NOTE: Server-Only Events
-        if (!CraftPresence.instance.isSingleplayer() && !joinInProgress) {
-            final ServerData serverData = CraftPresence.instance.getCurrentServerData();
-            final NetHandlerPlayClient connection = CraftPresence.instance.getConnection();
+        final ServerData newServerData = CraftPresence.instance.getCurrentServerData();
+        final NetHandlerPlayClient newConnection = CraftPresence.instance.getConnection();
 
-            if (serverData != null && connection != null) {
-                final String newServer_IP = serverData.serverIP;
-                final String newServer_Name = !StringHandler.isNullOrEmpty(serverData.serverName) ? serverData.serverName : CraftPresence.CONFIG.defaultServerName;
-                final String newServer_MOTD = !StringHandler.isNullOrEmpty(serverData.serverMOTD) && !(serverData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || serverData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(serverData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
-                final int newCurrentPlayers = connection.getPlayerInfoMap().size();
-                final int newMaxPlayers = connection.currentServerMaxPlayers;
+        if (!joinInProgress && newConnection != null) {
+            final int newCurrentPlayers = newConnection.getPlayerInfoMap().size();
+            final int newMaxPlayers = newConnection.currentServerMaxPlayers;
+            isOnLAN = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
 
-                if (!serverData.equals(currentServerData) || !newServer_IP.equals(currentServer_IP) || !newServer_MOTD.equals(currentServer_MOTD) || !newServer_Name.equals(currentServer_Name)) {
-                    currentServer_IP = newServer_IP;
-                    currentServer_MOTD = newServer_MOTD;
-                    currentServer_Name = newServer_Name;
-                    currentServerData = serverData;
-                    queuedForUpdate = true;
-                }
+            final String newServer_IP = newServerData != null ? newServerData.serverIP : null;
+            final String newServer_Name = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverName) ? newServerData.serverName : CraftPresence.CONFIG.defaultServerName;
+            final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverMOTD)) && !(newServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || newServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
+            final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
 
-                if (newCurrentPlayers != currentPlayers || newMaxPlayers != maxPlayers) {
-                    currentPlayers = newCurrentPlayers;
-                    maxPlayers = newMaxPlayers;
-                    if ((!StringHandler.isNullOrEmpty(currentServerMSG) && currentServerMSG.toLowerCase().contains("&players&")) || CraftPresence.CONFIG.enableJoinRequest) {
-                        queuedForUpdate = true;
-                    }
-                }
+            if (newServerData != null && (!newServerData.equals(currentServerData) || !newConnection.equals(currentConnection) || !newServer_IP.equals(currentServer_IP) || (!StringHandler.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) || (!StringHandler.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name)))) {
+                currentServer_IP = newServer_IP;
+                currentServer_MOTD = newServer_MOTD;
+                currentServer_Name = newServer_Name;
+                currentServerData = newServerData;
+                queuedForUpdate = true;
 
                 final ServerList serverList = new ServerList(CraftPresence.instance);
                 serverList.loadServerList();
@@ -110,14 +105,18 @@ public class ServerHandler {
                     getServerAddresses();
                 }
             }
-        }
 
-        // NOTE: Universal Events (SinglePlayer and MultiPlayer)
-        if (CraftPresence.player != null) {
-            final String gameTime = getTimeString(CraftPresence.player.world.getWorldTime());
+            // NOTE: Universal Events
+            if (newCurrentPlayers != currentPlayers || newMaxPlayers != maxPlayers) {
+                currentPlayers = newCurrentPlayers;
+                maxPlayers = newMaxPlayers;
+                if ((!StringHandler.isNullOrEmpty(currentServerMSG) && currentServerMSG.toLowerCase().contains("&players&")) || CraftPresence.CONFIG.enableJoinRequest) {
+                    queuedForUpdate = true;
+                }
+            }
 
-            if (!gameTime.equals(timeString)) {
-                timeString = gameTime;
+            if (!StringHandler.isNullOrEmpty(newGameTime) && !newGameTime.equals(timeString)) {
+                timeString = newGameTime;
                 if (!StringHandler.isNullOrEmpty(currentServerMSG) && currentServerMSG.toLowerCase().contains("&time&")) {
                     queuedForUpdate = true;
                 }
@@ -125,13 +124,7 @@ public class ServerHandler {
         }
 
         if (queuedForUpdate) {
-            if (!CraftPresence.instance.isSingleplayer()) {
-                updateServerPresence();
-            } else {
-                CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
-                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-                queuedForUpdate = false;
-            }
+            updateServerPresence();
         }
     }
 
@@ -224,33 +217,56 @@ public class ServerHandler {
     }
 
     private void updateServerPresence() {
-        final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
-        final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
+        if (!CraftPresence.instance.isSingleplayer() && !isOnLAN && currentServerData != null) {
+            // NOTE: Server-Only Presence Updates
+            final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+            final String alternateServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
+            final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
 
-        currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP, false), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
-        final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
-        final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
+            currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP, false), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
+            final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+            final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
 
-        CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP, false)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", CraftPresence.CONFIG.playerAmountPlaceholderMSG.replace("&current&", Integer.toString(currentPlayers)).replace("&max&", Integer.toString(maxPlayers))).replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
-        if (CraftPresence.CONFIG.enableJoinRequest) {
-            if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
-                CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
-            } else {
-                CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+            CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP, false)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", CraftPresence.CONFIG.playerAmountPlaceholderMSG.replace("&current&", Integer.toString(currentPlayers)).replace("&max&", Integer.toString(maxPlayers))).replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
+            if (CraftPresence.CONFIG.enableJoinRequest) {
+                if (!StringHandler.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
+                    CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
+                } else {
+                    CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+                }
+                CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
+                CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
+                CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
             }
-            CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
-            CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
-            CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
-        }
 
-        if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
-            CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-            CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
-        }
+            if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
+                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
+                CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
+            }
 
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-        queuedForUpdate = false;
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+            queuedForUpdate = false;
+        } else if (isOnLAN) {
+            // NOTE: LAN-Only Presence Updates
+            final String alternateServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
+            final String currentServerIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, StringHandler.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+            final String formattedServerIconKey = StringHandler.formatPackIcon(currentServerIcon.replace(" ", "_"));
+
+            CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.lanMSG.replace("&ip&", StringHandler.formatIP(currentServer_IP, false)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", CraftPresence.CONFIG.playerAmountPlaceholderMSG.replace("&current&", Integer.toString(currentPlayers)).replace("&max&", Integer.toString(maxPlayers))).replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
+
+            if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
+                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
+                CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
+            }
+
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+            queuedForUpdate = false;
+        } else if (CraftPresence.instance.isSingleplayer()) {
+            // NOTE: SinglePlayer-Only Presence Updates
+            CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+            queuedForUpdate = false;
+        }
     }
 
     public void getServerAddresses() {

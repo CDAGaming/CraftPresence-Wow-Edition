@@ -6,15 +6,21 @@
 
 * Added New Config Option:
 
+  * `lanMSG` - Available in Status Messages to Set a Message to display while in a LAN Game
+
   * `enableJoinRequest` - Available in General Config GUI and allows Enabling or Disabling Discord Join Requests
 
 * Added Ask To Join and Join Request Support
+
+* Added LAN Game Support
 
 * Added Some Additional Translations, mostly those missed in v1.4.8
 
 ### Fixes:
 
 * Fixes some Minor NPE Scenarios
+
+* Fixes a Crash when Joining a LAN Server [Issue Reference](https://gitlab.com/CDAGaming/CraftPresence/issues/8)
 
 * Fixes Issues with Fallback Icon Setting
 
