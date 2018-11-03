@@ -156,8 +156,8 @@ public class DiscordHandler {
             presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.vivecraftMessage;
         } else if (ManifestHandler.manifest != null && !StringHandler.isNullOrEmpty(ManifestHandler.manifest.name)) {
             presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
-        } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name"))) {
-            presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
+        } else if (!StringHandler.isNullOrEmpty(InstanceHandler.INSTANCE_NAME)) {
+            presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.INSTANCE_NAME));
         } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME)) {
             presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
         }
@@ -172,12 +172,9 @@ public class DiscordHandler {
                     presence.smallImageKey = iconKey;
                     presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
                 }
-            } else if (!StringHandler.isNullOrEmpty(InstanceHandler.get("name")) && !StringHandler.isNullOrEmpty(InstanceHandler.get("iconKey"))) {
-                final String iconKey = StringHandler.formatPackIcon(InstanceHandler.get("iconKey"));
-                if (DiscordAssetHandler.contains(iconKey)) {
-                    presence.smallImageKey = iconKey;
-                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.get("name")));
-                }
+            } else if (!StringHandler.isNullOrEmpty(InstanceHandler.INSTANCE_NAME) && !StringHandler.isNullOrEmpty(InstanceHandler.ICON_KEY) && DiscordAssetHandler.contains(InstanceHandler.ICON_KEY)) {
+                presence.smallImageKey = InstanceHandler.ICON_KEY;
+                presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.INSTANCE_NAME));
             } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME) && !StringHandler.isNullOrEmpty(PackHandler.ICON_NAME) && DiscordAssetHandler.contains(PackHandler.ICON_NAME)) {
                 presence.smallImageKey = PackHandler.ICON_NAME;
                 presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", PackHandler.PACK_NAME);

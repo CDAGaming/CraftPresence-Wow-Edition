@@ -13,7 +13,9 @@ import java.util.Properties;
 
 public class InstanceHandler {
     private static Properties configFile = new Properties();
-    private static String instanceFile = new File(System.getProperty("user.dir")).getParent() + "/instance.cfg";
+    private static String instanceFile = new File(System.getProperty("user.dir")).getParent() + File.separator + "instance.cfg";
+
+    public static String INSTANCE_NAME, ICON_KEY;
 
     public static boolean contains(String key) {
         return configFile != null && configFile.containsKey(key);
@@ -29,12 +31,11 @@ public class InstanceHandler {
             final InputStream STREAM = new FileInputStream(instanceFile);
             configFile.load(STREAM);
 
-            if (!StringHandler.isNullOrEmpty(get("name"))) {
-                if (!StringHandler.isNullOrEmpty(get("iconKey"))) {
-                    Constants.LOG.info(I18n.format("craftpresence.logger.info.instance.loaded", get("name"), get("iconKey")));
-                } else {
-                    Constants.LOG.info(I18n.format("craftpresence.logger.info.instance.loaded", get("name"), "NONE"));
-                }
+            INSTANCE_NAME = get("name");
+            ICON_KEY = StringHandler.formatPackIcon(!StringHandler.isNullOrEmpty(get("iconKey")) && !get("iconKey").equals("default") ? get("iconKey") : "infinity");
+
+            if (!StringHandler.isNullOrEmpty(INSTANCE_NAME) && !StringHandler.isNullOrEmpty(ICON_KEY)) {
+                Constants.LOG.info(I18n.format("craftpresence.logger.info.instance.loaded", INSTANCE_NAME, ICON_KEY));
                 CraftPresence.packFound = true;
             }
         } catch (Exception ex) {

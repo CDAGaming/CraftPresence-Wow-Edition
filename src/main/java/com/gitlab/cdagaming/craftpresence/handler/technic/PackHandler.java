@@ -10,8 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 public class PackHandler {
-    public static String PACK_NAME;
-    public static String ICON_NAME;
+    public static String PACK_NAME, ICON_NAME;
 
     public static void loadPack() {
         Constants.LOG.info(I18n.format("craftpresence.logger.info.technic.init"));
