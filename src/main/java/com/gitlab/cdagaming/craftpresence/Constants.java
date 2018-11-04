@@ -32,7 +32,7 @@ public class Constants {
     public static final Logger LOG = LogManager.getLogger(MODID);
     public static final boolean IS_DEV = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
-    protected static void loadDLL(final boolean Update) {
+    static void loadDLL(final boolean Update) {
         boolean UpdateStatus = Update;
         if (SystemUtils.IS_OS_WINDOWS) {
             final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
