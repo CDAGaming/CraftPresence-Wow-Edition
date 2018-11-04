@@ -1,12 +1,12 @@
 # CraftPresence Changes
 
-## v1.4.9 (11/09/2018)
+## v1.4.9 (11/07/2018)
 
 ### Changes:
 
 * Added New Config Option:
 
-  * `lanMSG` - Available in Status Messages to Set a Message to display while in a LAN Game
+  * `lanMSG` - Available in Status Messages GUI to Set a Message to display while in a LAN Game
 
   * `enableJoinRequest` - Available in General Config GUI and allows Enabling or Disabling Discord Join Requests
 
@@ -46,7 +46,7 @@ Over time, this GUI will be edited and change and improve to further customize y
 
 In v1.4.9, Join Request and "Ask to Join" are now supported!
 
-These Features are both in-development, so although most Issues have been fixed, you may/may not run into major issues.
+These Features are both extremely new, so although most Issues have been fixed, you may/may not run into major issues.
 
 If You happen to have a major Issue occur relating to this, Do not hesitate to make an Issue on our Issue Tracker!
 
