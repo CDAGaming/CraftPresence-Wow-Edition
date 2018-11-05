@@ -169,6 +169,11 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
             }
+            if (enableJoinRequestButton.isChecked() != CraftPresence.CONFIG.enableJoinRequest) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.enableJoinRequest = enableJoinRequestButton.isChecked();
+            }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == defaultIconButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null));

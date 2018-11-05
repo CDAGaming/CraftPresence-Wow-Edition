@@ -89,17 +89,21 @@ public class EntityHandler {
     }
 
     private boolean isEmpty(final Item item) {
-        return item == null || isEmpty(item.getDefaultInstance());
+        return item == null || isEmpty(getDefaultInstance(item));
     }
 
     private boolean isEmpty(final Block block) {
         return block == null || isEmpty(Item.getItemFromBlock(block));
     }
 
+    private ItemStack getDefaultInstance(final Item itemIn) {
+        return new ItemStack(itemIn);
+    }
+
     private boolean isEmpty(final ItemStack itemStack) {
         if (itemStack == null || itemStack == EMPTY) {
             return true;
-        } else if (itemStack.getItem() != Items.AIR) {
+        } else if (itemStack.getItem() != null && itemStack.getItem() != Items.AIR) {
             if (itemStack.getCount() <= 0) {
                 return true;
             } else {
@@ -251,8 +255,8 @@ public class EntityHandler {
                         }
                     }
                 } else {
-                    if (!ITEM_NAMES.contains(item.getItemStackDisplayName(item.getDefaultInstance()))) {
-                        ITEM_NAMES.add(item.getItemStackDisplayName(item.getDefaultInstance()));
+                    if (!ITEM_NAMES.contains(item.getItemStackDisplayName(getDefaultInstance(item)))) {
+                        ITEM_NAMES.add(item.getItemStackDisplayName(getDefaultInstance(item)));
                     }
                     if (!ITEM_CLASSES.contains(item.getClass().getName())) {
                         ITEM_CLASSES.add(item.getClass().getName());
