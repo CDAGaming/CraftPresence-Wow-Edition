@@ -12,7 +12,6 @@ import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.resources.I18n;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ServerHandler {
 
     public List<String> knownAddresses = new ArrayList<>();
     public String currentServer_IP;
-    private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString, requestedSecret;
+    private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
     private int currentPlayers, maxPlayers, serverIndex;
     private ServerData currentServerData, requestedServerData;
     private NetHandlerPlayClient currentConnection;
@@ -48,7 +47,6 @@ public class ServerHandler {
         isInUse = false;
 
         if (!joinInProgress) {
-            requestedSecret = null;
             requestedServerData = null;
         }
     }
@@ -74,7 +72,7 @@ public class ServerHandler {
         }
 
         if (joinInProgress && requestedServerData != null) {
-            joinServer(requestedServerData, requestedSecret);
+            joinServer(requestedServerData);
         }
     }
 
@@ -183,7 +181,6 @@ public class ServerHandler {
         if (isValidSecret) {
             if (CraftPresence.CONFIG.enableJoinRequest) {
                 requestedServerData = new ServerData(serverName, serverIP, false);
-                requestedSecret = secret;
             } else {
                 Constants.LOG.error(I18n.format("craftpresence.logger.warning.config.disabled.enablejoinrequest"));
             }
@@ -192,7 +189,7 @@ public class ServerHandler {
         }
     }
 
-    private void joinServer(final ServerData serverData, @Nullable final String secret) {
+    private void joinServer(final ServerData serverData) {
         try {
             if (CraftPresence.player != null) {
                 CraftPresence.player.world.sendQuittingDisconnectingPacket();
@@ -202,16 +199,6 @@ public class ServerHandler {
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
-            if (!StringHandler.isNullOrEmpty(secret)) {
-                if (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame")) {
-                    CraftPresence.CLIENT.handlers.joinGame.accept(secret);
-                }
-
-                if (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame")) {
-                    CraftPresence.CLIENT.handlers.spectateGame.accept(secret);
-                }
-            }
-            requestedSecret = null;
             requestedServerData = null;
         }
     }

@@ -4,6 +4,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -109,17 +110,19 @@ public class StringHandler {
     }
 
     public static String[] removeFromArray(final String[] originalArray, final String searchTerm, final int searchIndex, final String splitCharacter) {
-        String[] formatted = originalArray;
-        if (!isNullOrEmpty(Arrays.toString(formatted))) {
+        int indexNumber = 0;
+        List<String> formatted = new ArrayList<>(Arrays.asList(originalArray));
+        if (!isNullOrEmpty(formatted.toString())) {
             for (String part : formatted) {
                 String[] splitPart = part.split(splitCharacter);
                 if (!StringHandler.isNullOrEmpty(splitPart[searchIndex]) && splitPart[searchIndex].equalsIgnoreCase(searchTerm)) {
-                    formatted = Arrays.stream(formatted).filter(obj -> !obj.equals(part)).toArray(String[]::new);
+                    formatted.remove(indexNumber);
                     break;
                 }
+                indexNumber++;
             }
         }
-        return formatted;
+        return formatted.toArray(new String[0]);
     }
 
     public static String getConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String alternativeMSG) {

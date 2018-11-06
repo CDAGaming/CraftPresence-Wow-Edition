@@ -23,7 +23,6 @@ public class DiscordHandler {
     public final DiscordEventHandlers handlers = new DiscordEventHandlers();
     public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
-    public int timer = 0;
 
     public String GAME_STATE;
     public String DETAILS;
@@ -43,101 +42,101 @@ public class DiscordHandler {
     public byte INSTANCE;
 
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
-    private int lastErrorCode;
-    private int lastDisconnectErrorCode;
-    private Thread callbackThread = null, timerThread = null;
+    private int lastErrorCode, lastDisconnectErrorCode;
+    private Thread callbackThread = null;
 
     public synchronized void setup() {
         NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
-        Thread shutdownThread = new Thread(this::shutDown);
-        shutdownThread.setName("CraftPresence-Shutdown-Handler");
+        Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
+            @Override
+            public void run() {
+                shutDown();
+            }
+        };
         Runtime.getRuntime().addShutdownHook(shutdownThread);
     }
 
     private synchronized void setupThreads() {
-        callbackThread = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                DiscordRPC.INSTANCE.Discord_RunCallbacks();
-                try {
-                    Thread.sleep(2000L);
-                } catch (Exception ignored) {
-                }
-            }
-        }, "RPC-Callback-Handler");
-        callbackThread.start();
-
-        timerThread = new Thread(() -> {
-            while (!Thread.currentThread().isInterrupted()) {
-                if (timer > 0) {
-                    timer--;
+        callbackThread = new Thread("RPC-Callback-Handler") {
+            @Override
+            public void run() {
+                while (!Thread.currentThread().isInterrupted()) {
+                    DiscordRPC.INSTANCE.Discord_RunCallbacks();
                     try {
-                        Thread.sleep(1000L);
+                        Thread.sleep(2000L);
                     } catch (Exception ignored) {
                     }
                 }
             }
-        }, "Timer-Thread");
-        timerThread.start();
-    }
-
-    private synchronized void onReady(final DiscordUser user) {
-        if ((StringHandler.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
-            STATUS = "ready";
-            CURRENT_USER = user;
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
-            handlers.ready.accept(user);
-        }
-    }
-
-    private synchronized void onError(final int errorCode, final String message) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
-            STATUS = "errored";
-            lastErrorCode = errorCode;
-            shutDown();
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.rpc", errorCode, message));
-            handlers.errored.accept(errorCode, message);
-        }
-    }
-
-    private synchronized void onDisconnect(final int errorCode, final String message) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
-            STATUS = "disconnected";
-            lastDisconnectErrorCode = errorCode;
-            shutDown();
-            handlers.disconnected.accept(errorCode, message);
-        }
-    }
-
-    private synchronized void onJoinGame(final String secret) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
-            STATUS = "joinGame";
-            CraftPresence.SERVER.verifyAndJoin(secret);
-        }
-    }
-
-    private synchronized void onJoinRequest(final DiscordUser user) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(user)))) {
-            timer = 30;
-            STATUS = "joinRequest";
-            REQUESTER_USER = user;
-            ClientCommandHandler.instance.executeCommand(CraftPresence.player, "/" + Constants.MODID + " request");
-        }
-    }
-
-    private synchronized void onSpectateGame(final String secret) {
-        if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
-            STATUS = "spectateGame";
-            handlers.spectateGame.accept(secret);
-        }
+        };
+        callbackThread.start();
     }
 
     public synchronized void init() {
-        handlers.errored = this::onError;
-        handlers.disconnected = this::onDisconnect;
-        handlers.ready = this::onReady;
-        handlers.joinGame = this::onJoinGame;
-        handlers.joinRequest = this::onJoinRequest;
-        handlers.spectateGame = this::onSpectateGame;
+        handlers.errored = new DiscordEventHandlers.OnStatus() {
+            @Override
+            public void accept(int errorCode, String message) {
+                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
+                    STATUS = "errored";
+                    lastErrorCode = errorCode;
+                    shutDown();
+                    Constants.LOG.error(I18n.format("craftpresence.logger.error.rpc", errorCode, message));
+                }
+            }
+        };
+
+        handlers.disconnected = new DiscordEventHandlers.OnStatus() {
+            @Override
+            public void accept(int errorCode, String message) {
+                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
+                    STATUS = "disconnected";
+                    lastDisconnectErrorCode = errorCode;
+                    shutDown();
+                }
+            }
+        };
+
+        handlers.ready = new DiscordEventHandlers.OnReady() {
+            @Override
+            public void accept(DiscordUser user) {
+                if ((StringHandler.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
+                    STATUS = "ready";
+                    CURRENT_USER = user;
+                    Constants.LOG.info(I18n.format("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
+                }
+            }
+        };
+
+        handlers.joinGame = new DiscordEventHandlers.OnGameUpdate() {
+            @Override
+            public void accept(String secret) {
+                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
+                    STATUS = "joinGame";
+                    CraftPresence.SERVER.verifyAndJoin(secret);
+                }
+            }
+        };
+
+        handlers.joinRequest = new DiscordEventHandlers.OnJoinRequest() {
+            @Override
+            public void accept(DiscordUser request) {
+                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
+                    CraftPresence.TIMER = 30;
+                    STATUS = "joinRequest";
+                    REQUESTER_USER = request;
+                    ClientCommandHandler.instance.executeCommand(CraftPresence.player, "/" + Constants.MODID + " request");
+                }
+            }
+        };
+
+        handlers.spectateGame = new DiscordEventHandlers.OnGameUpdate() {
+            @Override
+            public void accept(String secret) {
+                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
+                    STATUS = "spectateGame";
+                }
+            }
+        };
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
         DiscordRPC.INSTANCE.Discord_UpdateHandlers(handlers);
@@ -189,7 +188,6 @@ public class DiscordHandler {
 
     public synchronized void shutDown() {
         callbackThread.interrupt();
-        timerThread.interrupt();
 
         DiscordRPC.INSTANCE.Discord_ClearPresence();
         DiscordRPC.INSTANCE.Discord_Shutdown();
@@ -203,7 +201,7 @@ public class DiscordHandler {
         STATUS = "disconnected";
         lastDisconnectErrorCode = 0;
         lastErrorCode = 0;
-        timer = 0;
+        CraftPresence.TIMER = 0;
         CURRENT_USER = null;
         REQUESTER_USER = null;
 
@@ -214,6 +212,10 @@ public class DiscordHandler {
         final String formattedKey = StringHandler.formatPackIcon(key);
 
         if (((StringHandler.isNullOrEmpty(lastImageRequested) || !lastImageRequested.equals(key)) || (StringHandler.isNullOrEmpty(lastImageTypeRequested) || !lastImageTypeRequested.equals(type.name()))) || (StringHandler.isNullOrEmpty(lastClientIDRequested) || !lastClientIDRequested.equals(CLIENT_ID))) {
+            lastClientIDRequested = CLIENT_ID;
+            lastImageRequested = key;
+            lastImageTypeRequested = type.name();
+
             if (DiscordAssetHandler.contains(formattedKey)) {
                 if (type.equals(DiscordAsset.AssetType.LARGE)) {
                     LARGEIMAGEKEY = formattedKey;
@@ -271,9 +273,6 @@ public class DiscordHandler {
                     }
                 }
             }
-            lastClientIDRequested = CLIENT_ID;
-            lastImageRequested = key;
-            lastImageTypeRequested = type.name();
         }
     }
 

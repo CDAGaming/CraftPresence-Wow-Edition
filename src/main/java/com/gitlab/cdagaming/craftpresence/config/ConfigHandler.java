@@ -328,14 +328,14 @@ public class ConfigHandler {
                         properties.setProperty(property, splitCharacter);
                         save();
                     }
-                    if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.CLIENT.timer != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
+                    if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.TIMER != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
                         CraftPresence.awaitingReply = false;
                         CraftPresence.CLIENT.REQUESTER_USER = null;
                         CraftPresence.CLIENT.JOIN_SECRET = null;
                         CraftPresence.CLIENT.PARTY_ID = null;
                         CraftPresence.CLIENT.PARTY_SIZE = 0;
                         CraftPresence.CLIENT.PARTY_MAX = 0;
-                        CraftPresence.CLIENT.timer = 0;
+                        CraftPresence.TIMER = 0;
                         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                     }
 

@@ -40,11 +40,11 @@ public class Constants {
             if (x64.contains(SystemUtils.OS_ARCH)) {
                 try {
                     final URL WIN_x86_64 = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/win32-x86-64/discord-rpc.dll");
-                    final File file = new File(Constants.MODID + File.separator + "discord-rpc.dll");
+                    final File file = new File(MODID + File.separator + "discord-rpc.dll");
                     if (file.exists() && UpdateStatus) {
                         final boolean fileDeleted = file.delete();
                         if (!fileDeleted) {
-                            Constants.LOG.error("Failed to Delete " + file.getName());
+                            LOG.error("Failed to Delete " + file.getName());
                         }
                     } else if (!file.exists()) {
                         UpdateStatus = true;
@@ -63,18 +63,18 @@ public class Constants {
                         }
                     }
                 } catch (Exception ex) {
-                    Constants.LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
+                    LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
                     ex.printStackTrace();
                 }
             }
             if (x86.contains(SystemUtils.OS_ARCH)) {
                 try {
                     final URL WIN_x86 = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/win32-x86/discord-rpc.dll");
-                    final File file = new File(Constants.MODID + File.separator + "discord-rpc.dll");
+                    final File file = new File(MODID + File.separator + "discord-rpc.dll");
                     if (file.exists() && UpdateStatus) {
                         final boolean fileDeleted = file.delete();
                         if (!fileDeleted) {
-                            Constants.LOG.error("Failed to Delete " + file.getName());
+                            LOG.error("Failed to Delete " + file.getName());
                         }
                     } else if (!file.exists()) {
                         UpdateStatus = true;
@@ -93,7 +93,7 @@ public class Constants {
                         }
                     }
                 } catch (Exception ex) {
-                    Constants.LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
+                    LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
                     ex.printStackTrace();
                 }
             }
@@ -101,11 +101,11 @@ public class Constants {
         if (SystemUtils.IS_OS_LINUX) {
             try {
                 final URL LINUX = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/linux-x86-64/libdiscord-rpc.so");
-                final File file = new File(Constants.MODID + File.separator + "libdiscord-rpc.so");
+                final File file = new File(MODID + File.separator + "libdiscord-rpc.so");
                 if (file.exists() && UpdateStatus) {
                     final boolean fileDeleted = file.delete();
                     if (!fileDeleted) {
-                        Constants.LOG.error("Failed to Delete " + file.getName());
+                        LOG.error("Failed to Delete " + file.getName());
                     }
                 } else if (!file.exists()) {
                     UpdateStatus = true;
@@ -124,18 +124,18 @@ public class Constants {
                     }
                 }
             } catch (Exception ex) {
-                Constants.LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
+                LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
                 ex.printStackTrace();
             }
         }
         if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
             try {
                 final URL MAC_OS = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/darwin/libdiscord-rpc.dylib");
-                final File file = new File(Constants.MODID + File.separator + "libdiscord-rpc.dylib");
+                final File file = new File(MODID + File.separator + "libdiscord-rpc.dylib");
                 if (file.exists() && UpdateStatus) {
                     final boolean fileDeleted = file.delete();
                     if (!fileDeleted) {
-                        Constants.LOG.error("Failed to Delete " + file.getName());
+                        LOG.error("Failed to Delete " + file.getName());
                     }
                 } else if (!file.exists()) {
                     UpdateStatus = true;
@@ -154,7 +154,7 @@ public class Constants {
                     }
                 }
             } catch (Exception ex) {
-                Constants.LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
+                LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
                 ex.printStackTrace();
             }
         }

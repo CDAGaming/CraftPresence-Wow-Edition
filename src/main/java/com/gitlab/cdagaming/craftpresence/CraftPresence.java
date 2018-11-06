@@ -28,6 +28,7 @@ public class CraftPresence {
     public static boolean packFound = false, awaitingReply = false;
     public static Minecraft instance = Minecraft.getMinecraft();
     public static EntityPlayer player = instance.player;
+    public static int TIMER = 0;
 
     public static ConfigHandler CONFIG;
     public static KeyHandler KEYBINDINGS = new KeyHandler();
@@ -37,6 +38,25 @@ public class CraftPresence {
     public static DimensionHandler DIMENSIONS = new DimensionHandler();
     public static EntityHandler ENTITIES = new EntityHandler();
     public static GUIHandler GUIS = new GUIHandler();
+
+    private static Thread timerThread = new Thread("CraftPresence-Timer") {
+        @Override
+        public void run() {
+            while (!Thread.currentThread().isInterrupted()) {
+                if (TIMER > 0) {
+                    TIMER--;
+                    try {
+                        Thread.sleep(1000L);
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+        }
+    };
+
+    static {
+        timerThread.start();
+    }
 
     @Mod.EventHandler
     public void disableMod(final FMLModDisabledEvent event) {
@@ -100,7 +120,7 @@ public class CraftPresence {
                 CONFIG.rebootOnWorldLoad = false;
             }
 
-            if (awaitingReply && CLIENT.timer == 0) {
+            if (awaitingReply && TIMER == 0) {
                 StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CraftPresence.CLIENT.REQUESTER_USER.username));
                 DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
                 awaitingReply = false;
