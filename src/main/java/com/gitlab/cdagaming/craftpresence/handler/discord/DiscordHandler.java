@@ -20,7 +20,6 @@ import javax.annotation.Nonnull;
 import java.io.File;
 
 public class DiscordHandler {
-    public final DiscordEventHandlers handlers = new DiscordEventHandlers();
     public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
 
@@ -41,6 +40,7 @@ public class DiscordHandler {
     public String SPECTATE_SECRET;
     public byte INSTANCE;
 
+    private final DiscordEventHandlers handlers = new DiscordEventHandlers();
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private int lastErrorCode, lastDisconnectErrorCode;
     private Thread callbackThread = null;
