@@ -19,7 +19,7 @@ archivesBaseName = "${mod_name}-${mc_version}"
 
 allprojects {
     sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_7
 }
 
 curseforge {
