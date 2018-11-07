@@ -4,6 +4,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -227,6 +228,20 @@ public class StringHandler {
             result = false;
         }
         return result;
+    }
+
+    public static Object lookupObject(Class classToAccess, Object instance, String... fieldNames) {
+        for (String fieldName : fieldNames) {
+            try {
+                Field lookupField = classToAccess.getDeclaredField(fieldName);
+                if (lookupField != null) {
+                    lookupField.setAccessible(true);
+                    return lookupField.get(instance);
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return null;
     }
 
     public static String stripColors(final String input) {

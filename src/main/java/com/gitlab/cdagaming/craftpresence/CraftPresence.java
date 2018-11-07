@@ -94,7 +94,7 @@ public class CraftPresence {
             CLIENT.setup();
             CLIENT.init();
             CLIENT.updateTimestamp();
-            CommandHandler.setLoadingPresence(event.description());
+            CommandHandler.setLoadingPresence(event.getClass().getSimpleName());
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.load"));
             ex.printStackTrace();
@@ -103,7 +103,7 @@ public class CraftPresence {
 
     @Mod.EventHandler
     public void postInit(final FMLPostInitializationEvent event) {
-        CommandHandler.setLoadingPresence(event.description());
+        CommandHandler.setLoadingPresence(event.getClass().getSimpleName());
     }
 
     @SubscribeEvent
