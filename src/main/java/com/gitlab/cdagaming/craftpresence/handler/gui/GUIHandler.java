@@ -5,10 +5,13 @@ import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.reflect.ClassPath;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -47,6 +50,10 @@ public class GUIHandler {
 
     public boolean isMouseOverElement(final int mouseX, final int mouseY, final int elementX, final int elementY, final int elementWidth, final int elementHeight) {
         return mouseX >= elementX && mouseX <= elementX + elementWidth && mouseY >= elementY && mouseY <= elementY + elementHeight;
+    }
+
+    public boolean isMouseOverButton(final int mouseX, final int mouseY, final GuiButton button) {
+        return isMouseOverElement(mouseX, mouseY, button.x, button.y, button.width, button.height);
     }
 
     public void emptyData() {
@@ -213,6 +220,155 @@ public class GUIHandler {
         CraftPresence.CLIENT.GAME_STATE = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         queuedForUpdate = false;
+    }
+
+    public void drawHoveringText(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font) {
+        if (!textLines.isEmpty()) {
+            GlStateManager.disableRescaleNormal();
+            RenderHelper.disableStandardItemLighting();
+            GlStateManager.disableLighting();
+            GlStateManager.disableDepth();
+            int tooltipTextWidth = 0;
+
+            for (String textLine : textLines) {
+                int textLineWidth = font.getStringWidth(textLine);
+
+                if (textLineWidth > tooltipTextWidth) {
+                    tooltipTextWidth = textLineWidth;
+                }
+            }
+
+            boolean needsWrap = false;
+
+            int titleLinesCount = 1;
+            int tooltipX = mouseX + 12;
+            if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
+                tooltipX = mouseX - 16 - tooltipTextWidth;
+                if (tooltipX < 4) // if the tooltip doesn't fit on the screen
+                {
+                    if (mouseX > screenWidth / 2) {
+                        tooltipTextWidth = mouseX - 12 - 8;
+                    } else {
+                        tooltipTextWidth = screenWidth - 16 - mouseX;
+                    }
+                    needsWrap = true;
+                }
+            }
+
+            if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
+                tooltipTextWidth = maxTextWidth;
+                needsWrap = true;
+            }
+
+            if (needsWrap) {
+                int wrappedTooltipWidth = 0;
+                List<String> wrappedTextLines = new ArrayList<>();
+                for (int i = 0; i < textLines.size(); i++) {
+                    String textLine = textLines.get(i);
+                    List<String> wrappedLine = font.listFormattedStringToWidth(textLine, tooltipTextWidth);
+                    if (i == 0) {
+                        titleLinesCount = wrappedLine.size();
+                    }
+
+                    for (String line : wrappedLine) {
+                        int lineWidth = font.getStringWidth(line);
+                        if (lineWidth > wrappedTooltipWidth) {
+                            wrappedTooltipWidth = lineWidth;
+                        }
+                        wrappedTextLines.add(line);
+                    }
+                }
+                tooltipTextWidth = wrappedTooltipWidth;
+                textLines = wrappedTextLines;
+
+                if (mouseX > screenWidth / 2) {
+                    tooltipX = mouseX - 16 - tooltipTextWidth;
+                } else {
+                    tooltipX = mouseX + 12;
+                }
+            }
+
+            int tooltipY = mouseY - 12;
+            int tooltipHeight = 8;
+
+            if (textLines.size() > 1) {
+                tooltipHeight += (textLines.size() - 1) * 10;
+                if (textLines.size() > titleLinesCount) {
+                    tooltipHeight += 2; // gap between title lines and next lines
+                }
+            }
+
+            if (tooltipY < 4) {
+                tooltipY = 4;
+            } else if (tooltipY + tooltipHeight + 4 > screenHeight) {
+                tooltipY = screenHeight - tooltipHeight - 4;
+            }
+
+            final int zLevel = 300;
+            int backgroundColor = 0xF0100010;
+            int borderColorStart = 0x505000FF;
+            int borderColorEnd = (borderColorStart & 0xFEFEFE) >> 1 | borderColorStart & 0xFF000000;
+
+            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
+            drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
+            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+            drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+            drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+            drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+            drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColorStart, borderColorStart);
+            drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
+
+            int tooltipTop = tooltipY;
+
+            for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
+                String line = textLines.get(lineNumber);
+                font.drawStringWithShadow(line, (float) tooltipX, (float) tooltipY, -1);
+
+                if (lineNumber + 1 == titleLinesCount) {
+                    tooltipY += 2;
+                }
+
+                tooltipY += 10;
+            }
+
+            GlStateManager.enableLighting();
+            GlStateManager.enableDepth();
+            RenderHelper.enableStandardItemLighting();
+            GlStateManager.enableRescaleNormal();
+        }
+    }
+
+    private void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor)
+    {
+        float startAlpha = (float)(startColor >> 24 & 255) / 255.0F;
+        float startRed   = (float)(startColor >> 16 & 255) / 255.0F;
+        float startGreen = (float)(startColor >>  8 & 255) / 255.0F;
+        float startBlue  = (float)(startColor       & 255) / 255.0F;
+        float endAlpha   = (float)(endColor   >> 24 & 255) / 255.0F;
+        float endRed     = (float)(endColor   >> 16 & 255) / 255.0F;
+        float endGreen   = (float)(endColor   >>  8 & 255) / 255.0F;
+        float endBlue    = (float)(endColor         & 255) / 255.0F;
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.pos(right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.pos( left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+        buffer.pos( left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+        buffer.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+        tessellator.draw();
+
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.enableAlpha();
+        GlStateManager.enableTexture2D();
     }
 
     public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,

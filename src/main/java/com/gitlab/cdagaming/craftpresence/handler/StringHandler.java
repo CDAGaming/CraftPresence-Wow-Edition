@@ -1,6 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
-import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -207,7 +207,7 @@ public class StringHandler {
         return Arrays.asList(formattedText.split("&newline&"));
     }
 
-    public static void sendMessageToPlayer(final ICommandSender sender, final String message) {
+    public static void sendMessageToPlayer(final Entity sender, final String message) {
         final List<String> lines = splitTextByNewLine(message);
         int currentLine = 0;
         while (lines.size() > currentLine) {

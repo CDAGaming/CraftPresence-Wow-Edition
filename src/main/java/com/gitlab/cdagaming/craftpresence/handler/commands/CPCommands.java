@@ -9,6 +9,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
@@ -98,7 +99,8 @@ public class CPCommands extends CommandBase {
     }
 
     @Override
-    public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender sender, @Nonnull String[] args) {
+    public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender commandSender, @Nonnull String[] args) {
+        final Entity sender = commandSender.getCommandSenderEntity();
         if (args.length == 0 || (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"))) {
             StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.usage.main"));
         } else if (!StringHandler.isNullOrEmpty(args[0])) {

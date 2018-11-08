@@ -1,34 +1,16 @@
 # CraftPresence Changes
 
-## v1.4.9 (11/08/2018)
+## v1.4.9.5 (11/??/2018)
 
 ### Changes:
 
-* Added New Config Option:
-
-  * `lanMSG` - Available in Status Messages GUI to Set a Message to display while in a LAN Game
-
-  * `enableJoinRequest` - Available in General Config GUI and allows Enabling or Disabling Discord Join Requests
-
-* Added Ask To Join and Join Request Support
-
-* Added LAN Game Support
-
-* Added Some Additional Translations, mostly those missed in v1.4.8
+* ???
 
 ### Fixes:
 
-* Fixes some Minor NPE Scenarios
+* Fixes Missing Hover Text in some Versions
 
-* Fixes a Crash when Joining a LAN Server [Issue Reference](https://gitlab.com/CDAGaming/CraftPresence/issues/8)
-
-* Fixes Issues with Fallback Icon Setting
-
-* Fixes Rapid RPC Update Scenarios
-
-* Fixes RPC Tick Issues
-
-* Fixes Some CommandSender Reference Issues
+* Fixes ICommandSender vs Entity Instances in Commands
 
 ### More Information:
 
