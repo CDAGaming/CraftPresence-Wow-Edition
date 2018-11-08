@@ -137,7 +137,6 @@ public class DiscordHandler {
         };
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
-        DiscordRPC.INSTANCE.Discord_UpdateHandlers(handlers);
         setupThreads();
     }
 

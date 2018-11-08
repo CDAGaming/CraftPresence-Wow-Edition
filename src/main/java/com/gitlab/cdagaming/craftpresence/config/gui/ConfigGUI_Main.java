@@ -69,39 +69,39 @@ public class ConfigGUI_Main extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (generalSet.isMouseOver()) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.general")), mouseX, mouseY);
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, generalSet)) {
+            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.general")), mouseX, mouseY, width, height, -1, fontRenderer);
         }
-        if (biomeSet.isMouseOver()) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, biomeSet)) {
             if (!biomeSet.enabled) {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome"))), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showbiome"))), mouseX, mouseY, width, height, -1, fontRenderer);
             } else {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, fontRenderer);
             }
         }
-        if (dimensionSet.isMouseOver()) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, dimensionSet)) {
             if (!dimensionSet.enabled) {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension"))), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showdimension"))), mouseX, mouseY, width, height, -1, fontRenderer);
             } else {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.dimensionmessages")), mouseX, mouseY, width, height, -1, fontRenderer);
             }
         }
-        if (serverSet.isMouseOver()) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, serverSet)) {
             if (!serverSet.enabled) {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY, width, height, -1, fontRenderer);
             } else {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY, width, height, -1, fontRenderer);
             }
         }
-        if (statusSet.isMouseOver()) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, statusSet)) {
             if (!statusSet.enabled) {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.general.showstate"))), mouseX, mouseY, width, height, -1, fontRenderer);
             } else {
-                drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.statusmessages")), mouseX, mouseY);
+                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.statusmessages")), mouseX, mouseY, width, height, -1, fontRenderer);
             }
         }
-        if (advancedSet.isMouseOver()) {
-            drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.advanced")), mouseX, mouseY);
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, advancedSet)) {
+            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.advanced")), mouseX, mouseY, width, height, -1, fontRenderer);
         }
     }
 

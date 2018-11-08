@@ -4,6 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
 import com.google.common.reflect.ClassPath;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -48,12 +49,16 @@ public class GUIHandler {
         tessellator.draw();
     }
 
-    public boolean isMouseOverElement(final int mouseX, final int mouseY, final int elementX, final int elementY, final int elementWidth, final int elementHeight) {
+    public boolean isMouseOver(final int mouseX, final int mouseY, final int elementX, final int elementY, final int elementWidth, final int elementHeight) {
         return mouseX >= elementX && mouseX <= elementX + elementWidth && mouseY >= elementY && mouseY <= elementY + elementHeight;
     }
 
-    public boolean isMouseOverButton(final int mouseX, final int mouseY, final GuiButton button) {
-        return isMouseOverElement(mouseX, mouseY, button.x, button.y, button.width, button.height);
+    public boolean isMouseOver(final int mouseX, final int mouseY, final GuiButton button) {
+        return isMouseOver(mouseX, mouseY, button.x, button.y, button.width, button.height);
+    }
+
+    public boolean isMouseOver(final int mouseX, final int mouseY, final GUICheckBox checkBox) {
+        return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth, checkBox.height);
     }
 
     public void emptyData() {
@@ -318,8 +323,6 @@ public class GUIHandler {
             drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
             drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColorStart, borderColorStart);
             drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
-
-            int tooltipTop = tooltipY;
 
             for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
                 String line = textLines.get(lineNumber);
