@@ -7,8 +7,8 @@ import net.minecraft.client.gui.GuiButton;
 import javax.annotation.Nonnull;
 
 public class GUICheckBox extends GuiButton {
-    private boolean is_Checked;
     public int boxWidth;
+    private boolean is_Checked;
 
     public GUICheckBox(int id, int xPos, int yPos, String displayString, boolean isChecked) {
         super(id, xPos, yPos, displayString);
