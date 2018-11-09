@@ -1,16 +1,14 @@
 # CraftPresence Changes
 
-## v1.4.9.5 (11/??/2018)
-
-### Changes:
-
-* ???
+## v1.4.9.5 (11/13/2018)
 
 ### Fixes:
 
 * Fixes Missing Hover Text in some Versions
 
 * Fixes ICommandSender vs Entity Instances in Commands
+
+* Fixes and Removes a Non-Existent RPC Event causing Crashes [(Issue Reference)]()
 
 ### More Information:
 
