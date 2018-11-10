@@ -8,6 +8,10 @@
 
 * Fixes ICommandSender vs Entity Instances in Commands
 
+* Removes Javax Annotations for Further Cross-Compatibility Support
+
+* Fixes Hover Message Render Issue for Value Name in Editor
+
 * Fixes and Removes a Non-Existent RPC Event causing Crashes [(Issue Reference)]()
 
 ### More Information:

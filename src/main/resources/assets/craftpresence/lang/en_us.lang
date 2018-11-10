@@ -176,6 +176,7 @@ craftpresence.logger.info.discord.assets.fallback=Fallback Icon for "%1$s" Found
 craftpresence.logger.error.rpc=CraftPresence has encountered the following RPC Error (Code: %1$s), and has been Shut Down to prevent a crash: %2$s
 craftpresence.logger.error.web=Failed to Go to Page: %1$s
 craftpresence.logger.error.https=Failed to Sign SSL Certificates for HTTPS, Any External Libraries required by CraftPresence may fail to download...
+craftpresence.logger.error.command=An Error has Occurred Executing this Command
 craftpresence.logger.error.config.save=Failed to load or save Configuration
 craftpresence.logger.error.config.invalidicon.empty=Unable to Detect any Usable Icons! Please Submit a Mod Issue, if this is a mistake
 craftpresence.logger.error.config.invalidicon.pre=Invalid Icon "%1$s" in Property "%2$s", Selecting a Randomized Valid Icon...

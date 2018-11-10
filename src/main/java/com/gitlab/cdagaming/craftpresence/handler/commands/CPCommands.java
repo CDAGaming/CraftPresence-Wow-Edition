@@ -13,14 +13,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("NullableProblems")
 public class CPCommands extends CommandBase {
-    @Nonnull
     @Override
     public String getName() {
         return Constants.MODID;
@@ -31,15 +29,13 @@ public class CPCommands extends CommandBase {
         return 0;
     }
 
-    @Nonnull
     @Override
-    public String getUsage(@Nullable ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "";
     }
 
-    @Nonnull
     @Override
-    public List<String> getTabCompletions(@Nullable MinecraftServer server, @Nullable ICommandSender sender, @Nonnull String[] args, @Nullable BlockPos targetPos) {
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos targetPos) {
         List<String> baseCompletions = new ArrayList<>();
         List<String> assetsCompletions = new ArrayList<>();
         List<String> viewCompletions = new ArrayList<>();
@@ -89,7 +85,6 @@ public class CPCommands extends CommandBase {
         return Collections.emptyList();
     }
 
-    @Nonnull
     @Override
     public List<String> getAliases() {
         List<String> aliases = new ArrayList<>();
@@ -99,8 +94,9 @@ public class CPCommands extends CommandBase {
     }
 
     @Override
-    public void execute(@Nullable MinecraftServer server, @Nonnull ICommandSender commandSender, @Nonnull String[] args) {
+    public void execute(MinecraftServer server, ICommandSender commandSender, String[] args) {
         final Entity sender = commandSender.getCommandSenderEntity();
+
         if (args.length == 0 || (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"))) {
             StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.usage.main"));
         } else if (!StringHandler.isNullOrEmpty(args[0])) {

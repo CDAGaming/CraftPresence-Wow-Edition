@@ -10,12 +10,15 @@ import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.command.CommandBase;
 import net.minecraftforge.client.ClientCommandHandler;
 
 public class CommandHandler {
+    public static CommandBase CP_COMMANDS = new CPCommands();
+
     private static void registerData() {
         CraftPresence.KEYBINDINGS.register();
-        ClientCommandHandler.instance.registerCommand(new CPCommands());
+        ClientCommandHandler.instance.registerCommand(CP_COMMANDS);
     }
 
     public static void reloadData() {

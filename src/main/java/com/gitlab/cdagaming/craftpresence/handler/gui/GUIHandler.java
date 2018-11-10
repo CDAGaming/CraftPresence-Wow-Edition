@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -374,7 +373,7 @@ public class GUIHandler {
     }
 
     public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
-                                          int topBorder, int bottomBorder, int leftBorder, int rightBorder, float zLevel, @Nullable ResourceLocation res) {
+                                          int topBorder, int bottomBorder, int leftBorder, int rightBorder, float zLevel, ResourceLocation res) {
         if (res != null) {
             CraftPresence.instance.getTextureManager().bindTexture(res);
         }

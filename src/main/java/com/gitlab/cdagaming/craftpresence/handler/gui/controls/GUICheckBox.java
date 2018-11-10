@@ -4,8 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 
-import javax.annotation.Nonnull;
-
+@SuppressWarnings("NullableProblems")
 public class GUICheckBox extends GuiButton {
     public int boxWidth;
     private boolean is_Checked;
@@ -22,7 +21,7 @@ public class GUICheckBox extends GuiButton {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partial) {
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
         if (visible) {
             hovered = mouseX >= x && mouseY >= y && mouseX < x + boxWidth && mouseY < y + height;
             CraftPresence.GUIS.drawContinuousTexturedBox(x, y, 0, 46, boxWidth, height, 200, 20, 2, 3, 2, 2, zLevel, BUTTON_TEXTURES);

@@ -11,7 +11,6 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class ConfigGUI_Selector extends GuiScreen {
     private String title, configOption, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
 
-    ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, @Nullable String currentValue, @Nullable String attributeName) {
+    ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, String currentValue, String attributeName) {
         mc = CraftPresence.instance;
         itemList = originalList = list;
         originalValue = currentValue;

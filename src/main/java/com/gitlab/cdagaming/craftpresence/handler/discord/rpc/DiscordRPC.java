@@ -3,9 +3,6 @@ package com.gitlab.cdagaming.craftpresence.handler.discord.rpc;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 /**
  * Core library binding for the official <a href="https://github.com/discordapp/discord-rpc" target="_blank">Discord RPC SDK</a>.
  * <br>Use {@link #INSTANCE} to access this library.
@@ -55,10 +52,10 @@ public interface DiscordRPC extends Library {
      * @param autoRegister  {@code true} to automatically call {@link #Discord_RegisterSteamGame(String, String)} or {@link #Discord_Register(String, String)}
      * @param steamId       Possible steam ID of the running game
      */
-    void Discord_Initialize(@Nonnull String applicationId,
-                            @Nullable DiscordEventHandlers handlers,
+    void Discord_Initialize(String applicationId,
+                            DiscordEventHandlers handlers,
                             boolean autoRegister,
-                            @Nullable String steamId);
+                            String steamId);
 
     /**
      * Shuts the RPC connection down.
@@ -91,7 +88,7 @@ public interface DiscordRPC extends Library {
      * @param struct The new presence to use
      * @see com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresence
      */
-    void Discord_UpdatePresence(@Nullable DiscordRichPresence struct);
+    void Discord_UpdatePresence(DiscordRichPresence struct);
 
     /**
      * Clears the currently set presence.
@@ -112,14 +109,14 @@ public interface DiscordRPC extends Library {
      * @param reply  The reply type
      * @see DiscordUser#userId DiscordUser.userId
      */
-    void Discord_Respond(@Nonnull String userid, int reply);
+    void Discord_Respond(String userid, int reply);
 
     /**
      * Updates the registered event handlers to the provided struct.
      *
      * @param handlers The handlers to update to, or null
      */
-    void Discord_UpdateHandlers(@Nullable DiscordEventHandlers handlers);
+    void Discord_UpdateHandlers(DiscordEventHandlers handlers);
 
     /**
      * Registers the given application so it can be run by the discord client. {@code discord-<appid>://}
