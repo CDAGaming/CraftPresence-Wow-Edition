@@ -12,7 +12,7 @@
 
 * Fixes Hover Message Render Issue for Value Name in Editor
 
-* Fixes and Removes a Non-Existent RPC Event causing Crashes [(Issue Reference)]()
+* Fixes and Removes a Non-Existent RPC Event causing Crashes [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/9)
 
 ### More Information:
 
