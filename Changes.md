@@ -12,6 +12,8 @@
 
 * Fixes Hover Message Render Issue for Value Name in Editor
 
+* Fixes a Bug in Some Versions relating to Not adding DiscordRPC to Search Path on Time (Now should take place immediately)
+
 * Fixes and Removes a Non-Existent RPC Event causing Crashes [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/9)
 
 ### More Information:

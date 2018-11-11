@@ -19,6 +19,10 @@ import net.minecraft.client.resources.I18n;
 import java.io.File;
 
 public class DiscordHandler {
+    static {
+        NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
+    }
+
     private final DiscordEventHandlers handlers = new DiscordEventHandlers();
     public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
@@ -43,7 +47,6 @@ public class DiscordHandler {
     private Thread callbackThread = null;
 
     public synchronized void setup() {
-        NativeLibrary.addSearchPath("discord-rpc", new File(Constants.MODID).getAbsolutePath());
         Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
             @Override
             public void run() {
@@ -122,18 +125,7 @@ public class DiscordHandler {
                     STATUS = "joinRequest";
                     REQUESTER_USER = request;
 
-                    try {
-                        CommandHandler.CP_COMMANDS.execute(CraftPresence.player.getServer(), CraftPresence.player.getCommandSenderEntity(), new String[]{"request"});
-                    } catch (Exception ex) {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.command"));
-                        ex.printStackTrace();
-
-                        DiscordRPC.INSTANCE.Discord_Respond(REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
-                        CraftPresence.awaitingReply = false;
-                        CraftPresence.TIMER = 0;
-                        REQUESTER_USER = null;
-                        STATUS = "ready";
-                    }
+                    CommandHandler.CP_COMMANDS.executeCommand(CraftPresence.player.getCommandSenderEntity(), new String[]{"request"});
                 }
             }
         };
