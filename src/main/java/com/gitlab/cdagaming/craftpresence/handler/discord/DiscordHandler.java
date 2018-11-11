@@ -125,7 +125,7 @@ public class DiscordHandler {
                     STATUS = "joinRequest";
                     REQUESTER_USER = request;
 
-                    CommandHandler.CP_COMMANDS.executeCommand(CraftPresence.player.getCommandSenderEntity(), new String[]{"request"});
+                    CommandHandler.CP_COMMANDS.executeCommand(CraftPresence.player, "request");
                 }
             }
         };

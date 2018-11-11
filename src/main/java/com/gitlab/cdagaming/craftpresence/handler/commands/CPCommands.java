@@ -98,7 +98,7 @@ public class CPCommands extends CommandBase {
         executeCommand(commandSender.getCommandSenderEntity(), args);
     }
 
-    public void executeCommand(Entity sender, String[] args) {
+    public void executeCommand(Entity sender, String... args) {
         if (sender != null) {
             if (args.length == 0 || (args[0].equalsIgnoreCase("help") || args[0].equalsIgnoreCase("?"))) {
                 StringHandler.sendMessageToPlayer(sender, I18n.format("craftpresence.command.usage.main"));
