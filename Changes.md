@@ -6,9 +6,11 @@
 
 * Fixes Missing Hover Text in some Versions
 
-* Fixes ICommandSender vs Entity Instances in Commands
+* Fixes ICommandSender or Entity Instances in Commands
 
-* Removes Javax Annotations for Further Cross-Compatibility Support
+* Fixes an OpenGL Error in Rendering Hover Text on 1.7.10 and Lower
+
+* Removes Javax Annotations and GLStateManager for Further Cross-Compatibility Support
 
 * Fixes Hover Message Render Issue for Value Name in Editor
 

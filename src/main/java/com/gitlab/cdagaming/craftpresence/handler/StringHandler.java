@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -211,11 +212,14 @@ public class StringHandler {
     }
 
     public static void sendMessageToPlayer(final Entity sender, final String message) {
-        final List<String> lines = splitTextByNewLine(message);
-        int currentLine = 0;
-        while (lines.size() > currentLine) {
-            sender.sendMessage(new TextComponentString(lines.get(currentLine)));
-            currentLine++;
+        if (sender instanceof EntityPlayer) {
+            final EntityPlayer player = (EntityPlayer) sender;
+            final List<String> lines = splitTextByNewLine(message);
+            int currentLine = 0;
+            while (lines.size() > currentLine) {
+                player.sendMessage(new TextComponentString(lines.get(currentLine)));
+                currentLine++;
+            }
         }
     }
 

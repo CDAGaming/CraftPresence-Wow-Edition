@@ -95,7 +95,7 @@ public class CPCommands extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender commandSender, String[] args) {
-        executeCommand(commandSender.getCommandSenderEntity(), args);
+        executeCommand((Entity) commandSender, args);
     }
 
     public void executeCommand(Entity sender, String... args) {
