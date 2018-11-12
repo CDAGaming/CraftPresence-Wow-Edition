@@ -83,18 +83,20 @@ public class ServerHandler {
         if (!joinInProgress && newConnection != null) {
             final int newCurrentPlayers = newConnection.getPlayerInfoMap().size();
             final int newMaxPlayers = newConnection.currentServerMaxPlayers;
-            isOnLAN = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
+            final boolean newLANStatus = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
 
-            final String newServer_IP = newServerData != null ? newServerData.serverIP : null;
+            final String newServer_IP = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : StringHandler.getLocalIP();
             final String newServer_Name = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverName) ? newServerData.serverName : CraftPresence.CONFIG.defaultServerName;
             final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverMOTD)) && !(newServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.cannot_connect")) || newServerData.serverMOTD.equalsIgnoreCase(I18n.format("multiplayer.status.pinging"))) ? StringHandler.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
             final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
 
-            if (newServerData != null && (!newServerData.equals(currentServerData) || !newConnection.equals(currentConnection) || !newServer_IP.equals(currentServer_IP) || (!StringHandler.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) || (!StringHandler.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name)))) {
+            if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) || (newServerData == null && currentServerData != null)) || !newConnection.equals(currentConnection) || !newServer_IP.equals(currentServer_IP) || (!StringHandler.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) || (!StringHandler.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name))) {
                 currentServer_IP = newServer_IP;
                 currentServer_MOTD = newServer_MOTD;
                 currentServer_Name = newServer_Name;
                 currentServerData = newServerData;
+                currentConnection = newConnection;
+                isOnLAN = newLANStatus;
                 queuedForUpdate = true;
 
                 final ServerList serverList = new ServerList(CraftPresence.instance);
@@ -251,6 +253,8 @@ public class ServerHandler {
         } else if (CraftPresence.instance.isSingleplayer()) {
             // NOTE: SinglePlayer-Only Presence Updates
             CraftPresence.CLIENT.GAME_STATE = CraftPresence.CONFIG.singleplayerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", timeString)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount())));
+            CraftPresence.CLIENT.SMALLIMAGEKEY = "";
+            CraftPresence.CLIENT.SMALLIMAGETEXT = "";
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         }

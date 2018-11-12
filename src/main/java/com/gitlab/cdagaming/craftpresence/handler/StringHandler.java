@@ -6,6 +6,7 @@ import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.lang.reflect.Field;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +56,15 @@ public class StringHandler {
             final String[] formatted = input.split(":");
             return !returnPort ? formatted[0] : formatted[1];
         } else {
-            return !returnPort ? input : "25565";
+            return !returnPort ? getLocalIP() : "25565";
+        }
+    }
+
+    public static String getLocalIP() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress().trim();
+        } catch (Exception ex) {
+            return "0.0.0.0";
         }
     }
 

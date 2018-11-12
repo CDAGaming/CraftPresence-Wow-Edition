@@ -12,6 +12,8 @@
 
 * Removes Javax Annotations and GLStateManager for Further Cross-Compatibility Support
 
+* Fixes LAN/Dedicated Server Join Crashes [(Issue Reference)](https://github.com/Sunekaer/stoneBlock/issues/591)
+
 * Fixes Hover Message Render Issue for Value Name in Editor
 
 * Fixes a Bug in Some Versions relating to Not adding DiscordRPC to Search Path on Time (Now should take place immediately)
