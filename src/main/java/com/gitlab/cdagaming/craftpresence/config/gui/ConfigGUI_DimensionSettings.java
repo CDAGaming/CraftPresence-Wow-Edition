@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_DimensionSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GuiButton proceedButton, dimensionMessagesButton, defaultIconButton;
+    private GUIExtendedButton proceedButton, dimensionMessagesButton, defaultIconButton;
     private GuiTextField defaultMessage;
 
     private String defaultDimensionMSG;
@@ -35,9 +36,9 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
         defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         defaultMessage.setText(defaultDimensionMSG);
 
-        dimensionMessagesButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionmessages"));
-        defaultIconButton = new GuiButton(110, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionicon"));
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        dimensionMessagesButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionmessages"));
+        defaultIconButton = new GUIExtendedButton(110, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.name.dimensionmessages.dimensionicon"));
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(dimensionMessagesButton);
         buttonList.add(defaultIconButton);

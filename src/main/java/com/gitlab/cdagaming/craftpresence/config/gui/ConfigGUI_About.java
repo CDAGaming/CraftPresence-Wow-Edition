@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ConfigGUI_About extends GuiScreen {
     private static final String SOURCE_URL = "https://gitlab.com/CDAGaming/CraftPresence";
     private final GuiScreen parentScreen;
-    private GuiButton viewSource, backButton;
+    private GUIExtendedButton viewSource, backButton;
 
     ConfigGUI_About(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -28,8 +29,8 @@ public class ConfigGUI_About extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        backButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
-        viewSource = new GuiButton(810, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 55), 180, 20, I18n.format("gui.config.buttonMessage.viewsource"));
+        backButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        viewSource = new GUIExtendedButton(810, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 55), 180, 20, I18n.format("gui.config.buttonMessage.viewsource"));
 
         buttonList.add(backButton);
         buttonList.add(viewSource);

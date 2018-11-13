@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_Editor extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GuiButton proceedButton, specificIconButton;
+    private GUIExtendedButton proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
     private String attributeName, configOption, specificMSG, defaultMSG, title, removeMSG;
     private boolean isNewValue, isDefaultValue;
@@ -81,14 +82,14 @@ public class ConfigGUI_Editor extends GuiScreen {
         specificMessage.setText(specificMSG);
 
         if ((parentScreen instanceof ConfigGUI_DimensionSettings || parentScreen instanceof ConfigGUI_ServerSettings) && !isNewValue) {
-            specificIconButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.buttonMessage.iconchange"));
+            specificIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.buttonMessage.iconchange"));
             buttonList.add(specificIconButton);
         }
         if (isNewValue) {
             newValueName = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
         }
 
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(proceedButton);
 

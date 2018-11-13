@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class ConfigGUI_NullEntry extends GuiScreen {
     private final GuiScreen parentScreen;
-    private GuiButton backButton;
+    private GUIExtendedButton backButton;
 
     ConfigGUI_NullEntry(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -24,7 +25,7 @@ public class ConfigGUI_NullEntry extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        backButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        backButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(backButton);
 

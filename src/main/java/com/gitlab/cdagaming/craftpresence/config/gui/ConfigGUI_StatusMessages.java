@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class ConfigGUI_StatusMessages extends GuiScreen {
     private final GuiScreen parentScreen;
     private int pageNumber;
-    private GuiButton proceedButton, nextPageButton, previousPageButton;
+    private GUIExtendedButton proceedButton, nextPageButton, previousPageButton;
     private GuiTextField mainMenuMSG, lanMSG, singleplayerMSG, loadingMSG,
             packMSG, playerMSG, playerAmountMSG, gameTimeMSG, modsMSG, viveCraftMSG;
 
@@ -54,9 +55,9 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         modsMSG.setText(CraftPresence.CONFIG.modsPlaceholderMSG);
         viveCraftMSG.setText(CraftPresence.CONFIG.vivecraftMessage);
 
-        previousPageButton = new GuiButton(700, 5, (sr.getScaledHeight() - 30), 20, 20, "<");
-        nextPageButton = new GuiButton(800, (sr.getScaledWidth() - 25), (sr.getScaledHeight() - 30), 20, 20, ">");
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        previousPageButton = new GUIExtendedButton(700, 5, (sr.getScaledHeight() - 30), 20, 20, "<");
+        nextPageButton = new GUIExtendedButton(800, (sr.getScaledWidth() - 25), (sr.getScaledHeight() - 30), 20, 20, ">");
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(previousPageButton);
         buttonList.add(nextPageButton);

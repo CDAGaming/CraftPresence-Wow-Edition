@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigGUI_BiomeSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GuiButton proceedButton, biomeMessagesButton;
+    private GUIExtendedButton proceedButton, biomeMessagesButton;
     private GuiTextField defaultMessage;
 
     private String defaultBiomeMSG;
@@ -34,8 +35,8 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         defaultMessage.setText(defaultBiomeMSG);
 
-        biomeMessagesButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.biomemessages.biomemessages"));
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        biomeMessagesButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.biomemessages.biomemessages"));
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(biomeMessagesButton);
         buttonList.add(proceedButton);

@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIScrollList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class ConfigGUI_Selector extends GuiScreen {
     private final GuiScreen parentScreen;
-    private GuiButton proceedButton, addNewButton;
+    private GUIExtendedButton proceedButton, addNewButton;
     private GUIScrollList scrollList;
     private GuiTextField searchBox;
     private String title, configOption, attributeName, originalValue, searchTerm;
@@ -38,12 +39,12 @@ public class ConfigGUI_Selector extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        proceedButton = new GuiButton(700, (sr.getScaledWidth() - 100), (sr.getScaledHeight() - 30), 90, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() - 100), (sr.getScaledHeight() - 30), 90, 20, I18n.format("gui.config.buttonMessage.back"));
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight(), 32, sr.getScaledHeight() - 45, 18, itemList, originalValue);
         searchBox = new GuiTextField(110, fontRenderer, 60, (sr.getScaledHeight() - 30), 120, 20);
 
         if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
-            addNewButton = new GuiButton(600, (sr.getScaledWidth() - 195), (sr.getScaledHeight() - 30), 90, 20, I18n.format("gui.config.buttonMessage.addnew"));
+            addNewButton = new GUIExtendedButton(600, (sr.getScaledWidth() - 195), (sr.getScaledHeight() - 30), 90, 20, I18n.format("gui.config.buttonMessage.addnew"));
             buttonList.add(addNewButton);
         }
 

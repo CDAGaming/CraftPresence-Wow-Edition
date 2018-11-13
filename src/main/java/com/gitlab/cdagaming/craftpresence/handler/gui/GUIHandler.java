@@ -5,9 +5,9 @@ import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import com.google.common.reflect.ClassPath;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -51,12 +51,12 @@ public class GUIHandler {
         return mouseX >= elementX && mouseX <= elementX + elementWidth && mouseY >= elementY && mouseY <= elementY + elementHeight;
     }
 
-    public boolean isMouseOver(final int mouseX, final int mouseY, final GuiButton button) {
-        return isMouseOver(mouseX, mouseY, button.x, button.y, button.width, button.height);
+    public boolean isMouseOver(final int mouseX, final int mouseY, final GUIExtendedButton button) {
+        return isMouseOver(mouseX, mouseY, button.x, button.y, button.getWidth(), button.getHeight());
     }
 
     public boolean isMouseOver(final int mouseX, final int mouseY, final GUICheckBox checkBox) {
-        return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth, checkBox.height);
+        return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth, checkBox.getHeight());
     }
 
     public void emptyData() {

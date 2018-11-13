@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -14,7 +15,7 @@ import java.io.IOException;
 
 public class ConfigGUI_AdvancedSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GuiButton proceedButton, guiMessagesButton, itemMessagesButton;
+    private GUIExtendedButton proceedButton, guiMessagesButton, itemMessagesButton;
     private GUICheckBox enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, overwriteServerIconButton;
     private GuiTextField splitCharacter;
@@ -37,14 +38,14 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         int calc1 = (sr.getScaledWidth() / 2) - 130;
         int calc2 = (sr.getScaledWidth() / 2) + 3;
 
-        guiMessagesButton = new GuiButton(120, calc1 - 15, CraftPresence.GUIS.getButtonY(2), 160, 20, I18n.format("gui.config.name.advanced.guimessages"));
-        itemMessagesButton = new GuiButton(130, calc2 + 15, CraftPresence.GUIS.getButtonY(2), 160, 20, I18n.format("gui.config.name.advanced.itemmessages"));
+        guiMessagesButton = new GUIExtendedButton(120, calc1 - 15, CraftPresence.GUIS.getButtonY(2), 160, 20, I18n.format("gui.config.name.advanced.guimessages"));
+        itemMessagesButton = new GUIExtendedButton(130, calc2 + 15, CraftPresence.GUIS.getButtonY(2), 160, 20, I18n.format("gui.config.name.advanced.itemmessages"));
 
         enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
         enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
         overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        proceedButton = new GuiButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
         buttonList.add(itemMessagesButton);

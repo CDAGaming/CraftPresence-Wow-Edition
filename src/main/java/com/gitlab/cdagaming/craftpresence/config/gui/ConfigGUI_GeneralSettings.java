@@ -4,6 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -15,7 +16,7 @@ import java.io.IOException;
 
 public class ConfigGUI_GeneralSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GuiButton proceedButton, defaultIconButton;
+    private GUIExtendedButton proceedButton, defaultIconButton;
     private GUICheckBox detectCurseManifestButton, detectMultiMCManifestButton,
             detectTechnicPackButton, showTimeButton,
             showBiomeButton, showDimensionButton, showStateButton, enableJoinRequestButton;
@@ -39,7 +40,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         int calc1 = (sr.getScaledWidth() / 2) - 130;
         int calc2 = (sr.getScaledWidth() / 2) + 3;
 
-        defaultIconButton = new GuiButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.general.defaulticon"));
+        defaultIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.general.defaulticon"));
         detectCurseManifestButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.general.detectcursemanifest"), CraftPresence.CONFIG.detectCurseManifest);
         detectMultiMCManifestButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.general.detectmultimcmanifest"), CraftPresence.CONFIG.detectMultiMCManifest);
         detectTechnicPackButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.detecttechnicpack"), CraftPresence.CONFIG.detectTechnicPack);
@@ -48,7 +49,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         showDimensionButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
         showStateButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
         enableJoinRequestButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
-        proceedButton = new GuiButton(1000, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(1000, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(defaultIconButton);
         buttonList.add(detectCurseManifestButton);

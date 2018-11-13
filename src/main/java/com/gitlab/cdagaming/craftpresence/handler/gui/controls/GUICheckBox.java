@@ -2,10 +2,9 @@ package com.gitlab.cdagaming.craftpresence.handler.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
 
 @SuppressWarnings("NullableProblems")
-public class GUICheckBox extends GuiButton {
+public class GUICheckBox extends GUIExtendedButton {
     public int boxWidth;
     private boolean is_Checked;
 
@@ -23,7 +22,7 @@ public class GUICheckBox extends GuiButton {
     @Override
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
         if (visible) {
-            hovered = mouseX >= x && mouseY >= y && mouseX < x + boxWidth && mouseY < y + height;
+            hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
             CraftPresence.GUIS.drawContinuousTexturedBox(x, y, 0, 46, boxWidth, height, 200, 20, 2, 3, 2, 2, zLevel, BUTTON_TEXTURES);
             mouseDragged(mc, mouseX, mouseY);
             int color = !enabled ? 10526880 : 14737632;
@@ -41,7 +40,7 @@ public class GUICheckBox extends GuiButton {
      */
     @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
-        if (enabled && visible && mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height) {
+        if (enabled && visible && hovered) {
             is_Checked = !is_Checked;
             return true;
         }

@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigGUI_Main extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GuiButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton;
+    private GUIExtendedButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -29,15 +30,15 @@ public class ConfigGUI_Main extends GuiScreen {
         int calc1 = (sr.getScaledWidth() / 2) - 183;
         int calc2 = (sr.getScaledWidth() / 2) + 3;
 
-        generalSet = new GuiButton(100, calc1, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.general"));
-        biomeSet = new GuiButton(200, calc2, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.biomemessages"));
-        dimensionSet = new GuiButton(300, calc1, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.dimensionmessages"));
-        serverSet = new GuiButton(400, calc2, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.servermessages"));
-        statusSet = new GuiButton(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.statusmessages"));
-        advancedSet = new GuiButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.advanced"));
+        generalSet = new GUIExtendedButton(100, calc1, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.general"));
+        biomeSet = new GUIExtendedButton(200, calc2, CraftPresence.GUIS.getButtonY(1), 180, 20, I18n.format("gui.config.title.biomemessages"));
+        dimensionSet = new GUIExtendedButton(300, calc1, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.dimensionmessages"));
+        serverSet = new GUIExtendedButton(400, calc2, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.title.servermessages"));
+        statusSet = new GUIExtendedButton(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.statusmessages"));
+        advancedSet = new GUIExtendedButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, I18n.format("gui.config.title.advanced"));
 
-        proceedButton = new GuiButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
-        aboutButton = new GuiButton(800, 10, (sr.getScaledHeight() - 30), 20, 20, "?");
+        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        aboutButton = new GUIExtendedButton(800, 10, (sr.getScaledHeight() - 30), 20, 20, "?");
 
         buttonList.add(generalSet);
         buttonList.add(biomeSet);
