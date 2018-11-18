@@ -339,14 +339,14 @@ public class GUIHandler {
     }
 
     private void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
-        float startAlpha = (float) (startColor >> 24 & 255) / 255.0F;
-        float startRed = (float) (startColor >> 16 & 255) / 255.0F;
-        float startGreen = (float) (startColor >> 8 & 255) / 255.0F;
-        float startBlue = (float) (startColor & 255) / 255.0F;
-        float endAlpha = (float) (endColor >> 24 & 255) / 255.0F;
-        float endRed = (float) (endColor >> 16 & 255) / 255.0F;
-        float endGreen = (float) (endColor >> 8 & 255) / 255.0F;
-        float endBlue = (float) (endColor & 255) / 255.0F;
+        float startAlpha = (startColor >> 24 & 255) / 255.0F;
+        float startRed = (startColor >> 16 & 255) / 255.0F;
+        float startGreen = (startColor >> 8 & 255) / 255.0F;
+        float startBlue = (startColor & 255) / 255.0F;
+        float endAlpha = (endColor >> 24 & 255) / 255.0F;
+        float endRed = (endColor >> 16 & 255) / 255.0F;
+        float endGreen = (endColor >> 8 & 255) / 255.0F;
+        float endBlue = (endColor & 255) / 255.0F;
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);

@@ -1,24 +1,10 @@
 # CraftPresence Changes
 
-## v1.4.9.5 (11/13/2018)
+## v1.4.9.8 (11/??/2018)
 
 ### Fixes:
 
-* Fixes Missing Hover Text in some Versions
-
-* Fixes ICommandSender or Entity Instances in Commands
-
-* Fixes an OpenGL Error in Rendering Hover Text on 1.7.10 and Lower
-
-* Removes Javax Annotations and GLStateManager for Further Cross-Compatibility Support
-
-* Fixes LAN/Dedicated Server Join Crashes [(Issue Reference)](https://github.com/Sunekaer/stoneBlock/issues/591)
-
-* Fixes Hover Message Render Issue for Value Name in Editor
-
-* Fixes a Bug in Some Versions relating to Not adding DiscordRPC to Search Path on Time (Now should take place immediately)
-
-* Fixes and Removes a Non-Existent RPC Event causing Crashes [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/9)
+* ???
 
 ### More Information:
 
