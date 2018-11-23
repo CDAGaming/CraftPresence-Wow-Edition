@@ -121,7 +121,7 @@ public class CraftPresence {
             }
 
             if (awaitingReply && TIMER == 0) {
-                StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CraftPresence.CLIENT.REQUESTER_USER.username));
+                StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
                 DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
                 awaitingReply = false;
                 CLIENT.STATUS = "ready";
