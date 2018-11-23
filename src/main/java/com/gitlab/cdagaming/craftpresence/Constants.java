@@ -1,17 +1,16 @@
 package com.gitlab.cdagaming.craftpresence;
 
+import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.realms.RealmsSharedConstants;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
 
 public class Constants {
@@ -34,129 +33,19 @@ public class Constants {
 
     static void loadDLL(final boolean Update) {
         boolean UpdateStatus = Update;
-        if (SystemUtils.IS_OS_WINDOWS) {
-            final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
-            final List<String> x86 = Lists.newArrayList("x86", "i386", "i486", "i586", "i686");
-            if (x64.contains(SystemUtils.OS_ARCH)) {
-                try {
-                    final URL WIN_x86_64 = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/win32-x86-64/discord-rpc.dll");
-                    final File file = new File(MODID + File.separator + "discord-rpc.dll");
-                    if (file.exists() && UpdateStatus) {
-                        final boolean fileDeleted = file.delete();
-                        if (!fileDeleted) {
-                            LOG.error("Failed to Delete " + file.getName());
-                        }
-                    } else if (!file.exists()) {
-                        UpdateStatus = true;
-                    }
 
-                    if (UpdateStatus) {
-                        FileUtils.copyURLToFile(WIN_x86_64, file);
-                    }
+        final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
+        final boolean is64Bit = x64.contains(SystemUtils.OS_ARCH);
 
-                    try {
-                        System.load(file.getAbsolutePath());
-                    } catch (Exception ex) {
-                        boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
-                        if (isPermsSet) {
-                            System.load(file.getAbsolutePath());
-                        }
-                    }
-                } catch (Exception ex) {
-                    LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
-                    ex.printStackTrace();
-                }
-            }
-            if (x86.contains(SystemUtils.OS_ARCH)) {
-                try {
-                    final URL WIN_x86 = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/win32-x86/discord-rpc.dll");
-                    final File file = new File(MODID + File.separator + "discord-rpc.dll");
-                    if (file.exists() && UpdateStatus) {
-                        final boolean fileDeleted = file.delete();
-                        if (!fileDeleted) {
-                            LOG.error("Failed to Delete " + file.getName());
-                        }
-                    } else if (!file.exists()) {
-                        UpdateStatus = true;
-                    }
+        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (SystemUtils.IS_OS_WINDOWS ? (is64Bit ? "win32-x86-64" : "win32-x86")
+                : SystemUtils.IS_OS_LINUX ? "linux-x86-64"
+                : SystemUtils.IS_OS_MAC ? "darwin" : "") + "/discord-rpc.dll";
+        final File file = new File(MODID + File.separator + (SystemUtils.IS_OS_WINDOWS ? "discord-rpc.dll"
+                : SystemUtils.IS_OS_LINUX ? "libdiscord-rpc.so"
+                : SystemUtils.IS_OS_MAC ? "libdiscord-rpc.dylib" : ""));
+        UpdateStatus = UpdateStatus || !file.exists();
 
-                    if (UpdateStatus) {
-                        FileUtils.copyURLToFile(WIN_x86, file);
-                    }
-
-                    try {
-                        System.load(file.getAbsolutePath());
-                    } catch (Exception ex) {
-                        boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
-                        if (isPermsSet) {
-                            System.load(file.getAbsolutePath());
-                        }
-                    }
-                } catch (Exception ex) {
-                    LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
-                    ex.printStackTrace();
-                }
-            }
-        }
-        if (SystemUtils.IS_OS_LINUX) {
-            try {
-                final URL LINUX = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/linux-x86-64/libdiscord-rpc.so");
-                final File file = new File(MODID + File.separator + "libdiscord-rpc.so");
-                if (file.exists() && UpdateStatus) {
-                    final boolean fileDeleted = file.delete();
-                    if (!fileDeleted) {
-                        LOG.error("Failed to Delete " + file.getName());
-                    }
-                } else if (!file.exists()) {
-                    UpdateStatus = true;
-                }
-
-                if (UpdateStatus) {
-                    FileUtils.copyURLToFile(LINUX, file);
-                }
-
-                try {
-                    System.load(file.getAbsolutePath());
-                } catch (Exception ex) {
-                    boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
-                    if (isPermsSet) {
-                        System.load(file.getAbsolutePath());
-                    }
-                }
-            } catch (Exception ex) {
-                LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
-                ex.printStackTrace();
-            }
-        }
-        if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
-            try {
-                final URL MAC_OS = new URL("https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/darwin/libdiscord-rpc.dylib");
-                final File file = new File(MODID + File.separator + "libdiscord-rpc.dylib");
-                if (file.exists() && UpdateStatus) {
-                    final boolean fileDeleted = file.delete();
-                    if (!fileDeleted) {
-                        LOG.error("Failed to Delete " + file.getName());
-                    }
-                } else if (!file.exists()) {
-                    UpdateStatus = true;
-                }
-
-                if (UpdateStatus) {
-                    FileUtils.copyURLToFile(MAC_OS, file);
-                }
-
-                try {
-                    System.load(file.getAbsolutePath());
-                } catch (Exception ex) {
-                    boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
-                    if (isPermsSet) {
-                        System.load(file.getAbsolutePath());
-                    }
-                }
-            } catch (Exception ex) {
-                LOG.error("Unable to retrieve DiscordRPC DLL for " + SystemUtils.OS_NAME + " ( Arch: " + SystemUtils.OS_ARCH + " )");
-                ex.printStackTrace();
-            }
-        }
+        FileHandler.downloadFile(url, file, UpdateStatus);
+        FileHandler.loadFileAsDLL(file);
     }
 }

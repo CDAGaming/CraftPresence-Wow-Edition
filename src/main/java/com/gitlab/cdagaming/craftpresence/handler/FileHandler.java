@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,6 +20,38 @@ public class FileHandler {
 
     public static <T> T getJSONFromFile(File file, Class<T> clazz) throws Exception {
         return getJSONFromFile(fileToString(file), clazz);
+    }
+
+    public static void downloadFile(final String urlString, final File file, final boolean replaceFile) {
+        try {
+            final URL url = new URL(urlString);
+            if (replaceFile) {
+                if (file.exists()) {
+                    final boolean fileDeleted = file.delete();
+                    if (!fileDeleted) {
+                        Constants.LOG.error("Failed to Delete " + file.getName());
+                    }
+                }
+                FileUtils.copyURLToFile(url, file);
+            }
+        } catch (Exception ex) {
+            // TODO: ERROR LOG
+        }
+    }
+
+    public static void loadFileAsDLL(final File file) {
+        try {
+            System.load(file.getAbsolutePath());
+        } catch (Exception ex1) {
+            try {
+                boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
+                if (isPermsSet) {
+                    System.load(file.getAbsolutePath());
+                }
+            } catch (Exception ex2) {
+                // TODO: ERROR LOG
+            }
+        }
     }
 
     public static <T> T getJSONFromFile(String file, Class<T> clazz) {

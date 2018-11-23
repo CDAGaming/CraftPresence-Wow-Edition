@@ -1,22 +1,22 @@
 image: java:8
 
 before_script:
-- which java
-- which javac
+  - which java
+  - which javac
 
 build:
   script:
-  - ./gradlew build
+    - ./gradlew build
   artifacts:
     paths:
-    - build/libs/*.jar
+      - build/libs/*.jar
     expire_in: 1 month
 
 deploy:
   script:
-  - ./gradlew curseforge
+    - ./gradlew curseforge
   artifacts:
     paths:
-    - build/libs/*.jar
+      - build/libs/*.jar
     expire_in: 1 month
   when: manual
