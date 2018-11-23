@@ -45,7 +45,9 @@ public class Constants {
                 : SystemUtils.IS_OS_MAC ? "libdiscord-rpc.dylib" : ""));
         UpdateStatus = UpdateStatus || !file.exists();
 
-        FileHandler.downloadFile(url, file, UpdateStatus);
+        if (UpdateStatus) {
+            FileHandler.downloadFile(url, file);
+        }
         FileHandler.loadFileAsDLL(file);
     }
 }

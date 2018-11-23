@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.handler;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import net.minecraft.client.resources.I18n;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -18,39 +19,39 @@ import java.util.jar.JarFile;
 public class FileHandler {
     private static Gson GSON = new GsonBuilder().create();
 
-    public static <T> T getJSONFromFile(File file, Class<T> clazz) throws Exception {
-        return getJSONFromFile(fileToString(file), clazz);
+    public static <T> T getJSONFromFile(File file, Class<T> classObj) throws Exception {
+        return getJSONFromFile(fileToString(file), classObj);
     }
 
-    public static void downloadFile(final String urlString, final File file, final boolean replaceFile) {
+    public static void downloadFile(final String urlString, final File file) {
         try {
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.download.init", file.getName(), file.getAbsolutePath(), urlString));
             final URL url = new URL(urlString);
-            if (replaceFile) {
-                if (file.exists()) {
-                    final boolean fileDeleted = file.delete();
-                    if (!fileDeleted) {
-                        Constants.LOG.error("Failed to Delete " + file.getName());
-                    }
+            if (file.exists()) {
+                final boolean fileDeleted = file.delete();
+                if (!fileDeleted) {
+                    Constants.LOG.error("Failed to Delete " + file.getName());
                 }
-                FileUtils.copyURLToFile(url, file);
             }
+            FileUtils.copyURLToFile(url, file);
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.download.loaded", file.getName(), file.getAbsolutePath(), urlString));
         } catch (Exception ex) {
-            // TODO: ERROR LOG
+            Constants.LOG.error(I18n.format("craftpresence.logger.error.download", file.getName(), urlString));
+            ex.printStackTrace();
         }
     }
 
     public static void loadFileAsDLL(final File file) {
         try {
-            System.load(file.getAbsolutePath());
-        } catch (Exception ex1) {
-            try {
-                boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
-                if (isPermsSet) {
-                    System.load(file.getAbsolutePath());
-                }
-            } catch (Exception ex2) {
-                // TODO: ERROR LOG
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.dll.init", file.getName()));
+            boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
+            if (isPermsSet) {
+                System.load(file.getAbsolutePath());
             }
+            Constants.LOG.info(I18n.format("craftpresence.logger.info.dll.loaded", file.getName()));
+        } catch (Exception ex) {
+            Constants.LOG.error(I18n.format("craftpresence.logger.error.dll", file.getName()));
+            ex.printStackTrace();
         }
     }
 
