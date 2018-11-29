@@ -1,10 +1,14 @@
 # CraftPresence Changes
 
-## v1.4.9.8 (11/??/2018)
+## v1.4.9.8 (12/07/2018)
+
+### Changes:
+
+* Code ReFactors
 
 ### Fixes:
 
-* ???
+* Fixes IndexOutOfBounds Exception on getRandomAsset
 
 ### More Information:
 

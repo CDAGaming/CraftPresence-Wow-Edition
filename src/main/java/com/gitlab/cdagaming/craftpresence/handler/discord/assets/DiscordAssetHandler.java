@@ -5,7 +5,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.*;
 
