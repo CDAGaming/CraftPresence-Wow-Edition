@@ -110,6 +110,22 @@ public class CraftPresence {
     public void onTick(final TickEvent.ClientTickEvent event) {
         CommandHandler.reloadData();
 
+        if (CraftPresence.CONFIG.showCurrentDimension && CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
+            CraftPresence.DIMENSIONS.getDimensions();
+        }
+        if (CraftPresence.CONFIG.showCurrentBiome && CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
+            CraftPresence.BIOMES.getBiomes();
+        }
+        if (CraftPresence.CONFIG.enablePERGUI && CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
+            CraftPresence.GUIS.getGUIs();
+        }
+        if (CraftPresence.CONFIG.enablePERItem && CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
+            CraftPresence.ENTITIES.getEntities();
+        }
+        if (CraftPresence.CONFIG.showGameState && CraftPresence.SERVER.knownAddresses.isEmpty()) {
+            CraftPresence.SERVER.getServerAddresses();
+        }
+
         if (!CONFIG.hasChanged) {
             if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                 CommandHandler.setMainMenuPresence();

@@ -23,7 +23,7 @@ gui.config.title.selector.item=CraftPresence - Select an Item
 gui.config.title.selector.icon=CraftPresence - Select an Icon
 ## CONFIG MESSAGES - TITLE COMMENTS ##
 gui.config.comment.title.general=General Settings for Displaying Info
-gui.config.comment.title.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n &id& = Biome ID
+gui.config.comment.title.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n - &id& = Biome ID
 gui.config.comment.title.dimensionmessages=Customize Messages to display with Dimensions \n (Manual Format: dimension_name;message) \n Available Placeholders: \n - &dimension& = Dimension Name \n - &id& = Dimension ID \n - &icon& = Default Dimension Icon
 gui.config.comment.title.servermessages=Customize Messages to display with Servers \n (Manual Format: server_IP;message;icon) \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.title.statusmessages=Customize Messages relating to different Game States
@@ -93,7 +93,7 @@ gui.config.comment.general.showbiome=Show Current Biome in Rich Presence? \n (Wi
 gui.config.comment.general.showdimension=Show Current Dimension in Rich Presence?
 gui.config.comment.general.showstate=Show Specific Game Data in Rich Presence? \n (Will Disable Current Biome)
 gui.config.comment.general.enablejoinrequest=Allows Sending or Accepting Join Requests in Discord
-gui.config.comment.biomemessages.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n &id& = Biome ID
+gui.config.comment.biomemessages.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n - &id& = Biome ID
 gui.config.comment.dimensionmessages.dimensionicon=Dimension Icon to Default to when in an Unsupported Dimension
 gui.config.comment.dimensionmessages.dimensionmessages=Customize Messages to display with Dimensions \n (Manual Format: dimension_name;message) \n Available Placeholders: \n - &dimension& = Dimension Name \n - &id& = Dimension ID \n - &icon& = Default Dimension Icon
 gui.config.comment.servermessages.servericon=Server Icon to default to when in an Unsupported Server

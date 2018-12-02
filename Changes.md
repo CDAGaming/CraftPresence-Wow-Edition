@@ -8,6 +8,8 @@
 
 ### Fixes:
 
+* Fixes Missing " - " Typo in Biome Hover Text
+
 * Fixes IndexOutOfBounds Exception on getRandomAsset
 
 ### More Information:
