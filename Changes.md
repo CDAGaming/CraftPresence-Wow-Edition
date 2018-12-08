@@ -1,12 +1,14 @@
 # CraftPresence Changes
 
-## v1.4.9.8 (12/07/2018)
+## v1.4.9.8 (12/09/2018)
 
 ### Changes:
 
-* Code ReFactors
+* Code ReFactors and Optimizations
 
 ### Fixes:
+
+* [1.13.x] Fixes Scroll Lists Clicking through background
 
 * Fixes Missing " - " Typo in Biome Hover Text
 
@@ -18,9 +20,9 @@
 
 The Config GUI has now been overhauled to provide a more User-Friendly Experience
 
-* Migrating on `1.7.10 - 1.12.2` (From v1.3.x and Below) - Remove `craftpresence.cfg` and either Regenerate or Manually Migrate
+* Migrating from `1.7.10 - 1.12.2` (On v1.3.x and Below) - Remove `craftpresence.cfg` and either Regenerate or Manually Migrate
 
-* Migrating on `1.13.x` (From v1.3.x and Below) - Rename `craftpresence.cfg` to `craftpresence.properties` or Regenerate Config
+* Migrating from `1.13.x` (On v1.3.x and Below) - Rename `craftpresence.cfg` to `craftpresence.properties` or Regenerate Config
 
 Over time, this GUI will be edited and change and improve to further customize your experience.
 
@@ -32,9 +34,9 @@ These Features are both extremely new, so although most Issues have been fixed, 
 
 If You happen to have a major Issue occur relating to this, Do not hesitate to make an Issue on our Issue Tracker!
 
-#### 1.13 Build Info:
+#### 1.13.x Build Info:
 
-The 1.13 Port of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
+The 1.13.x Port of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
 
 * KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
 
