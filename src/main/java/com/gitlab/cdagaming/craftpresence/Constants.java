@@ -37,12 +37,13 @@ public class Constants {
         final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
         final boolean is64Bit = x64.contains(SystemUtils.OS_ARCH);
 
+        final String fileName = (SystemUtils.IS_OS_WINDOWS ? "discord-rpc.dll"
+                : SystemUtils.IS_OS_LINUX ? "libdiscord-rpc.so"
+                : SystemUtils.IS_OS_MAC ? "libdiscord-rpc.dylib" : "");
         final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (SystemUtils.IS_OS_WINDOWS ? (is64Bit ? "win32-x86-64" : "win32-x86")
                 : SystemUtils.IS_OS_LINUX ? "linux-x86-64"
-                : SystemUtils.IS_OS_MAC ? "darwin" : "") + "/discord-rpc.dll";
-        final File file = new File(MODID + File.separator + (SystemUtils.IS_OS_WINDOWS ? "discord-rpc.dll"
-                : SystemUtils.IS_OS_LINUX ? "libdiscord-rpc.so"
-                : SystemUtils.IS_OS_MAC ? "libdiscord-rpc.dylib" : ""));
+                : SystemUtils.IS_OS_MAC ? "darwin" : "") + "/" + fileName;
+        final File file = new File(MODID + File.separator + fileName);
         UpdateStatus = UpdateStatus || !file.exists();
 
         if (UpdateStatus) {

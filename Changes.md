@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.4.9.8 (12/09/2018)
+## v1.4.9.8 (12/12/2018)
 
 ### Changes:
 
@@ -14,6 +14,7 @@
 
 * Fixes IndexOutOfBounds Exception on getRandomAsset
 
+* [HOTFIX] Fixes Linux and MacOS DLL Downloading from Original Build [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/10)
 ### More Information:
 
 #### Config Overhaul (Breaking Change with v2 Configs):
