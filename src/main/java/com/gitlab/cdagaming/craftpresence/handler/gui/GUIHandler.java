@@ -47,15 +47,15 @@ public class GUIHandler {
         tessellator.draw();
     }
 
-    public boolean isMouseOver(final int mouseX, final int mouseY, final int elementX, final int elementY, final int elementWidth, final int elementHeight) {
+    public boolean isMouseOver(final double mouseX, final double mouseY, final double elementX, final double elementY, final double elementWidth, final double elementHeight) {
         return mouseX >= elementX && mouseX <= elementX + elementWidth && mouseY >= elementY && mouseY <= elementY + elementHeight;
     }
 
-    public boolean isMouseOver(final int mouseX, final int mouseY, final GUIExtendedButton button) {
+    public boolean isMouseOver(final double mouseX, final double mouseY, final GUIExtendedButton button) {
         return isMouseOver(mouseX, mouseY, button.x, button.y, button.getWidth(), button.getHeight());
     }
 
-    public boolean isMouseOver(final int mouseX, final int mouseY, final GUICheckBox checkBox) {
+    public boolean isMouseOver(final double mouseX, final double mouseY, final GUICheckBox checkBox) {
         return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth, checkBox.getHeight());
     }
 

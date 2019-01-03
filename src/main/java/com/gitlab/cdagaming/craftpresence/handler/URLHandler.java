@@ -3,22 +3,15 @@ package com.gitlab.cdagaming.craftpresence.handler;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.resources.I18n;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 
 public class URLHandler {
-    private static final String USER_AGENT = Constants.MODID + "/" + Constants.VERSION_ID;
+    private static final String USER_AGENT = Constants.MODID + "/" + Constants.MCVersion;
     private static Gson GSON = new GsonBuilder().create();
 
     public static String getURLText(final URL url) throws Exception {
@@ -34,32 +27,6 @@ public class URLHandler {
 
     public static BufferedReader getURLReader(final String url) throws Exception {
         return getURLReader(new URL(url));
-    }
-
-    public static void acceptCertificates() {
-        TrustManager[] trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-
-                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
-                        // N/A
-                    }
-
-                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
-                        // N/A
-                    }
-                }
-        };
-
-        try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.https"));
-        }
     }
 
     public static BufferedReader getURLReader(final URL url) throws Exception {

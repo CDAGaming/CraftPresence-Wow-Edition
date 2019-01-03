@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.config.ConfigHandler;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.KeyHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.entity.EntityHandler;
@@ -86,7 +85,6 @@ public class CraftPresence {
         CommandHandler.reloadData();
 
         final File CP_DIR = new File(Constants.MODID);
-        URLHandler.acceptCertificates();
         Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         try {

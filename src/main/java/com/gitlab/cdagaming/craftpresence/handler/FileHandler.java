@@ -1,6 +1,8 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.resources.I18n;
@@ -33,10 +35,11 @@ public class FileHandler {
                     Constants.LOG.error("Failed to Delete " + file.getName());
                 }
             }
+
             FileUtils.copyURLToFile(url, file);
             Constants.LOG.info(I18n.format("craftpresence.logger.info.download.loaded", file.getName(), file.getAbsolutePath(), urlString));
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.download", file.getName(), urlString));
+            Constants.LOG.error(I18n.format("craftpresence.logger.error.download", file.getName(), urlString, file.getAbsolutePath()));
             ex.printStackTrace();
         }
     }

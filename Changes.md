@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.4.9.8 (12/12/2018)
+## v1.4.9.9 (01/03/2019)
 
 ### Changes:
 
@@ -8,13 +8,8 @@
 
 ### Fixes:
 
-* [1.13.x] Fixes Scroll Lists Clicking through background
+* [CRITICAL] Fix/Remove Unsecured Download Methods
 
-* Fixes Missing " - " Typo in Biome Hover Text
-
-* Fixes IndexOutOfBounds Exception on getRandomAsset
-
-* [HOTFIX] Fixes Linux and MacOS DLL Downloading from Original Build [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/10)
 ### More Information:
 
 #### Config Overhaul (Breaking Change with v2 Configs):
@@ -42,3 +37,9 @@ The 1.13.x Port of this Mod Requires the [Rift ModLoader](https://minecraft.curs
 * KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
 
 * Commands have been changed slightly to be compliant with [Brigadier's Command Parser](https://github.com/Mojang/brigadier) in 1.13
+
+#### 1.14.x Build Info:
+
+The 1.14.x Port of this Mod Requires the [FabricMC ModLoader](https://minecraft.curseforge.com/projects/fabric) and contains the same differences as the 1.13.x Port
+
+This Version of the Build is based on Minecraft Snapshots, since 1.14 is not fully released, caution is advised.
