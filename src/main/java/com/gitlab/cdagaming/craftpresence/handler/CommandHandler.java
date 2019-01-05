@@ -6,6 +6,7 @@ import com.gitlab.cdagaming.craftpresence.handler.commands.CPCommands;
 import com.gitlab.cdagaming.craftpresence.handler.curse.ManifestHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
+import com.gitlab.cdagaming.craftpresence.handler.mcupdater.MCUpdaterHandler;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import net.minecraft.client.Minecraft;
@@ -52,6 +53,9 @@ public class CommandHandler {
         }
         if (CraftPresence.CONFIG.detectMultiMCManifest && !CraftPresence.packFound) {
             InstanceHandler.loadInstance();
+        }
+        if (CraftPresence.CONFIG.detectMCUpdaterInstance && !CraftPresence.packFound) {
+            MCUpdaterHandler.loadInstance();
         }
         if (CraftPresence.CONFIG.detectTechnicPack && !CraftPresence.packFound) {
             PackHandler.loadPack();
