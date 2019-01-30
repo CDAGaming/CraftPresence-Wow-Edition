@@ -1,14 +1,20 @@
 # CraftPresence Changes
 
-## v1.4.9.9 (01/03/2019)
+## v1.5.0 (??/??/2019)
 
 ### Changes:
 
-* Code ReFactors and Optimizations
+* MCUpdater Instance Detection & Support
+
+* Code Optimizations to Improve Memory/CPU Usage
 
 ### Fixes:
 
-* [CRITICAL] Fix/Remove Unsecured Download Methods
+* [1.13.x - 1.14.x] Fixes for KeyBindings // Control Menu Crashes
+
+* Fixes Config Conflicts, allowing Info to be stacked seamless instead of not allowed
+
+* Fixes OnHover Double Spaces in Messages sent to Discord RPC
 
 ### More Information:
 
