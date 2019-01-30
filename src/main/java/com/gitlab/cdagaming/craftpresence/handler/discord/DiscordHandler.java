@@ -11,6 +11,7 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordEventHandle
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRichPresence;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordUser;
+import com.gitlab.cdagaming.craftpresence.handler.mcupdater.MCUpdaterHandler;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
@@ -158,6 +159,8 @@ public class DiscordHandler {
                 presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(ManifestHandler.manifest.name));
             } else if (!StringHandler.isNullOrEmpty(InstanceHandler.INSTANCE_NAME)) {
                 presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.INSTANCE_NAME));
+            } else if (MCUpdaterHandler.instance != null && !StringHandler.isNullOrEmpty(MCUpdaterHandler.instance.getPackName())) {
+                presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace( "&name&", StringHandler.formatWord(MCUpdaterHandler.instance.getPackName()));
             } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME)) {
                 presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
             }

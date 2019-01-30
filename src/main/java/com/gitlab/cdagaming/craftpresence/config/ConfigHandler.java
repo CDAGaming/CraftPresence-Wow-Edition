@@ -16,7 +16,7 @@ import java.util.Properties;
 public class ConfigHandler {
     // Config Names
     // GENERAL
-    public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectTechnicPack,
+    public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
             NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
             NAME_showGameState, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest;
     // BIOME MESSAGES
@@ -36,7 +36,7 @@ public class ConfigHandler {
 
     // Config Variables
     // GENERAL
-    public boolean detectCurseManifest, detectMultiMCManifest, detectTechnicPack, showTime,
+    public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
             showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
     public String clientID, defaultIcon;
     // BIOME MESSAGES
@@ -59,7 +59,7 @@ public class ConfigHandler {
     public boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false;
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
-    // CLASS-SPECIFIC - PRIVATE
+	// CLASS-SPECIFIC - PRIVATE
     private String fileName;
     private boolean verified = false, initialized = false, isConfigNew = false;
 
@@ -71,6 +71,7 @@ public class ConfigHandler {
         // GENERAL
         NAME_detectCurseManifest = I18n.format("gui.config.name.general.detectcursemanifest").replaceAll(" ", "_");
         NAME_detectMultiMCManifest = I18n.format("gui.config.name.general.detectmultimcmanifest").replaceAll(" ", "_");
+        NAME_detectMCUpdaterInstance = I18n.format("gui.config.name.general.detectmcupdaterinstance").replaceAll(" ", "_");
         NAME_detectTechnicPack = I18n.format("gui.config.name.general.detecttechnicpack").replaceAll(" ", "_");
         NAME_showTime = I18n.format("gui.config.name.general.showtime").replaceAll(" ", "_");
         NAME_showCurrentBiome = I18n.format("gui.config.name.general.showbiome").replaceAll(" ", "_");
@@ -81,6 +82,7 @@ public class ConfigHandler {
         NAME_enableJoinRequest = I18n.format("gui.config.name.general.enablejoinrequest").replaceAll(" ", "_");
         detectCurseManifest = true;
         detectMultiMCManifest = true;
+        detectMCUpdaterInstance = true;
         detectTechnicPack = true;
         showTime = true;
         showCurrentBiome = false;
@@ -178,6 +180,7 @@ public class ConfigHandler {
                 // GENERAL
                 detectCurseManifest = StringHandler.isValidBoolean(properties.getProperty(NAME_detectCurseManifest)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectCurseManifest)) : detectCurseManifest;
                 detectMultiMCManifest = StringHandler.isValidBoolean(properties.getProperty(NAME_detectMultiMCManifest)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectMultiMCManifest)) : detectMultiMCManifest;
+                detectMCUpdaterInstance = StringHandler.isValidBoolean(properties.getProperty(NAME_detectMCUpdaterInstance)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectMCUpdaterInstance)) : detectMCUpdaterInstance;
                 detectTechnicPack = StringHandler.isValidBoolean(properties.getProperty(NAME_detectTechnicPack)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectTechnicPack)) : detectTechnicPack;
                 showTime = StringHandler.isValidBoolean(properties.getProperty(NAME_showTime)) ? Boolean.parseBoolean(properties.getProperty(NAME_showTime)) : showTime;
                 showCurrentBiome = StringHandler.isValidBoolean(properties.getProperty(NAME_showCurrentBiome)) ? Boolean.parseBoolean(properties.getProperty(NAME_showCurrentBiome)) : showCurrentBiome;
@@ -231,6 +234,7 @@ public class ConfigHandler {
         // GENERAL
         properties.setProperty(NAME_detectCurseManifest, Boolean.toString(detectCurseManifest));
         properties.setProperty(NAME_detectMultiMCManifest, Boolean.toString(detectMultiMCManifest));
+        properties.setProperty(NAME_detectMCUpdaterInstance, Boolean.toString(detectMCUpdaterInstance));
         properties.setProperty(NAME_detectTechnicPack, Boolean.toString(detectTechnicPack));
         properties.setProperty(NAME_showTime, Boolean.toString(showTime));
         properties.setProperty(NAME_showCurrentBiome, Boolean.toString(showCurrentBiome));
