@@ -52,6 +52,7 @@ gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon
 gui.config.name.general.detectcursemanifest=Detect Curse Manifest
 gui.config.name.general.detectmultimcmanifest=Detect MultiMC Instance
+gui.config.name.general.detectmcupdaterinstance=Detect MCUpdater Instance
 gui.config.name.general.detecttechnicpack=Detect Technic Pack
 gui.config.name.general.showtime=Show Elapsed Time
 gui.config.name.general.showbiome=Show Biome

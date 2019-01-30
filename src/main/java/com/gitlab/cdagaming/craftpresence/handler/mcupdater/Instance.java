@@ -63,7 +63,6 @@ public class Instance {
         this.jarMods = jarMods;
     }
 
-
     public String getHash() {
         return hash;
     }
@@ -74,13 +73,11 @@ public class Instance {
 
     @Override
     public String toString() {
-        StringBuilder serializer = new StringBuilder();
-        serializer.append("Instance{");
-        serializer.append("mcversion:").append(this.mcversion).append(";");
-        serializer.append("revision:").append(this.revision).append(";");
-        serializer.append("hash:").append(this.hash).append(";");
-        serializer.append("}");
-        return serializer.toString();
+        return "Instance{" +
+                "mcversion:" + this.mcversion + ";" +
+                "revision:" + this.revision + ";" +
+                "hash:" + this.hash + ";" +
+                "}";
     }
 
     public String getPackName() {

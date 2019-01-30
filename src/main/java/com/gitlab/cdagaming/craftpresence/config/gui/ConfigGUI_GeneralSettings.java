@@ -18,7 +18,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private GUIExtendedButton proceedButton, defaultIconButton;
     private GUICheckBox detectCurseManifestButton, detectMultiMCManifestButton,
-            detectTechnicPackButton, showTimeButton,
+            detectMCUpdaterInstanceButton, detectTechnicPackButton, showTimeButton,
             showBiomeButton, showDimensionButton, showStateButton, enableJoinRequestButton;
     private GuiTextField clientID;
 
@@ -37,23 +37,25 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         clientID.setText(CraftPresence.CONFIG.clientID);
         clientID.setMaxStringLength(18);
 
-        int calc1 = (sr.getScaledWidth() / 2) - 130;
-        int calc2 = (sr.getScaledWidth() / 2) + 3;
+        int calc1 = (sr.getScaledWidth() / 2) - 145;
+        int calc2 = (sr.getScaledWidth() / 2) + 18;
 
         defaultIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.general.defaulticon"));
         detectCurseManifestButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.general.detectcursemanifest"), CraftPresence.CONFIG.detectCurseManifest);
         detectMultiMCManifestButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.general.detectmultimcmanifest"), CraftPresence.CONFIG.detectMultiMCManifest);
-        detectTechnicPackButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.detecttechnicpack"), CraftPresence.CONFIG.detectTechnicPack);
-        showTimeButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.showtime"), CraftPresence.CONFIG.showTime);
-        showBiomeButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showbiome"), CraftPresence.CONFIG.showCurrentBiome);
-        showDimensionButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
-        showStateButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
-        enableJoinRequestButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
-        proceedButton = new GUIExtendedButton(1000, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        detectMCUpdaterInstanceButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.detectmcupdaterinstance"), CraftPresence.CONFIG.detectMCUpdaterInstance);
+        detectTechnicPackButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.detecttechnicpack"), CraftPresence.CONFIG.detectTechnicPack);
+        showTimeButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showtime"), CraftPresence.CONFIG.showTime);
+        showBiomeButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showbiome"), CraftPresence.CONFIG.showCurrentBiome);
+        showDimensionButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
+        showStateButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
+        enableJoinRequestButton = new GUICheckBox(1000, calc1, CraftPresence.GUIS.getButtonY(7) - 40, I18n.format("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
+        proceedButton = new GUIExtendedButton(1100, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
 
         buttonList.add(defaultIconButton);
         buttonList.add(detectCurseManifestButton);
         buttonList.add(detectMultiMCManifestButton);
+        buttonList.add(detectMCUpdaterInstanceButton);
         buttonList.add(detectTechnicPackButton);
         buttonList.add(showTimeButton);
         buttonList.add(showBiomeButton);
@@ -93,6 +95,9 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectMultiMCManifestButton)) {
             CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectmultimcmanifest")), mouseX, mouseY, width, height, -1, fontRenderer);
+        }
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectMCUpdaterInstanceButton)) {
+            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectmcupdaterinstance")), mouseX, mouseY, width, height, -1, fontRenderer);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectTechnicPackButton)) {
             CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detecttechnicpack")), mouseX, mouseY, width, height, -1, fontRenderer);
@@ -134,6 +139,11 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.detectMultiMCManifest = detectMultiMCManifestButton.isChecked();
+            }
+            if (detectMCUpdaterInstanceButton.isChecked() != CraftPresence.CONFIG.detectMCUpdaterInstance) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                CraftPresence.CONFIG.detectMCUpdaterInstance = detectMCUpdaterInstanceButton.isChecked();
             }
             if (detectTechnicPackButton.isChecked() != CraftPresence.CONFIG.detectTechnicPack) {
                 CraftPresence.CONFIG.hasChanged = true;
