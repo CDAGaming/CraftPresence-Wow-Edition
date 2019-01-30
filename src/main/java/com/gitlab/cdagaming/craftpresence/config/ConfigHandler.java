@@ -59,7 +59,7 @@ public class ConfigHandler {
     public boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false;
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
-	// CLASS-SPECIFIC - PRIVATE
+    // CLASS-SPECIFIC - PRIVATE
     private String fileName;
     private boolean verified = false, initialized = false, isConfigNew = false;
 

@@ -160,7 +160,7 @@ public class DiscordHandler {
             } else if (!StringHandler.isNullOrEmpty(InstanceHandler.INSTANCE_NAME)) {
                 presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(InstanceHandler.INSTANCE_NAME));
             } else if (MCUpdaterHandler.instance != null && !StringHandler.isNullOrEmpty(MCUpdaterHandler.instance.getPackName())) {
-                presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace( "&name&", StringHandler.formatWord(MCUpdaterHandler.instance.getPackName()));
+                presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(MCUpdaterHandler.instance.getPackName()));
             } else if (!StringHandler.isNullOrEmpty(PackHandler.PACK_NAME)) {
                 presence.details = presence.details + (!StringHandler.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringHandler.formatWord(PackHandler.PACK_NAME));
             }

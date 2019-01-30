@@ -1,8 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
-import com.google.common.hash.Hashing;
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.resources.I18n;
