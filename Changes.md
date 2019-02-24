@@ -6,8 +6,6 @@
 
 * MCUpdater Instance Detection & Support
 
-* Code Optimizations to Improve Memory/CPU Usage
-
 ### Fixes:
 
 * [1.13.x - 1.14.x] Fixes for KeyBindings // Control Menu Crashes
