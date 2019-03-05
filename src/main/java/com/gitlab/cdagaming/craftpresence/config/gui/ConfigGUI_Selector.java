@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigGUI_Selector extends GuiScreen {
-    private final GuiScreen parentScreen;
+    public final GuiScreen parentScreen;
     private GUIExtendedButton proceedButton, addNewButton;
     private GUIScrollList scrollList;
     private GuiTextField searchBox;
     private String title, configOption, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
 
-    ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, String currentValue, String attributeName) {
+    public ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, String currentValue, String attributeName) {
         mc = CraftPresence.instance;
         itemList = originalList = list;
         originalValue = currentValue;

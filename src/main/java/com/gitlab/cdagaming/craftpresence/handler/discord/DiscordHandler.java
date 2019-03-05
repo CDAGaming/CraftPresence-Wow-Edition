@@ -2,8 +2,8 @@ package com.gitlab.cdagaming.craftpresence.handler.discord;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
-import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.commands.CommandsGUI;
 import com.gitlab.cdagaming.craftpresence.handler.curse.ManifestHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
@@ -126,7 +126,7 @@ public class DiscordHandler {
                     STATUS = "joinRequest";
                     REQUESTER_USER = request;
 
-                    CommandHandler.CP_COMMANDS.executeCommand(CraftPresence.player, "request");
+                    CommandsGUI.executeCommand("request");
                 }
             }
         };

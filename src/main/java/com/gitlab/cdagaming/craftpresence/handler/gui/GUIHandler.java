@@ -225,8 +225,18 @@ public class GUIHandler {
         queuedForUpdate = false;
     }
 
+    public void drawMuliLineString(List<String> textLines, int xPos, int yPos, FontRenderer fontRenderer) {
+        if (!textLines.isEmpty() && fontRenderer != null) {
+            for (String line : textLines) {
+                fontRenderer.drawStringWithShadow(line, xPos, yPos, -1);
+
+                yPos += 10;
+            }
+        }
+    }
+
     public void drawHoveringText(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font) {
-        if (!textLines.isEmpty()) {
+        if (!textLines.isEmpty() && font != null) {
             RenderHelper.disableStandardItemLighting();
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_DEPTH_TEST);

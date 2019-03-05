@@ -8,6 +8,7 @@ gui.config.title.servermessages=Customize Server Messages
 gui.config.title.statusmessages=Customize Status Messages
 gui.config.title.advanced=Advanced Settings
 gui.config.title.about.config=About this Configuration GUI
+gui.config.title.commands=Commands
 gui.config.title.error=CraftPresence - Error
 gui.config.title.biome.editspecificbiome=CraftPresence - Edit Biome (%1$s)
 gui.config.title.dimension.editspecificdimension=CraftPresence - Edit Dimension (%1$s)
