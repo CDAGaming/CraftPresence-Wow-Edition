@@ -79,9 +79,6 @@ public class StringHandler {
             if (formattedKey.contains("'")) {
                 formattedKey = formattedKey.replaceAll("'", "");
             }
-            if (formattedKey.contains("-")) {
-                formattedKey = formattedKey.replaceAll("-", "_");
-            }
             if (formattedKey.contains(".")) {
                 formattedKey = formattedKey.replaceAll("\\.", "_");
             }

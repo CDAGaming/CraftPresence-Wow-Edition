@@ -4,11 +4,13 @@
 
 ### Changes:
 
-* MCUpdater Instance Detection & Support
+* MCUpdater Instance Detection & Support [(PR Reference)](https://gitlab.com/CDAGaming/CraftPresence/merge_requests/1)
 
 * Added Forge 1.13.2 Support
 
 * Added New Commands GUI with Rewritten Command Interface
+
+* Allow Dashes to be used for Pack Icons (No Longer Replaced by Underscores) [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/15)
 
 ### Fixes:
 
