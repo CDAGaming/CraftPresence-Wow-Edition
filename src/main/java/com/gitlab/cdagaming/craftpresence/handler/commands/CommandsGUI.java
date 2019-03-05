@@ -53,6 +53,8 @@ public class CommandsGUI extends GuiScreen {
 
         buttonList.add(proceedButton);
 
+        executionString = I18n.format("craftpresence.command.usage.main");
+
         super.initGui();
     }
 
@@ -65,7 +67,7 @@ public class CommandsGUI extends GuiScreen {
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
-        if (!StringHandler.isNullOrEmpty(commandInput.getText())) {
+        if (!StringHandler.isNullOrEmpty(commandInput.getText()) && commandInput.getText().startsWith("/")) {
             commandArgs = commandInput.getText().replace("/", "").split(" ");
             filteredCommandArgs = commandInput.getText().replace("/", "").replace("cp", "").replace(Constants.MODID, "").trim().split(" ");
             tabCompletions = getTabCompletions(filteredCommandArgs);
@@ -74,7 +76,7 @@ public class CommandsGUI extends GuiScreen {
 
         // COMMANDS START
         if (executionCommandArgs != null) {
-            if (executionCommandArgs.length == 1 || (executionCommandArgs[0].equalsIgnoreCase("help") || executionCommandArgs[0].equalsIgnoreCase("?"))) {
+            if (executionCommandArgs.length == 0 || (executionCommandArgs[0].equalsIgnoreCase("help") || executionCommandArgs[0].equalsIgnoreCase("?") || executionCommandArgs[0].equalsIgnoreCase(""))) {
                 executionString = I18n.format("craftpresence.command.usage.main");
             } else if (!StringHandler.isNullOrEmpty(executionCommandArgs[0])) {
                 if (executionCommandArgs[0].equalsIgnoreCase("request")) {
@@ -183,9 +185,9 @@ public class CommandsGUI extends GuiScreen {
             } else {
                 executionString = I18n.format("craftpresence.logger.error.command");
             }
-        } else {
-            executionString = I18n.format("craftpresence.command.usage.main");
         }
+
+        executionCommandArgs = null;
         // COMMANDS END
 
         CraftPresence.GUIS.drawMuliLineString(StringHandler.splitTextByNewLine(executionString), 25, 35, fontRenderer);
@@ -205,7 +207,7 @@ public class CommandsGUI extends GuiScreen {
         if (keyCode == Keyboard.KEY_ESCAPE) {
             mc.displayGuiScreen(parentScreen);
         }
-        if (commandInput.isFocused() && commandArgs != null &&
+        if (commandInput.isFocused() && commandInput.getText().startsWith("/") && commandArgs != null &&
                 (commandArgs[0].equalsIgnoreCase("cp") || commandArgs[0].equalsIgnoreCase(Constants.MODID))) {
             if (keyCode == Keyboard.KEY_TAB && !tabCompletions.isEmpty()) {
                 Constants.LOG.info(commandArgs.length + " " + tabCompletions.size() + " - " + filteredCommandArgs[filteredCommandArgs.length - 1]);

@@ -8,6 +8,8 @@
 
 * Added Forge 1.13.2 Support
 
+* Added New Commands GUI with Rewritten Command Interface
+
 ### Fixes:
 
 * [1.13.x - Forge] Fixes for KeyBindings // Control Menu Crashes
@@ -29,8 +31,6 @@ If You happen to have a major Issue occur relating to this, Do not hesitate to m
 The Rift Edition of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
 
 * KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
-
-* Commands have been changed slightly to be compliant with [Brigadier's Command Parser](https://github.com/Mojang/brigadier) in 1.13
 
 #### 1.14.x Build Info:
 
