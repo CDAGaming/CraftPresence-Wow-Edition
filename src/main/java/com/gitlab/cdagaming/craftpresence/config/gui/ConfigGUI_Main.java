@@ -25,6 +25,7 @@ public class ConfigGUI_Main extends GuiScreen {
 
     @Override
     public void initGui() {
+        CraftPresence.GUIS.configGUIOpened = true;
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
@@ -144,8 +145,10 @@ public class ConfigGUI_Main extends GuiScreen {
             }
 
             if (mc.player != null) {
+                CraftPresence.GUIS.configGUIOpened = false;
                 mc.player.closeScreen();
             } else {
+                CraftPresence.GUIS.configGUIOpened = false;
                 mc.displayGuiScreen(parentScreen);
             }
         } else if (button.id == aboutButton.id) {

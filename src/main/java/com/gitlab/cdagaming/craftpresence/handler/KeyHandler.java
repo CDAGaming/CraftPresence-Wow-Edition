@@ -23,10 +23,8 @@ public class KeyHandler {
     }
 
     public void onTick() {
-        if (CraftPresence.player != null) {
-            if (configKeybinding.isPressed() && !CraftPresence.GUIS.openConfigGUI) {
-                CraftPresence.GUIS.openConfigGUI = true;
-            }
+        if (configKeybinding != null && Keyboard.isKeyDown(configKeybinding.getKeyCode()) && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
+            CraftPresence.GUIS.openConfigGUI = true;
         }
     }
 }

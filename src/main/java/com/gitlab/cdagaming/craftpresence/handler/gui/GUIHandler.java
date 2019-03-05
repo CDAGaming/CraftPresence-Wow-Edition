@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GUIHandler {
-    public boolean openConfigGUI = false, isInUse = false, enabled = false;
+    public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, enabled = false;
 
     public List<String> GUI_NAMES = new ArrayList<>();
     private List<String> EXCLUSIONS = new ArrayList<>();
