@@ -90,7 +90,7 @@ public class ConfigHandler {
         showGameState = true;
         clientID = "450485984333660181";
         defaultIcon = "grass";
-        enableJoinRequest = true;
+        enableJoinRequest = false;
         // BIOME MESSAGES
         NAME_biomeMessages = I18n.format("gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
         biomeMessages = new String[]{"default;Playing in &biome&"};

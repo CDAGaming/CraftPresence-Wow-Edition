@@ -138,7 +138,7 @@ craftpresence.defaults.placeholder.time=&worldtime&
 craftpresence.defaults.placeholder.mods=&modcount& Mods
 craftpresence.defaults.special.vivecraft=Playing in VR via Vivecraft
 ## COMMAND MESSAGES ##
-craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n Syntax: /<cp|craftpresence> <command> \n\n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lrequest §r- View Join Request Info \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page
+craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n §rSyntax: §6/<cp|craftpresence> <command> \n\n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lrequest §r- View Join Request Info \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page
 craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands: \n\n §6§lcurrentData §r- Shows your Current RPC Data, in text \n §6§lassets §r- Displays all Asset Icons available \n §6§ldimensions §r- Displays available Dimension Names \n §6§lbiomes §r- Displays available Biome Names \n §6§lservers §r- Displays available Server Addresses \n §6§lguis §r- Displays available GUI Names \n §6§litems §r- Displays available Item Names
 craftpresence.command.usage.assets=§lCraftPresence - Assets Sub-Commands: \n\n §6§llarge §r- View Discord Assets with Size LARGE \n §6§lsmall §r- View Discord Assets with Size SMALL \n §6§lall §r- View All Discord Assets
 craftpresence.command.unrecognized=§c§lUnknown Command - use §6§l/craftpresence help

@@ -14,6 +14,8 @@
 
 * Config GUI can now be opened from anywhere in Minecraft, not just within a world! (Default: Right CTRL)
 
+* Enable Join Request is now Disabled by Default (Won't effect Current Configs)
+
 ### Fixes:
 
 * [1.13.x - Forge] Fixes for KeyBindings // Control Menu Crashes
