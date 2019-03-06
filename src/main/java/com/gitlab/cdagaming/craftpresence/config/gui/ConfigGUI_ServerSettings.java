@@ -77,28 +77,28 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
         // Hovering over Default Server Name Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servername")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servername")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         // Hovering over Default Server MOTD Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermotd")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermotd")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         // Hovering over Default Server Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.servermessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, serverMessagesButton)) {
             if (!serverMessagesButton.enabled) {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.servermessages.servermessages"))), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.servermessages.servermessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
             } else {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermessages")), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servermessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, defaultIconButton)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servericon")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.servermessages.servericon")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
     }
 

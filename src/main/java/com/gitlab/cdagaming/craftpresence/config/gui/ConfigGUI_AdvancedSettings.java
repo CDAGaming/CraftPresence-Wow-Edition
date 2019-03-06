@@ -78,36 +78,36 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
         // Hovering over Split Character Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enableCommandsButton)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablecommands")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablecommands")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerGUIButton)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablepergui")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablepergui")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerItemButton)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, overwriteServerIconButton)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, guiMessagesButton)) {
             if (!guiMessagesButton.enabled) {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages"))), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
             } else {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.guimessages")), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.guimessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, itemMessagesButton)) {
             if (!itemMessagesButton.enabled) {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages"))), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
             } else {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.itemmessages")), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.itemmessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
     }
 

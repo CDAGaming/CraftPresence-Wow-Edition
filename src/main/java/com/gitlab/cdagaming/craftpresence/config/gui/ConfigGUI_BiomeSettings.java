@@ -63,17 +63,17 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
         // Hovering over Default Biome Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, biomeMessagesButton)) {
             if (!biomeMessagesButton.enabled) {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.biomemessages.biomemessages"))), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.biomemessages.biomemessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
             } else {
-                CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.biomemessages.biomemessages")), mouseX, mouseY, width, height, -1, fontRenderer);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.biomemessages.biomemessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
-            CraftPresence.GUIS.drawHoveringText(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
     }
 

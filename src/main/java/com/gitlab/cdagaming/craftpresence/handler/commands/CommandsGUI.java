@@ -189,7 +189,7 @@ public class CommandsGUI extends GuiScreen {
         executionCommandArgs = null;
         // COMMANDS END
 
-        CraftPresence.GUIS.drawMuliLineString(StringHandler.splitTextByNewLine(executionString), 25, 35, fontRenderer);
+        CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(executionString), 25, 45, width, height, -1, fontRenderer, false);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
