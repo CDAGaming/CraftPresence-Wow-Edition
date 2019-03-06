@@ -55,9 +55,10 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         modsMSG.setText(CraftPresence.CONFIG.modsPlaceholderMSG);
         viveCraftMSG.setText(CraftPresence.CONFIG.vivecraftMessage);
 
-        previousPageButton = new GUIExtendedButton(700, 5, (sr.getScaledHeight() - 30), 20, 20, "<");
-        nextPageButton = new GUIExtendedButton(800, (sr.getScaledWidth() - 25), (sr.getScaledHeight() - 30), 20, 20, ">");
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+
+        previousPageButton = new GUIExtendedButton(800, proceedButton.x - 23, (sr.getScaledHeight() - 30), 20, 20, "<");
+        nextPageButton = new GUIExtendedButton(900, (proceedButton.x + proceedButton.getWidth()) + 3, (sr.getScaledHeight() - 30), 20, 20, ">");
 
         buttonList.add(previousPageButton);
         buttonList.add(nextPageButton);
