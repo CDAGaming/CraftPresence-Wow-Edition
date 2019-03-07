@@ -1,30 +1,22 @@
 # CraftPresence Changes
 
-## v1.5.0 (03/08/2019)
+## v1.5.1 (03/??/2019)
 
 ### Changes:
 
-* MCUpdater Instance Detection & Support [(PR Reference)](https://gitlab.com/CDAGaming/CraftPresence/merge_requests/1)
+* Added Translations for "Pinging..." and Cannot connect" that are missing in some versions of MC
 
-* Added Forge 1.13.2 Support
-
-* Added New Commands GUI with Rewritten Command Interface
-
-* Allow Dashes to be used for Pack Icons (No Longer Replaced by Underscores) [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/15)
-
-* Config GUI can now be opened from anywhere in Minecraft, not just within a world! (Default: Right CTRL)
-
-* Enable Join Request is now Disabled by Default (Won't effect Current Configs)
+* Added Translation for if a File Fails to be deleted in downloading Discord DLLs
 
 ### Fixes:
 
-* [1.13.x - Forge] Fixes for KeyBindings // Control Menu Crashes
+* Fixes Improper "/cp view assets all" Command Output
 
-* Fixes OnHover Double Spaces in Messages sent to Discord RPC
+* Removed Extra Debug Logging when Using Tab Completion in CommandsGUI
 
-* Fixes a Memory Leak with Getting Mod GUIs
+* Fixed missing Null-Checks for the Notices in the About and NullEntry GUI, to prevent issues
 
-* Fixes a possible IndexOutOfBounds Crash by blocking Mouse Buttons from being used as Keybinds to open the Config GUI
+* Fix onJoinRequest Callback not opening the Commands GUI
 
 ### More Information:
 

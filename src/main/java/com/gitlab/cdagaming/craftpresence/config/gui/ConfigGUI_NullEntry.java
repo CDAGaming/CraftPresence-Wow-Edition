@@ -41,9 +41,11 @@ public class ConfigGUI_NullEntry extends GuiScreen {
         final List<String> notice = StringHandler.splitTextByNewLine(I18n.format("gui.config.errorMessage.null"));
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
-        for (int i = 0; i < notice.size(); i++) {
-            final String string = notice.get(i);
-            drawString(fontRenderer, string, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
+        if (notice != null && !notice.isEmpty()) {
+            for (int i = 0; i < notice.size(); i++) {
+                final String string = notice.get(i);
+                drawString(fontRenderer, string, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
+            }
         }
 
         super.drawScreen(mouseX, mouseY, partialTicks);

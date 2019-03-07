@@ -167,11 +167,13 @@ public class CommandsGUI extends GuiScreen {
                             if (executionCommandArgs.length == 2) {
                                 executionString = I18n.format("craftpresence.command.usage.assets");
                             } else if (!StringHandler.isNullOrEmpty(executionCommandArgs[2])) {
-                                if (executionCommandArgs[2].equalsIgnoreCase("large") || executionCommandArgs[2].equalsIgnoreCase("all")) {
+                                if (executionCommandArgs[2].equalsIgnoreCase("large")) {
                                     executionString = I18n.format("craftpresence.command.assets.large.header", DiscordAssetHandler.LARGE_ICONS);
                                 }
-                                if (executionCommandArgs[2].equalsIgnoreCase("small") || executionCommandArgs[2].equalsIgnoreCase("all")) {
+                                if (executionCommandArgs[2].equalsIgnoreCase("small")) {
                                     executionString = I18n.format("craftpresence.command.assets.small.header", DiscordAssetHandler.SMALL_ICONS);
+                                } else if (executionCommandArgs[2].equalsIgnoreCase("all")) {
+                                    executionString = I18n.format("craftpresence.command.assets.all.header", DiscordAssetHandler.ICON_LIST);
                                 }
                             }
                         } else {
@@ -209,7 +211,6 @@ public class CommandsGUI extends GuiScreen {
         if (commandInput.isFocused() && commandInput.getText().startsWith("/") && commandArgs != null &&
                 (commandArgs[0].equalsIgnoreCase("cp") || commandArgs[0].equalsIgnoreCase(Constants.MODID))) {
             if (keyCode == Keyboard.KEY_TAB && !tabCompletions.isEmpty()) {
-                Constants.LOG.info(commandArgs.length + " " + tabCompletions.size() + " - " + filteredCommandArgs[filteredCommandArgs.length - 1]);
                 if (commandArgs.length > 1 && (filteredCommandArgs[filteredCommandArgs.length - 1].length() > 1 || filteredCommandArgs[filteredCommandArgs.length - 1].equalsIgnoreCase("?"))) {
                     commandInput.setText(commandInput.getText().replace(filteredCommandArgs[filteredCommandArgs.length - 1], tabCompletions.get(0)));
                 }

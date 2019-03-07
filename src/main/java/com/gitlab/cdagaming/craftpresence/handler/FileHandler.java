@@ -30,7 +30,7 @@ public class FileHandler {
             if (file.exists()) {
                 final boolean fileDeleted = file.delete();
                 if (!fileDeleted) {
-                    Constants.LOG.error("Failed to Delete " + file.getName());
+                    Constants.LOG.error(I18n.format("craftpresence.logger.error.delete.file", file.getName()));
                 }
             }
 

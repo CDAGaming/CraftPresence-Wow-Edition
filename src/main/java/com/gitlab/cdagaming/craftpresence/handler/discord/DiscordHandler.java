@@ -126,6 +126,9 @@ public class DiscordHandler {
                     STATUS = "joinRequest";
                     REQUESTER_USER = request;
 
+                    if (!(CraftPresence.instance.currentScreen instanceof CommandsGUI)) {
+                        CraftPresence.instance.displayGuiScreen(new CommandsGUI(CraftPresence.instance.currentScreen));
+                    }
                     CommandsGUI.executeCommand("request");
                 }
             }

@@ -29,7 +29,7 @@ public class KeyHandler {
         if (configKeybinding != null) {
             if (configKeybinding.getKeyCode() < 0) {
                 Constants.LOG.error(I18n.format("craftpresence.logger.error.keybind"));
-                configKeybinding.setToDefault();
+                configKeybinding.setKeyCode(Keyboard.KEY_RCONTROL);
             } else if (Keyboard.isKeyDown(configKeybinding.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls) && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                 CraftPresence.GUIS.openConfigGUI = true;
             }
