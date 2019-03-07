@@ -22,6 +22,8 @@
 
 * Fixes OnHover Double Spaces in Messages sent to Discord RPC
 
+* Fixes a Memory Leak with Getting Mod GUIs
+
 * Fixes a possible IndexOutOfBounds Crash by blocking Mouse Buttons from being used as Keybinds to open the Config GUI
 
 ### More Information:
@@ -33,6 +35,8 @@ In v1.5.0, Commands for CraftPresence are now within a new menu of the config gu
 Along with this rewrite, take note of the following:
 
 * Tab Completion will only work for the most likely suggestion, and will only suggest for more then 2 characters in a word.
+
+* Only CraftPresence Commands, started with /cp or /craftpresence are Supported!
 
 This GUI is subject to improve as future updates are released.
 

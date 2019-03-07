@@ -105,6 +105,7 @@ public class FileHandler {
                                 classNames.add(className);
                             }
                         }
+                        jarFile.close();
                     } catch (Exception ignored) {
                     }
                 }
