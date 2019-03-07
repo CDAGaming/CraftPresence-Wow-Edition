@@ -1,6 +1,9 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import net.minecraft.client.gui.GuiControls;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
@@ -23,8 +26,13 @@ public class KeyHandler {
     }
 
     public void onTick() {
-        if (configKeybinding != null && Keyboard.isKeyDown(configKeybinding.getKeyCode()) && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
-            CraftPresence.GUIS.openConfigGUI = true;
+        if (configKeybinding != null) {
+            if (configKeybinding.getKeyCode() < 0) {
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.keybind"));
+                configKeybinding.setToDefault();
+            } else if (Keyboard.isKeyDown(configKeybinding.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls) && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
+                CraftPresence.GUIS.openConfigGUI = true;
+            }
         }
     }
 }

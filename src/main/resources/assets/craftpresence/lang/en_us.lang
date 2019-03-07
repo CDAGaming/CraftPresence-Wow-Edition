@@ -186,6 +186,7 @@ craftpresence.logger.error.rpc=CraftPresence has encountered the following RPC E
 craftpresence.logger.error.download=Failed to Download "%1$s" from "%2$s" \n Manually Download "%1$s" from "%2$s" to "%3$s"
 craftpresence.logger.error.dll=Failed to Load "%1$s" as a DLL, Things may not work well...
 craftpresence.logger.error.web=Failed to Go to Page: %1$s
+craftpresence.logger.error.keybind=A Keybind Error has occurred, Resetting Keybind to default to prevent a crash...
 craftpresence.logger.error.command=An Error has Occurred Executing this Command
 craftpresence.logger.error.config.save=Failed to load or save Configuration
 craftpresence.logger.error.config.invalidicon.empty=Unable to Detect any Usable Icons! Please Submit a Mod Issue, if this is a mistake

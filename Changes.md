@@ -22,6 +22,8 @@
 
 * Fixes OnHover Double Spaces in Messages sent to Discord RPC
 
+* Fixes a possible IndexOutOfBounds Crash by blocking Mouse Buttons from being used as Keybinds to open the Config GUI
+
 ### More Information:
 
 #### Command Rewrite Info:
