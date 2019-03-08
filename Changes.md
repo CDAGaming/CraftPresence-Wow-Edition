@@ -4,15 +4,17 @@
 
 ### Changes:
 
-* Added Translations for "Pinging..." and Cannot connect" that are missing in some versions of MC
+* Added Translations for "Pinging..." and "Cannot connect" that are missing in some versions of MC
 
-* Added Translation for if a File Fails to be deleted in downloading Discord DLLs
+* Added Translation for if a File Fails to be deleted in downloading or updating Discord DLLs
 
 ### Fixes:
 
 * Fixes Improper "/cp view assets all" Command Output
 
 * Removed Extra Debug Logging when Using Tab Completion in CommandsGUI
+
+* Fixed Tab Completion not Functioning in 1.13.2 and 1.14
 
 * Fixed missing Null-Checks for the Notices in the About and NullEntry GUI, to prevent issues
 
@@ -29,6 +31,8 @@ Along with this rewrite, take note of the following:
 * Tab Completion will only work for the most likely suggestion, and will only suggest for more then 2 characters in a word.
 
 * Only CraftPresence Commands, started with /cp or /craftpresence are Supported!
+
+* At this time, in 1.13.2 and 1.14, The Config GUI can only open ingame due to an unknown issue
 
 This GUI is subject to improve as future updates are released.
 

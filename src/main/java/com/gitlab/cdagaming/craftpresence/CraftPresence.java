@@ -53,7 +53,10 @@ public class CraftPresence {
         }
     };
 
-    static {
+    private boolean initialized = false;
+
+    public CraftPresence() {
+        MinecraftForge.EVENT_BUS.register(this);
         timerThread.start();
     }
 
@@ -68,17 +71,11 @@ public class CraftPresence {
             Constants.LOG.warn(I18n.format("craftpresence.logger.warning.fingerprintviolation"));
     }
 
-    @Mod.EventHandler
-    public void preInit(final FMLPreInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register(this);
-        CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
-    }
-
-    @Mod.EventHandler
-    public void init(final FMLInitializationEvent event) {
+    public void init() {
         if (Constants.IS_DEV) {
             Constants.LOG.warn(I18n.format("craftpresence.logger.warning.debugmode"));
         }
+        CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
         CONFIG.initialize();
 
         CommandHandler.init();
@@ -92,56 +89,57 @@ public class CraftPresence {
             CLIENT.setup();
             CLIENT.init();
             CLIENT.updateTimestamp();
-            CommandHandler.setLoadingPresence(event.getClass().getSimpleName());
+            CommandHandler.setLoadingPresence("Loading...");
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.load"));
             ex.printStackTrace();
+        } finally {
+            initialized = true;
         }
-    }
-
-    @Mod.EventHandler
-    public void postInit(final FMLPostInitializationEvent event) {
-        CommandHandler.setLoadingPresence(event.getClass().getSimpleName());
     }
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        CommandHandler.reloadData();
+        if (!initialized) {
+            init();
+        } else {
+            CommandHandler.reloadData();
 
-        if (CraftPresence.CONFIG.showCurrentDimension && CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
-            CraftPresence.DIMENSIONS.getDimensions();
-        }
-        if (CraftPresence.CONFIG.showCurrentBiome && CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
-            CraftPresence.BIOMES.getBiomes();
-        }
-        if (CraftPresence.CONFIG.enablePERGUI && CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
-            CraftPresence.GUIS.getGUIs();
-        }
-        if (CraftPresence.CONFIG.enablePERItem && CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
-            CraftPresence.ENTITIES.getEntities();
-        }
-        if (CraftPresence.CONFIG.showGameState && CraftPresence.SERVER.knownAddresses.isEmpty()) {
-            CraftPresence.SERVER.getServerAddresses();
-        }
-
-        if (!CONFIG.hasChanged) {
-            if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
-                CommandHandler.setMainMenuPresence();
+            if (CraftPresence.CONFIG.showCurrentDimension && CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
+                CraftPresence.DIMENSIONS.getDimensions();
+            }
+            if (CraftPresence.CONFIG.showCurrentBiome && CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
+                CraftPresence.BIOMES.getBiomes();
+            }
+            if (CraftPresence.CONFIG.enablePERGUI && CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
+                CraftPresence.GUIS.getGUIs();
+            }
+            if (CraftPresence.CONFIG.enablePERItem && CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
+                CraftPresence.ENTITIES.getEntities();
+            }
+            if (CraftPresence.CONFIG.showGameState && CraftPresence.SERVER.knownAddresses.isEmpty()) {
+                CraftPresence.SERVER.getServerAddresses();
             }
 
-            if (CONFIG.rebootOnWorldLoad && player != null) {
-                CommandHandler.rebootRPC();
-                CONFIG.rebootOnWorldLoad = false;
-            }
+            if (!CONFIG.hasChanged) {
+                if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                    CommandHandler.setMainMenuPresence();
+                }
 
-            if (awaitingReply && TIMER == 0) {
-                StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
-                DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
-                awaitingReply = false;
-                CLIENT.STATUS = "ready";
-            } else if (!awaitingReply && CLIENT.REQUESTER_USER != null) {
-                CLIENT.REQUESTER_USER = null;
-                CLIENT.STATUS = "ready";
+                if (CONFIG.rebootOnWorldLoad && player != null) {
+                    CommandHandler.rebootRPC();
+                    CONFIG.rebootOnWorldLoad = false;
+                }
+
+                if (awaitingReply && TIMER == 0) {
+                    StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
+                    DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
+                    awaitingReply = false;
+                    CLIENT.STATUS = "ready";
+                } else if (!awaitingReply && CLIENT.REQUESTER_USER != null) {
+                    CLIENT.REQUESTER_USER = null;
+                    CLIENT.STATUS = "ready";
+                }
             }
         }
     }
