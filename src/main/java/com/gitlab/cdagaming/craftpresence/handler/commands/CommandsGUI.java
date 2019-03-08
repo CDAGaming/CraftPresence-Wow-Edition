@@ -7,19 +7,22 @@ import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
+import com.google.common.base.Functions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import static net.minecraft.command.CommandBase.getListOfStringsMatchingLastWord;
 
 public class CommandsGUI extends GuiScreen {
     private static String[] executionCommandArgs;
@@ -285,5 +288,32 @@ public class CommandsGUI extends GuiScreen {
             }
         }
         return Collections.emptyList();
+    }
+
+    private static List<String> getListOfStringsMatchingLastWord(String[] inputArgs, Collection<?> possibleCompletions) {
+        String s = inputArgs[inputArgs.length - 1];
+        List<String> list = Lists.newArrayList();
+
+        if (!possibleCompletions.isEmpty()) {
+            for (String s1 : Iterables.transform(possibleCompletions, Functions.toStringFunction())) {
+                if (doesStringStartWith(s, s1)) {
+                    list.add(s1);
+                }
+            }
+
+            if (list.isEmpty()) {
+                for (Object object : possibleCompletions) {
+                    if (object instanceof ResourceLocation && doesStringStartWith(s, ((ResourceLocation) object).getPath())) {
+                        list.add(String.valueOf(object));
+                    }
+                }
+            }
+        }
+
+        return list;
+    }
+
+    private static boolean doesStringStartWith(String original, String region) {
+        return region.regionMatches(true, 0, original, 0, original.length());
     }
 }
