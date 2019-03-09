@@ -27,7 +27,7 @@ public class ConfigHandler {
     public String NAME_defaultServerIcon, NAME_defaultServerName,
             NAME_defaultServerMOTD, NAME_serverMessages;
     // STATUS MESSAGES
-    public String NAME_mainmenuMSG, NAME_lanMSG, NAME_singleplayerMSG, NAME_loadingMSG,
+    public String NAME_mainmenuMSG, NAME_lanMSG, NAME_singleplayerMSG,
             NAME_packPlaceholderMSG, NAME_playerPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
             NAME_gameTimePlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
@@ -48,7 +48,7 @@ public class ConfigHandler {
     public String defaultServerIcon, defaultServerName, defaultServerMOTD;
     public String[] serverMessages;
     // STATUS MESSAGES
-    public String mainmenuMSG, lanMSG, singleplayerMSG, loadingMSG, packPlaceholderMSG,
+    public String mainmenuMSG, lanMSG, singleplayerMSG, packPlaceholderMSG,
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
             gameTimePlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
@@ -112,7 +112,6 @@ public class ConfigHandler {
         NAME_mainmenuMSG = I18n.format("gui.config.name.statusmessages.mainmenumsg").replaceAll(" ", "_");
         NAME_lanMSG = I18n.format("gui.config.name.statusmessages.lanmsg").replaceAll(" ", "_");
         NAME_singleplayerMSG = I18n.format("gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
-        NAME_loadingMSG = I18n.format("gui.config.name.statusmessages.loadingmsg").replaceAll(" ", "_");
         NAME_packPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.packmsg").replaceAll(" ", "_");
         NAME_playerPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.playermsg").replaceAll(" ", "_");
         NAME_playerAmountPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.playeramountmsg").replaceAll(" ", "_");
@@ -122,7 +121,6 @@ public class ConfigHandler {
         mainmenuMSG = I18n.format("craftpresence.defaults.state.mainmenu");
         lanMSG = I18n.format("craftpresence.defaults.state.lan");
         singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer");
-        loadingMSG = I18n.format("craftpresence.defaults.state.loading");
         packPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.pack");
         playerPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.ign");
         playerAmountPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.players");
@@ -203,7 +201,6 @@ public class ConfigHandler {
                 mainmenuMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_mainmenuMSG)) ? properties.getProperty(NAME_mainmenuMSG) : mainmenuMSG;
                 lanMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_lanMSG)) ? properties.getProperty(NAME_lanMSG) : lanMSG;
                 singleplayerMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_singleplayerMSG)) ? properties.getProperty(NAME_singleplayerMSG) : singleplayerMSG;
-                loadingMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_loadingMSG)) ? properties.getProperty(NAME_loadingMSG) : loadingMSG;
                 packPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_packPlaceholderMSG)) ? properties.getProperty(NAME_packPlaceholderMSG) : packPlaceholderMSG;
                 playerPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_playerPlaceholderMSG)) ? properties.getProperty(NAME_playerPlaceholderMSG) : playerPlaceholderMSG;
                 playerAmountPlaceholderMSG = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_playerAmountPlaceholderMSG)) ? properties.getProperty(NAME_playerAmountPlaceholderMSG) : playerAmountPlaceholderMSG;
@@ -257,7 +254,6 @@ public class ConfigHandler {
         properties.setProperty(NAME_mainmenuMSG, mainmenuMSG);
         properties.setProperty(NAME_lanMSG, lanMSG);
         properties.setProperty(NAME_singleplayerMSG, singleplayerMSG);
-        properties.setProperty(NAME_loadingMSG, loadingMSG);
         properties.setProperty(NAME_packPlaceholderMSG, packPlaceholderMSG);
         properties.setProperty(NAME_playerPlaceholderMSG, playerPlaceholderMSG);
         properties.setProperty(NAME_playerAmountPlaceholderMSG, playerAmountPlaceholderMSG);

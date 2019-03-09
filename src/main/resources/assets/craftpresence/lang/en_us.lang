@@ -67,7 +67,6 @@ gui.config.name.servermessages.servericon=Default Server Icon
 gui.config.name.servermessages.servermotd=Default Server MOTD
 gui.config.name.servermessages.servername=Default Server Name
 gui.config.name.servermessages.servermessages=Server Messages
-gui.config.name.statusmessages.loadingmsg=Loading Message
 gui.config.name.statusmessages.mainmenumsg=Main Menu Message
 gui.config.name.statusmessages.lanmsg=LAN Game Message
 gui.config.name.statusmessages.singleplayermsg=Singleplayer Game Message
@@ -103,7 +102,6 @@ gui.config.comment.servermessages.servericon=Server Icon to default to when in a
 gui.config.comment.servermessages.servermotd=Server MOTD to default to, in the case of a null MOTD \n (And in Direct Connects)
 gui.config.comment.servermessages.servername=Server Display Name to default to, in the case of a null Name \n (And in Direct Connects)
 gui.config.comment.servermessages.servermessages=Customize Messages to display with Servers \n (Manual Format: server_IP;message;icon) \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
-gui.config.comment.statusmessages.loadingmsg=Message to Display while Loading the Game \n Available Placeholders: \n - &ign& = Your Minecraft Username \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Main Menu \n Available Placeholders: \n - &ign& = Your Minecraft Username \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.lanmsg=Message to Display while in a LAN Game \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer \n Available Placeholders: \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
@@ -125,8 +123,6 @@ key.craftpresence.category=CraftPresence - KeyBindings
 key.craftpresence.config_keybind=Open Config GUI
 ## DEFAULT MESSAGES ##
 craftpresence.defaults.servermessages.servermotd=A Minecraft Server
-craftpresence.defaults.state.loading=Loading the Game
-craftpresence.defaults.state.loading.status=Status: %1$s
 craftpresence.defaults.state.mainmenu=In the Main Menu
 craftpresence.defaults.state.mcversion=Minecraft %1$s
 craftpresence.defaults.state.lan=Playing on a LAN Server

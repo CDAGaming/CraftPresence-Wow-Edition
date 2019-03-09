@@ -43,6 +43,33 @@ public class CommandsGUI extends GuiScreen {
         executionCommandArgs = args;
     }
 
+    private static List<String> getListOfStringsMatchingLastWord(String[] inputArgs, Collection<?> possibleCompletions) {
+        String s = inputArgs[inputArgs.length - 1];
+        List<String> list = Lists.newArrayList();
+
+        if (!possibleCompletions.isEmpty()) {
+            for (String s1 : Iterables.transform(possibleCompletions, Functions.toStringFunction())) {
+                if (doesStringStartWith(s, s1)) {
+                    list.add(s1);
+                }
+            }
+
+            if (list.isEmpty()) {
+                for (Object object : possibleCompletions) {
+                    if (object instanceof ResourceLocation && doesStringStartWith(s, ((ResourceLocation) object).getPath())) {
+                        list.add(String.valueOf(object));
+                    }
+                }
+            }
+        }
+
+        return list;
+    }
+
+    private static boolean doesStringStartWith(String original, String region) {
+        return region.regionMatches(true, 0, original, 0, original.length());
+    }
+
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
@@ -288,32 +315,5 @@ public class CommandsGUI extends GuiScreen {
             }
         }
         return Collections.emptyList();
-    }
-
-    private static List<String> getListOfStringsMatchingLastWord(String[] inputArgs, Collection<?> possibleCompletions) {
-        String s = inputArgs[inputArgs.length - 1];
-        List<String> list = Lists.newArrayList();
-
-        if (!possibleCompletions.isEmpty()) {
-            for (String s1 : Iterables.transform(possibleCompletions, Functions.toStringFunction())) {
-                if (doesStringStartWith(s, s1)) {
-                    list.add(s1);
-                }
-            }
-
-            if (list.isEmpty()) {
-                for (Object object : possibleCompletions) {
-                    if (object instanceof ResourceLocation && doesStringStartWith(s, ((ResourceLocation) object).getPath())) {
-                        list.add(String.valueOf(object));
-                    }
-                }
-            }
-        }
-
-        return list;
-    }
-
-    private static boolean doesStringStartWith(String original, String region) {
-        return region.regionMatches(true, 0, original, 0, original.length());
     }
 }
