@@ -16,7 +16,7 @@ public class KeyHandler {
     private KeyBinding configKeybinding;
 
     public void register() {
-        configKeybinding = new KeyBinding("craftpresence.keybind.config.desc", Keyboard.KEY_RCONTROL, "craftpresence.keybind.category");
+        configKeybinding = new KeyBinding("key.craftpresence.config_keybind", Keyboard.KEY_RCONTROL, "key.craftpresence.category");
 
         keyBindings.add(configKeybinding);
 

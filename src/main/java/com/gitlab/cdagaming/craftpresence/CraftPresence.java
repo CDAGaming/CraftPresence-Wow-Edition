@@ -12,6 +12,7 @@ import com.gitlab.cdagaming.craftpresence.handler.server.ServerHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
@@ -57,6 +58,7 @@ public class CraftPresence {
 
     public CraftPresence() {
         MinecraftForge.EVENT_BUS.register(this);
+        CraftPresence.KEYBINDINGS.register();
         timerThread.start();
     }
 
@@ -89,7 +91,6 @@ public class CraftPresence {
             CLIENT.setup();
             CLIENT.init();
             CLIENT.updateTimestamp();
-            CommandHandler.setLoadingPresence("Loading...");
         } catch (Exception ex) {
             Constants.LOG.error(I18n.format("craftpresence.logger.error.load"));
             ex.printStackTrace();
@@ -100,9 +101,9 @@ public class CraftPresence {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        if (!initialized) {
+        if (!initialized && instance.currentScreen instanceof GuiMainMenu) {
             init();
-        } else {
+        } else if (initialized) {
             CommandHandler.reloadData();
 
             if (CraftPresence.CONFIG.showCurrentDimension && CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {

@@ -12,11 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 
 public class CommandHandler {
-
-    private static void registerData() {
-        CraftPresence.KEYBINDINGS.register();
-    }
-
     public static void reloadData() {
         CraftPresence.instance = Minecraft.getMinecraft();
         CraftPresence.player = CraftPresence.instance.player;
@@ -41,9 +36,6 @@ public class CommandHandler {
     }
 
     public static void init() {
-        if (CraftPresence.CONFIG.enableCommands) {
-            registerData();
-        }
         if (CraftPresence.CONFIG.detectCurseManifest && !CraftPresence.packFound) {
             ManifestHandler.loadManifest();
         }
@@ -93,16 +85,5 @@ public class CommandHandler {
                         CraftPresence.CLIENT.LARGEIMAGETEXT.equals(I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion))
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"));
-    }
-
-    public static void setLoadingPresence(final String state) {
-        CraftPresence.CLIENT.STATUS = "ready";
-        CraftPresence.CLIENT.SMALLIMAGEKEY = "";
-        CraftPresence.CLIENT.SMALLIMAGETEXT = "";
-        CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.loadingMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "";
-        CraftPresence.CLIENT.GAME_STATE = CraftPresence.SERVER.enabled ? I18n.format("craftpresence.defaults.state.loading.status", state) : "";
-        CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
-        CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.SERVER.enabled ? CraftPresence.CLIENT.GAME_STATE : I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 }

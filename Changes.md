@@ -8,6 +8,8 @@
 
 * Added Translation for if a File Fails to be deleted in downloading or updating Discord DLLs
 
+* Deprecated Support of Loading RPC Updates due to Changes in 1.13+ (Mod now Initializes once on Main Menu)
+
 ### Fixes:
 
 * Fixes Improper "/cp view assets all" Command Output
@@ -20,7 +22,21 @@
 
 * Fix onJoinRequest Callback not opening the Commands GUI
 
+* Disabling Commands no longer makes the Config GUI Inaccessible
+
+* Fix Control Menu & KeyBinding Issues in 1.13.2 Rift and 1.14 Fabric Ports (See More Info)
+
 ### More Information:
+
+#### Keybinding / Control Menu Fix Notes:
+
+The Fixes for the Control Menu Crashes in Rift 1.13.2 required the merging of [this PR on Chocohead's Rift Repository](https://github.com/Chocohead/Rift/pull/11)
+
+If you prefer to have this fix, Please use [this Rift Version](https://www.jitpack.io/#CDAGaming/Rift/jitpack-0a2217b941-1)
+
+Jar: [Click Here](https://www.jitpack.io/com/github/CDAGaming/Rift/jitpack-0a2217b941-1/Rift-jitpack-0a2217b941-1.jar)
+
+MultiMC Example Patch: [Click Here](https://gist.github.com/CDAGaming/ba84849826e96b69b829b7453e459edf)
 
 #### Command Rewrite Info:
 
@@ -32,7 +48,7 @@ Along with this rewrite, take note of the following:
 
 * Only CraftPresence Commands, started with /cp or /craftpresence are Supported!
 
-* At this time, in 1.13.2 and 1.14, The Config GUI can only open ingame due to an unknown issue
+* At this time, in 1.13.2 and 1.14, The Config GUI can only open ingame due to an unknown issue.
 
 This GUI is subject to improve as future updates are released.
 
@@ -49,6 +65,8 @@ If You happen to have any issues relating to this, do not hesitate to make an Is
 The Rift Edition of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
 
 * KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
+
+In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
 #### 1.14.x Build Info:
 
