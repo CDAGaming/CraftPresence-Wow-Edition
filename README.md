@@ -12,8 +12,8 @@ This Mod offers plenty of Customization options to specify entirely how others s
 From Having Your Current Biome Show Up, To which Dimension you in, as well as which server your in,
 The Customization Possibilities are limitless, with the only real limit being how creative you customize your display.
 
-#### Twitch // CursePack // MultiMC // Technic Support
-At this time, CraftPresence will detect whether your Launch Directory contains a Valid Twitch Manifest (manifest.json), a MultiMC Instance (instance.cfg), or a Technic installedPacks File (installedPacks).
+#### Twitch // CursePack // MultiMC // MCUpdater // Technic Support
+At this time, CraftPresence will detect whether your Launch Directory contains a valid Twitch Manifest (manifest.json), a MultiMC Instance (instance.cfg), a MCUpdater Instance (instance.json), or a Technic installedPacks File (installedPacks).
 If so, It'll put the Packs Name in your Display as well as Show it's Icon (when not in a server).
 
 As an example, this is how the mod will convert the pack name to an iconKey:
@@ -23,15 +23,14 @@ As an example, this is how the mod will convert the pack name to an iconKey:
 (Note the above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)
 
 ## Commands
-Beginning in v1.3.0, CraftPresence now offers the following Commands:
+CraftPresence currently offers the following Commands:
 
-(Commands can be prefixed by either `/craftpresence` or `/cp`)
+(Commands must be prefixed by either `/craftpresence` or `/cp`)
 
-(Commands Listed are the Syntax as of v1.4.9*)
+(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands in the Config GUI)
 
 - `/cp view` - Help Command to display Commands available to view a variety of Display Data
-- `/cp config` - Opens CraftPresence's Config GUI
-- `/cp reload` - Reloads Mod Data (In v1.4.8, forces a Tick Event)
+- `/cp reload` - Reloads Mod Data (In v1.4.8 and Above, this forces a Tick Event)
 - `/cp reboot` - Reboots RPC
 - `/cp shutdown` - Shutdown RPC (Can be turned on from `/cp reboot`)
 - `/cp request` - View Join Request Info
@@ -49,7 +48,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 
 (Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them*)
 
-#### Main Menu/Loading Message Placeholders
+#### Main Menu Message Placeholders
 - &IGN& - Your Minecraft Username
 - &MODS& - The Amount of Mods currently in your Mods Folder
 

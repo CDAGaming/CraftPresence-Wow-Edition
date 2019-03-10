@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.1 (03/??/2019)
+## v1.5.1 (03/15/2019)
 
 ### Changes:
 
@@ -8,7 +8,7 @@
 
 * Added Translation for if a File Fails to be deleted in downloading or updating Discord DLLs
 
-* Deprecated Support of Loading RPC Updates due to Changes in 1.13+ (Mod now Initializes once on Main Menu)
+* Deprecated Support of Loading Messages due to Changes in 1.13 and above (Mod now Initializes once on Main Menu and after the Loading Splash Screen)
 
 ### Fixes:
 
