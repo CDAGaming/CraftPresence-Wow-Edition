@@ -59,7 +59,7 @@ public class CraftPresence {
 
     public CraftPresence() {
         MinecraftForge.EVENT_BUS.register(this);
-        CraftPresence.KEYBINDINGS.register();
+        KEYBINDINGS.register();
         timerThread.start();
     }
 
@@ -107,20 +107,20 @@ public class CraftPresence {
         } else if (initialized) {
             CommandHandler.reloadData();
 
-            if (CraftPresence.CONFIG.showCurrentDimension && CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
-                CraftPresence.DIMENSIONS.getDimensions();
+            if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
+                DIMENSIONS.getDimensions();
             }
-            if (CraftPresence.CONFIG.showCurrentBiome && CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
-                CraftPresence.BIOMES.getBiomes();
+            if (CONFIG.showCurrentBiome && BIOMES.BIOME_NAMES.isEmpty()) {
+                BIOMES.getBiomes();
             }
-            if (CraftPresence.CONFIG.enablePERGUI && CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
-                CraftPresence.GUIS.getGUIs();
+            if (CONFIG.enablePERGUI && GUIS.GUI_NAMES.isEmpty()) {
+                GUIS.getGUIs();
             }
-            if (CraftPresence.CONFIG.enablePERItem && CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
-                CraftPresence.ENTITIES.getEntities();
+            if (CONFIG.enablePERItem && ENTITIES.ENTITY_NAMES.isEmpty()) {
+                ENTITIES.getEntities();
             }
-            if (CraftPresence.CONFIG.showGameState && CraftPresence.SERVER.knownAddresses.isEmpty()) {
-                CraftPresence.SERVER.getServerAddresses();
+            if (CONFIG.showGameState && SERVER.knownAddresses.isEmpty()) {
+                SERVER.getServerAddresses();
             }
 
             if (!CONFIG.hasChanged) {

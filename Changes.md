@@ -24,6 +24,8 @@
 
 * Disabling Commands no longer makes the Config GUI Inaccessible
 
+* Fix Missing Scroll List Methods in 1.13.2 Rift and 1.14 Fabric
+
 * Fix Control Menu & KeyBinding Issues in 1.13.2 Rift and 1.14 Fabric Ports (See More Info)
 
 ### More Information:
