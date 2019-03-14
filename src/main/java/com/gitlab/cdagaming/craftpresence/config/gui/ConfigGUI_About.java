@@ -65,7 +65,7 @@ public class ConfigGUI_About extends GuiScreen {
             try {
                 Desktop.getDesktop().browse(new URI(SOURCE_URL));
             } catch (Exception ex) {
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.web"));
+                Constants.LOG.error(I18n.format("craftpresence.logger.error.web", SOURCE_URL));
                 ex.printStackTrace();
             }
         }
