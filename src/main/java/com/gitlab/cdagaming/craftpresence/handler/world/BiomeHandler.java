@@ -2,17 +2,17 @@ package com.gitlab.cdagaming.craftpresence.handler.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.google.common.collect.Lists;
 import net.minecraft.world.biome.Biome;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BiomeHandler {
     public boolean isInUse = false, enabled = false;
 
-    public List<String> BIOME_NAMES = new ArrayList<>();
-    private List<Biome> BIOME_TYPES = new ArrayList<>();
-    private List<Integer> BIOME_IDS = new ArrayList<>();
+    public List<String> BIOME_NAMES = Lists.newArrayList();
+    private List<Biome> BIOME_TYPES = Lists.newArrayList();
+    private List<Integer> BIOME_IDS = Lists.newArrayList();
     private String CURRENT_BIOME_NAME;
     private Integer CURRENT_BIOME_ID;
 
@@ -89,7 +89,7 @@ public class BiomeHandler {
     }
 
     private List<Biome> getBiomeTypes() {
-        List<Biome> biomeTypes = new ArrayList<>();
+        List<Biome> biomeTypes = Lists.newArrayList();
 
         for (Biome biome : Biome.REGISTRY) {
             if (biome != null) {

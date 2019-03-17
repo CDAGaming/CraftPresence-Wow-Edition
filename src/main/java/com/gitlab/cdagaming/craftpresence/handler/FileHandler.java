@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.resources.I18n;
@@ -8,8 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -61,7 +61,7 @@ public class FileHandler {
     }
 
     public static String fileToString(File file) throws Exception {
-        return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        return FileUtils.readFileToString(file, Charset.forName("UTF-8"));
     }
 
     public static String getFileExtension(File file) {
@@ -88,7 +88,7 @@ public class FileHandler {
     }
 
     public static List<String> getModClassNames() {
-        List<String> classNames = new ArrayList<>();
+        List<String> classNames = Lists.newArrayList();
         final File[] mods = new File(Constants.modsDir).listFiles();
 
         if (mods != null) {

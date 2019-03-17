@@ -5,6 +5,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
@@ -12,13 +13,12 @@ import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.resources.I18n;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServerHandler {
     public boolean enabled = false, isInUse = false;
 
-    public List<String> knownAddresses = new ArrayList<>();
+    public List<String> knownAddresses = Lists.newArrayList();
     public String currentServer_IP;
     private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
     private int currentPlayers, maxPlayers, serverIndex;

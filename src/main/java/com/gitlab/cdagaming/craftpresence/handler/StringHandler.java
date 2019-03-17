@@ -7,7 +7,6 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import java.lang.reflect.Field;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -122,7 +121,7 @@ public class StringHandler {
 
     public static String[] removeFromArray(final String[] originalArray, final String searchTerm, final int searchIndex, final String splitCharacter) {
         int indexNumber = 0;
-        List<String> formatted = new ArrayList<>(Arrays.asList(originalArray));
+        List<String> formatted = Arrays.asList(originalArray);
         if (!isNullOrEmpty(formatted.toString())) {
             for (String part : formatted) {
                 String[] splitPart = part.split(splitCharacter);
@@ -259,6 +258,10 @@ public class StringHandler {
             }
         }
         return null;
+    }
+
+    public static int generateHash(Object... values) {
+        return Arrays.hashCode(values);
     }
 
     public static String stripColors(final String input) {

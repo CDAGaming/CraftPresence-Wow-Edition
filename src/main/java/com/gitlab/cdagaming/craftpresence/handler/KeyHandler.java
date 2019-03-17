@@ -2,27 +2,26 @@ package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
-import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KeyHandler {
-    private List<KeyBinding> keyBindings = new ArrayList<>();
+    private List<KeyBinding> keyBindings = Lists.newArrayList();
     private KeyBinding configKeybinding;
 
     public void register() {
+        keyBindings.addAll(Arrays.asList(CraftPresence.instance.gameSettings.keyBindings));
         configKeybinding = new KeyBinding("key.craftpresence.config_keybind", Keyboard.KEY_RCONTROL, "key.craftpresence.category");
 
         keyBindings.add(configKeybinding);
 
-        for (KeyBinding keyBinding : keyBindings) {
-            CraftPresence.instance.gameSettings.keyBindings = ArrayUtils.add(CraftPresence.instance.gameSettings.keyBindings, keyBinding);
-        }
+        CraftPresence.instance.gameSettings.keyBindings = keyBindings.toArray(new KeyBinding[]{});
     }
 
     public void onTick() {

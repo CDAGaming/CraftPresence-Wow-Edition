@@ -3,9 +3,9 @@ package com.gitlab.cdagaming.craftpresence.handler.world;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
+import com.google.common.collect.Lists;
 import net.minecraft.world.DimensionType;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +14,9 @@ public class DimensionHandler {
     public boolean isInUse = false, enabled = false;
 
     public String CURRENT_DIMENSION_NAME;
-    public List<String> DIMENSION_NAMES = new ArrayList<>();
-    private List<Integer> DIMENSION_IDS = new ArrayList<>();
-    private List<DimensionType> DIMENSION_TYPES = new ArrayList<>();
+    public List<String> DIMENSION_NAMES = Lists.newArrayList();
+    private List<Integer> DIMENSION_IDS = Lists.newArrayList();
+    private List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
     private Integer CURRENT_DIMENSION_ID;
 
     private boolean queuedForUpdate = false;
@@ -96,7 +96,7 @@ public class DimensionHandler {
     }
 
     private List<DimensionType> getDimensionTypes() {
-        List<DimensionType> dimensionTypes = new ArrayList<>();
+        List<DimensionType> dimensionTypes = Lists.newArrayList();
         Map<Integer, DimensionType> reflectedDimensionTypes = (Map<Integer, DimensionType>) StringHandler.lookupObject(DimensionType.class, null, "dimensionTypes");
 
         Collections.addAll(dimensionTypes, DimensionType.values());

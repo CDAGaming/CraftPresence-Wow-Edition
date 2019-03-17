@@ -6,7 +6,6 @@ import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.realms.RealmsSharedConstants;
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,14 +34,14 @@ public class Constants {
         boolean UpdateStatus = Update;
 
         final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
-        final boolean is64Bit = x64.contains(SystemUtils.OS_ARCH);
+        final boolean is64Bit = x64.contains(CraftPresence.SYSTEM.OS_ARCH);
 
-        final String fileName = (SystemUtils.IS_OS_WINDOWS ? "discord-rpc.dll"
-                : SystemUtils.IS_OS_LINUX ? "libdiscord-rpc.so"
-                : SystemUtils.IS_OS_MAC ? "libdiscord-rpc.dylib" : "");
-        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (SystemUtils.IS_OS_WINDOWS ? (is64Bit ? "win32-x86-64" : "win32-x86")
-                : SystemUtils.IS_OS_LINUX ? "linux-x86-64"
-                : SystemUtils.IS_OS_MAC ? "darwin" : "") + "/" + fileName;
+        final String fileName = (CraftPresence.SYSTEM.IS_WINDOWS ? "discord-rpc.dll"
+                : CraftPresence.SYSTEM.IS_LINUX ? "libdiscord-rpc.so"
+                : CraftPresence.SYSTEM.IS_MAC ? "libdiscord-rpc.dylib" : "");
+        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (CraftPresence.SYSTEM.IS_WINDOWS ? (is64Bit ? "win32-x86-64" : "win32-x86")
+                : CraftPresence.SYSTEM.IS_LINUX ? "linux-x86-64"
+                : CraftPresence.SYSTEM.IS_MAC ? "darwin" : "") + "/" + fileName;
         final File file = new File(MODID + File.separator + fileName);
         UpdateStatus = UpdateStatus || !file.exists();
 

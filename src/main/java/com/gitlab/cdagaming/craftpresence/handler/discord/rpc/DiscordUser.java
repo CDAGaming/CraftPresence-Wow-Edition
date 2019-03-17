@@ -1,11 +1,11 @@
 package com.gitlab.cdagaming.craftpresence.handler.discord.rpc;
 
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.sun.jna.Structure;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Struct binding for a discord join request.
@@ -41,15 +41,15 @@ public class DiscordUser extends Structure {
         if (!(o instanceof DiscordUser))
             return false;
         DiscordUser that = (DiscordUser) o;
-        return Objects.equals(userId, that.userId)
-                && Objects.equals(username, that.username)
-                && Objects.equals(discriminator, that.discriminator)
-                && Objects.equals(avatar, that.avatar);
+        return userId.equals(that.userId)
+                && username.equals(that.username)
+                && discriminator.equals(that.discriminator)
+                && avatar.equals(that.avatar);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, discriminator, avatar);
+        return StringHandler.generateHash(userId, username, discriminator, avatar);
     }
 
     @Override

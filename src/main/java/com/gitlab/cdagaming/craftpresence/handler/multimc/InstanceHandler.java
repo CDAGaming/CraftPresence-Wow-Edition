@@ -15,7 +15,7 @@ public class InstanceHandler {
     public static String INSTANCE_NAME, ICON_KEY;
 
     private static Properties configFile = new Properties();
-    private static String instanceFile = new File(System.getProperty("user.dir")).getParent() + File.separator + "instance.cfg";
+    private static String instanceFile = new File(CraftPresence.SYSTEM.USER_DIR).getParent() + File.separator + "instance.cfg";
 
     public static boolean contains(String key) {
         return configFile != null && configFile.containsKey(key);

@@ -16,11 +16,11 @@ public class PackHandler {
         Constants.LOG.info(I18n.format("craftpresence.logger.info.technic.init"));
 
         try {
-            final File installedPacks = new File(System.getProperty("user.dir") + File.separator + ".." + File.separator + ".." + File.separator + "installedPacks");
+            final File installedPacks = new File(CraftPresence.SYSTEM.USER_DIR + File.separator + ".." + File.separator + ".." + File.separator + "installedPacks");
             final Pack pack = FileHandler.getJSONFromFile(installedPacks, Pack.class);
 
             if (pack != null) {
-                if (System.getProperty("user.dir").contains(pack.selected)) {
+                if (CraftPresence.SYSTEM.USER_DIR.contains(pack.selected)) {
                     PACK_NAME = StringHandler.formatWord(pack.selected);
                     ICON_NAME = StringHandler.formatPackIcon(pack.selected);
                     CraftPresence.packFound = true;

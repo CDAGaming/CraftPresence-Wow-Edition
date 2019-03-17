@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.1 (03/15/2019)
+## v1.5.2 (03/29/2019)
 
 ### Changes:
 
@@ -8,9 +8,13 @@
 
 * Added Translation for if a File Fails to be deleted in downloading or updating Discord DLLs
 
+* Improved Java/JRE 1.6 Compatibility
+
 * Deprecated Support of Loading Messages due to Changes in 1.13 and above (Mod now Initializes once on Main Menu and after the Loading Splash Screen)
 
 ### Fixes:
+
+* Fixes a Major Crash if All Config Options are not Present (Read Error on Empty Config File)
 
 * Fixes Improper "/cp view assets all" Command Output
 
@@ -25,6 +29,8 @@
 * Disabling Commands no longer makes the Config GUI Inaccessible
 
 * Fix Missing Scroll List Methods in 1.13.2 Rift and 1.14 Fabric
+
+* Fix Possible NPE from RPC Updates before DLL was Loaded
 
 * Fix Control Menu & KeyBinding Issues in 1.13.2 Rift and 1.14 Fabric Ports (See More Info)
 

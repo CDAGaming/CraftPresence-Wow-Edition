@@ -6,6 +6,7 @@ import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
+import com.google.common.collect.Lists;
 import com.google.common.reflect.ClassPath;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,19 +18,18 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GUIHandler {
     public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, enabled = false;
 
-    public List<String> GUI_NAMES = new ArrayList<>();
-    private List<String> EXCLUSIONS = new ArrayList<>();
-    private List<Class> allowedClasses = new ArrayList<>();
+    public List<String> GUI_NAMES = Lists.newArrayList();
+    private List<String> EXCLUSIONS = Lists.newArrayList();
+    private List<Class> allowedClasses = Lists.newArrayList();
     private String CURRENT_GUI_NAME;
     private Class CURRENT_GUI_CLASS;
     private GuiScreen CURRENT_SCREEN;
-    private List<Class> GUI_CLASSES = new ArrayList<>();
+    private List<Class> GUI_CLASSES = Lists.newArrayList();
 
     private boolean queuedForUpdate = false;
 
@@ -139,7 +139,7 @@ public class GUIHandler {
             }
         }
 
-        final List<ClassPath.ClassInfo> classes = new ArrayList<>();
+        final List<ClassPath.ClassInfo> classes = Lists.newArrayList();
         try {
             classes.addAll(ClassPath.from(LOADER).getTopLevelClasses());
         } catch (Exception ex) {
@@ -261,7 +261,7 @@ public class GUIHandler {
 
             if (needsWrap) {
                 int wrappedTooltipWidth = 0;
-                List<String> wrappedTextLines = new ArrayList<>();
+                List<String> wrappedTextLines = Lists.newArrayList();
                 for (int i = 0; i < textLines.size(); i++) {
                     String textLine = textLines.get(i);
                     List<String> wrappedLine = font.listFormattedStringToWidth(textLine, tooltipTextWidth);

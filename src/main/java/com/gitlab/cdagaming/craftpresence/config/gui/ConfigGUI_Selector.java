@@ -5,6 +5,7 @@ import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIScrollList;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -13,7 +14,6 @@ import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigGUI_Selector extends GuiScreen {
@@ -59,7 +59,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         drawDefaultBackground();
 
         final String searchText = I18n.format("gui.config.editorMessage.search");
-        List<String> modifiedList = new ArrayList<>();
+        List<String> modifiedList = Lists.newArrayList();
 
         if (!searchBox.getText().isEmpty()) {
             if (!searchBox.getText().equals(searchTerm)) {

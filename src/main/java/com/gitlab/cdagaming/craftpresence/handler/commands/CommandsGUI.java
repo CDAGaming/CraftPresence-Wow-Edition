@@ -19,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +30,7 @@ public class CommandsGUI extends GuiScreen {
     private GuiTextField commandInput;
     private String executionString;
     private String[] commandArgs, filteredCommandArgs;
-    private List<String> tabCompletions = new ArrayList<>();
+    private List<String> tabCompletions = Lists.newArrayList();
 
     public CommandsGUI(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -268,10 +267,10 @@ public class CommandsGUI extends GuiScreen {
     }
 
     private List<String> getTabCompletions(String[] args) {
-        List<String> baseCompletions = new ArrayList<>();
-        List<String> assetsCompletions = new ArrayList<>();
-        List<String> viewCompletions = new ArrayList<>();
-        List<String> requestCompletions = new ArrayList<>();
+        List<String> baseCompletions = Lists.newArrayList();
+        List<String> assetsCompletions = Lists.newArrayList();
+        List<String> viewCompletions = Lists.newArrayList();
+        List<String> requestCompletions = Lists.newArrayList();
 
         baseCompletions.add("?");
         baseCompletions.add("help");

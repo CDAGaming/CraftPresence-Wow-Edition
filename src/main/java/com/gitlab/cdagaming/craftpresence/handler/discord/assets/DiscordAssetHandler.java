@@ -4,20 +4,24 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.client.resources.I18n;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class DiscordAssetHandler {
-    public static List<String> SMALL_ICONS = new ArrayList<>();
-    public static List<String> LARGE_ICONS = new ArrayList<>();
-    public static List<String> ICON_LIST = new ArrayList<>();
+    public static List<String> SMALL_ICONS = Lists.newArrayList();
+    public static List<String> LARGE_ICONS = Lists.newArrayList();
+    public static List<String> ICON_LIST = Lists.newArrayList();
 
-    private static List<String> SMALL_IDS = new ArrayList<>();
-    private static List<String> LARGE_IDS = new ArrayList<>();
-    private static List<String> ICON_IDS = new ArrayList<>();
+    private static List<String> SMALL_IDS = Lists.newArrayList();
+    private static List<String> LARGE_IDS = Lists.newArrayList();
+    private static List<String> ICON_IDS = Lists.newArrayList();
 
-    private static Map<String, DiscordAsset> ASSET_LIST = new HashMap<>();
+    private static Map<String, DiscordAsset> ASSET_LIST = Maps.newHashMap();
 
     public static boolean contains(final String key) {
         final String formattedKey = StringHandler.formatPackIcon(key.replace(" ", "_"));
@@ -68,7 +72,7 @@ public class DiscordAssetHandler {
     public static void loadAssets() {
         Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load", CraftPresence.CONFIG.clientID));
         Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load.credits"));
-        ASSET_LIST = new HashMap<>();
+        ASSET_LIST = Maps.newHashMap();
 
         try {
             final String url = "https://discordapp.com/api/oauth2/applications/" + CraftPresence.CONFIG.clientID + "/assets";

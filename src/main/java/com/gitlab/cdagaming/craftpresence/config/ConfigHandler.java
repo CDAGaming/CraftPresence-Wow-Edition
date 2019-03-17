@@ -3,12 +3,12 @@ package com.gitlab.cdagaming.craftpresence.config;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.google.common.collect.Lists;
 import net.minecraft.client.resources.I18n;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -167,7 +167,7 @@ public class ConfigHandler {
 
     public void read() {
         try {
-            Reader configReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
+            Reader configReader = new InputStreamReader(new FileInputStream(fileName), Charset.forName("UTF-8"));
             properties.load(configReader);
             configReader.close();
         } catch (Exception ex) {
@@ -220,9 +220,8 @@ public class ConfigHandler {
             } finally {
                 if (!verified) {
                     verifyConfig();
-                } else {
-                    Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
                 }
+                Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
             }
         }
     }
@@ -285,8 +284,8 @@ public class ConfigHandler {
     }
 
     private void verifyConfig() {
-        List<String> validProperties = new ArrayList<>();
-        List<String> removedProperties = new ArrayList<>();
+        List<String> validProperties = Lists.newArrayList();
+        List<String> removedProperties = Lists.newArrayList();
         boolean needsFullUpdate = false;
 
         for (Field field : getClass().getDeclaredFields()) {
@@ -391,7 +390,9 @@ public class ConfigHandler {
         if (needsFullUpdate) {
             setupInitialValues();
             verified = true;
-            read();
+            if (!properties.stringPropertyNames().isEmpty()) {
+                read();
+            }
             updateConfig();
         } else {
             verified = true;
@@ -400,7 +401,7 @@ public class ConfigHandler {
 
     public void save() {
         try {
-            Writer configWriter = new OutputStreamWriter(new FileOutputStream(new File(fileName)), StandardCharsets.UTF_8);
+            Writer configWriter = new OutputStreamWriter(new FileOutputStream(new File(fileName)), Charset.forName("UTF-8"));
             properties.store(configWriter, null);
             configWriter.close();
         } catch (Exception ex) {

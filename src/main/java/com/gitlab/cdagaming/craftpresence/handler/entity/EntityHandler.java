@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.handler.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
@@ -9,18 +10,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EntityHandler {
     public boolean isInUse = false, allItemsEmpty = false, enabled = false;
 
-    public List<String> ENTITY_NAMES = new ArrayList<>();
-    private List<String> BLOCK_NAMES = new ArrayList<>();
-    private List<String> BLOCK_CLASSES = new ArrayList<>();
-    private List<String> ITEM_NAMES = new ArrayList<>();
-    private List<String> ITEM_CLASSES = new ArrayList<>();
-    private List<String> ENTITY_CLASSES = new ArrayList<>();
+    public List<String> ENTITY_NAMES = Lists.newArrayList();
+    private List<String> BLOCK_NAMES = Lists.newArrayList();
+    private List<String> BLOCK_CLASSES = Lists.newArrayList();
+    private List<String> ITEM_NAMES = Lists.newArrayList();
+    private List<String> ITEM_CLASSES = Lists.newArrayList();
+    private List<String> ENTITY_CLASSES = Lists.newArrayList();
 
     private ItemStack EMPTY = new ItemStack((Item) null);
     private ItemStack CURRENT_MAINHAND_ITEM;
@@ -283,8 +283,8 @@ public class EntityHandler {
     }
 
     private void verifyEntities() {
-        List<String> removingBlocks = new ArrayList<>();
-        List<String> removingItems = new ArrayList<>();
+        List<String> removingBlocks = Lists.newArrayList();
+        List<String> removingItems = Lists.newArrayList();
         for (String itemName : ITEM_NAMES) {
             final String lowerItemName = itemName.toLowerCase();
             if (lowerItemName.contains("tile.") || lowerItemName.contains("item.") || lowerItemName.contains(".") || lowerItemName.contains(".name")) {

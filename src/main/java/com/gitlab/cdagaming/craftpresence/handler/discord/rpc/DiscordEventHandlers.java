@@ -1,12 +1,12 @@
 package com.gitlab.cdagaming.craftpresence.handler.discord.rpc;
 
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.sun.jna.Callback;
 import com.sun.jna.Structure;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Struct containing handlers for RPC events
@@ -53,17 +53,17 @@ public class DiscordEventHandlers extends Structure {
         if (!(o instanceof DiscordEventHandlers))
             return false;
         DiscordEventHandlers that = (DiscordEventHandlers) o;
-        return Objects.equals(ready, that.ready)
-                && Objects.equals(disconnected, that.disconnected)
-                && Objects.equals(errored, that.errored)
-                && Objects.equals(joinGame, that.joinGame)
-                && Objects.equals(spectateGame, that.spectateGame)
-                && Objects.equals(joinRequest, that.joinRequest);
+        return ready.equals(that.ready)
+                && disconnected.equals(that.disconnected)
+                && errored.equals(that.errored)
+                && joinGame.equals(that.joinGame)
+                && spectateGame.equals(that.spectateGame)
+                && joinRequest.equals(that.joinRequest);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(ready, disconnected, errored, joinGame, spectateGame, joinRequest);
+        return StringHandler.generateHash(ready, disconnected, errored, joinGame, spectateGame, joinRequest);
     }
 
     @Override

@@ -4,16 +4,16 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.google.common.collect.Maps;
 import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ManifestHandler {
     public static Manifest manifest;
-    private static Map<String, Manifest> manifests = new HashMap<>();
+    private static Map<String, Manifest> manifests = Maps.newHashMap();
 
     public static boolean contains(String key) {
         return manifest != null && manifests.containsKey(key);
@@ -21,7 +21,7 @@ public class ManifestHandler {
 
     public static void loadManifest() {
         Constants.LOG.info(I18n.format("craftpresence.logger.info.manifest.init"));
-        manifests = new HashMap<>();
+        manifests = Maps.newHashMap();
 
         try {
             manifest = FileHandler.getJSONFromFile(new File("manifest.json"), Manifest.class);

@@ -4,6 +4,7 @@ import com.gitlab.cdagaming.craftpresence.config.ConfigHandler;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.KeyHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.SystemHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.handler.entity.EntityHandler;
@@ -32,6 +33,7 @@ public class CraftPresence {
     public static int TIMER = 0;
 
     public static ConfigHandler CONFIG;
+    public static SystemHandler SYSTEM;
     public static KeyHandler KEYBINDINGS = new KeyHandler();
     public static DiscordHandler CLIENT = new DiscordHandler();
     public static ServerHandler SERVER = new ServerHandler();
@@ -78,14 +80,15 @@ public class CraftPresence {
         if (Constants.IS_DEV) {
             Constants.LOG.warn(I18n.format("craftpresence.logger.warning.debugmode"));
         }
+        SYSTEM = new SystemHandler();
         CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
         CONFIG.initialize();
 
-        CommandHandler.init();
-        CommandHandler.reloadData();
-
         final File CP_DIR = new File(Constants.MODID);
         Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
+
+        CommandHandler.init();
+        CommandHandler.reloadData();
 
         try {
             CLIENT.CLIENT_ID = CONFIG.clientID;
