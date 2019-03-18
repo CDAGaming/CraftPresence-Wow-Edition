@@ -11,7 +11,6 @@ import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.client.resources.I18n;
 
 import java.util.List;
 
@@ -87,7 +86,7 @@ public class ServerHandler {
 
             final String newServer_IP = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : StringHandler.getLocalIP();
             final String newServer_Name = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverName) ? newServerData.serverName : CraftPresence.CONFIG.defaultServerName;
-            final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverMOTD)) && !(newServerData.serverMOTD.equalsIgnoreCase(I18n.format("craftpresence.multiplayer.status.cannot_connect")) || newServerData.serverMOTD.equalsIgnoreCase(I18n.format("craftpresence.multiplayer.status.cannot_resolve")) || newServerData.serverMOTD.equalsIgnoreCase(I18n.format("craftpresence.multiplayer.status.pinging"))) ? StringHandler.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
+            final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverMOTD)) && !(newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_connect")) || newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_resolve")) || newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.pinging"))) ? StringHandler.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
             final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
 
             if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) || (newServerData == null && currentServerData != null)) || !newConnection.equals(currentConnection) || !newServer_IP.equals(currentServer_IP) || (!StringHandler.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) || (!StringHandler.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name))) {
@@ -184,10 +183,10 @@ public class ServerHandler {
             if (CraftPresence.CONFIG.enableJoinRequest) {
                 requestedServerData = new ServerData(serverName, serverIP, false);
             } else {
-                Constants.LOG.error(I18n.format("craftpresence.logger.warning.config.disabled.enablejoinrequest"));
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.warning.config.disabled.enablejoinrequest"));
             }
         } else {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.join", secret));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.join", secret));
         }
     }
 

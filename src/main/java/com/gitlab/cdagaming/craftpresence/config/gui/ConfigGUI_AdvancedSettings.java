@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
@@ -8,7 +9,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -38,14 +38,14 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         int calc1 = (sr.getScaledWidth() / 2) - 130;
         int calc2 = (sr.getScaledWidth() / 2) + 3;
 
-        guiMessagesButton = new GUIExtendedButton(120, calc1 - 15, CraftPresence.GUIS.getButtonY(2), 160, 20, I18n.format("gui.config.name.advanced.guimessages"));
-        itemMessagesButton = new GUIExtendedButton(130, calc2 + 15, CraftPresence.GUIS.getButtonY(2), 160, 20, I18n.format("gui.config.name.advanced.itemmessages"));
+        guiMessagesButton = new GUIExtendedButton(120, calc1 - 15, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"));
+        itemMessagesButton = new GUIExtendedButton(130, calc2 + 15, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
 
-        enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
-        enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
-        enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
-        overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
+        enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
+        enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
+        overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
         buttonList.add(itemMessagesButton);
@@ -63,8 +63,8 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = "CraftPresence - " + I18n.format("gui.config.title.advanced");
-        final String splitCharacterText = I18n.format("gui.config.name.advanced.splitcharacter");
+        final String title = "CraftPresence - " + Constants.TRANSLATOR.translate("gui.config.title.advanced");
+        final String splitCharacterText = Constants.TRANSLATOR.translate("gui.config.name.advanced.splitcharacter");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, splitCharacterText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -78,36 +78,36 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
         // Hovering over Split Character Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enableCommandsButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablecommands")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.enablecommands")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerGUIButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enablepergui")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.enablepergui")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerItemButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, overwriteServerIconButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, guiMessagesButton)) {
             if (!guiMessagesButton.enabled) {
-                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.guimessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
             } else {
-                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.guimessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.guimessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, itemMessagesButton)) {
             if (!itemMessagesButton.enabled) {
-                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.access", I18n.format("gui.config.name.advanced.itemmessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"))), mouseX, mouseY, width, height, -1, fontRenderer, true);
             } else {
-                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.advanced.itemmessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.itemmessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
     }
 
@@ -151,9 +151,9 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, I18n.format("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, I18n.format("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
         }
     }
 

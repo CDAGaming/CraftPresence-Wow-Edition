@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
@@ -10,7 +11,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -39,12 +39,12 @@ public class ConfigGUI_Selector extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() - 100), (sr.getScaledHeight() - 30), 90, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() - 100), (sr.getScaledHeight() - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         scrollList = new GUIScrollList(mc, sr.getScaledWidth(), sr.getScaledHeight(), 32, sr.getScaledHeight() - 45, 18, itemList, originalValue);
         searchBox = new GuiTextField(110, fontRenderer, 60, (sr.getScaledHeight() - 30), 120, 20);
 
         if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
-            addNewButton = new GUIExtendedButton(600, (sr.getScaledWidth() - 195), (sr.getScaledHeight() - 30), 90, 20, I18n.format("gui.config.buttonMessage.addnew"));
+            addNewButton = new GUIExtendedButton(600, (sr.getScaledWidth() - 195), (sr.getScaledHeight() - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.addnew"));
             buttonList.add(addNewButton);
         }
 
@@ -58,7 +58,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String searchText = I18n.format("gui.config.editorMessage.search");
+        final String searchText = Constants.TRANSLATOR.translate("gui.config.editorMessage.search");
         List<String> modifiedList = Lists.newArrayList();
 
         if (!searchBox.getText().isEmpty()) {
@@ -91,7 +91,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         searchBox.drawTextBox();
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
 
-        proceedButton.displayString = scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? I18n.format("gui.config.buttonMessage.continue") : I18n.format("gui.config.buttonMessage.back");
+        proceedButton.displayString = scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? Constants.TRANSLATOR.translate("gui.config.buttonMessage.continue") : Constants.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

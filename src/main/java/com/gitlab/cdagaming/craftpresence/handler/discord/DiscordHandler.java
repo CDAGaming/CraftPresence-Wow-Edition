@@ -15,7 +15,6 @@ import com.gitlab.cdagaming.craftpresence.handler.mcupdater.MCUpdaterHandler;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import com.sun.jna.NativeLibrary;
-import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 
@@ -81,7 +80,7 @@ public class DiscordHandler {
                     STATUS = "errored";
                     lastErrorCode = errorCode;
                     shutDown();
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.rpc", errorCode, message));
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
                 }
             }
         };
@@ -103,7 +102,7 @@ public class DiscordHandler {
                 if ((StringHandler.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
                     STATUS = "ready";
                     CURRENT_USER = user;
-                    Constants.LOG.info(I18n.format("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
+                    Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
                 }
             }
         };
@@ -188,7 +187,7 @@ public class DiscordHandler {
             }
 
             presence.largeImageKey = StringHandler.isNullOrEmpty(presence.largeImageKey) ? CraftPresence.CONFIG.defaultIcon : presence.largeImageKey;
-            presence.largeImageText = StringHandler.isNullOrEmpty(presence.largeImageText) ? I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion) : presence.largeImageText;
+            presence.largeImageText = StringHandler.isNullOrEmpty(presence.largeImageText) ? Constants.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", Constants.MCVersion) : presence.largeImageText;
 
             DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
         }
@@ -213,7 +212,7 @@ public class DiscordHandler {
         CURRENT_USER = null;
         REQUESTER_USER = null;
 
-        Constants.LOG.info(I18n.format("craftpresence.logger.info.shutdown"));
+        Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
     }
 
     public void setImage(final String key, final DiscordAsset.AssetType type) {
@@ -234,8 +233,8 @@ public class DiscordHandler {
                         SMALLIMAGEKEY = formattedKey;
                     }
                 } else {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.fallback", formattedKey, type.name()));
-                    Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.request", formattedKey, type.name()));
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.fallback", formattedKey, type.name()));
+                    Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.request", formattedKey, type.name()));
 
                     final String defaultIcon = StringHandler.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
                     final String defaultDimensionIcon = StringHandler.formatPackIcon(StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon).replace("&icon&", defaultIcon));
@@ -246,14 +245,14 @@ public class DiscordHandler {
                             // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name
                             final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME);
                             if (DiscordAssetHandler.contains(formattedCurrentDIMNameIcon)) {
-                                Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedCurrentDIMNameIcon));
+                                Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedCurrentDIMNameIcon));
                                 LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
                             } else {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
                                 LARGEIMAGEKEY = DiscordAssetHandler.contains(defaultDimensionIcon) ? defaultDimensionIcon : defaultIcon;
                             }
                         } else {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
                             LARGEIMAGEKEY = defaultIcon;
                         }
                     }
@@ -265,7 +264,7 @@ public class DiscordHandler {
                             for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
                                 final String formattedIPPart = StringHandler.formatPackIcon(ipPart);
                                 if (DiscordAssetHandler.contains(formattedIPPart)) {
-                                    Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedIPPart));
+                                    Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedIPPart));
                                     SMALLIMAGEKEY = formattedIPPart;
                                     matched = true;
                                     break;
@@ -273,11 +272,11 @@ public class DiscordHandler {
                             }
 
                             if (!matched) {
-                                Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
                                 SMALLIMAGEKEY = DiscordAssetHandler.contains(defaultServerIcon) ? defaultServerIcon : defaultIcon;
                             }
                         } else {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
                             SMALLIMAGEKEY = defaultIcon;
                         }
                     }

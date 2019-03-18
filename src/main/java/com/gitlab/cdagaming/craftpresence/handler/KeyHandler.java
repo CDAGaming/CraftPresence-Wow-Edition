@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiControls;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
@@ -17,7 +16,7 @@ public class KeyHandler {
 
     public void register() {
         keyBindings.addAll(Arrays.asList(CraftPresence.instance.gameSettings.keyBindings));
-        configKeybinding = new KeyBinding("key.craftpresence.config_keybind", Keyboard.KEY_RCONTROL, "key.craftpresence.category");
+        configKeybinding = new KeyBinding(Constants.TRANSLATOR.translate("key.craftpresence.config_keybind"), Keyboard.KEY_RCONTROL, Constants.TRANSLATOR.translate("key.craftpresence.category"));
 
         keyBindings.add(configKeybinding);
 
@@ -27,7 +26,7 @@ public class KeyHandler {
     public void onTick() {
         if (configKeybinding != null) {
             if (configKeybinding.getKeyCode() < 0) {
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.keybind"));
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.keybind"));
                 configKeybinding.setKeyCode(Keyboard.KEY_RCONTROL);
             } else if (Keyboard.isKeyDown(configKeybinding.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls) && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                 CraftPresence.GUIS.openConfigGUI = true;

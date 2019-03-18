@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
@@ -9,7 +10,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -40,17 +40,17 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         int calc1 = (sr.getScaledWidth() / 2) - 145;
         int calc2 = (sr.getScaledWidth() / 2) + 18;
 
-        defaultIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.name.general.defaulticon"));
-        detectCurseManifestButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.general.detectcursemanifest"), CraftPresence.CONFIG.detectCurseManifest);
-        detectMultiMCManifestButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), I18n.format("gui.config.name.general.detectmultimcmanifest"), CraftPresence.CONFIG.detectMultiMCManifest);
-        detectMCUpdaterInstanceButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.detectmcupdaterinstance"), CraftPresence.CONFIG.detectMCUpdaterInstance);
-        detectTechnicPackButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, I18n.format("gui.config.name.general.detecttechnicpack"), CraftPresence.CONFIG.detectTechnicPack);
-        showTimeButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showtime"), CraftPresence.CONFIG.showTime);
-        showBiomeButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, I18n.format("gui.config.name.general.showbiome"), CraftPresence.CONFIG.showCurrentBiome);
-        showDimensionButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
-        showStateButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, I18n.format("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
-        enableJoinRequestButton = new GUICheckBox(1000, calc1, CraftPresence.GUIS.getButtonY(7) - 40, I18n.format("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
-        proceedButton = new GUIExtendedButton(1100, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        defaultIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.general.defaulticon"));
+        detectCurseManifestButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.general.detectcursemanifest"), CraftPresence.CONFIG.detectCurseManifest);
+        detectMultiMCManifestButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.general.detectmultimcmanifest"), CraftPresence.CONFIG.detectMultiMCManifest);
+        detectMCUpdaterInstanceButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.general.detectmcupdaterinstance"), CraftPresence.CONFIG.detectMCUpdaterInstance);
+        detectTechnicPackButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.general.detecttechnicpack"), CraftPresence.CONFIG.detectTechnicPack);
+        showTimeButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, Constants.TRANSLATOR.translate("gui.config.name.general.showtime"), CraftPresence.CONFIG.showTime);
+        showBiomeButton = new GUICheckBox(700, calc2, CraftPresence.GUIS.getButtonY(5) - 20, Constants.TRANSLATOR.translate("gui.config.name.general.showbiome"), CraftPresence.CONFIG.showCurrentBiome);
+        showDimensionButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, Constants.TRANSLATOR.translate("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
+        showStateButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, Constants.TRANSLATOR.translate("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
+        enableJoinRequestButton = new GUICheckBox(1000, calc1, CraftPresence.GUIS.getButtonY(7) - 40, Constants.TRANSLATOR.translate("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
+        proceedButton = new GUIExtendedButton(1100, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(defaultIconButton);
         buttonList.add(detectCurseManifestButton);
@@ -72,8 +72,8 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = "CraftPresence - " + I18n.format("gui.config.title.general");
-        final String clientIDText = I18n.format("gui.config.name.general.clientid");
+        final String title = "CraftPresence - " + Constants.TRANSLATOR.translate("gui.config.title.general");
+        final String clientIDText = Constants.TRANSLATOR.translate("gui.config.name.general.clientid");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, clientIDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -85,40 +85,40 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
         // Hovering over Client ID Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.clientid")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.clientid")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, defaultIconButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.defaulticon")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.defaulticon")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectCurseManifestButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectcursemanifest")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.detectcursemanifest")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectMultiMCManifestButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectmultimcmanifest")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.detectmultimcmanifest")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectMCUpdaterInstanceButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detectmcupdaterinstance")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.detectmcupdaterinstance")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, detectTechnicPackButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.detecttechnicpack")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.detecttechnicpack")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, showTimeButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showtime")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.showtime")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, showBiomeButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showbiome")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.showbiome")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, showDimensionButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showdimension")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.showdimension")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, showStateButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.showstate")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.showstate")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enableJoinRequestButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.comment.general.enablejoinrequest")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.enablejoinrequest")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
     }
 

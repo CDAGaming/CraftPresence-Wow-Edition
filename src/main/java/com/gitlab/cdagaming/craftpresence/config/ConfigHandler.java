@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.collect.Lists;
-import net.minecraft.client.resources.I18n;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -69,17 +68,17 @@ public class ConfigHandler {
 
     public void setupInitialValues() {
         // GENERAL
-        NAME_detectCurseManifest = I18n.format("gui.config.name.general.detectcursemanifest").replaceAll(" ", "_");
-        NAME_detectMultiMCManifest = I18n.format("gui.config.name.general.detectmultimcmanifest").replaceAll(" ", "_");
-        NAME_detectMCUpdaterInstance = I18n.format("gui.config.name.general.detectmcupdaterinstance").replaceAll(" ", "_");
-        NAME_detectTechnicPack = I18n.format("gui.config.name.general.detecttechnicpack").replaceAll(" ", "_");
-        NAME_showTime = I18n.format("gui.config.name.general.showtime").replaceAll(" ", "_");
-        NAME_showCurrentBiome = I18n.format("gui.config.name.general.showbiome").replaceAll(" ", "_");
-        NAME_showCurrentDimension = I18n.format("gui.config.name.general.showdimension").replaceAll(" ", "_");
-        NAME_showGameState = I18n.format("gui.config.name.general.showstate").replaceAll(" ", "_");
-        NAME_clientID = I18n.format("gui.config.name.general.clientid").replaceAll(" ", "_");
-        NAME_defaultIcon = I18n.format("gui.config.name.general.defaulticon").replaceAll(" ", "_");
-        NAME_enableJoinRequest = I18n.format("gui.config.name.general.enablejoinrequest").replaceAll(" ", "_");
+        NAME_detectCurseManifest = Constants.TRANSLATOR.translate("gui.config.name.general.detectcursemanifest").replaceAll(" ", "_");
+        NAME_detectMultiMCManifest = Constants.TRANSLATOR.translate("gui.config.name.general.detectmultimcmanifest").replaceAll(" ", "_");
+        NAME_detectMCUpdaterInstance = Constants.TRANSLATOR.translate("gui.config.name.general.detectmcupdaterinstance").replaceAll(" ", "_");
+        NAME_detectTechnicPack = Constants.TRANSLATOR.translate("gui.config.name.general.detecttechnicpack").replaceAll(" ", "_");
+        NAME_showTime = Constants.TRANSLATOR.translate("gui.config.name.general.showtime").replaceAll(" ", "_");
+        NAME_showCurrentBiome = Constants.TRANSLATOR.translate("gui.config.name.general.showbiome").replaceAll(" ", "_");
+        NAME_showCurrentDimension = Constants.TRANSLATOR.translate("gui.config.name.general.showdimension").replaceAll(" ", "_");
+        NAME_showGameState = Constants.TRANSLATOR.translate("gui.config.name.general.showstate").replaceAll(" ", "_");
+        NAME_clientID = Constants.TRANSLATOR.translate("gui.config.name.general.clientid").replaceAll(" ", "_");
+        NAME_defaultIcon = Constants.TRANSLATOR.translate("gui.config.name.general.defaulticon").replaceAll(" ", "_");
+        NAME_enableJoinRequest = Constants.TRANSLATOR.translate("gui.config.name.general.enablejoinrequest").replaceAll(" ", "_");
         detectCurseManifest = true;
         detectMultiMCManifest = true;
         detectMCUpdaterInstance = true;
@@ -92,49 +91,49 @@ public class ConfigHandler {
         defaultIcon = "grass";
         enableJoinRequest = false;
         // BIOME MESSAGES
-        NAME_biomeMessages = I18n.format("gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
+        NAME_biomeMessages = Constants.TRANSLATOR.translate("gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
         biomeMessages = new String[]{"default;Playing in &biome&"};
         // DIMENSION MESSAGES
-        NAME_defaultDimensionIcon = I18n.format("gui.config.name.dimensionmessages.dimensionicon").replaceAll(" ", "_");
-        NAME_dimensionMessages = I18n.format("gui.config.name.dimensionmessages.dimensionmessages").replaceAll(" ", "_");
+        NAME_defaultDimensionIcon = Constants.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionicon").replaceAll(" ", "_");
+        NAME_dimensionMessages = Constants.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionmessages").replaceAll(" ", "_");
         defaultDimensionIcon = "unknown";
         dimensionMessages = new String[]{"default" + (!StringHandler.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In The &dimension&"};
         // SERVER MESSAGES
-        NAME_defaultServerIcon = I18n.format("gui.config.name.servermessages.servericon").replaceAll(" ", "_");
-        NAME_defaultServerName = I18n.format("gui.config.name.servermessages.servername").replaceAll(" ", "_");
-        NAME_defaultServerMOTD = I18n.format("gui.config.name.servermessages.servermotd").replaceAll(" ", "_");
-        NAME_serverMessages = I18n.format("gui.config.name.servermessages.servermessages").replaceAll(" ", "_");
+        NAME_defaultServerIcon = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servericon").replaceAll(" ", "_");
+        NAME_defaultServerName = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servername").replaceAll(" ", "_");
+        NAME_defaultServerMOTD = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermotd").replaceAll(" ", "_");
+        NAME_serverMessages = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermessages").replaceAll(" ", "_");
         defaultServerIcon = "default";
-        defaultServerName = I18n.format("selectServer.defaultName");
-        defaultServerMOTD = I18n.format("craftpresence.defaults.servermessages.servermotd");
+        defaultServerName = Constants.TRANSLATOR.translate("selectServer.defaultName");
+        defaultServerMOTD = Constants.TRANSLATOR.translate("craftpresence.defaults.servermessages.servermotd");
         serverMessages = new String[]{"default;Playing on &motd&"};
         // STATUS MESSAGES
-        NAME_mainmenuMSG = I18n.format("gui.config.name.statusmessages.mainmenumsg").replaceAll(" ", "_");
-        NAME_lanMSG = I18n.format("gui.config.name.statusmessages.lanmsg").replaceAll(" ", "_");
-        NAME_singleplayerMSG = I18n.format("gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
-        NAME_packPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.packmsg").replaceAll(" ", "_");
-        NAME_playerPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.playermsg").replaceAll(" ", "_");
-        NAME_playerAmountPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.playeramountmsg").replaceAll(" ", "_");
-        NAME_gameTimePlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.gametimemsg").replaceAll(" ", "_");
-        NAME_modsPlaceholderMSG = I18n.format("gui.config.name.statusmessages.placeholder.modsmsg").replaceAll(" ", "_");
-        NAME_vivecraftMessage = I18n.format("gui.config.name.statusmessages.special.vivecraftmsg").replaceAll(" ", "_");
-        mainmenuMSG = I18n.format("craftpresence.defaults.state.mainmenu");
-        lanMSG = I18n.format("craftpresence.defaults.state.lan");
-        singleplayerMSG = I18n.format("craftpresence.defaults.state.singleplayer");
-        packPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.pack");
-        playerPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.ign");
-        playerAmountPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.players");
-        gameTimePlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.time");
-        modsPlaceholderMSG = I18n.format("craftpresence.defaults.placeholder.mods");
-        vivecraftMessage = I18n.format("craftpresence.defaults.special.vivecraft");
+        NAME_mainmenuMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.mainmenumsg").replaceAll(" ", "_");
+        NAME_lanMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.lanmsg").replaceAll(" ", "_");
+        NAME_singleplayerMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
+        NAME_packPlaceholderMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.packmsg").replaceAll(" ", "_");
+        NAME_playerPlaceholderMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playermsg").replaceAll(" ", "_");
+        NAME_playerAmountPlaceholderMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playeramountmsg").replaceAll(" ", "_");
+        NAME_gameTimePlaceholderMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.gametimemsg").replaceAll(" ", "_");
+        NAME_modsPlaceholderMSG = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.modsmsg").replaceAll(" ", "_");
+        NAME_vivecraftMessage = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.special.vivecraftmsg").replaceAll(" ", "_");
+        mainmenuMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.state.mainmenu");
+        lanMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.state.lan");
+        singleplayerMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.state.singleplayer");
+        packPlaceholderMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.placeholder.pack");
+        playerPlaceholderMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.placeholder.ign");
+        playerAmountPlaceholderMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.placeholder.players");
+        gameTimePlaceholderMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.placeholder.time");
+        modsPlaceholderMSG = Constants.TRANSLATOR.translate("craftpresence.defaults.placeholder.mods");
+        vivecraftMessage = Constants.TRANSLATOR.translate("craftpresence.defaults.special.vivecraft");
         // ADVANCED
-        NAME_enableCommands = I18n.format("gui.config.name.advanced.enablecommands").replaceAll(" ", "_");
-        NAME_enablePERGUI = I18n.format("gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
-        NAME_enablePERItem = I18n.format("gui.config.name.advanced.enableperitem").replaceAll(" ", "_");
-        NAME_overwriteServerIcon = I18n.format("gui.config.name.advanced.overwriteservericon").replaceAll(" ", "_");
-        NAME_splitCharacter = I18n.format("gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
-        NAME_guiMessages = I18n.format("gui.config.name.advanced.guimessages").replaceAll(" ", "_");
-        NAME_itemMessages = I18n.format("gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
+        NAME_enableCommands = Constants.TRANSLATOR.translate("gui.config.name.advanced.enablecommands").replaceAll(" ", "_");
+        NAME_enablePERGUI = Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
+        NAME_enablePERItem = Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem").replaceAll(" ", "_");
+        NAME_overwriteServerIcon = Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon").replaceAll(" ", "_");
+        NAME_splitCharacter = Constants.TRANSLATOR.translate("gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
+        NAME_guiMessages = Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages").replaceAll(" ", "_");
+        NAME_itemMessages = Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
         enableCommands = true;
         enablePERGUI = false;
         enablePERItem = false;
@@ -153,7 +152,7 @@ public class ConfigHandler {
             isConfigNew = (!parentDir.exists() && parentDir.mkdirs()) || (!configFile.exists() && configFile.createNewFile());
             setupInitialValues();
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.save"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.save"));
             ex.printStackTrace();
         } finally {
             if (initialized) {
@@ -171,7 +170,7 @@ public class ConfigHandler {
             properties.load(configReader);
             configReader.close();
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.save"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.save"));
             ex.printStackTrace();
         } finally {
             try {
@@ -221,7 +220,7 @@ public class ConfigHandler {
                 if (!verified) {
                     verifyConfig();
                 }
-                Constants.LOG.info(I18n.format("craftpresence.logger.info.config.save"));
+                Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.config.save"));
             }
         }
     }
@@ -270,12 +269,12 @@ public class ConfigHandler {
 
         // Check for Conflicts before Saving
         if (showCurrentBiome && showGameState) {
-            Constants.LOG.warn(I18n.format("craftpresence.logger.warning.config.conflict.biomestate"));
+            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.config.conflict.biomestate"));
             showCurrentBiome = false;
             properties.setProperty(NAME_showCurrentBiome, "false");
         }
         if (enablePERGUI && showGameState) {
-            Constants.LOG.warn(I18n.format("craftpresence.logger.warning.config.conflict.pergui"));
+            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.config.conflict.pergui"));
             enablePERGUI = false;
             properties.setProperty(NAME_enablePERGUI, "false");
         }
@@ -295,7 +294,7 @@ public class ConfigHandler {
                     Object value = field.get(this);
                     validProperties.add(value.toString());
                     if (!properties.stringPropertyNames().contains(value.toString()) && validProperties.contains(value.toString())) {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", value.toString()));
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", value.toString()));
                         needsFullUpdate = true;
                     }
                 } catch (Exception ignored) {
@@ -305,24 +304,24 @@ public class ConfigHandler {
 
         for (String property : properties.stringPropertyNames()) {
             if (!validProperties.contains(property)) {
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
                 removedProperties.add(property);
                 properties.remove(property);
                 save();
             }
             if (!removedProperties.contains(property)) {
                 if (StringHandler.isNullOrEmpty(properties.getProperty(property))) {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.config.emptyprop", property));
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", property));
                     needsFullUpdate = true;
                 } else {
                     if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || !StringHandler.isValidLong(properties.getProperty(property)))) {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
                         clientID = "450485984333660181";
                         properties.setProperty(property, clientID);
                         save();
                     }
                     if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
-                        Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidprop", property));
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
                         splitCharacter = ";";
                         properties.setProperty(property, splitCharacter);
                         save();
@@ -341,7 +340,7 @@ public class ConfigHandler {
                     if (property.equals(NAME_biomeMessages) && biomeMessages != null) {
                         boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
                         if (!defaultFound) {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
                             biomeMessages = StringHandler.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
                             properties.setProperty(property, Arrays.toString(biomeMessages));
                             save();
@@ -350,7 +349,7 @@ public class ConfigHandler {
                     if (property.equals(NAME_dimensionMessages) && dimensionMessages != null) {
                         boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
                         if (!defaultFound) {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
                             dimensionMessages = StringHandler.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
                             properties.setProperty(property, Arrays.toString(dimensionMessages));
                             save();
@@ -359,7 +358,7 @@ public class ConfigHandler {
                     if (property.equals(NAME_serverMessages) && serverMessages != null) {
                         boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
                         if (!defaultFound) {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
                             serverMessages = StringHandler.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
                             properties.setProperty(property, Arrays.toString(serverMessages));
                             save();
@@ -368,7 +367,7 @@ public class ConfigHandler {
                     if (property.equals(NAME_guiMessages) && guiMessages != null) {
                         boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
                         if (!defaultFound) {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
                             guiMessages = StringHandler.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
                             properties.setProperty(property, Arrays.toString(guiMessages));
                             save();
@@ -377,7 +376,7 @@ public class ConfigHandler {
                     if (property.equals(NAME_itemMessages) && itemMessages != null) {
                         boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
                         if (!defaultFound) {
-                            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.defaultmissing", property));
+                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
                             itemMessages = StringHandler.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
                             properties.setProperty(property, Arrays.toString(itemMessages));
                             save();
@@ -405,7 +404,7 @@ public class ConfigHandler {
             properties.store(configWriter, null);
             configWriter.close();
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.save"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.save"));
             ex.printStackTrace();
         }
     }

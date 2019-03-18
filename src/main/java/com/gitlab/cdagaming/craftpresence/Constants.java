@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence;
 
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
+import com.gitlab.cdagaming.craftpresence.handler.TranslationHandler;
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -28,6 +29,7 @@ public class Constants {
     public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
     public static final Logger LOG = LogManager.getLogger(MODID);
+    public static final TranslationHandler TRANSLATOR = new TranslationHandler(MODID);
     public static final boolean IS_DEV = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
     static void loadDLL(final boolean Update) {

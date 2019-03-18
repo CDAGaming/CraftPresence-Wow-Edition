@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
@@ -8,7 +9,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
 
         if (isNewValue) {
-            title = I18n.format("gui.config.title.editor.addnew");
+            title = Constants.TRANSLATOR.translate("gui.config.title.editor.addnew");
             if (parentScreen instanceof ConfigGUI_BiomeSettings) {
                 specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
             } else if (parentScreen instanceof ConfigGUI_DimensionSettings) {
@@ -52,44 +52,44 @@ public class ConfigGUI_Editor extends GuiScreen {
             }
         } else {
             if (parentScreen instanceof ConfigGUI_BiomeSettings) {
-                title = I18n.format("gui.config.title.biome.editspecificbiome", attributeName);
+                title = Constants.TRANSLATOR.translate("gui.config.title.biome.editspecificbiome", attributeName);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ConfigGUI_DimensionSettings) {
-                title = I18n.format("gui.config.title.dimension.editspecificdimension", attributeName);
+                title = Constants.TRANSLATOR.translate("gui.config.title.dimension.editspecificdimension", attributeName);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ConfigGUI_ServerSettings) {
-                title = I18n.format("gui.config.title.server.editspecificserver", attributeName);
+                title = Constants.TRANSLATOR.translate("gui.config.title.server.editspecificserver", attributeName);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ConfigGUI_AdvancedSettings) {
                 if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
-                    title = I18n.format("gui.config.title.gui.editspecificgui", attributeName);
+                    title = Constants.TRANSLATOR.translate("gui.config.title.gui.editspecificgui", attributeName);
                     defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                    title = I18n.format("gui.config.title.gui.editspecificitem", attributeName);
+                    title = Constants.TRANSLATOR.translate("gui.config.title.gui.editspecificitem", attributeName);
                     defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 }
             }
         }
 
-        removeMSG = I18n.format("gui.config.message.remove");
+        removeMSG = Constants.TRANSLATOR.translate("gui.config.message.remove");
 
         specificMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         specificMessage.setText(specificMSG);
 
         if ((parentScreen instanceof ConfigGUI_DimensionSettings || parentScreen instanceof ConfigGUI_ServerSettings) && !isNewValue) {
-            specificIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, I18n.format("gui.config.buttonMessage.iconchange"));
+            specificIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.iconchange"));
             buttonList.add(specificIconButton);
         }
         if (isNewValue) {
             newValueName = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
         }
 
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(proceedButton);
 
@@ -101,8 +101,8 @@ public class ConfigGUI_Editor extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String messageText = I18n.format("gui.config.editorMessage.message");
-        final String valueNameText = I18n.format("gui.config.editorMessage.valuename");
+        final String messageText = Constants.TRANSLATOR.translate("gui.config.editorMessage.message");
+        final String valueNameText = Constants.TRANSLATOR.translate("gui.config.editorMessage.valuename");
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, messageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -114,7 +114,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         }
         specificMessage.drawTextBox();
 
-        proceedButton.displayString = !specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG)) ? I18n.format("gui.config.buttonMessage.continue") : I18n.format("gui.config.buttonMessage.back");
+        proceedButton.displayString = !specificMessage.getText().equals(specificMSG) || (isNewValue && !StringHandler.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringHandler.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG)) ? Constants.TRANSLATOR.translate("gui.config.buttonMessage.continue") : Constants.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
         proceedButton.enabled = !(StringHandler.isNullOrEmpty(specificMessage.getText()) && isDefaultValue);
 
@@ -122,14 +122,14 @@ public class ConfigGUI_Editor extends GuiScreen {
 
         // Hovering over Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(messageText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.message.remove")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.remove")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         // Hovering over Value Name Label
         if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(valueNameText), fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.valuename")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.valuename")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
-            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(I18n.format("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
     }
 

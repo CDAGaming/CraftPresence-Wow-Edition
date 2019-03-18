@@ -5,7 +5,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.collect.Maps;
-import net.minecraft.client.resources.I18n;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,7 +19,7 @@ public class ManifestHandler {
     }
 
     public static void loadManifest() {
-        Constants.LOG.info(I18n.format("craftpresence.logger.info.manifest.init"));
+        Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.manifest.init"));
         manifests = Maps.newHashMap();
 
         try {
@@ -29,10 +28,10 @@ public class ManifestHandler {
             if (manifest != null && !StringHandler.isNullOrEmpty(manifest.name)) {
                 manifests.put(manifest.name, manifest);
                 CraftPresence.packFound = true;
-                Constants.LOG.info(I18n.format("craftpresence.logger.info.manifest.loaded", manifest.name));
+                Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.manifest.loaded", manifest.name));
             }
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.file.manifest"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.file.manifest"));
 
             if (ex.getClass() != FileNotFoundException.class) {
                 ex.printStackTrace();

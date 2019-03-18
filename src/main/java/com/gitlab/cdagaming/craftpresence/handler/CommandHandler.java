@@ -9,13 +9,13 @@ import com.gitlab.cdagaming.craftpresence.handler.mcupdater.MCUpdaterHandler;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 
 public class CommandHandler {
     public static void reloadData() {
         CraftPresence.instance = Minecraft.getMinecraft();
         CraftPresence.player = CraftPresence.instance.player;
 
+        Constants.TRANSLATOR.tick();
         CraftPresence.KEYBINDINGS.onTick();
         CraftPresence.BIOMES.onTick();
         CraftPresence.DIMENSIONS.onTick();
@@ -62,7 +62,7 @@ public class CommandHandler {
         CraftPresence.CLIENT.JOIN_SECRET = "";
         CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "";
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
-        CraftPresence.CLIENT.LARGEIMAGETEXT = I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion);
+        CraftPresence.CLIENT.LARGEIMAGETEXT = Constants.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", Constants.MCVersion);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
@@ -82,7 +82,7 @@ public class CommandHandler {
                         CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) &&
-                        CraftPresence.CLIENT.LARGEIMAGETEXT.equals(I18n.format("craftpresence.defaults.state.mcversion", Constants.MCVersion))
+                        CraftPresence.CLIENT.LARGEIMAGETEXT.equals(Constants.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", Constants.MCVersion))
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"));
     }

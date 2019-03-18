@@ -1,7 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
-import net.minecraft.client.resources.I18n;
 
 public class SystemHandler {
     public String OS_NAME, OS_ARCH, USER_DIR;
@@ -18,7 +17,7 @@ public class SystemHandler {
             IS_MAC = OS_NAME.startsWith("Mac");
             IS_WINDOWS = OS_NAME.startsWith("Windows");
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.system"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.system"));
             ex.printStackTrace();
         }
     }

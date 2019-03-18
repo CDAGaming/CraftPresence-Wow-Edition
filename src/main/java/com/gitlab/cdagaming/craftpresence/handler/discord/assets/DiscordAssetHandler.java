@@ -6,7 +6,6 @@ import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.URLHandler;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import net.minecraft.client.resources.I18n;
 
 import java.util.List;
 import java.util.Map;
@@ -63,15 +62,15 @@ public class DiscordAssetHandler {
             final Random randomObj = new Random();
             return ICON_LIST.get(randomObj.nextInt(ICON_LIST.size()));
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.empty"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidicon.empty"));
             ex.printStackTrace();
             return "";
         }
     }
 
     public static void loadAssets() {
-        Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load", CraftPresence.CONFIG.clientID));
-        Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.load.credits"));
+        Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.load", CraftPresence.CONFIG.clientID));
+        Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.load.credits"));
         ASSET_LIST = Maps.newHashMap();
 
         try {
@@ -108,11 +107,11 @@ public class DiscordAssetHandler {
                 }
             }
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.discord.assets.load"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.load"));
             ex.printStackTrace();
         } finally {
             verifyConfigAssets();
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.discord.assets.detected", String.valueOf(ASSET_LIST.size())));
+            Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.detected", String.valueOf(ASSET_LIST.size())));
         }
     }
 
@@ -121,10 +120,10 @@ public class DiscordAssetHandler {
         for (String property : CraftPresence.CONFIG.properties.stringPropertyNames()) {
             if ((property.equals(CraftPresence.CONFIG.NAME_defaultIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) && !contains(CraftPresence.CONFIG.properties.getProperty(property))) {
                 final String newAsset = contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : getRandomAsset();
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.pre", CraftPresence.CONFIG.properties.getProperty(property), property));
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidicon.pre", CraftPresence.CONFIG.properties.getProperty(property), property));
                 CraftPresence.CONFIG.properties.setProperty(property, newAsset);
                 needsFullUpdate = true;
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.config.invalidicon.post", property, newAsset));
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidicon.post", property, newAsset));
             }
         }
 

@@ -14,7 +14,6 @@ import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -73,12 +72,12 @@ public class CraftPresence {
     @Mod.EventHandler
     public void onFingerprintViolation(final FMLFingerprintViolationEvent event) {
         if (!Constants.IS_DEV)
-            Constants.LOG.warn(I18n.format("craftpresence.logger.warning.fingerprintviolation"));
+            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.fingerprintviolation"));
     }
 
     public void init() {
         if (Constants.IS_DEV) {
-            Constants.LOG.warn(I18n.format("craftpresence.logger.warning.debugmode"));
+            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
         }
         SYSTEM = new SystemHandler();
         CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
@@ -96,7 +95,7 @@ public class CraftPresence {
             CLIENT.init();
             CLIENT.updateTimestamp();
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.load"));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.load"));
             ex.printStackTrace();
         } finally {
             initialized = true;
@@ -137,7 +136,7 @@ public class CraftPresence {
                 }
 
                 if (awaitingReply && TIMER == 0) {
-                    StringHandler.sendMessageToPlayer(player, I18n.format("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
+                    StringHandler.sendMessageToPlayer(player, Constants.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
                     DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
                     awaitingReply = false;
                     CLIENT.STATUS = "ready";

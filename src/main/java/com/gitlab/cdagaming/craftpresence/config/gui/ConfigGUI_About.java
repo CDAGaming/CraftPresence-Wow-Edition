@@ -7,7 +7,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -29,8 +28,8 @@ public class ConfigGUI_About extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         ScaledResolution sr = new ScaledResolution(mc);
 
-        backButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, I18n.format("gui.config.buttonMessage.back"));
-        viewSource = new GUIExtendedButton(810, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 55), 180, 20, I18n.format("gui.config.buttonMessage.viewsource"));
+        backButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        viewSource = new GUIExtendedButton(810, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 55), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.viewsource"));
 
         buttonList.add(backButton);
         buttonList.add(viewSource);
@@ -43,8 +42,8 @@ public class ConfigGUI_About extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = I18n.format("gui.config.title.about.config");
-        final List<String> notice = StringHandler.splitTextByNewLine(I18n.format("gui.config.message.credits"));
+        final String title = Constants.TRANSLATOR.translate("gui.config.title.about.config");
+        final List<String> notice = StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.credits"));
 
         drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
         if (notice != null && !notice.isEmpty()) {
@@ -65,7 +64,7 @@ public class ConfigGUI_About extends GuiScreen {
             try {
                 Desktop.getDesktop().browse(new URI(SOURCE_URL));
             } catch (Exception ex) {
-                Constants.LOG.error(I18n.format("craftpresence.logger.error.web", SOURCE_URL));
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.web", SOURCE_URL));
                 ex.printStackTrace();
             }
         }

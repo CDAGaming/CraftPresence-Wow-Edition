@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.client.resources.I18n;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -25,33 +24,33 @@ public class FileHandler {
 
     public static void downloadFile(final String urlString, final File file) {
         try {
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.download.init", file.getName(), file.getAbsolutePath(), urlString));
+            Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.download.init", file.getName(), file.getAbsolutePath(), urlString));
             final URL url = new URL(urlString);
             if (file.exists()) {
                 final boolean fileDeleted = file.delete();
                 if (!fileDeleted) {
-                    Constants.LOG.error(I18n.format("craftpresence.logger.error.delete.file", file.getName()));
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.delete.file", file.getName()));
                 }
             }
 
             FileUtils.copyURLToFile(url, file);
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.download.loaded", file.getName(), file.getAbsolutePath(), urlString));
+            Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.download.loaded", file.getName(), file.getAbsolutePath(), urlString));
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.download", file.getName(), urlString, file.getAbsolutePath()));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.download", file.getName(), urlString, file.getAbsolutePath()));
             ex.printStackTrace();
         }
     }
 
     public static void loadFileAsDLL(final File file) {
         try {
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.dll.init", file.getName()));
+            Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.dll.init", file.getName()));
             boolean isPermsSet = file.setReadable(true) && file.setWritable(true);
             if (isPermsSet) {
                 System.load(file.getAbsolutePath());
             }
-            Constants.LOG.info(I18n.format("craftpresence.logger.info.dll.loaded", file.getName()));
+            Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.dll.loaded", file.getName()));
         } catch (Exception ex) {
-            Constants.LOG.error(I18n.format("craftpresence.logger.error.dll", file.getName()));
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.dll", file.getName()));
             ex.printStackTrace();
         }
     }
