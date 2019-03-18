@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
+@SuppressWarnings("TryWithIdenticalCatches")
 public class GUIHandler {
     public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, enabled = false;
 
@@ -159,7 +160,13 @@ public class GUIHandler {
                 Class guiClass;
                 try {
                     guiClass = Class.forName(info.getName());
-                } catch (NoClassDefFoundError | ExceptionInInitializerError | ClassNotFoundException ex) {
+                } catch (NoClassDefFoundError ex) {
+                    EXCLUSIONS.add(info.getName());
+                    continue;
+                } catch (ExceptionInInitializerError ex2) {
+                    EXCLUSIONS.add(info.getName());
+                    continue;
+                } catch (ClassNotFoundException ex3) {
                     EXCLUSIONS.add(info.getName());
                     continue;
                 }
@@ -189,7 +196,13 @@ public class GUIHandler {
                 Class modGUIClass;
                 try {
                     modGUIClass = Class.forName(modClass);
-                } catch (NoClassDefFoundError | ExceptionInInitializerError | ClassNotFoundException ex) {
+                } catch (NoClassDefFoundError ex) {
+                    EXCLUSIONS.add(modClass);
+                    continue;
+                } catch (ExceptionInInitializerError ex2) {
+                    EXCLUSIONS.add(modClass);
+                    continue;
+                } catch (ClassNotFoundException ex3) {
                     EXCLUSIONS.add(modClass);
                     continue;
                 }

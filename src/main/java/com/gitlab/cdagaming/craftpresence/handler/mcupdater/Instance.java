@@ -1,7 +1,8 @@
 package com.gitlab.cdagaming.craftpresence.handler.mcupdater;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +12,9 @@ public class Instance {
     private String packId;
     private String revision;
     private String hash = "";
-    private List<Object> instanceFiles = new ArrayList<>();
-    private List<Object> jarMods = new ArrayList<>();
-    private Map<String, Boolean> optionalMods = new HashMap<>();
+    private List<Object> instanceFiles = Lists.newArrayList();
+    private List<Object> jarMods = Lists.newArrayList();
+    private Map<String, Boolean> optionalMods = Maps.newHashMap();
 
     public List<Object> getInstanceFiles() {
         return instanceFiles;

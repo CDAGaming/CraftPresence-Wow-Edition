@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("TryWithIdenticalCatches")
 public class StringHandler {
     private static final char COLOR_CHAR = '\u00A7';
     private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
@@ -240,7 +241,9 @@ public class StringHandler {
         boolean result;
         try {
             result = data.size() >= index && !isNullOrEmpty(data.get(index));
-        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            result = false;
+        } catch (NullPointerException ex2) {
             result = false;
         }
         return result;
