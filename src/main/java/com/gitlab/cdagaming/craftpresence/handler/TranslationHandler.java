@@ -75,7 +75,7 @@ public class TranslationHandler {
     private void getTranslationMap() {
         translationMap = Maps.newHashMap();
 
-        InputStream in = getClass().getResourceAsStream("/assets/"
+        InputStream in = TranslationHandler.class.getResourceAsStream("/assets/"
                 + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
                 "lang/" + languageID + (usingJSON ? ".json" : ".lang"));
 
