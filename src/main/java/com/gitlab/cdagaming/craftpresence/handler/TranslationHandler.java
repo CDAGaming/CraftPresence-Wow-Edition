@@ -82,7 +82,9 @@ public class TranslationHandler {
         if (in != null) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
-                for (String currentString = reader.readLine().trim(); !StringHandler.isNullOrEmpty(currentString); currentString = reader.readLine().trim()) {
+                String currentString;
+                while ((currentString = reader.readLine()) != null) {
+                    currentString = currentString.trim();
                     if (!currentString.startsWith("#") && !currentString.startsWith("[{}]") && (usingJSON ? currentString.contains(":") : currentString.contains("="))) {
                         String[] splitTranslation = usingJSON ? currentString.split(":", 2) : currentString.split("=", 2);
                         if (usingJSON) {
