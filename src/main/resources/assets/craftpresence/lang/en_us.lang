@@ -122,6 +122,7 @@ gui.config.comment.advanced.itemmessages=Customize Messages to display with Item
 key.craftpresence.category=CraftPresence - KeyBindings
 key.craftpresence.config_keybind=Open Config GUI
 ## DEFAULT MESSAGES ##
+craftpresence.defaults.servermessages.servername=Minecraft Server
 craftpresence.defaults.servermessages.servermotd=A Minecraft Server
 craftpresence.defaults.state.mainmenu=In the Main Menu
 craftpresence.defaults.state.mcversion=Minecraft %1$s
@@ -135,6 +136,7 @@ craftpresence.defaults.placeholder.mods=&modcount& Mods
 craftpresence.defaults.special.vivecraft=Playing in VR via Vivecraft
 craftpresence.multiplayer.status.cannot_connect=Can't connect to server
 craftpresence.multiplayer.status.pinging=Pinging...
+craftpresence.multiplayer.status.polling=Polling...
 craftpresence.multiplayer.status.cannot_resolve=Can't resolve hostname
 ## COMMAND MESSAGES ##
 craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n §rSyntax: §6/<cp|craftpresence> <command> \n\n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lrequest §r- View Join Request Info \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page

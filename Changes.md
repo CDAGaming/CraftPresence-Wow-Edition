@@ -4,17 +4,19 @@
 
 ### Changes:
 
-* Added Translations for "Pinging..." and "Cannot connect" that are missing in some versions of MC
+* Added Translations for "Pinging...", "Polling..." and "Cannot connect" that are missing in some versions of MC
 
 * Added Translation for if a File Fails to be deleted in downloading or updating Discord DLLs
 
-* Improved Java/JRE 1.6 Compatibility
+* Refactored Translation System (Added a Fallback for if I18n Fails, and for Older Versions of Minecraft)
+
+* Java/JRE 1.6 Compatibility
 
 * Deprecated Support of Loading Messages due to Changes in 1.13 and above (Mod now Initializes once on Main Menu and after the Loading Splash Screen)
 
 ### Fixes:
 
-* Fixes a Major Crash if All Config Options are not Present (Read Error on Empty Config File)
+* Fixes a Major Crash that occurred if All Config Options are not Present (Read Error on Empty Config File)
 
 * Fixes Improper "/cp view assets all" Command Output
 
@@ -24,6 +26,8 @@
 
 * Fixed missing Null-Checks for the Notices in the About and NullEntry GUI, to prevent issues
 
+* Fix Default Server Name listing as selectServer.defaultName
+
 * Fix onJoinRequest Callback not opening the Commands GUI
 
 * Disabling Commands no longer makes the Config GUI Inaccessible
@@ -32,7 +36,7 @@
 
 * Fix Possible NPE from RPC Updates before DLL was Loaded
 
-* Fix Control Menu & KeyBinding Issues in 1.13.2 Rift and 1.14 Fabric Ports (See More Info)
+* Fix Control Menu and KeyBinding Issues in 1.13.2 Rift and 1.14 Fabric Ports (See More Info)
 
 ### More Information:
 
@@ -83,3 +87,15 @@ The 1.14.x Port of this Mod Requires the [FabricMC ModLoader](https://minecraft.
 This Version of the Build is based on Minecraft Snapshots, since 1.14 is not fully released, caution is advised.
 
 A 1.14.x Snapshot Build will expire upon the release of a succeeding build. (Ex: If a 19w04b build is Released, then the 19w04a build is removed)
+
+#### Legacy Build Info (Minecraft Versions 1.5.2 and Below):
+
+Ports of this Mod for Minecraft Versions 1.5.2 and Lower are on very limited support.
+
+Please Keep in Mind the Following:
+
+* Ensure that you also Download and Have the Required Libraries (Posted in Additional Files Section on CurseForge)
+
+* Store the Required Libraries in your .minecraft/bin or .minecraft/libraries Folder, depending on how your .minecraft folder is setup
+
+* In the Legacy Builds, a different Translation Engine is being used instead of I18n. Please Report any Issues that come up as a result of this Change

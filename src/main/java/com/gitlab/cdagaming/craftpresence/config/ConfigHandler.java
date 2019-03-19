@@ -104,7 +104,7 @@ public class ConfigHandler {
         NAME_defaultServerMOTD = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermotd").replaceAll(" ", "_");
         NAME_serverMessages = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermessages").replaceAll(" ", "_");
         defaultServerIcon = "default";
-        defaultServerName = Constants.TRANSLATOR.translate("selectServer.defaultName");
+        defaultServerName = Constants.TRANSLATOR.translate("craftpresence.defaults.servermessages.servername");
         defaultServerMOTD = Constants.TRANSLATOR.translate("craftpresence.defaults.servermessages.servermotd");
         serverMessages = new String[]{"default;Playing on &motd&"};
         // STATUS MESSAGES

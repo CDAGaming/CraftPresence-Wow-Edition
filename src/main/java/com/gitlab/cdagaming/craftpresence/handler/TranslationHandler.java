@@ -16,15 +16,31 @@ public class TranslationHandler {
     private Map<String, String> translationMap = Maps.newHashMap();
     private Map<String, Boolean> requestMap = Maps.newHashMap();
     private Minecraft mc = Minecraft.getMinecraft();
+    private boolean usingJSON = false;
 
     public TranslationHandler() {
         setLanguage(mc.gameSettings.language.toLowerCase());
+        setUsingJSON(false);
+        getTranslationMap();
+    }
+
+    public TranslationHandler(final boolean useJSON) {
+        setLanguage(mc.gameSettings.language.toLowerCase());
+        setUsingJSON(useJSON);
         getTranslationMap();
     }
 
     public TranslationHandler(final String modID) {
         setLanguage(mc.gameSettings.language.toLowerCase());
         setModID(modID);
+        setUsingJSON(false);
+        getTranslationMap();
+    }
+
+    public TranslationHandler(final String modID, final boolean useJSON) {
+        setLanguage(mc.gameSettings.language.toLowerCase());
+        setModID(modID);
+        setUsingJSON(useJSON);
         getTranslationMap();
     }
 
@@ -34,6 +50,10 @@ public class TranslationHandler {
             setLanguage(mc.gameSettings.language.toLowerCase());
             getTranslationMap();
         }
+    }
+
+    private void setUsingJSON(final boolean usingJSON) {
+        this.usingJSON = usingJSON;
     }
 
     private void setLanguage(final String languageID) {
@@ -57,23 +77,30 @@ public class TranslationHandler {
 
         InputStream in = getClass().getResourceAsStream("/assets/"
                 + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
-                "lang/" + languageID + ".lang");
+                "lang/" + languageID + (usingJSON ? ".json" : ".lang"));
+
         if (in != null) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             try {
-                for (String currentString = reader.readLine(); !StringHandler.isNullOrEmpty(currentString); currentString = reader.readLine()) {
-                    if (!currentString.startsWith("#") && currentString.contains("=")) {
-                        String[] splitTranslation = currentString.split("=", 2);
-                        translationMap.put(splitTranslation[0], splitTranslation[1]);
+                for (String currentString = reader.readLine().trim(); !StringHandler.isNullOrEmpty(currentString); currentString = reader.readLine().trim()) {
+                    if (!currentString.startsWith("#") && !currentString.startsWith("[{}]") && (usingJSON ? currentString.contains(":") : currentString.contains("="))) {
+                        String[] splitTranslation = usingJSON ? currentString.split(":", 2) : currentString.split("=", 2);
+                        if (usingJSON) {
+                            String str1 = splitTranslation[0].substring(1, splitTranslation[0].length() - 1).replace("\\n", "\n").replace("\\", "").trim();
+                            String str2 = splitTranslation[1].substring(2, splitTranslation[1].length() - 2).replace("\\n", "\n").replace("\\", "").trim();
+                            translationMap.put(str1.replace("Â", ""), str2.replace("Â", ""));
+                        } else {
+                            translationMap.put(splitTranslation[0].trim().replace("Â", ""), splitTranslation[1].trim().replace("Â", ""));
+                        }
                     }
                 }
                 in.close();
             } catch (Exception ex) {
-                Constants.LOG.error("An Exception has Occurred while Loading Translation Mappings, Things may not Work well...");
+                Constants.LOG.error("An Exception has Occurred while Loading Translation Mappings, Things may not work well...");
                 ex.printStackTrace();
             }
         } else {
-            Constants.LOG.error("Translations for " + modID + " do not exist at " + languageID);
+            Constants.LOG.error("Translations for " + modID + " do not exist for " + languageID);
             requestMap.put(languageID, false);
             setLanguage("en_us");
         }
