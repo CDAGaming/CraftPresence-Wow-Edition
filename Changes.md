@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.2 (03/29/2019)
+## v1.5.2 (03/22/2019)
 
 ### Changes:
 
@@ -10,11 +10,13 @@
 
 * Refactored Translation System (Added a Fallback for if I18n Fails, and for Older Versions of Minecraft)
 
-* Java/JRE 1.6 Compatibility
+* Added Support for Java/JRE 1.6
 
 * Deprecated Support of Loading Messages due to Changes in 1.13 and above (Mod now Initializes once on Main Menu and after the Loading Splash Screen)
 
 ### Fixes:
+
+* Fixes a NPE Crash with Getting Dimensions on Minecraft 1.8.9 and Below
 
 * Fixes a Major Crash that occurred if All Config Options are not Present (Read Error on Empty Config File)
 

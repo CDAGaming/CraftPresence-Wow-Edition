@@ -12,42 +12,42 @@ import java.util.Map;
 
 public class TranslationHandler {
     public static TranslationHandler instance;
-    private String languageID = "en_us", modID;
+    private String languageID = "en_US", modID;
     private Map<String, String> translationMap = Maps.newHashMap();
     private Map<String, Boolean> requestMap = Maps.newHashMap();
     private Minecraft mc = Minecraft.getMinecraft();
     private boolean usingJSON = false;
 
     public TranslationHandler() {
-        setLanguage(mc.gameSettings.language.toLowerCase());
+        setLanguage(mc.gameSettings.language);
         setUsingJSON(false);
         getTranslationMap();
     }
 
     public TranslationHandler(final boolean useJSON) {
-        setLanguage(mc.gameSettings.language.toLowerCase());
+        setLanguage(mc.gameSettings.language);
         setUsingJSON(useJSON);
         getTranslationMap();
     }
 
     public TranslationHandler(final String modID) {
-        setLanguage(mc.gameSettings.language.toLowerCase());
+        setLanguage(mc.gameSettings.language);
         setModID(modID);
         setUsingJSON(false);
         getTranslationMap();
     }
 
     public TranslationHandler(final String modID, final boolean useJSON) {
-        setLanguage(mc.gameSettings.language.toLowerCase());
+        setLanguage(mc.gameSettings.language);
         setModID(modID);
         setUsingJSON(useJSON);
         getTranslationMap();
     }
 
     void tick() {
-        if (!languageID.equals(mc.gameSettings.language.toLowerCase()) &&
-                (!requestMap.containsKey(mc.gameSettings.language.toLowerCase()) || requestMap.get(mc.gameSettings.language.toLowerCase()))) {
-            setLanguage(mc.gameSettings.language.toLowerCase());
+        if (!languageID.equals(mc.gameSettings.language) &&
+                (!requestMap.containsKey(mc.gameSettings.language) || requestMap.get(mc.gameSettings.language))) {
+            setLanguage(mc.gameSettings.language);
             getTranslationMap();
         }
     }
@@ -60,7 +60,7 @@ public class TranslationHandler {
         if (!StringHandler.isNullOrEmpty(languageID)) {
             this.languageID = languageID;
         } else {
-            this.languageID = "en_us";
+            this.languageID = "en_US";
         }
     }
 
@@ -78,9 +78,12 @@ public class TranslationHandler {
         InputStream in = TranslationHandler.class.getResourceAsStream("/assets/"
                 + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
                 "lang/" + languageID + (usingJSON ? ".json" : ".lang"));
+        InputStream fallbackIn = TranslationHandler.class.getResourceAsStream("/assets/"
+                + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
+                "lang/" + languageID.toLowerCase() + (usingJSON ? ".json" : ".lang"));
 
-        if (in != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        if (in != null || fallbackIn != null) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn));
             try {
                 String currentString;
                 while ((currentString = reader.readLine()) != null) {
@@ -96,7 +99,13 @@ public class TranslationHandler {
                         }
                     }
                 }
-                in.close();
+
+                if (in != null) {
+                    in.close();
+                }
+                if (fallbackIn != null) {
+                    fallbackIn.close();
+                }
             } catch (Exception ex) {
                 Constants.LOG.error("An Exception has Occurred while Loading Translation Mappings, Things may not work well...");
                 ex.printStackTrace();
@@ -104,7 +113,7 @@ public class TranslationHandler {
         } else {
             Constants.LOG.error("Translations for " + modID + " do not exist for " + languageID);
             requestMap.put(languageID, false);
-            setLanguage("en_us");
+            setLanguage("en_US");
         }
     }
 
