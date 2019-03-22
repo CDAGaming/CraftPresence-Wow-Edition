@@ -12,6 +12,8 @@
 
 * Added Support for Java/JRE 1.6
 
+* Several Config Options no longer require the RPC to Reboot, saving some CPU Energy for other tasks
+
 * Dimension Format is now fully lowercase with underscores replacing spaces for a universal format (May Break some Configs!)
 
 * Compatibility Patches for Lower Versions of Minecraft

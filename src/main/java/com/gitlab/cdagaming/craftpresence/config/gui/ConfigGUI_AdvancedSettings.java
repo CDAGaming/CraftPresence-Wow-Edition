@@ -129,8 +129,6 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                 if (CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
                     CraftPresence.GUIS.getGUIs();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                } else {
-                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.enablePERGUI = enablePerGUIButton.isChecked();
             }
@@ -139,8 +137,6 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                 if (CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
                     CraftPresence.ENTITIES.getEntities();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                } else {
-                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
             }

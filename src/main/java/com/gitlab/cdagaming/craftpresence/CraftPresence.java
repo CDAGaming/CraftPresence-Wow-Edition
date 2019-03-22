@@ -87,7 +87,7 @@ public class CraftPresence {
         Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         CommandHandler.init();
-        CommandHandler.reloadData();
+        CommandHandler.reloadData(false);
 
         try {
             CLIENT.CLIENT_ID = CONFIG.clientID;
@@ -107,7 +107,7 @@ public class CraftPresence {
         if (!initialized && instance.currentScreen instanceof GuiMainMenu) {
             init();
         } else if (initialized) {
-            CommandHandler.reloadData();
+            CommandHandler.reloadData(false);
 
             if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
                 DIMENSIONS.getDimensions();
@@ -128,11 +128,6 @@ public class CraftPresence {
             if (!CONFIG.hasChanged) {
                 if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !GUIS.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandHandler.setMainMenuPresence();
-                }
-
-                if (CONFIG.rebootOnWorldLoad && player != null) {
-                    CommandHandler.rebootRPC();
-                    CONFIG.rebootOnWorldLoad = false;
                 }
 
                 if (awaitingReply && TIMER == 0) {

@@ -55,7 +55,7 @@ public class ConfigHandler {
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // CLASS-SPECIFIC - PUBLIC
-    public boolean hasChanged = false, hasClientPropertiesChanged = false, rebootOnWorldLoad = false;
+    public boolean hasChanged = false, hasClientPropertiesChanged = false;
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE

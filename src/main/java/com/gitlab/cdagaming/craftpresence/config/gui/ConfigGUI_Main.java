@@ -126,20 +126,13 @@ public class ConfigGUI_Main extends GuiScreen {
         } else if (button.id == advancedSet.id) {
             mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(currentScreen));
         } else if (button.id == proceedButton.id) {
-            boolean rebooted = false;
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
                 CraftPresence.CONFIG.read();
+                CommandHandler.reloadData(true);
                 if (CraftPresence.CONFIG.hasClientPropertiesChanged) {
                     CommandHandler.rebootRPC();
-                    rebooted = true;
                     CraftPresence.CONFIG.hasClientPropertiesChanged = false;
-                }
-                if (mc.player != null && CraftPresence.CONFIG.rebootOnWorldLoad) {
-                    if (!rebooted) {
-                        CommandHandler.rebootRPC();
-                    }
-                    CraftPresence.CONFIG.rebootOnWorldLoad = false;
                 }
                 CraftPresence.CONFIG.hasChanged = false;
             }
@@ -161,12 +154,11 @@ public class ConfigGUI_Main extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            if (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged || CraftPresence.CONFIG.rebootOnWorldLoad) {
+            if (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged) {
                 CraftPresence.CONFIG.setupInitialValues();
                 CraftPresence.CONFIG.read();
                 CraftPresence.CONFIG.hasChanged = false;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = false;
-                CraftPresence.CONFIG.rebootOnWorldLoad = false;
             }
             CraftPresence.GUIS.configGUIOpened = false;
         }

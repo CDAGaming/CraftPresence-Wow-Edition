@@ -11,7 +11,7 @@ import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
 import net.minecraft.client.Minecraft;
 
 public class CommandHandler {
-    public static void reloadData() {
+    public static void reloadData(final boolean forceUpdateRPC) {
         CraftPresence.instance = Minecraft.getMinecraft();
         CraftPresence.player = CraftPresence.instance.player;
 
@@ -22,6 +22,24 @@ public class CommandHandler {
         CraftPresence.GUIS.onTick();
         CraftPresence.ENTITIES.onTick();
         CraftPresence.SERVER.onTick();
+
+        if (forceUpdateRPC) {
+            if (CraftPresence.DIMENSIONS.isInUse) {
+                CraftPresence.DIMENSIONS.updateDimensionPresence();
+            }
+            if (CraftPresence.GUIS.isInUse) {
+                CraftPresence.GUIS.updateGUIPresence();
+            }
+            if (CraftPresence.ENTITIES.isInUse) {
+                CraftPresence.ENTITIES.updateEntityPresence();
+            }
+            if (CraftPresence.SERVER.isInUse) {
+                CraftPresence.SERVER.updateServerPresence();
+            }
+            if (CraftPresence.BIOMES.isInUse) {
+                CraftPresence.BIOMES.updateBiomePresence();
+            }
+        }
     }
 
     public static void rebootRPC() {

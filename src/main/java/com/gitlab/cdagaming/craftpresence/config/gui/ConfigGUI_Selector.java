@@ -124,7 +124,6 @@ public class ConfigGUI_Selector extends GuiScreen {
                             final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
                             CraftPresence.CONFIG.hasChanged = true;
-                            CraftPresence.CONFIG.rebootOnWorldLoad = true;
                             if (StringHandler.isNullOrEmpty(currentDimensionMSG) || currentDimensionMSG.equals(defaultDimensionMSG)) {
                                 CraftPresence.CONFIG.dimensionMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
                             }
@@ -135,7 +134,6 @@ public class ConfigGUI_Selector extends GuiScreen {
                             final String currentServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
                             CraftPresence.CONFIG.hasChanged = true;
-                            CraftPresence.CONFIG.rebootOnWorldLoad = true;
                             if (StringHandler.isNullOrEmpty(currentServerMSG) || currentServerMSG.equals(defaultServerMSG)) {
                                 CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
                             }

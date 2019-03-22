@@ -160,8 +160,6 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 if (CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
                     CraftPresence.BIOMES.getBiomes();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                } else {
-                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.showCurrentBiome = showBiomeButton.isChecked();
             }
@@ -170,8 +168,6 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
                 if (CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
                     CraftPresence.DIMENSIONS.getDimensions();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                } else {
-                    CraftPresence.CONFIG.rebootOnWorldLoad = true;
                 }
                 CraftPresence.CONFIG.showCurrentDimension = showDimensionButton.isChecked();
             }

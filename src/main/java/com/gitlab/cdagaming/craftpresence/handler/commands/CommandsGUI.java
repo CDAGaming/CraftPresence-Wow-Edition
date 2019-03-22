@@ -144,22 +144,7 @@ public class CommandsGUI extends GuiScreen {
                     }
                 } else if (executionCommandArgs[0].equalsIgnoreCase("reload")) {
                     executionString = Constants.TRANSLATOR.translate("craftpresence.command.reload");
-                    CommandHandler.reloadData();
-                    if (CraftPresence.DIMENSIONS.isInUse) {
-                        CraftPresence.DIMENSIONS.updateDimensionPresence();
-                    }
-                    if (CraftPresence.GUIS.isInUse) {
-                        CraftPresence.GUIS.updateGUIPresence();
-                    }
-                    if (CraftPresence.ENTITIES.isInUse) {
-                        CraftPresence.ENTITIES.updateEntityPresence();
-                    }
-                    if (CraftPresence.SERVER.isInUse) {
-                        CraftPresence.SERVER.updateServerPresence();
-                    }
-                    if (CraftPresence.BIOMES.isInUse) {
-                        CraftPresence.BIOMES.updateBiomePresence();
-                    }
+                    CommandHandler.reloadData(true);
                     executionString = Constants.TRANSLATOR.translate("craftpresence.command.reload.complete");
                 } else if (executionCommandArgs[0].equalsIgnoreCase("shutdown")) {
                     executionString = Constants.TRANSLATOR.translate("craftpresence.command.shutdown.pre");
