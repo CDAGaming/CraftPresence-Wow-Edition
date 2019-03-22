@@ -162,19 +162,24 @@ public class ConfigGUI_Editor extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 if (parentScreen instanceof ConfigGUI_BiomeSettings) {
                     CraftPresence.CONFIG.biomeMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.biomeMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                    CraftPresence.BIOMES.BIOME_NAMES.remove(attributeName);
                     CraftPresence.BIOMES.getBiomes();
                 } else if (parentScreen instanceof ConfigGUI_DimensionSettings) {
                     CraftPresence.CONFIG.dimensionMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                    CraftPresence.DIMENSIONS.DIMENSION_NAMES.remove(attributeName);
                     CraftPresence.DIMENSIONS.getDimensions();
                 } else if (parentScreen instanceof ConfigGUI_ServerSettings) {
                     CraftPresence.CONFIG.serverMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.serverMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                    CraftPresence.SERVER.knownAddresses.remove(attributeName);
                     CraftPresence.SERVER.getServerAddresses();
                 } else if (parentScreen instanceof ConfigGUI_AdvancedSettings) {
                     if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
                         CraftPresence.CONFIG.guiMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.guiMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                        CraftPresence.GUIS.GUI_NAMES.remove(attributeName);
                         CraftPresence.GUIS.getGUIs();
                     } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                         CraftPresence.CONFIG.itemMessages = StringHandler.removeFromArray(CraftPresence.CONFIG.itemMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                        CraftPresence.ENTITIES.ENTITY_NAMES.remove(attributeName);
                         CraftPresence.ENTITIES.getEntities();
                     }
                 }
