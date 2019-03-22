@@ -122,6 +122,7 @@ gui.config.comment.advanced.itemmessages=Customize Messages to display with Item
 key.craftpresence.category=CraftPresence - KeyBindings
 key.craftpresence.config_keybind=Open Config GUI
 ## DEFAULT MESSAGES ##
+craftpresence.message.unsupported=This Feature is not Supported in this Version of Minecraft
 craftpresence.defaults.servermessages.servername=Minecraft Server
 craftpresence.defaults.servermessages.servermotd=A Minecraft Server
 craftpresence.defaults.state.mainmenu=In the Main Menu

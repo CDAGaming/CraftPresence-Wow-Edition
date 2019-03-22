@@ -60,7 +60,7 @@ public class DimensionHandler {
 
     private void updateDimensionData() {
         final DimensionType newDimensionType = CraftPresence.player.world.provider.getDimensionType();
-        final String newDimensionName = newDimensionType.getName();
+        final String newDimensionName = StringHandler.formatDimensionName(newDimensionType.getName(), false);
         final Integer newDimensionID = newDimensionType.getId();
         if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
             CURRENT_DIMENSION_NAME = newDimensionName;
@@ -77,15 +77,15 @@ public class DimensionHandler {
         }
     }
 
-    private void updateDimensionPresence() {
+    public void updateDimensionPresence() {
         final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
-        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME);
+        final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, StringHandler.formatDimensionName(CURRENT_DIMENSION_NAME, true), 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
+        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, StringHandler.formatDimensionName(CURRENT_DIMENSION_NAME, true), 0, 2, CraftPresence.CONFIG.splitCharacter, StringHandler.formatDimensionName(CURRENT_DIMENSION_NAME, true));
         final String formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
         CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
 
-        CraftPresence.CLIENT.DETAILS = currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME).replace("The", "")).replace("&id&", CURRENT_DIMENSION_ID.toString());
+        CraftPresence.CLIENT.DETAILS = StringHandler.formatWord(currentDimensionMSG.replace("&dimension&", StringHandler.formatWord(CURRENT_DIMENSION_NAME)).replace("&id&", CURRENT_DIMENSION_ID.toString()));
         if (!CraftPresence.ENTITIES.isInUse || CraftPresence.ENTITIES.allItemsEmpty) {
             CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
             queuedForUpdate = false;
@@ -115,8 +115,8 @@ public class DimensionHandler {
     public void getDimensions() {
         for (DimensionType TYPE : getDimensionTypes()) {
             if (TYPE != null) {
-                if (!DIMENSION_NAMES.contains(TYPE.getName())) {
-                    DIMENSION_NAMES.add(TYPE.getName());
+                if (!DIMENSION_NAMES.contains(StringHandler.formatDimensionName(TYPE.getName(), true))) {
+                    DIMENSION_NAMES.add(StringHandler.formatDimensionName(TYPE.getName(), true));
                 }
                 if (!DIMENSION_IDS.contains(TYPE.getId())) {
                     DIMENSION_IDS.add(TYPE.getId());
@@ -130,8 +130,8 @@ public class DimensionHandler {
         for (String dimensionMessage : CraftPresence.CONFIG.dimensionMessages) {
             if (!StringHandler.isNullOrEmpty(dimensionMessage)) {
                 final String[] part = dimensionMessage.split(CraftPresence.CONFIG.splitCharacter);
-                if (!StringHandler.isNullOrEmpty(part[0]) && !DIMENSION_NAMES.contains(part[0])) {
-                    DIMENSION_NAMES.add(part[0]);
+                if (!StringHandler.isNullOrEmpty(part[0]) && !DIMENSION_NAMES.contains(StringHandler.formatDimensionName(part[0], true))) {
+                    DIMENSION_NAMES.add(StringHandler.formatDimensionName(part[0], true));
                 }
             }
         }

@@ -204,7 +204,7 @@ public class ServerHandler {
         }
     }
 
-    private void updateServerPresence() {
+    public void updateServerPresence() {
         if (!CraftPresence.instance.isSingleplayer() && !isOnLAN && currentServerData != null) {
             // NOTE: Server-Only Presence Updates
             final String defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);

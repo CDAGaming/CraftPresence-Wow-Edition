@@ -89,6 +89,18 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &LEGS& - The Current Leggings Armor Piece you have Equipped
 - &BOOTS& - The Current Boots Armor Piece you have Equipped
 
+## Versions of CraftPresence
+Beginning in v1.5.2, CraftPresence is now split into two different Editions, based on the MC Version you use it in:
+
+- Full Version (MC 1.3.2 - 1.14.x) includes All Features of CraftPresence at Full Support for Issues
+  - In MC 1.5.2 and Below, a Separate Translation Engine is being used, and may cause issues (In Higher Versions, this is only used as a fallback)
+
+- Legacy Version (MC 1.2.5 and Below)
+  - Unavailable Server Support in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
+  - GUI Scaling is Bugged due to an Issue with MC's Scale Factor (This will not effect those on Auto Scaling)
+  - Text Wrapping is Unsupported and does not currently work
+  - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
+
 ## Disclaimer
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
 Service (In this Case, Discord).

@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.2 (03/22/2019)
+## v1.5.2 (03/29/2019)
 
 ### Changes:
 
@@ -12,9 +12,17 @@
 
 * Added Support for Java/JRE 1.6
 
+* Dimension Format is now fully lowercase with underscores replacing spaces for a universal format (May Break some Configs!)
+
+* Compatibility Patches for Lower Versions of Minecraft
+
 * Deprecated Support of Loading Messages due to Changes in 1.13 and above (Mod now Initializes once on Main Menu and after the Loading Splash Screen)
 
 ### Fixes:
+
+* Fixes ANY repeating Text in Formatted Strings, no longer just "The" for Dimensions
+
+* Fixes a Crash when Removing a Value in Config GUI
 
 * Fixes a NPE Crash with Getting Dimensions on Minecraft 1.8.9 and Below
 
@@ -96,8 +104,10 @@ Ports of this Mod for Minecraft Versions 1.5.2 and Lower are on very limited sup
 
 Please Keep in Mind the Following:
 
-* Ensure that you also Download and Have the Required Libraries (Posted in Additional Files Section on CurseForge)
+* There is NO Support for Server RPC Displays from MC 1.2.5 and Below, due to Modding Limitations.
 
-* Store the Required Libraries in your .minecraft/bin or .minecraft/libraries Folder, depending on how your .minecraft folder is setup
+* Bugs that Relate with Issues in Vanilla Code, are unlikely able to be fixed due to MC's Limitations
 
-* In the Legacy Builds, a different Translation Engine is being used instead of I18n. Please Report any Issues that come up as a result of this Change
+* In the Legacy Builds, a different Translation Engine is being used instead of I18n. Please Report any Issues that come up as a result of this Change.
+
+Please See Mod Description // README for More Info

@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
+import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
@@ -72,8 +73,8 @@ public class StringHandler {
         if (isNullOrEmpty(formattedKey)) {
             return formattedKey;
         } else {
-            if (formattedKey.contains(" ")) {
-                formattedKey = formattedKey.replaceAll(" ", "");
+            if (formattedKey.contains("\\s")) {
+                formattedKey = formattedKey.replaceAll("\\s+", "");
             }
             if (formattedKey.contains("'")) {
                 formattedKey = formattedKey.replaceAll("'", "");
@@ -121,7 +122,7 @@ public class StringHandler {
 
     public static String[] removeFromArray(final String[] originalArray, final String searchTerm, final int searchIndex, final String splitCharacter) {
         int indexNumber = 0;
-        List<String> formatted = Arrays.asList(originalArray);
+        List<String> formatted = Lists.newLinkedList(Arrays.asList(originalArray));
         if (!isNullOrEmpty(formatted.toString())) {
             for (String part : formatted) {
                 String[] splitPart = part.split(splitCharacter);
@@ -156,7 +157,7 @@ public class StringHandler {
         String searchKey = searchTerm;
 
         if (searchKey.contains(" ")) {
-            searchKey = searchKey.replaceAll(" ", "");
+            searchKey = searchKey.replaceAll("\\s+", "");
         }
 
         if (!isNullOrEmpty(Arrays.toString(formatted))) {
@@ -192,18 +193,70 @@ public class StringHandler {
             if (formattedKey.contains("-")) {
                 formattedKey = formattedKey.replaceAll("-", " ");
             }
+            if (formattedKey.contains(" ")) {
+                formattedKey = formattedKey.replaceAll("\\s+", " ");
+            }
             if (BRACKET_PATTERN.matcher(formattedKey).find()) {
                 formattedKey = BRACKET_PATTERN.matcher(formattedKey).replaceAll("");
             }
             if (STRIP_COLOR_PATTERN.matcher(formattedKey).find()) {
                 formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
             }
-            return capitalizeWord(formattedKey);
+
+            return removeRepeatWords(capitalizeWord(formattedKey)).trim();
+        }
+    }
+
+    public static String removeRepeatWords(final String original) {
+        if (isNullOrEmpty(original)) {
+            return original;
+        } else {
+            String lastWord = "";
+            StringBuilder finalString = new StringBuilder();
+            String[] wordList = original.split(" ");
+
+            for (String word : wordList) {
+                if (isNullOrEmpty(lastWord) || !word.equals(lastWord)) {
+                    finalString.append(word).append(" ");
+                    lastWord = word;
+                }
+            }
+
+            return finalString.toString().trim();
+        }
+    }
+
+    public static String formatDimensionName(final String dimName, final boolean formatToID) {
+        StringBuilder formattedKey = new StringBuilder(dimName);
+        if (isNullOrEmpty(formattedKey.toString())) {
+            return formattedKey.toString();
+        } else {
+            if (formattedKey.toString().contains("WorldProvider")) {
+                formattedKey = new StringBuilder(formattedKey.toString().replace("WorldProvider", ""));
+            }
+
+            if (formattedKey.toString().contains(" ")) {
+                formattedKey = new StringBuilder(formattedKey.toString().replaceAll("\\s+", " "));
+            }
+
+            if (formattedKey.toString().equalsIgnoreCase("surface")) {
+                return "overworld";
+            } else if (formattedKey.toString().equalsIgnoreCase("hell") || formattedKey.toString().equalsIgnoreCase("nether")) {
+                return "the_nether";
+            } else if (formattedKey.toString().equalsIgnoreCase("end")) {
+                return "the_end";
+            } else {
+                if (formatToID) {
+                    return formattedKey.toString().trim().toLowerCase().replace(" ", "_");
+                } else {
+                    return formatWord(formattedKey.toString());
+                }
+            }
         }
     }
 
     public static String capitalizeWord(String str) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
 
         // Declare a character of space
         // To identify that the next character is the starting

@@ -166,7 +166,7 @@ public class EntityHandler {
         }
     }
 
-    private void updateEntityPresence() {
+    public void updateEntityPresence() {
         final String defaultItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         final String offHandItemMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_OFFHAND_ITEM_NAME);
