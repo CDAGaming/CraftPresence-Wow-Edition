@@ -160,13 +160,10 @@ public class GUIHandler {
                 Class guiClass;
                 try {
                     guiClass = Class.forName(info.getName());
-                } catch (NoClassDefFoundError ex) {
+                } catch (Error ex) {
                     EXCLUSIONS.add(info.getName());
                     continue;
-                } catch (ExceptionInInitializerError ex2) {
-                    EXCLUSIONS.add(info.getName());
-                    continue;
-                } catch (ClassNotFoundException ex3) {
+                } catch (Exception ex3) {
                     EXCLUSIONS.add(info.getName());
                     continue;
                 }
@@ -196,13 +193,10 @@ public class GUIHandler {
                 Class modGUIClass;
                 try {
                     modGUIClass = Class.forName(modClass);
-                } catch (NoClassDefFoundError ex) {
+                } catch (Error ex) {
                     EXCLUSIONS.add(modClass);
                     continue;
-                } catch (ExceptionInInitializerError ex2) {
-                    EXCLUSIONS.add(modClass);
-                    continue;
-                } catch (ClassNotFoundException ex3) {
+                } catch (Exception ex2) {
                     EXCLUSIONS.add(modClass);
                     continue;
                 }
