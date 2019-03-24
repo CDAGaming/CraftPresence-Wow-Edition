@@ -46,6 +46,8 @@
 
 * Fix enablePerGUI Crashing RPC before Main Menu due to a "pid error"
 
+* Fix Initialization for Mods that Edit the Main Menu
+
 * Disabling Commands no longer makes the Config GUI Inaccessible
 
 * Fix Missing Scroll List Methods in 1.13.2 Rift and 1.14 Fabric
