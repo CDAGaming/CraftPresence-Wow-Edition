@@ -7,7 +7,6 @@ import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import com.google.common.collect.Lists;
-import com.google.common.reflect.ClassPath;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -18,6 +17,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
 import java.util.List;
 
 @SuppressWarnings("TryWithIdenticalCatches")
@@ -117,98 +117,17 @@ public class GUIHandler {
         }
     }
 
-    // TODO: Find a Better and More Stable Implementation for ClassPath, that doesn't need Shading
-    @SuppressWarnings("UnstableApiUsage")
     public void getGUIs() {
-        final ClassLoader LOADER = Thread.currentThread().getContextClassLoader();
-        final String[] startingExclusions = new String[]{
-                "net.minecraft.network", "net.minecraft.server"
-        };
-        final Class[] startingAllowedClasses = new Class[]{
+        final Class[] searchClasses = new Class[]{
                 GuiScreen.class, GuiContainer.class
         };
 
-        for (String exclusion : startingExclusions) {
-            if (!EXCLUSIONS.contains(exclusion)) {
-                EXCLUSIONS.add(exclusion);
+        for (Class classObj : FileHandler.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+            if (!GUI_NAMES.contains(classObj.getSimpleName())) {
+                GUI_NAMES.add(classObj.getSimpleName());
             }
-        }
-
-        for (Class allowedClass : startingAllowedClasses) {
-            if (!allowedClasses.contains(allowedClass)) {
-                allowedClasses.add(allowedClass);
-            }
-        }
-
-        final List<ClassPath.ClassInfo> classes = Lists.newArrayList();
-        try {
-            classes.addAll(ClassPath.from(LOADER).getTopLevelClasses());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        for (ClassPath.ClassInfo info : classes) {
-            boolean hasExclusions = false;
-            for (String exclusion : EXCLUSIONS) {
-                if (info.getName().startsWith(exclusion) || info.getName().contains(exclusion) || info.getName().equals(exclusion)) {
-                    hasExclusions = true;
-                    break;
-                }
-            }
-
-            if (!hasExclusions && info.getName().startsWith("net.minecraft.")) {
-                Class guiClass;
-                try {
-                    guiClass = Class.forName(info.getName());
-                } catch (Error ex) {
-                    EXCLUSIONS.add(info.getName());
-                    continue;
-                } catch (Exception ex3) {
-                    EXCLUSIONS.add(info.getName());
-                    continue;
-                }
-
-                if (guiClass != null && guiClass.getSuperclass() != null && (allowedClasses.contains(guiClass.getSuperclass()) || GUI_CLASSES.contains(guiClass.getSuperclass()))) {
-                    if (!GUI_NAMES.contains(guiClass.getSimpleName())) {
-                        GUI_NAMES.add(guiClass.getSimpleName());
-                    }
-                    if (!GUI_CLASSES.contains(guiClass)) {
-                        GUI_CLASSES.add(guiClass);
-                    }
-                }
-            }
-        }
-
-        for (String modClass : FileHandler.getModClassNames()) {
-            boolean hasExclusions = false;
-
-            for (String exclusion : EXCLUSIONS) {
-                if (modClass.contains(exclusion) || modClass.equals(exclusion)) {
-                    hasExclusions = true;
-                    break;
-                }
-            }
-
-            if (!hasExclusions) {
-                Class modGUIClass;
-                try {
-                    modGUIClass = Class.forName(modClass);
-                } catch (Error ex) {
-                    EXCLUSIONS.add(modClass);
-                    continue;
-                } catch (Exception ex2) {
-                    EXCLUSIONS.add(modClass);
-                    continue;
-                }
-
-                if (modGUIClass != null && modGUIClass.getSuperclass() != null && (allowedClasses.contains(modGUIClass.getSuperclass()) || GUI_CLASSES.contains(modGUIClass.getSuperclass()))) {
-                    if (!GUI_NAMES.contains(modGUIClass.getSimpleName())) {
-                        GUI_NAMES.add(modGUIClass.getSimpleName());
-                    }
-                    if (!GUI_CLASSES.contains(modGUIClass)) {
-                        GUI_CLASSES.add(modGUIClass);
-                    }
-                }
+            if (!GUI_CLASSES.contains(classObj)) {
+                GUI_CLASSES.add(classObj);
             }
         }
 

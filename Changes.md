@@ -12,6 +12,8 @@
 
 * Added Support for Java/JRE 1.6
 
+* Overhaul Per-GUI System Detection (Should be more CPU-Safe)
+
 * Several Config Options no longer require the RPC to Reboot, saving some CPU Energy for other tasks
 
 * Dimension Format is now fully lowercase with underscores replacing spaces for a universal format (May Break some Configs!)
@@ -41,6 +43,8 @@
 * Fix Default Server Name listing as selectServer.defaultName
 
 * Fix onJoinRequest Callback not opening the Commands GUI
+
+* Fix enablePerGUI Crashing RPC before Main Menu due to a "pid error"
 
 * Disabling Commands no longer makes the Config GUI Inaccessible
 

@@ -31,6 +31,7 @@ public class Constants {
     public static final Logger LOG = LogManager.getLogger(MODID);
     public static final TranslationHandler TRANSLATOR = new TranslationHandler(MODID, false);
     public static final boolean IS_DEV = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+    public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
 
     static void loadDLL(final boolean Update) {
         boolean UpdateStatus = Update;

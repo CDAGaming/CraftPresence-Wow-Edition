@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.io.FileUtils;
@@ -84,6 +85,86 @@ public class FileHandler {
             }
         }
         return modCount;
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public static List<Class> getClassNamesMatchingSuperType(final List<Class> searchList, final String... sourcePackages) {
+        final List<Class> matchingClasses = Lists.newArrayList();
+        final List<ClassPath.ClassInfo> classList = Lists.newArrayList();
+
+        // Attempt to Get Top Level Classes from the JVM Class Loader as Well as Mod Classes
+        try {
+            classList.addAll(ClassPath.from(Constants.CLASS_LOADER).getTopLevelClasses());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        //Attempt to Add Classes Matching any of the Source Packages
+        for (ClassPath.ClassInfo classInfo : classList) {
+            try {
+                boolean clearToContinue = false;
+                Class originalClassObj = null;
+                Class currentClassObj = null;
+                List<Class> superClassList = Lists.newArrayList();
+
+                for (String startString : sourcePackages) {
+                    if (classInfo.getName().startsWith(startString)) {
+                        clearToContinue = true;
+                        originalClassObj = Class.forName(classInfo.getName());
+                        currentClassObj = originalClassObj;
+                        break;
+                    }
+                }
+
+                if (clearToContinue && originalClassObj != null) {
+                    // Add All SuperClasses of this Class to a List
+                    while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
+                        superClassList.add(currentClassObj.getSuperclass());
+                        currentClassObj = currentClassObj.getSuperclass();
+                    }
+
+                    // If Match is Found, add original Class to final List, and add all Super Classes to search List
+                    if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+                        matchingClasses.add(originalClassObj);
+                        searchList.addAll(superClassList);
+                    }
+                }
+            } catch (Exception ignored) {
+                // Ignore this Exception and Continue
+            } catch (Error ignored) {
+                // Ignore this Error and Continue
+            }
+        }
+
+        // Attempt to Retrieve Mod Classes
+        for (String modClassString : getModClassNames()) {
+            Class modClassObj, currentClassObj;
+            List<Class> superClassList = Lists.newArrayList();
+
+            try {
+                modClassObj = Class.forName(modClassString);
+                currentClassObj = modClassObj;
+
+                if (modClassObj != null) {
+                    // Add all SuperClasses of Mod Class to a List
+                    while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
+                        superClassList.add(currentClassObj.getSuperclass());
+                        currentClassObj = currentClassObj.getSuperclass();
+                    }
+
+                    // If Match is Found, add original Class to final List, and add all Super Classes to search List
+                    if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+                        matchingClasses.add(modClassObj);
+                        searchList.addAll(superClassList);
+                    }
+                }
+            } catch (Exception ignored) {
+                // Ignore this Exception and Continue
+            } catch (Error ignored) {
+                // Ignore this Error and Continue
+            }
+        }
+        return matchingClasses;
     }
 
     public static List<String> getModClassNames() {
