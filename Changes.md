@@ -1,10 +1,10 @@
 # CraftPresence Changes
 
-## v1.5.3 (03/29/2019)
+## v1.5.3 (04/05/2019)
 
 ### Changes:
 
-* ???
+* Per-GUI Implementation Updated to allow Sub Classes (Forge ConfigGUI Compatibility)
 
 ### Fixes:
 
@@ -12,11 +12,15 @@
 
 * Fixes GUI Scaling Issue on Legacy Versions of CraftPresence
 
+* Fixes Multiple Per-GUI System Issues relating to Ticking and Getting Available GUIs
+
+* Now Remove GUI Line (GAME_STATE) if no GUI is Open
+
 * Fixes an Infinite Loop if Dimension Name was from an Incorrectly made WorldProvider
 
 ### More Information:
 
-#### Keybinding / Control Menu Fix Notes:
+#### KeyBinding / Control Menu Fix Notes:
 
 The Fixes for the Control Menu Crashes in Rift 1.13.2 required the merging of [this PR on Chocohead's Rift Repository](https://github.com/Chocohead/Rift/pull/11)
 

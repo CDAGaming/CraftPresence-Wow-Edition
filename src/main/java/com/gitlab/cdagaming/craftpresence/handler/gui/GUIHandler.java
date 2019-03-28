@@ -1,6 +1,5 @@
 package com.gitlab.cdagaming.craftpresence.handler.gui;
 
-import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;

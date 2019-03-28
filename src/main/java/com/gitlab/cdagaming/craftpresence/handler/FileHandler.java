@@ -89,9 +89,8 @@ public class FileHandler {
 
     @SuppressWarnings("UnstableApiUsage")
     public static List<Class> getClassNamesMatchingSuperType(final List<Class> searchList, final String... sourcePackages) {
-        final List<Class> matchingClasses = Lists.newArrayList();
+        final List<Class> matchingClasses = Lists.newArrayList(), availableClassList = Lists.newArrayList();
         final List<ClassPath.ClassInfo> classList = Lists.newArrayList();
-        List<Class> currentSearchList = Lists.newLinkedList(searchList);
 
         // Attempt to Get Top Level Classes from the JVM Class Loader
         try {
@@ -100,46 +99,42 @@ public class FileHandler {
             ex.printStackTrace();
         }
 
-        //Attempt to Add Classes Matching any of the Source Packages
         for (ClassPath.ClassInfo classInfo : classList) {
-            boolean clearToContinue = false;
-            Class originalClassObj = null;
-            Class currentClassObj = null;
-            List<Class> superClassList = Lists.newArrayList();
-
             for (String startString : sourcePackages) {
+                // Attempt to Add Classes Matching any of the Source Packages
                 if (classInfo.getName().startsWith(startString) && (!classInfo.getName().contains("FMLServerHandler"))) {
                     try {
-                        Constants.LOG.error(classInfo.getName() + " - Checked");
-                        originalClassObj = Class.forName(classInfo.getName());
-                        currentClassObj = originalClassObj;
+                        Class classObj = Class.forName(classInfo.getName());
+                        availableClassList.add(classObj);
+                        for (Class subClassObj : classObj.getClasses()) {
+                            if (!availableClassList.contains(subClassObj)) {
+                                availableClassList.add(subClassObj);
+                            }
+                        }
                     } catch (Exception ignored) {
                         // Ignore this Exception and Continue
-                        continue;
                     } catch (Error ignored) {
                         // Ignore this Error and Continue
-                        continue;
-                    } finally {
-                        clearToContinue = true;
                     }
-                    break;
                 }
             }
+        }
 
-            if (clearToContinue && originalClassObj != null) {
-                // Add All SuperClasses of this Class to a List
-                while (currentClassObj.getSuperclass() != null && !currentSearchList.contains(currentClassObj.getSuperclass())) {
-                    superClassList.add(currentClassObj.getSuperclass());
-                    currentClassObj = currentClassObj.getSuperclass();
-                }
+        for (Class classObj : availableClassList) {
+            Class currentClassObj = classObj;
+            List<Class> superClassList = Lists.newArrayList();
 
-                // If Match is Found, add original Class to final List, and add all Super Classes to search List
-                if (currentClassObj.getSuperclass() != null && currentSearchList.contains(currentClassObj.getSuperclass())) {
-                    matchingClasses.add(originalClassObj);
-                    currentSearchList.addAll(superClassList);
-                }
+            // Add All SuperClasses of this Class to a List
+            while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
+                superClassList.add(currentClassObj.getSuperclass());
+                currentClassObj = currentClassObj.getSuperclass();
             }
 
+            // If Match is Found, add original Class to final List, and add all Super Classes to returning List
+            if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+                matchingClasses.add(classObj);
+                matchingClasses.addAll(superClassList);
+            }
         }
 
         // Attempt to Retrieve Mod Classes
@@ -153,15 +148,15 @@ public class FileHandler {
 
                 if (modClassObj != null) {
                     // Add all SuperClasses of Mod Class to a List
-                    while (currentClassObj.getSuperclass() != null && !currentSearchList.contains(currentClassObj.getSuperclass())) {
+                    while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
                         superClassList.add(currentClassObj.getSuperclass());
                         currentClassObj = currentClassObj.getSuperclass();
                     }
 
-                    // If Match is Found, add original Class to final List, and add all Super Classes to search List
-                    if (currentClassObj.getSuperclass() != null && currentSearchList.contains(currentClassObj.getSuperclass())) {
+                    // If Match is Found, add original Class to final List, and add all Super Classes to returning List
+                    if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
                         matchingClasses.add(modClassObj);
-                        currentSearchList.addAll(superClassList);
+                        matchingClasses.addAll(superClassList);
                     }
                 }
             } catch (Exception ignored) {
