@@ -1,7 +1,9 @@
 package com.gitlab.cdagaming.craftpresence.handler.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
+import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
@@ -25,8 +27,6 @@ public class GUIHandler {
     public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, enabled = false;
 
     public List<String> GUI_NAMES = Lists.newArrayList();
-    private List<String> EXCLUSIONS = Lists.newArrayList();
-    private List<Class> allowedClasses = Lists.newArrayList();
     private String CURRENT_GUI_NAME;
     private Class CURRENT_GUI_CLASS;
     private GuiScreen CURRENT_SCREEN;
@@ -77,7 +77,7 @@ public class GUIHandler {
 
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
-        isInUse = enabled && CraftPresence.instance.currentScreen != null;
+        isInUse = enabled && (CraftPresence.instance.currentScreen != null || CURRENT_SCREEN != null);
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
         if (needsUpdate) {
@@ -100,15 +100,26 @@ public class GUIHandler {
     }
 
     private void updateGUIData() {
-        if (CraftPresence.instance.currentScreen != null) {
-            final Class newScreenClass = CraftPresence.instance.currentScreen.getClass();
-            final String newScreenName = newScreenClass.getSimpleName();
+        if ((CURRENT_SCREEN != null && CraftPresence.instance.currentScreen == null) || (CURRENT_SCREEN == null && !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE)) || (isInUse && CommandHandler.isOnMainMenuPresence())) {
+            clearClientData();
+            CraftPresence.CLIENT.GAME_STATE = "";
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        } else {
+            if (CraftPresence.instance.currentScreen != null) {
+                final Class newScreenClass = CraftPresence.instance.currentScreen.getClass();
+                final String newScreenName = newScreenClass.getSimpleName();
 
-            if (!CraftPresence.instance.currentScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
-                CURRENT_SCREEN = CraftPresence.instance.currentScreen;
-                CURRENT_GUI_CLASS = newScreenClass;
-                CURRENT_GUI_NAME = newScreenName;
-                queuedForUpdate = true;
+                if (!CraftPresence.instance.currentScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
+                    CURRENT_SCREEN = CraftPresence.instance.currentScreen;
+                    CURRENT_GUI_CLASS = newScreenClass;
+                    CURRENT_GUI_NAME = newScreenName;
+                    queuedForUpdate = true;
+                }
+
+                // TODO: VERIFY
+                if (!GUI_NAMES.contains(newScreenName) || !GUI_CLASSES.contains(newScreenClass)) {
+                    getGUIs();
+                }
             }
         }
 

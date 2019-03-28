@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler.world;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class DimensionHandler {
     public boolean isInUse = false, enabled = false;
 
-    public String CURRENT_DIMENSION_NAME;
+    public String CURRENT_DIMENSION_NAME, CURRENT_DIMENSION_NAME_ID;
     public List<String> DIMENSION_NAMES = Lists.newArrayList();
     private List<Integer> DIMENSION_IDS = Lists.newArrayList();
     private List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
@@ -61,14 +62,16 @@ public class DimensionHandler {
     private void updateDimensionData() {
         final DimensionType newDimensionType = CraftPresence.player.world.provider.getDimensionType();
         final String newDimensionName = StringHandler.formatDimensionName(newDimensionType.getName(), false);
+        final String newDimensionNameID = StringHandler.formatDimensionName(newDimensionType.getName(), true);
         final Integer newDimensionID = newDimensionType.getId();
-        if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
+        if (!newDimensionNameID.equals(CURRENT_DIMENSION_NAME_ID) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
             CURRENT_DIMENSION_NAME = newDimensionName;
+            CURRENT_DIMENSION_NAME_ID = newDimensionNameID;
             CURRENT_DIMENSION_ID = newDimensionID;
             queuedForUpdate = true;
         }
 
-        if (!DIMENSION_TYPES.contains(newDimensionType)) {
+        if (!DIMENSION_NAMES.contains(newDimensionNameID) && !DIMENSION_TYPES.contains(newDimensionType)) {
             getDimensions();
         }
 

@@ -1,60 +1,18 @@
 # CraftPresence Changes
 
-## v1.5.2 (03/29/2019)
+## v1.5.3 (03/29/2019)
 
 ### Changes:
 
-* Added Translations for "Pinging...", "Polling..." and "Cannot connect" that are missing in some versions of MC
-
-* Added Translation for if a File Fails to be deleted in downloading or updating Discord DLLs
-
-* Refactored Translation System (Added a Fallback for if I18n Fails, and for Older Versions of Minecraft)
-
-* Added Support for Java/JRE 1.6
-
-* Overhaul Per-GUI System Detection (Should be more CPU-Safe)
-
-* Several Config Options no longer require the RPC to Reboot, saving some CPU Energy for other tasks
-
-* Dimension Format is now fully lowercase with underscores replacing spaces for a universal format (May Break some Configs!)
-
-* Compatibility Patches for Lower Versions of Minecraft
-
-* Deprecated Support of Loading Messages due to Changes in 1.13 and above (Mod now Initializes once on Main Menu and after the Loading Splash Screen)
+* ???
 
 ### Fixes:
 
-* Fixes ANY repeating Text in Formatted Strings, no longer just "The" for Dimensions
+* Fixes Constantly getting the Game Time, even If Server or SinglePlayer Message didn't have a time placeholder
 
-* Fixes a Crash when Removing a Value in Config GUI
+* Fixes GUI Scaling Issue on Legacy Versions of CraftPresence
 
-* Fixes a NPE Crash with Getting Dimensions on Minecraft 1.8.9 and Below
-
-* Fixes a Major Crash that occurred if All Config Options are not Present (Read Error on Empty Config File)
-
-* Fixes Improper "/cp view assets all" Command Output
-
-* Removed Extra Debug Logging when Using Tab Completion in CommandsGUI
-
-* Fixed Tab Completion not Functioning in 1.13.2 and 1.14
-
-* Fixed missing Null-Checks for the Notices in the About and NullEntry GUI, to prevent issues
-
-* Fix Default Server Name listing as selectServer.defaultName
-
-* Fix onJoinRequest Callback not opening the Commands GUI
-
-* Fix enablePerGUI Crashing RPC before Main Menu due to a "pid error"
-
-* Fix Initialization for Mods that Edit the Main Menu
-
-* Disabling Commands no longer makes the Config GUI Inaccessible
-
-* Fix Missing Scroll List Methods in 1.13.2 Rift and 1.14 Fabric
-
-* Fix Possible NPE from RPC Updates before DLL was Loaded
-
-* Fix Control Menu and KeyBinding Issues in 1.13.2 Rift and 1.14 Fabric Ports (See More Info)
+* Fixes an Infinite Loop if Dimension Name was from an Incorrectly made WorldProvider
 
 ### More Information:
 
