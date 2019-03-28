@@ -73,12 +73,12 @@ public class CommandHandler {
         CraftPresence.CLIENT.STATUS = "ready";
         CraftPresence.CLIENT.SMALLIMAGEKEY = "";
         CraftPresence.CLIENT.SMALLIMAGETEXT = "";
-        CraftPresence.CLIENT.GAME_STATE = "";
+        CraftPresence.CLIENT.GAME_STATE = !CraftPresence.GUIS.isInUse ? "" : CraftPresence.CLIENT.GAME_STATE;
         CraftPresence.CLIENT.PARTY_ID = "";
         CraftPresence.CLIENT.PARTY_SIZE = 0;
         CraftPresence.CLIENT.PARTY_MAX = 0;
         CraftPresence.CLIENT.JOIN_SECRET = "";
-        CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "";
+        CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled && !CraftPresence.GUIS.isInUse ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "";
         CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
         CraftPresence.CLIENT.LARGEIMAGETEXT = Constants.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", Constants.MCVersion);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
@@ -88,13 +88,13 @@ public class CommandHandler {
         return !CraftPresence.CONFIG.hasChanged &&
                 StringHandler.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGEKEY) &&
                 StringHandler.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGETEXT) &&
-                StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE) &&
+                (CraftPresence.GUIS.isInUse || StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE)) &&
                 StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) &&
                 CraftPresence.CLIENT.PARTY_SIZE == 0 &&
                 CraftPresence.CLIENT.PARTY_MAX == 0 &&
                 StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) &&
-                        CraftPresence.CLIENT.DETAILS.equals(CraftPresence.SERVER.enabled ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "")
+                        CraftPresence.CLIENT.DETAILS.equals(CraftPresence.SERVER.enabled && !CraftPresence.GUIS.enabled ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "")
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
                         CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)

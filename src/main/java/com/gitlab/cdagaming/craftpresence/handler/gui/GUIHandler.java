@@ -2,7 +2,6 @@ package com.gitlab.cdagaming.craftpresence.handler.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
-import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
@@ -99,7 +98,7 @@ public class GUIHandler {
     }
 
     private void updateGUIData() {
-        if ((CURRENT_SCREEN != null && CraftPresence.instance.currentScreen == null) || (CURRENT_SCREEN == null && !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE)) || (isInUse && CommandHandler.isOnMainMenuPresence())) {
+        if ((CURRENT_SCREEN != null && CraftPresence.instance.currentScreen == null) || (CURRENT_SCREEN == null && !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE))) {
             clearClientData();
             CraftPresence.CLIENT.GAME_STATE = "";
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
@@ -115,7 +114,6 @@ public class GUIHandler {
                     queuedForUpdate = true;
                 }
 
-                // TODO: VERIFY
                 if (!GUI_NAMES.contains(newScreenName) || !GUI_CLASSES.contains(newScreenClass)) {
                     getGUIs();
                 }
