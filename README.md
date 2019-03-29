@@ -102,7 +102,6 @@ Beginning in v1.5.2, CraftPresence is now split into two different Editions, bas
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
 ## Disclaimers
-
 #### GUI Support for Minecraft GUIs
 Due to Obfuscation from Mapping Providers, Minecraft GUIs must be opened once in order to be separately customized.
 
