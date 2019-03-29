@@ -112,8 +112,8 @@ gui.config.comment.statusmessages.placeholder.gametimemsg=Message to use for the
 gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder \n Available Placeholders: \n - &modcount& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs \n (You'll need to change each of your variables manually)
-gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Takes Effect after Restarting Minecraft)
-gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - Overwrites Biomes \n - Requires an Option in GUI Messages
+gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Enables Command GUI in Main Config GUI)
+gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - Overwrites Biomes \n - Requires an Option in GUI Messages \n - Minecraft's GUIs must be Opened once before Configuring due to Obfuscation
 gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding \n Note the Following: \n - Requires an Option in Item Messages
 gui.config.comment.advanced.overwriteservericon=Allows CraftPresence to overwrite the Server Icon and Text if a Pack is in use
 gui.config.comment.advanced.guimessages=Customize Messages to display with GUIs \n (Manual Format: gui;message) \n Available Placeholders: \n - &gui& = GUI Name \n - &class& = GUI Class Name \n - &screen& = GUI Screen Instance Name

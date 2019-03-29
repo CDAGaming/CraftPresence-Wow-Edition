@@ -27,7 +27,7 @@ CraftPresence currently offers the following Commands:
 
 (Commands must be prefixed by either `/craftpresence` or `/cp`)
 
-(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands in the Config GUI)
+(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands" in the Config GUI)
 
 - `/cp view` - Help Command to display Commands available to view a variety of Display Data
 - `/cp reload` - Reloads Mod Data (In v1.4.8 and Above, this forces a Tick Event)
@@ -76,7 +76,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &TIME& - The Current World Time
 - &MODS& - The Amount of Mods currently in your Mods Folder
 
-#### GUI Placeholders
+#### GUI Placeholders*
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)
 - &CLASS& - The Current GUI Class (Ex: net.minecraft.xxx)
 - &SCREEN& - The Current GUI Screen Instance
@@ -101,7 +101,12 @@ Beginning in v1.5.2, CraftPresence is now split into two different Editions, bas
   - Text Wrapping is Unsupported and does not currently work
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
-## Disclaimer
+## Disclaimers
+
+#### GUI Support for Minecraft GUIs
+Due to Obfuscation from Mapping Providers, Minecraft GUIs must be opened once in order to be separately customized.
+
+#### Discord TOS
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
 Service (In this Case, Discord).
 

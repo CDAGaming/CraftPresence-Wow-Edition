@@ -114,8 +114,12 @@ public class GUIHandler {
                     queuedForUpdate = true;
                 }
 
-                if (!GUI_NAMES.contains(newScreenName) || !GUI_CLASSES.contains(newScreenClass)) {
-                    getGUIs();
+                if (!GUI_NAMES.contains(newScreenName)) {
+                    GUI_NAMES.add(newScreenName);
+                }
+
+                if (!GUI_CLASSES.contains(newScreenClass)) {
+                    GUI_CLASSES.add(newScreenClass);
                 }
             }
         }
