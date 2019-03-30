@@ -61,9 +61,9 @@ public class ConfigGUI_Main extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = Constants.TRANSLATOR.translate("gui.config.title");
+        final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
 
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
         dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;

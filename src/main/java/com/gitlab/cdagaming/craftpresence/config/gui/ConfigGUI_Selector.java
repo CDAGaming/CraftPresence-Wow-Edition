@@ -21,14 +21,14 @@ public class ConfigGUI_Selector extends GuiScreen {
     private GUIExtendedButton proceedButton, addNewButton;
     private GUIScrollList scrollList;
     private GuiTextField searchBox;
-    private String title, configOption, attributeName, originalValue, searchTerm;
+    private String mainTitle, configOption, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
 
-    public ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String title, List<String> list, String currentValue, String attributeName) {
+    public ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName) {
         mc = CraftPresence.instance;
         itemList = originalList = list;
         originalValue = currentValue;
-        this.title = title;
+        this.mainTitle = mainTitle;
         this.parentScreen = parentScreen;
         this.attributeName = attributeName;
         this.configOption = configOption;
@@ -89,7 +89,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         scrollList.drawScreen(mouseX, mouseY, partialTicks);
         drawString(fontRenderer, searchText, (30 - (fontRenderer.getStringWidth(searchText) / 2)), (sr.getScaledHeight() - 25), 0xFFFFFF);
         searchBox.drawTextBox();
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         proceedButton.displayString = scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? Constants.TRANSLATOR.translate("gui.config.buttonMessage.continue") : Constants.TRANSLATOR.translate("gui.config.buttonMessage.back");
 

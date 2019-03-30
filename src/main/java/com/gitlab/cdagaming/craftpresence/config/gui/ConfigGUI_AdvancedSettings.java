@@ -63,10 +63,12 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = "CraftPresence - " + Constants.TRANSLATOR.translate("gui.config.title.advanced");
+        final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
+        final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.advanced");
         final String splitCharacterText = Constants.TRANSLATOR.translate("gui.config.name.advanced.splitcharacter");
 
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, splitCharacterText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         splitCharacter.drawTextBox();
 

@@ -291,7 +291,7 @@ public class StringHandler {
             }
             return Arrays.asList(formattedText.split("&newline&"));
         } else {
-            return null;
+            return Lists.newArrayList();
         }
     }
 

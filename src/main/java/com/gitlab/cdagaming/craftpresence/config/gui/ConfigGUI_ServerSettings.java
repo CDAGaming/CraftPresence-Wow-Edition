@@ -56,12 +56,14 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = "CraftPresence - " + Constants.TRANSLATOR.translate("gui.config.title.servermessages");
+        final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
+        final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.servermessages");
         final String serverNameText = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servername");
         final String serverMOTDText = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermotd");
         final String defaultMessageText = Constants.TRANSLATOR.translate("gui.config.defaultMessage.server");
 
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, serverNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         drawString(fontRenderer, serverMOTDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
         drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);

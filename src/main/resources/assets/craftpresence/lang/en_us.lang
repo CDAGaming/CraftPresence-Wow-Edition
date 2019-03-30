@@ -1,6 +1,6 @@
 #PARSE_ESCAPES
 ## CONFIG GUI - TITLE NAMES ##
-gui.config.title=CraftPresence Configuration GUI
+gui.config.title=CraftPresence - Configuration GUI
 gui.config.title.general=General Settings
 gui.config.title.biomemessages=Customize Biome Messages
 gui.config.title.dimensionmessages=Customize Dimension Messages

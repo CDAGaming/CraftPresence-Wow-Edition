@@ -6,13 +6,15 @@
 
 * Per-GUI Implementation Updated to allow Sub Classes (Forge ConfigGUI Compatibility)
 
-### Fixes:
+* Config GUI Text Adjustments
 
-* Fixes Constantly getting the Game Time, even If Server or SinglePlayer Message didn't have a time placeholder
+### Fixes:
 
 * Fixes GUI Scaling Issue on Legacy Versions of CraftPresence
 
 * Fixes Multiple Per-GUI System Issues relating to Ticking and Getting Available GUIs
+
+* Fixes a Possible NPE Retrieving Split New Line Strings
 
 * Now Remove GUI Line (GAME_STATE) if no GUI is Open
 

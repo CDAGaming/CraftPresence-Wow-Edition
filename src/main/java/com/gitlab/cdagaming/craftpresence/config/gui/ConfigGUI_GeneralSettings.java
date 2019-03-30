@@ -72,10 +72,12 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
-        final String title = "CraftPresence - " + Constants.TRANSLATOR.translate("gui.config.title.general");
+        final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
+        final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.general");
         final String clientIDText = Constants.TRANSLATOR.translate("gui.config.name.general.clientid");
 
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(fontRenderer, clientIDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
 

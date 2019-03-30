@@ -17,7 +17,7 @@ public class ConfigGUI_Editor extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private GUIExtendedButton proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
-    private String attributeName, configOption, specificMSG, defaultMSG, title, removeMSG;
+    private String attributeName, configOption, specificMSG, defaultMSG, mainTitle, removeMSG;
     private boolean isNewValue, isDefaultValue;
 
     ConfigGUI_Editor(GuiScreen parentScreen, String attributeName, String configOption) {
@@ -36,7 +36,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         ScaledResolution sr = new ScaledResolution(mc);
 
         if (isNewValue) {
-            title = Constants.TRANSLATOR.translate("gui.config.title.editor.addnew");
+            mainTitle = Constants.TRANSLATOR.translate("gui.config.title.editor.addnew");
             if (parentScreen instanceof ConfigGUI_BiomeSettings) {
                 specificMSG = defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
             } else if (parentScreen instanceof ConfigGUI_DimensionSettings) {
@@ -52,24 +52,24 @@ public class ConfigGUI_Editor extends GuiScreen {
             }
         } else {
             if (parentScreen instanceof ConfigGUI_BiomeSettings) {
-                title = Constants.TRANSLATOR.translate("gui.config.title.biome.editspecificbiome", attributeName);
+                mainTitle = Constants.TRANSLATOR.translate("gui.config.title.biome.editspecificbiome", attributeName);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ConfigGUI_DimensionSettings) {
-                title = Constants.TRANSLATOR.translate("gui.config.title.dimension.editspecificdimension", attributeName);
+                mainTitle = Constants.TRANSLATOR.translate("gui.config.title.dimension.editspecificdimension", attributeName);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ConfigGUI_ServerSettings) {
-                title = Constants.TRANSLATOR.translate("gui.config.title.server.editspecificserver", attributeName);
+                mainTitle = Constants.TRANSLATOR.translate("gui.config.title.server.editspecificserver", attributeName);
                 defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ConfigGUI_AdvancedSettings) {
                 if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
-                    title = Constants.TRANSLATOR.translate("gui.config.title.gui.editspecificgui", attributeName);
+                    mainTitle = Constants.TRANSLATOR.translate("gui.config.title.gui.editspecificgui", attributeName);
                     defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                    title = Constants.TRANSLATOR.translate("gui.config.title.gui.editspecificitem", attributeName);
+                    mainTitle = Constants.TRANSLATOR.translate("gui.config.title.gui.editspecificitem", attributeName);
                     defaultMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 }
@@ -104,7 +104,7 @@ public class ConfigGUI_Editor extends GuiScreen {
         final String messageText = Constants.TRANSLATOR.translate("gui.config.editorMessage.message");
         final String valueNameText = Constants.TRANSLATOR.translate("gui.config.editorMessage.valuename");
 
-        drawString(fontRenderer, title, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(title) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
         drawString(fontRenderer, messageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         if (isNewValue) {
             drawString(fontRenderer, valueNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
