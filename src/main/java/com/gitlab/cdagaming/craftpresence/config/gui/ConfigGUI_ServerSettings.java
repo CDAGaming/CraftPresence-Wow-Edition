@@ -8,7 +8,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -29,20 +28,19 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
         defaultServerMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
-        defaultName = new GuiTextField(100, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        defaultName = new GuiTextField(100, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         defaultName.setText(CraftPresence.CONFIG.defaultServerName);
-        defaultMOTD = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        defaultMOTD = new GuiTextField(110, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
         defaultMOTD.setText(CraftPresence.CONFIG.defaultServerMOTD);
-        defaultMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        defaultMSG = new GuiTextField(120, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
         defaultMSG.setText(defaultServerMSG);
 
-        serverMessagesButton = new GUIExtendedButton(130, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermessages"));
-        defaultIconButton = new GUIExtendedButton(140, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(5), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.servermessages.servericon"));
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        serverMessagesButton = new GUIExtendedButton(130, (width / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermessages"));
+        defaultIconButton = new GUIExtendedButton(140, (width / 2) - 90, CraftPresence.GUIS.getButtonY(5), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.servermessages.servericon"));
+        proceedButton = new GUIExtendedButton(900, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(serverMessagesButton);
         buttonList.add(defaultIconButton);
@@ -53,7 +51,6 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
@@ -62,11 +59,11 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         final String serverMOTDText = Constants.TRANSLATOR.translate("gui.config.name.servermessages.servermotd");
         final String defaultMessageText = Constants.TRANSLATOR.translate("gui.config.defaultMessage.server");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, serverNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        drawString(fontRenderer, serverMOTDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-        drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (width / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, serverNameText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, serverMOTDText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+        drawString(fontRenderer, defaultMessageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
         defaultName.drawTextBox();
         defaultMOTD.drawTextBox();
@@ -78,15 +75,15 @@ public class ConfigGUI_ServerSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Default Server Name Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(serverNameText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.servermessages.servername")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         // Hovering over Default Server MOTD Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(serverMOTDText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.servermessages.servermotd")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         // Hovering over Default Server Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.title.servermessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, serverMessagesButton)) {

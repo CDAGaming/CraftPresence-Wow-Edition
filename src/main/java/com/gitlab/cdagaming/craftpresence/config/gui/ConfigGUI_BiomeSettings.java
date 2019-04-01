@@ -7,7 +7,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -28,15 +27,14 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
         defaultBiomeMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
-        defaultMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        defaultMessage = new GuiTextField(110, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         defaultMessage.setText(defaultBiomeMSG);
 
-        biomeMessagesButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.biomemessages.biomemessages"));
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        biomeMessagesButton = new GUIExtendedButton(100, (width / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.biomemessages.biomemessages"));
+        proceedButton = new GUIExtendedButton(900, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(biomeMessagesButton);
         buttonList.add(proceedButton);
@@ -46,16 +44,15 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
         final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.biomemessages");
         final String defaultMessageText = Constants.TRANSLATOR.translate("gui.config.defaultMessage.biome");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, defaultMessageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (width / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, defaultMessageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         defaultMessage.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMessage.getText());
@@ -64,7 +61,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Default Biome Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(defaultMessageText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, biomeMessagesButton)) {

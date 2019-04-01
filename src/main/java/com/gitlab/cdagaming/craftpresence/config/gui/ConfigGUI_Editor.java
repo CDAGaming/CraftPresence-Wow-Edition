@@ -8,7 +8,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -33,7 +32,6 @@ public class ConfigGUI_Editor extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
         if (isNewValue) {
             mainTitle = Constants.TRANSLATOR.translate("gui.config.title.editor.addnew");
@@ -78,18 +76,18 @@ public class ConfigGUI_Editor extends GuiScreen {
 
         removeMSG = Constants.TRANSLATOR.translate("gui.config.message.remove");
 
-        specificMessage = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        specificMessage = new GuiTextField(110, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         specificMessage.setText(specificMSG);
 
         if ((parentScreen instanceof ConfigGUI_DimensionSettings || parentScreen instanceof ConfigGUI_ServerSettings) && !isNewValue) {
-            specificIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.iconchange"));
+            specificIconButton = new GUIExtendedButton(100, (width / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.iconchange"));
             buttonList.add(specificIconButton);
         }
         if (isNewValue) {
-            newValueName = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+            newValueName = new GuiTextField(120, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
         }
 
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(900, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(proceedButton);
 
@@ -98,19 +96,18 @@ public class ConfigGUI_Editor extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String messageText = Constants.TRANSLATOR.translate("gui.config.editorMessage.message");
         final String valueNameText = Constants.TRANSLATOR.translate("gui.config.editorMessage.valuename");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        drawString(fontRenderer, messageText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(fontRenderer, messageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         if (isNewValue) {
-            drawString(fontRenderer, valueNameText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, valueNameText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
             newValueName.drawTextBox();
         } else {
-            drawString(fontRenderer, removeMSG, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(removeMSG) / 2), (sr.getScaledHeight() - 45), 0xFFFFFF);
+            drawString(fontRenderer, removeMSG, (width / 2) - (fontRenderer.getStringWidth(removeMSG) / 2), (height - 45), 0xFFFFFF);
         }
         specificMessage.drawTextBox();
 
@@ -121,11 +118,11 @@ public class ConfigGUI_Editor extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(messageText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(messageText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.remove")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         // Hovering over Value Name Label
-        if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(valueNameText), fontRenderer.FONT_HEIGHT)) {
+        if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(valueNameText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.hoverMessage.valuename")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {

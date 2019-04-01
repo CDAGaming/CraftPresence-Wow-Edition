@@ -10,7 +10,7 @@
 
 ### Fixes:
 
-* Fixes GUI Scaling Issue on Legacy Versions of CraftPresence
+* Fixes GUI Scaling Issues on Legacy Versions of CraftPresence
 
 * Fixes Multiple Per-GUI System Issues relating to Ticking and Getting Available GUIs
 
@@ -28,13 +28,13 @@ The Fixes for the Control Menu Crashes in Rift 1.13.2 required the merging of [t
 
 If you prefer to have this fix, Please use [this Rift Version](https://www.jitpack.io/#CDAGaming/Rift/jitpack-0a2217b941-1)
 
-Jar: [Click Here](https://www.jitpack.io/com/github/CDAGaming/Rift/jitpack-0a2217b941-1/Rift-jitpack-0a2217b941-1.jar)
+Download Jar: [Click Here](https://www.jitpack.io/com/github/CDAGaming/Rift/jitpack-0a2217b941-1/Rift-jitpack-0a2217b941-1.jar)
 
 MultiMC Example Patch: [Click Here](https://gist.github.com/CDAGaming/ba84849826e96b69b829b7453e459edf)
 
 #### Command Rewrite Info:
 
-In v1.5.0, Commands for CraftPresence are now within a new menu of the config gui.
+Starting In v1.5.0, Commands for CraftPresence are now within a new menu of the Config Gui.
 
 Along with this rewrite, take note of the following:
 
@@ -42,7 +42,7 @@ Along with this rewrite, take note of the following:
 
 * Only CraftPresence Commands, started with /cp or /craftpresence are Supported!
 
-* At this time, in 1.13.2 and 1.14, The Config GUI can only open ingame due to an unknown issue.
+* At this time, in 1.13.2 and 1.14, The Config GUI can only open in-game due to an unknown issue.
 
 This GUI is subject to improve as future updates are released.
 

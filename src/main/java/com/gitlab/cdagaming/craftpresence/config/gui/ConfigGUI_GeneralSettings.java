@@ -9,7 +9,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -31,16 +30,15 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
-        clientID = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        clientID = new GuiTextField(110, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         clientID.setText(CraftPresence.CONFIG.clientID);
         clientID.setMaxStringLength(18);
 
-        int calc1 = (sr.getScaledWidth() / 2) - 145;
-        int calc2 = (sr.getScaledWidth() / 2) + 18;
+        int calc1 = (width / 2) - 145;
+        int calc2 = (width / 2) + 18;
 
-        defaultIconButton = new GUIExtendedButton(100, (sr.getScaledWidth() / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.general.defaulticon"));
+        defaultIconButton = new GUIExtendedButton(100, (width / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.name.general.defaulticon"));
         detectCurseManifestButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.general.detectcursemanifest"), CraftPresence.CONFIG.detectCurseManifest);
         detectMultiMCManifestButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.general.detectmultimcmanifest"), CraftPresence.CONFIG.detectMultiMCManifest);
         detectMCUpdaterInstanceButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.general.detectmcupdaterinstance"), CraftPresence.CONFIG.detectMCUpdaterInstance);
@@ -50,7 +48,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         showDimensionButton = new GUICheckBox(800, calc1, CraftPresence.GUIS.getButtonY(6) - 30, Constants.TRANSLATOR.translate("gui.config.name.general.showdimension"), CraftPresence.CONFIG.showCurrentDimension);
         showStateButton = new GUICheckBox(900, calc2, CraftPresence.GUIS.getButtonY(6) - 30, Constants.TRANSLATOR.translate("gui.config.name.general.showstate"), CraftPresence.CONFIG.showGameState);
         enableJoinRequestButton = new GUICheckBox(1000, calc1, CraftPresence.GUIS.getButtonY(7) - 40, Constants.TRANSLATOR.translate("gui.config.name.general.enablejoinrequest"), CraftPresence.CONFIG.enableJoinRequest);
-        proceedButton = new GUIExtendedButton(1100, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(1100, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(defaultIconButton);
         buttonList.add(detectCurseManifestButton);
@@ -69,16 +67,15 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
         final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.general");
         final String clientIDText = Constants.TRANSLATOR.translate("gui.config.name.general.clientid");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, clientIDText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (width / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, clientIDText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         clientID.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(clientID.getText()) && clientID.getText().length() == 18 && StringHandler.isValidLong(clientID.getText());
@@ -86,7 +83,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Client ID Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(clientIDText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.general.clientid")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, defaultIconButton)) {

@@ -8,7 +8,6 @@ import com.gitlab.cdagaming.craftpresence.handler.commands.CommandsGUI;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -27,10 +26,9 @@ public class ConfigGUI_Main extends GuiScreen {
     public void initGui() {
         CraftPresence.GUIS.configGUIOpened = true;
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
-        int calc1 = (sr.getScaledWidth() / 2) - 183;
-        int calc2 = (sr.getScaledWidth() / 2) + 3;
+        int calc1 = (width / 2) - 183;
+        int calc2 = (width / 2) + 3;
 
         generalSet = new GUIExtendedButton(100, calc1, CraftPresence.GUIS.getButtonY(1), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.general"));
         biomeSet = new GUIExtendedButton(200, calc2, CraftPresence.GUIS.getButtonY(1), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.biomemessages"));
@@ -39,9 +37,9 @@ public class ConfigGUI_Main extends GuiScreen {
         statusSet = new GUIExtendedButton(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.statusmessages"));
         advancedSet = new GUIExtendedButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.advanced"));
 
-        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        aboutButton = new GUIExtendedButton(800, 10, (sr.getScaledHeight() - 30), 20, 20, "?");
-        commandGUIButton = new GUIExtendedButton(900, (sr.getScaledWidth() - 120), (sr.getScaledHeight() - 30), 85, 20, Constants.TRANSLATOR.translate("gui.config.title.commands"));
+        proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        aboutButton = new GUIExtendedButton(800, 10, (height - 30), 20, 20, "?");
+        commandGUIButton = new GUIExtendedButton(900, (width - 120), (height - 30), 85, 20, Constants.TRANSLATOR.translate("gui.config.title.commands"));
 
         buttonList.add(generalSet);
         buttonList.add(biomeSet);
@@ -58,12 +56,11 @@ public class ConfigGUI_Main extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
         dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;

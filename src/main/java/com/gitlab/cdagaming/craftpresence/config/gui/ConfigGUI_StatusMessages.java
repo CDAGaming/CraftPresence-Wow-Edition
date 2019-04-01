@@ -7,7 +7,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -28,20 +27,19 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
         // Page 1 Items
-        mainMenuMSG = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
-        lanMSG = new GuiTextField(120, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
-        singleplayerMSG = new GuiTextField(130, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        mainMenuMSG = new GuiTextField(110, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        lanMSG = new GuiTextField(120, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        singleplayerMSG = new GuiTextField(130, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
 
         // Page 2 Items
-        packMSG = new GuiTextField(150, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
-        playerMSG = new GuiTextField(160, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
-        playerAmountMSG = new GuiTextField(170, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
-        gameTimeMSG = new GuiTextField(180, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
-        modsMSG = new GuiTextField(190, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
-        viveCraftMSG = new GuiTextField(200, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
+        packMSG = new GuiTextField(150, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        playerMSG = new GuiTextField(160, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
+        playerAmountMSG = new GuiTextField(170, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        gameTimeMSG = new GuiTextField(180, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
+        modsMSG = new GuiTextField(190, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
+        viveCraftMSG = new GuiTextField(200, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
 
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
         lanMSG.setText(CraftPresence.CONFIG.lanMSG);
@@ -53,10 +51,10 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         modsMSG.setText(CraftPresence.CONFIG.modsPlaceholderMSG);
         viveCraftMSG.setText(CraftPresence.CONFIG.vivecraftMessage);
 
-        proceedButton = new GUIExtendedButton(700, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
-        previousPageButton = new GUIExtendedButton(800, proceedButton.x - 23, (sr.getScaledHeight() - 30), 20, 20, "<");
-        nextPageButton = new GUIExtendedButton(900, (proceedButton.x + proceedButton.getWidth()) + 3, (sr.getScaledHeight() - 30), 20, 20, ">");
+        previousPageButton = new GUIExtendedButton(800, proceedButton.x - 23, (height - 30), 20, 20, "<");
+        nextPageButton = new GUIExtendedButton(900, (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30), 20, 20, ">");
 
         buttonList.add(previousPageButton);
         buttonList.add(nextPageButton);
@@ -67,7 +65,6 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
@@ -82,13 +79,13 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         final String modsText = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.modsmsg");
         final String viveCraftText = Constants.TRANSLATOR.translate("gui.config.name.statusmessages.special.vivecraftmsg");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (width / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
         if (pageNumber == 0) {
-            drawString(fontRenderer, mainMenuText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            drawString(fontRenderer, lanText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            drawString(fontRenderer, singlePlayerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, mainMenuText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(fontRenderer, lanText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            drawString(fontRenderer, singlePlayerText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
             mainMenuMSG.drawTextBox();
             lanMSG.drawTextBox();
@@ -96,12 +93,12 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
         }
 
         if (pageNumber == 1) {
-            drawString(fontRenderer, packText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            drawString(fontRenderer, playerText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            drawString(fontRenderer, playerAmountText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            drawString(fontRenderer, gameTimeText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
-            drawString(fontRenderer, modsText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
-            drawString(fontRenderer, viveCraftText, (sr.getScaledWidth() / 2) - 145, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+            drawString(fontRenderer, packText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(fontRenderer, playerText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            drawString(fontRenderer, playerAmountText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            drawString(fontRenderer, gameTimeText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            drawString(fontRenderer, modsText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
+            drawString(fontRenderer, viveCraftText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
 
             packMSG.drawTextBox();
             playerMSG.drawTextBox();
@@ -119,42 +116,42 @@ public class ConfigGUI_StatusMessages extends GuiScreen {
 
         if (pageNumber == 0) {
             // Hovering over Main Menu Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(mainMenuText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(mainMenuText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.mainmenumsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             //Hovering over LAN Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(lanText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(lanText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.lanmsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             // Hovering over Single Player Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(singlePlayerText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(singlePlayerText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.singleplayermsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }
 
         if (pageNumber == 1) {
             // Hovering over Pack Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(packText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(packText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.packmsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             // Hovering over Player Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(playerText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(2) + 5, fontRenderer.getStringWidth(playerText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.playermsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             // Hovering over Player Amount Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(playerAmountText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(3) + 5, fontRenderer.getStringWidth(playerAmountText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.playeramountmsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             // Hovering over Game Time Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(4) + 5, fontRenderer.getStringWidth(gameTimeText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(4) + 5, fontRenderer.getStringWidth(gameTimeText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.gametimemsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             // Hovering over Mods Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(5) + 5, fontRenderer.getStringWidth(modsText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(5) + 5, fontRenderer.getStringWidth(modsText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.modsmsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
             // Hovering over Vivecraft Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 145, CraftPresence.GUIS.getButtonY(6) + 5, fontRenderer.getStringWidth(viveCraftText), fontRenderer.FONT_HEIGHT)) {
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(6) + 5, fontRenderer.getStringWidth(viveCraftText), fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.statusmessages.special.vivecraftmsg")), mouseX, mouseY, width, height, -1, fontRenderer, true);
             }
         }

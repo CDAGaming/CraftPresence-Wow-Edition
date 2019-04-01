@@ -8,7 +8,6 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
@@ -29,14 +28,13 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
-        ScaledResolution sr = new ScaledResolution(mc);
 
-        splitCharacter = new GuiTextField(110, fontRenderer, (sr.getScaledWidth() / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
+        splitCharacter = new GuiTextField(110, fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         splitCharacter.setText(CraftPresence.CONFIG.splitCharacter);
         splitCharacter.setMaxStringLength(1);
 
-        int calc1 = (sr.getScaledWidth() / 2) - 130;
-        int calc2 = (sr.getScaledWidth() / 2) + 3;
+        int calc1 = (width / 2) - 130;
+        int calc2 = (width / 2) + 3;
 
         guiMessagesButton = new GUIExtendedButton(120, calc1 - 15, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"));
         itemMessagesButton = new GUIExtendedButton(130, calc2 + 15, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
@@ -45,7 +43,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
         overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        proceedButton = new GUIExtendedButton(900, (sr.getScaledWidth() / 2) - 90, (sr.getScaledHeight() - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        proceedButton = new GUIExtendedButton(900, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
         buttonList.add(itemMessagesButton);
@@ -60,16 +58,15 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution sr = new ScaledResolution(mc);
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
         final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.advanced");
         final String splitCharacterText = Constants.TRANSLATOR.translate("gui.config.name.advanced.splitcharacter");
 
-        drawString(fontRenderer, mainTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(fontRenderer, subTitle, (sr.getScaledWidth() / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(fontRenderer, splitCharacterText, (sr.getScaledWidth() / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(fontRenderer, subTitle, (width / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(fontRenderer, splitCharacterText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         splitCharacter.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*");
@@ -79,7 +76,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Split Character Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (sr.getScaledWidth() / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, fontRenderer.getStringWidth(splitCharacterText), fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY, width, height, -1, fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enableCommandsButton)) {
