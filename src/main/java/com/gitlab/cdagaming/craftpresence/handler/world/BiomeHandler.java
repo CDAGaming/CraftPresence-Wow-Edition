@@ -59,13 +59,20 @@ public class BiomeHandler {
         final Biome newBiome = CraftPresence.player.world.getBiome(CraftPresence.player.getPosition());
         final String newBiomeName = newBiome.getBiomeName();
         final Integer newBiomeID = Biome.getIdForBiome(newBiome);
+
         if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
             CURRENT_BIOME_NAME = newBiomeName;
             CURRENT_BIOME_ID = newBiomeID;
             queuedForUpdate = true;
 
+            if (!BIOME_NAMES.contains(newBiomeName)) {
+                BIOME_NAMES.add(newBiomeName);
+            }
+            if (!BIOME_IDS.contains(newBiomeID)) {
+                BIOME_IDS.add(newBiomeID);
+            }
             if (!BIOME_TYPES.contains(newBiome)) {
-                getBiomes();
+                BIOME_TYPES.add(newBiome);
             }
         }
 

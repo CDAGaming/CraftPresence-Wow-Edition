@@ -104,22 +104,23 @@ public class GUIHandler {
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         } else {
             if (CraftPresence.instance.currentScreen != null) {
-                final Class newScreenClass = CraftPresence.instance.currentScreen.getClass();
+                final GuiScreen newScreen = CraftPresence.instance.currentScreen;
+                final Class newScreenClass = newScreen.getClass();
                 final String newScreenName = newScreenClass.getSimpleName();
 
-                if (!CraftPresence.instance.currentScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
-                    CURRENT_SCREEN = CraftPresence.instance.currentScreen;
+                if (!newScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
+                    CURRENT_SCREEN = newScreen;
                     CURRENT_GUI_CLASS = newScreenClass;
                     CURRENT_GUI_NAME = newScreenName;
                     queuedForUpdate = true;
-                }
 
-                if (!GUI_NAMES.contains(newScreenName)) {
-                    GUI_NAMES.add(newScreenName);
-                }
+                    if (!GUI_NAMES.contains(newScreenName)) {
+                        GUI_NAMES.add(newScreenName);
+                    }
 
-                if (!GUI_CLASSES.contains(newScreenClass)) {
-                    GUI_CLASSES.add(newScreenClass);
+                    if (!GUI_CLASSES.contains(newScreenClass)) {
+                        GUI_CLASSES.add(newScreenClass);
+                    }
                 }
             }
         }

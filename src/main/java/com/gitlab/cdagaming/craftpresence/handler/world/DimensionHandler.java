@@ -63,15 +63,22 @@ public class DimensionHandler {
         final String newDimensionName = StringHandler.formatDimensionName(newDimensionType.getName(), false);
         final String newDimensionNameID = StringHandler.formatDimensionName(newDimensionType.getName(), true);
         final Integer newDimensionID = newDimensionType.getId();
+
         if (!newDimensionNameID.equals(CURRENT_DIMENSION_NAME_ID) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
             CURRENT_DIMENSION_NAME = newDimensionName;
             CURRENT_DIMENSION_NAME_ID = newDimensionNameID;
             CURRENT_DIMENSION_ID = newDimensionID;
             queuedForUpdate = true;
-        }
 
-        if (!DIMENSION_NAMES.contains(newDimensionNameID) && !DIMENSION_TYPES.contains(newDimensionType)) {
-            getDimensions();
+            if (!DIMENSION_NAMES.contains(newDimensionNameID)) {
+                DIMENSION_NAMES.add(newDimensionNameID);
+            }
+            if (!DIMENSION_TYPES.contains(newDimensionType)) {
+                DIMENSION_TYPES.add(newDimensionType);
+            }
+            if (!DIMENSION_IDS.contains(newDimensionID)) {
+                DIMENSION_IDS.add(newDimensionID);
+            }
         }
 
         if (queuedForUpdate) {
