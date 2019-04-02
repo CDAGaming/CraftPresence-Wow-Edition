@@ -93,7 +93,7 @@ public class CommandHandler {
                 CraftPresence.CLIENT.PARTY_SIZE == 0 &&
                 CraftPresence.CLIENT.PARTY_MAX == 0 &&
                 StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) &&
-                (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) &&
+                (StringHandler.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) ||
                         CraftPresence.CLIENT.DETAILS.equals(CraftPresence.SERVER.enabled && !CraftPresence.GUIS.enabled ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", Constants.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileHandler.getModCount()))) : "")
                 ) &&
                 (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
