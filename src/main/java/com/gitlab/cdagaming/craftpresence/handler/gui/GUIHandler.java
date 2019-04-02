@@ -11,7 +11,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +19,6 @@ import org.lwjgl.opengl.GL11;
 import java.util.Arrays;
 import java.util.List;
 
-@SuppressWarnings("TryWithIdenticalCatches")
 public class GUIHandler {
     public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, enabled = false;
 
@@ -243,8 +241,6 @@ public class GUIHandler {
             }
 
             if (withBackground) {
-                RenderHelper.disableStandardItemLighting();
-                GL11.glDisable(GL11.GL_LIGHTING);
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 final int zLevel = 300;
@@ -275,9 +271,7 @@ public class GUIHandler {
             }
 
             if (withBackground) {
-                GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
-                RenderHelper.enableStandardItemLighting();
             }
         }
     }
