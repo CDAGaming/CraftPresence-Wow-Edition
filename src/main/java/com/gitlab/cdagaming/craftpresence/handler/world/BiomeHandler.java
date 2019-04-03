@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.collect.Lists;
 import net.minecraft.world.biome.Biome;
@@ -98,9 +99,29 @@ public class BiomeHandler {
     private List<Biome> getBiomeTypes() {
         List<Biome> biomeTypes = Lists.newArrayList();
 
-        for (Biome biome : Biome.REGISTRY) {
-            if (biome != null) {
-                biomeTypes.add(biome);
+        if (Biome.REGISTRY != null) {
+            for (Biome biome : Biome.REGISTRY) {
+                if (biome != null && !biomeTypes.contains(biome)) {
+                    biomeTypes.add(biome);
+                }
+            }
+        }
+
+        if (biomeTypes.isEmpty()) {
+            // Fallback: Use Manual Class Lookup
+            for (Class classObj : FileHandler.getClassNamesMatchingSuperType(Biome.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+                if (classObj != null) {
+                    try {
+                        Biome biomeObj = (Biome) classObj.newInstance();
+                        if (biomeObj != null && !biomeTypes.contains(biomeObj)) {
+                            biomeTypes.add(biomeObj);
+                        }
+                    } catch (Exception ignored) {
+                        // Ignore Any Exceptions
+                    } catch (Error ignored) {
+                        // Ignore Any Errors
+                    }
+                }
             }
         }
 

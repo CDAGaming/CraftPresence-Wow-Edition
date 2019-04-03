@@ -6,6 +6,8 @@
 
 * Per-GUI Implementation Updated to allow Sub Classes (Forge ConfigGUI Compatibility)
 
+* Added Additional Fallback for Biome and Dimension Handlers, including Reflection and Class Lookup Usage
+
 * Config GUI Text Adjustments
 
 * Now Remove GUI Line (GAME_STATE) if no GUI is Open, and enablePerGUI is enabled

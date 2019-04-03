@@ -168,6 +168,10 @@ public class FileHandler {
         return matchingClasses;
     }
 
+    public static List<Class> getClassNamesMatchingSuperType(final Class searchTarget, final String... sourcePackages) {
+        return getClassNamesMatchingSuperType(Collections.singletonList(searchTarget), sourcePackages);
+    }
+
     public static List<String> getModClassNames() {
         List<String> classNames = Lists.newArrayList();
         final File[] mods = new File(Constants.modsDir).listFiles();

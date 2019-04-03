@@ -1,10 +1,12 @@
 package com.gitlab.cdagaming.craftpresence.handler.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAsset;
 import com.google.common.collect.Lists;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldProvider;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,19 +61,24 @@ public class DimensionHandler {
     }
 
     private void updateDimensionData() {
-        final DimensionType newDimensionType = CraftPresence.player.world.provider.getDimensionType();
+        final WorldProvider newProvider = CraftPresence.player.world.provider;
+        final DimensionType newDimensionType = newProvider.getDimensionType();
         final String newDimensionName = StringHandler.formatDimensionName(newDimensionType.getName(), false);
-        final String newDimensionNameID = StringHandler.formatDimensionName(newDimensionType.getName(), true);
+
+        final String newDimension_primaryNameID = StringHandler.formatDimensionName(newDimensionType.getName(), true);
+        final String newDimension_alternativeNameID = StringHandler.formatDimensionName(newProvider.getClass().getSimpleName(), true);
+        final String newDimension_nameID = !DIMENSION_NAMES.isEmpty() && DIMENSION_NAMES.contains(newDimension_alternativeNameID) ? newDimension_alternativeNameID : newDimension_primaryNameID;
+
         final Integer newDimensionID = newDimensionType.getId();
 
-        if (!newDimensionNameID.equals(CURRENT_DIMENSION_NAME_ID) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
+        if (!newDimension_nameID.equals(CURRENT_DIMENSION_NAME_ID) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
             CURRENT_DIMENSION_NAME = newDimensionName;
-            CURRENT_DIMENSION_NAME_ID = newDimensionNameID;
+            CURRENT_DIMENSION_NAME_ID = newDimension_nameID;
             CURRENT_DIMENSION_ID = newDimensionID;
             queuedForUpdate = true;
 
-            if (!DIMENSION_NAMES.contains(newDimensionNameID)) {
-                DIMENSION_NAMES.add(newDimensionNameID);
+            if (!DIMENSION_NAMES.contains(newDimension_nameID)) {
+                DIMENSION_NAMES.add(newDimension_nameID);
             }
             if (!DIMENSION_TYPES.contains(newDimensionType)) {
                 DIMENSION_TYPES.add(newDimensionType);
@@ -88,8 +95,8 @@ public class DimensionHandler {
 
     public void updateDimensionPresence() {
         final String defaultDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, StringHandler.formatDimensionName(CURRENT_DIMENSION_NAME, true), 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
-        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, StringHandler.formatDimensionName(CURRENT_DIMENSION_NAME, true), 0, 2, CraftPresence.CONFIG.splitCharacter, StringHandler.formatDimensionName(CURRENT_DIMENSION_NAME, true));
+        final String currentDimensionMSG = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
+        final String currentDimensionIcon = StringHandler.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME_ID);
         final String formattedIconKey = StringHandler.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
         CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
@@ -110,10 +117,29 @@ public class DimensionHandler {
 
         Collections.addAll(dimensionTypes, DimensionType.values());
 
-        if (reflectedDimensionTypes != null) {
-            for (DimensionType type : reflectedDimensionTypes.values()) {
-                if (type != null && !dimensionTypes.contains(type)) {
-                    dimensionTypes.add(type);
+        if (dimensionTypes.isEmpty()) {
+            // Fallback 1: Use Reflected Dimension Types
+            if (reflectedDimensionTypes != null) {
+                for (DimensionType type : reflectedDimensionTypes.values()) {
+                    if (type != null && !dimensionTypes.contains(type)) {
+                        dimensionTypes.add(type);
+                    }
+                }
+            } else {
+                // Fallback 2: Use Manual Class Lookup
+                for (Class classObj : FileHandler.getClassNamesMatchingSuperType(WorldProvider.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+                    if (classObj != null) {
+                        try {
+                            WorldProvider providerObj = (WorldProvider) classObj.newInstance();
+                            if (providerObj != null && !dimensionTypes.contains(providerObj.getDimensionType())) {
+                                dimensionTypes.add(providerObj.getDimensionType());
+                            }
+                        } catch (Exception ignored) {
+                            // Ignore Any Exceptions
+                        } catch (Error ignored) {
+                            // Ignore Any Errors
+                        }
+                    }
                 }
             }
         }
