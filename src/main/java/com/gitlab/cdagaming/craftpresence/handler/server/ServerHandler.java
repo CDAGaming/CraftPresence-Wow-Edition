@@ -98,9 +98,13 @@ public class ServerHandler {
                 isOnLAN = newLANStatus;
                 queuedForUpdate = true;
 
+                if (!knownAddresses.contains(StringHandler.formatIP(currentServer_IP, false))) {
+                    knownAddresses.add(StringHandler.formatIP(currentServer_IP, false));
+                }
+
                 final ServerList serverList = new ServerList(CraftPresence.instance);
                 serverList.loadServerList();
-                if (serverList.countServers() != serverIndex || CraftPresence.CONFIG.serverMessages.length != serverIndex || !knownAddresses.contains(StringHandler.formatIP(currentServer_IP, false))) {
+                if (serverList.countServers() != serverIndex || CraftPresence.CONFIG.serverMessages.length != serverIndex) {
                     getServerAddresses();
                 }
             }
