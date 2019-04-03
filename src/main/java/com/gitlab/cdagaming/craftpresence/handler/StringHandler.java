@@ -50,8 +50,8 @@ public class StringHandler {
     }
 
     public static String formatIP(final String input, final boolean returnPort) {
-        if (!isNullOrEmpty(input) && input.contains(":")) {
-            final String[] formatted = input.split(":");
+        if (!isNullOrEmpty(input)) {
+            final String[] formatted = input.split(":", 2);
             return !returnPort ? formatted[0] : formatted[1];
         } else {
             return !returnPort ? "127.0.0.1" : "25565";
