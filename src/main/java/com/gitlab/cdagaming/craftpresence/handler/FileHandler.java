@@ -102,7 +102,7 @@ public class FileHandler {
         for (ClassPath.ClassInfo classInfo : classList) {
             for (String startString : sourcePackages) {
                 // Attempt to Add Classes Matching any of the Source Packages
-                if (classInfo.getName().startsWith(startString) && (!classInfo.getName().contains("FMLServerHandler"))) {
+                if (classInfo.getName().startsWith(startString) && (!classInfo.getName().contains("FMLServerHandler") && !classInfo.getName().toLowerCase().contains("mixin"))) {
                     try {
                         Class classObj = Class.forName(classInfo.getName());
                         availableClassList.add(classObj);
@@ -142,27 +142,29 @@ public class FileHandler {
             Class modClassObj, currentClassObj;
             List<Class> superClassList = Lists.newArrayList();
 
-            try {
-                modClassObj = Class.forName(modClassString);
-                currentClassObj = modClassObj;
+            if (!modClassString.toLowerCase().contains("mixin")) {
+                try {
+                    modClassObj = Class.forName(modClassString);
+                    currentClassObj = modClassObj;
 
-                if (modClassObj != null) {
-                    // Add all SuperClasses of Mod Class to a List
-                    while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
-                        superClassList.add(currentClassObj.getSuperclass());
-                        currentClassObj = currentClassObj.getSuperclass();
-                    }
+                    if (modClassObj != null) {
+                        // Add all SuperClasses of Mod Class to a List
+                        while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
+                            superClassList.add(currentClassObj.getSuperclass());
+                            currentClassObj = currentClassObj.getSuperclass();
+                        }
 
-                    // If Match is Found, add original Class to final List, and add all Super Classes to returning List
-                    if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
-                        matchingClasses.add(modClassObj);
-                        matchingClasses.addAll(superClassList);
+                        // If Match is Found, add original Class to final List, and add all Super Classes to returning List
+                        if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+                            matchingClasses.add(modClassObj);
+                            matchingClasses.addAll(superClassList);
+                        }
                     }
+                } catch (Exception ignored) {
+                    // Ignore this Exception and Continue
+                } catch (Error ignored) {
+                    // Ignore this Error and Continue
                 }
-            } catch (Exception ignored) {
-                // Ignore this Exception and Continue
-            } catch (Error ignored) {
-                // Ignore this Error and Continue
             }
         }
         return matchingClasses;
