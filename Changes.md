@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.3 (04/05/2019)
+## v1.5.3 (04/12/2019)
 
 ### Changes:
 
@@ -8,15 +8,19 @@
 
 * Config GUI Text Adjustments
 
+* Now Remove GUI Line (GAME_STATE) if no GUI is Open, and enablePerGUI is enabled
+
 ### Fixes:
+
+* Fixes Memory and CPU Issues related to StringHandler#getLocalIP() [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/21)
+
+* Fixes Issues with `&time&` and `&players&` causing constant RPC Updates even if placeholders not present
 
 * Fixes GUI Scaling Issues on Legacy Versions of CraftPresence
 
 * Fixes Multiple Per-GUI System Issues relating to Ticking and Getting Available GUIs
 
 * Fixes a Possible NPE Retrieving Split New Line Strings
-
-* Now Remove GUI Line (GAME_STATE) if no GUI is Open
 
 * Fixes an Infinite Loop if Dimension Name was from an Incorrectly made WorldProvider
 
