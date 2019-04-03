@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.lang.reflect.Field;
-import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -55,15 +54,7 @@ public class StringHandler {
             final String[] formatted = input.split(":");
             return !returnPort ? formatted[0] : formatted[1];
         } else {
-            return !returnPort ? getLocalIP() : "25565";
-        }
-    }
-
-    public static String getLocalIP() {
-        try {
-            return InetAddress.getLocalHost().getHostAddress().trim();
-        } catch (Exception ex) {
-            return "0.0.0.0";
+            return !returnPort ? "127.0.0.1" : "25565";
         }
     }
 

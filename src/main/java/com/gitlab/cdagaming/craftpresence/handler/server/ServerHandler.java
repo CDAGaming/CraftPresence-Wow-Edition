@@ -84,7 +84,7 @@ public class ServerHandler {
             final int newMaxPlayers = newConnection.currentServerMaxPlayers;
             final boolean newLANStatus = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
 
-            final String newServer_IP = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : StringHandler.getLocalIP();
+            final String newServer_IP = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : "127.0.0.1";
             final String newServer_Name = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverName) ? newServerData.serverName : CraftPresence.CONFIG.defaultServerName;
             final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverMOTD)) && !(newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_connect")) || newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_resolve")) || newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.polling")) || newServerData.serverMOTD.equalsIgnoreCase(Constants.TRANSLATOR.translate("craftpresence.multiplayer.status.pinging"))) ? StringHandler.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
             final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
