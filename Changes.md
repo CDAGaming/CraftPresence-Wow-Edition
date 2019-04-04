@@ -6,7 +6,7 @@
 
 * Per-GUI Implementation Updated to allow Sub Classes (Forge ConfigGUI Compatibility)
 
-* Added Additional Fallback for Biome and Dimension Handlers, including Reflection and Class Lookup Usage
+* Added Additional Fallbacks for Biome and Dimension Handlers, including Reflection and Class Lookup Usage
 
 * Config GUI Text Adjustments
 
@@ -54,7 +54,7 @@ This GUI is subject to improve as future updates are released.
 
 #### Ask to Join // Join Request Info:
 
-In v1.4.9, Join Request and "Ask to Join" are now supported!
+Starting In v1.4.9, Join Request and "Ask to Join" are now supported!
 
 These Features are both extremely new, so although most Issues have been fixed, you may/may not run into major issues.
 
@@ -66,7 +66,7 @@ The Rift Edition of this Mod Requires the [Rift ModLoader](https://minecraft.cur
 
 * KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
 
-In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
+Starting In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
 #### 1.14.x Build Info:
 
