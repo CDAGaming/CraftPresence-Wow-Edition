@@ -101,8 +101,6 @@ Beginning in v1.5.2, CraftPresence is now split into two different Editions, bas
 
 - Legacy Version (MC 1.2.5 and Below)
   - Unavailable Server Support in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
-  - GUI Scaling is Bugged due to an Issue with MC's Scale Factor (This will not effect those on Auto Scaling)
-  - Text Wrapping is Unsupported and does not currently work
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
 ## Disclaimers

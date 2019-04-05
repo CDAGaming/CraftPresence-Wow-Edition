@@ -20,6 +20,8 @@
 
 * Fixes GUI Scaling Issues on Legacy Versions of CraftPresence
 
+* Fixes Text Wrapping on Legacy Versions of CraftPresence
+
 * Fixes Multiple Per-GUI System Issues relating to Ticking and Getting Available GUIs
 
 * Fixes a Possible NPE Retrieving Split New Line Strings

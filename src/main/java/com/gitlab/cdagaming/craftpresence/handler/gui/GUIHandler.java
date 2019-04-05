@@ -201,7 +201,7 @@ public class GUIHandler {
                 List<String> wrappedTextLines = Lists.newArrayList();
                 for (int i = 0; i < textLines.size(); i++) {
                     String textLine = textLines.get(i);
-                    List<String> wrappedLine = font.listFormattedStringToWidth(textLine, tooltipTextWidth);
+                    List<String> wrappedLine = StringHandler.splitTextByNewLine(StringHandler.wrapFormattedStringToWidth(textLine, tooltipTextWidth));
                     if (i == 0) {
                         titleLinesCount = wrappedLine.size();
                     }

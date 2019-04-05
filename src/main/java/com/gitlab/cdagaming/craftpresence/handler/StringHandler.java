@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -243,6 +244,87 @@ public class StringHandler {
                 }
             }
         }
+    }
+
+    public static String wrapFormattedStringToWidth(String stringInput, int wrapWidth) {
+        int stringSizeToWidth = sizeStringToWidth(stringInput, wrapWidth);
+
+        if (stringInput.length() <= stringSizeToWidth) {
+            return stringInput;
+        } else {
+            String s = stringInput.substring(0, stringSizeToWidth);
+            char c0 = stringInput.charAt(stringSizeToWidth);
+            boolean flag = c0 == ' ' || c0 == '\n';
+            String s1 = getFormatFromString(s) + stringInput.substring(stringSizeToWidth + (flag ? 1 : 0));
+            return s + "\n" + wrapFormattedStringToWidth(s1, wrapWidth);
+        }
+    }
+
+    public static String getFormatFromString(String text) {
+        StringBuilder s = new StringBuilder();
+        int i = -1;
+        int j = text.length();
+
+        while ((i = text.indexOf(167, i + 1)) != -1) {
+            if (i < j - 1) {
+                char c0 = text.charAt(i + 1);
+
+                if (STRIP_COLOR_PATTERN.matcher(String.valueOf(c0)).find()) {
+                    s = new StringBuilder("\u00a7" + c0);
+                }
+            }
+        }
+
+        return s.toString();
+    }
+
+    public static int sizeStringToWidth(String stringEntry, int wrapWidth) {
+        int stringLength = stringEntry.length();
+        int charWidth = 0;
+        int currentLine = 0;
+        int currentIndex = -1;
+
+        for (boolean flag = false; currentLine < stringLength; ++currentLine) {
+            char c0 = stringEntry.charAt(currentLine);
+
+            switch (c0) {
+                case '\n':
+                    --currentLine;
+                    break;
+                case ' ':
+                    currentIndex = currentLine;
+                default:
+                    charWidth += CraftPresence.instance.fontRenderer.getCharWidth(c0);
+
+                    if (flag) {
+                        ++charWidth;
+                    }
+
+                    break;
+                case '\u00a7':
+                    if (currentLine < stringLength - 1) {
+                        ++currentLine;
+
+                        char c1 = stringEntry.charAt(currentLine);
+
+                        String stringOfCharacter = String.valueOf(c1);
+
+                        flag = stringOfCharacter.equalsIgnoreCase("l") && !(stringOfCharacter.equalsIgnoreCase("r") || STRIP_COLOR_PATTERN.matcher(stringOfCharacter).find());
+                    }
+            }
+
+            if (c0 == '\n') {
+                ++currentLine;
+                currentIndex = currentLine;
+                break;
+            }
+
+            if (charWidth > wrapWidth) {
+                break;
+            }
+        }
+
+        return currentLine != stringLength && currentIndex != -1 && currentIndex < currentLine ? currentIndex : currentLine;
     }
 
     public static String capitalizeWord(String str) {
