@@ -23,8 +23,8 @@ public class StringHandler {
     private static byte[] MC_GLYPH_WIDTH = new byte[65536];
 
     public static void init() {
-        MC_CHAR_WIDTH = (int[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "charWidth");
-        MC_GLYPH_WIDTH = (byte[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "glyphWidth");
+        MC_CHAR_WIDTH = (int[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "charWidth", "field_78286_d", "d");
+        MC_GLYPH_WIDTH = (byte[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "glyphWidth", "field_78287_e", "e");
     }
 
     public static boolean isNullOrEmpty(final String entry) {
