@@ -1,17 +1,17 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
-import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.google.common.collect.Lists;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class StringHandler {
@@ -23,8 +23,24 @@ public class StringHandler {
     private static byte[] MC_GLYPH_WIDTH = new byte[65536];
 
     public static void init() {
-        MC_CHAR_WIDTH = (int[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "charWidth", "field_78286_d", "d");
-        MC_GLYPH_WIDTH = (byte[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "glyphWidth", "field_78287_e", "e");
+        try {
+            Properties properties = new Properties();
+            InputStream inputStream = StringHandler.class.getResourceAsStream("/assets/"
+                    + (!StringHandler.isNullOrEmpty(Constants.MODID) ? Constants.MODID + "/" : "") + "character.properties");
+            properties.load(inputStream);
+
+            String[] localChars = properties.getProperty("MC_CHARACTER_WIDTHS").replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            String[] localGlyphs = properties.getProperty("MC_GLYPH_WIDTHS").replaceAll("\\[", "").replaceAll("]", "").split(", ");
+
+            for (int i = 0; i < localChars.length && i <= 256; i++) {
+                MC_CHAR_WIDTH[i] = Integer.parseInt(localChars[i]);
+            }
+
+            for (int i = 0; i < localGlyphs.length && i <= 65536; i++) {
+                MC_GLYPH_WIDTH[i] = Byte.parseByte(localGlyphs[i]);
+            }
+        } catch (Exception ignored) {
+        }
     }
 
     public static boolean isNullOrEmpty(final String entry) {
@@ -263,25 +279,25 @@ public class StringHandler {
         if (stringInput.length() <= stringSizeToWidth) {
             return stringInput;
         } else {
-            String s = stringInput.substring(0, stringSizeToWidth);
+            String subString = stringInput.substring(0, stringSizeToWidth);
             char currentCharacter = stringInput.charAt(stringSizeToWidth);
             boolean flag = Character.isSpaceChar(currentCharacter) || currentCharacter == '\n';
-            String s1 = getFormatFromString(s) + stringInput.substring(stringSizeToWidth + (flag ? 1 : 0));
-            return s + "\n" + wrapFormattedStringToWidth(s1, wrapWidth);
+            String s1 = getFormatFromString(subString) + stringInput.substring(stringSizeToWidth + (flag ? 1 : 0));
+            return subString + "\n" + wrapFormattedStringToWidth(s1, wrapWidth);
         }
     }
 
     public static String getFormatFromString(String text) {
         StringBuilder s = new StringBuilder();
-        int i = -1;
-        int j = text.length();
+        int index = -1;
+        int stringLength = text.length();
 
-        while ((i = text.indexOf(167, i + 1)) != -1) {
-            if (i < j - 1) {
-                char c0 = text.charAt(i + 1);
+        while ((index = text.indexOf(167, index + 1)) != -1) {
+            if (index < stringLength - 1) {
+                char currentCharacter = text.charAt(index + 1);
 
-                if (STRIP_COLOR_PATTERN.matcher(String.valueOf(c0)).find()) {
-                    s = new StringBuilder("\u00a7" + c0);
+                if (STRIP_COLOR_PATTERN.matcher(String.valueOf(currentCharacter)).find()) {
+                    s = new StringBuilder("\u00a7" + currentCharacter);
                 }
             }
         }
@@ -307,16 +323,20 @@ public class StringHandler {
         } else if (characterInput == 167) {
             return -1;
         } else {
-            int index = MC_CHAR_MAPPINGS.indexOf(characterInput);
-            if (characterInput > 0 && index != -1 && !usingUnicode) {
-                return MC_CHAR_WIDTH[index];
-            } else if (MC_GLYPH_WIDTH[characterInput] != 0) {
-                int glyphIndex = MC_GLYPH_WIDTH[characterInput] & 255;
-                int shiftedIndex = glyphIndex >>> 4;
-                int remappedIndex = glyphIndex & 15;
-                ++remappedIndex;
-                return (remappedIndex - shiftedIndex) / 2 + 1;
-            } else {
+            try {
+                int index = MC_CHAR_MAPPINGS.indexOf(characterInput);
+                if (characterInput > 0 && index != -1 && !usingUnicode) {
+                    return MC_CHAR_WIDTH[index];
+                } else if (MC_GLYPH_WIDTH[characterInput] != 0) {
+                    int glyphIndex = MC_GLYPH_WIDTH[characterInput] & 255;
+                    int shiftedIndex = glyphIndex >>> 4;
+                    int remappedIndex = glyphIndex & 15;
+                    ++remappedIndex;
+                    return (remappedIndex - shiftedIndex) / 2 + 1;
+                } else {
+                    return 0;
+                }
+            } catch (Exception ex) {
                 return 0;
             }
         }
@@ -329,16 +349,16 @@ public class StringHandler {
         int currentIndex = -1;
 
         for (boolean flag = false; currentLine < stringLength; ++currentLine) {
-            char c0 = stringEntry.charAt(currentLine);
+            char currentCharacter = stringEntry.charAt(currentLine);
 
-            switch (c0) {
+            switch (currentCharacter) {
                 case '\n':
                     --currentLine;
                     break;
                 case ' ':
                     currentIndex = currentLine;
                 default:
-                    charWidth += getCharWidth(c0, Constants.TRANSLATOR.isUnicode);
+                    charWidth += getCharWidth(currentCharacter, Constants.TRANSLATOR.isUnicode);
                     if (flag) {
                         ++charWidth;
                     }
@@ -348,15 +368,15 @@ public class StringHandler {
                     if (currentLine < stringLength - 1) {
                         ++currentLine;
 
-                        char c1 = stringEntry.charAt(currentLine);
+                        char charIndex = stringEntry.charAt(currentLine);
 
-                        String stringOfCharacter = String.valueOf(c1);
+                        String stringOfCharacter = String.valueOf(charIndex);
 
                         flag = stringOfCharacter.equalsIgnoreCase("l") && !(stringOfCharacter.equalsIgnoreCase("r") || STRIP_COLOR_PATTERN.matcher(stringOfCharacter).find());
                     }
             }
 
-            if (c0 == '\n') {
+            if (currentCharacter == '\n') {
                 ++currentLine;
                 currentIndex = currentLine;
                 break;
@@ -377,17 +397,17 @@ public class StringHandler {
         // Declare a character of space
         // To identify that the next character is the starting
         // of a new word
-        char ch = ' ';
-        for (int i = 0; i < str.length(); i++) {
+        char charIndex = ' ';
+        for (int index = 0; index < str.length(); index++) {
 
             // If previous character is space and current
             // character is not space then it shows that
             // current letter is the starting of the word
-            if (ch == ' ' && str.charAt(i) != ' ')
-                s.append(Character.toUpperCase(str.charAt(i)));
+            if (charIndex == ' ' && str.charAt(index) != ' ')
+                s.append(Character.toUpperCase(str.charAt(index)));
             else
-                s.append(str.charAt(i));
-            ch = str.charAt(i);
+                s.append(str.charAt(index));
+            charIndex = str.charAt(index);
         }
 
         // Return the string with trimming
