@@ -310,17 +310,13 @@ public class StringHandler {
             int index = MC_CHAR_MAPPINGS.indexOf(characterInput);
             if (characterInput > 0 && index != -1 && !usingUnicode) {
                 return MC_CHAR_WIDTH[index];
-            }
-            else if (MC_GLYPH_WIDTH[characterInput] != 0)
-            {
+            } else if (MC_GLYPH_WIDTH[characterInput] != 0) {
                 int glyphIndex = MC_GLYPH_WIDTH[characterInput] & 255;
                 int shiftedIndex = glyphIndex >>> 4;
                 int remappedIndex = glyphIndex & 15;
                 ++remappedIndex;
                 return (remappedIndex - shiftedIndex) / 2 + 1;
-            }
-            else
-            {
+            } else {
                 return 0;
             }
         }

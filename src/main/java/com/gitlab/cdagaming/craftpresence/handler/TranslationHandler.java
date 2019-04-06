@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class TranslationHandler {
     public static TranslationHandler instance;
+    public boolean isUnicode = false;
     private String languageID = "en_US", modID;
     private Map<String, String> translationMap = Maps.newHashMap();
     private Map<String, Boolean> requestMap = Maps.newHashMap();
     private Minecraft mc = Minecraft.getMinecraft();
     private boolean usingJSON = false;
-    public boolean isUnicode = false;
 
     public TranslationHandler() {
         setLanguage(mc.gameSettings.language);
