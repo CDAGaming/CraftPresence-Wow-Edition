@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
@@ -167,7 +168,7 @@ public class GUIHandler {
             int tooltipTextWidth = 0;
 
             for (String textLine : textLines) {
-                int textLineWidth = font.getStringWidth(textLine);
+                int textLineWidth = StringHandler.getStringWidth(textLine);
 
                 if (textLineWidth > tooltipTextWidth) {
                     tooltipTextWidth = textLineWidth;
@@ -207,7 +208,7 @@ public class GUIHandler {
                     }
 
                     for (String line : wrappedLine) {
-                        int lineWidth = font.getStringWidth(line);
+                        int lineWidth = StringHandler.getStringWidth(line);
                         if (lineWidth > wrappedTooltipWidth) {
                             wrappedTooltipWidth = lineWidth;
                         }

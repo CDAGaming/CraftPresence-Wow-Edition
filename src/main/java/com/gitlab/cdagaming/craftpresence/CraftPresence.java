@@ -87,6 +87,7 @@ public class CraftPresence {
         Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         CommandHandler.init();
+        StringHandler.init();
 
         try {
             CLIENT.CLIENT_ID = CONFIG.clientID;

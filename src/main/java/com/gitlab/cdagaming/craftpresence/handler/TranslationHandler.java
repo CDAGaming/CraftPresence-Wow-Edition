@@ -17,17 +17,20 @@ public class TranslationHandler {
     private Map<String, Boolean> requestMap = Maps.newHashMap();
     private Minecraft mc = Minecraft.getMinecraft();
     private boolean usingJSON = false;
+    public boolean isUnicode = false;
 
     public TranslationHandler() {
         setLanguage(mc.gameSettings.language);
         setUsingJSON(false);
         getTranslationMap();
+        checkUnicode();
     }
 
     public TranslationHandler(final boolean useJSON) {
         setLanguage(mc.gameSettings.language);
         setUsingJSON(useJSON);
         getTranslationMap();
+        checkUnicode();
     }
 
     public TranslationHandler(final String modID) {
@@ -35,6 +38,7 @@ public class TranslationHandler {
         setModID(modID);
         setUsingJSON(false);
         getTranslationMap();
+        checkUnicode();
     }
 
     public TranslationHandler(final String modID, final boolean useJSON) {
@@ -42,6 +46,7 @@ public class TranslationHandler {
         setModID(modID);
         setUsingJSON(useJSON);
         getTranslationMap();
+        checkUnicode();
     }
 
     void tick() {
@@ -49,7 +54,32 @@ public class TranslationHandler {
                 (!requestMap.containsKey(mc.gameSettings.language) || requestMap.get(mc.gameSettings.language))) {
             setLanguage(mc.gameSettings.language);
             getTranslationMap();
+            checkUnicode();
         }
+
+        if (isUnicode != mc.gameSettings.forceUnicodeFont) {
+            checkUnicode();
+        }
+    }
+
+    private void checkUnicode() {
+        isUnicode = false;
+        int i = 0;
+        int totalLength = 0;
+
+        for (String currentString : translationMap.values()) {
+            int currentLength = currentString.length();
+            totalLength += currentLength;
+
+            for (int index = 0; index < currentLength; ++index) {
+                if (currentString.charAt(index) >= 256) {
+                    ++i;
+                }
+            }
+        }
+
+        float f = (float) i / (float) totalLength;
+        isUnicode = (double) f > 0.1D || mc.gameSettings.forceUnicodeFont;
     }
 
     private void setUsingJSON(final boolean usingJSON) {

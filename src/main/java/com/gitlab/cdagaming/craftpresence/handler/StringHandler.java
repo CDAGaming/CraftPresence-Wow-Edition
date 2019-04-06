@@ -1,12 +1,15 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.google.common.collect.Lists;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -15,6 +18,14 @@ public class StringHandler {
     private static final char COLOR_CHAR = '\u00A7';
     private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
     private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
+    private static final String MC_CHAR_MAPPINGS = "\u00c0\u00c1\u00c2\u00c8\u00ca\u00cb\u00cd\u00d3\u00d4\u00d5\u00da\u00df\u00e3\u00f5\u011f\u0130\u0131\u0152\u0153\u015e\u015f\u0174\u0175\u017e\u0207\u0000\u0000\u0000\u0000\u0000\u0000\u0000 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u0000\u00c7\u00fc\u00e9\u00e2\u00e4\u00e0\u00e5\u00e7\u00ea\u00eb\u00e8\u00ef\u00ee\u00ec\u00c4\u00c5\u00c9\u00e6\u00c6\u00f4\u00f6\u00f2\u00fb\u00f9\u00ff\u00d6\u00dc\u00f8\u00a3\u00d8\u00d7\u0192\u00e1\u00ed\u00f3\u00fa\u00f1\u00d1\u00aa\u00ba\u00bf\u00ae\u00ac\u00bd\u00bc\u00a1\u00ab\u00bb\u2591\u2592\u2593\u2502\u2524\u2561\u2562\u2556\u2555\u2563\u2551\u2557\u255d\u255c\u255b\u2510\u2514\u2534\u252c\u251c\u2500\u253c\u255e\u255f\u255a\u2554\u2569\u2566\u2560\u2550\u256c\u2567\u2568\u2564\u2565\u2559\u2558\u2552\u2553\u256b\u256a\u2518\u250c\u2588\u2584\u258c\u2590\u2580\u03b1\u03b2\u0393\u03c0\u03a3\u03c3\u03bc\u03c4\u03a6\u0398\u03a9\u03b4\u221e\u2205\u2208\u2229\u2261\u00b1\u2265\u2264\u2320\u2321\u00f7\u2248\u00b0\u2219\u00b7\u221a\u207f\u00b2\u25a0\u0000";
+    private static int[] MC_CHAR_WIDTH = new int[256];
+    private static byte[] MC_GLYPH_WIDTH = new byte[65536];
+
+    public static void init() {
+        MC_CHAR_WIDTH = (int[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "charWidth");
+        MC_GLYPH_WIDTH = (byte[]) lookupObject(FontRenderer.class, CraftPresence.instance.fontRenderer, "glyphWidth");
+    }
 
     public static boolean isNullOrEmpty(final String entry) {
         return entry == null || entry.isEmpty() || entry.equalsIgnoreCase("null");
@@ -253,8 +264,8 @@ public class StringHandler {
             return stringInput;
         } else {
             String s = stringInput.substring(0, stringSizeToWidth);
-            char c0 = stringInput.charAt(stringSizeToWidth);
-            boolean flag = c0 == ' ' || c0 == '\n';
+            char currentCharacter = stringInput.charAt(stringSizeToWidth);
+            boolean flag = Character.isSpaceChar(currentCharacter) || currentCharacter == '\n';
             String s1 = getFormatFromString(s) + stringInput.substring(stringSizeToWidth + (flag ? 1 : 0));
             return s + "\n" + wrapFormattedStringToWidth(s1, wrapWidth);
         }
@@ -278,6 +289,43 @@ public class StringHandler {
         return s.toString();
     }
 
+    public static int getStringWidth(String stringEntry) {
+        if (isNullOrEmpty(stringEntry)) {
+            return 0;
+        } else {
+            int strLength = 0;
+            for (char strChar : stringEntry.toCharArray()) {
+                strLength += getCharWidth(strChar, Constants.TRANSLATOR.isUnicode);
+            }
+            return strLength;
+        }
+    }
+
+    public static int getCharWidth(char characterInput, boolean usingUnicode) {
+        if (Character.isSpaceChar(characterInput) || characterInput == 160) {
+            return 4;
+        } else if (characterInput == 167) {
+            return -1;
+        } else {
+            int index = MC_CHAR_MAPPINGS.indexOf(characterInput);
+            if (characterInput > 0 && index != -1 && !usingUnicode) {
+                return MC_CHAR_WIDTH[index];
+            }
+            else if (MC_GLYPH_WIDTH[characterInput] != 0)
+            {
+                int glyphIndex = MC_GLYPH_WIDTH[characterInput] & 255;
+                int shiftedIndex = glyphIndex >>> 4;
+                int remappedIndex = glyphIndex & 15;
+                ++remappedIndex;
+                return (remappedIndex - shiftedIndex) / 2 + 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+
     public static int sizeStringToWidth(String stringEntry, int wrapWidth) {
         int stringLength = stringEntry.length();
         int charWidth = 0;
@@ -294,8 +342,7 @@ public class StringHandler {
                 case ' ':
                     currentIndex = currentLine;
                 default:
-                    charWidth += CraftPresence.instance.fontRenderer.getCharWidth(c0);
-
+                    charWidth += getCharWidth(c0, Constants.TRANSLATOR.isUnicode);
                     if (flag) {
                         ++charWidth;
                     }
@@ -323,6 +370,7 @@ public class StringHandler {
                 break;
             }
         }
+
 
         return currentLine != stringLength && currentIndex != -1 && currentIndex < currentLine ? currentIndex : currentLine;
     }
@@ -406,6 +454,19 @@ public class StringHandler {
             }
         }
         return null;
+    }
+
+    public static void executeMethod(Class classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {
+        for (String methodName : methodNames) {
+            try {
+                Method lookupMethod = classToAccess.getDeclaredMethod(methodName, argumentTypes);
+                if (lookupMethod != null) {
+                    lookupMethod.setAccessible(true);
+                    lookupMethod.invoke(instance, args);
+                }
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     public static int generateHash(Object... values) {
