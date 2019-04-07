@@ -6,12 +6,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class StringHandler {
@@ -24,20 +22,15 @@ public class StringHandler {
 
     public static void init() {
         try {
-            Properties properties = new Properties();
-            InputStream inputStream = StringHandler.class.getResourceAsStream("/assets/"
-                    + (!StringHandler.isNullOrEmpty(Constants.MODID) ? Constants.MODID + "/" : "") + "character.properties");
-            properties.load(inputStream);
-
-            String[] localChars = properties.getProperty("MC_CHARACTER_WIDTHS").replaceAll("\\[", "").replaceAll("]", "").split(", ");
-            String[] localGlyphs = properties.getProperty("MC_GLYPH_WIDTHS").replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            String[] localChars = Constants.TRANSLATOR.translate("craftpresence.variable.charwidth").replaceAll("\\[", "").replaceAll("]", "").split(", ");
+            String[] localGlyphs = Constants.TRANSLATOR.translate("craftpresence.variable.glyphwidth").replaceAll("\\[", "").replaceAll("]", "").split(", ");
 
             for (int i = 0; i < localChars.length && i <= 256; i++) {
-                MC_CHAR_WIDTH[i] = Integer.parseInt(localChars[i]);
+                MC_CHAR_WIDTH[i] = Integer.parseInt(localChars[i].trim());
             }
 
             for (int i = 0; i < localGlyphs.length && i <= 65536; i++) {
-                MC_GLYPH_WIDTH[i] = Byte.parseByte(localGlyphs[i]);
+                MC_GLYPH_WIDTH[i] = Byte.parseByte(localGlyphs[i].trim());
             }
         } catch (Exception ignored) {
         }
