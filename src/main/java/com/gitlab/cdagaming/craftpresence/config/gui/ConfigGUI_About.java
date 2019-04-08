@@ -42,11 +42,11 @@ public class ConfigGUI_About extends GuiScreen {
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title.about.config");
         final List<String> notice = StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.credits"));
 
-        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {
                 final String string = notice.get(i);
-                drawString(fontRenderer, string, (width / 2) - (fontRenderer.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
+                drawString(mc.fontRenderer, string, (width / 2) - (StringHandler.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
             }
         }
 

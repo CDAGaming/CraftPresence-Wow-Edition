@@ -70,7 +70,7 @@ public class CommandsGUI extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        commandInput = new GuiTextField(110, fontRenderer, 115, (height - 30), (width - 120), 20);
+        commandInput = new GuiTextField(110, mc.fontRenderer, 115, (height - 30), (width - 120), 20);
         commandInput.setMaxStringLength(128);
 
         proceedButton = new GUIExtendedButton(700, 10, (height - 30), 100, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
@@ -89,8 +89,8 @@ public class CommandsGUI extends GuiScreen {
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
         final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.commands");
 
-        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(fontRenderer, subTitle, (width / 2) - (fontRenderer.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringHandler.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
         if (!StringHandler.isNullOrEmpty(commandInput.getText()) && commandInput.getText().startsWith("/")) {
             commandArgs = commandInput.getText().replace("/", "").split(" ");
@@ -217,7 +217,7 @@ public class CommandsGUI extends GuiScreen {
         executionCommandArgs = null;
         // COMMANDS END
 
-        CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(executionString), 25, 45, width, height, -1, fontRenderer, false);
+        CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(executionString), 25, 45, width, height, -1, mc.fontRenderer, false);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

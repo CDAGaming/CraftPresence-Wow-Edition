@@ -39,7 +39,7 @@ public class ConfigGUI_Selector extends GuiScreen {
 
         proceedButton = new GUIExtendedButton(700, (width - 100), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         scrollList = new GUIScrollList(mc, width, height, 32, height - 45, 18, itemList, originalValue);
-        searchBox = new GuiTextField(110, fontRenderer, 60, (height - 30), 120, 20);
+        searchBox = new GuiTextField(110, mc.fontRenderer, 60, (height - 30), 120, 20);
 
         if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
             addNewButton = new GUIExtendedButton(600, (width - 195), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.addnew"));
@@ -84,9 +84,9 @@ public class ConfigGUI_Selector extends GuiScreen {
 
         scrollList.itemList = itemList;
         scrollList.drawScreen(mouseX, mouseY, partialTicks);
-        drawString(fontRenderer, searchText, (30 - (fontRenderer.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
+        drawString(mc.fontRenderer, searchText, (30 - (StringHandler.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
         searchBox.drawTextBox();
-        drawString(fontRenderer, mainTitle, (width / 2) - (fontRenderer.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         proceedButton.displayString = scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? Constants.TRANSLATOR.translate("gui.config.buttonMessage.continue") : Constants.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
