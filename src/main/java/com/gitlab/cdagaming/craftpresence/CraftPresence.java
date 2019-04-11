@@ -32,7 +32,7 @@ public class CraftPresence {
     public static int TIMER = 0;
 
     public static ConfigHandler CONFIG;
-    public static SystemHandler SYSTEM;
+    public static SystemHandler SYSTEM = new SystemHandler();
     public static KeyHandler KEYBINDINGS = new KeyHandler();
     public static DiscordHandler CLIENT = new DiscordHandler();
     public static ServerHandler SERVER = new ServerHandler();
