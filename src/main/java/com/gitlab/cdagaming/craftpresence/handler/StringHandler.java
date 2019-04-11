@@ -254,7 +254,7 @@ public class StringHandler {
                 return "overworld";
             } else if (formattedKey.toString().equalsIgnoreCase("hell") || formattedKey.toString().equalsIgnoreCase("nether")) {
                 return "the_nether";
-            } else if (formattedKey.toString().equalsIgnoreCase("end")) {
+            } else if (formattedKey.toString().equalsIgnoreCase("end") || formattedKey.toString().equalsIgnoreCase("sky")) {
                 return "the_end";
             } else {
                 if (formatToID) {

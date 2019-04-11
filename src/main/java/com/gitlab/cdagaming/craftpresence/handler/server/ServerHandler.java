@@ -79,9 +79,9 @@ public class ServerHandler {
         final ServerData newServerData = CraftPresence.instance.getCurrentServerData();
         final NetHandlerPlayClient newConnection = CraftPresence.instance.getConnection();
 
-        if (!joinInProgress && newConnection != null) {
-            final int newCurrentPlayers = newConnection.getPlayerInfoMap().size();
-            final int newMaxPlayers = newConnection.currentServerMaxPlayers;
+        if (!joinInProgress) {
+            final int newCurrentPlayers = newConnection != null ? newConnection.getPlayerInfoMap().size() : 1;
+            final int newMaxPlayers = newConnection != null ? newConnection.currentServerMaxPlayers : newCurrentPlayers;
             final boolean newLANStatus = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
 
             final String newServer_IP = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : "127.0.0.1";

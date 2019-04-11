@@ -1,32 +1,18 @@
 # CraftPresence Changes
 
-## v1.5.3 (04/12/2019)
+## v1.5.4 (05/??/2019)
 
 ### Changes:
 
-* Per-GUI Implementation Updated to allow Sub Classes (Forge ConfigGUI Compatibility)
-
-* Added Additional Fallbacks for Biome and Dimension Handlers, including Reflection and Class Lookup Usage
-
-* Config GUI Text Adjustments
-
-* Now Remove GUI Line (GAME_STATE) if no GUI is Open, and enablePerGUI is enabled
+* ???
 
 ### Fixes:
 
-* Fixes Memory and CPU Issues related to StringHandler#getLocalIP() [(Issue Reference)](https://gitlab.com/CDAGaming/CraftPresence/issues/21)
+* Fix Cases where ServerHandler Events would not run if a Connection was Null
 
-* Fixes Issues with `&time&` and `&players&` causing constant RPC Updates even if placeholders not present
+* Fix The End displaying as sky in some Versions of CraftPresence
 
-* Fixes GUI Scaling Issues on Legacy Versions of CraftPresence
-
-* Fixes Text Wrapping on Legacy Versions of CraftPresence
-
-* Fixes Multiple Per-GUI System Issues relating to Ticking and Getting Available GUIs
-
-* Fixes a Possible NPE Retrieving Split New Line Strings
-
-* Fixes an Infinite Loop if Dimension Name was from an Incorrectly made WorldProvider
+* Miscellaneous Compatibility Fixes
 
 ### More Information:
 

@@ -49,7 +49,7 @@ minecraft {
     replace "GRADLE:certFingerprint", certfingerprint
 
     replaceIn "Constants.java"
-    makeObfSourceJar = true
+    makeObfSourceJar = false
 }
 
 jar {

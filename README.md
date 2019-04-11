@@ -94,13 +94,14 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &BOOTS& - The Current Boots Armor Piece you have Equipped
 
 ## Versions of CraftPresence
-Beginning in v1.5.2, CraftPresence is now split into two different Editions, based on the MC Version you use it in:
+Beginning in v1.5.2, CraftPresence is now split into different editions, based on the Minecraft Version you use it in:
 
-- Full Version (MC 1.3.2 - 1.14.x) includes All Features of CraftPresence at Full Support for Issues
-  - In MC 1.5.2 and Below, a Separate Translation Engine is being used, and may cause issues (In Higher Versions, this is only used as a fallback)
+- Full Version (Minecraft 1.3.2 - 1.14.x) includes All Features of CraftPresence at Full Support for Issues
+  - In Minecraft 1.5.2 and Below, a Separate Translation Engine is being used, and may cause issues (In Higher Versions, this is only used as a fallback)
 
-- Legacy Version (MC 1.2.5 and Below)
+- Legacy Version (Minecraft 1.2.5 and Below)
   - Unavailable Server Support in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
+  - Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with ModLoader + ModLoaderMP
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
 ## Disclaimers
