@@ -1,11 +1,13 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 
 public class SystemHandler {
     public String OS_NAME, OS_ARCH, USER_DIR;
-
+    public boolean isTiming = false;
     public boolean IS_LINUX = false, IS_MAC = false, IS_WINDOWS = false;
+    private long BEGINNING_TIMESTAMP;
 
     public SystemHandler() {
         try {
@@ -19,6 +21,20 @@ public class SystemHandler {
         } catch (Exception ex) {
             Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.system"));
             ex.printStackTrace();
+        }
+    }
+
+    public void startTimer() {
+        BEGINNING_TIMESTAMP = System.currentTimeMillis() + (CraftPresence.TIMER * 1000L);
+        isTiming = true;
+    }
+
+    public void checkTimer() {
+        if (CraftPresence.TIMER > 0) {
+            long remainingTime = (BEGINNING_TIMESTAMP - System.currentTimeMillis()) / 1000L;
+            CraftPresence.TIMER = (int) remainingTime;
+        } else if (isTiming) {
+            isTiming = false;
         }
     }
 }

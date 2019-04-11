@@ -1,12 +1,15 @@
 # CraftPresence Changes
 
-## v1.5.4 (05/??/2019)
+## v1.5.3.1 (04/??/2019)
 
 ### Changes:
 
 * ???
 
 ### Fixes:
+
+* Refactor Timer Methods to fully fix CPU Issues
+
 * Fix Compatibility with Customizing Servers with Ports
 
 * Fix Cases where ServerHandler Events would not run if a Connection was Null

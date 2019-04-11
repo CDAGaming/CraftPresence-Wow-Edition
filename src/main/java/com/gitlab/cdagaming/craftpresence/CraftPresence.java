@@ -41,27 +41,11 @@ public class CraftPresence {
     public static EntityHandler ENTITIES = new EntityHandler();
     public static GUIHandler GUIS = new GUIHandler();
 
-    private static Thread timerThread = new Thread("CraftPresence-Timer") {
-        @Override
-        public void run() {
-            while (!Thread.currentThread().isInterrupted()) {
-                if (TIMER > 0) {
-                    TIMER--;
-                    try {
-                        Thread.sleep(1000L);
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        }
-    };
-
     private boolean initialized = false;
 
     public CraftPresence() {
         MinecraftForge.EVENT_BUS.register(this);
         KEYBINDINGS.register();
-        timerThread.start();
     }
 
     @Mod.EventHandler
@@ -113,6 +97,14 @@ public class CraftPresence {
             init();
         } else if (initialized) {
             CommandHandler.reloadData(false);
+
+            if (TIMER > 0) {
+                if (!SYSTEM.isTiming) {
+                    SYSTEM.startTimer();
+                } else {
+                    SYSTEM.checkTimer();
+                }
+            }
 
             if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
                 DIMENSIONS.getDimensions();
