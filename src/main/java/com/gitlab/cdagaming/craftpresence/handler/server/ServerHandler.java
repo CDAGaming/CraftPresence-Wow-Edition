@@ -98,8 +98,8 @@ public class ServerHandler {
                 isOnLAN = newLANStatus;
                 queuedForUpdate = true;
 
-                if (!knownAddresses.contains(StringHandler.formatIP(currentServer_IP, false))) {
-                    knownAddresses.add(StringHandler.formatIP(currentServer_IP, false));
+                if (!StringHandler.isNullOrEmpty(currentServer_IP) && !knownAddresses.contains(currentServer_IP.contains(":") ? currentServer_IP : StringHandler.formatIP(currentServer_IP, false))) {
+                    knownAddresses.add(currentServer_IP.contains(":") ? currentServer_IP : StringHandler.formatIP(currentServer_IP, false));
                 }
 
                 final ServerList serverList = new ServerList(CraftPresence.instance);
@@ -271,8 +271,8 @@ public class ServerHandler {
 
         for (int currentIndex = 0; currentIndex < serverIndex; currentIndex++) {
             final ServerData data = serverList.getServerData(currentIndex);
-            if (!StringHandler.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(StringHandler.formatIP(data.serverIP, false))) {
-                knownAddresses.add(StringHandler.formatIP(data.serverIP, false));
+            if (!StringHandler.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(data.serverIP.contains(":") ? data.serverIP : StringHandler.formatIP(data.serverIP, false))) {
+                knownAddresses.add(data.serverIP.contains(":") ? data.serverIP : StringHandler.formatIP(data.serverIP, false));
             }
         }
 
