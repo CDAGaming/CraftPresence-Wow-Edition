@@ -8,7 +8,7 @@
 
 ### Fixes:
 
-* Refactor Timer Methods to fully fix CPU Issues
+* Fix CPU Issues related to Timer and RPC Callbacks
 
 * Fix Compatibility with Customizing Servers with Ports
 

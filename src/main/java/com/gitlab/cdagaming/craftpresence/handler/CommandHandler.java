@@ -16,6 +16,8 @@ public class CommandHandler {
         CraftPresence.player = CraftPresence.instance.player;
 
         Constants.TRANSLATOR.tick();
+        CraftPresence.SYSTEM.tick();
+
         CraftPresence.KEYBINDINGS.onTick();
         CraftPresence.BIOMES.onTick();
         CraftPresence.DIMENSIONS.onTick();

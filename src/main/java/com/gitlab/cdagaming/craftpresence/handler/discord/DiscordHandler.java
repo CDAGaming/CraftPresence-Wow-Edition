@@ -44,7 +44,6 @@ public class DiscordHandler {
     public byte INSTANCE;
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private int lastErrorCode, lastDisconnectErrorCode;
-    private Thread callbackThread = null;
 
     public synchronized void setup() {
         Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
@@ -54,22 +53,6 @@ public class DiscordHandler {
             }
         };
         Runtime.getRuntime().addShutdownHook(shutdownThread);
-    }
-
-    private synchronized void setupThreads() {
-        callbackThread = new Thread("RPC-Callback-Handler") {
-            @Override
-            public void run() {
-                while (!Thread.currentThread().isInterrupted()) {
-                    DiscordRPC.INSTANCE.Discord_RunCallbacks();
-                    try {
-                        Thread.sleep(2000L);
-                    } catch (Exception ignored) {
-                    }
-                }
-            }
-        };
-        callbackThread.start();
     }
 
     public synchronized void init() {
@@ -121,7 +104,7 @@ public class DiscordHandler {
             @Override
             public void accept(DiscordUser request) {
                 if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
-                    CraftPresence.TIMER = 30;
+                    CraftPresence.SYSTEM.TIMER = 30;
                     STATUS = "joinRequest";
                     REQUESTER_USER = request;
 
@@ -143,12 +126,11 @@ public class DiscordHandler {
         };
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
-        setupThreads();
     }
 
     public void updateTimestamp() {
         if (CraftPresence.CONFIG.showTime) {
-            START_TIMESTAMP = System.currentTimeMillis() / 1000L;
+            START_TIMESTAMP = CraftPresence.SYSTEM.CURRENT_TIMESTAMP / 1000L;
         }
     }
 
@@ -194,8 +176,6 @@ public class DiscordHandler {
     }
 
     public synchronized void shutDown() {
-        callbackThread.interrupt();
-
         DiscordRPC.INSTANCE.Discord_ClearPresence();
         DiscordRPC.INSTANCE.Discord_Shutdown();
 
@@ -208,7 +188,7 @@ public class DiscordHandler {
         STATUS = "disconnected";
         lastDisconnectErrorCode = 0;
         lastErrorCode = 0;
-        CraftPresence.TIMER = 0;
+        CraftPresence.SYSTEM.TIMER = 0;
         CURRENT_USER = null;
         REQUESTER_USER = null;
 

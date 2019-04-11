@@ -29,7 +29,6 @@ public class CraftPresence {
     public static boolean packFound = false, awaitingReply = false;
     public static Minecraft instance = Minecraft.getMinecraft();
     public static EntityPlayer player = instance.player;
-    public static int TIMER = 0;
 
     public static ConfigHandler CONFIG;
     public static SystemHandler SYSTEM = new SystemHandler();
@@ -98,14 +97,6 @@ public class CraftPresence {
         } else if (initialized) {
             CommandHandler.reloadData(false);
 
-            if (TIMER > 0) {
-                if (!SYSTEM.isTiming) {
-                    SYSTEM.startTimer();
-                } else {
-                    SYSTEM.checkTimer();
-                }
-            }
-
             if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
                 DIMENSIONS.getDimensions();
             }
@@ -127,7 +118,7 @@ public class CraftPresence {
                     CommandHandler.setMainMenuPresence();
                 }
 
-                if (awaitingReply && TIMER == 0) {
+                if (awaitingReply && SYSTEM.TIMER == 0) {
                     StringHandler.sendMessageToPlayer(player, Constants.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
                     DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
                     awaitingReply = false;

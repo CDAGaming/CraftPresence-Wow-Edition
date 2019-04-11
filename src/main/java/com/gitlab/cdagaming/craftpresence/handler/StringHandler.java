@@ -451,7 +451,7 @@ public class StringHandler {
         return result;
     }
 
-    public static Object lookupObject(Class classToAccess, Object instance, String... fieldNames) {
+    public static Object lookupObject(Class<?> classToAccess, Object instance, String... fieldNames) {
         for (String fieldName : fieldNames) {
             try {
                 Field lookupField = classToAccess.getDeclaredField(fieldName);
@@ -465,7 +465,7 @@ public class StringHandler {
         return null;
     }
 
-    public static void executeMethod(Class classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {
+    public static void executeMethod(Class<?> classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {
         for (String methodName : methodNames) {
             try {
                 Method lookupMethod = classToAccess.getDeclaredMethod(methodName, argumentTypes);

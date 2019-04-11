@@ -108,12 +108,12 @@ public class CommandsGUI extends GuiScreen {
                     if (executionCommandArgs.length == 1) {
                         if (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
                             if (CraftPresence.CONFIG.enableJoinRequest) {
-                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.username, CraftPresence.TIMER);
+                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.username, CraftPresence.SYSTEM.TIMER);
                                 CraftPresence.awaitingReply = true;
                             } else {
                                 DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
                                 CraftPresence.CLIENT.STATUS = "ready";
-                                CraftPresence.TIMER = 0;
+                                CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
                             }
                         } else {
@@ -126,13 +126,13 @@ public class CommandsGUI extends GuiScreen {
                                 executionString = Constants.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.username);
                                 DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
                                 CraftPresence.CLIENT.STATUS = "ready";
-                                CraftPresence.TIMER = 0;
+                                CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
                             } else if (executionCommandArgs[1].equalsIgnoreCase("deny")) {
                                 executionString = Constants.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.username);
                                 DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
                                 CraftPresence.CLIENT.STATUS = "ready";
-                                CraftPresence.TIMER = 0;
+                                CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
                             } else {
                                 executionString = Constants.TRANSLATOR.translate("craftpresence.command.unrecognized");
