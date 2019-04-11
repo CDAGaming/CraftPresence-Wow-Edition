@@ -100,13 +100,13 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
   - In Minecraft 1.5.2 and Below, a Separate Translation Engine is being used, and may cause issues (In Higher Versions, this is only used as a fallback)
 
 - Legacy Version (Minecraft 1.2.5 and Below)
-  - Unavailable Server Support in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
+  - Server Support is unavailable in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
   - Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with ModLoader + ModLoaderMP
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
 ## Disclaimers
-#### GUI Support for Minecraft GUIs
-Due to Obfuscation from Mapping Providers, Minecraft GUIs must be opened once in order to be separately customized.
+#### Minecraft Object Obfuscation
+Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensions, or Servers must be opened once in the session in order to be separately customized.
 
 #### Discord TOS
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
