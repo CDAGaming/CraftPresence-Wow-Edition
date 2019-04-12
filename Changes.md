@@ -1,10 +1,10 @@
 # CraftPresence Changes
 
-## v1.5.3.1 (04/??/2019)
+## v1.5.3.1 (04/15/2019)
 
 ### Changes:
 
-* ???
+* Introduce RGB and Hex Code Support for Tooltips (Not Configurable at this Time)
 
 ### Fixes:
 

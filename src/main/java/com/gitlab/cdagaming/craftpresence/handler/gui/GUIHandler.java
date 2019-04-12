@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -162,6 +163,18 @@ public class GUIHandler {
         queuedForUpdate = false;
     }
 
+    public Color getColorFromHex(final String hexColor) {
+        if (!StringHandler.isNullOrEmpty(hexColor.substring(1))) {
+            int r = Integer.valueOf(hexColor.substring(1, 3), 16);
+            int g = Integer.valueOf(hexColor.substring(3, 5), 16);
+            int b = Integer.valueOf(hexColor.substring(5, 7), 16);
+
+            return new Color(r, g, b);
+        } else {
+            return Color.black;
+        }
+    }
+
     public void drawMultiLineString(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
         if (!textLines.isEmpty() && font != null) {
             int tooltipTextWidth = 0;
@@ -244,9 +257,11 @@ public class GUIHandler {
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 final int zLevel = 300;
-                int backgroundColor = 0xF0100010;
-                int borderColorStart = 0x505000FF;
-                int borderColorEnd = (borderColorStart & 0xFEFEFE) >> 1 | borderColorStart & 0xFF000000;
+                String backgroundColor = "-267386864";
+                String borderColorStart = "1347420415";
+
+                int borderColorCode = (borderColorStart.contains("#") ? getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
+                String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
 
                 drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
                 drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
@@ -276,15 +291,34 @@ public class GUIHandler {
         }
     }
 
-    private void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor) {
-        float startAlpha = (startColor >> 24 & 255) / 255.0F;
-        float startRed = (startColor >> 16 & 255) / 255.0F;
-        float startGreen = (startColor >> 8 & 255) / 255.0F;
-        float startBlue = (startColor & 255) / 255.0F;
-        float endAlpha = (endColor >> 24 & 255) / 255.0F;
-        float endRed = (endColor >> 16 & 255) / 255.0F;
-        float endGreen = (endColor >> 8 & 255) / 255.0F;
-        float endBlue = (endColor & 255) / 255.0F;
+    private void drawGradientRect(int zLevel, int left, int top, int right, int bottom, String startColorCode, String endColorCode) {
+        Color startColorObj = null, endColorObj = null;
+        int startColor = 0xFFFFFF, endColor = 0xFFFFFF;
+        float startAlpha, startRed, startGreen, startBlue,
+                endAlpha, endRed, endGreen, endBlue;
+
+        if (!StringHandler.isNullOrEmpty(startColorCode)) {
+            if (startColorCode.startsWith("#")) {
+                startColorObj = getColorFromHex(startColorCode);
+                endColorObj = (!StringHandler.isNullOrEmpty(endColorCode) && endColorCode.startsWith("#")) ? getColorFromHex(endColorCode) : startColorObj;
+            } else if (StringHandler.isValidInteger(startColorCode)) {
+                startColor = Integer.parseInt(startColorCode);
+                endColor = (StringHandler.isValidInteger(endColorCode)) ? Integer.parseInt(endColorCode) : startColor;
+            }
+        }
+
+        int startColorInstance = startColorObj != null ? startColorObj.getRGB() : startColor;
+        int endColorInstance = endColorObj != null ? endColorObj.getRGB() : endColor;
+
+        startAlpha = (startColorInstance >> 24 & 255) / 255.0F;
+        startRed = (startColorInstance >> 16 & 255) / 255.0F;
+        startGreen = (startColorInstance >> 8 & 255) / 255.0F;
+        startBlue = (startColorInstance & 255) / 255.0F;
+
+        endAlpha = (endColorInstance >> 24 & 255) / 255.0F;
+        endRed = (endColorInstance >> 16 & 255) / 255.0F;
+        endGreen = (endColorInstance >> 8 & 255) / 255.0F;
+        endBlue = (endColorInstance & 255) / 255.0F;
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
