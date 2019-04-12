@@ -52,6 +52,7 @@ public class DiscordHandler {
                 shutDown();
             }
         };
+        shutdownThread.setDaemon(true);
         Runtime.getRuntime().addShutdownHook(shutdownThread);
     }
 
