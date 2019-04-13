@@ -163,18 +163,6 @@ public class GUIHandler {
         queuedForUpdate = false;
     }
 
-    public Color getColorFromHex(final String hexColor) {
-        if (!StringHandler.isNullOrEmpty(hexColor.substring(1))) {
-            int r = Integer.valueOf(hexColor.substring(1, 3), 16);
-            int g = Integer.valueOf(hexColor.substring(3, 5), 16);
-            int b = Integer.valueOf(hexColor.substring(5, 7), 16);
-
-            return new Color(r, g, b);
-        } else {
-            return Color.black;
-        }
-    }
-
     public void drawMultiLineString(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
         if (!textLines.isEmpty() && font != null) {
             int tooltipTextWidth = 0;
@@ -260,7 +248,7 @@ public class GUIHandler {
                 String backgroundColor = "-267386864";
                 String borderColorStart = "1347420415";
 
-                int borderColorCode = (borderColorStart.contains("#") ? getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
+                int borderColorCode = (borderColorStart.contains("#") ? StringHandler.getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
                 String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
 
                 drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
@@ -299,8 +287,8 @@ public class GUIHandler {
 
         if (!StringHandler.isNullOrEmpty(startColorCode)) {
             if (startColorCode.startsWith("#")) {
-                startColorObj = getColorFromHex(startColorCode);
-                endColorObj = (!StringHandler.isNullOrEmpty(endColorCode) && endColorCode.startsWith("#")) ? getColorFromHex(endColorCode) : startColorObj;
+                startColorObj = StringHandler.getColorFromHex(startColorCode);
+                endColorObj = (!StringHandler.isNullOrEmpty(endColorCode) && endColorCode.startsWith("#")) ? StringHandler.getColorFromHex(endColorCode) : startColorObj;
             } else if (StringHandler.isValidInteger(startColorCode)) {
                 startColor = Integer.parseInt(startColorCode);
                 endColor = (StringHandler.isValidInteger(endColorCode)) ? Integer.parseInt(endColorCode) : startColor;

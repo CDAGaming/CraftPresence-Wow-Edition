@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 
+import java.awt.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -34,6 +35,28 @@ public class StringHandler {
             }
         } catch (Exception ignored) {
         }
+    }
+
+    public static Color getColorFromHex(final String hexColor) {
+        if (!StringHandler.isNullOrEmpty(hexColor.substring(1))) {
+            int r = Integer.valueOf(hexColor.substring(1, 3), 16);
+            int g = Integer.valueOf(hexColor.substring(3, 5), 16);
+            int b = Integer.valueOf(hexColor.substring(5, 7), 16);
+
+            return new Color(r, g, b);
+        } else {
+            return Color.black;
+        }
+    }
+
+    public int getHexFromColor(Color color) {
+        String alpha = Integer.toHexString(color.getAlpha());
+        String red = Integer.toHexString(color.getRed());
+        String green = Integer.toHexString(color.getGreen());
+        String blue = Integer.toHexString(color.getBlue());
+
+        String hex = "0x" + alpha + red + green + blue;
+        return Integer.parseInt(hex, 16);
     }
 
     public static boolean isNullOrEmpty(final String entry) {
