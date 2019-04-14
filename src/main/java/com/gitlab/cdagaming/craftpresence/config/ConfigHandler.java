@@ -32,6 +32,8 @@ public class ConfigHandler {
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
+    // ACCESSIBILITY
+    // TODO public String NAME_tooltipBGColor, NAME_tooltipBorderColor;
 
     // Config Variables
     // GENERAL
@@ -54,6 +56,9 @@ public class ConfigHandler {
     public boolean enableCommands, enablePERGUI, enablePERItem, overwriteServerIcon;
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
+    // ACCESSIBILITY
+    // TODO public String tooltipBCColor, tooltipBorderColor;
+
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
     // CLASS-SPECIFIC - PUBLIC

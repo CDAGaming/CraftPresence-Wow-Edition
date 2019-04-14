@@ -38,25 +38,38 @@ public class StringHandler {
     }
 
     public static Color getColorFromHex(final String hexColor) {
-        if (!StringHandler.isNullOrEmpty(hexColor.substring(1))) {
-            int r = Integer.valueOf(hexColor.substring(1, 3), 16);
-            int g = Integer.valueOf(hexColor.substring(3, 5), 16);
-            int b = Integer.valueOf(hexColor.substring(5, 7), 16);
+        try {
+            if (hexColor.length() == 7 && !StringHandler.isNullOrEmpty(hexColor.substring(1))) {
+                int r = Integer.valueOf(hexColor.substring(1, 3), 16);
+                int g = Integer.valueOf(hexColor.substring(3, 5), 16);
+                int b = Integer.valueOf(hexColor.substring(5, 7), 16);
 
-            return new Color(r, g, b);
-        } else {
-            return Color.black;
+                return new Color(r, g, b);
+            } else if (hexColor.length() == 6 && !hexColor.startsWith("#")) {
+                int r = Integer.valueOf(hexColor.substring(0, 2), 16);
+                int g = Integer.valueOf(hexColor.substring(2, 4), 16);
+                int b = Integer.valueOf(hexColor.substring(4, 6), 16);
+
+                return new Color(r, g, b);
+            } else {
+                return Color.white;
+            }
+        } catch (Exception ex) {
+            return Color.white;
         }
     }
 
-    public int getHexFromColor(Color color) {
-        String alpha = Integer.toHexString(color.getAlpha());
-        String red = Integer.toHexString(color.getRed());
-        String green = Integer.toHexString(color.getGreen());
-        String blue = Integer.toHexString(color.getBlue());
+    public static String getHexFromColor(Color color) {
+        String preFinal = "0x" + toSafeHexValue(color.getAlpha()) + toSafeHexValue(color.getRed()) + toSafeHexValue(color.getGreen()) + toSafeHexValue(color.getBlue());
+        return preFinal;
+    }
 
-        String hex = "0x" + alpha + red + green + blue;
-        return Integer.parseInt(hex, 16);
+    private static String toSafeHexValue(int number) {
+        StringBuilder builder = new StringBuilder(Integer.toHexString(number & 0xff));
+        while (builder.length() < 2) {
+            builder.append("0");
+        }
+        return builder.toString().toUpperCase();
     }
 
     public static boolean isNullOrEmpty(final String entry) {

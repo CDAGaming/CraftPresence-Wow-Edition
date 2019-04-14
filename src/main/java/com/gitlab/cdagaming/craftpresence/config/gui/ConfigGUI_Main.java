@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigGUI_Main extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GUIExtendedButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, proceedButton, aboutButton, commandGUIButton;
+    private GUIExtendedButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, accessibilitySet, proceedButton, aboutButton, commandGUIButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -36,6 +36,7 @@ public class ConfigGUI_Main extends GuiScreen {
         serverSet = new GUIExtendedButton(400, calc2, CraftPresence.GUIS.getButtonY(2), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.servermessages"));
         statusSet = new GUIExtendedButton(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.statusmessages"));
         advancedSet = new GUIExtendedButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.advanced"));
+        accessibilitySet = new GUIExtendedButton(700, (width / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.accessibility"));
 
         proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         aboutButton = new GUIExtendedButton(800, 10, (height - 30), 20, 20, "?");
@@ -47,6 +48,7 @@ public class ConfigGUI_Main extends GuiScreen {
         buttonList.add(serverSet);
         buttonList.add(statusSet);
         buttonList.add(advancedSet);
+        buttonList.add(accessibilitySet);
         buttonList.add(proceedButton);
         buttonList.add(aboutButton);
         buttonList.add(commandGUIButton);
@@ -106,6 +108,9 @@ public class ConfigGUI_Main extends GuiScreen {
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, advancedSet)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.title.advanced")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, accessibilitySet)) {
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.title.accessibility")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+        }
     }
 
     @Override
@@ -122,6 +127,8 @@ public class ConfigGUI_Main extends GuiScreen {
             mc.displayGuiScreen(new ConfigGUI_StatusMessages(currentScreen));
         } else if (button.id == advancedSet.id) {
             mc.displayGuiScreen(new ConfigGUI_AdvancedSettings(currentScreen));
+        } else if (button.id == accessibilitySet.id) {
+            mc.displayGuiScreen(new ConfigGUI_AccessibilitySettings(currentScreen));
         } else if (button.id == proceedButton.id) {
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();

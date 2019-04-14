@@ -248,7 +248,7 @@ public class GUIHandler {
                 String backgroundColor = "-267386864";
                 String borderColorStart = "1347420415";
 
-                int borderColorCode = (borderColorStart.contains("#") ? StringHandler.getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
+                int borderColorCode = (borderColorStart.startsWith("#") ? StringHandler.getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
                 String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
 
                 drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
