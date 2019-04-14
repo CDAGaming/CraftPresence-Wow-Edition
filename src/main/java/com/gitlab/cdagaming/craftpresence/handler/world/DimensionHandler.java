@@ -23,7 +23,7 @@ public class DimensionHandler {
 
     private boolean queuedForUpdate = false;
 
-    public void emptyData() {
+    private void emptyData() {
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
         DIMENSION_TYPES.clear();

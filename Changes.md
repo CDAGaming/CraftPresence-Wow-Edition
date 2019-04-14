@@ -4,7 +4,11 @@
 
 ### Changes:
 
-* Introduce RGB and Hex Code Support for Tooltips (Not Configurable at this Time)
+* New Accessibility GUI with Options for:
+  
+  * Options to Customize Tooltip Background and Border Colors (Supports Most Color Formats)
+  
+  * Soon to have Options for Fallback Language and KeyBindings in a Future Update
 
 ### Fixes:
 

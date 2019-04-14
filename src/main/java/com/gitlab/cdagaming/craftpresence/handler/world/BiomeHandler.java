@@ -19,7 +19,7 @@ public class BiomeHandler {
 
     private boolean queuedForUpdate = false;
 
-    public void emptyData() {
+    private void emptyData() {
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
         BIOME_TYPES.clear();

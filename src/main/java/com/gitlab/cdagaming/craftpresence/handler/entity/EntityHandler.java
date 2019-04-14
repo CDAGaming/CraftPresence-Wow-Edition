@@ -39,7 +39,7 @@ public class EntityHandler {
 
     private boolean queuedForUpdate = false;
 
-    public void emptyData() {
+    private void emptyData() {
         BLOCK_NAMES.clear();
         BLOCK_CLASSES.clear();
         ITEM_NAMES.clear();

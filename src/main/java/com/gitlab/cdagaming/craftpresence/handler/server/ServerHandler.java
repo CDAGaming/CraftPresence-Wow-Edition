@@ -26,7 +26,7 @@ public class ServerHandler {
 
     private boolean queuedForUpdate = false, joinInProgress = false, isOnLAN = false;
 
-    public void emptyData() {
+    private void emptyData() {
         knownAddresses.clear();
         clearClientData();
     }

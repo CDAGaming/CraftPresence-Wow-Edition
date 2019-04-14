@@ -57,7 +57,7 @@ public class GUIHandler {
         return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth, checkBox.getHeight());
     }
 
-    public void emptyData() {
+    private void emptyData() {
         GUI_NAMES.clear();
         GUI_CLASSES.clear();
         clearClientData();
@@ -245,8 +245,27 @@ public class GUIHandler {
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 final int zLevel = 300;
-                String backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
-                String borderColorStart = CraftPresence.CONFIG.tooltipBorderColor;
+                String backgroundColor, borderColorStart;
+
+                // Perform Checks for different Color Format Fixes
+                // Fix 1 Example: ababab -> #ababab
+                // Fix 2 Example: 0xFFFFFF -> -1 or 100010
+
+                if (CraftPresence.CONFIG.tooltipBGColor.length() == 6) {
+                    backgroundColor = "#" + CraftPresence.CONFIG.tooltipBGColor;
+                } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith("0x")) {
+                    backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBGColor).intValue());
+                } else {
+                    backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                }
+
+                if (CraftPresence.CONFIG.tooltipBorderColor.length() == 6) {
+                    borderColorStart = "#" + CraftPresence.CONFIG.tooltipBorderColor;
+                } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith("0x")) {
+                    borderColorStart = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBorderColor).intValue());
+                } else {
+                    borderColorStart = CraftPresence.CONFIG.tooltipBorderColor;
+                }
 
                 int borderColorCode = (borderColorStart.startsWith("#") ? StringHandler.getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
                 String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
