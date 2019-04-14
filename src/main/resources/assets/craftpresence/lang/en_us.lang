@@ -51,6 +51,7 @@ gui.config.editorMessage.redcolorvalue=Red Color Value:
 gui.config.editorMessage.greencolorvalue=Green Color Value:
 gui.config.editorMessage.bluecolorvalue=Blue Color Value:
 gui.config.editorMessage.alphacolorvalue=Alpha Color Value:
+gui.config.editorMessage.refresh=**Press ENTER to Refresh Values**
 gui.config.message.credits=This Configuration GUI was made from scratch by \n Jonathing, and will continue to be maintained by \n CDAGaming. A lot of effort went into making this \n custom GUI, so show him some support! Thanks. \n\n Feel free to learn from this GUI's code on \n the CraftPresence GitLab repository.
 gui.config.message.remove=**Remove Message Text to Remove this Value**
 gui.config.errorMessage.null=This GUI is not Implemented just yet! \n\n Please Check Back Later..

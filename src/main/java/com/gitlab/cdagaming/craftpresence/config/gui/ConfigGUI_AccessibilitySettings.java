@@ -22,8 +22,11 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        tooltipBGButton = new GUIExtendedButton(100, (width / 2) - 90, CraftPresence.GUIS.getButtonY(1), 180, 20, CraftPresence.CONFIG.NAME_tooltipBGColor.replaceAll("_", " "));
-        tooltipBorderButton = new GUIExtendedButton(200, (width / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, CraftPresence.CONFIG.NAME_tooltipBorderColor.replaceAll("_", " "));
+        int calc1 = (width / 2) - 183;
+        int calc2 = (width / 2) + 3;
+
+        tooltipBGButton = new GUIExtendedButton(100, calc1, CraftPresence.GUIS.getButtonY(1), 180, 20, CraftPresence.CONFIG.NAME_tooltipBGColor.replaceAll("_", " "));
+        tooltipBorderButton = new GUIExtendedButton(200, calc2, CraftPresence.GUIS.getButtonY(1), 180, 20, CraftPresence.CONFIG.NAME_tooltipBorderColor.replaceAll("_", " "));
 
         backButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 

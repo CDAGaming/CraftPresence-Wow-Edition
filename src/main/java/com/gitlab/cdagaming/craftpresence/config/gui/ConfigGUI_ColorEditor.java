@@ -58,14 +58,16 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         drawDefaultBackground();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.editor.color", configValueName);
+        final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
 
         final String hexCodeTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.hexcode");
         final String redTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.redcolorvalue");
         final String greenTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.greencolorvalue");
         final String blueTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.bluecolorvalue");
         final String alphaTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.alphacolorvalue");
+
         final String previewTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.preview");
+        final String noticeTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.refresh");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringHandler.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
@@ -75,7 +77,9 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         drawString(mc.fontRenderer, greenTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
         drawString(mc.fontRenderer, blueTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
         drawString(mc.fontRenderer, alphaTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+
         drawString(mc.fontRenderer, previewTitle, width - 90, height - 30, 0xFFFFFF);
+        drawString(mc.fontRenderer, noticeTitle, (width / 2) - 90, height - 30, 0xFFFFFF);
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(hexText.getText());
 
@@ -182,12 +186,14 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         } else if (!StringHandler.isNullOrEmpty(redText.getText()) && !StringHandler.isNullOrEmpty(greenText.getText()) && !StringHandler.isNullOrEmpty(blueText.getText()) && !StringHandler.isNullOrEmpty(alphaText.getText())) {
             if (!redText.getText().equals(Integer.toString(currentRed)) || !blueText.getText().equals(Integer.toString(currentBlue)) || !greenText.getText().equals(Integer.toString(currentGreen)) || !alphaText.getText().equals(Integer.toString(currentAlpha))) {
                 if (StringHandler.isValidInteger(redText.getText()) && StringHandler.isValidInteger(greenText.getText()) && StringHandler.isValidInteger(blueText.getText()) && StringHandler.isValidInteger(alphaText.getText())) {
-                    localColor = new Color(Integer.parseInt(redText.getText()), Integer.parseInt(greenText.getText()), Integer.parseInt(blueText.getText()), Integer.parseInt(alphaText.getText()));
+                    if (!(Integer.parseInt(redText.getText()) > 255 || Integer.parseInt(greenText.getText()) > 255 || Integer.parseInt(blueText.getText()) > 255 || Integer.parseInt(alphaText.getText()) > 255)) {
+                        localColor = new Color(Integer.parseInt(redText.getText()), Integer.parseInt(greenText.getText()), Integer.parseInt(blueText.getText()), Integer.parseInt(alphaText.getText()));
 
-                    currentNormalHexValue = StringHandler.getHexFromColor(localColor);
-                    hexText.setText(currentNormalHexValue);
+                        currentNormalHexValue = StringHandler.getHexFromColor(localColor);
+                        hexText.setText(currentNormalHexValue);
 
-                    currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
+                        currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
+                    }
                 }
             }
         }
