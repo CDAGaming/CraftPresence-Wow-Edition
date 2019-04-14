@@ -158,7 +158,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
     }
 
     private void syncValues() {
-        int localValue;
+        Integer localValue = null;
         Color localColor;
 
         if (!StringHandler.isNullOrEmpty(hexText.getText()) && !hexText.getText().equals(currentNormalHexValue)) {
@@ -167,22 +167,24 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             } else if (hexText.getText().startsWith("0x")) {
                 localColor = new Color(Long.decode(hexText.getText()).intValue(), true);
                 localValue = localColor.getRGB();
-            } else {
+            } else if (StringHandler.isValidInteger(hexText.getText())) {
                 localValue = Integer.decode(hexText.getText());
             }
 
-            currentAlpha = (localValue >> 24 & 255);
-            currentRed = (localValue >> 16 & 255);
-            currentGreen = (localValue >> 8 & 255);
-            currentBlue = (localValue & 255);
+            if (localValue != null) {
+                currentAlpha = (localValue >> 24 & 255);
+                currentRed = (localValue >> 16 & 255);
+                currentGreen = (localValue >> 8 & 255);
+                currentBlue = (localValue & 255);
 
-            alphaText.setText(Integer.toString(currentAlpha));
-            redText.setText(Integer.toString(currentRed));
-            greenText.setText(Integer.toString(currentGreen));
-            blueText.setText(Integer.toString(currentBlue));
+                alphaText.setText(Integer.toString(currentAlpha));
+                redText.setText(Integer.toString(currentRed));
+                greenText.setText(Integer.toString(currentGreen));
+                blueText.setText(Integer.toString(currentBlue));
 
-            currentNormalHexValue = hexText.getText();
-            currentConvertedHexValue = Integer.toString(localValue);
+                currentNormalHexValue = hexText.getText();
+                currentConvertedHexValue = Integer.toString(localValue);
+            }
         } else if (!StringHandler.isNullOrEmpty(redText.getText()) && !StringHandler.isNullOrEmpty(greenText.getText()) && !StringHandler.isNullOrEmpty(blueText.getText()) && !StringHandler.isNullOrEmpty(alphaText.getText())) {
             if (!redText.getText().equals(Integer.toString(currentRed)) || !blueText.getText().equals(Integer.toString(currentBlue)) || !greenText.getText().equals(Integer.toString(currentGreen)) || !alphaText.getText().equals(Integer.toString(currentAlpha))) {
                 if (StringHandler.isValidInteger(redText.getText()) && StringHandler.isValidInteger(greenText.getText()) && StringHandler.isValidInteger(blueText.getText()) && StringHandler.isValidInteger(alphaText.getText())) {
