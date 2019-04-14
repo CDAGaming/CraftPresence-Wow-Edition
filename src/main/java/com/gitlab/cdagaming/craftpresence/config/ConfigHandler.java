@@ -33,7 +33,7 @@ public class ConfigHandler {
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
-    // TODO public String NAME_tooltipBGColor, NAME_tooltipBorderColor;
+    public String NAME_tooltipBGColor, NAME_tooltipBorderColor;
 
     // Config Variables
     // GENERAL
@@ -57,7 +57,7 @@ public class ConfigHandler {
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
-    // TODO public String tooltipBCColor, tooltipBorderColor;
+    public String tooltipBGColor, tooltipBorderColor;
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
@@ -146,6 +146,11 @@ public class ConfigHandler {
         splitCharacter = ";";
         guiMessages = new String[]{"default;In &gui&"};
         itemMessages = new String[]{"default;Holding &main&"};
+        // ACCESSIBILITY
+        NAME_tooltipBGColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.tooltipbgcolor").replaceAll(" ", "_");
+        NAME_tooltipBorderColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.tooltipbordercolor").replaceAll(" ", "_");
+        tooltipBGColor = "-267386864";
+        tooltipBorderColor = "1347420415";
 
         initialized = true;
     }
@@ -219,6 +224,9 @@ public class ConfigHandler {
                 splitCharacter = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_splitCharacter)) ? properties.getProperty(NAME_splitCharacter) : splitCharacter;
                 guiMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : guiMessages;
                 itemMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : itemMessages;
+                // ACCESSIBILITY
+                tooltipBGColor = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_tooltipBGColor)) ? properties.getProperty(NAME_tooltipBGColor) : tooltipBGColor;
+                tooltipBorderColor = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_tooltipBorderColor)) ? properties.getProperty(NAME_tooltipBorderColor) : tooltipBorderColor;
             } catch (NullPointerException ex) {
                 verifyConfig();
             } finally {
@@ -271,6 +279,9 @@ public class ConfigHandler {
         properties.setProperty(NAME_splitCharacter, splitCharacter);
         properties.setProperty(NAME_guiMessages, Arrays.toString(guiMessages));
         properties.setProperty(NAME_itemMessages, Arrays.toString(itemMessages));
+        // ACCESSIBILITY
+        properties.setProperty(NAME_tooltipBGColor, tooltipBGColor);
+        properties.setProperty(NAME_tooltipBorderColor, tooltipBorderColor);
 
         // Check for Conflicts before Saving
         if (showCurrentBiome && showGameState) {

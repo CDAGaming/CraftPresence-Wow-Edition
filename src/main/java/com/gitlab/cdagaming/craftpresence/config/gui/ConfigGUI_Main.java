@@ -38,9 +38,9 @@ public class ConfigGUI_Main extends GuiScreen {
         advancedSet = new GUIExtendedButton(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.advanced"));
         accessibilitySet = new GUIExtendedButton(700, (width / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.accessibility"));
 
-        proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        aboutButton = new GUIExtendedButton(800, 10, (height - 30), 20, 20, "?");
-        commandGUIButton = new GUIExtendedButton(900, (width - 120), (height - 30), 85, 20, Constants.TRANSLATOR.translate("gui.config.title.commands"));
+        proceedButton = new GUIExtendedButton(800, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        aboutButton = new GUIExtendedButton(900, 10, (height - 30), 20, 20, "?");
+        commandGUIButton = new GUIExtendedButton(1000, (width - 120), (height - 30), 85, 20, Constants.TRANSLATOR.translate("gui.config.title.commands"));
 
         buttonList.add(generalSet);
         buttonList.add(biomeSet);

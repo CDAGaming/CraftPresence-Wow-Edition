@@ -245,8 +245,8 @@ public class GUIHandler {
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 final int zLevel = 300;
-                String backgroundColor = "-267386864";
-                String borderColorStart = "1347420415";
+                String backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                String borderColorStart = CraftPresence.CONFIG.tooltipBorderColor;
 
                 int borderColorCode = (borderColorStart.startsWith("#") ? StringHandler.getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
                 String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
@@ -279,7 +279,7 @@ public class GUIHandler {
         }
     }
 
-    private void drawGradientRect(int zLevel, int left, int top, int right, int bottom, String startColorCode, String endColorCode) {
+    public void drawGradientRect(int zLevel, int left, int top, int right, int bottom, String startColorCode, String endColorCode) {
         Color startColorObj = null, endColorObj = null;
         int startColor = 0xFFFFFF, endColor = 0xFFFFFF;
         float startAlpha, startRed, startGreen, startBlue,

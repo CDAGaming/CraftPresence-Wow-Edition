@@ -60,8 +60,7 @@ public class StringHandler {
     }
 
     public static String getHexFromColor(Color color) {
-        String preFinal = "0x" + toSafeHexValue(color.getAlpha()) + toSafeHexValue(color.getRed()) + toSafeHexValue(color.getGreen()) + toSafeHexValue(color.getBlue());
-        return preFinal;
+        return "0x" + toSafeHexValue(color.getAlpha()) + toSafeHexValue(color.getRed()) + toSafeHexValue(color.getGreen()) + toSafeHexValue(color.getBlue());
     }
 
     private static String toSafeHexValue(int number) {
