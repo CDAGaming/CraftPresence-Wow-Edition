@@ -102,10 +102,10 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             syncValues();
 
             if (!StringHandler.isNullOrEmpty(configValueName)) {
-                if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor)) {
+                if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBGColor)) {
                     CraftPresence.CONFIG.hasChanged = true;
                     CraftPresence.CONFIG.tooltipBGColor = currentNormalHexValue;
-                } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor)) {
+                } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
                     CraftPresence.CONFIG.hasChanged = true;
                     CraftPresence.CONFIG.tooltipBorderColor = currentNormalHexValue;
                 }
