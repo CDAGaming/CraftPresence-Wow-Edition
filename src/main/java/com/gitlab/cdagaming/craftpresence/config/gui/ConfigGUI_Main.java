@@ -58,7 +58,7 @@ public class ConfigGUI_Main extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
+        CraftPresence.GUIS.drawBackground(width, height);
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
 

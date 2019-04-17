@@ -242,8 +242,6 @@ public class GUIHandler {
             }
 
             if (withBackground) {
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-
                 final int zLevel = 300;
                 String backgroundColor, borderColorStart;
 
@@ -291,10 +289,26 @@ public class GUIHandler {
 
                 tooltipY += 10;
             }
+        }
+    }
 
-            if (withBackground) {
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
+    public void drawBackground(final int width, final int height) {
+        if (CraftPresence.instance.world != null) {
+            drawGradientRect(300, 0, 0, width, height, "-1072689136", "-804253680");
+        } else {
+            // TODO: Set Texture to Config Value
+            String temp = "textures/gui/options_background.png";
+            ResourceLocation loc = null;
+            if (!StringHandler.isNullOrEmpty(temp)) {
+                if (temp.contains(":")) {
+                    String[] splitInput = temp.split(":", 2);
+                    loc = new ResourceLocation(splitInput[0], splitInput[1]);
+                } else {
+                    loc = new ResourceLocation(temp);
+                }
             }
+
+            drawContinuousTexturedBox(0, 0, 0, 46, width, height, width, height, 50, height, 50, width, 300, loc);
         }
     }
 

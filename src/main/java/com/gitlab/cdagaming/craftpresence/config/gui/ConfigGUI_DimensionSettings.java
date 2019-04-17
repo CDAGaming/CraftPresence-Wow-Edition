@@ -47,7 +47,7 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
+        CraftPresence.GUIS.drawBackground(width, height);
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title");
         final String subTitle = Constants.TRANSLATOR.translate("gui.config.title.dimensionmessages");

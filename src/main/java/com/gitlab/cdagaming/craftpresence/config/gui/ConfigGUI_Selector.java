@@ -53,7 +53,7 @@ public class ConfigGUI_Selector extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
+        CraftPresence.GUIS.drawBackground(width, height);
 
         final String searchText = Constants.TRANSLATOR.translate("gui.config.editorMessage.search");
         List<String> modifiedList = Lists.newArrayList();

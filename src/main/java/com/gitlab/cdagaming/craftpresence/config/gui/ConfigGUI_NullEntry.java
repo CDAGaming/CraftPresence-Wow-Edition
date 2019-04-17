@@ -32,7 +32,7 @@ public class ConfigGUI_NullEntry extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
+        CraftPresence.GUIS.drawBackground(width, height);
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title.error");
         final List<String> notice = StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.errorMessage.null"));
