@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.handler.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import net.minecraft.client.Minecraft;
 
 @SuppressWarnings("NullableProblems")
@@ -13,7 +14,7 @@ public class GUICheckBox extends GUIExtendedButton {
         is_Checked = isChecked;
         boxWidth = 11;
         height = 11;
-        width = boxWidth + 2 + CraftPresence.instance.fontRenderer.getStringWidth(displayString);
+        width = boxWidth + 2 + StringHandler.getStringWidth(displayString);
     }
 
     /**
