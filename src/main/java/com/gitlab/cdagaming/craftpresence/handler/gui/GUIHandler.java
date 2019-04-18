@@ -313,17 +313,22 @@ public class GUIHandler {
     }
 
     public void drawTextureRect(double width, double height, double tint, ResourceLocation texLocation) {
+        if (texLocation != null) {
+            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        }
+
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_FOG);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        float divider = 32.0F;
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        CraftPresence.instance.getTextureManager().bindTexture(texLocation);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        float f = 32.0F;
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(0.0D, height, 0.0D).tex(0.0D, (double)((float)height / 32.0F + (float)tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(width, height, 0.0D).tex((double)((float)width / 32.0F), (double)((float)height / 32.0F + (float)tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(width, 0.0D, 0.0D).tex((double)((float)width / 32.0F), tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferbuilder.pos(0.0D, height, 0.0D).tex(0.0D, (double)((float)height / divider + (float)tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(width, height, 0.0D).tex((double)((float)width / divider), (double)((float)height / divider + (float)tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(width, 0.0D, 0.0D).tex((double)((float)width / divider), tint).color(64, 64, 64, 255).endVertex();
         bufferbuilder.pos(0.0D, 0.0D, 0.0D).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
         tessellator.draw();
     }
