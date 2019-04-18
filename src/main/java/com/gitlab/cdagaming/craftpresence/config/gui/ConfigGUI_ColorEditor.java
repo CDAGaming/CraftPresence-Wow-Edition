@@ -15,10 +15,14 @@ import java.io.IOException;
 public class ConfigGUI_ColorEditor extends GuiScreen {
     private final GuiScreen parentScreen;
     private int pageNumber;
-    private String currentNormalHexValue, currentConvertedHexValue, configValueName, startingHexValue;
-    private int currentRed, currentGreen, currentBlue, currentAlpha;
     private GUIExtendedButton proceedButton, nextPageButton, previousPageButton;
+    private String configValueName;
+
+    // Page 1 Variables
+    private String currentNormalHexValue, currentConvertedHexValue, startingHexValue;
+    private int currentRed, currentGreen, currentBlue, currentAlpha;
     private GuiTextField hexText, redText, greenText, blueText, alphaText;
+    // Page 2 Variables TODO
 
     ConfigGUI_ColorEditor(GuiScreen parentScreen, String configValueName) {
         mc = CraftPresence.instance;
@@ -78,7 +82,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringHandler.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(mc.fontRenderer, previewTitle, width - 90, height - 30, 0xFFFFFF);
+        drawString(mc.fontRenderer, previewTitle, width - 90, height - 25, 0xFFFFFF);
         drawString(mc.fontRenderer, noticeTitle, (width / 2) - 90, CraftPresence.GUIS.getButtonY(1) - 5, 0xFFFFFF);
 
         // Page 1 Items
@@ -104,7 +108,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
             proceedButton.enabled = !StringHandler.isNullOrEmpty(hexText.getText());
 
-            CraftPresence.GUIS.drawGradientRect(300, width - 45, height - 45, width - 5, height - 5, currentConvertedHexValue, currentConvertedHexValue);
+            CraftPresence.GUIS.drawGradientRect(300, width - 45, height - 45, width - 1, height - 2, currentConvertedHexValue, currentConvertedHexValue);
         }
 
         // Page 2 Items TODO
