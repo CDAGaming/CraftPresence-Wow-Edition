@@ -50,11 +50,11 @@ public class GUIHandler {
     }
 
     public boolean isMouseOver(final double mouseX, final double mouseY, final GUIExtendedButton button) {
-        return isMouseOver(mouseX, mouseY, button.x, button.y, button.getWidth(), button.getHeight());
+        return isMouseOver(mouseX, mouseY, button.x, button.y, button.getWidth() - 1, button.getHeight() - 1);
     }
 
     public boolean isMouseOver(final double mouseX, final double mouseY, final GUICheckBox checkBox) {
-        return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth, checkBox.getHeight());
+        return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth - 1, checkBox.getHeight() - 1);
     }
 
     private void emptyData() {
