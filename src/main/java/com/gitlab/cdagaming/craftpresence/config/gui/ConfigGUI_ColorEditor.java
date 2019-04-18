@@ -29,14 +29,6 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         pageNumber = 0;
         this.parentScreen = parentScreen;
         this.configValueName = configValueName;
-
-        if (!StringHandler.isNullOrEmpty(configValueName)) {
-            if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor)) {
-                startingHexValue = CraftPresence.CONFIG.tooltipBGColor;
-            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor)) {
-                startingHexValue = CraftPresence.CONFIG.tooltipBorderColor;
-            }
-        }
     }
 
     @Override
@@ -44,20 +36,14 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
 
         // Page 1 Items
-        if (pageNumber == 0) {
-            hexText = new GuiTextField(100, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
-            hexText.setText(startingHexValue);
+        hexText = new GuiTextField(100, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
 
-            redText = new GuiTextField(110, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
-            greenText = new GuiTextField(120, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
-            blueText = new GuiTextField(130, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
-            alphaText = new GuiTextField(140, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
-        }
+        redText = new GuiTextField(110, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
+        greenText = new GuiTextField(120, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
+        blueText = new GuiTextField(130, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
+        alphaText = new GuiTextField(140, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
 
         // Page 2 Items TODO
-        if (pageNumber == 1) {
-            //
-        }
 
         proceedButton = new GUIExtendedButton(700, 10, (height - 30), 80, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         previousPageButton = new GUIExtendedButton(800, (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30), 20, 20, "<");
@@ -67,6 +53,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         buttonList.add(nextPageButton);
         buttonList.add(proceedButton);
 
+        initValues();
         syncValues();
         super.initGui();
     }
@@ -125,10 +112,12 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         if (button.id == previousPageButton.id && pageNumber != 0) {
             pageNumber--;
+            initValues();
             syncValues();
         }
         if (button.id == nextPageButton.id && pageNumber != 1) {
             pageNumber++;
+            initValues();
             syncValues();
         }
 
@@ -163,10 +152,14 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         if (keyCode == Keyboard.KEY_LEFT && pageNumber != 0) {
             pageNumber--;
+            initValues();
+            syncValues();
         }
 
         if (keyCode == Keyboard.KEY_RIGHT && pageNumber != 1) {
             pageNumber++;
+            initValues();
+            syncValues();
         }
 
         // Page 1 Items
@@ -229,13 +222,39 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         Keyboard.enableRepeatEvents(false);
     }
 
+    private void initValues() {
+        if (!StringHandler.isNullOrEmpty(configValueName)) {
+            if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor)) {
+                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
+                    startingHexValue = CraftPresence.CONFIG.tooltipBGColor;
+                } else {
+                    // TODO - PG 2
+                }
+            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor)) {
+                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
+                    startingHexValue = CraftPresence.CONFIG.tooltipBorderColor;
+                } else {
+                    // TODO - PG 2
+                }
+            }
+
+            if (StringHandler.isNullOrEmpty(hexText.getText()) && !StringHandler.isNullOrEmpty(startingHexValue)) {
+                hexText.setText(startingHexValue);
+                currentNormalHexValue = null;
+                currentConvertedHexValue = null;
+            }
+
+            // TODO: Add Event for PG 2
+        }
+    }
+
     private void syncValues() {
         // Page 1 - RGBA / Hex Syncing
         if (pageNumber == 0) {
             Integer localValue = null;
             Color localColor;
 
-            if (!StringHandler.isNullOrEmpty(hexText.getText())) {
+            if (!StringHandler.isNullOrEmpty(hexText.getText()) && !hexText.getText().equals(currentNormalHexValue)) {
                 if (hexText.getText().startsWith("#") || hexText.getText().length() == 6) {
                     localValue = StringHandler.getColorFromHex(hexText.getText()).getRGB();
                 } else if (hexText.getText().startsWith("0x")) {

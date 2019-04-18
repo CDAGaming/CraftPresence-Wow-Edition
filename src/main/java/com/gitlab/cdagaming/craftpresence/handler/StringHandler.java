@@ -79,6 +79,10 @@ public class StringHandler {
         return !isNullOrEmpty(entry) && (entry.equalsIgnoreCase("true") || entry.equalsIgnoreCase("false"));
     }
 
+    public static boolean isValidColorCode(final String entry) {
+        return !isNullOrEmpty(entry) && ((entry.startsWith("#") || entry.length() == 6) || entry.startsWith("0x") || isValidInteger(entry));
+    }
+
     public static boolean isValidInteger(final String entry) {
         if (!isNullOrEmpty(entry)) {
             try {
