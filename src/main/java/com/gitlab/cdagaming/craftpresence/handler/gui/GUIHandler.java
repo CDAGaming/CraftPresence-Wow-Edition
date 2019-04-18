@@ -31,7 +31,7 @@ public class GUIHandler {
 
     private boolean queuedForUpdate = false;
 
-    private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, float zLevel) {
+    private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, double zLevel) {
         final float uScale = 1f / 0x100;
         final float vScale = 1f / 0x100;
 
@@ -281,7 +281,7 @@ public class GUIHandler {
 
             for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
                 String line = textLines.get(lineNumber);
-                font.drawStringWithShadow(line, (float) tooltipX, (float) tooltipY, -1);
+                font.drawStringWithShadow(line, tooltipX, tooltipY, -1);
 
                 if (lineNumber + 1 == titleLinesCount) {
                     tooltipY += 2;
@@ -321,14 +321,14 @@ public class GUIHandler {
         GL11.glDisable(GL11.GL_FOG);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        float divider = 32.0F;
+        final float divider = 32.0F;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(0.0D, height, 0.0D).tex(0.0D, (double)((float)height / divider + (float)tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(width, height, 0.0D).tex((double)((float)width / divider), (double)((float)height / divider + (float)tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(width, 0.0D, 0.0D).tex((double)((float)width / divider), tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(0.0D, height, 0.0D).tex(0.0D, (height / divider + tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(width, height, 0.0D).tex((width / divider), (height / divider + tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(width, 0.0D, 0.0D).tex((width / divider), tint).color(64, 64, 64, 255).endVertex();
         bufferbuilder.pos(0.0D, 0.0D, 0.0D).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
         tessellator.draw();
     }
@@ -384,7 +384,7 @@ public class GUIHandler {
     }
 
     public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
-                                          int topBorder, int bottomBorder, int leftBorder, int rightBorder, float zLevel, ResourceLocation res) {
+                                          int topBorder, int bottomBorder, int leftBorder, int rightBorder, double zLevel, ResourceLocation res) {
         if (res != null) {
             CraftPresence.instance.getTextureManager().bindTexture(res);
         }
