@@ -308,8 +308,24 @@ public class GUIHandler {
                 }
             }
 
-            drawContinuousTexturedBox(0, 0, 0, 46, width, height, width, height, 50, height, 50, width, 300, loc);
+            drawTextureRect(width, height, 0, loc);
         }
+    }
+
+    public void drawTextureRect(double width, double height, double tint, ResourceLocation texLocation) {
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_FOG);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        float f = 32.0F;
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+        bufferbuilder.pos(0.0D, height, 0.0D).tex(0.0D, (double)((float)height / 32.0F + (float)tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(width, height, 0.0D).tex((double)((float)width / 32.0F), (double)((float)height / 32.0F + (float)tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(width, 0.0D, 0.0D).tex((double)((float)width / 32.0F), tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(0.0D, 0.0D, 0.0D).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
+        tessellator.draw();
     }
 
     public void drawGradientRect(int zLevel, int left, int top, int right, int bottom, String startColorCode, String endColorCode) {
