@@ -242,9 +242,12 @@ public class GUIHandler {
             }
 
             if (withBackground) {
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
+
                 final int zLevel = 300;
                 String backgroundColor, borderColorStart;
 
+                // TODO: Add Texture Support
                 // Perform Checks for different Color Format Fixes
                 // Fix 1 Example: ababab -> #ababab
                 // Fix 2 Example: 0xFFFFFF -> -1 or 100010
@@ -289,6 +292,10 @@ public class GUIHandler {
 
                 tooltipY += 10;
             }
+
+            if (withBackground) {
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+            }
         }
     }
 
@@ -299,16 +306,18 @@ public class GUIHandler {
             // TODO: Set Texture to Config Value
             String temp = "textures/gui/options_background.png";
             ResourceLocation loc = null;
-            if (!StringHandler.isNullOrEmpty(temp)) {
+            if (StringHandler.isValidColorCode(temp)) {
+                drawGradientRect(300, 0, 0, width, height, temp, temp);
+            } else if (!StringHandler.isNullOrEmpty(temp)) {
                 if (temp.contains(":")) {
                     String[] splitInput = temp.split(":", 2);
                     loc = new ResourceLocation(splitInput[0], splitInput[1]);
                 } else {
                     loc = new ResourceLocation(temp);
                 }
-            }
 
-            drawTextureRect(width, height, 0, loc);
+                drawTextureRect(width, height, 0, loc);
+            }
         }
     }
 
