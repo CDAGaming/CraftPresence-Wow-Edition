@@ -342,7 +342,7 @@ public class GUIHandler {
         tessellator.draw();
     }
 
-    public void drawGradientRect(int zLevel, int left, int top, int right, int bottom, String startColorCode, String endColorCode) {
+    public void drawGradientRect(float zLevel, double left, double top, double right, double bottom, String startColorCode, String endColorCode) {
         Color startColorObj = null, endColorObj = null;
         int startColor = 0xFFFFFF, endColor = 0xFFFFFF;
         float startAlpha, startRed, startGreen, startBlue,
@@ -371,6 +371,7 @@ public class GUIHandler {
         endGreen = (endColorInstance >> 8 & 255) / 255.0F;
         endBlue = (endColorInstance & 255) / 255.0F;
 
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -390,6 +391,7 @@ public class GUIHandler {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
