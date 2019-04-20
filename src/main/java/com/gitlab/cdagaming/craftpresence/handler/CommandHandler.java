@@ -12,9 +12,6 @@ import net.minecraft.client.Minecraft;
 
 public class CommandHandler {
     public static void reloadData(final boolean forceUpdateRPC) {
-        CraftPresence.instance = Minecraft.getMinecraft();
-        CraftPresence.player = CraftPresence.instance.player;
-
         Constants.TRANSLATOR.tick();
         CraftPresence.SYSTEM.tick();
 

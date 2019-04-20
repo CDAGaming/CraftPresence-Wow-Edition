@@ -87,12 +87,15 @@ public class CraftPresence {
 
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
-        if (!initialized && instance.currentScreen != null && (
+        instance = Minecraft.getMinecraft();
+        player = instance.player;
+
+        if (!initialized && (instance.currentScreen != null && (player != null ||
                 instance.currentScreen instanceof GuiMainMenu ||
-                        instance.currentScreen.getClass().getSimpleName().equals("GuiCustom") ||
-                        instance.currentScreen.getClass().getSimpleName().contains("MainMenu") || (
-                        instance.currentScreen.getClass().getSuperclass() != null &&
-                                instance.currentScreen.getClass().getSuperclass().getSimpleName().equals(GuiMainMenu.class.getSimpleName())))) {
+                instance.currentScreen.getClass().getSimpleName().equals("GuiCustom") ||
+                instance.currentScreen.getClass().getSimpleName().contains("MainMenu") || (
+                instance.currentScreen.getClass().getSuperclass() != null &&
+                        instance.currentScreen.getClass().getSuperclass().getSimpleName().equals(GuiMainMenu.class.getSimpleName()))))) {
             init();
         } else if (initialized) {
             CommandHandler.reloadData(false);
