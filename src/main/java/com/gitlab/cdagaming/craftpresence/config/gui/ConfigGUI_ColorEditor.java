@@ -335,11 +335,15 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             }
 
             // TODO: Null Catch Removal
-            if (!StringHandler.isNullOrEmpty(currentConvertedMCTexturePath) && currentConvertedMCTexturePath.contains(":")) {
-                String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
-                currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+            if (!StringHandler.isNullOrEmpty(currentConvertedMCTexturePath)) {
+                if (currentConvertedMCTexturePath.contains(":")) {
+                    String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
+                    currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                } else {
+                    currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
+                }
             } else {
-                currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
+                currentMCTexture = new ResourceLocation("");
             }
         }
     }

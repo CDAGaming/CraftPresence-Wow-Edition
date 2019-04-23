@@ -324,7 +324,7 @@ public class GUIHandler {
                     }
 
                     // Render with Textures -- WIP TODO
-                    drawTextureRect(300, tooltipX - 3, tooltipY - 3, tooltipX - 3, tooltipY - 3, 0, borderTexture);
+                    drawTextureRect(300, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 3, tooltipHeight + 3, 0, borderTexture);
                 }
             }
 
