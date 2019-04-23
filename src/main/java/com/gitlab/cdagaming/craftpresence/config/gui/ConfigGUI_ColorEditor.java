@@ -7,6 +7,7 @@ import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -23,6 +24,10 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
     private int currentRed, currentGreen, currentBlue, currentAlpha;
     private GuiTextField hexText, redText, greenText, blueText, alphaText;
     // Page 2 Variables TODO
+    private String currentNormalMCTexturePath, currentConvertedMCTexturePath, startingMCTexturePath;
+    private int currentU, currentV;
+    private GuiTextField mcTextureText;
+    private ResourceLocation currentMCTexture;
 
     ConfigGUI_ColorEditor(GuiScreen parentScreen, String configValueName) {
         mc = CraftPresence.instance;
@@ -44,6 +49,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         alphaText = new GuiTextField(140, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
 
         // Page 2 Items TODO
+        mcTextureText = new GuiTextField(150, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
 
         proceedButton = new GUIExtendedButton(700, 10, (height - 30), 80, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         previousPageButton = new GUIExtendedButton(800, (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30), 20, 20, "<");
@@ -100,7 +106,15 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 Items TODO
         if (pageNumber == 1) {
-            //
+            final String mcTextureTitle = "Texture Path:";
+
+            drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
+
+            mcTextureText.drawTextBox();
+
+            proceedButton.enabled = !StringHandler.isNullOrEmpty(mcTextureText.getText());
+
+            CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, currentMCTexture);
         }
 
         previousPageButton.enabled = pageNumber != 0;
@@ -136,7 +150,13 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 }
 
                 if (pageNumber == 1) {
-                    // TODO
+                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBGColor)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.tooltipBGColor = currentNormalMCTexturePath;
+                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath;
+                    }
                 }
             }
 
@@ -173,7 +193,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 Items TODO
         if (pageNumber == 1) {
-            //
+            mcTextureText.textboxKeyTyped(typedChar, keyCode);
         }
 
         if (keyCode == Keyboard.KEY_NUMPADENTER || keyCode == Keyboard.KEY_RETURN) {
@@ -194,7 +214,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 Items TODO
         if (pageNumber == 1) {
-            //
+            mcTextureText.mouseClicked(mouseX, mouseY, mouseButton);
         }
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -213,7 +233,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 Items TODO
         if (pageNumber == 1) {
-            //
+            mcTextureText.updateCursorCounter();
         }
     }
 
@@ -227,14 +247,14 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor)) {
                 if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
                     startingHexValue = CraftPresence.CONFIG.tooltipBGColor;
-                } else {
-                    // TODO - PG 2
+                } else if (!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.tooltipBGColor;
                 }
             } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor)) {
                 if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
                     startingHexValue = CraftPresence.CONFIG.tooltipBorderColor;
-                } else {
-                    // TODO - PG 2
+                } else if (!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.tooltipBorderColor;
                 }
             }
 
@@ -244,7 +264,12 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 currentConvertedHexValue = null;
             }
 
-            // TODO: Add Event for PG 2
+            if (StringHandler.isNullOrEmpty(mcTextureText.getText()) && !StringHandler.isNullOrEmpty(startingMCTexturePath)) {
+                mcTextureText.setText(startingMCTexturePath);
+                currentNormalHexValue = null;
+                currentConvertedMCTexturePath = null;
+                currentMCTexture = null;
+            }
         }
     }
 
@@ -296,7 +321,26 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
-            //
+            if (!StringHandler.isNullOrEmpty(mcTextureText.getText()) && !StringHandler.isValidColorCode(mcTextureText.getText()) && !mcTextureText.getText().equals(currentNormalMCTexturePath)) {
+                if (mcTextureText.getText().contains(":") && !mcTextureText.getText().startsWith(":")) {
+                    currentNormalHexValue = mcTextureText.getText();
+                } else if (mcTextureText.getText().startsWith(":")) {
+                    currentNormalHexValue = mcTextureText.getText().substring(1);
+                } else {
+                    currentNormalMCTexturePath = "minecraft:" + mcTextureText.getText();
+                }
+                currentConvertedMCTexturePath = currentNormalMCTexturePath;
+            } else {
+                // TODO: Add U & V & Tint Options
+            }
+
+            // TODO: Null Catch Removal
+            if (!StringHandler.isNullOrEmpty(currentConvertedMCTexturePath) && currentConvertedMCTexturePath.contains(":")) {
+                String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
+                currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+            } else {
+                currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
+            }
         }
     }
 }

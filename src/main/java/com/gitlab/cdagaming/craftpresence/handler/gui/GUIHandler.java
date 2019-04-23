@@ -245,41 +245,87 @@ public class GUIHandler {
                 GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 final int zLevel = 300;
-                String backgroundColor, borderColorStart;
+                String backgroundColor, borderColor;
+                ResourceLocation backGroundTexture, borderTexture;
 
                 // TODO: Add Texture Support
                 // Perform Checks for different Color Format Fixes
                 // Fix 1 Example: ababab -> #ababab
                 // Fix 2 Example: 0xFFFFFF -> -1 or 100010
+                //
+                // Also Ensure (if using MC Textures) that they annotate with nameHere:textureHere
 
-                if (CraftPresence.CONFIG.tooltipBGColor.length() == 6) {
-                    backgroundColor = "#" + CraftPresence.CONFIG.tooltipBGColor;
-                } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith("0x")) {
-                    backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBGColor).intValue());
+                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
+                    if (CraftPresence.CONFIG.tooltipBGColor.length() == 6) {
+                        backgroundColor = "#" + CraftPresence.CONFIG.tooltipBGColor;
+                    } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith("0x")) {
+                        backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBGColor).intValue());
+                    } else {
+                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                    }
+
+                    // Draw with Colors
+                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
+                    drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
+                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+                    drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+                    drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                 } else {
-                    backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                    if (CraftPresence.CONFIG.tooltipBGColor.contains(":") && !CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
+                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                    } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
+                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor.substring(1);
+                    } else {
+                        backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
+                    }
+
+                    if (backgroundColor.contains(":")) {
+                        String[] splitInput = backgroundColor.split(":", 2);
+                        backGroundTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                    } else {
+                        backGroundTexture = new ResourceLocation(backgroundColor);
+                    }
+
+                    // Render with Textures WIP TODO
+                    //drawTextureRect(300, tooltipX, tooltipY, tooltipTextWidth, tooltipHeight, 0, backGroundTexture);
                 }
 
-                if (CraftPresence.CONFIG.tooltipBorderColor.length() == 6) {
-                    borderColorStart = "#" + CraftPresence.CONFIG.tooltipBorderColor;
-                } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith("0x")) {
-                    borderColorStart = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBorderColor).intValue());
+                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
+                    if (CraftPresence.CONFIG.tooltipBorderColor.length() == 6) {
+                        borderColor = "#" + CraftPresence.CONFIG.tooltipBorderColor;
+                    } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith("0x")) {
+                        borderColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBorderColor).intValue());
+                    } else {
+                        borderColor = CraftPresence.CONFIG.tooltipBorderColor;
+                    }
+
+                    // Draw with Colors
+                    int borderColorCode = (borderColor.startsWith("#") ? StringHandler.getColorFromHex(borderColor).getRGB() : Integer.parseInt(borderColor));
+                    String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
+
+                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
+                    drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
+                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
+                    drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
                 } else {
-                    borderColorStart = CraftPresence.CONFIG.tooltipBorderColor;
+                    if (CraftPresence.CONFIG.tooltipBorderColor.contains(":") && !CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
+                        borderColor = CraftPresence.CONFIG.tooltipBorderColor;
+                    } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
+                        borderColor = CraftPresence.CONFIG.tooltipBorderColor.substring(1);
+                    } else {
+                        borderColor = "minecraft:" + CraftPresence.CONFIG.tooltipBorderColor;
+                    }
+
+                    if (borderColor.contains(":")) {
+                        String[] splitInput = borderColor.split(":", 2);
+                        borderTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                    } else {
+                        borderTexture = new ResourceLocation(borderColor);
+                    }
+
+                    // Render with Textures -- WIP TODO
+                    drawTextureRect(300, tooltipX - 3, tooltipY - 3, tooltipX - 3, tooltipY - 3, 0, borderTexture);
                 }
-
-                int borderColorCode = (borderColorStart.startsWith("#") ? StringHandler.getColorFromHex(borderColorStart).getRGB() : Integer.parseInt(borderColorStart));
-                String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
-
-                drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
-                drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
-                drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-                drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-                drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-                drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
-                drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
-                drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColorStart, borderColorStart);
-                drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
             }
 
             for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
@@ -316,12 +362,12 @@ public class GUIHandler {
                     loc = new ResourceLocation(temp);
                 }
 
-                drawTextureRect(width, height, 0, loc);
+                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, loc);
             }
         }
     }
 
-    public void drawTextureRect(double width, double height, double tint, ResourceLocation texLocation) {
+    public void drawTextureRect(double zLevel, double startingX, double startingY, double width, double height, double tint, ResourceLocation texLocation) {
         if (texLocation != null) {
             CraftPresence.instance.getTextureManager().bindTexture(texLocation);
         }
@@ -335,10 +381,10 @@ public class GUIHandler {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(0.0D, height, 0.0D).tex(0.0D, (height / divider + tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(width, height, 0.0D).tex((width / divider), (height / divider + tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(width, 0.0D, 0.0D).tex((width / divider), tint).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(0.0D, 0.0D, 0.0D).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(startingX, startingY + height, zLevel).tex(0.0D, (height / divider + tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(startingX + width, startingY + height, zLevel).tex((width / divider), (height / divider + tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(startingX + width, startingY, zLevel).tex((width / divider), tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(startingX, startingY, zLevel).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
         tessellator.draw();
     }
 
