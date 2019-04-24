@@ -248,7 +248,6 @@ public class GUIHandler {
                 String backgroundColor, borderColor;
                 ResourceLocation backGroundTexture, borderTexture;
 
-                // TODO: Add Texture Support
                 // Perform Checks for different Color Format Fixes
                 // Fix 1 Example: ababab -> #ababab
                 // Fix 2 Example: 0xFFFFFF -> -1 or 100010
@@ -286,8 +285,7 @@ public class GUIHandler {
                         backGroundTexture = new ResourceLocation(backgroundColor);
                     }
 
-                    // Render with Textures WIP TODO
-                    //drawTextureRect(300, tooltipX, tooltipY, tooltipTextWidth, tooltipHeight, 0, backGroundTexture);
+                    drawTextureRect(300, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
                 }
 
                 if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
@@ -323,8 +321,10 @@ public class GUIHandler {
                         borderTexture = new ResourceLocation(borderColor);
                     }
 
-                    // Render with Textures -- WIP TODO
-                    drawTextureRect(300, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 3, tooltipHeight + 3, 0, borderTexture);
+                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, borderTexture); // Top Border
+                    drawTextureRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipTextWidth + 5, 1, 0, borderTexture); // Bottom Border
+                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, 1, tooltipHeight + 5, 0, borderTexture); // Left Border
+                    drawTextureRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3, 1, tooltipHeight + 6, 0, borderTexture); // Right Border
                 }
             }
 
@@ -345,7 +345,7 @@ public class GUIHandler {
         }
     }
 
-    public void drawBackground(final int width, final int height) {
+    public void drawBackground(final double width, final double height) {
         if (CraftPresence.instance.world != null) {
             drawGradientRect(300, 0, 0, width, height, "-1072689136", "-804253680");
         } else {
@@ -367,7 +367,7 @@ public class GUIHandler {
         }
     }
 
-    public void drawTextureRect(double zLevel, double startingX, double startingY, double width, double height, double tint, ResourceLocation texLocation) {
+    public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, ResourceLocation texLocation) {
         if (texLocation != null) {
             CraftPresence.instance.getTextureManager().bindTexture(texLocation);
         }
@@ -381,10 +381,10 @@ public class GUIHandler {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(startingX, startingY + height, zLevel).tex(0.0D, (height / divider + tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(startingX + width, startingY + height, zLevel).tex((width / divider), (height / divider + tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(startingX + width, startingY, zLevel).tex((width / divider), tint).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(startingX, startingY, zLevel).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(xPos, yPos + height, zLevel).tex(0.0D, (height / divider + tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(xPos + width, yPos + height, zLevel).tex((width / divider), (height / divider + tint)).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(xPos + width, yPos, zLevel).tex((width / divider), tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(xPos, yPos, zLevel).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
         tessellator.draw();
     }
 
