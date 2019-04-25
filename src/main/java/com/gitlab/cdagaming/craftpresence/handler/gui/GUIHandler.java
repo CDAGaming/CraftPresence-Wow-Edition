@@ -349,17 +349,17 @@ public class GUIHandler {
         if (CraftPresence.instance.world != null) {
             drawGradientRect(300, 0, 0, width, height, "-1072689136", "-804253680");
         } else {
-            // TODO: Set Texture to Config Value
-            String temp = "textures/gui/options_background.png";
-            ResourceLocation loc = null;
-            if (StringHandler.isValidColorCode(temp)) {
-                drawGradientRect(300, 0, 0, width, height, temp, temp);
-            } else if (!StringHandler.isNullOrEmpty(temp)) {
-                if (temp.contains(":")) {
-                    String[] splitInput = temp.split(":", 2);
+            String bgCode = CraftPresence.CONFIG.guiBGColor;
+            ResourceLocation loc;
+
+            if (StringHandler.isValidColorCode(bgCode)) {
+                drawGradientRect(300, 0, 0, width, height, bgCode, bgCode);
+            } else if (!StringHandler.isNullOrEmpty(bgCode)) {
+                if (bgCode.contains(":")) {
+                    String[] splitInput = bgCode.split(":", 2);
                     loc = new ResourceLocation(splitInput[0], splitInput[1]);
                 } else {
-                    loc = new ResourceLocation(temp);
+                    loc = new ResourceLocation(bgCode);
                 }
 
                 drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, loc);

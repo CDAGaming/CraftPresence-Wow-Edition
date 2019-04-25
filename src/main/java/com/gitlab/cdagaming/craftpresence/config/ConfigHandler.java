@@ -33,7 +33,7 @@ public class ConfigHandler {
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBGColor, NAME_tooltipBorderColor;
+    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_fallbackLanguageID, NAME_fallbackKeybind;
 
     // Config Variables
     // GENERAL
@@ -57,7 +57,7 @@ public class ConfigHandler {
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
-    public String tooltipBGColor, tooltipBorderColor;
+    public String tooltipBGColor, tooltipBorderColor, guiBGColor, fallbackLanguageID, fallbackKeyBind;
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
@@ -149,8 +149,14 @@ public class ConfigHandler {
         // ACCESSIBILITY
         NAME_tooltipBGColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.tooltipbgcolor").replaceAll(" ", "_");
         NAME_tooltipBorderColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.tooltipbordercolor").replaceAll(" ", "_");
+        NAME_guiBGColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.guibgcolor").replaceAll(" ", "_");
+        NAME_fallbackLanguageID = Constants.TRANSLATOR.translate("gui.config.name.accessibility.fallbacklanguageid").replaceAll(" ", "_");
+        NAME_fallbackKeybind = Constants.TRANSLATOR.translate("gui.config.name.accessibility.fallbackkeybind").replaceAll(" ", "_");
         tooltipBGColor = "-267386864";
         tooltipBorderColor = "1347420415";
+        guiBGColor = "textures/gui/options_background.png";
+        fallbackLanguageID = "";
+        fallbackKeyBind = "";
 
         initialized = true;
     }

@@ -95,6 +95,9 @@ gui.config.name.advanced.guimessages=GUI Messages
 gui.config.name.advanced.itemmessages=Item Messages
 gui.config.name.accessibility.tooltipbgcolor=Tooltip Background Color
 gui.config.name.accessibility.tooltipbordercolor=Tooltip Border Color
+gui.config.name.accessibility.guibgcolor=GUI Background Color
+gui.config.name.accessibility.fallbacklanguageid=Fallback Language ID
+gui.config.name.accessibility.fallbackkeybind=Fallback KeyBind
 ## CONFIG MESSAGES - COMMENTS ##
 gui.config.comment.general.clientid=Client ID Used for retrieving Assets, Icon Keys, and titles
 gui.config.comment.general.defaulticon=Default Icon \n (Used in Main Menu, Dimensions and Servers)
