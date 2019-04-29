@@ -262,6 +262,12 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 } else if (!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor)) {
                     startingMCTexturePath = CraftPresence.CONFIG.tooltipBorderColor;
                 }
+            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor)) {
+                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.guiBGColor)) {
+                    startingHexValue = CraftPresence.CONFIG.guiBGColor;
+                } else if (!StringHandler.isNullOrEmpty(CraftPresence.CONFIG.guiBGColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.guiBGColor;
+                }
             }
 
             if (StringHandler.isNullOrEmpty(hexText.getText()) && !StringHandler.isNullOrEmpty(startingHexValue)) {
