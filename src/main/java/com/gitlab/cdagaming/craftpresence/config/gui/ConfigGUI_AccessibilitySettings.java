@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
 
 public class ConfigGUI_AccessibilitySettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GUIExtendedButton backButton, tooltipBGButton, tooltipBorderButton;
+    private GUIExtendedButton backButton, tooltipBGButton, tooltipBorderButton, guiBGButton;
 
     ConfigGUI_AccessibilitySettings(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -27,11 +27,13 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
 
         tooltipBGButton = new GUIExtendedButton(100, calc1, CraftPresence.GUIS.getButtonY(1), 180, 20, CraftPresence.CONFIG.NAME_tooltipBGColor.replaceAll("_", " "));
         tooltipBorderButton = new GUIExtendedButton(200, calc2, CraftPresence.GUIS.getButtonY(1), 180, 20, CraftPresence.CONFIG.NAME_tooltipBorderColor.replaceAll("_", " "));
+        guiBGButton = new GUIExtendedButton(300, (width / 2) - 90, CraftPresence.GUIS.getButtonY(2), 180, 20, CraftPresence.CONFIG.NAME_guiBGColor.replaceAll("_", " "));
 
         backButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(tooltipBGButton);
         buttonList.add(tooltipBorderButton);
+        buttonList.add(guiBGButton);
         buttonList.add(backButton);
 
         super.initGui();
@@ -56,6 +58,8 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
             mc.displayGuiScreen(new ConfigGUI_ColorEditor(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor));
         } else if (button.id == tooltipBorderButton.id) {
             mc.displayGuiScreen(new ConfigGUI_ColorEditor(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor));
+        } else if (button.id == guiBGButton.id) {
+            mc.displayGuiScreen(new ConfigGUI_ColorEditor(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor));
         } else if (button.id == backButton.id) {
             mc.displayGuiScreen(parentScreen);
         }

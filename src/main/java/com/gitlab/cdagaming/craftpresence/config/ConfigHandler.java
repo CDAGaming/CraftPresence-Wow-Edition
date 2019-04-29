@@ -33,7 +33,7 @@ public class ConfigHandler {
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_fallbackLanguageID, NAME_fallbackKeybind;
+    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_configKeycode;
 
     // Config Variables
     // GENERAL
@@ -57,7 +57,7 @@ public class ConfigHandler {
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
-    public String tooltipBGColor, tooltipBorderColor, guiBGColor, fallbackLanguageID, fallbackKeyBind;
+    public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
@@ -150,13 +150,13 @@ public class ConfigHandler {
         NAME_tooltipBGColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.tooltipbgcolor").replaceAll(" ", "_");
         NAME_tooltipBorderColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.tooltipbordercolor").replaceAll(" ", "_");
         NAME_guiBGColor = Constants.TRANSLATOR.translate("gui.config.name.accessibility.guibgcolor").replaceAll(" ", "_");
-        NAME_fallbackLanguageID = Constants.TRANSLATOR.translate("gui.config.name.accessibility.fallbacklanguageid").replaceAll(" ", "_");
-        NAME_fallbackKeybind = Constants.TRANSLATOR.translate("gui.config.name.accessibility.fallbackkeybind").replaceAll(" ", "_");
+        NAME_languageID = Constants.TRANSLATOR.translate("gui.config.name.accessibility.languageid").replaceAll(" ", "_");
+        NAME_configKeycode = Constants.TRANSLATOR.translate("key.craftpresence.config_keybind").replaceAll(" ", "_");
         tooltipBGColor = "-267386864";
         tooltipBorderColor = "1347420415";
         guiBGColor = "textures/gui/options_background.png";
-        fallbackLanguageID = "";
-        fallbackKeyBind = "";
+        languageID = "en_US";
+        configKeyCode = "157";
 
         initialized = true;
     }
@@ -233,6 +233,9 @@ public class ConfigHandler {
                 // ACCESSIBILITY
                 tooltipBGColor = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_tooltipBGColor)) ? properties.getProperty(NAME_tooltipBGColor) : tooltipBGColor;
                 tooltipBorderColor = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_tooltipBorderColor)) ? properties.getProperty(NAME_tooltipBorderColor) : tooltipBorderColor;
+                guiBGColor = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiBGColor)) ? properties.getProperty(NAME_guiBGColor) : guiBGColor;
+                languageID = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_languageID)) ? properties.getProperty(NAME_languageID) : languageID;
+                configKeyCode = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_configKeycode)) ? properties.getProperty(NAME_configKeycode) : configKeyCode;
             } catch (NullPointerException ex) {
                 verifyConfig();
             } finally {
@@ -288,6 +291,9 @@ public class ConfigHandler {
         // ACCESSIBILITY
         properties.setProperty(NAME_tooltipBGColor, tooltipBGColor);
         properties.setProperty(NAME_tooltipBorderColor, tooltipBorderColor);
+        properties.setProperty(NAME_guiBGColor, guiBGColor);
+        properties.setProperty(NAME_languageID, languageID);
+        properties.setProperty(NAME_configKeycode, configKeyCode);
 
         // Check for Conflicts before Saving
         if (showCurrentBiome && showGameState) {
@@ -340,6 +346,12 @@ public class ConfigHandler {
                         Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
                         clientID = "450485984333660181";
                         properties.setProperty(property, clientID);
+                        save();
+                    }
+                    if (property.equals(NAME_configKeycode) && (!StringHandler.isValidInteger(properties.getProperty(property)))) {
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
+                        configKeyCode = "157";
+                        properties.setProperty(property, configKeyCode);
                         save();
                     }
                     if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {

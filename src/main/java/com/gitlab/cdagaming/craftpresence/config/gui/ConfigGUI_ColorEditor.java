@@ -106,7 +106,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 Items TODO
         if (pageNumber == 1) {
-            final String mcTextureTitle = "Texture Path:";
+            final String mcTextureTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.texturepath");
 
             drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
 
@@ -146,6 +146,9 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                     } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
                         CraftPresence.CONFIG.hasChanged = true;
                         CraftPresence.CONFIG.tooltipBorderColor = currentNormalHexValue;
+                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.guiBGColor)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.guiBGColor = currentNormalHexValue;
                     }
                 }
 
@@ -156,6 +159,9 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                     } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
                         CraftPresence.CONFIG.hasChanged = true;
                         CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath;
+                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.guiBGColor)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.guiBGColor = currentNormalMCTexturePath;
                     }
                 }
             }
@@ -334,7 +340,6 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 // TODO: Add U & V & Tint Options
             }
 
-            // TODO: Null Catch Removal
             if (!StringHandler.isNullOrEmpty(currentConvertedMCTexturePath)) {
                 if (currentConvertedMCTexturePath.contains(":")) {
                     String[] splitInput = currentConvertedMCTexturePath.split(":", 2);

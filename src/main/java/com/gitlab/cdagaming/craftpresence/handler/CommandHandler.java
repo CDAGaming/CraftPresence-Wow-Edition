@@ -8,7 +8,6 @@ import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHan
 import com.gitlab.cdagaming.craftpresence.handler.mcupdater.MCUpdaterHandler;
 import com.gitlab.cdagaming.craftpresence.handler.multimc.InstanceHandler;
 import com.gitlab.cdagaming.craftpresence.handler.technic.PackHandler;
-import net.minecraft.client.Minecraft;
 
 public class CommandHandler {
     public static void reloadData(final boolean forceUpdateRPC) {

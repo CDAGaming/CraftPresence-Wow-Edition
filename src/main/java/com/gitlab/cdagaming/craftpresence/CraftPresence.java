@@ -13,7 +13,6 @@ import com.gitlab.cdagaming.craftpresence.handler.server.ServerHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -44,7 +43,7 @@ public class CraftPresence {
 
     public CraftPresence() {
         MinecraftForge.EVENT_BUS.register(this);
-        KEYBINDINGS.register();
+        init();
     }
 
     @Mod.EventHandler
@@ -54,14 +53,14 @@ public class CraftPresence {
 
     @Mod.EventHandler
     public void onFingerprintViolation(final FMLFingerprintViolationEvent event) {
-        if (!Constants.IS_DEV)
+        if (!Constants.IS_DEV) {
             Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.fingerprintviolation"));
+        } else {
+            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
+        }
     }
 
     public void init() {
-        if (Constants.IS_DEV) {
-            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
-        }
         SYSTEM = new SystemHandler();
         CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
         CONFIG.initialize();
@@ -90,14 +89,7 @@ public class CraftPresence {
         instance = Minecraft.getMinecraft();
         player = instance.player;
 
-        if (!initialized && (instance.currentScreen != null && (player != null ||
-                instance.currentScreen instanceof GuiMainMenu ||
-                instance.currentScreen.getClass().getSimpleName().equals("GuiCustom") ||
-                instance.currentScreen.getClass().getSimpleName().contains("MainMenu") || (
-                instance.currentScreen.getClass().getSuperclass() != null &&
-                        instance.currentScreen.getClass().getSuperclass().getSimpleName().equals(GuiMainMenu.class.getSimpleName()))))) {
-            init();
-        } else if (initialized) {
+        if (initialized) {
             CommandHandler.reloadData(false);
 
             if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {

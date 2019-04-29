@@ -1,9 +1,8 @@
 package com.gitlab.cdagaming.craftpresence.handler;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.google.common.collect.Maps;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -16,25 +15,24 @@ public class TranslationHandler {
     private String languageID = "en_US", modID;
     private Map<String, String> translationMap = Maps.newHashMap();
     private Map<String, Boolean> requestMap = Maps.newHashMap();
-    private Minecraft mc = Minecraft.getMinecraft();
     private boolean usingJSON = false;
 
     public TranslationHandler() {
-        setLanguage(mc.gameSettings.language);
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setUsingJSON(false);
         getTranslationMap();
         checkUnicode();
     }
 
     public TranslationHandler(final boolean useJSON) {
-        setLanguage(mc.gameSettings.language);
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setUsingJSON(useJSON);
         getTranslationMap();
         checkUnicode();
     }
 
     public TranslationHandler(final String modID) {
-        setLanguage(mc.gameSettings.language);
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setModID(modID);
         setUsingJSON(false);
         getTranslationMap();
@@ -42,7 +40,7 @@ public class TranslationHandler {
     }
 
     public TranslationHandler(final String modID, final boolean useJSON) {
-        setLanguage(mc.gameSettings.language);
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setModID(modID);
         setUsingJSON(useJSON);
         getTranslationMap();
@@ -50,14 +48,14 @@ public class TranslationHandler {
     }
 
     void tick() {
-        if (!languageID.equals(mc.gameSettings.language) &&
-                (!requestMap.containsKey(mc.gameSettings.language) || requestMap.get(mc.gameSettings.language))) {
-            setLanguage(mc.gameSettings.language);
+        if (CraftPresence.CONFIG != null && !languageID.equals(CraftPresence.CONFIG.languageID) &&
+                (!requestMap.containsKey(CraftPresence.CONFIG.languageID) || requestMap.get(CraftPresence.CONFIG.languageID))) {
+            setLanguage(CraftPresence.CONFIG.languageID);
             getTranslationMap();
             checkUnicode();
         }
 
-        if (isUnicode != mc.gameSettings.forceUnicodeFont) {
+        if (isUnicode != CraftPresence.instance.gameSettings.forceUnicodeFont) {
             checkUnicode();
         }
     }
@@ -79,7 +77,7 @@ public class TranslationHandler {
         }
 
         float f = (float) i / (float) totalLength;
-        isUnicode = (double) f > 0.1D || mc.gameSettings.forceUnicodeFont;
+        isUnicode = (double) f > 0.1D || CraftPresence.instance.gameSettings.forceUnicodeFont;
     }
 
     private void setUsingJSON(final boolean usingJSON) {
@@ -148,12 +146,6 @@ public class TranslationHandler {
     }
 
     public String translate(String translationKey, Object... parameters) {
-        String i18n_Translation = I18n.format(translationKey, parameters);
-
-        if (!i18n_Translation.equals(translationKey)) {
-            return i18n_Translation;
-        }
-
         if (translationMap.containsKey(translationKey)) {
             return String.format(translationMap.get(translationKey), parameters);
         } else {

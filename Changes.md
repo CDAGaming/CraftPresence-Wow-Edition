@@ -1,38 +1,24 @@
 # CraftPresence Changes
 
-## v1.5.3.1 (04/15/2019)
+## v1.5.5 (06/??/2019)
 
 ### Changes:
 
-* New Accessibility GUI with Options for:
+* Added Options to Accessibility GUI:
   
-  * Options to Customize Tooltip Background and Border Colors (Supports Most Color Formats)
+  * Option to Customize GUI Background to a Color or Texture
   
-  * Soon to have Options for Fallback Language and KeyBindings in a Future Update
+  * Extended Previous Tooltip Color Options to also be able to use a Texture
+  
+  * Added Options for Language ID and Setting KeyBindings for Universal Compatibility (Custom Rift Jar no longer Required for KeyBind Fix)
+  
+* Deprecated I18n, to put Newer Translation System in Full Control
 
 ### Fixes:
 
-* Fix CPU Issues related to Timer and RPC Callbacks
-
-* Fix Compatibility with Customizing Servers with Ports
-
-* Fix Cases where ServerHandler Events would not run if a Connection was Null
-
-* Fix The End displaying as sky in some Versions of CraftPresence
-
-* Miscellaneous Compatibility Fixes
+* Initialization now takes place much earlier and no longer requires Main Menu Stuff
 
 ### More Information:
-
-#### KeyBinding / Control Menu Fix Notes:
-
-The Fixes for the Control Menu Crashes in Rift 1.13.2 required the merging of [this PR on Chocohead's Rift Repository](https://github.com/Chocohead/Rift/pull/11)
-
-If you prefer to have this fix, Please use [this Rift Version](https://www.jitpack.io/#CDAGaming/Rift/jitpack-0a2217b941-1)
-
-Download Jar: [Click Here](https://www.jitpack.io/com/github/CDAGaming/Rift/jitpack-0a2217b941-1/Rift-jitpack-0a2217b941-1.jar)
-
-MultiMC Example Patch: [Click Here](https://gist.github.com/CDAGaming/ba84849826e96b69b829b7453e459edf)
 
 #### Command Rewrite Info:
 
@@ -48,19 +34,11 @@ Along with this rewrite, take note of the following:
 
 This GUI is subject to improve as future updates are released.
 
-#### Ask to Join // Join Request Info:
-
-Starting In v1.4.9, Join Request and "Ask to Join" are now supported!
-
-These Features are both extremely new, so although most Issues have been fixed, you may/may not run into major issues.
-
-If You happen to have any issues relating to this, do not hesitate to make an Issue on our Issue Tracker!
-
 #### 1.13.x Build Info:
 
 The Rift Edition of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
 
-* KeyCodes have changed! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
+* KeyCodes have changed from an LWJGL Upgrade! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
 
 Starting In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
@@ -81,7 +59,5 @@ Please Keep in Mind the Following:
 * There is NO Support for Server RPC Displays from MC 1.2.5 and Below, due to Modding Limitations.
 
 * Bugs that Relate with Issues in Vanilla Code, are unlikely able to be fixed due to MC's Limitations
-
-* In the Legacy Builds, a different Translation Engine is being used instead of I18n. Please Report any Issues that come up as a result of this Change.
 
 Please See Mod Description // README for More Info
