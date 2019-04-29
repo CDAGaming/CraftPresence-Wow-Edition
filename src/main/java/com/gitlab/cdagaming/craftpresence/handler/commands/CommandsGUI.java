@@ -71,7 +71,7 @@ public class CommandsGUI extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
 
         commandInput = new GuiTextField(110, mc.fontRenderer, 115, (height - 30), (width - 120), 20);
-        commandInput.setMaxStringLength(128);
+        commandInput.setMaxStringLength(512);
 
         proceedButton = new GUIExtendedButton(700, 10, (height - 30), 100, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 

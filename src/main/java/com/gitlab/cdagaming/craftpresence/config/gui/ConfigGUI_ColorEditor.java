@@ -50,6 +50,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 Items TODO
         mcTextureText = new GuiTextField(150, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
+        mcTextureText.setMaxStringLength(512);
 
         proceedButton = new GUIExtendedButton(700, 10, (height - 30), 80, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         previousPageButton = new GUIExtendedButton(800, (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30), 20, 20, "<");
