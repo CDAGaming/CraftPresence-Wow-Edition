@@ -31,7 +31,7 @@ gui.config.comment.title.dimensionmessages=Customize Messages to display with Di
 gui.config.comment.title.servermessages=Customize Messages to display with Servers \n (Manual Format: server_IP;message;icon) \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.title.statusmessages=Customize Messages relating to different Game States
 gui.config.comment.title.advanced=Customize Additional Settings of the Mod
-gui.config.comment.title.accessibility= Customize Accessibility Settings of the Mod \n Includes: \n - Fallback Language \n - Fallback KeyBind \n - GUI Customization Options
+gui.config.comment.title.accessibility= Customize Accessibility Settings of the Mod \n Includes: \n - Language ID \n - KeyBindings \n - Additional GUI Customization Options
 ## CONFIG GUI - BUTTONS AND NAMES ##
 gui.config.buttonMessage.back=Back
 gui.config.buttonMessage.save=Save
@@ -44,6 +44,7 @@ gui.config.defaultMessage.dimension=Default Dimension Message
 gui.config.defaultMessage.server=Default Server Message
 gui.config.editorMessage.search=Search:
 gui.config.editorMessage.message=Message:
+gui.config.editorMessage.enterkey=Enter Key...
 gui.config.editorMessage.valuename=Value Name:
 gui.config.editorMessage.hexcode=Hex Code:
 gui.config.editorMessage.texturepath=Texture Path:
