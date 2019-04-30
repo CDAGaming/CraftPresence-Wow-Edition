@@ -275,13 +275,18 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 hexText.setText(startingHexValue);
                 currentNormalHexValue = null;
                 currentConvertedHexValue = null;
-            }
-
-            if (StringHandler.isNullOrEmpty(mcTextureText.getText()) && !StringHandler.isNullOrEmpty(startingMCTexturePath)) {
-                mcTextureText.setText(startingMCTexturePath);
                 currentNormalHexValue = null;
                 currentConvertedMCTexturePath = null;
-                currentMCTexture = null;
+                currentMCTexture = new ResourceLocation("");
+                pageNumber = 0;
+            } else if (StringHandler.isNullOrEmpty(mcTextureText.getText()) && !StringHandler.isNullOrEmpty(startingMCTexturePath)) {
+                mcTextureText.setText(startingMCTexturePath);
+                currentNormalHexValue = null;
+                currentConvertedHexValue = null;
+                currentNormalHexValue = null;
+                currentConvertedMCTexturePath = null;
+                currentMCTexture = new ResourceLocation("");
+                pageNumber = 1;
             }
         }
     }
@@ -334,20 +339,16 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
-            if (!StringHandler.isNullOrEmpty(mcTextureText.getText()) && !StringHandler.isValidColorCode(mcTextureText.getText()) && !mcTextureText.getText().equals(currentNormalMCTexturePath)) {
+            if (!StringHandler.isNullOrEmpty(mcTextureText.getText()) && !mcTextureText.getText().equals(currentNormalMCTexturePath)) {
                 if (mcTextureText.getText().contains(":") && !mcTextureText.getText().startsWith(":")) {
-                    currentNormalHexValue = mcTextureText.getText();
+                    currentNormalMCTexturePath = mcTextureText.getText();
                 } else if (mcTextureText.getText().startsWith(":")) {
-                    currentNormalHexValue = mcTextureText.getText().substring(1);
+                    currentNormalMCTexturePath = mcTextureText.getText().substring(1);
                 } else {
                     currentNormalMCTexturePath = "minecraft:" + mcTextureText.getText();
                 }
                 currentConvertedMCTexturePath = currentNormalMCTexturePath;
-            } else {
-                // TODO: Add U & V & Tint Options
-            }
 
-            if (!StringHandler.isNullOrEmpty(currentConvertedMCTexturePath)) {
                 if (currentConvertedMCTexturePath.contains(":")) {
                     String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
                     currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
