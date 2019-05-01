@@ -186,6 +186,9 @@ public class DiscordHandler {
         CraftPresence.SERVER.clearClientData();
         CraftPresence.GUIS.clearClientData();
 
+        CraftPresence.closing = true;
+        CraftPresence.timerObj.cancel();
+
         STATUS = "disconnected";
         lastDisconnectErrorCode = 0;
         lastErrorCode = 0;

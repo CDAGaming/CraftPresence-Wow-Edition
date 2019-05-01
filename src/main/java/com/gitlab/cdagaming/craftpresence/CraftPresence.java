@@ -18,14 +18,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Mod(modid = Constants.MODID, name = Constants.NAME, version = Constants.VERSION_ID, clientSideOnly = true, guiFactory = Constants.GUI_FACTORY, canBeDeactivated = true, updateJSON = Constants.UPDATE_JSON, certificateFingerprint = Constants.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
-    public static boolean packFound = false, awaitingReply = false;
+    public static boolean packFound = false, awaitingReply = false, closing = false;
     public static Minecraft instance = Minecraft.getMinecraft();
     public static EntityPlayer player = instance.player;
 
@@ -38,12 +38,13 @@ public class CraftPresence {
     public static DimensionHandler DIMENSIONS = new DimensionHandler();
     public static EntityHandler ENTITIES = new EntityHandler();
     public static GUIHandler GUIS = new GUIHandler();
+    public static Timer timerObj = new Timer(CraftPresence.class.getSimpleName());
 
     private boolean initialized = false;
 
     public CraftPresence() {
         MinecraftForge.EVENT_BUS.register(this);
-        init();
+        scheduleTick();
     }
 
     @Mod.EventHandler
@@ -60,7 +61,7 @@ public class CraftPresence {
         }
     }
 
-    public void init() {
+    private void init() {
         SYSTEM = new SystemHandler();
         CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
         CONFIG.initialize();
@@ -84,12 +85,25 @@ public class CraftPresence {
         }
     }
 
-    @SubscribeEvent
-    public void onTick(final TickEvent.ClientTickEvent event) {
-        instance = Minecraft.getMinecraft();
-        player = instance.player;
+    private void scheduleTick() {
+        if (!closing) {
+            timerObj.schedule(
+                    new TimerTask() {
+                        @Override
+                        public void run() {
+                            clientTick();
+                        }
+                    },
+                    50
+            );
+        }
+    }
 
+    private void clientTick() {
         if (initialized) {
+            instance = Minecraft.getMinecraft();
+            player = instance.player;
+
             CommandHandler.reloadData(false);
 
             if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
@@ -123,6 +137,10 @@ public class CraftPresence {
                     CLIENT.STATUS = "ready";
                 }
             }
+        } else if (!closing) {
+            init();
         }
+
+        scheduleTick();
     }
 }
