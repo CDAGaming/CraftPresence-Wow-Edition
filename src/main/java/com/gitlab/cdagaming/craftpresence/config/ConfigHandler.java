@@ -156,7 +156,7 @@ public class ConfigHandler {
         tooltipBorderColor = "1347420415";
         guiBGColor = "textures/gui/options_background.png";
         languageID = "en_US";
-        configKeyCode = "157";
+        configKeyCode = "29";
 
         initialized = true;
     }
