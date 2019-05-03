@@ -33,11 +33,11 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         splitCharacter.setText(CraftPresence.CONFIG.splitCharacter);
         splitCharacter.setMaxStringLength(1);
 
-        int calc1 = (width / 2) - 130;
+        int calc1 = (width / 2) - 160;
         int calc2 = (width / 2) + 3;
 
-        guiMessagesButton = new GUIExtendedButton(120, calc1 - 15, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"));
-        itemMessagesButton = new GUIExtendedButton(130, calc2 + 15, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
+        guiMessagesButton = new GUIExtendedButton(120, calc1, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"));
+        itemMessagesButton = new GUIExtendedButton(130, calc2, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
 
         enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
         enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);

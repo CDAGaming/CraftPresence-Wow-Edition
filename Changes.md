@@ -18,6 +18,8 @@
 
 * Initialization now takes place much earlier and no longer requires Main Menu Stuff
 
+* Fix Improper Centering of Buttons in Advanced Settings GUI
+
 ### More Information:
 
 #### Command Rewrite Info:
