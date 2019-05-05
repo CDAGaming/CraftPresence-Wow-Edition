@@ -289,6 +289,14 @@ public class StringHandler {
                 formattedKey = new StringBuilder(formattedKey.toString().replaceAll("\\s+", " "));
             }
 
+            if (formattedKey.toString().contains(":")) {
+                formattedKey = new StringBuilder(formattedKey.toString().split(":", 2)[1]);
+            }
+
+            if (formattedKey.toString().contains("{") || formattedKey.toString().contains("}")) {
+                formattedKey = new StringBuilder(formattedKey.toString().replaceAll("[{}]", ""));
+            }
+
             if (formattedKey.toString().equalsIgnoreCase("surface")) {
                 return "overworld";
             } else if (formattedKey.toString().equalsIgnoreCase("hell") || formattedKey.toString().equalsIgnoreCase("nether")) {

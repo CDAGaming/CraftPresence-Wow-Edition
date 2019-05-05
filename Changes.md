@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.5 (06/??/2019)
+## v1.5.5 (06/05/2019)
 
 ### Changes:
 
@@ -13,6 +13,8 @@
   * Added Options for Language ID and Setting KeyBindings for Universal Compatibility (Custom Rift Jar no longer Required for KeyBind Fix)
   
 * Deprecated I18n, to put Newer Translation System in Full Control
+
+* Added Additional Formatting Rules to Dimension Name Formatting
 
 ### Fixes:
 
