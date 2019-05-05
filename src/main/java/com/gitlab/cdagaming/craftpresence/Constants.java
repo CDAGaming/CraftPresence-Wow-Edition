@@ -29,9 +29,9 @@ public class Constants {
     public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
     public static final Logger LOG = LogManager.getLogger(MODID);
+    public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
     public static final TranslationHandler TRANSLATOR = new TranslationHandler(MODID, false);
     public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
-    public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
 
     static void loadDLL(final boolean Update) {
         boolean UpdateStatus = Update;

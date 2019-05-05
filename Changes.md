@@ -26,6 +26,8 @@
 
 * Fixes KeyBindings not functioning when not in a Game (Now work properly once on Main Menu)
 
+* Fixes a Bug with Translation Resource Loading (Now tries to use Main Thread Loader, then local ClassLoader)
+
 ### More Information:
 
 #### Command Rewrite Info:
