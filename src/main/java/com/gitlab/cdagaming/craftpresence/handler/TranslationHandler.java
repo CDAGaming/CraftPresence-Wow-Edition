@@ -55,7 +55,7 @@ public class TranslationHandler {
             checkUnicode();
         }
 
-        if (isUnicode != CraftPresence.instance.gameSettings.forceUnicodeFont) {
+        if (CraftPresence.instance.gameSettings != null && isUnicode != CraftPresence.instance.gameSettings.forceUnicodeFont) {
             checkUnicode();
         }
     }
@@ -77,7 +77,7 @@ public class TranslationHandler {
         }
 
         float f = (float) i / (float) totalLength;
-        isUnicode = (double) f > 0.1D || CraftPresence.instance.gameSettings.forceUnicodeFont;
+        isUnicode = (double) f > 0.1D || (CraftPresence.instance.gameSettings != null && CraftPresence.instance.gameSettings.forceUnicodeFont);
     }
 
     private void setUsingJSON(final boolean usingJSON) {

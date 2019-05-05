@@ -18,7 +18,11 @@
 
 * Initialization now takes place much earlier and no longer requires Main Menu Stuff
 
-* Fix Improper Centering of Buttons in Advanced Settings GUI
+* Fixes Improper Centering of Buttons in Advanced Settings GUI
+
+* Fixes Several Possible Cases of NPEs
+
+* Fixes KeyBindings not functioning when not in a Game (Now work properly once on Main Menu)
 
 ### More Information:
 

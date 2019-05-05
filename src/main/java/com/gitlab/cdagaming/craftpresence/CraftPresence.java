@@ -14,10 +14,7 @@ import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
 import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
-import net.minecraftforge.fml.common.event.FMLModDisabledEvent;
 
 import java.io.File;
 import java.util.Timer;
@@ -43,25 +40,16 @@ public class CraftPresence {
     private boolean initialized = false;
 
     public CraftPresence() {
-        MinecraftForge.EVENT_BUS.register(this);
         scheduleTick();
     }
 
-    @Mod.EventHandler
-    public void disableMod(final FMLModDisabledEvent event) {
-        CLIENT.shutDown();
-    }
-
-    @Mod.EventHandler
-    public void onFingerprintViolation(final FMLFingerprintViolationEvent event) {
+    private void init() {
         if (!Constants.IS_DEV) {
             Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.fingerprintviolation"));
         } else {
             Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
         }
-    }
 
-    private void init() {
         SYSTEM = new SystemHandler();
         CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
         CONFIG.initialize();

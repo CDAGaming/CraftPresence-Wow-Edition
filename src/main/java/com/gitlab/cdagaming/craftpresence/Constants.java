@@ -30,7 +30,7 @@ public class Constants {
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
     public static final Logger LOG = LogManager.getLogger(MODID);
     public static final TranslationHandler TRANSLATOR = new TranslationHandler(MODID, false);
-    public static final boolean IS_DEV = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+    public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty()) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
     public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
 
     static void loadDLL(final boolean Update) {

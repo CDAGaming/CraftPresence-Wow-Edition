@@ -4,6 +4,7 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.google.common.collect.Lists;
+import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -156,7 +157,7 @@ public class ConfigHandler {
         tooltipBorderColor = "1347420415";
         guiBGColor = "textures/gui/options_background.png";
         languageID = "en_US";
-        configKeyCode = "29";
+        configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
 
         initialized = true;
     }
@@ -350,7 +351,7 @@ public class ConfigHandler {
                     }
                     if (property.equals(NAME_configKeycode) && (!StringHandler.isValidInteger(properties.getProperty(property)))) {
                         Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
-                        configKeyCode = "157";
+                        configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
                         properties.setProperty(property, configKeyCode);
                         save();
                     }
