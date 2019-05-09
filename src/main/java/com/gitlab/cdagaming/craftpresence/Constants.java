@@ -63,6 +63,7 @@ public class Constants {
         final File charDataDir = new File(MODID + File.separator + fileName);
         boolean UpdateStatus = Update || !charDataDir.exists(), errored = false;
         InputStream inputData = null;
+        OutputStream outputData = null;
 
         if (UpdateStatus) {
             LOG.info(TRANSLATOR.translate("craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
@@ -70,11 +71,12 @@ public class Constants {
 
             if (inputData != null) {
                 try {
-                    byte[] transferBuffer = new byte[inputData.available()];
-                    int readStatus = inputData.read(transferBuffer);
+                    outputData = new FileOutputStream(charDataDir);
 
-                    OutputStream outputData = new FileOutputStream(charDataDir);
-                    outputData.write(transferBuffer);
+                    byte[] transferBuffer = new byte[inputData.available()];
+                    for (int readBuffer = inputData.read(transferBuffer); readBuffer != -1; readBuffer = inputData.read(transferBuffer)) {
+                        outputData.write(transferBuffer, 0, readBuffer);
+                    }
 
                     LOG.info(TRANSLATOR.translate("craftpresence.logger.info.download.loaded", fileName, charDataDir.getAbsolutePath(), charDataPath));
                 } catch (Exception ex) {
@@ -125,6 +127,10 @@ public class Constants {
         try {
             if (inputData != null) {
                 inputData.close();
+            }
+
+            if (outputData != null) {
+                outputData.close();
             }
         } catch (Exception ex) {
             LOG.error(TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
