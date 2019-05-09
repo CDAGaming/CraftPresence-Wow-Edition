@@ -103,21 +103,12 @@ public class TranslationHandler {
     private void getTranslationMap() {
         translationMap = Maps.newHashMap();
 
-        InputStream in = Constants.CLASS_LOADER.getResourceAsStream("/assets/"
+        InputStream in = StringHandler.getResourceAsStream(TranslationHandler.class, "/assets/"
                 + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
                 "lang/" + languageID + (usingJSON ? ".json" : ".lang"));
-        InputStream fallbackIn = Constants.CLASS_LOADER.getResourceAsStream("/assets/"
+        InputStream fallbackIn = StringHandler.getResourceAsStream(TranslationHandler.class, "/assets/"
                 + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
                 "lang/" + languageID.toLowerCase() + (usingJSON ? ".json" : ".lang"));
-
-        if (in == null && fallbackIn == null) {
-            in = TranslationHandler.class.getResourceAsStream("/assets/"
-                    + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
-                    "lang/" + languageID + (usingJSON ? ".json" : ".lang"));
-            fallbackIn = TranslationHandler.class.getResourceAsStream("/assets/"
-                    + (!StringHandler.isNullOrEmpty(modID) ? modID + "/" : "") +
-                    "lang/" + languageID.toLowerCase() + (usingJSON ? ".json" : ".lang"));
-        }
 
         if (in != null || fallbackIn != null) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn));
