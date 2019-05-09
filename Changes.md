@@ -11,6 +11,12 @@
   * Extended Previous Tooltip Color Options to also be able to use a Texture
   
   * Added Options for Language ID and Setting KeyBindings for Universal Compatibility (Custom Rift Jar no longer Required for KeyBind Fix)
+
+* Added Options to Advanced GUI:
+
+  * Option to Disable Rendering Tooltips
+
+  * Options to Edit or Re-Sync Character and Glyph Widths
   
 * Deprecated I18n, to put Newer Translation System in Full Control
 
