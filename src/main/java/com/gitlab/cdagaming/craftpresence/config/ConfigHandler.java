@@ -31,7 +31,7 @@ public class ConfigHandler {
             NAME_packPlaceholderMSG, NAME_playerPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
             NAME_gameTimePlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon,
+    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon, NAME_renderTooltips,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_configKeycode;
@@ -54,7 +54,7 @@ public class ConfigHandler {
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
             gameTimePlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem, overwriteServerIcon;
+    public boolean enableCommands, enablePERGUI, enablePERItem, overwriteServerIcon, renderTooltips;
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
@@ -137,6 +137,7 @@ public class ConfigHandler {
         NAME_enablePERGUI = Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
         NAME_enablePERItem = Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem").replaceAll(" ", "_");
         NAME_overwriteServerIcon = Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon").replaceAll(" ", "_");
+        NAME_renderTooltips = Constants.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips").replaceAll(" ", "_");
         NAME_splitCharacter = Constants.TRANSLATOR.translate("gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
         NAME_guiMessages = Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages").replaceAll(" ", "_");
         NAME_itemMessages = Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
@@ -144,6 +145,7 @@ public class ConfigHandler {
         enablePERGUI = false;
         enablePERItem = false;
         overwriteServerIcon = false;
+        renderTooltips = true;
         splitCharacter = ";";
         guiMessages = new String[]{"default;In &gui&"};
         itemMessages = new String[]{"default;Holding &main&"};
@@ -228,6 +230,7 @@ public class ConfigHandler {
                 enablePERGUI = StringHandler.isValidBoolean(properties.getProperty(NAME_enablePERGUI)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI)) : enablePERGUI;
                 enablePERItem = StringHandler.isValidBoolean(properties.getProperty(NAME_enablePERItem)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERItem)) : enablePERItem;
                 overwriteServerIcon = StringHandler.isValidBoolean(properties.getProperty(NAME_overwriteServerIcon)) ? Boolean.parseBoolean(properties.getProperty(NAME_overwriteServerIcon)) : overwriteServerIcon;
+                renderTooltips = StringHandler.isValidBoolean(properties.getProperty(NAME_renderTooltips)) ? Boolean.parseBoolean(properties.getProperty(NAME_renderTooltips)) : renderTooltips;
                 splitCharacter = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_splitCharacter)) ? properties.getProperty(NAME_splitCharacter) : splitCharacter;
                 guiMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : guiMessages;
                 itemMessages = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : itemMessages;

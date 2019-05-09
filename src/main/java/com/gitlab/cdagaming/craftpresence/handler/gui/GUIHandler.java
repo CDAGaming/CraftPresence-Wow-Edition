@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.handler.gui;
 
+import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
@@ -164,183 +165,185 @@ public class GUIHandler {
     }
 
     public void drawMultiLineString(List<String> textLines, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
-        if (!textLines.isEmpty() && font != null) {
-            int tooltipTextWidth = 0;
+        if (CraftPresence.CONFIG.renderTooltips && !Constants.forceBlockTooltipRendering) {
+            if (!textLines.isEmpty() && font != null) {
+                int tooltipTextWidth = 0;
 
-            for (String textLine : textLines) {
-                int textLineWidth = StringHandler.getStringWidth(textLine);
+                for (String textLine : textLines) {
+                    int textLineWidth = StringHandler.getStringWidth(textLine);
 
-                if (textLineWidth > tooltipTextWidth) {
-                    tooltipTextWidth = textLineWidth;
-                }
-            }
-
-            boolean needsWrap = false;
-
-            int titleLinesCount = 1;
-            int tooltipX = mouseX + 12;
-            if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
-                tooltipX = mouseX - 16 - tooltipTextWidth;
-                if (tooltipX < 4) // if the tooltip doesn't fit on the screen
-                {
-                    if (mouseX > screenWidth / 2) {
-                        tooltipTextWidth = mouseX - 12 - 8;
-                    } else {
-                        tooltipTextWidth = screenWidth - 16 - mouseX;
+                    if (textLineWidth > tooltipTextWidth) {
+                        tooltipTextWidth = textLineWidth;
                     }
+                }
+
+                boolean needsWrap = false;
+
+                int titleLinesCount = 1;
+                int tooltipX = mouseX + 12;
+                if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
+                    tooltipX = mouseX - 16 - tooltipTextWidth;
+                    if (tooltipX < 4) // if the tooltip doesn't fit on the screen
+                    {
+                        if (mouseX > screenWidth / 2) {
+                            tooltipTextWidth = mouseX - 12 - 8;
+                        } else {
+                            tooltipTextWidth = screenWidth - 16 - mouseX;
+                        }
+                        needsWrap = true;
+                    }
+                }
+
+                if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
+                    tooltipTextWidth = maxTextWidth;
                     needsWrap = true;
                 }
-            }
 
-            if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
-                tooltipTextWidth = maxTextWidth;
-                needsWrap = true;
-            }
-
-            if (needsWrap) {
-                int wrappedTooltipWidth = 0;
-                List<String> wrappedTextLines = Lists.newArrayList();
-                for (int i = 0; i < textLines.size(); i++) {
-                    String textLine = textLines.get(i);
-                    List<String> wrappedLine = StringHandler.splitTextByNewLine(StringHandler.wrapFormattedStringToWidth(textLine, tooltipTextWidth));
-                    if (i == 0) {
-                        titleLinesCount = wrappedLine.size();
-                    }
-
-                    for (String line : wrappedLine) {
-                        int lineWidth = StringHandler.getStringWidth(line);
-                        if (lineWidth > wrappedTooltipWidth) {
-                            wrappedTooltipWidth = lineWidth;
+                if (needsWrap) {
+                    int wrappedTooltipWidth = 0;
+                    List<String> wrappedTextLines = Lists.newArrayList();
+                    for (int i = 0; i < textLines.size(); i++) {
+                        String textLine = textLines.get(i);
+                        List<String> wrappedLine = StringHandler.splitTextByNewLine(StringHandler.wrapFormattedStringToWidth(textLine, tooltipTextWidth));
+                        if (i == 0) {
+                            titleLinesCount = wrappedLine.size();
                         }
-                        wrappedTextLines.add(line);
+
+                        for (String line : wrappedLine) {
+                            int lineWidth = StringHandler.getStringWidth(line);
+                            if (lineWidth > wrappedTooltipWidth) {
+                                wrappedTooltipWidth = lineWidth;
+                            }
+                            wrappedTextLines.add(line);
+                        }
+                    }
+                    tooltipTextWidth = wrappedTooltipWidth;
+                    textLines = wrappedTextLines;
+
+                    if (mouseX > screenWidth / 2) {
+                        tooltipX = mouseX - 16 - tooltipTextWidth;
+                    } else {
+                        tooltipX = mouseX + 12;
                     }
                 }
-                tooltipTextWidth = wrappedTooltipWidth;
-                textLines = wrappedTextLines;
 
-                if (mouseX > screenWidth / 2) {
-                    tooltipX = mouseX - 16 - tooltipTextWidth;
-                } else {
-                    tooltipX = mouseX + 12;
-                }
-            }
+                int tooltipY = mouseY - 12;
+                int tooltipHeight = 8;
 
-            int tooltipY = mouseY - 12;
-            int tooltipHeight = 8;
-
-            if (textLines.size() > 1) {
-                tooltipHeight += (textLines.size() - 1) * 10;
-                if (textLines.size() > titleLinesCount) {
-                    tooltipHeight += 2; // gap between title lines and next lines
-                }
-            }
-
-            if (tooltipY < 4) {
-                tooltipY = 4;
-            } else if (tooltipY + tooltipHeight + 4 > screenHeight) {
-                tooltipY = screenHeight - tooltipHeight - 4;
-            }
-
-            if (withBackground) {
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-                final int zLevel = 300;
-                String backgroundColor, borderColor;
-                ResourceLocation backGroundTexture, borderTexture;
-
-                // Perform Checks for different Color Format Fixes
-                // Fix 1 Example: ababab -> #ababab
-                // Fix 2 Example: 0xFFFFFF -> -1 or 100010
-                //
-                // Also Ensure (if using MC Textures) that they annotate with nameHere:textureHere
-
-                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
-                    if (CraftPresence.CONFIG.tooltipBGColor.length() == 6) {
-                        backgroundColor = "#" + CraftPresence.CONFIG.tooltipBGColor;
-                    } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith("0x")) {
-                        backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBGColor).intValue());
-                    } else {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                if (textLines.size() > 1) {
+                    tooltipHeight += (textLines.size() - 1) * 10;
+                    if (textLines.size() > titleLinesCount) {
+                        tooltipHeight += 2; // gap between title lines and next lines
                     }
-
-                    // Draw with Colors
-                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
-                    drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
-                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-                    drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-                    drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
-                } else {
-                    if (CraftPresence.CONFIG.tooltipBGColor.contains(":") && !CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
-                    } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor.substring(1);
-                    } else {
-                        backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
-                    }
-
-                    if (backgroundColor.contains(":")) {
-                        String[] splitInput = backgroundColor.split(":", 2);
-                        backGroundTexture = new ResourceLocation(splitInput[0], splitInput[1]);
-                    } else {
-                        backGroundTexture = new ResourceLocation(backgroundColor);
-                    }
-
-                    drawTextureRect(300, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
                 }
 
-                if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
-                    if (CraftPresence.CONFIG.tooltipBorderColor.length() == 6) {
-                        borderColor = "#" + CraftPresence.CONFIG.tooltipBorderColor;
-                    } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith("0x")) {
-                        borderColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBorderColor).intValue());
-                    } else {
-                        borderColor = CraftPresence.CONFIG.tooltipBorderColor;
-                    }
-
-                    // Draw with Colors
-                    int borderColorCode = (borderColor.startsWith("#") ? StringHandler.getColorFromHex(borderColor).getRGB() : Integer.parseInt(borderColor));
-                    String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
-
-                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
-                    drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
-                    drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
-                    drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
-                } else {
-                    if (CraftPresence.CONFIG.tooltipBorderColor.contains(":") && !CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
-                        borderColor = CraftPresence.CONFIG.tooltipBorderColor;
-                    } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
-                        borderColor = CraftPresence.CONFIG.tooltipBorderColor.substring(1);
-                    } else {
-                        borderColor = "minecraft:" + CraftPresence.CONFIG.tooltipBorderColor;
-                    }
-
-                    if (borderColor.contains(":")) {
-                        String[] splitInput = borderColor.split(":", 2);
-                        borderTexture = new ResourceLocation(splitInput[0], splitInput[1]);
-                    } else {
-                        borderTexture = new ResourceLocation(borderColor);
-                    }
-
-                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, borderTexture); // Top Border
-                    drawTextureRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipTextWidth + 5, 1, 0, borderTexture); // Bottom Border
-                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, 1, tooltipHeight + 5, 0, borderTexture); // Left Border
-                    drawTextureRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3, 1, tooltipHeight + 6, 0, borderTexture); // Right Border
-                }
-            }
-
-            for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
-                String line = textLines.get(lineNumber);
-                font.drawStringWithShadow(line, tooltipX, tooltipY, -1);
-
-                if (lineNumber + 1 == titleLinesCount) {
-                    tooltipY += 2;
+                if (tooltipY < 4) {
+                    tooltipY = 4;
+                } else if (tooltipY + tooltipHeight + 4 > screenHeight) {
+                    tooltipY = screenHeight - tooltipHeight - 4;
                 }
 
-                tooltipY += 10;
-            }
+                if (withBackground) {
+                    GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-            if (withBackground) {
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                    final int zLevel = 300;
+                    String backgroundColor, borderColor;
+                    ResourceLocation backGroundTexture, borderTexture;
+
+                    // Perform Checks for different Color Format Fixes
+                    // Fix 1 Example: ababab -> #ababab
+                    // Fix 2 Example: 0xFFFFFF -> -1 or 100010
+                    //
+                    // Also Ensure (if using MC Textures) that they annotate with nameHere:textureHere
+
+                    if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
+                        if (CraftPresence.CONFIG.tooltipBGColor.length() == 6) {
+                            backgroundColor = "#" + CraftPresence.CONFIG.tooltipBGColor;
+                        } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith("0x")) {
+                            backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBGColor).intValue());
+                        } else {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                        }
+
+                        // Draw with Colors
+                        drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
+                        drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
+                        drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+                        drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+                        drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+                    } else {
+                        if (CraftPresence.CONFIG.tooltipBGColor.contains(":") && !CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                        } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor.substring(1);
+                        } else {
+                            backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
+                        }
+
+                        if (backgroundColor.contains(":")) {
+                            String[] splitInput = backgroundColor.split(":", 2);
+                            backGroundTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                        } else {
+                            backGroundTexture = new ResourceLocation(backgroundColor);
+                        }
+
+                        drawTextureRect(300, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
+                    }
+
+                    if (StringHandler.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
+                        if (CraftPresence.CONFIG.tooltipBorderColor.length() == 6) {
+                            borderColor = "#" + CraftPresence.CONFIG.tooltipBorderColor;
+                        } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith("0x")) {
+                            borderColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBorderColor).intValue());
+                        } else {
+                            borderColor = CraftPresence.CONFIG.tooltipBorderColor;
+                        }
+
+                        // Draw with Colors
+                        int borderColorCode = (borderColor.startsWith("#") ? StringHandler.getColorFromHex(borderColor).getRGB() : Integer.parseInt(borderColor));
+                        String borderColorEnd = Integer.toString((borderColorCode & 0xFEFEFE) >> 1 | borderColorCode & 0xFF000000);
+
+                        drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
+                        drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
+                        drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
+                        drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
+                    } else {
+                        if (CraftPresence.CONFIG.tooltipBorderColor.contains(":") && !CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
+                            borderColor = CraftPresence.CONFIG.tooltipBorderColor;
+                        } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
+                            borderColor = CraftPresence.CONFIG.tooltipBorderColor.substring(1);
+                        } else {
+                            borderColor = "minecraft:" + CraftPresence.CONFIG.tooltipBorderColor;
+                        }
+
+                        if (borderColor.contains(":")) {
+                            String[] splitInput = borderColor.split(":", 2);
+                            borderTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                        } else {
+                            borderTexture = new ResourceLocation(borderColor);
+                        }
+
+                        drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, borderTexture); // Top Border
+                        drawTextureRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipTextWidth + 5, 1, 0, borderTexture); // Bottom Border
+                        drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, 1, tooltipHeight + 5, 0, borderTexture); // Left Border
+                        drawTextureRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3, 1, tooltipHeight + 6, 0, borderTexture); // Right Border
+                    }
+                }
+
+                for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
+                    String line = textLines.get(lineNumber);
+                    font.drawStringWithShadow(line, tooltipX, tooltipY, -1);
+
+                    if (lineNumber + 1 == titleLinesCount) {
+                        tooltipY += 2;
+                    }
+
+                    tooltipY += 10;
+                }
+
+                if (withBackground) {
+                    GL11.glEnable(GL11.GL_DEPTH_TEST);
+                }
             }
         }
     }

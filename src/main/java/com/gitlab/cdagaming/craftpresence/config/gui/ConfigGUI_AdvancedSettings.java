@@ -11,12 +11,13 @@ import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ConfigGUI_AdvancedSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private GUIExtendedButton proceedButton, guiMessagesButton, itemMessagesButton;
     private GUICheckBox enableCommandsButton, enablePerGUIButton,
-            enablePerItemButton, overwriteServerIconButton;
+            enablePerItemButton, overwriteServerIconButton, renderTooltipsButton;
     private GuiTextField splitCharacter;
 
     ConfigGUI_AdvancedSettings(GuiScreen parentScreen) {
@@ -43,6 +44,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
         overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
+        renderTooltipsButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
         proceedButton = new GUIExtendedButton(900, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
@@ -51,6 +53,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         buttonList.add(enablePerGUIButton);
         buttonList.add(enablePerItemButton);
         buttonList.add(overwriteServerIconButton);
+        buttonList.add(renderTooltipsButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -90,6 +93,9 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, overwriteServerIconButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+        }
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, renderTooltipsButton)) {
+            CraftPresence.GUIS.drawMultiLineString(StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.comment.advanced.rendertooltips")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, guiMessagesButton)) {
             if (!guiMessagesButton.enabled) {
@@ -143,6 +149,16 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.overwriteServerIcon = overwriteServerIconButton.isChecked();
+            }
+            if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                if (renderTooltipsButton.isChecked()) {
+                    if (Arrays.equals(StringHandler.MC_CHAR_WIDTH, new int[256]) || Arrays.equals(StringHandler.MC_GLYPH_WIDTH, new byte[65536])) {
+                        Constants.loadCharData(true);
+                    }
+                }
+                CraftPresence.CONFIG.renderTooltips = renderTooltipsButton.isChecked();
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {

@@ -34,7 +34,7 @@ public class Constants {
     public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
     public static final TranslationHandler TRANSLATOR = new TranslationHandler(MODID, false);
     public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
-    public static boolean blockTooltipRendering = false;
+    public static boolean forceBlockTooltipRendering = false;
 
     static void loadDLL(final boolean Update) {
         boolean UpdateStatus = Update;
@@ -57,7 +57,7 @@ public class Constants {
         FileHandler.loadFileAsDLL(file);
     }
 
-    static void loadCharData(final boolean Update) {
+    public static void loadCharData(final boolean Update) {
         LOG.info(TRANSLATOR.translate("craftpresence.logger.info.chardata.init"));
         final String fileName = "chardata.properties", charDataPath = "/assets/" + MODID + "/" + fileName;
         final File charDataDir = new File(MODID + File.separator + fileName);
@@ -131,9 +131,10 @@ public class Constants {
         } finally {
             if (errored) {
                 LOG.error(TRANSLATOR.translate("craftpresence.logger.error.chardata"));
-                blockTooltipRendering = true;
+                forceBlockTooltipRendering = true;
             } else {
                 LOG.info(TRANSLATOR.translate("craftpresence.logger.info.chardata.loaded"));
+                forceBlockTooltipRendering = false;
             }
         }
     }
