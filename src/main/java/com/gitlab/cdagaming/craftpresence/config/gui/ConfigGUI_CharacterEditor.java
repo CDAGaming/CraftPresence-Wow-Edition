@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class ConfigGUI_CharacterEditor extends GuiScreen {
     private final GuiScreen parentScreen;
-    private GUIExtendedButton backButton, saveButton, syncAllButton, syncSingleButton;
+    private GUIExtendedButton backButton, saveButton, syncAllButton, syncSingleButton, resetCharsButton;
     private GuiTextField charInput, charWidth;
     private String lastScannedCharacter;
 
@@ -31,12 +31,14 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
         charInput.setMaxStringLength(1);
         charWidth.setMaxStringLength(2);
 
-        syncAllButton = new GUIExtendedButton(200, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.sync.all"));
-        syncSingleButton = new GUIExtendedButton(300, (width / 2) - 90, syncAllButton.y - 25, 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.sync.single", charInput.getText()));
+        resetCharsButton = new GUIExtendedButton(200, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.reset"));
+        syncAllButton = new GUIExtendedButton(300, (width / 2) - 90, resetCharsButton.y - 25, 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.sync.all"));
+        syncSingleButton = new GUIExtendedButton(400, (width / 2) - 90, syncAllButton.y - 25, 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.sync.single", charInput.getText()));
 
         backButton = new GUIExtendedButton(700, 5, (height - 30), 100, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         saveButton = new GUIExtendedButton(800, width - 105, (height - 30), 100, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.save"));
 
+        buttonList.add(resetCharsButton);
         buttonList.add(syncAllButton);
         buttonList.add(syncSingleButton);
         buttonList.add(backButton);
@@ -89,9 +91,19 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
         } else if (button.id == saveButton.id) {
             // Save Single Value
         } else if (button.id == syncAllButton.id) {
-            // Sync All Values to FontRenderer Defaults
+            for (int charIndex : StringHandler.MC_CHAR_WIDTH) {
+                String character = Character.getName(charIndex);
+                StringHandler.MC_CHAR_WIDTH[charIndex] = mc.fontRenderer.getStringWidth(character);
+            }
+
+            for (byte glyphIndex : StringHandler.MC_GLYPH_WIDTH) {
+                String glyph = Character.getName(glyphIndex);
+                StringHandler.MC_GLYPH_WIDTH[glyphIndex] = (byte) mc.fontRenderer.getStringWidth(glyph);
+            }
         } else if (button.id == syncSingleButton.id) {
             // Sync Single Value to FontRender Defaults
+        } else if (button.id == resetCharsButton.id) {
+            Constants.loadCharData(true);
         }
     }
 

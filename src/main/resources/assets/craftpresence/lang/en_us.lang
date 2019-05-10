@@ -43,6 +43,7 @@ gui.config.buttonMessage.iconchange=Change Icon
 gui.config.buttonMessage.chareditor=Character Editor
 gui.config.buttonMessage.sync.single=Sync %1$s
 gui.config.buttonMessage.sync.all=Sync All
+gui.config.buttonMessage.reset=Reset To Default
 gui.config.defaultMessage.biome=Default Biome Message
 gui.config.defaultMessage.dimension=Default Dimension Message
 gui.config.defaultMessage.server=Default Server Message
