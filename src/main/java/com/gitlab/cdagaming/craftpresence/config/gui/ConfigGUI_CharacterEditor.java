@@ -10,12 +10,14 @@ import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ConfigGUI_CharacterEditor extends GuiScreen {
     private final GuiScreen parentScreen;
     private GUIExtendedButton backButton, saveButton, syncAllButton, syncSingleButton, resetCharsButton;
     private GuiTextField charInput, charWidth;
-    private String lastScannedCharacter;
+    private String lastScannedString;
+    private char lastScannedChar;
 
     ConfigGUI_CharacterEditor(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -69,13 +71,16 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
             syncSingleButton.enabled = false;
         }
 
-        if (!charInput.getText().equals(lastScannedCharacter)) {
-            lastScannedCharacter = charInput.getText();
+        if (!charInput.getText().equals(lastScannedString)) {
+            lastScannedString = charInput.getText();
 
-            if (!StringHandler.isNullOrEmpty(lastScannedCharacter)) {
-                charWidth.setText(Integer.toString(StringHandler.getStringWidth(lastScannedCharacter)));
+            if (!StringHandler.isNullOrEmpty(lastScannedString)) {
+                lastScannedChar = lastScannedString.charAt(0);
+                charWidth.setText(Integer.toString(StringHandler.getStringWidth(lastScannedString)));
                 charWidth.setEnabled(true);
                 syncSingleButton.enabled = true;
+            } else {
+                lastScannedChar = Character.UNASSIGNED;
             }
         }
 
@@ -86,24 +91,48 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        int[] originalCharArray = StringHandler.MC_CHAR_WIDTH;
+        byte[] originalGlyphArray = StringHandler.MC_GLYPH_WIDTH;
+
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentScreen);
-        } else if (button.id == saveButton.id) {
+        } else if (button.id == saveButton.id && StringHandler.isValidInteger(charWidth.getText())) {
+            int characterWidth = Integer.parseInt(charWidth.getText());
             // Save Single Value
+            if (lastScannedChar > 0 && lastScannedChar <= StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
+                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = characterWidth;
+            } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
+                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) characterWidth;
+            }
         } else if (button.id == syncAllButton.id) {
+            // Sync ALL Values to FontRender Defaults
             for (int charIndex : StringHandler.MC_CHAR_WIDTH) {
-                String character = Character.getName(charIndex);
+                String character = Character.toString((char) charIndex);
                 StringHandler.MC_CHAR_WIDTH[charIndex] = mc.fontRenderer.getStringWidth(character);
             }
 
-            for (byte glyphIndex : StringHandler.MC_GLYPH_WIDTH) {
-                String glyph = Character.getName(glyphIndex);
+            for (byte glyphByte : StringHandler.MC_GLYPH_WIDTH) {
+                int glyphIndex = glyphByte & 255;
+                String glyph = Character.toString((char) glyphIndex);
                 StringHandler.MC_GLYPH_WIDTH[glyphIndex] = (byte) mc.fontRenderer.getStringWidth(glyph);
             }
         } else if (button.id == syncSingleButton.id) {
             // Sync Single Value to FontRender Defaults
+            if (lastScannedChar > 0 && lastScannedChar <= StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
+                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = mc.fontRenderer.getStringWidth(lastScannedString);
+            } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
+                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getStringWidth(lastScannedString);
+            }
         } else if (button.id == resetCharsButton.id) {
             Constants.loadCharData(true);
+        }
+
+        if (!Arrays.equals(StringHandler.MC_CHAR_WIDTH, originalCharArray) || !Arrays.equals(StringHandler.MC_GLYPH_WIDTH, originalGlyphArray)) {
+            // Write to Char Data
+            Constants.writeToCharData();
+
+            lastScannedString = null;
+            lastScannedChar = Character.UNASSIGNED;
         }
     }
 

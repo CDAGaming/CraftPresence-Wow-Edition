@@ -144,4 +144,47 @@ public class Constants {
             }
         }
     }
+
+    public static void writeToCharData() {
+        FileReader fr = null;
+        FileWriter fw = null;
+        final File charDataDir = new File(MODID + File.separator + "chardata.properties");
+
+        if (charDataDir.exists()) {
+            try {
+                fr = new FileReader(charDataDir);
+                fw = new FileWriter(charDataDir);
+            } catch (Exception ex) {
+                loadCharData(true);
+            } finally {
+                if (fr != null && fw != null) {
+                    try (BufferedReader br = new BufferedReader(fr)) {
+                        String currentString;
+                        String newString;
+                        while ((currentString = br.readLine()) != null) {
+                            newString = null;
+                            if (currentString.contains("=")) {
+                                if (currentString.toLowerCase().startsWith("charwidth")) {
+                                    newString = "charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH);
+                                } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
+                                    newString = "glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH);
+                                }
+                            }
+
+                            if (!StringHandler.isNullOrEmpty(newString)) {
+                                fw.write(newString);
+                            }
+                        }
+                        fw.close();
+                    } catch (Exception ex) {
+                        //
+                    } finally {
+                        Constants.LOG.error("FINISHED WRITING");
+                    }
+                }
+            }
+        } else {
+            loadCharData(true);
+        }
+    }
 }
