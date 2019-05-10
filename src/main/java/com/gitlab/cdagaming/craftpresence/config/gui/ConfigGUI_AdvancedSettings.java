@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 public class ConfigGUI_AdvancedSettings extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GUIExtendedButton proceedButton, guiMessagesButton, itemMessagesButton;
+    private GUIExtendedButton proceedButton, guiMessagesButton, itemMessagesButton, characterEditorButton;
     private GUICheckBox enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, overwriteServerIconButton, renderTooltipsButton;
     private GuiTextField splitCharacter;
@@ -40,15 +40,18 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
         guiMessagesButton = new GUIExtendedButton(120, calc1, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"));
         itemMessagesButton = new GUIExtendedButton(130, calc2, CraftPresence.GUIS.getButtonY(2), 160, 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
 
-        enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
-        enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(3), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
-        enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
-        overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(4) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        renderTooltipsButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(5) - 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
+        characterEditorButton = new GUIExtendedButton(140, (width / 2) - 90, CraftPresence.GUIS.getButtonY(3), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.chareditor"));
+
+        enableCommandsButton = new GUICheckBox(200, calc1, CraftPresence.GUIS.getButtonY(4), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
+        enablePerGUIButton = new GUICheckBox(300, calc2, CraftPresence.GUIS.getButtonY(4), Constants.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
+        enablePerItemButton = new GUICheckBox(400, calc1, CraftPresence.GUIS.getButtonY(5) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
+        overwriteServerIconButton = new GUICheckBox(500, calc2, CraftPresence.GUIS.getButtonY(5) - 10, Constants.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
+        renderTooltipsButton = new GUICheckBox(600, calc1, CraftPresence.GUIS.getButtonY(6) - 20, Constants.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
         proceedButton = new GUIExtendedButton(900, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
         buttonList.add(itemMessagesButton);
+        buttonList.add(characterEditorButton);
         buttonList.add(enableCommandsButton);
         buttonList.add(enablePerGUIButton);
         buttonList.add(enablePerItemButton);
@@ -165,6 +168,8 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null));
         } else if (button.id == itemMessagesButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
+        } else if (button.id == characterEditorButton.id) {
+            mc.displayGuiScreen(new ConfigGUI_CharacterEditor(currentScreen));
         }
     }
 

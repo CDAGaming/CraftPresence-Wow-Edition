@@ -34,6 +34,8 @@
 
 * Fixes a Bug with Translation Resource Loading (Now tries to use Main Thread Loader, then local ClassLoader)
 
+* Fixes an Exception with Missing Format Arguments in Translation Handler
+
 ### More Information:
 
 #### Command Rewrite Info:

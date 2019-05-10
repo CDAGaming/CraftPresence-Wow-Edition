@@ -146,11 +146,23 @@ public class TranslationHandler {
     }
 
     public String translate(String translationKey, Object... parameters) {
-        if (translationMap.containsKey(translationKey)) {
-            return String.format(translationMap.get(translationKey), parameters);
-        } else {
-            Constants.LOG.error("Unable to retrieve a Translation for " + translationKey);
-            return translationKey;
+        boolean hasErrored = false;
+        String translatedString = translationKey;
+        try {
+            if (translationMap.containsKey(translationKey)) {
+                translatedString = String.format(translationMap.get(translationKey), parameters);
+            } else {
+                hasErrored = true;
+            }
+        } catch (Exception ex) {
+            Constants.LOG.error("Exception Parsing " + translationKey);
+            ex.printStackTrace();
+            hasErrored = true;
         }
+
+        if (hasErrored) {
+            Constants.LOG.error("Unable to retrieve a Translation for " + translationKey);
+        }
+        return translatedString;
     }
 }
