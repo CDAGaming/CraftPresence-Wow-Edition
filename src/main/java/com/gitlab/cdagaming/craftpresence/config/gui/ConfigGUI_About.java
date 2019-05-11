@@ -46,7 +46,7 @@ public class ConfigGUI_About extends GuiScreen {
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {
                 final String string = notice.get(i);
-                drawString(mc.fontRenderer, string, (width / 2) - (StringHandler.getStringWidth(string) / 2), 80 + (i * 10), 0xFFFFFF);
+                drawString(mc.fontRenderer, string, (width / 2) - (StringHandler.getStringWidth(string) / 2), (height / 3) + (i * 10), 0xFFFFFF);
             }
         }
 

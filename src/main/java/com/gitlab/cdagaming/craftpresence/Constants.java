@@ -155,7 +155,6 @@ public class Constants {
                 fr = new FileReader(charDataDir);
             } catch (Exception ex) {
                 loadCharData(true);
-                ex.printStackTrace();
             } finally {
                 if (fr != null) {
                     try (BufferedReader br = new BufferedReader(fr)) {
@@ -166,9 +165,6 @@ public class Constants {
                                     textData.add("charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH));
                                 } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
                                     textData.add("glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH));
-                                } else {
-                                    Constants.loadCharData(true);
-                                    break;
                                 }
                             }
                         }
@@ -182,6 +178,8 @@ public class Constants {
                                 bw.write(lineInput);
                                 bw.newLine();
                             }
+                        } else {
+                            Constants.loadCharData(true);
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

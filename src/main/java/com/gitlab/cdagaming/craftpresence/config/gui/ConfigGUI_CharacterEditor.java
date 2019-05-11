@@ -11,6 +11,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class ConfigGUI_CharacterEditor extends GuiScreen {
     private final GuiScreen parentScreen;
@@ -56,6 +57,14 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title.editor.character");
         final String charInputTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.charinput");
         final String charWidthTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.charwidth");
+        final List<String> notice = StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.character.notice"));
+
+        if (notice != null && !notice.isEmpty()) {
+            for (int i = 0; i < notice.size(); i++) {
+                final String string = notice.get(i);
+                drawString(mc.fontRenderer, string, (width / 2) - (StringHandler.getStringWidth(string) / 2), (height / 2) + (i * 10), 0xFFFFFF);
+            }
+        }
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
         drawString(mc.fontRenderer, charInputTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
