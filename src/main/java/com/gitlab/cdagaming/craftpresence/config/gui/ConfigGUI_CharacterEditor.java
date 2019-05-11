@@ -85,7 +85,9 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
         }
 
         syncSingleButton.displayString = Constants.TRANSLATOR.translate("gui.config.buttonMessage.sync.single", charInput.getText());
+        saveButton.enabled = syncSingleButton.enabled;
         syncSingleButton.visible = syncSingleButton.enabled;
+        saveButton.visible = syncSingleButton.visible;
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

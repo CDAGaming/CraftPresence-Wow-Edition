@@ -289,6 +289,7 @@ public class ConfigHandler {
         properties.setProperty(NAME_enablePERGUI, Boolean.toString(enablePERGUI));
         properties.setProperty(NAME_enablePERItem, Boolean.toString(enablePERItem));
         properties.setProperty(NAME_overwriteServerIcon, Boolean.toString(overwriteServerIcon));
+        properties.setProperty(NAME_renderTooltips, Boolean.toString(renderTooltips));
         properties.setProperty(NAME_splitCharacter, splitCharacter);
         properties.setProperty(NAME_guiMessages, Arrays.toString(guiMessages));
         properties.setProperty(NAME_itemMessages, Arrays.toString(itemMessages));
