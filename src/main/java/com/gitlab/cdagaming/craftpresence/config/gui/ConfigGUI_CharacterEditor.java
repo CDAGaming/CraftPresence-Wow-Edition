@@ -91,14 +91,14 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        int[] originalCharArray = StringHandler.MC_CHAR_WIDTH;
-        byte[] originalGlyphArray = StringHandler.MC_GLYPH_WIDTH;
+        int[] originalCharArray = StringHandler.MC_CHAR_WIDTH.clone();
+        byte[] originalGlyphArray = StringHandler.MC_GLYPH_WIDTH.clone();
 
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == saveButton.id && StringHandler.isValidInteger(charWidth.getText())) {
-            int characterWidth = Integer.parseInt(charWidth.getText());
             // Save Single Value
+            int characterWidth = Integer.parseInt(charWidth.getText());
             if (lastScannedChar > 0 && lastScannedChar <= StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
                 StringHandler.MC_CHAR_WIDTH[lastScannedChar] = characterWidth;
             } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
@@ -106,33 +106,35 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
             }
         } else if (button.id == syncAllButton.id) {
             // Sync ALL Values to FontRender Defaults
-            for (int charIndex : StringHandler.MC_CHAR_WIDTH) {
-                String character = Character.toString((char) charIndex);
-                StringHandler.MC_CHAR_WIDTH[charIndex] = mc.fontRenderer.getStringWidth(character);
+            for (int currentCharIndex = 0; currentCharIndex < StringHandler.MC_CHAR_WIDTH.length - 1; currentCharIndex++) {
+                char characterObj = (char) (currentCharIndex);
+                StringHandler.MC_CHAR_WIDTH[currentCharIndex] = mc.fontRenderer.getCharWidth(characterObj);
             }
 
-            for (byte glyphByte : StringHandler.MC_GLYPH_WIDTH) {
-                int glyphIndex = glyphByte & 255;
-                String glyph = Character.toString((char) glyphIndex);
-                StringHandler.MC_GLYPH_WIDTH[glyphIndex] = (byte) mc.fontRenderer.getStringWidth(glyph);
+            for (int currentGlyphIndex = 0; currentGlyphIndex < StringHandler.MC_GLYPH_WIDTH.length - 1; currentGlyphIndex++) {
+                char glyphObj = (char) (currentGlyphIndex & 255);
+                StringHandler.MC_GLYPH_WIDTH[currentGlyphIndex] = (byte) mc.fontRenderer.getCharWidth(glyphObj);
             }
         } else if (button.id == syncSingleButton.id) {
             // Sync Single Value to FontRender Defaults
-            if (lastScannedChar > 0 && lastScannedChar <= StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
-                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = mc.fontRenderer.getStringWidth(lastScannedString);
+            if (lastScannedChar > 0 && lastScannedChar < StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
+                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = mc.fontRenderer.getCharWidth(lastScannedChar);
             } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
-                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getStringWidth(lastScannedString);
+                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getCharWidth(lastScannedChar);
             }
         } else if (button.id == resetCharsButton.id) {
             Constants.loadCharData(true);
         }
 
-        if (!Arrays.equals(StringHandler.MC_CHAR_WIDTH, originalCharArray) || !Arrays.equals(StringHandler.MC_GLYPH_WIDTH, originalGlyphArray)) {
+        if (!Arrays.equals(originalCharArray, StringHandler.MC_CHAR_WIDTH) || !Arrays.equals(originalGlyphArray, StringHandler.MC_GLYPH_WIDTH)) {
             // Write to Char Data
             Constants.writeToCharData();
 
+            // Clear Data for Next Entry
             lastScannedString = null;
             lastScannedChar = Character.UNASSIGNED;
+            charInput.setText("");
+            charWidth.setText("");
         }
     }
 

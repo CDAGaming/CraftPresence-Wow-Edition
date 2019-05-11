@@ -146,40 +146,45 @@ public class Constants {
     }
 
     public static void writeToCharData() {
+        List<String> textData = Lists.newArrayList();
         FileReader fr = null;
-        FileWriter fw = null;
         final File charDataDir = new File(MODID + File.separator + "chardata.properties");
 
         if (charDataDir.exists()) {
             try {
                 fr = new FileReader(charDataDir);
-                fw = new FileWriter(charDataDir);
             } catch (Exception ex) {
                 loadCharData(true);
+                ex.printStackTrace();
             } finally {
-                if (fr != null && fw != null) {
+                if (fr != null) {
                     try (BufferedReader br = new BufferedReader(fr)) {
                         String currentString;
-                        String newString;
                         while ((currentString = br.readLine()) != null) {
-                            newString = null;
                             if (currentString.contains("=")) {
                                 if (currentString.toLowerCase().startsWith("charwidth")) {
-                                    newString = "charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH);
+                                    textData.add("charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH));
                                 } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
-                                    newString = "glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH);
+                                    textData.add("glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH));
+                                } else {
+                                    Constants.loadCharData(true);
+                                    break;
                                 }
                             }
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
 
-                            if (!StringHandler.isNullOrEmpty(newString)) {
-                                fw.write(newString);
+                    try (BufferedWriter bw = new BufferedWriter(new FileWriter(charDataDir))) {
+                        if (!textData.isEmpty()) {
+                            for (String lineInput : textData) {
+                                bw.write(lineInput);
+                                bw.newLine();
                             }
                         }
-                        fw.close();
                     } catch (Exception ex) {
-                        //
-                    } finally {
-                        Constants.LOG.error("FINISHED WRITING");
+                        ex.printStackTrace();
                     }
                 }
             }
