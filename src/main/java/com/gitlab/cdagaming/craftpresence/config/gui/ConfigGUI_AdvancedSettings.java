@@ -155,7 +155,6 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
                 CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 if (renderTooltipsButton.isChecked()) {
                     if (Arrays.equals(StringHandler.MC_CHAR_WIDTH, new int[256]) || Arrays.equals(StringHandler.MC_GLYPH_WIDTH, new byte[65536])) {
                         Constants.loadCharData(true);
