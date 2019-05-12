@@ -18,7 +18,9 @@
 
   * Options to Edit or Re-Sync Character and Glyph Widths
   
-* Deprecated I18n, to put Newer Translation System in Full Control
+* Added an Option to Reset your Config to Default Settings
+
+* Fully Deprecated I18n, to put Newer Translation System in Full Control
 
 * Added Additional Formatting Rules to Dimension Name Formatting
 
@@ -66,7 +68,7 @@ The 1.14.x Port of this Mod Requires the [FabricMC ModLoader](https://minecraft.
 
 This Version of the Build is based on Minecraft Snapshots, since 1.14 is not fully released, caution is advised.
 
-A 1.14.x Snapshot Build will expire upon the release of a succeeding build. (Ex: If a 19w04b build is Released, then the 19w04a build is removed)
+A 1.14.x Snapshot Build will be marked as BETA to match it's Snapshot Status
 
 #### Legacy Build Info (Minecraft Versions 1.5.2 and Below):
 
@@ -76,6 +78,6 @@ Please Keep in Mind the Following:
 
 * There is NO Support for Server RPC Displays from MC 1.2.5 and Below, due to Modding Limitations.
 
-* Bugs that Relate with Issues in Vanilla Code, are unlikely able to be fixed due to MC's Limitations
+* Bugs that Relate with or are caused by Issues in the Vanilla CodeBase, are unlikely able to be fixed due to MC's Limitations
 
-Please See Mod Description // README for More Info
+Please See the Mod Description // README for More Info

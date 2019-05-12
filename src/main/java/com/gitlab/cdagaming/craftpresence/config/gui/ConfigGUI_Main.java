@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class ConfigGUI_Main extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private GUIExtendedButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, accessibilitySet, proceedButton, aboutButton, commandGUIButton;
+    private GUIExtendedButton generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, accessibilitySet, proceedButton, aboutButton, commandGUIButton, resetConfigButton;
 
     public ConfigGUI_Main(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -39,8 +39,9 @@ public class ConfigGUI_Main extends GuiScreen {
         accessibilitySet = new GUIExtendedButton(700, (width / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, Constants.TRANSLATOR.translate("gui.config.title.accessibility"));
 
         proceedButton = new GUIExtendedButton(800, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        aboutButton = new GUIExtendedButton(900, 10, (height - 30), 20, 20, "?");
-        commandGUIButton = new GUIExtendedButton(1000, (width - 120), (height - 30), 85, 20, Constants.TRANSLATOR.translate("gui.config.title.commands"));
+        aboutButton = new GUIExtendedButton(900, (width - 30), 10, 20, 20, "?");
+        commandGUIButton = new GUIExtendedButton(1000, (width - 105), (height - 30), 95, 20, Constants.TRANSLATOR.translate("gui.config.title.commands"));
+        resetConfigButton = new GUIExtendedButton(1100, 10, (height - 30), 95, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.reset"));
 
         buttonList.add(generalSet);
         buttonList.add(biomeSet);
@@ -52,6 +53,7 @@ public class ConfigGUI_Main extends GuiScreen {
         buttonList.add(proceedButton);
         buttonList.add(aboutButton);
         buttonList.add(commandGUIButton);
+        buttonList.add(resetConfigButton);
 
         super.initGui();
     }
@@ -152,6 +154,11 @@ public class ConfigGUI_Main extends GuiScreen {
             mc.displayGuiScreen(new ConfigGUI_About(currentScreen));
         } else if (button.id == commandGUIButton.id) {
             mc.displayGuiScreen(new CommandsGUI(currentScreen));
+        } else if (button.id == resetConfigButton.id) {
+            CraftPresence.CONFIG.hasChanged = false;
+            CraftPresence.CONFIG.hasClientPropertiesChanged = false;
+            CraftPresence.CONFIG.setupInitialValues();
+            CraftPresence.CONFIG.updateConfig();
         }
     }
 
