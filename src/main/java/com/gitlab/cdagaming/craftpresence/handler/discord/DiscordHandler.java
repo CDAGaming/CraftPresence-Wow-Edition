@@ -49,6 +49,9 @@ public class DiscordHandler {
         Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
             @Override
             public void run() {
+                CraftPresence.closing = true;
+                CraftPresence.timerObj.cancel();
+
                 shutDown();
             }
         };
@@ -185,9 +188,6 @@ public class DiscordHandler {
         CraftPresence.BIOMES.clearClientData();
         CraftPresence.SERVER.clearClientData();
         CraftPresence.GUIS.clearClientData();
-
-        CraftPresence.closing = true;
-        CraftPresence.timerObj.cancel();
 
         STATUS = "disconnected";
         lastDisconnectErrorCode = 0;
