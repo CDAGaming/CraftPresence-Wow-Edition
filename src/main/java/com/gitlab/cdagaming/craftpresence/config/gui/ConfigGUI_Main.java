@@ -159,6 +159,9 @@ public class ConfigGUI_Main extends GuiScreen {
             CraftPresence.CONFIG.hasClientPropertiesChanged = false;
             CraftPresence.CONFIG.setupInitialValues();
             CraftPresence.CONFIG.updateConfig();
+
+            CommandHandler.reloadData(true);
+            CommandHandler.rebootRPC();
         }
     }
 
