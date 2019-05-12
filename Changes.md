@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.5.5 (06/05/2019)
+## v1.5.5 (06/07/2019)
 
 ### Changes:
 

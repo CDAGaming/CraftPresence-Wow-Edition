@@ -23,9 +23,8 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
     private String currentNormalHexValue, currentConvertedHexValue, startingHexValue;
     private int currentRed, currentGreen, currentBlue, currentAlpha;
     private GuiTextField hexText, redText, greenText, blueText, alphaText;
-    // Page 2 Variables TODO
+    // Page 2 Variables
     private String currentNormalMCTexturePath, currentConvertedMCTexturePath, startingMCTexturePath;
-    private int currentU, currentV;
     private GuiTextField mcTextureText;
     private ResourceLocation currentMCTexture;
 
@@ -48,7 +47,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
         blueText = new GuiTextField(130, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
         alphaText = new GuiTextField(140, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
 
-        // Page 2 Items TODO
+        // Page 2 Items
         mcTextureText = new GuiTextField(150, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
         mcTextureText.setMaxStringLength(512);
 
@@ -105,7 +104,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             CraftPresence.GUIS.drawGradientRect(300, width - 45, height - 45, width - 1, height - 2, currentConvertedHexValue, currentConvertedHexValue);
         }
 
-        // Page 2 Items TODO
+        // Page 2 Items
         if (pageNumber == 1) {
             final String mcTextureTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.texturepath");
 
@@ -198,7 +197,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             alphaText.textboxKeyTyped(typedChar, keyCode);
         }
 
-        // Page 2 Items TODO
+        // Page 2 Items
         if (pageNumber == 1) {
             mcTextureText.textboxKeyTyped(typedChar, keyCode);
         }
@@ -219,7 +218,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             alphaText.mouseClicked(mouseX, mouseY, mouseButton);
         }
 
-        // Page 2 Items TODO
+        // Page 2 Items
         if (pageNumber == 1) {
             mcTextureText.mouseClicked(mouseX, mouseY, mouseButton);
         }
@@ -238,7 +237,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             alphaText.updateCursorCounter();
         }
 
-        // Page 2 Items TODO
+        // Page 2 Items
         if (pageNumber == 1) {
             mcTextureText.updateCursorCounter();
         }
