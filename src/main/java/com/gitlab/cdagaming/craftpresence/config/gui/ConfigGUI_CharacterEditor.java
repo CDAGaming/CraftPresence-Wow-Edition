@@ -20,6 +20,9 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
     private String lastScannedString;
     private char lastScannedChar;
 
+    private int[] originalCharArray = StringHandler.MC_CHAR_WIDTH.clone();
+    private byte[] originalGlyphArray = StringHandler.MC_GLYPH_WIDTH.clone();
+
     ConfigGUI_CharacterEditor(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
         this.parentScreen = parentScreen;
@@ -53,6 +56,7 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         CraftPresence.GUIS.drawBackground(width, height);
+        checkValues();
 
         final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title.editor.character");
         final String charInputTitle = Constants.TRANSLATOR.translate("gui.config.editorMessage.charinput");
@@ -102,9 +106,6 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        int[] originalCharArray = StringHandler.MC_CHAR_WIDTH.clone();
-        byte[] originalGlyphArray = StringHandler.MC_GLYPH_WIDTH.clone();
-
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == saveButton.id && StringHandler.isValidInteger(charWidth.getText())) {
@@ -119,27 +120,31 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
             // Sync ALL Values to FontRender Defaults
             for (int currentCharIndex = 0; currentCharIndex < StringHandler.MC_CHAR_WIDTH.length - 1; currentCharIndex++) {
                 char characterObj = (char) (currentCharIndex);
-                StringHandler.MC_CHAR_WIDTH[currentCharIndex] = mc.fontRenderer.getCharWidth(characterObj);
+                StringHandler.MC_CHAR_WIDTH[currentCharIndex] = mc.fontRenderer.getStringWidth(Character.toString(characterObj));
             }
 
             for (int currentGlyphIndex = 0; currentGlyphIndex < StringHandler.MC_GLYPH_WIDTH.length - 1; currentGlyphIndex++) {
                 char glyphObj = (char) (currentGlyphIndex & 255);
-                StringHandler.MC_GLYPH_WIDTH[currentGlyphIndex] = (byte) mc.fontRenderer.getCharWidth(glyphObj);
+                StringHandler.MC_GLYPH_WIDTH[currentGlyphIndex] = (byte) mc.fontRenderer.getStringWidth(Character.toString(glyphObj));
             }
         } else if (button.id == syncSingleButton.id) {
             // Sync Single Value to FontRender Defaults
             if (lastScannedChar > 0 && lastScannedChar < StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
-                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = mc.fontRenderer.getCharWidth(lastScannedChar);
+                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = mc.fontRenderer.getStringWidth(Character.toString(lastScannedChar));
             } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
-                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getCharWidth(lastScannedChar);
+                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getStringWidth(Character.toString(lastScannedChar));
             }
         } else if (button.id == resetCharsButton.id) {
             Constants.loadCharData(true);
         }
+    }
 
+    private void checkValues() {
         if (!Arrays.equals(originalCharArray, StringHandler.MC_CHAR_WIDTH) || !Arrays.equals(originalGlyphArray, StringHandler.MC_GLYPH_WIDTH)) {
-            // Write to Char Data
+            // Write to Char Data and Re-Set originalCharArray and originalGlyphArray
             Constants.writeToCharData();
+            originalCharArray = StringHandler.MC_CHAR_WIDTH.clone();
+            originalGlyphArray = StringHandler.MC_GLYPH_WIDTH.clone();
 
             // Clear Data for Next Entry
             lastScannedString = null;
