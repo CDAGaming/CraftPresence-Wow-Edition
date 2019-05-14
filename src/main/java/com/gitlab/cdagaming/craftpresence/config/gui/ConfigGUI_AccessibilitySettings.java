@@ -40,7 +40,7 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
         languageIDText = new GuiTextField(400, mc.fontRenderer, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20);
         languageIDText.setText(CraftPresence.CONFIG.languageID);
 
-        configKeyBindingButton = new GUIExtendedButton(500, calc2 + 50, CraftPresence.GUIS.getButtonY(5), 90, 20, Keyboard.getKeyName(Integer.parseInt(currentKeyCode)));
+        configKeyBindingButton = new GUIExtendedButton(500, calc2 + 50, CraftPresence.GUIS.getButtonY(5), 90, 20, !StringHandler.isNullOrEmpty(Keyboard.getKeyName(Integer.parseInt(currentKeyCode))) ? Keyboard.getKeyName(Integer.parseInt(currentKeyCode)) : currentKeyCode);
 
         proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
@@ -107,7 +107,7 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (entryMode) {
-            configKeyBindingButton.displayString = Keyboard.getKeyName(keyCode);
+            configKeyBindingButton.displayString = !StringHandler.isNullOrEmpty(Keyboard.getKeyName(keyCode)) ? Keyboard.getKeyName(keyCode) : Integer.toString(keyCode);
             currentKeyCode = Integer.toString(keyCode);
             entryMode = false;
         } else if (keyCode == Keyboard.KEY_ESCAPE) {

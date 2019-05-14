@@ -4,6 +4,8 @@
 
 ### Changes:
 
+* Added 1.14.1 Fabric Support (1.14 is now Deprecated)
+
 * Added Options to Accessibility GUI:
   
   * Option to Customize GUI Background to a Color or Texture
@@ -31,6 +33,8 @@
 * Fixes Improper Centering of Buttons in Advanced Settings GUI
 
 * Fixes Several Possible Cases of NPEs
+
+* Fixes an NPE within GUIs if Config is null
 
 * Fixes KeyBindings not functioning when not in a Game (Now work properly once on Main Menu)
 
