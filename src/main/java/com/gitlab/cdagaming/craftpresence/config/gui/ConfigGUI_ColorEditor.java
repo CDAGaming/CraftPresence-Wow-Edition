@@ -153,15 +153,15 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 }
 
                 if (pageNumber == 1) {
-                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBGColor)) {
+                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                         CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.tooltipBGColor = currentNormalMCTexturePath;
-                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
+                        CraftPresence.CONFIG.tooltipBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                         CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath;
-                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.guiBGColor)) {
+                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                         CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.guiBGColor = currentNormalMCTexturePath;
+                        CraftPresence.CONFIG.guiBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
                     }
                 }
             }
@@ -296,7 +296,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
             Integer localValue = null;
             Color localColor;
 
-            if (!StringHandler.isNullOrEmpty(hexText.getText()) && !hexText.getText().equals(currentNormalHexValue)) {
+            if (!StringHandler.isNullOrEmpty(hexText.getText())) {
                 if (hexText.getText().startsWith("#") || hexText.getText().length() == 6) {
                     localValue = StringHandler.getColorFromHex(hexText.getText()).getRGB();
                 } else if (hexText.getText().startsWith("0x")) {
@@ -321,16 +321,14 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                     currentConvertedHexValue = Integer.toString(localValue);
                 }
             } else if (!StringHandler.isNullOrEmpty(redText.getText()) && !StringHandler.isNullOrEmpty(greenText.getText()) && !StringHandler.isNullOrEmpty(blueText.getText()) && !StringHandler.isNullOrEmpty(alphaText.getText())) {
-                if (!redText.getText().equals(Integer.toString(currentRed)) || !blueText.getText().equals(Integer.toString(currentBlue)) || !greenText.getText().equals(Integer.toString(currentGreen)) || !alphaText.getText().equals(Integer.toString(currentAlpha))) {
-                    if (StringHandler.isValidInteger(redText.getText()) && StringHandler.isValidInteger(greenText.getText()) && StringHandler.isValidInteger(blueText.getText()) && StringHandler.isValidInteger(alphaText.getText())) {
-                        if (!(Integer.parseInt(redText.getText()) > 255 || Integer.parseInt(greenText.getText()) > 255 || Integer.parseInt(blueText.getText()) > 255 || Integer.parseInt(alphaText.getText()) > 255)) {
-                            localColor = new Color(Integer.parseInt(redText.getText()), Integer.parseInt(greenText.getText()), Integer.parseInt(blueText.getText()), Integer.parseInt(alphaText.getText()));
+                if (StringHandler.isValidInteger(redText.getText()) && StringHandler.isValidInteger(greenText.getText()) && StringHandler.isValidInteger(blueText.getText()) && StringHandler.isValidInteger(alphaText.getText())) {
+                    if (!(Integer.parseInt(redText.getText()) > 255 || Integer.parseInt(greenText.getText()) > 255 || Integer.parseInt(blueText.getText()) > 255 || Integer.parseInt(alphaText.getText()) > 255)) {
+                        localColor = new Color(Integer.parseInt(redText.getText()), Integer.parseInt(greenText.getText()), Integer.parseInt(blueText.getText()), Integer.parseInt(alphaText.getText()));
 
-                            currentNormalHexValue = StringHandler.getHexFromColor(localColor);
-                            hexText.setText(currentNormalHexValue);
+                        currentNormalHexValue = StringHandler.getHexFromColor(localColor);
+                        hexText.setText(currentNormalHexValue);
 
-                            currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
-                        }
+                        currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
                     }
                 }
             }
@@ -338,7 +336,11 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
-            if (!StringHandler.isNullOrEmpty(mcTextureText.getText()) && !mcTextureText.getText().equals(currentNormalMCTexturePath)) {
+            if (!StringHandler.isNullOrEmpty(mcTextureText.getText())) {
+                if (mcTextureText.getText().contains(CraftPresence.CONFIG.splitCharacter)) {
+                    mcTextureText.setText(mcTextureText.getText().replace(CraftPresence.CONFIG.splitCharacter, ":"));
+                }
+
                 if (mcTextureText.getText().contains(":") && !mcTextureText.getText().startsWith(":")) {
                     currentNormalMCTexturePath = mcTextureText.getText();
                 } else if (mcTextureText.getText().startsWith(":")) {

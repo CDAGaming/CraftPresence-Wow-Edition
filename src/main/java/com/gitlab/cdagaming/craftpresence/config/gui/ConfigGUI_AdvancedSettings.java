@@ -129,7 +129,6 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             if (enableCommandsButton.isChecked() != CraftPresence.CONFIG.enableCommands) {
                 CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.enableCommands = enableCommandsButton.isChecked();
             }
             if (enablePerGUIButton.isChecked() != CraftPresence.CONFIG.enablePERGUI) {

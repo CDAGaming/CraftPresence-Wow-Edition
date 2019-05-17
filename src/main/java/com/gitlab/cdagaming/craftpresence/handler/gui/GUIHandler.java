@@ -358,6 +358,10 @@ public class GUIHandler {
             if (StringHandler.isValidColorCode(bgCode)) {
                 drawGradientRect(300, 0, 0, width, height, bgCode, bgCode);
             } else if (!StringHandler.isNullOrEmpty(bgCode)) {
+                if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
+                    bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                }
+
                 if (bgCode.contains(":")) {
                     String[] splitInput = bgCode.split(":", 2);
                     loc = new ResourceLocation(splitInput[0], splitInput[1]);
