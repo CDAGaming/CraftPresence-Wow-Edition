@@ -125,7 +125,7 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             if (!splitCharacter.getText().equals(CraftPresence.CONFIG.splitCharacter)) {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                CraftPresence.CONFIG.splitCharacter = splitCharacter.getText();
+                CraftPresence.CONFIG.queuedSplitCharacter = splitCharacter.getText();
             }
             if (enableCommandsButton.isChecked() != CraftPresence.CONFIG.enableCommands) {
                 CraftPresence.CONFIG.hasChanged = true;

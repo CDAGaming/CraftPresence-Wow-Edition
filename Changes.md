@@ -26,7 +26,13 @@
 
 * Added Additional Formatting Rules to Dimension Name Formatting
 
+* Changing your Split Character will now transfer your other settings to the New Character on Verification
+
 ### Fixes:
+
+* Fixes Issues with Config Verification failing to Re-Run if it needs a full update
+
+* Fixed Double Logging in ConfigHandler (Now has a parameter to Skip Logging at the End)
 
 * Initialization now takes place much earlier and no longer requires Main Menu Stuff
 

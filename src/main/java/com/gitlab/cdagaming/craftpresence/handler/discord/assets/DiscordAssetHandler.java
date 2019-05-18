@@ -129,7 +129,7 @@ public class DiscordAssetHandler {
 
         if (needsFullUpdate) {
             CraftPresence.CONFIG.save();
-            CraftPresence.CONFIG.read();
+            CraftPresence.CONFIG.read(false);
         }
     }
 }

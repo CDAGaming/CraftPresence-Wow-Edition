@@ -62,9 +62,11 @@ public class ConfigHandler {
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
+    public String queuedSplitCharacter;
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE
+    private List<String> configPropertyNames = Lists.newArrayList();
     private String fileName;
     private boolean verified = false, initialized = false, isConfigNew = false;
 
@@ -161,6 +163,17 @@ public class ConfigHandler {
         languageID = "en_US";
         configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
 
+        for (Field field : getClass().getDeclaredFields()) {
+            if (field.getName().contains("NAME_")) {
+                try {
+                    field.setAccessible(true);
+                    configPropertyNames.add(field.get(this).toString());
+                } catch (Exception ex) {
+                    //
+                }
+            }
+        }
+
         initialized = true;
     }
 
@@ -178,12 +191,14 @@ public class ConfigHandler {
                 if (isConfigNew) {
                     updateConfig();
                 }
-                read();
+                read(false);
             }
         }
     }
 
-    public void read() {
+    public void read(final boolean skipLogging) {
+        verified = false;
+
         try {
             Reader configReader = new InputStreamReader(new FileInputStream(fileName), Charset.forName("UTF-8"));
             properties.load(configReader);
@@ -246,7 +261,9 @@ public class ConfigHandler {
                 if (!verified) {
                     verifyConfig();
                 }
-                Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.config.save"));
+                if (!skipLogging) {
+                    Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.config.save"));
+                }
             }
         }
     }
@@ -316,27 +333,18 @@ public class ConfigHandler {
     }
 
     private void verifyConfig() {
-        List<String> validProperties = Lists.newArrayList();
         List<String> removedProperties = Lists.newArrayList();
         boolean needsFullUpdate = false;
 
-        for (Field field : getClass().getDeclaredFields()) {
-            if (field.getName().contains("NAME_")) {
-                try {
-                    field.setAccessible(true);
-                    Object value = field.get(this);
-                    validProperties.add(value.toString());
-                    if (!properties.stringPropertyNames().contains(value.toString()) && validProperties.contains(value.toString())) {
-                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", value.toString()));
-                        needsFullUpdate = true;
-                    }
-                } catch (Exception ignored) {
-                }
+        for (String configProperty : configPropertyNames) {
+            if (!properties.stringPropertyNames().contains(configProperty)) {
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", configProperty));
+                needsFullUpdate = true;
             }
         }
 
         for (String property : properties.stringPropertyNames()) {
-            if (!validProperties.contains(property)) {
+            if (!configPropertyNames.contains(property)) {
                 Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
                 removedProperties.add(property);
                 properties.remove(property);
@@ -361,9 +369,7 @@ public class ConfigHandler {
                     }
                     if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
                         Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
-                        splitCharacter = ";";
-                        properties.setProperty(property, splitCharacter);
-                        save();
+                        queuedSplitCharacter = ";";
                     }
                     if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.SYSTEM.TIMER != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
                         CraftPresence.awaitingReply = false;
@@ -425,11 +431,26 @@ public class ConfigHandler {
             }
         }
 
+        if (!properties.stringPropertyNames().isEmpty()) {
+            if (!StringHandler.isNullOrEmpty(queuedSplitCharacter)) {
+                // Transfer Split Character
+                for (String propertyName : configPropertyNames) {
+                    if (properties.stringPropertyNames().contains(propertyName) && properties.getProperty(propertyName).contains(splitCharacter)) {
+                        properties.setProperty(propertyName, properties.getProperty(propertyName).replace(splitCharacter, queuedSplitCharacter));
+                        save();
+                    }
+                }
+
+                needsFullUpdate = true;
+                queuedSplitCharacter = null;
+            }
+        }
+
         if (needsFullUpdate) {
             setupInitialValues();
-            verified = true;
+            verified = false;
             if (!properties.stringPropertyNames().isEmpty()) {
-                read();
+                read(true);
             }
             updateConfig();
         } else {

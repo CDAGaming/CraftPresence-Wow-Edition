@@ -134,7 +134,7 @@ public class ConfigGUI_Main extends GuiScreen {
         } else if (button.id == proceedButton.id) {
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
-                CraftPresence.CONFIG.read();
+                CraftPresence.CONFIG.read(false);
                 CommandHandler.reloadData(true);
                 if (CraftPresence.CONFIG.hasClientPropertiesChanged) {
                     CommandHandler.rebootRPC();
@@ -169,7 +169,7 @@ public class ConfigGUI_Main extends GuiScreen {
         if (keyCode == Keyboard.KEY_ESCAPE) {
             if (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged) {
                 CraftPresence.CONFIG.setupInitialValues();
-                CraftPresence.CONFIG.read();
+                CraftPresence.CONFIG.read(false);
                 CraftPresence.CONFIG.hasChanged = false;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = false;
             }
