@@ -148,6 +148,7 @@ public class Constants {
     public static void writeToCharData() {
         List<String> textData = Lists.newArrayList();
         FileReader fr = null;
+        FileWriter fw = null;
         final File charDataDir = new File(MODID + File.separator + "chardata.properties");
 
         if (charDataDir.exists()) {
@@ -157,32 +158,46 @@ public class Constants {
                 loadCharData(true);
             } finally {
                 if (fr != null) {
-                    try (BufferedReader br = new BufferedReader(fr)) {
-                        String currentString;
-                        while ((currentString = br.readLine()) != null) {
-                            if (currentString.contains("=")) {
-                                if (currentString.toLowerCase().startsWith("charwidth")) {
-                                    textData.add("charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH));
-                                } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
-                                    textData.add("glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH));
+                    try {
+                        BufferedReader br = new BufferedReader(fr);
+                        if (br != null) {
+                            String currentString;
+                            while ((currentString = br.readLine()) != null) {
+                                if (currentString.contains("=")) {
+                                    if (currentString.toLowerCase().startsWith("charwidth")) {
+                                        textData.add("charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH));
+                                    } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
+                                        textData.add("glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH));
+                                    }
                                 }
                             }
+                            br.close();
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
 
-                    try (BufferedWriter bw = new BufferedWriter(new FileWriter(charDataDir))) {
-                        if (!textData.isEmpty()) {
-                            for (String lineInput : textData) {
-                                bw.write(lineInput);
-                                bw.newLine();
-                            }
-                        } else {
-                            Constants.loadCharData(true);
-                        }
+                    try {
+                        fw = new FileWriter(charDataDir);
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        loadCharData(true);
+                    } finally {
+                        if (fw != null) {
+                            try {
+                                BufferedWriter bw = new BufferedWriter(fw);
+                                if (bw != null && !textData.isEmpty()) {
+                                    for (String lineInput : textData) {
+                                        bw.write(lineInput);
+                                        bw.newLine();
+                                    }
+                                    bw.close();
+                                } else {
+                                    loadCharData(true);
+                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
                     }
                 }
             }
