@@ -50,7 +50,7 @@ CraftPresence currently offers the following Commands:
 ## Placeholders
 In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
 
-(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them*)
+(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)
 
 #### Main Menu Message Placeholders
 - &IGN& - Your Minecraft Username
@@ -80,7 +80,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &TIME& - The Current World Time
 - &MODS& - The Amount of Mods currently in your Mods Folder
 
-#### GUI Placeholders*
+#### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)
 - &CLASS& - The Current GUI Class (Ex: net.minecraft.xxx)
 - &SCREEN& - The Current GUI Screen Instance
@@ -95,9 +95,6 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 
 ## Versions of CraftPresence
 Beginning in v1.5.2, CraftPresence is now split into different editions, based on the Minecraft Version you use it in:
-
-- Full Version (Minecraft 1.3.2 - 1.14.x) includes All Features of CraftPresence at Full Support for Issues
-  - In Minecraft 1.5.2 and Below, a Separate Translation Engine is being used, and may cause issues (In Higher Versions, this is only used as a fallback)
 
 - Legacy Version (Minecraft 1.2.5 and Below)
   - Server Support is unavailable in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
