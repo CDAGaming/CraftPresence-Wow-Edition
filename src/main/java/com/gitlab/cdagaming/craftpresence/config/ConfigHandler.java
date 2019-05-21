@@ -169,7 +169,7 @@ public class ConfigHandler {
                     field.setAccessible(true);
                     configPropertyNames.add(field.get(this).toString());
                 } catch (Exception ex) {
-                    //
+                    ex.printStackTrace();
                 }
             }
         }
