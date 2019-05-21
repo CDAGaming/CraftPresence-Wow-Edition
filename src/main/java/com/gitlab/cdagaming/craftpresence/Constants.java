@@ -63,7 +63,9 @@ public class Constants {
         final File charDataDir = new File(MODID + File.separator + fileName);
         boolean UpdateStatus = Update || !charDataDir.exists(), errored = false;
         InputStream inputData = null;
+        InputStreamReader inputStream = null;
         OutputStream outputData = null;
+        BufferedReader reader = null;
 
         if (UpdateStatus) {
             LOG.info(TRANSLATOR.translate("craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
@@ -90,7 +92,8 @@ public class Constants {
         if (!errored) {
             try {
                 inputData = new FileInputStream(charDataDir);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputData));
+                inputStream = new InputStreamReader(inputData);
+                reader = new BufferedReader(inputStream);
 
                 String currentString;
                 while ((currentString = reader.readLine()) != null) {
@@ -125,15 +128,21 @@ public class Constants {
         }
 
         try {
+            if (reader != null) {
+                reader.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
             if (inputData != null) {
                 inputData.close();
             }
-
             if (outputData != null) {
                 outputData.close();
             }
         } catch (Exception ex) {
             LOG.error(TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
+            ex.printStackTrace();
         } finally {
             if (errored) {
                 LOG.error(TRANSLATOR.translate("craftpresence.logger.error.chardata"));
@@ -149,56 +158,57 @@ public class Constants {
         List<String> textData = Lists.newArrayList();
         FileReader fr = null;
         FileWriter fw = null;
+        BufferedReader br = null;
+        BufferedWriter bw = null;
         final File charDataDir = new File(MODID + File.separator + "chardata.properties");
 
         if (charDataDir.exists()) {
             try {
+                // Read and Queue Character Data
                 fr = new FileReader(charDataDir);
-            } catch (Exception ex) {
-                loadCharData(true);
-            } finally {
-                if (fr != null) {
-                    try {
-                        BufferedReader br = new BufferedReader(fr);
-                        if (br != null) {
-                            String currentString;
-                            while ((currentString = br.readLine()) != null) {
-                                if (currentString.contains("=")) {
-                                    if (currentString.toLowerCase().startsWith("charwidth")) {
-                                        textData.add("charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH));
-                                    } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
-                                        textData.add("glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH));
-                                    }
-                                }
-                            }
-                            br.close();
+                br = new BufferedReader(fr);
+                String currentString;
+                while (!StringHandler.isNullOrEmpty((currentString = br.readLine()))) {
+                    if (currentString.contains("=")) {
+                        if (currentString.toLowerCase().startsWith("charwidth")) {
+                            textData.add("charWidth=" + Arrays.toString(StringHandler.MC_CHAR_WIDTH));
+                        } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
+                            textData.add("glyphWidth=" + Arrays.toString(StringHandler.MC_GLYPH_WIDTH));
                         }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
                     }
+                }
 
-                    try {
-                        fw = new FileWriter(charDataDir);
-                    } catch (Exception ex) {
-                        loadCharData(true);
-                    } finally {
-                        if (fw != null) {
-                            try {
-                                BufferedWriter bw = new BufferedWriter(fw);
-                                if (bw != null && !textData.isEmpty()) {
-                                    for (String lineInput : textData) {
-                                        bw.write(lineInput);
-                                        bw.newLine();
-                                    }
-                                    bw.close();
-                                } else {
-                                    loadCharData(true);
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
+                // Write Queued Character Data
+                fw = new FileWriter(charDataDir);
+                bw = new BufferedWriter(fw);
+                if (!textData.isEmpty()) {
+                    for (String lineInput : textData) {
+                        bw.write(lineInput);
+                        bw.newLine();
                     }
+                } else {
+                    // If charWidth and glyphWidth don't exist, Reset Character Data
+                    loadCharData(true);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    if (br != null) {
+                        br.close();
+                    }
+                    if (bw != null) {
+                        bw.close();
+                    }
+                    if (fr != null) {
+                        fr.close();
+                    }
+                    if (fw != null) {
+                        fw.close();
+                    }
+                } catch (Exception ex) {
+                    LOG.error(TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
+                    ex.printStackTrace();
                 }
             }
         } else {
