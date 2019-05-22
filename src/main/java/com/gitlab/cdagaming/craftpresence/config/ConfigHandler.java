@@ -3,14 +3,14 @@ package com.gitlab.cdagaming.craftpresence.config;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class ConfigHandler {
@@ -66,7 +66,7 @@ public class ConfigHandler {
     // CLASS-SPECIFIC - PUBLIC
     public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE
-    private List<String> configPropertyNames = Lists.newArrayList();
+    private Map<String, String> configPropertyMappings = Maps.newHashMap();
     private String fileName;
     private boolean verified = false, initialized = false, isConfigNew = false;
 
@@ -167,7 +167,7 @@ public class ConfigHandler {
             if (field.getName().contains("NAME_")) {
                 try {
                     field.setAccessible(true);
-                    configPropertyNames.add(field.get(this).toString());
+                    configPropertyMappings.put(field.getName(), field.get(this).toString());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -333,99 +333,101 @@ public class ConfigHandler {
     }
 
     private void verifyConfig() {
-        List<String> removedProperties = Lists.newArrayList();
         boolean needsFullUpdate = false;
 
-        for (String configProperty : configPropertyNames) {
-            if (!properties.stringPropertyNames().contains(configProperty)) {
-                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", configProperty));
-                needsFullUpdate = true;
+        for (Map.Entry<String, String> configEntrySet : configPropertyMappings.entrySet()) {
+            if (!properties.stringPropertyNames().contains(configEntrySet.getValue())) {
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", configEntrySet.getValue()));
+                try {
+                    // Get Field Value from Config Entry and Set Property to it
+                    Field configPropertyValue = getClass().getDeclaredField(configEntrySet.getKey().replace("NAME_", ""));
+                    configPropertyValue.setAccessible(true);
+                    properties.setProperty(configEntrySet.getValue(), configPropertyValue.get(this).toString());
+                    save();
+
+                    needsFullUpdate = true;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
 
         for (String property : properties.stringPropertyNames()) {
-            if (!configPropertyNames.contains(property)) {
+            if (!configPropertyMappings.values().contains(property)) {
                 Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
-                removedProperties.add(property);
                 properties.remove(property);
                 save();
-            }
-            if (!removedProperties.contains(property)) {
-                if (StringHandler.isNullOrEmpty(properties.getProperty(property))) {
-                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", property));
-                    needsFullUpdate = true;
-                } else {
-                    if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || !StringHandler.isValidLong(properties.getProperty(property)))) {
-                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
-                        clientID = "450485984333660181";
-                        properties.setProperty(property, clientID);
-                        save();
-                    }
-                    if (property.equals(NAME_configKeycode) && (!StringHandler.isValidInteger(properties.getProperty(property)))) {
-                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
-                        configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
-                        properties.setProperty(property, configKeyCode);
-                        save();
-                    }
-                    if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
-                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
-                        queuedSplitCharacter = ";";
-                    }
-                    if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.SYSTEM.TIMER != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
-                        CraftPresence.awaitingReply = false;
-                        CraftPresence.CLIENT.REQUESTER_USER = null;
-                        CraftPresence.CLIENT.JOIN_SECRET = null;
-                        CraftPresence.CLIENT.PARTY_ID = null;
-                        CraftPresence.CLIENT.PARTY_SIZE = 0;
-                        CraftPresence.CLIENT.PARTY_MAX = 0;
-                        CraftPresence.SYSTEM.TIMER = 0;
-                        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-                    }
+            } else {
+                if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || !StringHandler.isValidLong(properties.getProperty(property)))) {
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
+                    clientID = "450485984333660181";
+                    properties.setProperty(property, clientID);
+                    save();
+                }
+                if (property.equals(NAME_configKeycode) && (!StringHandler.isValidInteger(properties.getProperty(property)))) {
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
+                    configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
+                    properties.setProperty(property, configKeyCode);
+                    save();
+                }
+                if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
+                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.invalidprop", property));
+                    queuedSplitCharacter = ";";
+                }
+                if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringHandler.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringHandler.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.SYSTEM.TIMER != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
+                    CraftPresence.awaitingReply = false;
+                    CraftPresence.CLIENT.REQUESTER_USER = null;
+                    CraftPresence.CLIENT.JOIN_SECRET = null;
+                    CraftPresence.CLIENT.PARTY_ID = null;
+                    CraftPresence.CLIENT.PARTY_SIZE = 0;
+                    CraftPresence.CLIENT.PARTY_MAX = 0;
+                    CraftPresence.SYSTEM.TIMER = 0;
+                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+                }
 
-                    if (property.equals(NAME_biomeMessages) && biomeMessages != null) {
-                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
-                        if (!defaultFound) {
-                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
-                            biomeMessages = StringHandler.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
-                            properties.setProperty(property, Arrays.toString(biomeMessages));
-                            save();
-                        }
+                if (property.equals(NAME_biomeMessages) && biomeMessages != null) {
+                    boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
+                    if (!defaultFound) {
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
+                        biomeMessages = StringHandler.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
+                        properties.setProperty(property, Arrays.toString(biomeMessages));
+                        save();
                     }
-                    if (property.equals(NAME_dimensionMessages) && dimensionMessages != null) {
-                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
-                        if (!defaultFound) {
-                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
-                            dimensionMessages = StringHandler.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
-                            properties.setProperty(property, Arrays.toString(dimensionMessages));
-                            save();
-                        }
+                }
+                if (property.equals(NAME_dimensionMessages) && dimensionMessages != null) {
+                    boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
+                    if (!defaultFound) {
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
+                        dimensionMessages = StringHandler.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
+                        properties.setProperty(property, Arrays.toString(dimensionMessages));
+                        save();
                     }
-                    if (property.equals(NAME_serverMessages) && serverMessages != null) {
-                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
-                        if (!defaultFound) {
-                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
-                            serverMessages = StringHandler.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
-                            properties.setProperty(property, Arrays.toString(serverMessages));
-                            save();
-                        }
+                }
+                if (property.equals(NAME_serverMessages) && serverMessages != null) {
+                    boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
+                    if (!defaultFound) {
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
+                        serverMessages = StringHandler.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
+                        properties.setProperty(property, Arrays.toString(serverMessages));
+                        save();
                     }
-                    if (property.equals(NAME_guiMessages) && guiMessages != null) {
-                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
-                        if (!defaultFound) {
-                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
-                            guiMessages = StringHandler.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
-                            properties.setProperty(property, Arrays.toString(guiMessages));
-                            save();
-                        }
+                }
+                if (property.equals(NAME_guiMessages) && guiMessages != null) {
+                    boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
+                    if (!defaultFound) {
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
+                        guiMessages = StringHandler.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
+                        properties.setProperty(property, Arrays.toString(guiMessages));
+                        save();
                     }
-                    if (property.equals(NAME_itemMessages) && itemMessages != null) {
-                        boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
-                        if (!defaultFound) {
-                            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
-                            itemMessages = StringHandler.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
-                            properties.setProperty(property, Arrays.toString(itemMessages));
-                            save();
-                        }
+                }
+                if (property.equals(NAME_itemMessages) && itemMessages != null) {
+                    boolean defaultFound = !StringHandler.isNullOrEmpty(StringHandler.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
+                    if (!defaultFound) {
+                        Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.defaultmissing", property));
+                        itemMessages = StringHandler.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
+                        properties.setProperty(property, Arrays.toString(itemMessages));
+                        save();
                     }
                 }
             }
@@ -434,7 +436,7 @@ public class ConfigHandler {
         if (!properties.stringPropertyNames().isEmpty()) {
             if (!StringHandler.isNullOrEmpty(queuedSplitCharacter)) {
                 // Transfer Split Character
-                for (String propertyName : configPropertyNames) {
+                for (String propertyName : configPropertyMappings.values()) {
                     if (properties.stringPropertyNames().contains(propertyName) && properties.getProperty(propertyName).contains(splitCharacter)) {
                         properties.setProperty(propertyName, properties.getProperty(propertyName).replace(splitCharacter, queuedSplitCharacter));
                         save();
