@@ -63,7 +63,7 @@ public class ConfigHandler {
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
     public String queuedSplitCharacter;
-    // CLASS-SPECIFIC - PUBLIC
+    public File configFile, parentDir;
     public Properties properties = new Properties();
     // CLASS-SPECIFIC - PRIVATE
     private Map<String, String> configPropertyMappings = Maps.newHashMap();
@@ -179,8 +179,8 @@ public class ConfigHandler {
 
     public void initialize() {
         try {
-            File configFile = new File(fileName);
-            File parentDir = configFile.getParentFile();
+            configFile = new File(fileName);
+            parentDir = configFile.getParentFile();
             isConfigNew = (!parentDir.exists() && parentDir.mkdirs()) || (!configFile.exists() && configFile.createNewFile());
             setupInitialValues();
         } catch (Exception ex) {
@@ -197,12 +197,14 @@ public class ConfigHandler {
     }
 
     public void read(final boolean skipLogging) {
+        Reader configReader = null;
+        FileInputStream inputStream = null;
         verified = false;
 
         try {
-            Reader configReader = new InputStreamReader(new FileInputStream(fileName), Charset.forName("UTF-8"));
+            inputStream = new FileInputStream(configFile);
+            configReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
             properties.load(configReader);
-            configReader.close();
         } catch (Exception ex) {
             Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.save"));
             ex.printStackTrace();
@@ -265,6 +267,18 @@ public class ConfigHandler {
                     Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.config.save"));
                 }
             }
+        }
+
+        try {
+            if (configReader != null) {
+                configReader.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        } catch (Exception ex) {
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
+            ex.printStackTrace();
         }
     }
 
@@ -461,12 +475,27 @@ public class ConfigHandler {
     }
 
     public void save() {
+        Writer configWriter = null;
+        FileOutputStream outputStream = null;
+
         try {
-            Writer configWriter = new OutputStreamWriter(new FileOutputStream(new File(fileName)), Charset.forName("UTF-8"));
+            outputStream = new FileOutputStream(configFile);
+            configWriter = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
             properties.store(configWriter, null);
-            configWriter.close();
         } catch (Exception ex) {
             Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.save"));
+            ex.printStackTrace();
+        }
+
+        try {
+            if (configWriter != null) {
+                configWriter.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+        } catch (Exception ex) {
+            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
             ex.printStackTrace();
         }
     }
