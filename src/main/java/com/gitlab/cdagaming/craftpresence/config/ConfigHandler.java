@@ -159,7 +159,7 @@ public class ConfigHandler {
         NAME_configKeycode = Constants.TRANSLATOR.translate("key.craftpresence.config_keybind").replaceAll(" ", "_");
         tooltipBGColor = "-267386864";
         tooltipBorderColor = "1347420415";
-        guiBGColor = "textures/gui/options_background.png";
+        guiBGColor = "minecraft" + splitCharacter + "textures/gui/options_background.png";
         languageID = "en_US";
         configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
 
