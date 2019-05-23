@@ -22,7 +22,7 @@ public class ConfigGUI_Selector extends GuiScreen {
     private GuiTextField searchBox;
     private String mainTitle, configOption, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
-    private boolean allowContinuing = false;
+    private boolean allowContinuing;
 
     public ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing) {
         mc = CraftPresence.instance;
