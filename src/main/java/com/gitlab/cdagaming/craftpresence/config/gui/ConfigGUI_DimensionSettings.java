@@ -92,9 +92,9 @@ public class ConfigGUI_DimensionSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == dimensionMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null, true));
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, Constants.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultDimensionIcon, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, Constants.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultDimensionIcon, null, true));
         }
     }
 

@@ -86,7 +86,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == biomeMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.biome"), CraftPresence.BIOMES.BIOME_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.biome"), CraftPresence.BIOMES.BIOME_NAMES, null, null, true));
         }
     }
 

@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.handler.commands;
 
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Selector;
 import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
 import com.gitlab.cdagaming.craftpresence.handler.discord.assets.DiscordAssetHandler;
@@ -159,31 +160,31 @@ public class CommandsGUI extends GuiScreen {
                     } else if (!StringHandler.isNullOrEmpty(executionCommandArgs[1])) {
                         if (executionCommandArgs[1].equalsIgnoreCase("items")) {
                             if (CraftPresence.ENTITIES.enabled) {
-                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.items.header", CraftPresence.ENTITIES.ENTITY_NAMES);
+                                mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.items"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, false));
                             } else {
                                 executionString = Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("servers")) {
                             if (CraftPresence.SERVER.enabled) {
-                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.servers.header", CraftPresence.SERVER.knownAddresses);
+                                mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.servers"), CraftPresence.SERVER.knownAddresses, null, null, false));
                             } else {
                                 executionString = Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.general.showstate"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("guis")) {
                             if (CraftPresence.GUIS.enabled) {
-                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.guis.header", CraftPresence.GUIS.GUI_NAMES);
+                                mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.guis"), CraftPresence.GUIS.GUI_NAMES, null, null, false));
                             } else {
                                 executionString = Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.advanced.guimessages"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("biomes")) {
                             if (CraftPresence.BIOMES.enabled) {
-                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.biomes.header", CraftPresence.BIOMES.BIOME_NAMES);
+                                mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.biomes"), CraftPresence.BIOMES.BIOME_NAMES, null, null, false));
                             } else {
                                 executionString = Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.general.showbiome"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("dimensions")) {
                             if (CraftPresence.DIMENSIONS.enabled) {
-                                executionString = Constants.TRANSLATOR.translate("craftpresence.command.dimensions.header", CraftPresence.DIMENSIONS.DIMENSION_NAMES);
+                                mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.dimensions"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null, false));
                             } else {
                                 executionString = Constants.TRANSLATOR.translate("gui.config.hoverMessage.access", Constants.TRANSLATOR.translate("gui.config.name.general.showdimension"));
                             }
@@ -194,12 +195,11 @@ public class CommandsGUI extends GuiScreen {
                                 executionString = Constants.TRANSLATOR.translate("craftpresence.command.usage.assets");
                             } else if (!StringHandler.isNullOrEmpty(executionCommandArgs[2])) {
                                 if (executionCommandArgs[2].equalsIgnoreCase("large")) {
-                                    executionString = Constants.TRANSLATOR.translate("craftpresence.command.assets.large.header", DiscordAssetHandler.LARGE_ICONS);
-                                }
-                                if (executionCommandArgs[2].equalsIgnoreCase("small")) {
-                                    executionString = Constants.TRANSLATOR.translate("craftpresence.command.assets.small.header", DiscordAssetHandler.SMALL_ICONS);
+                                    mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.assets.large"), DiscordAssetHandler.LARGE_ICONS, null, null, false));
+                                } else if (executionCommandArgs[2].equalsIgnoreCase("small")) {
+                                    mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.assets.small"), DiscordAssetHandler.SMALL_ICONS, null, null, false));
                                 } else if (executionCommandArgs[2].equalsIgnoreCase("all")) {
-                                    executionString = Constants.TRANSLATOR.translate("craftpresence.command.assets.all.header", DiscordAssetHandler.ICON_LIST);
+                                    mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, null, Constants.TRANSLATOR.translate("gui.config.title.selector.view.assets.all"), DiscordAssetHandler.ICON_LIST, null, null, false));
                                 }
                             }
                         } else {

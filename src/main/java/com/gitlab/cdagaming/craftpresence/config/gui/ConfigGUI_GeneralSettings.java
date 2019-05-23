@@ -182,7 +182,7 @@ public class ConfigGUI_GeneralSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, "CraftPresence - Select an Icon", DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, Constants.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetHandler.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null, true));
         }
     }
 

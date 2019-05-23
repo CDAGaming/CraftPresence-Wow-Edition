@@ -163,9 +163,9 @@ public class ConfigGUI_AdvancedSettings extends GuiScreen {
             }
             mc.displayGuiScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null));
+            mc.displayGuiScreen(new ConfigGUI_Selector(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, Constants.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
         } else if (button.id == characterEditorButton.id) {
             mc.displayGuiScreen(new ConfigGUI_CharacterEditor(currentScreen));
         }

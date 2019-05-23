@@ -1,10 +1,12 @@
 # CraftPresence Changes
 
-## v1.5.5 (05/31/2019)
+## v1.5.5 (06/07/2019)
 
 ### Changes:
 
 * Added 1.14.1 Fabric Support (1.14 is now Deprecated)
+
+* Commands for viewing Assets, Servers, Dimensions, GUIs, and Biomes have been changed to open their Lists in a Selector GUI
 
 * Added Options to Accessibility GUI:
   
@@ -47,6 +49,10 @@
 * Fixes a Bug with Translation Resource Loading (Now tries to use Main Thread Loader, then local ClassLoader)
 
 * Fixes an Exception with Missing Format Arguments in Translation Handler
+
+* Fixes Some Selector Titles Not being Localized Properly
+
+* Fixes an Extremely Rare Bug with Small Icon List coming up for `/cp view assets large`
 
 ### More Information:
 

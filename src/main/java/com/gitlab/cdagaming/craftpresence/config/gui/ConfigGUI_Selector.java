@@ -22,8 +22,9 @@ public class ConfigGUI_Selector extends GuiScreen {
     private GuiTextField searchBox;
     private String mainTitle, configOption, attributeName, originalValue, searchTerm;
     private List<String> itemList, originalList;
+    private boolean allowContinuing = false;
 
-    public ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName) {
+    public ConfigGUI_Selector(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing) {
         mc = CraftPresence.instance;
         itemList = originalList = list;
         originalValue = currentValue;
@@ -31,6 +32,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         this.parentScreen = parentScreen;
         this.attributeName = attributeName;
         this.configOption = configOption;
+        this.allowContinuing = allowContinuing;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         scrollList = new GUIScrollList(mc, width, height, 32, height - 45, 18, itemList, originalValue);
         searchBox = new GuiTextField(110, mc.fontRenderer, 60, (height - 30), 120, 20);
 
-        if (!originalList.equals(DiscordAssetHandler.ICON_LIST)) {
+        if (allowContinuing && !originalList.equals(DiscordAssetHandler.ICON_LIST)) {
             addNewButton = new GUIExtendedButton(600, (width - 195), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.addnew"));
             buttonList.add(addNewButton);
         }
@@ -88,7 +90,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         searchBox.drawTextBox();
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
-        proceedButton.displayString = scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? Constants.TRANSLATOR.translate("gui.config.buttonMessage.continue") : Constants.TRANSLATOR.translate("gui.config.buttonMessage.back");
+        proceedButton.displayString = allowContinuing && scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringHandler.isNullOrEmpty(originalValue))) ? Constants.TRANSLATOR.translate("gui.config.buttonMessage.continue") : Constants.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -98,7 +100,7 @@ public class ConfigGUI_Selector extends GuiScreen {
         if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
             mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, null, configOption));
         } else if (button.id == proceedButton.id) {
-            if (scrollList.currentValue != null) {
+            if (allowContinuing && scrollList.currentValue != null) {
                 if (originalValue != null) {
                     if (!scrollList.currentValue.equals(originalValue)) {
                         if (configOption.equals(CraftPresence.CONFIG.NAME_defaultIcon)) {
