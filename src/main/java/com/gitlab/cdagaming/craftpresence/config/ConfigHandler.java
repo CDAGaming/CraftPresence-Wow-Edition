@@ -352,14 +352,30 @@ public class ConfigHandler {
         for (Map.Entry<String, String> configEntrySet : configPropertyMappings.entrySet()) {
             if (!properties.stringPropertyNames().contains(configEntrySet.getValue())) {
                 Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", configEntrySet.getValue()));
+                Field configPropertyValue = null;
                 try {
-                    // Get Field Value from Config Entry and Set Property to it
-                    Field configPropertyValue = getClass().getDeclaredField(configEntrySet.getKey().replace("NAME_", ""));
-                    configPropertyValue.setAccessible(true);
-                    properties.setProperty(configEntrySet.getValue(), configPropertyValue.get(this).toString());
-                    save();
+                    // Case 1: Try to Locate Property Value by Exact Case
+                    // Ex: NAME_exampleValue tries to get from exampleValue Assignment
+                    configPropertyValue = getClass().getDeclaredField(configEntrySet.getKey().replace("NAME_", ""));
+                } catch (Exception ex) {
+                    // Case 2: Look through All Declared Fields to see If it matches in lower case
+                    // Ex: NAME_exampleValue >> Tries to find exampleValue in any case
+                    for (Field declaredField : getClass().getDeclaredFields()) {
+                        if (declaredField != null && declaredField.getName().toLowerCase().equalsIgnoreCase(configEntrySet.getKey().replace("NAME_", "").toLowerCase())) {
+                            configPropertyValue = declaredField;
+                            break;
+                        }
+                    }
+                }
 
-                    needsFullUpdate = true;
+                try {
+                    // Attempt to Save Value if Found a Matching Value
+                    if (configPropertyValue != null) {
+                        configPropertyValue.setAccessible(true);
+                        properties.setProperty(configEntrySet.getValue(), configPropertyValue.get(this).toString());
+                        save();
+                        needsFullUpdate = true;
+                    }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
