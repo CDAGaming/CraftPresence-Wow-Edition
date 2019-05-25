@@ -81,7 +81,7 @@ public class ServerHandler {
 
         if (!joinInProgress) {
             final int newCurrentPlayers = newConnection != null ? newConnection.getPlayerInfoMap().size() : 1;
-            final int newMaxPlayers = newConnection != null ? newConnection.currentServerMaxPlayers : newCurrentPlayers;
+            final int newMaxPlayers = newConnection != null && newConnection.currentServerMaxPlayers >= newCurrentPlayers ? newConnection.currentServerMaxPlayers : newCurrentPlayers + 1;
             final boolean newLANStatus = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
 
             final String newServer_IP = newServerData != null && !StringHandler.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : "127.0.0.1";
