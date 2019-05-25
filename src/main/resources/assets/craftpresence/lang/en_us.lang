@@ -116,6 +116,7 @@ gui.config.name.accessibility.tooltipbgcolor=Tooltip Background Color
 gui.config.name.accessibility.tooltipbordercolor=Tooltip Border Color
 gui.config.name.accessibility.guibgcolor=GUI Background Color
 gui.config.name.accessibility.languageid=Language ID
+gui.config.name.accessibility.striptranslationcolors=Strip Translation Colors
 ## CONFIG MESSAGES - COMMENTS ##
 gui.config.comment.general.clientid=Client ID Used for retrieving Assets, Icon Keys, and titles
 gui.config.comment.general.defaulticon=Default Icon \n (Used in Main Menu, Dimensions and Servers)

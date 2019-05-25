@@ -26,6 +26,8 @@
 
 * Fully Deprecated I18n, to put Newer Translation System in Full Control
 
+* Added Boolean to TranslationHandler to control whether Color Codes are Included in Translated Text
+
 * Added Additional Formatting Rules to Dimension Name Formatting
 
 * Changing your Split Character will now transfer your other settings to the New Character on Verification

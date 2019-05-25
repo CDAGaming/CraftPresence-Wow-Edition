@@ -30,7 +30,7 @@ public class Constants {
     public static final String USERNAME = Minecraft.getMinecraft().getSession().getUsername();
     public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
-    public static final Logger LOG = LogManager.getLogger(MODID);
+    public static final ModLogger LOG = new ModLogger(MODID);
     public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
     public static final TranslationHandler TRANSLATOR = new TranslationHandler(MODID, false);
     public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
@@ -58,7 +58,7 @@ public class Constants {
     }
 
     public static void loadCharData(final boolean Update) {
-        LOG.info(TRANSLATOR.translate("craftpresence.logger.info.chardata.init"));
+        LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.init"));
         final String fileName = "chardata.properties", charDataPath = "/assets/" + MODID + "/" + fileName;
         final File charDataDir = new File(MODID + File.separator + fileName);
         boolean UpdateStatus = Update || !charDataDir.exists(), errored = false;
@@ -68,7 +68,7 @@ public class Constants {
         BufferedReader reader = null;
 
         if (UpdateStatus) {
-            LOG.info(TRANSLATOR.translate("craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
+            LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
             inputData = StringHandler.getResourceAsStream(Constants.class, charDataPath);
 
             if (inputData != null) {
@@ -80,7 +80,7 @@ public class Constants {
                         outputData.write(transferBuffer, 0, readBuffer);
                     }
 
-                    LOG.info(TRANSLATOR.translate("craftpresence.logger.info.download.loaded", fileName, charDataDir.getAbsolutePath(), charDataPath));
+                    LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.download.loaded", fileName, charDataDir.getAbsolutePath(), charDataPath));
                 } catch (Exception ex) {
                     errored = true;
                 }
@@ -141,14 +141,14 @@ public class Constants {
                 outputData.close();
             }
         } catch (Exception ex) {
-            LOG.error(TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
+            LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.dataclose"));
             ex.printStackTrace();
         } finally {
             if (errored) {
-                LOG.error(TRANSLATOR.translate("craftpresence.logger.error.chardata"));
+                LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.chardata"));
                 forceBlockTooltipRendering = true;
             } else {
-                LOG.info(TRANSLATOR.translate("craftpresence.logger.info.chardata.loaded"));
+                LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.loaded"));
                 forceBlockTooltipRendering = false;
             }
         }
@@ -207,7 +207,7 @@ public class Constants {
                         fw.close();
                     }
                 } catch (Exception ex) {
-                    LOG.error(TRANSLATOR.translate("craftpresence.logger.error.dataclose"));
+                    LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.dataclose"));
                     ex.printStackTrace();
                 }
             }

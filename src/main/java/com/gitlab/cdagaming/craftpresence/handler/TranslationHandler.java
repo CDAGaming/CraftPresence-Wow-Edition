@@ -145,7 +145,7 @@ public class TranslationHandler {
         }
     }
 
-    public String translate(String translationKey, Object... parameters) {
+    public String translate(boolean stripColors, String translationKey, Object... parameters) {
         boolean hasError = false;
         String translatedString = translationKey;
         try {
@@ -163,6 +163,10 @@ public class TranslationHandler {
         if (hasError) {
             Constants.LOG.error("Unable to retrieve a Translation for " + translationKey);
         }
-        return translatedString;
+        return stripColors ? StringHandler.stripColors(translatedString) : translatedString;
+    }
+
+    public String translate(String translationKey, Object... parameters) {
+        return translate(CraftPresence.CONFIG != null && CraftPresence.CONFIG.stripTranslationColors, translationKey, parameters);
     }
 }

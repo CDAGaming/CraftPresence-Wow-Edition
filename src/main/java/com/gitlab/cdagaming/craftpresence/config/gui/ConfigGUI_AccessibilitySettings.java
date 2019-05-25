@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,6 +17,7 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
     private boolean entryMode = false;
     private String currentKeyCode;
     private GuiTextField languageIDText;
+    private GUICheckBox stripTranslationColorsButton;
     private GUIExtendedButton proceedButton, tooltipBGButton, tooltipBorderButton, guiBGButton, configKeyBindingButton;
 
     ConfigGUI_AccessibilitySettings(GuiScreen parentScreen) {
@@ -40,13 +42,16 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
         languageIDText = new GuiTextField(400, mc.fontRenderer, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20);
         languageIDText.setText(CraftPresence.CONFIG.languageID);
 
-        configKeyBindingButton = new GUIExtendedButton(500, calc2 + 50, CraftPresence.GUIS.getButtonY(5), 90, 20, !StringHandler.isNullOrEmpty(Keyboard.getKeyName(Integer.parseInt(currentKeyCode))) ? Keyboard.getKeyName(Integer.parseInt(currentKeyCode)) : currentKeyCode);
+        stripTranslationColorsButton = new GUICheckBox(500, calc1, CraftPresence.GUIS.getButtonY(4) + 10, Constants.TRANSLATOR.translate("gui.config.name.accessibility.striptranslationcolors"), CraftPresence.CONFIG.stripTranslationColors);
+
+        configKeyBindingButton = new GUIExtendedButton(600, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, !StringHandler.isNullOrEmpty(Keyboard.getKeyName(Integer.parseInt(currentKeyCode))) ? Keyboard.getKeyName(Integer.parseInt(currentKeyCode)) : currentKeyCode);
 
         proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(tooltipBGButton);
         buttonList.add(tooltipBorderButton);
         buttonList.add(guiBGButton);
+        buttonList.add(stripTranslationColorsButton);
         buttonList.add(configKeyBindingButton);
         buttonList.add(proceedButton);
 
@@ -70,8 +75,8 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
 
         drawString(mc.fontRenderer, languageIDTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
-        drawString(mc.fontRenderer, keyBindingTitle, (width / 2) - (StringHandler.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(4) + 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
+        drawString(mc.fontRenderer, keyBindingTitle, (width / 2) - (StringHandler.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(5) + 10, 0xFFFFFF);
+        drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
 
         languageIDText.drawTextBox();
 
@@ -99,6 +104,10 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
             if (!languageIDText.getText().equals(CraftPresence.CONFIG.languageID)) {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.languageID = languageIDText.getText();
+            }
+            if (stripTranslationColorsButton.isChecked() != CraftPresence.CONFIG.stripTranslationColors) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.stripTranslationColors = stripTranslationColorsButton.isChecked();
             }
             mc.displayGuiScreen(parentScreen);
         }
