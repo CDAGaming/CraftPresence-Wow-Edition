@@ -39,18 +39,22 @@ public class ConfigGUI_Selector extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        proceedButton = new GUIExtendedButton(700, (width - 100), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        scrollList = new GUIScrollList(mc, width, height, 32, height - 45, 18, itemList, originalValue);
-        searchBox = new GuiTextField(110, mc.fontRenderer, 60, (height - 30), 120, 20);
+        if (itemList != null && !itemList.isEmpty()) {
+            proceedButton = new GUIExtendedButton(700, (width - 100), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+            scrollList = new GUIScrollList(mc, width, height, 32, height - 45, 18, itemList, originalValue);
+            searchBox = new GuiTextField(110, mc.fontRenderer, 60, (height - 30), 120, 20);
 
-        if (allowContinuing && !originalList.equals(DiscordAssetHandler.ICON_LIST)) {
-            addNewButton = new GUIExtendedButton(600, (width - 195), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.addnew"));
-            buttonList.add(addNewButton);
+            if (allowContinuing && !originalList.equals(DiscordAssetHandler.ICON_LIST)) {
+                addNewButton = new GUIExtendedButton(600, (width - 195), (height - 30), 90, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.addnew"));
+                buttonList.add(addNewButton);
+            }
+
+            buttonList.add(proceedButton);
+
+            super.initGui();
+        } else {
+            mc.displayGuiScreen(new ConfigGUI_Message(parentScreen, StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.emptylist"))));
         }
-
-        buttonList.add(proceedButton);
-
-        super.initGui();
     }
 
     @Override
@@ -139,7 +143,7 @@ public class ConfigGUI_Selector extends GuiScreen {
                             CraftPresence.CONFIG.serverMessages = StringHandler.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
                             mc.displayGuiScreen(parentScreen);
                         } else {
-                            mc.displayGuiScreen(new ConfigGUI_NullEntry(parentScreen));
+                            mc.displayGuiScreen(new ConfigGUI_Message(parentScreen, StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.null"))));
                         }
                     } else {
                         mc.displayGuiScreen(parentScreen);
@@ -148,7 +152,7 @@ public class ConfigGUI_Selector extends GuiScreen {
                     if (configOption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configOption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configOption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                         mc.displayGuiScreen(new ConfigGUI_Editor(parentScreen, scrollList.currentValue, configOption));
                     } else {
-                        mc.displayGuiScreen(new ConfigGUI_NullEntry(parentScreen));
+                        mc.displayGuiScreen(new ConfigGUI_Message(parentScreen, StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.message.null"))));
                     }
                 }
             } else {

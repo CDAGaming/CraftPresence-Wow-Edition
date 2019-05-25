@@ -10,13 +10,16 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public class ConfigGUI_NullEntry extends GuiScreen {
+public class ConfigGUI_Message extends GuiScreen {
     private final GuiScreen parentScreen;
     private GUIExtendedButton backButton;
 
-    ConfigGUI_NullEntry(GuiScreen parentScreen) {
+    private List<String> messageData;
+
+    ConfigGUI_Message(GuiScreen parentScreen, List<String> messageData) {
         mc = CraftPresence.instance;
         this.parentScreen = parentScreen;
+        this.messageData = messageData;
     }
 
     @Override
@@ -34,13 +37,12 @@ public class ConfigGUI_NullEntry extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         CraftPresence.GUIS.drawBackground(width, height);
 
-        final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title.error");
-        final List<String> notice = StringHandler.splitTextByNewLine(Constants.TRANSLATOR.translate("gui.config.errorMessage.null"));
+        final String mainTitle = Constants.TRANSLATOR.translate("gui.config.title.message");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringHandler.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        if (notice != null && !notice.isEmpty()) {
-            for (int i = 0; i < notice.size(); i++) {
-                final String string = notice.get(i);
+        if (messageData != null && !messageData.isEmpty()) {
+            for (int i = 0; i < messageData.size(); i++) {
+                final String string = messageData.get(i);
                 drawString(mc.fontRenderer, string, (width / 2) - (StringHandler.getStringWidth(string) / 2), (height / 3) + (i * 10), 0xFFFFFF);
             }
         }

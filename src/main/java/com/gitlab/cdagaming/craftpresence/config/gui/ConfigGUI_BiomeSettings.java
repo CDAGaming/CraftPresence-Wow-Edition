@@ -56,7 +56,7 @@ public class ConfigGUI_BiomeSettings extends GuiScreen {
         defaultMessage.drawTextBox();
 
         proceedButton.enabled = !StringHandler.isNullOrEmpty(defaultMessage.getText());
-        biomeMessagesButton.enabled = CraftPresence.CONFIG.showCurrentBiome;
+        biomeMessagesButton.enabled = CraftPresence.BIOMES.enabled;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

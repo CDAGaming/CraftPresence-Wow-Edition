@@ -30,9 +30,13 @@
 
 * Added Additional Formatting Rules to Dimension Name Formatting
 
+* Removed some Sections of Live Editing due to Issues caused with some Config Options requiring Saving
+
 * Changing your Split Character will now transfer your other settings to the New Character on Verification
 
 ### Fixes:
+
+* Fixes Game Crashing from Null List in Selector (Will now bring you immediately back to original Screen)
 
 * Fixes Issues with Config Verification failing to Re-Run if it needs a full update
 
