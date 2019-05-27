@@ -7,6 +7,7 @@ import com.google.common.collect.Maps;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 public class TranslationHandler {
@@ -111,7 +112,7 @@ public class TranslationHandler {
                 "lang/" + languageID.toLowerCase() + (usingJSON ? ".json" : ".lang"));
 
         if (in != null || fallbackIn != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn, Charset.forName("UTF-8")));
             try {
                 String currentString;
                 while ((currentString = reader.readLine()) != null) {
@@ -121,9 +122,9 @@ public class TranslationHandler {
                         if (usingJSON) {
                             String str1 = splitTranslation[0].substring(1, splitTranslation[0].length() - 1).replace("\\n", "\n").replace("\\", "").trim();
                             String str2 = splitTranslation[1].substring(2, splitTranslation[1].length() - 2).replace("\\n", "\n").replace("\\", "").trim();
-                            translationMap.put(str1.replace("Â", ""), str2.replace("Â", ""));
+                            translationMap.put(str1, str2);
                         } else {
-                            translationMap.put(splitTranslation[0].trim().replace("Â", ""), splitTranslation[1].trim().replace("Â", ""));
+                            translationMap.put(splitTranslation[0].trim(), splitTranslation[1].trim());
                         }
                     }
                 }

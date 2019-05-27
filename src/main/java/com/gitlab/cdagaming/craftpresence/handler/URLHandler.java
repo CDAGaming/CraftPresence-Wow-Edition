@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 
 public class URLHandler {
     private static final String USER_AGENT = Constants.MODID + "/" + Constants.MCVersion;
@@ -30,7 +31,7 @@ public class URLHandler {
     }
 
     public static BufferedReader getURLReader(final URL url) throws Exception {
-        return new BufferedReader(new InputStreamReader(getURLStream(url)));
+        return new BufferedReader(getURLStreamReader(url));
     }
 
     public static InputStream getURLStream(final URL url) throws Exception {
@@ -39,12 +40,15 @@ public class URLHandler {
         return (connection.getInputStream());
     }
 
+    public static InputStreamReader getURLStreamReader(final URL url) throws Exception {
+        return new InputStreamReader(getURLStream(url), Charset.forName("UTF-8"));
+    }
+
     public static <T> T getJSONFromURL(String url, Class<T> clazz) throws Exception {
         return getJSONFromURL(new URL(url), clazz);
     }
 
     public static <T> T getJSONFromURL(URL url, Class<T> clazz) throws Exception {
-        InputStreamReader reader = new InputStreamReader(getURLStream(url));
-        return GSON.fromJson(reader, clazz);
+        return GSON.fromJson(getURLStreamReader(url), clazz);
     }
 }

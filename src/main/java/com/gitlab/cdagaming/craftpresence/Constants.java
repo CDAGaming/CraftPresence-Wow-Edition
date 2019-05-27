@@ -10,6 +10,7 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.realms.RealmsSharedConstants;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class Constants {
             LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
             inputData = StringHandler.getResourceAsStream(Constants.class, charDataPath);
 
+            // Write Data from Local charData to Directory if Update is needed
             if (inputData != null) {
                 try {
                     outputData = new FileOutputStream(charDataDir);
@@ -90,7 +92,7 @@ public class Constants {
         if (!errored) {
             try {
                 inputData = new FileInputStream(charDataDir);
-                inputStream = new InputStreamReader(inputData);
+                inputStream = new InputStreamReader(inputData, Charset.forName("UTF-8"));
                 reader = new BufferedReader(inputStream);
 
                 String currentString;
@@ -154,8 +156,10 @@ public class Constants {
 
     public static void writeToCharData() {
         List<String> textData = Lists.newArrayList();
-        FileReader fr = null;
-        FileWriter fw = null;
+        InputStream inputData = null;
+        InputStreamReader inputStream = null;
+        OutputStream outputData = null;
+        OutputStreamWriter outputStream = null;
         BufferedReader br = null;
         BufferedWriter bw = null;
         final File charDataDir = new File(MODID + File.separator + "chardata.properties");
@@ -163,8 +167,10 @@ public class Constants {
         if (charDataDir.exists()) {
             try {
                 // Read and Queue Character Data
-                fr = new FileReader(charDataDir);
-                br = new BufferedReader(fr);
+                inputData = new FileInputStream(charDataDir);
+                inputStream = new InputStreamReader(inputData, Charset.forName("UTF-8"));
+                br = new BufferedReader(inputStream);
+
                 String currentString;
                 while (!StringHandler.isNullOrEmpty((currentString = br.readLine()))) {
                     if (currentString.contains("=")) {
@@ -177,8 +183,10 @@ public class Constants {
                 }
 
                 // Write Queued Character Data
-                fw = new FileWriter(charDataDir);
-                bw = new BufferedWriter(fw);
+                outputData = new FileOutputStream(charDataDir);
+                outputStream = new OutputStreamWriter(outputData, Charset.forName("UTF-8"));
+                bw = new BufferedWriter(outputStream);
+
                 if (!textData.isEmpty()) {
                     for (String lineInput : textData) {
                         bw.write(lineInput);
@@ -198,11 +206,17 @@ public class Constants {
                     if (bw != null) {
                         bw.close();
                     }
-                    if (fr != null) {
-                        fr.close();
+                    if (inputStream != null) {
+                        inputStream.close();
                     }
-                    if (fw != null) {
-                        fw.close();
+                    if (inputData != null) {
+                        inputData.close();
+                    }
+                    if (outputStream != null) {
+                        outputStream.close();
+                    }
+                    if (outputData != null) {
+                        outputData.close();
                     }
                 } catch (Exception ex) {
                     LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.dataclose"));

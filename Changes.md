@@ -4,7 +4,7 @@
 
 ### Changes:
 
-* Added 1.14.1 Fabric Support (1.14 is now Deprecated)
+* Added 1.14.2 Fabric Support (1.14 and 1.14.1 Versions are now Deprecated)
 
 * Commands for viewing Assets, Servers, Dimensions, GUIs, and Biomes have been changed to open their Lists in a Selector GUI
 
@@ -59,6 +59,8 @@
 * Fixes Some Selector Titles Not being Localized Properly
 
 * Fixes an Extremely Rare Bug with Small Icon List coming up for `/cp view assets large`
+
+* Fixes some Encoding Bugs causing Translations or JSON Retrievals to have garbled data
 
 ### More Information:
 
