@@ -22,12 +22,12 @@ public class GUIScrollList extends GuiSlot {
 
     @Override
     public void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
-        currentValue = itemList.get(slotIndex);
+        currentValue = getSelectedItem(slotIndex);
     }
 
     @Override
     public boolean isSelected(int slotIndex) {
-        return itemList.get(slotIndex).equals(currentValue);
+        return getSelectedItem(slotIndex).equals(currentValue);
     }
 
     @Override
@@ -37,6 +37,14 @@ public class GUIScrollList extends GuiSlot {
 
     @Override
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-        mc.fontRenderer.drawStringWithShadow(itemList.get(slotIndex), xPos, yPos, 0xFFFFFF);
+        mc.fontRenderer.drawStringWithShadow(getSelectedItem(slotIndex), xPos, yPos, 0xFFFFFF);
+    }
+
+    public String getSelectedItem(int slotIndex) {
+        try {
+            return itemList.get(slotIndex);
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

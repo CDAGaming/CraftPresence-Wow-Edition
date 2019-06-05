@@ -8,7 +8,7 @@ public class KeyHandler {
     public void onTick() {
         if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
-                if (Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
+                if (Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                     CraftPresence.GUIS.openConfigGUI = true;
                 }
             } catch (Exception ex) {

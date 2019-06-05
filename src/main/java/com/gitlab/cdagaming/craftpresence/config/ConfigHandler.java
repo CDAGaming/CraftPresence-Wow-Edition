@@ -164,7 +164,7 @@ public class ConfigHandler {
         guiBGColor = "minecraft" + splitCharacter + "textures/gui/options_background.png";
         languageID = "en_US";
         stripTranslationColors = false;
-        configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
+        configKeyCode = Integer.toString(Keyboard.KEY_GRAVE);
 
         for (Field field : getClass().getDeclaredFields()) {
             if (field.getName().contains("NAME_")) {

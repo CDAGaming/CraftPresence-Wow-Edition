@@ -102,6 +102,7 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
 ## Disclaimers
+
 #### Minecraft Object Obfuscation
 Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensions, or Servers must be opened once in the session in order to be separately customized.
 

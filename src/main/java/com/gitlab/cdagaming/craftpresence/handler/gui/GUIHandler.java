@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GUIHandler {
-    public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, enabled = false;
+    public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, isFocused = false, enabled = false;
 
     public List<String> GUI_NAMES = Lists.newArrayList();
     private String CURRENT_GUI_NAME;
@@ -76,6 +76,7 @@ public class GUIHandler {
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
         isInUse = enabled && (CraftPresence.instance.currentScreen != null || CURRENT_SCREEN != null);
+        isFocused = CraftPresence.instance.currentScreen != null && CraftPresence.instance.currentScreen.isFocused();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
         if (needsUpdate) {
