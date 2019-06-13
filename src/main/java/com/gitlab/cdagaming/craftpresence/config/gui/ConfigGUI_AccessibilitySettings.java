@@ -17,7 +17,7 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
     private boolean entryMode = false;
     private String currentKeyCode;
     private GuiTextField languageIDText;
-    private GUICheckBox stripTranslationColorsButton;
+    private GUICheckBox stripTranslationColorsButton, showLoggingInChatButton;
     private GUIExtendedButton proceedButton, tooltipBGButton, tooltipBorderButton, guiBGButton, configKeyBindingButton;
 
     ConfigGUI_AccessibilitySettings(GuiScreen parentScreen) {
@@ -44,14 +44,17 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
 
         stripTranslationColorsButton = new GUICheckBox(500, calc1, CraftPresence.GUIS.getButtonY(4) + 10, Constants.TRANSLATOR.translate("gui.config.name.accessibility.striptranslationcolors"), CraftPresence.CONFIG.stripTranslationColors);
 
-        configKeyBindingButton = new GUIExtendedButton(600, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, !StringHandler.isNullOrEmpty(Keyboard.getKeyName(Integer.parseInt(currentKeyCode))) ? Keyboard.getKeyName(Integer.parseInt(currentKeyCode)) : currentKeyCode);
+        showLoggingInChatButton = new GUICheckBox(600, calc2, CraftPresence.GUIS.getButtonY(4) + 10, Constants.TRANSLATOR.translate("gui.config.name.accessibility.showlogginginchat"), CraftPresence.CONFIG.showLoggingInChat);
 
-        proceedButton = new GUIExtendedButton(700, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        configKeyBindingButton = new GUIExtendedButton(700, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, !StringHandler.isNullOrEmpty(Keyboard.getKeyName(Integer.parseInt(currentKeyCode))) ? Keyboard.getKeyName(Integer.parseInt(currentKeyCode)) : currentKeyCode);
+
+        proceedButton = new GUIExtendedButton(800, (width / 2) - 90, (height - 30), 180, 20, Constants.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(tooltipBGButton);
         buttonList.add(tooltipBorderButton);
         buttonList.add(guiBGButton);
         buttonList.add(stripTranslationColorsButton);
+        buttonList.add(showLoggingInChatButton);
         buttonList.add(configKeyBindingButton);
         buttonList.add(proceedButton);
 
@@ -108,6 +111,10 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
             if (stripTranslationColorsButton.isChecked() != CraftPresence.CONFIG.stripTranslationColors) {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.stripTranslationColors = stripTranslationColorsButton.isChecked();
+            }
+            if (showLoggingInChatButton.isChecked() != CraftPresence.CONFIG.showLoggingInChat) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.showLoggingInChat = showLoggingInChatButton.isChecked();
             }
             mc.displayGuiScreen(parentScreen);
         }

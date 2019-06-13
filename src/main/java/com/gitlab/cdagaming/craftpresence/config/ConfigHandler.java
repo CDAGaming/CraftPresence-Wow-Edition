@@ -34,7 +34,7 @@ public class ConfigHandler {
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon, NAME_renderTooltips,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_configKeycode;
+    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeycode;
 
     // Config Variables
     // GENERAL
@@ -59,7 +59,7 @@ public class ConfigHandler {
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
     public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
-    public boolean stripTranslationColors;
+    public boolean stripTranslationColors, showLoggingInChat;
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
@@ -158,12 +158,14 @@ public class ConfigHandler {
         NAME_guiBGColor = Constants.TRANSLATOR.translate(true, "gui.config.name.accessibility.guibgcolor").replaceAll(" ", "_");
         NAME_languageID = Constants.TRANSLATOR.translate(true, "gui.config.name.accessibility.languageid").replaceAll(" ", "_");
         NAME_stripTranslationColors = Constants.TRANSLATOR.translate(true, "gui.config.name.accessibility.striptranslationcolors").replaceAll(" ", "_");
+        NAME_showLoggingInChat = Constants.TRANSLATOR.translate(true, "gui.config.name.accessibility.showlogginginchat").replaceAll(" ", "_");
         NAME_configKeycode = Constants.TRANSLATOR.translate(true, "key.craftpresence.config_keybind").replaceAll(" ", "_");
         tooltipBGColor = "-267386864";
         tooltipBorderColor = "1347420415";
         guiBGColor = "minecraft" + splitCharacter + "textures/gui/options_background.png";
         languageID = "en_US";
         stripTranslationColors = false;
+        showLoggingInChat = false;
         configKeyCode = Integer.toString(Keyboard.KEY_GRAVE);
 
         for (Field field : getClass().getDeclaredFields()) {
@@ -260,6 +262,7 @@ public class ConfigHandler {
                 guiBGColor = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_guiBGColor)) ? properties.getProperty(NAME_guiBGColor) : guiBGColor;
                 languageID = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_languageID)) ? properties.getProperty(NAME_languageID) : languageID;
                 stripTranslationColors = StringHandler.isValidBoolean(properties.getProperty(NAME_stripTranslationColors)) ? Boolean.parseBoolean(properties.getProperty(NAME_stripTranslationColors)) : stripTranslationColors;
+                showLoggingInChat = StringHandler.isValidBoolean(properties.getProperty(NAME_showLoggingInChat)) ? Boolean.parseBoolean(properties.getProperty(NAME_showLoggingInChat)) : showLoggingInChat;
                 configKeyCode = !StringHandler.isNullOrEmpty(properties.getProperty(NAME_configKeycode)) ? properties.getProperty(NAME_configKeycode) : configKeyCode;
             } catch (NullPointerException ex) {
                 verifyConfig();
@@ -334,6 +337,7 @@ public class ConfigHandler {
         properties.setProperty(NAME_guiBGColor, guiBGColor);
         properties.setProperty(NAME_languageID, languageID);
         properties.setProperty(NAME_stripTranslationColors, Boolean.toString(stripTranslationColors));
+        properties.setProperty(NAME_showLoggingInChat, Boolean.toString(showLoggingInChat));
         properties.setProperty(NAME_configKeycode, configKeyCode);
 
         // Check for Conflicts before Saving

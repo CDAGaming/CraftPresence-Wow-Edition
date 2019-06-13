@@ -6,9 +6,13 @@
 
 * The Default KeyBind to access the Config GUI is now the Grave (`) Key due to Conflicts with Game Functions
 
+* New Config Option added to Show Logging in Chat instead of in Console Logs, when in-game
+
 ### Fixes:
 
 * Fixed KeyBinds Triggering when trying to type or on a focused GUI element
+
+* Fixed an NPE in EntityHandler if no Items or Blocks exist
 
 * Compatibility Fixes for Scroll List Issues
 

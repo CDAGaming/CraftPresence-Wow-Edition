@@ -286,16 +286,20 @@ public class EntityHandler {
         List<String> removingBlocks = Lists.newArrayList();
         List<String> removingItems = Lists.newArrayList();
         for (String itemName : ITEM_NAMES) {
-            final String lowerItemName = itemName.toLowerCase();
-            if (lowerItemName.contains("tile.") || lowerItemName.contains("item.") || lowerItemName.contains(".") || lowerItemName.contains(".name")) {
-                removingItems.add(itemName);
+            if (!StringHandler.isNullOrEmpty(itemName)) {
+                final String lowerItemName = itemName.toLowerCase();
+                if (lowerItemName.contains("tile.") || lowerItemName.contains("item.") || lowerItemName.contains(".") || lowerItemName.contains(".name")) {
+                    removingItems.add(itemName);
+                }
             }
         }
 
         for (String blockName : BLOCK_NAMES) {
-            final String lowerBlockName = blockName.toLowerCase();
-            if (lowerBlockName.contains("tile.") || lowerBlockName.contains("item.") || lowerBlockName.contains(".") || lowerBlockName.contains(".name")) {
-                removingBlocks.add(blockName);
+            if (!StringHandler.isNullOrEmpty(blockName)) {
+                final String lowerBlockName = blockName.toLowerCase();
+                if (lowerBlockName.contains("tile.") || lowerBlockName.contains("item.") || lowerBlockName.contains(".") || lowerBlockName.contains(".name")) {
+                    removingBlocks.add(blockName);
+                }
             }
         }
 
