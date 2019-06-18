@@ -14,24 +14,24 @@ public class ModLogger {
     }
 
     public void error(final String logMessage, Object... logArguments) {
-        if (CraftPresence.player != null && !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.showLoggingInChat) {
-            StringHandler.sendMessageToPlayer(CraftPresence.player, "§6§l[§f" + loggerName + "§6]§r " + logMessage);
+        if (CraftPresence.player != null && !CraftPresence.CONFIG.hasChanged && !CraftPresence.closing && CraftPresence.CONFIG.showLoggingInChat) {
+            StringHandler.sendMessageToPlayer(CraftPresence.player, "§6§l[§f§l" + loggerName + "§6]§r§c " + logMessage);
         } else {
             logInstance.error(logMessage, logArguments);
         }
     }
 
     public void warn(final String logMessage, Object... logArguments) {
-        if (CraftPresence.player != null && !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.showLoggingInChat) {
-            StringHandler.sendMessageToPlayer(CraftPresence.player, "§6§l[§f" + loggerName + "§6]§r " + logMessage);
+        if (CraftPresence.player != null && !CraftPresence.CONFIG.hasChanged && !CraftPresence.closing && CraftPresence.CONFIG.showLoggingInChat) {
+            StringHandler.sendMessageToPlayer(CraftPresence.player, "§6§l[§f§l" + loggerName + "§6]§r§e " + logMessage);
         } else {
             logInstance.warn(logMessage, logArguments);
         }
     }
 
     public void info(final String logMessage, Object... logArguments) {
-        if (CraftPresence.player != null && !CraftPresence.CONFIG.hasChanged && CraftPresence.CONFIG.showLoggingInChat) {
-            StringHandler.sendMessageToPlayer(CraftPresence.player, "§6§l[§f" + loggerName + "§6]§r " + logMessage);
+        if (CraftPresence.player != null && !CraftPresence.CONFIG.hasChanged && !CraftPresence.closing && CraftPresence.CONFIG.showLoggingInChat) {
+            StringHandler.sendMessageToPlayer(CraftPresence.player, "§6§l[§f§l" + loggerName + "§6]§r " + logMessage);
         } else {
             logInstance.info(logMessage, logArguments);
         }
