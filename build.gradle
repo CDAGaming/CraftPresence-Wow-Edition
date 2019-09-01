@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.2.0"
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
     }
 }
 
@@ -31,6 +31,7 @@ curseforge {
         changelogType = "markdown"
         releaseType = "release"
         addGameVersion "${mc_version}"
+		addGameVersion "Forge"
 
         mainArtifact(jar) {
             displayName = "${mod_name} v${version} (${mc_version})"
