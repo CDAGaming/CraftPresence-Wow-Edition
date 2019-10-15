@@ -123,6 +123,10 @@ public class ConfigGUI_AccessibilitySettings extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (entryMode) {
+            if (!CraftPresence.KEYBINDINGS.isValidKeyCode(keyCode)) {
+                keyCode = Keyboard.KEY_NONE;
+            }
+
             configKeyBindingButton.displayString = !StringHandler.isNullOrEmpty(Keyboard.getKeyName(keyCode)) ? Keyboard.getKeyName(keyCode) : Integer.toString(keyCode);
             currentKeyCode = Integer.toString(keyCode);
             entryMode = false;

@@ -2,12 +2,12 @@
 Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the JNA (Java Native Access) API!
 
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
-[![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_297038_downloads.svg)](https://minecraft.curseforge.com/projects/craftpresence)
-[![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/For%20MC_297038_all.svg)](https://minecraft.curseforge.com/projects/craftpresence)
+[![CurseForge-Downloads](https://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://minecraft.curseforge.com/projects/craftpresence)
+[![CurseForge-Availability](https://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://minecraft.curseforge.com/projects/craftpresence)
 
 ## Port Notes
-- CraftPresence for Minecraft 1.14.x requires the [FabricMC ModLoader](https://minecraft.curseforge.com/projects/fabric)
-- CraftPresence for Minecraft 1.13 requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift)
+- CraftPresence for Minecraft 1.14.x requires the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
+- CraftPresence for Minecraft 1.13 requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
 - CraftPresence for Minecraft 1.13.2 (Rift Edition) requires [Chocohead's Version of Rift](https://jitpack.io/com/github/chocohead/rift/2c400465c7e0b5abf4e643372fbd9a7e6d39e3ff/rift-2c400465c7e0b5abf4e643372fbd9a7e6d39e3ff.jar)
 
 ## Features

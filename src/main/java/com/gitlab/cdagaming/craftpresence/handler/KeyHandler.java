@@ -4,11 +4,29 @@ import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class KeyHandler {
+    // Allowed KeyCode Start Limit and Individual Filters
+    // After ESC and Including any KeyCodes under 0x00
+    // Notes:
+    // LWJGL 2: ESC = 0x01
+    // LWJGL 3: ESC = 256
+    private int keyStartLimit = 0x00;
+    private List<Integer> invalidKeys = new ArrayList<Integer>() {{
+        add(0x01);
+        add(256);
+    }};
+
+    public boolean isValidKeyCode(int sourceKeyCode) {
+        return sourceKeyCode > keyStartLimit && !invalidKeys.contains(sourceKeyCode);
+    }
+
     public void onTick() {
         if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
-                if (Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
+                if (isValidKeyCode(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                     CraftPresence.GUIS.openConfigGUI = true;
                 }
             } catch (Exception ex) {

@@ -1,16 +1,22 @@
 # CraftPresence Changes
 
-## v1.5.6 (06/24/2019)
+## v1.5.6 (10/24/2019)
 
 ### Changes:
 
-* The Default KeyBind to access the Config GUI is now the Grave (`) Key due to Conflicts with Game Functions
+* The Default KeyBind to access the Config GUI is now the Grave Key ``(`)`` due to Conflicts with Game Functions
 
 * New Config Option added to Show Logging in Chat instead of in Console Logs, when in-game
 
 ### Fixes:
 
 * Fixed KeyBinds Triggering when trying to type or on a focused GUI element
+
+* Fixes GUI Context Issues and ensure thread-safety on GUIs
+
+* Fixes NONE or Unknown KeyCode Parsing which was leading to issues opening GUIs
+
+  * Also allows ESC and Invalid KeyCodes to be properly interpreted as `NONE / UNKNOWN`
 
 * Fixed an NPE in EntityHandler if no Items or Blocks exist
 
@@ -34,7 +40,7 @@ This GUI is subject to improve as future updates are released.
 
 #### 1.13.x Build Info:
 
-The Rift Edition of this Mod Requires the [Rift ModLoader](https://minecraft.curseforge.com/projects/rift) and contains the following differences to take Note of:
+The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift) and contains the following differences to take Note of:
 
 * KeyCodes have changed from an LWJGL Upgrade! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
 
@@ -42,7 +48,7 @@ Starting In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor 
 
 #### 1.14.x Build Info:
 
-The 1.14.x Port of this Mod Requires the [FabricMC ModLoader](https://minecraft.curseforge.com/projects/fabric) and contains the same differences as the 1.13.x Port
+The 1.14.x Port of this Mod Requires the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api) and contains the same differences as the 1.13.x Port
 
 #### Snapshot Build Info:
 

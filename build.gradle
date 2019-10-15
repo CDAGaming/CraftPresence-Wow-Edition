@@ -31,7 +31,7 @@ curseforge {
         changelogType = "markdown"
         releaseType = "release"
         addGameVersion "${mc_version}"
-		addGameVersion "Forge"
+        addGameVersion "Forge"
 
         mainArtifact(jar) {
             displayName = "${mod_name} v${version} (${mc_version})"

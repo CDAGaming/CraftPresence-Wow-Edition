@@ -93,9 +93,18 @@ public class GUIHandler {
         }
 
         if (openConfigGUI) {
-            CraftPresence.instance.displayGuiScreen(new ConfigGUI_Main(CraftPresence.instance.currentScreen));
+            openScreen(new ConfigGUI_Main(CraftPresence.instance.currentScreen));
             openConfigGUI = false;
         }
+    }
+
+    public void openScreen(final GuiScreen targetScreen) {
+        CraftPresence.instance.addScheduledTask(new Runnable() {
+            @Override
+            public void run() {
+                CraftPresence.instance.displayGuiScreen(targetScreen);
+            }
+        });
     }
 
     private void updateGUIData() {
