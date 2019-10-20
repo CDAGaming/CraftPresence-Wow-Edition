@@ -2,8 +2,8 @@
 Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the JNA (Java Native Access) API!
 
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
-[![CurseForge-Downloads](https://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://minecraft.curseforge.com/projects/craftpresence)
-[![CurseForge-Availability](https://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://minecraft.curseforge.com/projects/craftpresence)
+[![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://minecraft.curseforge.com/projects/craftpresence)
+[![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://minecraft.curseforge.com/projects/craftpresence)
 
 ## Port Notes
 - CraftPresence for Minecraft 1.14.x requires the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
