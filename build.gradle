@@ -6,7 +6,7 @@ buildscript {
         maven { url = "https://jitpack.io" }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
+        classpath "com.github.CDAGaming:ForgeGradle:FG_2.3-SNAPSHOT"
         classpath "com.github.liachmodded:CurseGradle:master-SNAPSHOT"
     }
 }
@@ -19,8 +19,8 @@ group = "com.gitlab.cdagaming"
 archivesBaseName = "${mod_name}-${mc_version}"
 
 allprojects {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
 curseforge {
@@ -91,8 +91,8 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     storePass = System.getenv("key_MAINPASS")
     keyPass = System.getenv("keyPass")
 
-    inputFile = jar.archivePath
-    outputFile = jar.archivePath
+    inputFile = jar.archiveFile
+    outputFile = jar.archiveFile
 }
 
 tasks.build.dependsOn signJar
