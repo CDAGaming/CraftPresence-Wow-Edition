@@ -3,11 +3,11 @@ buildscript {
         jcenter()
         mavenCentral()
         maven { url = "https://files.minecraftforge.net/maven" }
-        maven { url = "https://plugins.gradle.org/m2/" }
+        maven { url = "https://jitpack.io" }
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
-        classpath "gradle.plugin.com.matthewprenger:CurseGradle:1.4.0"
+        classpath "com.github.liachmodded:CurseGradle:master-SNAPSHOT"
     }
 }
 

@@ -44,9 +44,7 @@ public class CraftPresence {
     }
 
     private void init() {
-        if (!Constants.IS_DEV) {
-            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.fingerprintviolation"));
-        } else {
+        if (Constants.IS_DEV) {
             Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
         }
 

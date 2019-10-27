@@ -113,14 +113,16 @@ public class DimensionHandler {
 
     private List<DimensionType> getDimensionTypes() {
         List<DimensionType> dimensionTypes = Lists.newArrayList();
-        Map<Integer, DimensionType> reflectedDimensionTypes = (Map<Integer, DimensionType>) StringHandler.lookupObject(DimensionType.class, null, "dimensionTypes");
+        Map<?, ?> reflectedDimensionTypes = (Map<?, ?>) StringHandler.lookupObject(DimensionType.class, null, "dimensionTypes");
 
         Collections.addAll(dimensionTypes, DimensionType.values());
 
         if (dimensionTypes.isEmpty()) {
             // Fallback 1: Use Reflected Dimension Types
             if (reflectedDimensionTypes != null) {
-                for (DimensionType type : reflectedDimensionTypes.values()) {
+                for (Object objectType : reflectedDimensionTypes.values()) {
+                    DimensionType type = (objectType instanceof DimensionType) ? (DimensionType) objectType : null;
+
                     if (type != null && !dimensionTypes.contains(type)) {
                         dimensionTypes.add(type);
                     }
