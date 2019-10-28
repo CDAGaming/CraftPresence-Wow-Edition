@@ -2,18 +2,17 @@
 Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the JNA (Java Native Access) API!
 
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
-[![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://minecraft.curseforge.com/projects/craftpresence)
-[![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://minecraft.curseforge.com/projects/craftpresence)
+[![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
+[![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 
 ## Port Notes
 - CraftPresence for Minecraft 1.14.x and 1.15.x requires the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-- CraftPresence for Minecraft 1.13 requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
-- CraftPresence for Minecraft 1.13.2 (Rift Edition) requires [Chocohead's Version of Rift](https://jitpack.io/com/github/chocohead/rift/2c400465c7e0b5abf4e643372fbd9a7e6d39e3ff/rift-2c400465c7e0b5abf4e643372fbd9a7e6d39e3ff.jar)
+- CraftPresence for Minecraft 1.13.x requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
 
 ## Features
 Besides having the Ability to Change your Discord Status from "Playing Minecraft",
-This Mod offers plenty of Customization options to specify entirely how others see you play.
-From Having Your Current Biome Show Up, To which Dimension you in, as well as which server your in,
+This Mod offers plenty of Customization Options to specify entirely how others see you play.
+From Having Your Current Biome Show Up, To which Dimension you in, as well as which server you're in,
 The Customization Possibilities are limitless, with the only real limit being how creative you customize your display.
 
 #### Twitch // CursePack // MultiMC // MCUpdater // Technic Support
@@ -22,7 +21,7 @@ If so, It'll put the Packs Name in your Display as well as Show it's Icon (when 
 
 As an example, this is how the mod will convert the pack name to an iconKey:
 
-`All the Mods 3 >> allthemods3`
+`All the Mods 3 == allthemods3`
 
 (Note the above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)
 
@@ -39,13 +38,20 @@ CraftPresence currently offers the following Commands:
 - `/cp shutdown` - Shutdown RPC (Can be turned on from `/cp reboot`)
 - `/cp request` - View Join Request Info
 - `/cp view currentData` - Displays in Text Form, your Current RPC Data
-- `/cp view assets <large|small|all>` - Displays all Asset IconKeys available to you
+- `/cp view assets (large | small | all)` - Displays all Asset IconKeys available to you
 - `/cp view dimensions` - Displays all Dimension Names available for use, if Showing Current Dimension is enabled
 - `/cp view biomes` - Displays all Biome Names available for use, if Showing Current Biome is enabled
 - `/cp view servers` - Displays all Server Addresses available for use, if Show Game State is enabled
 - `/cp view guis` - Displays all GUI Names available for use, if Per-GUI is Enabled
 - `/cp view items` - Displays all Item Names available for use, if Per-Item is Enabled
-- `/cp <help|?>` - Help Command to display the Above Commands and These Explanations
+- `/cp (help | ?)` - Help Command to display the Above Commands and These Explanations
+
+## KeyBinds
+CraftPresence currently contains the following KeyBinds:
+
+(In v1.5.5 and Above, KeyBinds are now customized in the Accessibility Settings in the Config GUI)
+
+- `Open Config GUI` - KeyBind to Open the CraftPresence ConfigGUI (Default: GRAVE Key)
 
 ## Placeholders
 In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
@@ -54,7 +60,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 
 #### Main Menu Message Placeholders
 - &IGN& - Your Minecraft Username
-- &MODS& - The Amount of Mods currently in your Mods Folder
+- &MODS& - The Number of Mods currently in your Mods Folder
 
 #### Biome Placeholders
 - &BIOME& - The Current Biome Name
@@ -73,12 +79,12 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 - &PLAYERS& - The Current Player Count `(10 / 100 Players)`
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
-- &MODS& - The Amount of Mods currently in your Mods Folder
+- &MODS& - The Number of Mods currently in your Mods Folder
 
 #### SinglePlayer Placeholders
 - &IGN& - Your Minecraft Username
 - &TIME& - The Current World Time
-- &MODS& - The Amount of Mods currently in your Mods Folder
+- &MODS& - The Number of Mods currently in your Mods Folder
 
 #### GUI Placeholders
 - &GUI& - The Current GUI Name (Supports GUIContainers and GUIScreens)
@@ -101,13 +107,25 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
   - Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with ModLoader + ModLoaderMP
   - Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited
 
-## Disclaimers
+## Disclaimers & Additional Info
 
 #### Minecraft Object Obfuscation
-Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensions, or Servers must be opened once in the session in order to be separately customized.
+Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensions, or Servers must be opened once in the session to be separately customized.
+
+#### Icon Request
+Not seeing an Icon you like or have a suggestion for an Icon to add/modify on the Default Client ID?
+
+If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues/), so long as the following requirements are met:
+
+- If adding an Icon from a dimension, Specify the Mod's Link that the dimension derives from
+  - This is because specific Icon IDs must be used, which can be found by the mod or from checking your Logs/Chat after entering the dimension as CraftPresence will tell you the ID expected
+- A 512x512 or 1024x1024 Icon to be used
+  - Icons near these Sizes are also allowed, but may not give a great final quality
+- If Requesting an Icon be Modified or Removed from the Default Client ID, please specify a reason why
+  - Mostly just so It can be logged why it was changed for future reference
 
 #### Discord TOS
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
 Service (In this Case, Discord).
 
-The Terms of Service relating to Creating your own Discord ID can be found [here](https://discordapp.com/developers/docs/legal)
+The Terms of Service relating to Creating a Discord ID for icons can be found [here](https://discordapp.com/developers/docs/legal)
