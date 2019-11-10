@@ -31,7 +31,9 @@ public class InstanceHandler {
             configFile.load(STREAM);
 
             INSTANCE_NAME = get("name");
-            ICON_KEY = StringHandler.formatPackIcon(!StringHandler.isNullOrEmpty(get("iconKey")) && !get("iconKey").equals("default") ? get("iconKey") : "infinity");
+
+            final String tempIconKey = get("iconKey");
+            ICON_KEY = StringHandler.formatPackIcon(!StringHandler.isNullOrEmpty(tempIconKey) && !tempIconKey.equals("default") ? tempIconKey : "infinity");
 
             if (!StringHandler.isNullOrEmpty(INSTANCE_NAME) && !StringHandler.isNullOrEmpty(ICON_KEY)) {
                 Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.instance.loaded", INSTANCE_NAME, ICON_KEY));

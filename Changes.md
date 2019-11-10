@@ -1,26 +1,30 @@
 # CraftPresence Changes
 
-## v1.5.6 (10/24/2019)
+## v1.5.7 (11/29/2019)
 
 ### Changes:
 
-* The Default KeyBind to access the Config GUI is now the Grave Key ``(`)`` due to Conflicts with Game Functions
+* `/cp view currentData` will now show the Current User the RPC is attached to
 
-* New Config Option added to Show Logging in Chat instead of in Console Logs, when in-game
+* Now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
+
+* Compatibility Changes:
+
+  * Now Compiled under Gradle 6.x on 1.8.9 and Above
+    
+    * 1.7.10 and 1.6.4 utilize Gradle 2.14.1
+  
+  * Now Targets Java 8 and uses Java 8 Functions on 1.12.2 and Above
 
 ### Fixes:
 
-* Fixed KeyBinds Triggering when trying to type or on a focused GUI element
+* Corrected Credits Message for ItsDizzy
 
-* Fixes GUI Context Issues and ensure thread-safety on GUIs
+* Code Warning Fixes and Cleanups
 
-* Fixes NONE or Unknown KeyCode Parsing which was leading to issues opening GUIs
+* Fixed an Unintentional Warning from a false positive Fingerprint Violation
 
-  * Also allows ESC and Invalid KeyCodes to be properly interpreted as `NONE / UNKNOWN`
-
-* Fixed an NPE in EntityHandler if no Items or Blocks exist
-
-* Compatibility Fixes for Scroll List Issues
+* Minor Performance Improvements
 
 ### More Information:
 

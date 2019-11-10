@@ -72,7 +72,7 @@ public class DimensionHandler {
         final Integer newDimensionID = newDimensionType.getId();
 
         if (!newDimension_nameID.equals(CURRENT_DIMENSION_NAME_ID) || !newDimensionID.equals(CURRENT_DIMENSION_ID)) {
-            CURRENT_DIMENSION_NAME = newDimensionName;
+            CURRENT_DIMENSION_NAME = !StringHandler.isNullOrEmpty(newDimensionName) ? newDimensionName : newDimension_nameID;
             CURRENT_DIMENSION_NAME_ID = newDimension_nameID;
             CURRENT_DIMENSION_ID = newDimensionID;
             queuedForUpdate = true;

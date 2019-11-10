@@ -392,7 +392,7 @@ public class ConfigHandler {
         }
 
         for (String property : properties.stringPropertyNames()) {
-            if (!configPropertyMappings.values().contains(property)) {
+            if (!configPropertyMappings.containsValue(property)) {
                 Constants.LOG.error(Constants.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
                 properties.remove(property);
                 save();

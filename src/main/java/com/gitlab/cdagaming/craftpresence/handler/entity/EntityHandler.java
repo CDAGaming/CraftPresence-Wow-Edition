@@ -22,7 +22,8 @@ public class EntityHandler {
     private List<String> ITEM_CLASSES = Lists.newArrayList();
     private List<String> ENTITY_CLASSES = Lists.newArrayList();
 
-    private ItemStack EMPTY = new ItemStack((Item) null);
+    private Item EMPTY_ITEM = (Item) null;
+    private ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
     private ItemStack CURRENT_MAINHAND_ITEM;
     private ItemStack CURRENT_OFFHAND_ITEM;
     private ItemStack CURRENT_HELMET;
@@ -50,15 +51,15 @@ public class EntityHandler {
     }
 
     public void clearClientData() {
-        CURRENT_MAINHAND_ITEM = EMPTY;
-        CURRENT_OFFHAND_ITEM = EMPTY;
+        CURRENT_MAINHAND_ITEM = EMPTY_STACK;
+        CURRENT_OFFHAND_ITEM = EMPTY_STACK;
         CURRENT_MAINHAND_ITEM_NAME = null;
         CURRENT_OFFHAND_ITEM_NAME = null;
 
-        CURRENT_HELMET = EMPTY;
-        CURRENT_CHEST = EMPTY;
-        CURRENT_LEGS = EMPTY;
-        CURRENT_BOOTS = EMPTY;
+        CURRENT_HELMET = EMPTY_STACK;
+        CURRENT_CHEST = EMPTY_STACK;
+        CURRENT_LEGS = EMPTY_STACK;
+        CURRENT_BOOTS = EMPTY_STACK;
         CURRENT_HELMET_NAME = null;
         CURRENT_CHEST_NAME = null;
         CURRENT_LEGS_NAME = null;
@@ -101,9 +102,9 @@ public class EntityHandler {
     }
 
     private boolean isEmpty(final ItemStack itemStack) {
-        if (itemStack == null || itemStack == EMPTY) {
+        if (itemStack == null || itemStack == EMPTY_STACK) {
             return true;
-        } else if (itemStack.getItem() != null && itemStack.getItem() != Items.AIR) {
+        } else if (itemStack.getItem() != EMPTY_ITEM && itemStack.getItem() != Items.AIR) {
             if (itemStack.getCount() <= 0) {
                 return true;
             } else {

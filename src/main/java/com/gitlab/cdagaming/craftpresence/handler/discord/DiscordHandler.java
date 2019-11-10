@@ -226,8 +226,8 @@ public class DiscordHandler {
 
                     if (type.equals(DiscordAsset.AssetType.LARGE)) {
                         if (CraftPresence.DIMENSIONS.isInUse) {
-                            // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name
-                            final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME);
+                            // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name (Or Dimension ID if Dimension Name is Empty)
+                            final String formattedCurrentDIMNameIcon = StringHandler.formatPackIcon(!StringHandler.isNullOrEmpty(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME) ? CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME : CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME_ID);
                             if (DiscordAssetHandler.contains(formattedCurrentDIMNameIcon)) {
                                 Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedCurrentDIMNameIcon));
                                 LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
