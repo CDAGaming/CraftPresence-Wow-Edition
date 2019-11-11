@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class URLHandler {
     private static final String USER_AGENT = Constants.MODID + "/" + Constants.MCVersion;
@@ -41,7 +41,7 @@ public class URLHandler {
     }
 
     public static InputStreamReader getURLStreamReader(final URL url) throws Exception {
-        return new InputStreamReader(getURLStream(url), Charset.forName("UTF-8"));
+        return new InputStreamReader(getURLStream(url), StandardCharsets.UTF_8);
     }
 
     public static <T> T getJSONFromURL(String url, Class<T> clazz) throws Exception {

@@ -60,72 +60,54 @@ public class DiscordHandler {
     }
 
     public synchronized void init() {
-        handlers.errored = new DiscordEventHandlers.OnStatus() {
-            @Override
-            public void accept(int errorCode, String message) {
-                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
-                    STATUS = "errored";
-                    lastErrorCode = errorCode;
-                    shutDown();
-                    Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
-                }
+        handlers.errored = (errorCode, message) -> {
+            if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
+                STATUS = "errored";
+                lastErrorCode = errorCode;
+                shutDown();
+                Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
             }
         };
 
-        handlers.disconnected = new DiscordEventHandlers.OnStatus() {
-            @Override
-            public void accept(int errorCode, String message) {
-                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
-                    STATUS = "disconnected";
-                    lastDisconnectErrorCode = errorCode;
-                    shutDown();
-                }
+        handlers.disconnected = (errorCode, message) -> {
+            if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
+                STATUS = "disconnected";
+                lastDisconnectErrorCode = errorCode;
+                shutDown();
             }
         };
 
-        handlers.ready = new DiscordEventHandlers.OnReady() {
-            @Override
-            public void accept(DiscordUser user) {
-                if ((StringHandler.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
-                    STATUS = "ready";
-                    CURRENT_USER = user;
-                    Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
-                }
+        handlers.ready = user -> {
+            if ((StringHandler.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
+                STATUS = "ready";
+                CURRENT_USER = user;
+                Constants.LOG.info(Constants.TRANSLATOR.translate("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
             }
         };
 
-        handlers.joinGame = new DiscordEventHandlers.OnGameUpdate() {
-            @Override
-            public void accept(String secret) {
-                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
-                    STATUS = "joinGame";
-                    CraftPresence.SERVER.verifyAndJoin(secret);
-                }
+        handlers.joinGame = secret -> {
+            if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
+                STATUS = "joinGame";
+                CraftPresence.SERVER.verifyAndJoin(secret);
             }
         };
 
-        handlers.joinRequest = new DiscordEventHandlers.OnJoinRequest() {
-            @Override
-            public void accept(DiscordUser request) {
-                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
-                    CraftPresence.SYSTEM.TIMER = 30;
-                    STATUS = "joinRequest";
-                    REQUESTER_USER = request;
+        handlers.joinRequest = request -> {
+            if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
+                CraftPresence.SYSTEM.TIMER = 30;
+                STATUS = "joinRequest";
+                REQUESTER_USER = request;
 
-                    if (!(CraftPresence.instance.currentScreen instanceof CommandsGUI)) {
-                        CraftPresence.instance.displayGuiScreen(new CommandsGUI(CraftPresence.instance.currentScreen));
-                    }
-                    CommandsGUI.executeCommand("request");
+                if (!(CraftPresence.instance.currentScreen instanceof CommandsGUI)) {
+                    CraftPresence.instance.displayGuiScreen(new CommandsGUI(CraftPresence.instance.currentScreen));
                 }
+                CommandsGUI.executeCommand("request");
             }
         };
 
-        handlers.spectateGame = new DiscordEventHandlers.OnGameUpdate() {
-            @Override
-            public void accept(String secret) {
-                if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
-                    STATUS = "spectateGame";
-                }
+        handlers.spectateGame = secret -> {
+            if (StringHandler.isNullOrEmpty(STATUS) || (!StringHandler.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
+                STATUS = "spectateGame";
             }
         };
 

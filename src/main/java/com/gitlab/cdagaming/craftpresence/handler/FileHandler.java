@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -61,7 +61,7 @@ public class FileHandler {
     }
 
     public static String fileToString(File file) throws Exception {
-        return FileUtils.readFileToString(file, Charset.forName("UTF-8"));
+        return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
     }
 
     public static String getFileExtension(File file) {

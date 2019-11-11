@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
@@ -208,7 +208,7 @@ public class ConfigHandler {
 
         try {
             inputStream = new FileInputStream(configFile);
-            configReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            configReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             properties.load(configReader);
         } catch (Exception ex) {
             Constants.LOG.error(Constants.TRANSLATOR.translate(true, "craftpresence.logger.error.config.save"));
@@ -505,7 +505,7 @@ public class ConfigHandler {
 
         try {
             outputStream = new FileOutputStream(configFile);
-            configWriter = new OutputStreamWriter(outputStream, Charset.forName("UTF-8"));
+            configWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
             properties.store(configWriter, null);
         } catch (Exception ex) {
             Constants.LOG.error(Constants.TRANSLATOR.translate(true, "craftpresence.logger.error.config.save"));

@@ -10,7 +10,7 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.realms.RealmsSharedConstants;
 
 import java.io.*;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -92,7 +92,7 @@ public class Constants {
         if (!errored) {
             try {
                 inputData = new FileInputStream(charDataDir);
-                inputStream = new InputStreamReader(inputData, Charset.forName("UTF-8"));
+                inputStream = new InputStreamReader(inputData, StandardCharsets.UTF_8);
                 reader = new BufferedReader(inputStream);
 
                 String currentString;
@@ -168,7 +168,7 @@ public class Constants {
             try {
                 // Read and Queue Character Data
                 inputData = new FileInputStream(charDataDir);
-                inputStream = new InputStreamReader(inputData, Charset.forName("UTF-8"));
+                inputStream = new InputStreamReader(inputData, StandardCharsets.UTF_8);
                 br = new BufferedReader(inputStream);
 
                 String currentString;
@@ -184,7 +184,7 @@ public class Constants {
 
                 // Write Queued Character Data
                 outputData = new FileOutputStream(charDataDir);
-                outputStream = new OutputStreamWriter(outputData, Charset.forName("UTF-8"));
+                outputStream = new OutputStreamWriter(outputData, StandardCharsets.UTF_8);
                 bw = new BufferedWriter(outputStream);
 
                 if (!textData.isEmpty()) {
