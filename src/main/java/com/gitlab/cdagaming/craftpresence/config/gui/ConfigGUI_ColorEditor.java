@@ -274,7 +274,6 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 hexText.setText(startingHexValue);
                 currentNormalHexValue = null;
                 currentConvertedHexValue = null;
-                currentNormalHexValue = null;
                 currentConvertedMCTexturePath = null;
                 currentMCTexture = new ResourceLocation("");
                 pageNumber = 0;
@@ -282,7 +281,6 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 mcTextureText.setText(startingMCTexturePath);
                 currentNormalHexValue = null;
                 currentConvertedHexValue = null;
-                currentNormalHexValue = null;
                 currentConvertedMCTexturePath = null;
                 currentMCTexture = new ResourceLocation("");
                 pageNumber = 1;
