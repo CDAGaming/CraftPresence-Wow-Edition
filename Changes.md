@@ -22,6 +22,10 @@
 
 * Code Warning Fixes and Cleanups
 
+* Fixes an NPE that may occur when on the Texture Input GUI
+
+* Fixes a Race Case Issue preventing Inputting RGBA Values for color customization UIs
+
 * Fixed an Unintentional Warning from a false positive Fingerprint Violation
 
 * Minor Performance Improvements

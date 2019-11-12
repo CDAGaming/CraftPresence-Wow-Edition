@@ -114,6 +114,9 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
 
             proceedButton.enabled = !StringHandler.isNullOrEmpty(mcTextureText.getText());
 
+            if (currentMCTexture == null) {
+                currentMCTexture = new ResourceLocation("");
+            }
             CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, currentMCTexture);
         }
 
@@ -303,21 +306,21 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 } else if (StringHandler.isValidInteger(hexText.getText())) {
                     localValue = Integer.decode(hexText.getText());
                 }
+            }
 
-                if (localValue != null) {
-                    currentAlpha = (localValue >> 24 & 255);
-                    currentRed = (localValue >> 16 & 255);
-                    currentGreen = (localValue >> 8 & 255);
-                    currentBlue = (localValue & 255);
+            if (localValue != null && !Integer.toString(localValue).equals(currentConvertedHexValue)) {
+                currentAlpha = (localValue >> 24 & 255);
+                currentRed = (localValue >> 16 & 255);
+                currentGreen = (localValue >> 8 & 255);
+                currentBlue = (localValue & 255);
 
-                    alphaText.setText(Integer.toString(currentAlpha));
-                    redText.setText(Integer.toString(currentRed));
-                    greenText.setText(Integer.toString(currentGreen));
-                    blueText.setText(Integer.toString(currentBlue));
+                alphaText.setText(Integer.toString(currentAlpha));
+                redText.setText(Integer.toString(currentRed));
+                greenText.setText(Integer.toString(currentGreen));
+                blueText.setText(Integer.toString(currentBlue));
 
-                    currentNormalHexValue = hexText.getText();
-                    currentConvertedHexValue = Integer.toString(localValue);
-                }
+                currentNormalHexValue = hexText.getText();
+                currentConvertedHexValue = Integer.toString(localValue);
             } else if (!StringHandler.isNullOrEmpty(redText.getText()) && !StringHandler.isNullOrEmpty(greenText.getText()) && !StringHandler.isNullOrEmpty(blueText.getText()) && !StringHandler.isNullOrEmpty(alphaText.getText())) {
                 if (StringHandler.isValidInteger(redText.getText()) && StringHandler.isValidInteger(greenText.getText()) && StringHandler.isValidInteger(blueText.getText()) && StringHandler.isValidInteger(alphaText.getText())) {
                     if (!(Integer.parseInt(redText.getText()) > 255 || Integer.parseInt(greenText.getText()) > 255 || Integer.parseInt(blueText.getText()) > 255 || Integer.parseInt(alphaText.getText()) > 255)) {
