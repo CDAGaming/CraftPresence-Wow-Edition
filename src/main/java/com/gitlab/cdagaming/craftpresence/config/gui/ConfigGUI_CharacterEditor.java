@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.Tuple;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -108,13 +109,17 @@ public class ConfigGUI_CharacterEditor extends GuiScreen {
     protected void actionPerformed(GuiButton button) {
         if (button.id == backButton.id) {
             mc.displayGuiScreen(parentScreen);
-        } else if (button.id == saveButton.id && StringHandler.isValidInteger(charWidth.getText())) {
-            // Save Single Value
-            int characterWidth = Integer.parseInt(charWidth.getText());
-            if (lastScannedChar > 0 && lastScannedChar <= StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
-                StringHandler.MC_CHAR_WIDTH[lastScannedChar] = characterWidth;
-            } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
-                StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) characterWidth;
+        } else if (button.id == saveButton.id) {
+            Tuple<Boolean, Integer> charData = StringHandler.GetValidInteger(charWidth.getText());
+
+            if (charData.getFirst()) {
+                // Save Single Value if Char Data is a Valid Number
+                int characterWidth = charData.getSecond();
+                if (lastScannedChar > 0 && lastScannedChar <= StringHandler.MC_CHAR_WIDTH.length && !Constants.TRANSLATOR.isUnicode) {
+                    StringHandler.MC_CHAR_WIDTH[lastScannedChar] = characterWidth;
+                } else if (StringHandler.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
+                    StringHandler.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) characterWidth;
+                }
             }
         } else if (button.id == syncAllButton.id) {
             // Sync ALL Values to FontRender Defaults

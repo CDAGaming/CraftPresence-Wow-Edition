@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.Constants;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.Tuple;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -303,7 +304,7 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 } else if (hexText.getText().startsWith("0x")) {
                     localColor = new Color(Long.decode(hexText.getText()).intValue(), true);
                     localValue = localColor.getRGB();
-                } else if (StringHandler.isValidInteger(hexText.getText())) {
+                } else if (StringHandler.GetValidInteger(hexText.getText()).getFirst()) {
                     localValue = Integer.decode(hexText.getText());
                 }
             }
@@ -322,9 +323,26 @@ public class ConfigGUI_ColorEditor extends GuiScreen {
                 currentNormalHexValue = hexText.getText();
                 currentConvertedHexValue = Integer.toString(localValue);
             } else if (!StringHandler.isNullOrEmpty(redText.getText()) && !StringHandler.isNullOrEmpty(greenText.getText()) && !StringHandler.isNullOrEmpty(blueText.getText()) && !StringHandler.isNullOrEmpty(alphaText.getText())) {
-                if (StringHandler.isValidInteger(redText.getText()) && StringHandler.isValidInteger(greenText.getText()) && StringHandler.isValidInteger(blueText.getText()) && StringHandler.isValidInteger(alphaText.getText())) {
-                    if (!(Integer.parseInt(redText.getText()) > 255 || Integer.parseInt(greenText.getText()) > 255 || Integer.parseInt(blueText.getText()) > 255 || Integer.parseInt(alphaText.getText()) > 255)) {
-                        localColor = new Color(Integer.parseInt(redText.getText()), Integer.parseInt(greenText.getText()), Integer.parseInt(blueText.getText()), Integer.parseInt(alphaText.getText()));
+                Tuple<Boolean, Integer> redData = StringHandler.GetValidInteger(redText.getText()),
+                        greenData = StringHandler.GetValidInteger(greenText.getText()),
+                        blueData = StringHandler.GetValidInteger(blueText.getText()),
+                        alphaData = StringHandler.GetValidInteger(alphaText.getText());
+
+                // Check if all RGBA Values are Valid
+                if (redData.getFirst() && greenData.getFirst() && blueData.getFirst() && alphaData.getFirst()) {
+                    boolean isRedDifferent = redData.getSecond() != currentRed,
+                            isGreenDifferent = greenData.getSecond() != currentGreen,
+                            isBlueDifferent = blueData.getSecond() != currentBlue,
+                            isAlphaDifferent = alphaData.getSecond() != currentAlpha;
+
+                    // Determine if any Values DO need updates
+                    if (isRedDifferent || isGreenDifferent || isBlueDifferent || isAlphaDifferent) {
+                        currentRed = redData.getSecond() & 255;
+                        currentGreen = greenData.getSecond() & 255;
+                        currentBlue = blueData.getSecond() & 255;
+                        currentAlpha = alphaData.getSecond() & 255;
+
+                        localColor = new Color(currentRed, currentGreen, currentBlue, currentAlpha);
 
                         currentNormalHexValue = StringHandler.getHexFromColor(localColor);
                         hexText.setText(currentNormalHexValue);

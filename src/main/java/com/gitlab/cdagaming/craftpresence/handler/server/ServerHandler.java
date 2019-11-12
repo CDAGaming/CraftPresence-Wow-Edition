@@ -174,7 +174,7 @@ public class ServerHandler {
     public void verifyAndJoin(final String secret) {
         String[] boolParts = secret.split(";");
         String[] stringParts = boolParts[0].split("-");
-        boolean containsValidClientID = StringHandler.elementExists(stringParts, 0) && (stringParts[0].length() == 18 && StringHandler.isValidLong(stringParts[0]));
+        boolean containsValidClientID = StringHandler.elementExists(stringParts, 0) && (stringParts[0].length() == 18 && StringHandler.GetValidLong(stringParts[0]).getFirst());
         boolean containsServerName = StringHandler.elementExists(boolParts, 1) && StringHandler.elementExists(stringParts, 1) && Boolean.parseBoolean(boolParts[1]);
         boolean containsServerIP = StringHandler.elementExists(boolParts, 2) && StringHandler.elementExists(stringParts, 2) && Boolean.parseBoolean(boolParts[2]);
         String serverName = containsServerName ? stringParts[1] : CraftPresence.CONFIG.defaultServerName;

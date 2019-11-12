@@ -6,11 +6,13 @@
 
 * `/cp view currentData` will now show the Current User the RPC is attached to
 
-* Now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
+* The Mod will now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
+
+* (Code-Behind) Change `isValidInteger` and `isValidLong` to Getters powered by Tuple's for both getting a boolean and the number itself
 
 * Compatibility Changes:
 
-  * Now Compiled under Gradle 6.x on 1.8.9 and Above
+  * Now Compiled under Gradle 5.x on 1.8.9 and Above
     
     * 1.7.10 and 1.6.4 utilize Gradle 2.14.1
   

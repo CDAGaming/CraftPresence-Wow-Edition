@@ -397,13 +397,13 @@ public class ConfigHandler {
                 properties.remove(property);
                 save();
             } else {
-                if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || !StringHandler.isValidLong(properties.getProperty(property)))) {
+                if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || !StringHandler.GetValidLong(properties.getProperty(property)).getFirst())) {
                     Constants.LOG.error(Constants.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
                     clientID = "450485984333660181";
                     properties.setProperty(property, clientID);
                     save();
                 }
-                if (property.equals(NAME_configKeycode) && (!StringHandler.isValidInteger(properties.getProperty(property)))) {
+                if (property.equals(NAME_configKeycode) && (!StringHandler.GetValidInteger(properties.getProperty(property)).getFirst())) {
                     Constants.LOG.error(Constants.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
                     configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
                     properties.setProperty(property, configKeyCode);

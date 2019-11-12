@@ -64,33 +64,41 @@ public class StringHandler {
     }
 
     public static boolean isValidColorCode(final String entry) {
-        return !isNullOrEmpty(entry) && ((entry.startsWith("#") || entry.length() == 6) || entry.startsWith("0x") || isValidInteger(entry));
+        return !isNullOrEmpty(entry) && ((entry.startsWith("#") || entry.length() == 6) || entry.startsWith("0x") || GetValidInteger(entry).getFirst());
     }
 
-    public static boolean isValidInteger(final String entry) {
+    public static Tuple<Boolean, Integer> GetValidInteger(final String entry) {
+        Tuple<Boolean, Integer> finalSet = new Tuple<>();
+
         if (!isNullOrEmpty(entry)) {
             try {
-                Integer.parseInt(entry);
-                return true;
+                finalSet.setSecond(Integer.parseInt(entry));
+                finalSet.setFirst(true);
             } catch (Exception ex) {
-                return false;
+                finalSet.setFirst(false);
             }
         } else {
-            return false;
+            finalSet.setFirst(false);
         }
+
+        return finalSet;
     }
 
-    public static boolean isValidLong(final String entry) {
+    public static Tuple<Boolean, Long> GetValidLong(final String entry) {
+        Tuple<Boolean, Long> finalSet = new Tuple<>();
+
         if (!isNullOrEmpty(entry)) {
             try {
-                Long.parseLong(entry);
-                return true;
+                finalSet.setSecond(Long.parseLong(entry));
+                finalSet.setFirst(true);
             } catch (Exception ex) {
-                return false;
+                finalSet.setFirst(false);
             }
         } else {
-            return false;
+            finalSet.setFirst(false);
         }
+
+        return finalSet;
     }
 
     public static String formatIP(final String input, final boolean returnPort) {

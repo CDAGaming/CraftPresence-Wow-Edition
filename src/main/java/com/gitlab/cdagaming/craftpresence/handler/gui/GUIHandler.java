@@ -5,6 +5,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.config.gui.ConfigGUI_Main;
 import com.gitlab.cdagaming.craftpresence.handler.FileHandler;
 import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
+import com.gitlab.cdagaming.craftpresence.handler.Tuple;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUICheckBox;
 import com.gitlab.cdagaming.craftpresence.handler.gui.controls.GUIExtendedButton;
 import com.google.common.collect.Lists;
@@ -414,9 +415,16 @@ public class GUIHandler {
             if (startColorCode.startsWith("#")) {
                 startColorObj = StringHandler.getColorFromHex(startColorCode);
                 endColorObj = (!StringHandler.isNullOrEmpty(endColorCode) && endColorCode.startsWith("#")) ? StringHandler.getColorFromHex(endColorCode) : startColorObj;
-            } else if (StringHandler.isValidInteger(startColorCode)) {
-                startColor = Integer.parseInt(startColorCode);
-                endColor = (StringHandler.isValidInteger(endColorCode)) ? Integer.parseInt(endColorCode) : startColor;
+            } else {
+                // Determine if Start Color Code is a Valid Number
+                Tuple<Boolean, Integer> startColorData = StringHandler.GetValidInteger(startColorCode),
+                        endColorData = StringHandler.GetValidInteger(endColorCode);
+
+                // Check and ensure that at least one of the Color Codes are correct
+                if (startColorData.getFirst() || endColorData.getFirst()) {
+                    startColor = startColorData.getFirst() ? startColorData.getSecond() : endColor;
+                    endColor = endColorData.getFirst() ? endColorData.getSecond() : startColor;
+                }
             }
         }
 
