@@ -99,12 +99,7 @@ public class GUIHandler {
     }
 
     public void openScreen(final GuiScreen targetScreen) {
-        CraftPresence.instance.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                CraftPresence.instance.displayGuiScreen(targetScreen);
-            }
-        });
+        CraftPresence.instance.addScheduledTask(() -> CraftPresence.instance.displayGuiScreen(targetScreen));
     }
 
     private void updateGUIData() {
