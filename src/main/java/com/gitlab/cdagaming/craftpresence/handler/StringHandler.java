@@ -384,7 +384,6 @@ public class StringHandler {
 
             switch (currentCharacter) {
                 case '\n':
-                    --currentLine;
                     break;
                 case ' ':
                     currentIndex = currentLine;
@@ -398,17 +397,14 @@ public class StringHandler {
                 case '\u00a7':
                     if (currentLine < stringLength - 1) {
                         ++currentLine;
-
-                        char charIndex = stringEntry.charAt(currentLine);
-
-                        String stringOfCharacter = String.valueOf(charIndex);
+                        currentCharacter = stringEntry.charAt(currentLine);
+                        String stringOfCharacter = String.valueOf(currentCharacter);
 
                         flag = stringOfCharacter.equalsIgnoreCase("l") && !(stringOfCharacter.equalsIgnoreCase("r") || STRIP_COLOR_PATTERN.matcher(stringOfCharacter).find());
                     }
             }
 
             if (currentCharacter == '\n') {
-                ++currentLine;
                 currentIndex = currentLine;
                 break;
             }

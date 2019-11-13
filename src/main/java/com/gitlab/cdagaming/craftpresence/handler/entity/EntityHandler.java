@@ -102,7 +102,7 @@ public class EntityHandler {
     }
 
     private boolean isEmpty(final ItemStack itemStack) {
-        if (itemStack == null || itemStack == EMPTY_STACK) {
+        if (itemStack == null || itemStack.equals(EMPTY_STACK)) {
             return true;
         } else if (itemStack.getItem() != EMPTY_ITEM && itemStack.getItem() != Items.AIR) {
             if (itemStack.getCount() <= 0) {

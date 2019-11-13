@@ -370,7 +370,7 @@ public class ConfigHandler {
                     // Case 2: Look through All Declared Fields to see If it matches in lower case
                     // Ex: NAME_exampleValue >> Tries to find exampleValue in any case
                     for (Field declaredField : getClass().getDeclaredFields()) {
-                        if (declaredField != null && declaredField.getName().toLowerCase().equalsIgnoreCase(configEntrySet.getKey().replace("NAME_", "").toLowerCase())) {
+                        if (declaredField != null && declaredField.getName().equalsIgnoreCase(configEntrySet.getKey().replace("NAME_", ""))) {
                             configPropertyValue = declaredField;
                             break;
                         }
