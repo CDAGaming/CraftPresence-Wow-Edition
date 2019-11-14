@@ -382,31 +382,25 @@ public class StringHandler {
         for (boolean flag = false; currentLine < stringLength; ++currentLine) {
             char currentCharacter = stringEntry.charAt(currentLine);
 
-            switch (currentCharacter) {
-                case '\n':
-                    break;
-                case ' ':
-                    currentIndex = currentLine;
-                default:
-                    charWidth += getCharWidth(currentCharacter, Constants.TRANSLATOR.isUnicode);
-                    if (flag) {
-                        ++charWidth;
-                    }
+            if (currentCharacter == ' ' || currentCharacter == '\n') {
+                currentIndex = currentLine;
 
+                if (currentCharacter == '\n') {
                     break;
-                case '\u00a7':
-                    if (currentLine < stringLength - 1) {
-                        ++currentLine;
-                        currentCharacter = stringEntry.charAt(currentLine);
-                        String stringOfCharacter = String.valueOf(currentCharacter);
-
-                        flag = stringOfCharacter.equalsIgnoreCase("l") && !(stringOfCharacter.equalsIgnoreCase("r") || STRIP_COLOR_PATTERN.matcher(stringOfCharacter).find());
-                    }
+                }
             }
 
-            if (currentCharacter == '\n') {
-                currentIndex = currentLine;
-                break;
+            if (currentCharacter == '\u00a7' && currentLine < stringLength - 1) {
+                ++currentLine;
+                currentCharacter = stringEntry.charAt(currentLine);
+                String stringOfCharacter = String.valueOf(currentCharacter);
+
+                flag = stringOfCharacter.equalsIgnoreCase("l") && !(stringOfCharacter.equalsIgnoreCase("r") || STRIP_COLOR_PATTERN.matcher(stringOfCharacter).find());
+            }
+
+            charWidth += getCharWidth(currentCharacter, Constants.TRANSLATOR.isUnicode);
+            if (flag) {
+                ++charWidth;
             }
 
             if (charWidth > wrapWidth) {
