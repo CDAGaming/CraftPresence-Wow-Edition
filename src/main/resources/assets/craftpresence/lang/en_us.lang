@@ -196,6 +196,7 @@ craftpresence.command.reboot.post=§2§lCraftPresence has been Rebooted!
 ## LOGGING MESSAGES ##
 craftpresence.logger.info.load=Loaded Display Data with ID: %1$s (Logged in as %2$s)
 craftpresence.logger.info.shutdown=Shutting Down CraftPresence...
+craftpresence.logger.info.config.new=New Configuration Data for CraftPresence has been created successfully!
 craftpresence.logger.info.config.save=Configuration Settings have been Saved and Reloaded Successfully!
 craftpresence.logger.info.manifest.init=Checking for valid Curse Manifest Data...
 craftpresence.logger.info.manifest.loaded=Found Curse Manifest Data! ( Name: "%1$s" )

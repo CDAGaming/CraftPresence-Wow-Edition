@@ -1,17 +1,17 @@
 package com.gitlab.cdagaming.craftpresence;
 
-import com.gitlab.cdagaming.craftpresence.config.ConfigHandler;
-import com.gitlab.cdagaming.craftpresence.handler.CommandHandler;
-import com.gitlab.cdagaming.craftpresence.handler.KeyHandler;
-import com.gitlab.cdagaming.craftpresence.handler.StringHandler;
-import com.gitlab.cdagaming.craftpresence.handler.SystemHandler;
-import com.gitlab.cdagaming.craftpresence.handler.discord.DiscordHandler;
-import com.gitlab.cdagaming.craftpresence.handler.discord.rpc.DiscordRPC;
-import com.gitlab.cdagaming.craftpresence.handler.entity.EntityHandler;
-import com.gitlab.cdagaming.craftpresence.handler.gui.GUIHandler;
-import com.gitlab.cdagaming.craftpresence.handler.server.ServerHandler;
-import com.gitlab.cdagaming.craftpresence.handler.world.BiomeHandler;
-import com.gitlab.cdagaming.craftpresence.handler.world.DimensionHandler;
+import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
+import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
+import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
+import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.SystemUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.DiscordUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
+import com.gitlab.cdagaming.craftpresence.utils.entity.EntityUtils;
+import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
+import com.gitlab.cdagaming.craftpresence.utils.server.ServerUtils;
+import com.gitlab.cdagaming.craftpresence.utils.world.BiomeUtils;
+import com.gitlab.cdagaming.craftpresence.utils.world.DimensionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.Mod;
@@ -20,21 +20,21 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@Mod(modid = Constants.MODID, name = Constants.NAME, version = Constants.VERSION_ID, clientSideOnly = true, guiFactory = Constants.GUI_FACTORY, canBeDeactivated = true, updateJSON = Constants.UPDATE_JSON, certificateFingerprint = Constants.FINGERPRINT, acceptedMinecraftVersions = "*")
+@Mod(modid = ModUtils.MODID, name = ModUtils.NAME, version = ModUtils.VERSION_ID, clientSideOnly = true, guiFactory = ModUtils.GUI_FACTORY, canBeDeactivated = true, updateJSON = ModUtils.UPDATE_JSON, certificateFingerprint = ModUtils.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
     public static boolean packFound = false, awaitingReply = false, closing = false;
     public static Minecraft instance = Minecraft.getMinecraft();
     public static EntityPlayer player = instance.player;
 
-    public static ConfigHandler CONFIG;
-    public static SystemHandler SYSTEM = new SystemHandler();
-    public static KeyHandler KEYBINDINGS = new KeyHandler();
-    public static DiscordHandler CLIENT = new DiscordHandler();
-    public static ServerHandler SERVER = new ServerHandler();
-    public static BiomeHandler BIOMES = new BiomeHandler();
-    public static DimensionHandler DIMENSIONS = new DimensionHandler();
-    public static EntityHandler ENTITIES = new EntityHandler();
-    public static GUIHandler GUIS = new GUIHandler();
+    public static ConfigUtils CONFIG;
+    public static SystemUtils SYSTEM = new SystemUtils();
+    public static KeyUtils KEYBINDINGS = new KeyUtils();
+    public static DiscordUtils CLIENT = new DiscordUtils();
+    public static ServerUtils SERVER = new ServerUtils();
+    public static BiomeUtils BIOMES = new BiomeUtils();
+    public static DimensionUtils DIMENSIONS = new DimensionUtils();
+    public static EntityUtils ENTITIES = new EntityUtils();
+    public static GuiUtils GUIS = new GuiUtils();
     public static Timer timerObj = new Timer(CraftPresence.class.getSimpleName());
 
     private boolean initialized = false;
@@ -44,19 +44,19 @@ public class CraftPresence {
     }
 
     private void init() {
-        if (Constants.IS_DEV) {
-            Constants.LOG.warn(Constants.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
+        if (ModUtils.IS_DEV) {
+            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
         }
 
-        SYSTEM = new SystemHandler();
-        CONFIG = new ConfigHandler(Constants.configDir + File.separator + Constants.MODID + ".properties");
+        SYSTEM = new SystemUtils();
+        CONFIG = new ConfigUtils(ModUtils.configDir + File.separator + ModUtils.MODID + ".properties");
         CONFIG.initialize();
 
-        final File CP_DIR = new File(Constants.MODID);
-        Constants.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
-        Constants.loadCharData(!CP_DIR.exists() || CP_DIR.listFiles() == null);
+        final File CP_DIR = new File(ModUtils.MODID);
+        ModUtils.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
+        ModUtils.loadCharData(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
-        CommandHandler.init();
+        CommandUtils.init();
 
         try {
             CLIENT.CLIENT_ID = CONFIG.clientID;
@@ -64,7 +64,7 @@ public class CraftPresence {
             CLIENT.init();
             CLIENT.updateTimestamp();
         } catch (Exception ex) {
-            Constants.LOG.error(Constants.TRANSLATOR.translate("craftpresence.logger.error.load"));
+            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.load"));
             ex.printStackTrace();
         } finally {
             initialized = true;
@@ -90,7 +90,7 @@ public class CraftPresence {
             instance = Minecraft.getMinecraft();
             player = instance.player;
 
-            CommandHandler.reloadData(false);
+            CommandUtils.reloadData(false);
 
             if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
                 DIMENSIONS.getDimensions();
@@ -109,12 +109,12 @@ public class CraftPresence {
             }
 
             if (!CONFIG.hasChanged) {
-                if ((!CommandHandler.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
-                    CommandHandler.setMainMenuPresence();
+                if ((!CommandUtils.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                    CommandUtils.setMainMenuPresence();
                 }
 
                 if (awaitingReply && SYSTEM.TIMER == 0) {
-                    StringHandler.sendMessageToPlayer(player, Constants.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
+                    StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
                     DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
                     awaitingReply = false;
                     CLIENT.STATUS = "ready";
