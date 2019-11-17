@@ -2,9 +2,9 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.google.common.collect.Lists;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class KeyUtils {
@@ -14,10 +14,7 @@ public class KeyUtils {
     // LWJGL 2: ESC = 0x01
     // LWJGL 3: ESC = 256
     private int keyStartLimit = 0x00;
-    private List<Integer> invalidKeys = new ArrayList<Integer>() {{
-        add(0x01);
-        add(256);
-    }};
+    private List<Integer> invalidKeys = Lists.newArrayList(0x01, 256);
 
     public boolean isValidKeyCode(int sourceKeyCode) {
         return sourceKeyCode > keyStartLimit && !invalidKeys.contains(sourceKeyCode);

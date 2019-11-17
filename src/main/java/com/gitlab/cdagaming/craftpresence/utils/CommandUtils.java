@@ -82,7 +82,7 @@ public class CommandUtils {
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
-    public static Boolean isOnMainMenuPresence() {
+    public static boolean isOnMainMenuPresence() {
         return !CraftPresence.CONFIG.hasChanged &&
                 StringUtils.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGEKEY) &&
                 StringUtils.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGETEXT) &&

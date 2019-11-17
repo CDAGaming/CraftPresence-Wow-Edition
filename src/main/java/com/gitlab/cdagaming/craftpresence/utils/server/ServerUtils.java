@@ -4,7 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -18,12 +18,12 @@ public class ServerUtils {
     public boolean enabled = false, isInUse = false;
 
     public List<String> knownAddresses = Lists.newArrayList();
-    public String currentServer_IP;
-    private String currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
+    private String currentServer_IP, currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
     private int currentPlayers, maxPlayers, serverIndex;
     private ServerData currentServerData, requestedServerData;
     private NetHandlerPlayClient currentConnection;
 
+    // Note: queuedForUpdate is needed here for Multiple-Condition RPC Triggers
     private boolean queuedForUpdate = false, joinInProgress = false, isOnLAN = false;
 
     private void emptyData() {
@@ -48,6 +48,10 @@ public class ServerUtils {
         if (!joinInProgress) {
             requestedServerData = null;
         }
+
+        CraftPresence.CLIENT.initArgumentData("&SERVER&");
+        CraftPresence.CLIENT.initIconData("&SERVER&");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -86,10 +90,18 @@ public class ServerUtils {
 
             final String newServer_IP = newServerData != null && !StringUtils.isNullOrEmpty(newServerData.serverIP) ? newServerData.serverIP : "127.0.0.1";
             final String newServer_Name = newServerData != null && !StringUtils.isNullOrEmpty(newServerData.serverName) ? newServerData.serverName : CraftPresence.CONFIG.defaultServerName;
-            final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringUtils.isNullOrEmpty(newServerData.serverMOTD)) && !(newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_connect")) || newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_resolve")) || newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.polling")) || newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.pinging"))) ? StringUtils.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
+            final String newServer_MOTD = !isOnLAN && !CraftPresence.instance.isSingleplayer() && (newServerData != null && !StringUtils.isNullOrEmpty(newServerData.serverMOTD)) &&
+                    !(newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_connect")) ||
+                            newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_resolve")) ||
+                            newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.polling")) ||
+                            newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.pinging"))) ? StringUtils.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
             final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
 
-            if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) || (newServerData == null && currentServerData != null)) || (newConnection != null && !newConnection.equals(currentConnection)) || !newServer_IP.equals(currentServer_IP) || (!StringUtils.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) || (!StringUtils.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name))) {
+            if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) ||
+                    (newServerData == null && currentServerData != null)) ||
+                    (newConnection != null && !newConnection.equals(currentConnection)) || !newServer_IP.equals(currentServer_IP) ||
+                    (!StringUtils.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) ||
+                    (!StringUtils.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name))) {
                 currentServer_IP = newServer_IP;
                 currentServer_MOTD = newServer_MOTD;
                 currentServer_Name = newServer_Name;
@@ -207,58 +219,88 @@ public class ServerUtils {
     }
 
     public void updateServerPresence() {
-        if (!CraftPresence.instance.isSingleplayer() && !isOnLAN && currentServerData != null) {
-            // NOTE: Server-Only Presence Updates
-            final String defaultServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-            final String alternateServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
-            final String alternateServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
+        // Form General Argument Lists
+        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), gameTimeArgs = Lists.newArrayList(), modsArgs = Lists.newArrayList();
 
-            currentServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
-            final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
-            final String formattedServerIconKey = StringUtils.formatPackIcon(currentServerIcon.replace(" ", "_"));
+        // Player Data Arguments
+        playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
-            CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringUtils.formatIP(currentServer_IP, false)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", CraftPresence.CONFIG.playerAmountPlaceholderMSG.replace("&current&", Integer.toString(currentPlayers)).replace("&max&", Integer.toString(maxPlayers))).replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", !StringUtils.isNullOrEmpty(timeString) ? timeString : "")).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount())));
-            if (CraftPresence.CONFIG.enableJoinRequest) {
-                if (!StringUtils.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
-                    CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
-                } else {
-                    CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+        // Game Time Arguments
+        gameTimeArgs.add(new Tuple<>("&WORLDTIME&", timeString));
+
+        // Mods Arguments
+        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
+
+        if (!CraftPresence.instance.isSingleplayer() && currentServerData != null) {
+            String CURRENT_SERVER_ICON;
+
+            // Form Tuple List of Argument for Servers/LAN Games
+            List<Tuple<String, String>> serverArgs = Lists.newArrayList(), playerAmountArgs = Lists.newArrayList();
+
+            // Player Amount Arguments
+            playerAmountArgs.add(new Tuple<>("&CURRENT&", Integer.toString(currentPlayers)));
+            playerAmountArgs.add(new Tuple<>("&MAX&", Integer.toString(maxPlayers)));
+
+            // Server Data Arguments
+            serverArgs.add(new Tuple<>("&IP&", StringUtils.formatIP(currentServer_IP, false)));
+            serverArgs.add(new Tuple<>("&NAME&", currentServer_Name));
+            serverArgs.add(new Tuple<>("&MOTD&", currentServer_MOTD));
+            serverArgs.add(new Tuple<>("&PLAYERS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerAmountPlaceholderMSG, playerAmountArgs)));
+            serverArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+            serverArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
+            serverArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
+
+            if (isOnLAN) {
+                // NOTE: LAN-Only Presence Updates
+                final String alternateServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
+                final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+                final String formattedServerIconKey = StringUtils.formatPackIcon(currentServerIcon.replace(" ", "_"));
+
+                CURRENT_SERVER_ICON = formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon);
+
+                currentServerMSG = CraftPresence.CONFIG.lanMSG;
+            } else {
+                // NOTE: Server-Only Presence Updates
+                final String defaultServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                final String alternateServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
+                final String alternateServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
+
+                currentServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
+                final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+                final String formattedServerIconKey = StringUtils.formatPackIcon(currentServerIcon.replace(" ", "_"));
+
+                CURRENT_SERVER_ICON = formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon);
+
+                if (CraftPresence.CONFIG.enableJoinRequest) {
+                    if (!StringUtils.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
+                        CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
+                    } else {
+                        CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_IP;
+                    }
+                    CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
+                    CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
+                    CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
                 }
-                CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
-                CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
-                CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
             }
 
-            if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
-                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-                CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
-            }
-
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-            queuedForUpdate = false;
-        } else if (isOnLAN) {
-            // NOTE: LAN-Only Presence Updates
-            final String alternateServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
-            final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
-            final String formattedServerIconKey = StringUtils.formatPackIcon(currentServerIcon.replace(" ", "_"));
-
-            currentServerMSG = CraftPresence.CONFIG.lanMSG;
-            CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ip&", StringUtils.formatIP(currentServer_IP, false)).replace("&name&", currentServer_Name).replace("&motd&", currentServer_MOTD).replace("&players&", CraftPresence.CONFIG.playerAmountPlaceholderMSG.replace("&current&", Integer.toString(currentPlayers)).replace("&max&", Integer.toString(maxPlayers))).replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", !StringUtils.isNullOrEmpty(timeString) ? timeString : "")).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount())));
-
-            if (!CraftPresence.CONFIG.overwriteServerIcon || !CraftPresence.packFound) {
-                CraftPresence.CLIENT.setImage(formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon), DiscordAsset.AssetType.SMALL);
-                CraftPresence.CLIENT.SMALLIMAGETEXT = CraftPresence.CLIENT.GAME_STATE;
-            }
-
+            CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, serverArgs), false);
+            CraftPresence.CLIENT.syncArgument("&SERVER&", CURRENT_SERVER_ICON, true);
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         } else if (CraftPresence.instance.isSingleplayer()) {
+            // Form SinglePlayer Tuple Argument List
+            List<Tuple<String, String>> soloArgs = Lists.newArrayList();
+
+            soloArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+            soloArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
+            soloArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
+
             // NOTE: SinglePlayer-Only Presence Updates
             currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;
 
-            CraftPresence.CLIENT.GAME_STATE = currentServerMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&time&", CraftPresence.CONFIG.gameTimePlaceholderMSG.replace("&worldtime&", !StringUtils.isNullOrEmpty(timeString) ? timeString : "")).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount())));
-            CraftPresence.CLIENT.SMALLIMAGEKEY = "";
-            CraftPresence.CLIENT.SMALLIMAGETEXT = "";
+            CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, soloArgs), false);
+            CraftPresence.CLIENT.initArgumentData("&SERVER&");
+            CraftPresence.CLIENT.initIconData("&SERVER&");
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         }

@@ -15,10 +15,11 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordUser;
 import com.gitlab.cdagaming.craftpresence.utils.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.utils.multimc.MultiMCUtils;
 import com.gitlab.cdagaming.craftpresence.utils.technic.TechnicUtils;
+import com.google.common.collect.Lists;
 import com.sun.jna.NativeLibrary;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 public class DiscordUtils {
     static {
@@ -26,8 +27,6 @@ public class DiscordUtils {
     }
 
     private final DiscordEventHandlers handlers = new DiscordEventHandlers();
-    private ArrayList<Tuple<String, String>> messageData = new ArrayList<>(), iconData = new ArrayList<>();
-
     public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
     public String GAME_STATE;
@@ -46,7 +45,7 @@ public class DiscordUtils {
     public String MATCH_SECRET;
     public String SPECTATE_SECRET;
     public byte INSTANCE;
-
+    private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList();
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private int lastErrorCode, lastDisconnectErrorCode;
 
@@ -117,6 +116,10 @@ public class DiscordUtils {
         };
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
+
+        initArgumentData("&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initIconData("&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        syncPackArguments();
     }
 
     public void updateTimestamp() {
@@ -125,18 +128,66 @@ public class DiscordUtils {
         }
     }
 
-    public void syncPlaceholder(String placeHolderName, String insertString, boolean isIconData) {
+    public void syncArgument(String argumentName, String insertString, boolean isIconData) {
         // Remove and Replace Placeholder Data, if the placeholder needs Updates
-        if (!StringUtils.isNullOrEmpty(placeHolderName)) {
+        if (!StringUtils.isNullOrEmpty(argumentName)) {
             if (isIconData) {
-                if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(placeHolderName) && !e.getSecond().equalsIgnoreCase(insertString))) {
-                    iconData.add(new Tuple<>(placeHolderName, insertString));
+                if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                    iconData.add(new Tuple<>(argumentName, insertString));
                 }
             } else {
-                if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(placeHolderName) && !e.getSecond().equalsIgnoreCase(insertString))) {
-                    messageData.add(new Tuple<>(placeHolderName, insertString));
+                if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                    messageData.add(new Tuple<>(argumentName, insertString));
                 }
             }
+        }
+    }
+
+    public void initArgumentData(String... args) {
+        // Initialize Available Arguments to Empty Data
+        for (String argumentName : args) {
+            messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
+            messageData.add(new Tuple<>(argumentName, ""));
+        }
+    }
+
+    public void initIconData(String... args) {
+        // Initialize available Icon Arguments to Empty Data
+        for (String iconArgumentName : args) {
+            iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(iconArgumentName));
+            iconData.add(new Tuple<>(iconArgumentName, ""));
+        }
+    }
+
+    private void syncPackArguments() {
+        // Add &PACK& Placeholder to ArgumentData
+
+        String foundPackName = "", foundPackIcon = "";
+        if (ModUtils.BRAND.contains("vivecraft")) {
+            CraftPresence.packFound = true;
+
+            foundPackName = CraftPresence.CONFIG.vivecraftMessage;
+            foundPackIcon = "vivecraft";
+        } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
+            foundPackName = CurseUtils.manifest.name;
+            foundPackIcon = foundPackName;
+        } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME)) {
+            foundPackName = MultiMCUtils.INSTANCE_NAME;
+            foundPackIcon = MultiMCUtils.ICON_KEY;
+        } else if (MCUpdaterUtils.instance != null && !StringUtils.isNullOrEmpty(MCUpdaterUtils.instance.getPackName())) {
+            foundPackName = MCUpdaterUtils.instance.getPackName();
+            foundPackIcon = foundPackName;
+        } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
+            foundPackName = TechnicUtils.PACK_NAME;
+            foundPackIcon = TechnicUtils.ICON_NAME;
+        }
+
+        if (!StringUtils.isNullOrEmpty(foundPackName)) {
+            syncArgument("&PACK&", StringUtils.formatWord(StringUtils.replaceAnyCase(CraftPresence.CONFIG.packPlaceholderMSG, "&NAME&", foundPackName)), false);
+        }
+
+        if (!StringUtils.isNullOrEmpty(foundPackIcon)) {
+            syncArgument("&PACK&", StringUtils.formatPackIcon(foundPackIcon), true);
         }
     }
 
@@ -145,42 +196,6 @@ public class DiscordUtils {
             // Format Presence based on Arguments available in argumentData
             presence.details = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData);
             presence.state = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData);
-
-            // Attack Pack Data, if any, to Presence Details
-            // TODO: Adapt towards newer systems
-            /*if (ModUtils.BRAND.contains("vivecraft")) {
-                CraftPresence.packFound = true;
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.vivecraftMessage;
-            } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(CurseUtils.manifest.name));
-            } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME)) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MultiMCUtils.INSTANCE_NAME));
-            } else if (MCUpdaterUtils.instance != null && !StringUtils.isNullOrEmpty(MCUpdaterUtils.instance.getPackName())) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MCUpdaterUtils.instance.getPackName()));
-            } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(TechnicUtils.PACK_NAME));
-            }*/
-
-            // Set smallImageKey to Pack Data, if any
-            // TODO: Adapt towards new systems
-            /*if ((StringUtils.isNullOrEmpty(presence.smallImageKey) && StringUtils.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {
-                if (ModUtils.BRAND.contains("vivecraft") && DiscordAssetUtils.contains("vivecraft")) {
-                    presence.smallImageKey = "vivecraft";
-                    presence.smallImageText = CraftPresence.CONFIG.vivecraftMessage;
-                } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
-                    final String iconKey = StringUtils.formatPackIcon(CurseUtils.manifest.name);
-                    if (DiscordAssetUtils.contains(iconKey)) {
-                        presence.smallImageKey = iconKey;
-                        presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(CurseUtils.manifest.name));
-                    }
-                } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME) && !StringUtils.isNullOrEmpty(MultiMCUtils.ICON_KEY) && DiscordAssetUtils.contains(MultiMCUtils.ICON_KEY)) {
-                    presence.smallImageKey = MultiMCUtils.ICON_KEY;
-                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MultiMCUtils.INSTANCE_NAME));
-                } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME) && !StringUtils.isNullOrEmpty(TechnicUtils.ICON_NAME) && DiscordAssetUtils.contains(TechnicUtils.ICON_NAME)) {
-                    presence.smallImageKey = TechnicUtils.ICON_NAME;
-                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", TechnicUtils.PACK_NAME);
-                }
-            }*/
 
             DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
         }

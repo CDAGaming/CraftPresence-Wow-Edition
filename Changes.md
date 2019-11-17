@@ -27,6 +27,7 @@
 ### Fixes
 
 *   Fixed Config Conflicts with a more dynamic system
+*   Fixed Icon Support for MCUpdater (Will now use the Pack Name like Curse/Twitch)
 *   Code Compliance Adjustments as well as multiple refactors
 *   Corrected Credits Message for ItsDizzy
 *   Code Warning Fixes and Cleanups

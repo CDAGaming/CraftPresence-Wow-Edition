@@ -181,6 +181,8 @@ public class ConfigUtils {
         NAME_smallImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.smallimagemsg");
         gameStateMSG = "&SERVER&";
         detailsMSG = "&DIMENSION&";
+        largeImageMSG = "&DIMENSION&";
+        smallImageMSG = "&SERVER&";
 
         for (Field field : getClass().getDeclaredFields()) {
             if (field.getName().contains("NAME_")) {

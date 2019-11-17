@@ -13,9 +13,9 @@ import java.util.Map;
 
 public class DimensionUtils {
     public boolean isInUse = false, enabled = false;
+    public List<String> DIMENSION_NAMES = Lists.newArrayList();
 
     private String CURRENT_DIMENSION_NAME, CURRENT_DIMENSION_NAME_ID;
-    public List<String> DIMENSION_NAMES = Lists.newArrayList();
     private List<Integer> DIMENSION_IDS = Lists.newArrayList();
     private List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
     private Integer CURRENT_DIMENSION_ID;
@@ -32,6 +32,9 @@ public class DimensionUtils {
         CURRENT_DIMENSION_ID = null;
 
         isInUse = false;
+        CraftPresence.CLIENT.initArgumentData("&DIMENSION&");
+        CraftPresence.CLIENT.initIconData("&DIMENSION&");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -95,8 +98,8 @@ public class DimensionUtils {
         final String CURRENT_DIMENSION_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon);
         final String CURRENT_DIMENSION_MESSAGE = StringUtils.formatWord(currentDimensionMSG.replace("&dimension&", StringUtils.formatWord(CURRENT_DIMENSION_NAME)).replace("&id&", CURRENT_DIMENSION_ID.toString()));
 
-        CraftPresence.CLIENT.syncPlaceholder("&DIMENSION&", CURRENT_DIMENSION_MESSAGE, false);
-        CraftPresence.CLIENT.syncPlaceholder("&DIMENSION&", CURRENT_DIMENSION_ICON, true);
+        CraftPresence.CLIENT.syncArgument("&DIMENSION&", CURRENT_DIMENSION_MESSAGE, false);
+        CraftPresence.CLIENT.syncArgument("&DIMENSION&", CURRENT_DIMENSION_ICON, true);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

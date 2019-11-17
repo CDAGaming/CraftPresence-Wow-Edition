@@ -29,6 +29,9 @@ public class BiomeUtils {
         CURRENT_BIOME_ID = null;
 
         isInUse = false;
+        CraftPresence.CLIENT.initArgumentData("&BIOME&");
+        CraftPresence.CLIENT.initIconData("&BIOME&");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -85,8 +88,8 @@ public class BiomeUtils {
         final String CURRENT_BIOME_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon);
         final String CURRENT_BIOME_MESSAGE = StringUtils.formatWord(currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString()));
 
-        CraftPresence.CLIENT.syncPlaceholder("&BIOME&", CURRENT_BIOME_MESSAGE, false);
-        CraftPresence.CLIENT.syncPlaceholder("&BIOME&", CURRENT_BIOME_ICON, true);
+        CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_MESSAGE, false);
+        CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_ICON, true);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
