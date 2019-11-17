@@ -30,7 +30,7 @@ CraftPresence currently offers the following Commands:
 
 (Commands must be prefixed by either `/craftpresence` or `/cp`)
 
-(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands" in the Config GUI)
+*(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands" in the Config GUI)*
 
 *   `/cp view` - Help Command to display Commands available to view a variety of Display Data
 *   `/cp reload` - Reloads Mod Data (In v1.4.8 and Above, this forces a Tick Event)
@@ -49,14 +49,26 @@ CraftPresence currently offers the following Commands:
 ## KeyBinds
 CraftPresence currently contains the following KeyBinds:
 
-(In v1.5.5 and Above, KeyBinds are now customized in the Accessibility Settings in the Config GUI)
+*(In v1.5.5 and Above, KeyBinds are now customized in the Accessibility Settings in the Config GUI)*
 
 *   `Open Config GUI` - KeyBind to Open the CraftPresence ConfigGUI (Default: GRAVE Key)
 
 ## Placeholders
 In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
 
-(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)
+*(In v1.6.0 and Above, You can now define where in the Rich Presence the Messages should go)*
+
+*(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)*
+
+### Presence Display Placeholders
+*   &DIMENSION& - The Dimension Message from your Dimension Settings, if enabled and in use
+*   &BIOME& - The Biome Message from your Biome Settings, if enabled and in use
+*   &SERVER& - The Server/SinglePlayer Message from your Server Settings, if enabled and in use
+*   &GUI& - The GUI Message from your GUI Settings, if enabled and in use
+*   &ENTITY& - The Entity/Item Message from your Advanced -> Entity/Item Setting, if enabled and in use
+
+*(All Placeholders must be present in one of the RPC Areas)*
+*(For Image Keys, it works as a priority list going in sequential order)*
 
 ### Main Menu Message Placeholders
 *   &IGN& - Your Minecraft Username

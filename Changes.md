@@ -1,9 +1,13 @@
 # CraftPresence Changes
 
-## v1.5.8 (11/29/2019)
+## v1.6.0 (12/15/2019)
 
 ### Changes
 
+*   Added Specific Presence Display Settings to ConfigGUI
+
+    *   Now allows users to set where in the RPC they'd like each message
+    
 *   `/cp view currentData` will now show the Current User the RPC is attached to
 
 *   Added a New Config Message in Logs for Initial Setups
@@ -22,6 +26,7 @@
 
 ### Fixes
 
+*   Fixed Config Conflicts with a more dynamic system
 *   Code Compliance Adjustments as well as multiple refactors
 *   Corrected Credits Message for ItsDizzy
 *   Code Warning Fixes and Cleanups

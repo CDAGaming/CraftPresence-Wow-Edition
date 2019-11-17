@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class StringUtils {
@@ -53,6 +54,30 @@ public class StringUtils {
             builder.append("0");
         }
         return builder.toString().toUpperCase();
+    }
+
+    public static String replaceAnyCase(String source, String targetToReplace, String replaceWith) {
+        if (!isNullOrEmpty(source)) {
+            return Pattern.compile(targetToReplace, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(source)
+                    .replaceAll(Matcher.quoteReplacement(replaceWith));
+        } else {
+            return "";
+        }
+    }
+
+    public static String sequentialReplaceAnyCase(String source, List<Tuple<String, String>> replaceData) {
+        if (!isNullOrEmpty(source)) {
+            String finalResult = source;
+
+            if (!replaceData.isEmpty()) {
+                for (Tuple<String, String> replacementData : replaceData) {
+                    finalResult = replaceAnyCase(finalResult, replacementData.getFirst(), replacementData.getSecond());
+                }
+            }
+            return finalResult;
+        } else {
+            return "";
+        }
     }
 
     public static boolean isNullOrEmpty(final String entry) {

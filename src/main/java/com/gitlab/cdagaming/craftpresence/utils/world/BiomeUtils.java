@@ -17,8 +17,6 @@ public class BiomeUtils {
     private String CURRENT_BIOME_NAME;
     private Integer CURRENT_BIOME_ID;
 
-    private boolean queuedForUpdate = false;
-
     private void emptyData() {
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
@@ -30,7 +28,6 @@ public class BiomeUtils {
         CURRENT_BIOME_NAME = null;
         CURRENT_BIOME_ID = null;
 
-        queuedForUpdate = false;
         isInUse = false;
     }
 
@@ -64,7 +61,6 @@ public class BiomeUtils {
         if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
             CURRENT_BIOME_NAME = newBiomeName;
             CURRENT_BIOME_ID = newBiomeID;
-            queuedForUpdate = true;
 
             if (!BIOME_NAMES.contains(newBiomeName)) {
                 BIOME_NAMES.add(newBiomeName);
@@ -75,9 +71,7 @@ public class BiomeUtils {
             if (!BIOME_TYPES.contains(newBiome)) {
                 BIOME_TYPES.add(newBiome);
             }
-        }
 
-        if (queuedForUpdate) {
             updateBiomePresence();
         }
     }
@@ -85,15 +79,15 @@ public class BiomeUtils {
     public void updateBiomePresence() {
         final String defaultBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMSG);
-        final String formattedBiomeMSG = currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString());
+        final String currentBiomeIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_BIOME_NAME);
+        final String formattedIconKey = StringUtils.formatPackIcon(currentBiomeIcon.replace(" ", "_"));
 
-        if (!CraftPresence.GUIS.isInUse && !CraftPresence.SERVER.isInUse) {
-            CraftPresence.CLIENT.GAME_STATE = formattedBiomeMSG;
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-            queuedForUpdate = false;
-        } else {
-            queuedForUpdate = true;
-        }
+        final String CURRENT_BIOME_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon);
+        final String CURRENT_BIOME_MESSAGE = StringUtils.formatWord(currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString()));
+
+        CraftPresence.CLIENT.syncPlaceholder("&BIOME&", CURRENT_BIOME_MESSAGE, false);
+        CraftPresence.CLIENT.syncPlaceholder("&BIOME&", CURRENT_BIOME_ICON, true);
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     private List<Biome> getBiomeTypes() {

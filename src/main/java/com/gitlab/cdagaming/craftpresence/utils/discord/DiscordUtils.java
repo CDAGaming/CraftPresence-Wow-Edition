@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.curse.CurseUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
@@ -17,6 +18,7 @@ import com.gitlab.cdagaming.craftpresence.utils.technic.TechnicUtils;
 import com.sun.jna.NativeLibrary;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class DiscordUtils {
     static {
@@ -24,6 +26,8 @@ public class DiscordUtils {
     }
 
     private final DiscordEventHandlers handlers = new DiscordEventHandlers();
+    private ArrayList<Tuple<String, String>> messageData = new ArrayList<>(), iconData = new ArrayList<>();
+
     public DiscordUser CURRENT_USER, REQUESTER_USER;
     public String STATUS;
     public String GAME_STATE;
@@ -42,6 +46,7 @@ public class DiscordUtils {
     public String MATCH_SECRET;
     public String SPECTATE_SECRET;
     public byte INSTANCE;
+
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private int lastErrorCode, lastDisconnectErrorCode;
 
@@ -120,9 +125,30 @@ public class DiscordUtils {
         }
     }
 
+    public void syncPlaceholder(String placeHolderName, String insertString, boolean isIconData) {
+        // Remove and Replace Placeholder Data, if the placeholder needs Updates
+        if (!StringUtils.isNullOrEmpty(placeHolderName)) {
+            if (isIconData) {
+                if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(placeHolderName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                    iconData.add(new Tuple<>(placeHolderName, insertString));
+                }
+            } else {
+                if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(placeHolderName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                    messageData.add(new Tuple<>(placeHolderName, insertString));
+                }
+            }
+        }
+    }
+
     public void updatePresence(final DiscordRichPresence presence) {
         if (presence != null) {
-            if (ModUtils.BRAND.contains("vivecraft")) {
+            // Format Presence based on Arguments available in argumentData
+            presence.details = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData);
+            presence.state = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData);
+
+            // Attack Pack Data, if any, to Presence Details
+            // TODO: Adapt towards newer systems
+            /*if (ModUtils.BRAND.contains("vivecraft")) {
                 CraftPresence.packFound = true;
                 presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.vivecraftMessage;
             } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
@@ -133,9 +159,11 @@ public class DiscordUtils {
                 presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MCUpdaterUtils.instance.getPackName()));
             } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
                 presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(TechnicUtils.PACK_NAME));
-            }
+            }*/
 
-            if ((StringUtils.isNullOrEmpty(presence.smallImageKey) && StringUtils.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {
+            // Set smallImageKey to Pack Data, if any
+            // TODO: Adapt towards new systems
+            /*if ((StringUtils.isNullOrEmpty(presence.smallImageKey) && StringUtils.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {
                 if (ModUtils.BRAND.contains("vivecraft") && DiscordAssetUtils.contains("vivecraft")) {
                     presence.smallImageKey = "vivecraft";
                     presence.smallImageText = CraftPresence.CONFIG.vivecraftMessage;
@@ -152,10 +180,7 @@ public class DiscordUtils {
                     presence.smallImageKey = TechnicUtils.ICON_NAME;
                     presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", TechnicUtils.PACK_NAME);
                 }
-            }
-
-            presence.largeImageKey = StringUtils.isNullOrEmpty(presence.largeImageKey) ? CraftPresence.CONFIG.defaultIcon : presence.largeImageKey;
-            presence.largeImageText = StringUtils.isNullOrEmpty(presence.largeImageText) ? ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion) : presence.largeImageText;
+            }*/
 
             DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
         }
@@ -203,48 +228,15 @@ public class DiscordUtils {
                     ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.request", formattedKey, type.name()));
 
                     final String defaultIcon = StringUtils.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
-                    final String defaultDimensionIcon = StringUtils.formatPackIcon(StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon).replace("&icon&", defaultIcon));
-                    final String defaultServerIcon = StringUtils.formatPackIcon(StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon).replace("&icon&", defaultIcon));
 
                     if (type.equals(DiscordAsset.AssetType.LARGE)) {
-                        if (CraftPresence.DIMENSIONS.isInUse) {
-                            // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name (Or Dimension ID if Dimension Name is Empty)
-                            final String formattedCurrentDIMNameIcon = StringUtils.formatPackIcon(!StringUtils.isNullOrEmpty(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME) ? CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME : CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME_ID);
-                            if (DiscordAssetUtils.contains(formattedCurrentDIMNameIcon)) {
-                                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedCurrentDIMNameIcon));
-                                LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
-                            } else {
-                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                                LARGEIMAGEKEY = DiscordAssetUtils.contains(defaultDimensionIcon) ? defaultDimensionIcon : defaultIcon;
-                            }
-                        } else {
-                            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                            LARGEIMAGEKEY = defaultIcon;
-                        }
+                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                        LARGEIMAGEKEY = defaultIcon;
                     }
 
                     if (type.equals(DiscordAsset.AssetType.SMALL)) {
-                        if (CraftPresence.SERVER.isInUse) {
-                            // NOTE: Fallback for when On a Server is The Parts of Your IP
-                            boolean matched = false;
-                            for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
-                                final String formattedIPPart = StringUtils.formatPackIcon(ipPart);
-                                if (DiscordAssetUtils.contains(formattedIPPart)) {
-                                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedIPPart));
-                                    SMALLIMAGEKEY = formattedIPPart;
-                                    matched = true;
-                                    break;
-                                }
-                            }
-
-                            if (!matched) {
-                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                                SMALLIMAGEKEY = DiscordAssetUtils.contains(defaultServerIcon) ? defaultServerIcon : defaultIcon;
-                            }
-                        } else {
-                            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                            SMALLIMAGEKEY = defaultIcon;
-                        }
+                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
+                        SMALLIMAGEKEY = defaultIcon;
                     }
                 }
             }

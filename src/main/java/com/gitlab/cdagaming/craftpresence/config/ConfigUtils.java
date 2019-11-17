@@ -20,7 +20,7 @@ public class ConfigUtils {
             NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
             NAME_showGameState, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest;
     // BIOME MESSAGES
-    public String NAME_biomeMessages;
+    public String NAME_defaultBiomeIcon, NAME_biomeMessages;
     // DIMENSION MESSAGES
     public String NAME_defaultDimensionIcon, NAME_dimensionMessages;
     // SERVER MESSAGES
@@ -35,6 +35,8 @@ public class ConfigUtils {
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeycode;
+    // DISPLAY MESSAGES
+    public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG;
 
     // Config Variables
     // GENERAL
@@ -42,6 +44,7 @@ public class ConfigUtils {
             showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
     public String clientID, defaultIcon;
     // BIOME MESSAGES
+    public String defaultBiomeIcon;
     public String[] biomeMessages;
     // DIMENSION MESSAGES
     public String defaultDimensionIcon;
@@ -60,6 +63,8 @@ public class ConfigUtils {
     // ACCESSIBILITY
     public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
     public boolean stripTranslationColors, showLoggingInChat;
+    // DISPLAY MESSAGES
+    public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG;
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
@@ -100,7 +105,9 @@ public class ConfigUtils {
         defaultIcon = "grass";
         enableJoinRequest = false;
         // BIOME MESSAGES
+        NAME_defaultBiomeIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biomemessages.biomeicon").replaceAll(" ", "_");
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
+        defaultBiomeIcon = "plains"; // TODO: ???
         biomeMessages = new String[]{"default;Playing in &biome&"};
         // DIMENSION MESSAGES
         NAME_defaultDimensionIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimensionmessages.dimensionicon").replaceAll(" ", "_");
@@ -167,6 +174,13 @@ public class ConfigUtils {
         stripTranslationColors = false;
         showLoggingInChat = false;
         configKeyCode = Integer.toString(Keyboard.KEY_GRAVE);
+        // DISPLAY MESSAGES
+        NAME_gameStateMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.gamestatemsg");
+        NAME_detailsMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.detailsmsg");
+        NAME_largeImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.largeimagemsg");
+        NAME_smallImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.smallimagemsg");
+        gameStateMSG = "&SERVER&";
+        detailsMSG = "&DIMENSION&";
 
         for (Field field : getClass().getDeclaredFields()) {
             if (field.getName().contains("NAME_")) {
@@ -228,6 +242,7 @@ public class ConfigUtils {
                 defaultIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultIcon)) ? properties.getProperty(NAME_defaultIcon) : defaultIcon;
                 enableJoinRequest = StringUtils.isValidBoolean(properties.getProperty(NAME_enableJoinRequest)) ? Boolean.parseBoolean(properties.getProperty(NAME_enableJoinRequest)) : enableJoinRequest;
                 // BIOME MESSAGES
+                defaultBiomeIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultBiomeIcon)) ? properties.getProperty(NAME_defaultBiomeIcon) : defaultBiomeIcon;
                 biomeMessages = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : biomeMessages;
                 // DIMENSION MESSAGES
                 defaultDimensionIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultDimensionIcon)) ? properties.getProperty(NAME_defaultDimensionIcon) : defaultDimensionIcon;
@@ -307,6 +322,7 @@ public class ConfigUtils {
         properties.setProperty(NAME_defaultIcon, defaultIcon);
         properties.setProperty(NAME_enableJoinRequest, Boolean.toString(enableJoinRequest));
         // BIOME MESSAGES
+        properties.setProperty(NAME_defaultBiomeIcon, defaultBiomeIcon);
         properties.setProperty(NAME_biomeMessages, Arrays.toString(biomeMessages));
         // DIMENSION MESSAGES
         properties.setProperty(NAME_defaultDimensionIcon, defaultDimensionIcon);
@@ -344,17 +360,7 @@ public class ConfigUtils {
         properties.setProperty(NAME_showLoggingInChat, Boolean.toString(showLoggingInChat));
         properties.setProperty(NAME_configKeycode, configKeyCode);
 
-        // Check for Conflicts before Saving
-        if (showCurrentBiome && showGameState) {
-            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.config.conflict.biomestate"));
-            showCurrentBiome = false;
-            properties.setProperty(NAME_showCurrentBiome, "false");
-        }
-        if (enablePERGUI && showGameState) {
-            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.config.conflict.pergui"));
-            enablePERGUI = false;
-            properties.setProperty(NAME_enablePERGUI, "false");
-        }
+        //
 
         save();
     }

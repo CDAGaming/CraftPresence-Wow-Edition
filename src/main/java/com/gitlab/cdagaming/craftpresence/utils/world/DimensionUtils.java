@@ -3,7 +3,6 @@ package com.gitlab.cdagaming.craftpresence.utils.world;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.google.common.collect.Lists;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -15,13 +14,11 @@ import java.util.Map;
 public class DimensionUtils {
     public boolean isInUse = false, enabled = false;
 
-    public String CURRENT_DIMENSION_NAME, CURRENT_DIMENSION_NAME_ID;
+    private String CURRENT_DIMENSION_NAME, CURRENT_DIMENSION_NAME_ID;
     public List<String> DIMENSION_NAMES = Lists.newArrayList();
     private List<Integer> DIMENSION_IDS = Lists.newArrayList();
     private List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
     private Integer CURRENT_DIMENSION_ID;
-
-    private boolean queuedForUpdate = false;
 
     private void emptyData() {
         DIMENSION_NAMES.clear();
@@ -34,7 +31,6 @@ public class DimensionUtils {
         CURRENT_DIMENSION_NAME = null;
         CURRENT_DIMENSION_ID = null;
 
-        queuedForUpdate = false;
         isInUse = false;
     }
 
@@ -75,7 +71,6 @@ public class DimensionUtils {
             CURRENT_DIMENSION_NAME = !StringUtils.isNullOrEmpty(newDimensionName) ? newDimensionName : newDimension_nameID;
             CURRENT_DIMENSION_NAME_ID = newDimension_nameID;
             CURRENT_DIMENSION_ID = newDimensionID;
-            queuedForUpdate = true;
 
             if (!DIMENSION_NAMES.contains(newDimension_nameID)) {
                 DIMENSION_NAMES.add(newDimension_nameID);
@@ -86,9 +81,7 @@ public class DimensionUtils {
             if (!DIMENSION_IDS.contains(newDimensionID)) {
                 DIMENSION_IDS.add(newDimensionID);
             }
-        }
 
-        if (queuedForUpdate) {
             updateDimensionPresence();
         }
     }
@@ -99,15 +92,11 @@ public class DimensionUtils {
         final String currentDimensionIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME_ID);
         final String formattedIconKey = StringUtils.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
-        CraftPresence.CLIENT.setImage(formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon), DiscordAsset.AssetType.LARGE);
+        final String CURRENT_DIMENSION_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon);
+        final String CURRENT_DIMENSION_MESSAGE = StringUtils.formatWord(currentDimensionMSG.replace("&dimension&", StringUtils.formatWord(CURRENT_DIMENSION_NAME)).replace("&id&", CURRENT_DIMENSION_ID.toString()));
 
-        CraftPresence.CLIENT.DETAILS = StringUtils.formatWord(currentDimensionMSG.replace("&dimension&", StringUtils.formatWord(CURRENT_DIMENSION_NAME)).replace("&id&", CURRENT_DIMENSION_ID.toString()));
-        if (!CraftPresence.ENTITIES.isInUse || CraftPresence.ENTITIES.allItemsEmpty) {
-            CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
-            queuedForUpdate = false;
-        } else {
-            queuedForUpdate = true;
-        }
+        CraftPresence.CLIENT.syncPlaceholder("&DIMENSION&", CURRENT_DIMENSION_MESSAGE, false);
+        CraftPresence.CLIENT.syncPlaceholder("&DIMENSION&", CURRENT_DIMENSION_ICON, true);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
