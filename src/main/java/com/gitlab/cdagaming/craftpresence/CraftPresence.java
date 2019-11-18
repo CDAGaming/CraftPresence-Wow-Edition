@@ -109,8 +109,13 @@ public class CraftPresence {
             }
 
             if (!CONFIG.hasChanged) {
-                if ((!CommandUtils.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandUtils.setMainMenuPresence();
+                } else if (CommandUtils.isInMainMenu && player != null) {
+                    CommandUtils.isInMainMenu = false;
+
+                    CLIENT.initArgumentData("&MAINMENU&");
+                    CLIENT.initIconData("&MAINMENU&");
                 }
 
                 if (awaitingReply && SYSTEM.TIMER == 0) {

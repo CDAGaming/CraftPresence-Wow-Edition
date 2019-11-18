@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.config;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Maps;
 import org.lwjgl.input.Keyboard;
@@ -36,7 +37,7 @@ public class ConfigUtils {
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeycode;
     // DISPLAY MESSAGES
-    public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG;
+    public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
 
     // Config Variables
     // GENERAL
@@ -64,7 +65,7 @@ public class ConfigUtils {
     public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
     public boolean stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
-    public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG;
+    public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG, largeImageKey, smallImageKey;
 
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
@@ -179,10 +180,14 @@ public class ConfigUtils {
         NAME_detailsMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.detailsmsg");
         NAME_largeImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.largeimagemsg");
         NAME_smallImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.smallimagemsg");
-        gameStateMSG = "&SERVER&";
-        detailsMSG = "&DIMENSION&";
-        largeImageMSG = "&DIMENSION&";
+        NAME_largeImageKey = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.largeimagekey");
+        NAME_smallImageKey = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.smallimagekey");
+        gameStateMSG = "&SERVER& &PACK&";
+        detailsMSG = "&MAINMENU&&DIMENSION&";
+        largeImageMSG = "&MAINMENU&&DIMENSION&";
         smallImageMSG = "&SERVER&";
+        largeImageKey = "&MAINMENU&&DIMENSION&";
+        smallImageKey = "&SERVER&&PACK&";
 
         for (Field field : getClass().getDeclaredFields()) {
             if (field.getName().contains("NAME_")) {
@@ -282,10 +287,12 @@ public class ConfigUtils {
                 showLoggingInChat = StringUtils.isValidBoolean(properties.getProperty(NAME_showLoggingInChat)) ? Boolean.parseBoolean(properties.getProperty(NAME_showLoggingInChat)) : showLoggingInChat;
                 configKeyCode = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_configKeycode)) ? properties.getProperty(NAME_configKeycode) : configKeyCode;
                 // DISPLAY MESSAGES
-                gameStateMSG = "&SERVER&";
-                detailsMSG = "&DIMENSION&";
-                largeImageMSG = "&DIMENSION&";
-                smallImageMSG = "&SERVER&";
+                gameStateMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_gameStateMSG)) ? properties.getProperty(NAME_gameStateMSG) : gameStateMSG;
+                detailsMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_detailsMSG)) ? properties.getProperty(NAME_detailsMSG) : detailsMSG;
+                largeImageMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_largeImageMSG)) ? properties.getProperty(NAME_largeImageMSG) : largeImageMSG;
+                smallImageMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_smallImageMSG)) ? properties.getProperty(NAME_smallImageMSG) : smallImageMSG;
+                largeImageKey = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_largeImageKey)) ? properties.getProperty(NAME_largeImageKey) : largeImageKey;
+                smallImageKey = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_smallImageKey)) ? properties.getProperty(NAME_smallImageKey) : smallImageKey;
             } catch (NullPointerException ex) {
                 verifyConfig();
             } finally {
@@ -371,6 +378,8 @@ public class ConfigUtils {
         properties.setProperty(NAME_detailsMSG, detailsMSG);
         properties.setProperty(NAME_largeImageMSG, largeImageMSG);
         properties.setProperty(NAME_smallImageMSG, smallImageMSG);
+        properties.setProperty(NAME_largeImageKey, largeImageKey);
+        properties.setProperty(NAME_smallImageKey, smallImageKey);
 
         save();
     }
@@ -434,14 +443,7 @@ public class ConfigUtils {
                     queuedSplitCharacter = ";";
                 }
                 if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringUtils.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.SYSTEM.TIMER != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
-                    CraftPresence.awaitingReply = false;
-                    CraftPresence.CLIENT.REQUESTER_USER = null;
-                    CraftPresence.CLIENT.JOIN_SECRET = null;
-                    CraftPresence.CLIENT.PARTY_ID = null;
-                    CraftPresence.CLIENT.PARTY_SIZE = 0;
-                    CraftPresence.CLIENT.PARTY_MAX = 0;
-                    CraftPresence.SYSTEM.TIMER = 0;
-                    CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+                    CommandUtils.clearPartyData(true, true);
                 }
 
                 if (property.equals(NAME_biomeMessages) && biomeMessages != null) {

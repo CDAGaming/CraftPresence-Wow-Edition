@@ -3,13 +3,14 @@ package com.gitlab.cdagaming.craftpresence.utils;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.curse.CurseUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.utils.multimc.MultiMCUtils;
 import com.gitlab.cdagaming.craftpresence.utils.technic.TechnicUtils;
 
 public class CommandUtils {
+    public static boolean isInMainMenu = false;
+
     public static void reloadData(final boolean forceUpdateRPC) {
         ModUtils.TRANSLATOR.tick();
         CraftPresence.SYSTEM.tick();
@@ -69,37 +70,27 @@ public class CommandUtils {
 
     public static void setMainMenuPresence() {
         CraftPresence.CLIENT.STATUS = "ready";
-        CraftPresence.CLIENT.SMALLIMAGEKEY = "";
-        CraftPresence.CLIENT.SMALLIMAGETEXT = "";
-        CraftPresence.CLIENT.GAME_STATE = !CraftPresence.GUIS.isInUse ? "" : CraftPresence.CLIENT.GAME_STATE;
-        CraftPresence.CLIENT.PARTY_ID = "";
-        CraftPresence.CLIENT.PARTY_SIZE = 0;
-        CraftPresence.CLIENT.PARTY_MAX = 0;
-        CraftPresence.CLIENT.JOIN_SECRET = "";
-        CraftPresence.CLIENT.DETAILS = CraftPresence.SERVER.enabled && !CraftPresence.GUIS.isInUse ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount()))) : "";
-        CraftPresence.CLIENT.setImage(CraftPresence.CONFIG.defaultIcon, DiscordAsset.AssetType.LARGE);
-        CraftPresence.CLIENT.LARGEIMAGETEXT = ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion);
+        clearPartyData(false, false);
+
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount()))), false);
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CONFIG.defaultIcon, true);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+
+        isInMainMenu = true;
     }
 
-    public static boolean isOnMainMenuPresence() {
-        return !CraftPresence.CONFIG.hasChanged &&
-                StringUtils.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGEKEY) &&
-                StringUtils.isNullOrEmpty(CraftPresence.CLIENT.SMALLIMAGETEXT) &&
-                (CraftPresence.GUIS.isInUse || StringUtils.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE)) &&
-                StringUtils.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) &&
-                CraftPresence.CLIENT.PARTY_SIZE == 0 &&
-                CraftPresence.CLIENT.PARTY_MAX == 0 &&
-                StringUtils.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) &&
-                (StringUtils.isNullOrEmpty(CraftPresence.CLIENT.DETAILS) ||
-                        CraftPresence.CLIENT.DETAILS.equals(CraftPresence.SERVER.enabled && !CraftPresence.GUIS.enabled ? CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount()))) : "")
-                ) &&
-                (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGEKEY) &&
-                        CraftPresence.CLIENT.LARGEIMAGEKEY.equals(CraftPresence.CONFIG.defaultIcon)
-                ) &&
-                (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.LARGEIMAGETEXT) &&
-                        CraftPresence.CLIENT.LARGEIMAGETEXT.equals(ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion))
-                ) &&
-                (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"));
+    public static void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
+        if (clearRequesterData) {
+            CraftPresence.awaitingReply = false;
+            CraftPresence.CLIENT.REQUESTER_USER = null;
+            CraftPresence.SYSTEM.TIMER = 0;
+        }
+        CraftPresence.CLIENT.JOIN_SECRET = null;
+        CraftPresence.CLIENT.PARTY_ID = null;
+        CraftPresence.CLIENT.PARTY_SIZE = 0;
+        CraftPresence.CLIENT.PARTY_MAX = 0;
+        if (updateRPC) {
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        }
     }
 }

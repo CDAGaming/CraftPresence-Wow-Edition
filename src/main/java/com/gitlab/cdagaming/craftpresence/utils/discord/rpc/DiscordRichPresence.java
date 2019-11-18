@@ -3,7 +3,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord.rpc;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.sun.jna.Structure;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -145,20 +145,20 @@ public class DiscordRichPresence extends Structure {
     public byte instance;
 
     public DiscordRichPresence(final String state, final String details, final long startTimestamp, final long endTimestamp, final String largeImageKey, final String largeImageText, final String smallImageKey, final String smallImageText, final String partyId, final int partySize, final int partyMax, final String matchSecret, final String joinSecret, final String spectateSecret, final byte instance) {
-        this.state = !StringUtils.isNullOrEmpty(state) ? new String(state.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : state;
-        this.details = !StringUtils.isNullOrEmpty(details) ? new String(details.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : details;
+        this.state = !StringUtils.isNullOrEmpty(state) ? new String(state.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : state;
+        this.details = !StringUtils.isNullOrEmpty(details) ? new String(details.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : details;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
-        this.largeImageKey = !StringUtils.isNullOrEmpty(largeImageKey) ? new String(largeImageKey.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : largeImageKey;
-        this.largeImageText = !StringUtils.isNullOrEmpty(largeImageText) ? new String(largeImageText.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : largeImageText;
-        this.smallImageKey = !StringUtils.isNullOrEmpty(smallImageKey) ? new String(smallImageKey.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : smallImageKey;
-        this.smallImageText = !StringUtils.isNullOrEmpty(smallImageText) ? new String(smallImageText.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : smallImageText;
-        this.partyId = !StringUtils.isNullOrEmpty(partyId) ? new String(partyId.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : partyId;
+        this.largeImageKey = !StringUtils.isNullOrEmpty(largeImageKey) ? new String(largeImageKey.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : largeImageKey;
+        this.largeImageText = !StringUtils.isNullOrEmpty(largeImageText) ? new String(largeImageText.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : largeImageText;
+        this.smallImageKey = !StringUtils.isNullOrEmpty(smallImageKey) ? new String(smallImageKey.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : smallImageKey;
+        this.smallImageText = !StringUtils.isNullOrEmpty(smallImageText) ? new String(smallImageText.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : smallImageText;
+        this.partyId = !StringUtils.isNullOrEmpty(partyId) ? new String(partyId.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : partyId;
         this.partySize = partySize;
         this.partyMax = partyMax;
-        this.matchSecret = !StringUtils.isNullOrEmpty(matchSecret) ? new String(matchSecret.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : matchSecret;
-        this.joinSecret = !StringUtils.isNullOrEmpty(joinSecret) ? new String(joinSecret.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : joinSecret;
-        this.spectateSecret = !StringUtils.isNullOrEmpty(spectateSecret) ? new String(spectateSecret.getBytes(Charset.forName("UTF-8"))).replaceAll("\\s+", " ") : spectateSecret;
+        this.matchSecret = !StringUtils.isNullOrEmpty(matchSecret) ? new String(matchSecret.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : matchSecret;
+        this.joinSecret = !StringUtils.isNullOrEmpty(joinSecret) ? new String(joinSecret.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : joinSecret;
+        this.spectateSecret = !StringUtils.isNullOrEmpty(spectateSecret) ? new String(spectateSecret.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ") : spectateSecret;
         this.instance = instance;
     }
 

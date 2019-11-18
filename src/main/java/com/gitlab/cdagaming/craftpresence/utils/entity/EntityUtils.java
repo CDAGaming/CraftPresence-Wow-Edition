@@ -2,7 +2,6 @@ package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +22,7 @@ public class EntityUtils {
     private List<String> ITEM_CLASSES = Lists.newArrayList();
     private List<String> ENTITY_CLASSES = Lists.newArrayList();
 
-    private Item EMPTY_ITEM = (Item) null;
+    private Item EMPTY_ITEM = null;
     private ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
     private ItemStack CURRENT_MAINHAND_ITEM;
     private ItemStack CURRENT_OFFHAND_ITEM;
