@@ -31,8 +31,6 @@ public class GuiUtils {
     private GuiScreen CURRENT_SCREEN;
     private List<Class> GUI_CLASSES = Lists.newArrayList();
 
-    private boolean queuedForUpdate = false;
-
     private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, double zLevel) {
         final float uScale = 1f / 0x100;
         final float vScale = 1f / 0x100;
@@ -70,8 +68,10 @@ public class GuiUtils {
         CURRENT_SCREEN = null;
         CURRENT_GUI_CLASS = null;
 
-        queuedForUpdate = false;
         isInUse = false;
+        CraftPresence.CLIENT.initArgumentData("&GUI&");
+        CraftPresence.CLIENT.initIconData("&GUI&");
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -118,7 +118,6 @@ public class GuiUtils {
                     CURRENT_SCREEN = newScreen;
                     CURRENT_GUI_CLASS = newScreenClass;
                     CURRENT_GUI_NAME = newScreenName;
-                    queuedForUpdate = true;
 
                     if (!GUI_NAMES.contains(newScreenName)) {
                         GUI_NAMES.add(newScreenName);
@@ -127,12 +126,10 @@ public class GuiUtils {
                     if (!GUI_CLASSES.contains(newScreenClass)) {
                         GUI_CLASSES.add(newScreenClass);
                     }
+
+                    updateGUIPresence();
                 }
             }
-        }
-
-        if (queuedForUpdate) {
-            updateGUIPresence();
         }
     }
 
@@ -161,13 +158,24 @@ public class GuiUtils {
     }
 
     public void updateGUIPresence() {
+        // Form GUI Argument List
+        List<Tuple<String, String>> guiArgs = Lists.newArrayList();
+
+        guiArgs.add(new Tuple<>("&GUI&", CURRENT_GUI_NAME));
+        guiArgs.add(new Tuple<>("&CLASS&", CURRENT_GUI_CLASS.getSimpleName()));
+        guiArgs.add(new Tuple<>("&SCREEN&", CURRENT_SCREEN.toString()));
+
         final String defaultGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
+        final String currentGuiIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_GUI_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_GUI_NAME);
+        final String formattedIconKey = StringUtils.formatPackIcon(currentGuiIcon.replace(" ", "_"));
 
-        // NOTE: Overrides Biomes
-        CraftPresence.CLIENT.GAME_STATE = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
+        final String CURRENT_GUI_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultBiomeIcon); // TODO: ???
+        final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGUIMSG, guiArgs);
+
+        CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_MESSAGE, false);
+        CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_ICON, true);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-        queuedForUpdate = false;
     }
 
     public void drawMultiLineString(final List<String> textToInput, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {

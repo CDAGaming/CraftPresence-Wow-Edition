@@ -281,6 +281,11 @@ public class ConfigUtils {
                 stripTranslationColors = StringUtils.isValidBoolean(properties.getProperty(NAME_stripTranslationColors)) ? Boolean.parseBoolean(properties.getProperty(NAME_stripTranslationColors)) : stripTranslationColors;
                 showLoggingInChat = StringUtils.isValidBoolean(properties.getProperty(NAME_showLoggingInChat)) ? Boolean.parseBoolean(properties.getProperty(NAME_showLoggingInChat)) : showLoggingInChat;
                 configKeyCode = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_configKeycode)) ? properties.getProperty(NAME_configKeycode) : configKeyCode;
+                // DISPLAY MESSAGES
+                gameStateMSG = "&SERVER&";
+                detailsMSG = "&DIMENSION&";
+                largeImageMSG = "&DIMENSION&";
+                smallImageMSG = "&SERVER&";
             } catch (NullPointerException ex) {
                 verifyConfig();
             } finally {
@@ -361,8 +366,11 @@ public class ConfigUtils {
         properties.setProperty(NAME_stripTranslationColors, Boolean.toString(stripTranslationColors));
         properties.setProperty(NAME_showLoggingInChat, Boolean.toString(showLoggingInChat));
         properties.setProperty(NAME_configKeycode, configKeyCode);
-
-        //
+        // DISPLAY MESSAGES
+        properties.setProperty(NAME_gameStateMSG, gameStateMSG);
+        properties.setProperty(NAME_detailsMSG, detailsMSG);
+        properties.setProperty(NAME_largeImageMSG, largeImageMSG);
+        properties.setProperty(NAME_smallImageMSG, smallImageMSG);
 
         save();
     }

@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.utils.world;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
@@ -90,13 +91,19 @@ public class DimensionUtils {
     }
 
     public void updateDimensionPresence() {
+        // Form Dimension Argument List
+        List<Tuple<String, String>> dimensionArgs = Lists.newArrayList();
+
+        dimensionArgs.add(new Tuple<>("&DIMENSION&", CURRENT_DIMENSION_NAME));
+        dimensionArgs.add(new Tuple<>("&ID&", CURRENT_DIMENSION_ID.toString()));
+
         final String defaultDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
         final String currentDimensionIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME_ID);
         final String formattedIconKey = StringUtils.formatPackIcon(currentDimensionIcon.replace(" ", "_"));
 
         final String CURRENT_DIMENSION_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon);
-        final String CURRENT_DIMENSION_MESSAGE = StringUtils.formatWord(currentDimensionMSG.replace("&dimension&", StringUtils.formatWord(CURRENT_DIMENSION_NAME)).replace("&id&", CURRENT_DIMENSION_ID.toString()));
+        final String CURRENT_DIMENSION_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentDimensionMSG, dimensionArgs);
 
         CraftPresence.CLIENT.syncArgument("&DIMENSION&", CURRENT_DIMENSION_MESSAGE, false);
         CraftPresence.CLIENT.syncArgument("&DIMENSION&", CURRENT_DIMENSION_ICON, true);

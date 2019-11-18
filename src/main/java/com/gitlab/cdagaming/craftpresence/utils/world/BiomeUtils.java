@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.utils.world;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.world.biome.Biome;
 
@@ -80,13 +81,19 @@ public class BiomeUtils {
     }
 
     public void updateBiomePresence() {
+        // Form Biome Argument List
+        List<Tuple<String, String>> biomeArgs = Lists.newArrayList();
+
+        biomeArgs.add(new Tuple<>("&BIOME&", CURRENT_BIOME_NAME));
+        biomeArgs.add(new Tuple<>("&ID&", CURRENT_BIOME_ID.toString()));
+
         final String defaultBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMSG);
         final String currentBiomeIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_BIOME_NAME);
         final String formattedIconKey = StringUtils.formatPackIcon(currentBiomeIcon.replace(" ", "_"));
 
-        final String CURRENT_BIOME_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultDimensionIcon);
-        final String CURRENT_BIOME_MESSAGE = StringUtils.formatWord(currentBiomeMSG.replace("&biome&", CURRENT_BIOME_NAME).replace("&id&", CURRENT_BIOME_ID.toString()));
+        final String CURRENT_BIOME_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultBiomeIcon);
+        final String CURRENT_BIOME_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentBiomeMSG, biomeArgs);
 
         CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_MESSAGE, false);
         CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_ICON, true);

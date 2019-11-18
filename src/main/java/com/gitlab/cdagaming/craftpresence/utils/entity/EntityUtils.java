@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -38,8 +39,6 @@ public class EntityUtils {
     private String CURRENT_LEGS_NAME;
     private String CURRENT_BOOTS_NAME;
 
-    private boolean queuedForUpdate = false;
-
     private void emptyData() {
         BLOCK_NAMES.clear();
         BLOCK_CLASSES.clear();
@@ -65,7 +64,6 @@ public class EntityUtils {
         CURRENT_LEGS_NAME = null;
         CURRENT_BOOTS_NAME = null;
 
-        queuedForUpdate = false;
         allItemsEmpty = true;
         isInUse = false;
     }
@@ -159,15 +157,16 @@ public class EntityUtils {
             CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
 
             allItemsEmpty = isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS);
-            queuedForUpdate = true;
-        }
-
-        if (queuedForUpdate) {
             updateEntityPresence();
         }
     }
 
     public void updateEntityPresence() {
+        // Form Entity Argument List - TODO
+        /*List<Tuple<String, String>> entityArgs = Lists.newArrayList();
+
+        //entityArgs.add(new Tuple<>("&MAIN&"))
+
         final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         final String offHandItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_OFFHAND_ITEM_NAME);
@@ -199,8 +198,7 @@ public class EntityUtils {
         } else if (CraftPresence.DIMENSIONS.isInUse) {
             CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
         }
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-        queuedForUpdate = false;
+        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());*/
     }
 
     public void getEntities() {

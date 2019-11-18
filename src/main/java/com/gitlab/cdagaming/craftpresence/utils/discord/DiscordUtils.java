@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
@@ -194,8 +195,10 @@ public class DiscordUtils {
     public void updatePresence(final DiscordRichPresence presence) {
         if (presence != null) {
             // Format Presence based on Arguments available in argumentData
-            presence.details = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData);
-            presence.state = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData);
+            if (!CommandUtils.isOnMainMenuPresence() || CraftPresence.player != null) {
+                presence.details = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData);
+                presence.state = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData);
+            }
 
             DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
         }

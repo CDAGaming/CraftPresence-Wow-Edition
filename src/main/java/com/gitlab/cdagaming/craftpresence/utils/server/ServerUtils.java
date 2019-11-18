@@ -226,7 +226,7 @@ public class ServerUtils {
         playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
         // Game Time Arguments
-        gameTimeArgs.add(new Tuple<>("&WORLDTIME&", timeString));
+        gameTimeArgs.add(new Tuple<>("&WORLDTIME&", !StringUtils.isNullOrEmpty(timeString) ? timeString : ""));
 
         // Mods Arguments
         modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
@@ -299,8 +299,7 @@ public class ServerUtils {
             currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, soloArgs), false);
-            CraftPresence.CLIENT.initArgumentData("&SERVER&");
-            CraftPresence.CLIENT.initIconData("&SERVER&");
+            CraftPresence.CLIENT.initIconData("&SERVER&"); // TODO: ???
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         }
