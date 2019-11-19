@@ -270,9 +270,9 @@ public class ConfigUtils {
                         // *This will likely only work for strings or simplistic conversions*
                         fieldObject = expectedClass.cast(foundProperty);
 
-                        // If null or toString is null, throw NPE to reset value to Prior/Default Value
+                        // If null or toString is null, throw Exception to reset value to Prior/Default Value
                         if (fieldObject == null || StringUtils.isNullOrEmpty(fieldObject.toString())) {
-                            throw new NullPointerException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", configDataMappings.get(currentIndex).getFirst()));
+                            throw new IllegalArgumentException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", configDataMappings.get(currentIndex).getFirst()));
                         }
                     } catch (Exception ex) {
                         // Case 2: Manually Convert Variable based on Expected Type
