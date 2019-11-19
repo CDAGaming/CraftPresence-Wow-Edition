@@ -2,16 +2,16 @@ package com.gitlab.cdagaming.craftpresence.config;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.google.common.collect.Maps;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
+import com.google.common.collect.Lists;
 import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 import java.util.Properties;
 
 public class ConfigUtils {
@@ -35,7 +35,7 @@ public class ConfigUtils {
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon, NAME_renderTooltips,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeycode;
+    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
     public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
 
@@ -72,10 +72,17 @@ public class ConfigUtils {
     public String queuedSplitCharacter;
     public File configFile, parentDir;
     public Properties properties = new Properties();
+
     // CLASS-SPECIFIC - PRIVATE
-    private Map<String, String> configPropertyMappings = Maps.newHashMap();
+
+    // Mappings:
+    // Config Data = Tuple<propertyValue, value>
+    // Config Property = Tuple<propertyFieldName, valueFieldName>
+    private List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
+    private List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
+
     private String fileName;
-    private boolean verified = false, initialized = false, isConfigNew = false;
+    private boolean initialized = false, isConfigNew = false;
 
     public ConfigUtils(String fileName) {
         this.fileName = fileName;
@@ -108,7 +115,7 @@ public class ConfigUtils {
         // BIOME MESSAGES
         NAME_defaultBiomeIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biomemessages.biomeicon").replaceAll(" ", "_");
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
-        defaultBiomeIcon = "plains"; // TODO: ???
+        defaultBiomeIcon = "plains";
         biomeMessages = new String[]{"default;Playing in &biome&"};
         // DIMENSION MESSAGES
         NAME_defaultDimensionIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimensionmessages.dimensionicon").replaceAll(" ", "_");
@@ -167,7 +174,7 @@ public class ConfigUtils {
         NAME_languageID = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.languageid").replaceAll(" ", "_");
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.striptranslationcolors").replaceAll(" ", "_");
         NAME_showLoggingInChat = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.showlogginginchat").replaceAll(" ", "_");
-        NAME_configKeycode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keybind").replaceAll(" ", "_");
+        NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keybind").replaceAll(" ", "_");
         tooltipBGColor = "-267386864";
         tooltipBorderColor = "1347420415";
         guiBGColor = "minecraft" + splitCharacter + "textures/gui/options_background.png";
@@ -189,18 +196,31 @@ public class ConfigUtils {
         largeImageKey = "&MAINMENU&&DIMENSION&";
         smallImageKey = "&SERVER&&PACK&";
 
+        syncMappings();
+        initialized = true;
+    }
+
+    private void syncMappings() {
+        // Ensure Data is Cleared
+        configDataMappings.clear();
+        configPropertyMappings.clear();
+
+        // Add Data to Mappings
         for (Field field : getClass().getDeclaredFields()) {
-            if (field.getName().contains("NAME_")) {
+            if (field.getName().startsWith("NAME_")) {
                 try {
+                    Field valueField = getClass().getField(field.getName().replaceFirst("NAME_", ""));
+
                     field.setAccessible(true);
-                    configPropertyMappings.put(field.getName(), field.get(this).toString());
+                    valueField.setAccessible(true);
+
+                    configDataMappings.add(new Tuple<>(field.get(this).toString(), valueField.get(this)));
+                    configPropertyMappings.add(new Tuple<>(field.getName(), valueField.getName()));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
         }
-
-        initialized = true;
     }
 
     public void initialize() {
@@ -225,7 +245,6 @@ public class ConfigUtils {
     public void read(final boolean skipLogging) {
         Reader configReader = null;
         FileInputStream inputStream = null;
-        verified = false;
 
         try {
             inputStream = new FileInputStream(configFile);
@@ -235,77 +254,64 @@ public class ConfigUtils {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.save"));
             ex.printStackTrace();
         } finally {
-            try {
-                // GENERAL
-                detectCurseManifest = StringUtils.isValidBoolean(properties.getProperty(NAME_detectCurseManifest)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectCurseManifest)) : detectCurseManifest;
-                detectMultiMCManifest = StringUtils.isValidBoolean(properties.getProperty(NAME_detectMultiMCManifest)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectMultiMCManifest)) : detectMultiMCManifest;
-                detectMCUpdaterInstance = StringUtils.isValidBoolean(properties.getProperty(NAME_detectMCUpdaterInstance)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectMCUpdaterInstance)) : detectMCUpdaterInstance;
-                detectTechnicPack = StringUtils.isValidBoolean(properties.getProperty(NAME_detectTechnicPack)) ? Boolean.parseBoolean(properties.getProperty(NAME_detectTechnicPack)) : detectTechnicPack;
-                showTime = StringUtils.isValidBoolean(properties.getProperty(NAME_showTime)) ? Boolean.parseBoolean(properties.getProperty(NAME_showTime)) : showTime;
-                showCurrentBiome = StringUtils.isValidBoolean(properties.getProperty(NAME_showCurrentBiome)) ? Boolean.parseBoolean(properties.getProperty(NAME_showCurrentBiome)) : showCurrentBiome;
-                showCurrentDimension = StringUtils.isValidBoolean(properties.getProperty(NAME_showCurrentDimension)) ? Boolean.parseBoolean(properties.getProperty(NAME_showCurrentDimension)) : showCurrentDimension;
-                showGameState = StringUtils.isValidBoolean(properties.getProperty(NAME_showGameState)) ? Boolean.parseBoolean(properties.getProperty(NAME_showGameState)) : showGameState;
-                clientID = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_clientID)) ? properties.getProperty(NAME_clientID) : clientID;
-                defaultIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultIcon)) ? properties.getProperty(NAME_defaultIcon) : defaultIcon;
-                enableJoinRequest = StringUtils.isValidBoolean(properties.getProperty(NAME_enableJoinRequest)) ? Boolean.parseBoolean(properties.getProperty(NAME_enableJoinRequest)) : enableJoinRequest;
-                // BIOME MESSAGES
-                defaultBiomeIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultBiomeIcon)) ? properties.getProperty(NAME_defaultBiomeIcon) : defaultBiomeIcon;
-                biomeMessages = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_biomeMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : biomeMessages;
-                // DIMENSION MESSAGES
-                defaultDimensionIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultDimensionIcon)) ? properties.getProperty(NAME_defaultDimensionIcon) : defaultDimensionIcon;
-                dimensionMessages = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_dimensionMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : dimensionMessages;
-                // SERVER MESSAGES
-                defaultServerIcon = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultServerIcon)) ? properties.getProperty(NAME_defaultServerIcon) : defaultServerIcon;
-                defaultServerName = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultServerName)) ? properties.getProperty(NAME_defaultServerName) : defaultServerName;
-                defaultServerMOTD = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_defaultServerMOTD)) ? properties.getProperty(NAME_defaultServerMOTD) : defaultServerMOTD;
-                serverMessages = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_serverMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : serverMessages;
-                // STATUS MESSAGES
-                mainmenuMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_mainmenuMSG)) ? properties.getProperty(NAME_mainmenuMSG) : mainmenuMSG;
-                lanMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_lanMSG)) ? properties.getProperty(NAME_lanMSG) : lanMSG;
-                singleplayerMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_singleplayerMSG)) ? properties.getProperty(NAME_singleplayerMSG) : singleplayerMSG;
-                packPlaceholderMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_packPlaceholderMSG)) ? properties.getProperty(NAME_packPlaceholderMSG) : packPlaceholderMSG;
-                playerPlaceholderMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_playerPlaceholderMSG)) ? properties.getProperty(NAME_playerPlaceholderMSG) : playerPlaceholderMSG;
-                playerAmountPlaceholderMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_playerAmountPlaceholderMSG)) ? properties.getProperty(NAME_playerAmountPlaceholderMSG) : playerAmountPlaceholderMSG;
-                gameTimePlaceholderMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_gameTimePlaceholderMSG)) ? properties.getProperty(NAME_gameTimePlaceholderMSG) : gameTimePlaceholderMSG;
-                modsPlaceholderMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_modsPlaceholderMSG)) ? properties.getProperty(NAME_modsPlaceholderMSG) : modsPlaceholderMSG;
-                vivecraftMessage = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_vivecraftMessage)) ? properties.getProperty(NAME_vivecraftMessage) : vivecraftMessage;
-                // ADVANCED
-                enableCommands = StringUtils.isValidBoolean(properties.getProperty(NAME_enableCommands)) ? Boolean.parseBoolean(properties.getProperty(NAME_enableCommands)) : enableCommands;
-                enablePERGUI = StringUtils.isValidBoolean(properties.getProperty(NAME_enablePERGUI)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERGUI)) : enablePERGUI;
-                enablePERItem = StringUtils.isValidBoolean(properties.getProperty(NAME_enablePERItem)) ? Boolean.parseBoolean(properties.getProperty(NAME_enablePERItem)) : enablePERItem;
-                overwriteServerIcon = StringUtils.isValidBoolean(properties.getProperty(NAME_overwriteServerIcon)) ? Boolean.parseBoolean(properties.getProperty(NAME_overwriteServerIcon)) : overwriteServerIcon;
-                renderTooltips = StringUtils.isValidBoolean(properties.getProperty(NAME_renderTooltips)) ? Boolean.parseBoolean(properties.getProperty(NAME_renderTooltips)) : renderTooltips;
-                splitCharacter = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_splitCharacter)) ? properties.getProperty(NAME_splitCharacter) : splitCharacter;
-                guiMessages = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_guiMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : guiMessages;
-                itemMessages = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "")) ? properties.getProperty(NAME_itemMessages).replaceAll("\\[", "").replaceAll("]", "").split(", ") : itemMessages;
-                // ACCESSIBILITY
-                tooltipBGColor = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_tooltipBGColor)) ? properties.getProperty(NAME_tooltipBGColor) : tooltipBGColor;
-                tooltipBorderColor = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_tooltipBorderColor)) ? properties.getProperty(NAME_tooltipBorderColor) : tooltipBorderColor;
-                guiBGColor = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_guiBGColor)) ? properties.getProperty(NAME_guiBGColor) : guiBGColor;
-                languageID = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_languageID)) ? properties.getProperty(NAME_languageID) : languageID;
-                stripTranslationColors = StringUtils.isValidBoolean(properties.getProperty(NAME_stripTranslationColors)) ? Boolean.parseBoolean(properties.getProperty(NAME_stripTranslationColors)) : stripTranslationColors;
-                showLoggingInChat = StringUtils.isValidBoolean(properties.getProperty(NAME_showLoggingInChat)) ? Boolean.parseBoolean(properties.getProperty(NAME_showLoggingInChat)) : showLoggingInChat;
-                configKeyCode = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_configKeycode)) ? properties.getProperty(NAME_configKeycode) : configKeyCode;
-                // DISPLAY MESSAGES
-                gameStateMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_gameStateMSG)) ? properties.getProperty(NAME_gameStateMSG) : gameStateMSG;
-                detailsMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_detailsMSG)) ? properties.getProperty(NAME_detailsMSG) : detailsMSG;
-                largeImageMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_largeImageMSG)) ? properties.getProperty(NAME_largeImageMSG) : largeImageMSG;
-                smallImageMSG = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_smallImageMSG)) ? properties.getProperty(NAME_smallImageMSG) : smallImageMSG;
-                largeImageKey = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_largeImageKey)) ? properties.getProperty(NAME_largeImageKey) : largeImageKey;
-                smallImageKey = !StringUtils.isNullOrEmpty(properties.getProperty(NAME_smallImageKey)) ? properties.getProperty(NAME_smallImageKey) : smallImageKey;
-            } catch (NullPointerException ex) {
-                verifyConfig();
-            } finally {
-                if (!verified) {
-                    verifyConfig();
-                }
-                if (!skipLogging) {
-                    if (isConfigNew) {
-                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.config.new"));
-                    } else {
-                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.config.save"));
+            int currentIndex = 0;
+            List<String> propertyList = Lists.newArrayList(properties.stringPropertyNames());
+
+            for (Tuple<String, String> configProperty : configPropertyMappings) {
+                Object fieldObject = null, foundProperty;
+                Class<?> expectedClass = configDataMappings.get(currentIndex).getSecond().getClass();
+
+                if (propertyList.contains(configDataMappings.get(currentIndex).getFirst())) {
+                    propertyList.remove(configDataMappings.get(currentIndex).getFirst());
+                    foundProperty = properties.get(configDataMappings.get(currentIndex).getFirst());
+
+                    try {
+                        // Case 1: Attempt to Automatically Cast to Expected Variable
+                        fieldObject = expectedClass.cast(foundProperty);
+                    } catch (Exception ex) {
+                        // Case 2: Manually Convert Variable based on Expected Type
+                        if ((expectedClass == boolean.class || expectedClass == Boolean.class) &&
+                                StringUtils.isValidBoolean(foundProperty.toString())) {
+                            // Convert to Boolean if Valid
+                            fieldObject = Boolean.parseBoolean(foundProperty.toString());
+                        } else if ((expectedClass == int.class || expectedClass == Integer.class) &&
+                                StringUtils.getValidInteger(foundProperty.toString()).getFirst()) {
+                            // Convert to Integer if Valid
+                            fieldObject = StringUtils.getValidInteger(foundProperty.toString()).getSecond();
+                        } else if (expectedClass == String[].class) {
+                            // Convert to String Array (After Verifying it is a single Array)
+                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("^\\[([^\\s]+?)\\]", foundProperty.toString()), 1, true);
+
+                            if (!StringUtils.isNullOrEmpty(convertedString) &&
+                                    (convertedString.startsWith("\\[") && convertedString.endsWith("]")) &&
+                                    convertedString.contains(", ")) {
+                                fieldObject = foundProperty.toString()
+                                        .replaceAll("\\[", "").replaceAll("]", "")
+                                        .split(", ");
+                            }
+                        } else {
+                            // If not a Convertible Type, Revert Value to prior Data
+                            if (!skipLogging) {
+                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                            }
+                            fieldObject = configDataMappings.get(currentIndex).getSecond();
+                        }
+                    } finally {
+                        if (fieldObject != null) {
+                            StringUtils.updateField(getClass(), CraftPresence.CONFIG, new Tuple<>(configProperty.getSecond(), fieldObject));
+                        }
                     }
                 }
+                currentIndex++;
+            }
+
+            for (String remainingProp : propertyList) {
+                // Removes any Invalid Properties, that were not checked off during read
+                if (!skipLogging) {
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", remainingProp));
+                }
+                properties.remove(remainingProp);
+                save();
             }
         }
 
@@ -319,204 +325,42 @@ public class ConfigUtils {
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.dataclose"));
             ex.printStackTrace();
+        } finally {
+            if (!skipLogging) {
+                if (isConfigNew) {
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.config.new"));
+                } else {
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.config.save"));
+                }
+            }
         }
     }
 
     public void updateConfig() {
-        // GENERAL
-        properties.setProperty(NAME_detectCurseManifest, Boolean.toString(detectCurseManifest));
-        properties.setProperty(NAME_detectMultiMCManifest, Boolean.toString(detectMultiMCManifest));
-        properties.setProperty(NAME_detectMCUpdaterInstance, Boolean.toString(detectMCUpdaterInstance));
-        properties.setProperty(NAME_detectTechnicPack, Boolean.toString(detectTechnicPack));
-        properties.setProperty(NAME_showTime, Boolean.toString(showTime));
-        properties.setProperty(NAME_showCurrentBiome, Boolean.toString(showCurrentBiome));
-        properties.setProperty(NAME_showCurrentDimension, Boolean.toString(showCurrentDimension));
-        properties.setProperty(NAME_showGameState, Boolean.toString(showGameState));
-        properties.setProperty(NAME_clientID, clientID);
-        properties.setProperty(NAME_defaultIcon, defaultIcon);
-        properties.setProperty(NAME_enableJoinRequest, Boolean.toString(enableJoinRequest));
-        // BIOME MESSAGES
-        properties.setProperty(NAME_defaultBiomeIcon, defaultBiomeIcon);
-        properties.setProperty(NAME_biomeMessages, Arrays.toString(biomeMessages));
-        // DIMENSION MESSAGES
-        properties.setProperty(NAME_defaultDimensionIcon, defaultDimensionIcon);
-        properties.setProperty(NAME_dimensionMessages, Arrays.toString(dimensionMessages));
-        // SERVER MESSAGES
-        properties.setProperty(NAME_defaultServerIcon, defaultServerIcon);
-        properties.setProperty(NAME_defaultServerName, defaultServerName);
-        properties.setProperty(NAME_defaultServerMOTD, defaultServerMOTD);
-        properties.setProperty(NAME_serverMessages, Arrays.toString(serverMessages));
-        // STATUS MESSAGES
-        properties.setProperty(NAME_mainmenuMSG, mainmenuMSG);
-        properties.setProperty(NAME_lanMSG, lanMSG);
-        properties.setProperty(NAME_singleplayerMSG, singleplayerMSG);
-        properties.setProperty(NAME_packPlaceholderMSG, packPlaceholderMSG);
-        properties.setProperty(NAME_playerPlaceholderMSG, playerPlaceholderMSG);
-        properties.setProperty(NAME_playerAmountPlaceholderMSG, playerAmountPlaceholderMSG);
-        properties.setProperty(NAME_gameTimePlaceholderMSG, gameTimePlaceholderMSG);
-        properties.setProperty(NAME_modsPlaceholderMSG, modsPlaceholderMSG);
-        properties.setProperty(NAME_vivecraftMessage, vivecraftMessage);
-        // ADVANCED
-        properties.setProperty(NAME_enableCommands, Boolean.toString(enableCommands));
-        properties.setProperty(NAME_enablePERGUI, Boolean.toString(enablePERGUI));
-        properties.setProperty(NAME_enablePERItem, Boolean.toString(enablePERItem));
-        properties.setProperty(NAME_overwriteServerIcon, Boolean.toString(overwriteServerIcon));
-        properties.setProperty(NAME_renderTooltips, Boolean.toString(renderTooltips));
-        properties.setProperty(NAME_splitCharacter, splitCharacter);
-        properties.setProperty(NAME_guiMessages, Arrays.toString(guiMessages));
-        properties.setProperty(NAME_itemMessages, Arrays.toString(itemMessages));
-        // ACCESSIBILITY
-        properties.setProperty(NAME_tooltipBGColor, tooltipBGColor);
-        properties.setProperty(NAME_tooltipBorderColor, tooltipBorderColor);
-        properties.setProperty(NAME_guiBGColor, guiBGColor);
-        properties.setProperty(NAME_languageID, languageID);
-        properties.setProperty(NAME_stripTranslationColors, Boolean.toString(stripTranslationColors));
-        properties.setProperty(NAME_showLoggingInChat, Boolean.toString(showLoggingInChat));
-        properties.setProperty(NAME_configKeycode, configKeyCode);
-        // DISPLAY MESSAGES
-        properties.setProperty(NAME_gameStateMSG, gameStateMSG);
-        properties.setProperty(NAME_detailsMSG, detailsMSG);
-        properties.setProperty(NAME_largeImageMSG, largeImageMSG);
-        properties.setProperty(NAME_smallImageMSG, smallImageMSG);
-        properties.setProperty(NAME_largeImageKey, largeImageKey);
-        properties.setProperty(NAME_smallImageKey, smallImageKey);
+        // Sync Edits from Read Events that may have occurred
+        syncMappings();
+
+        for (Tuple<String, Object> configDataSet : configDataMappings) {
+            Class<?> expectedClass = configDataSet.getSecond().getClass();
+            String finalOutput;
+
+            try {
+                if (expectedClass == String[].class) {
+                    // Save as String Array
+                    finalOutput = Arrays.toString((String[]) configDataSet.getSecond());
+                } else {
+                    // If not a Convertible Type, Attempt Auto Conversion
+                    finalOutput = configDataSet.getSecond().toString();
+                }
+
+                // Save Final Output Value in Properties
+                properties.setProperty(configDataSet.getFirst(), finalOutput);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 
         save();
-    }
-
-    private void verifyConfig() {
-        boolean needsFullUpdate = false;
-
-        for (Map.Entry<String, String> configEntrySet : configPropertyMappings.entrySet()) {
-            if (!properties.stringPropertyNames().contains(configEntrySet.getValue())) {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configEntrySet.getValue()));
-                Field configPropertyValue = null;
-                try {
-                    // Case 1: Try to Locate Property Value by Exact Case
-                    // Ex: NAME_exampleValue tries to get from exampleValue Assignment
-                    configPropertyValue = getClass().getDeclaredField(configEntrySet.getKey().replace("NAME_", ""));
-                } catch (Exception ex) {
-                    // Case 2: Look through All Declared Fields to see If it matches in lower case
-                    // Ex: NAME_exampleValue >> Tries to find exampleValue in any case
-                    for (Field declaredField : getClass().getDeclaredFields()) {
-                        if (declaredField != null && declaredField.getName().equalsIgnoreCase(configEntrySet.getKey().replace("NAME_", ""))) {
-                            configPropertyValue = declaredField;
-                            break;
-                        }
-                    }
-                }
-
-                try {
-                    // Attempt to Save Value if Found a Matching Value
-                    if (configPropertyValue != null) {
-                        configPropertyValue.setAccessible(true);
-                        properties.setProperty(configEntrySet.getValue(), configPropertyValue.get(this).toString());
-                        save();
-                        needsFullUpdate = true;
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-
-        for (String property : properties.stringPropertyNames()) {
-            if (!configPropertyMappings.containsValue(property)) {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
-                properties.remove(property);
-                save();
-            } else {
-                if (property.equals(NAME_clientID) && (properties.getProperty(property).length() != 18 || !StringUtils.getValidLong(properties.getProperty(property)).getFirst())) {
-                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
-                    clientID = "450485984333660181";
-                    properties.setProperty(property, clientID);
-                    save();
-                }
-                if (property.equals(NAME_configKeycode) && (!StringUtils.getValidInteger(properties.getProperty(property)).getFirst())) {
-                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
-                    configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
-                    properties.setProperty(property, configKeyCode);
-                    save();
-                }
-                if (property.equals(NAME_splitCharacter) && (properties.getProperty(property).length() != 1 || properties.getProperty(property).matches(".*[a-z].*") || properties.getProperty(property).matches(".*[A-Z].*"))) {
-                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", property));
-                    queuedSplitCharacter = ";";
-                }
-                if ((property.equals(NAME_enableJoinRequest) && properties.getProperty(property).equals("false")) && (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.PARTY_ID) || !StringUtils.isNullOrEmpty(CraftPresence.CLIENT.JOIN_SECRET) || CraftPresence.SYSTEM.TIMER != 0 || CraftPresence.awaitingReply || CraftPresence.CLIENT.PARTY_SIZE != 0 || CraftPresence.CLIENT.PARTY_MAX != 0 || CraftPresence.CLIENT.REQUESTER_USER != null)) {
-                    CommandUtils.clearPartyData(true, true);
-                }
-
-                if (property.equals(NAME_biomeMessages) && biomeMessages != null) {
-                    boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(biomeMessages, "default", 0, 1, splitCharacter, null));
-                    if (!defaultFound) {
-                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", property));
-                        biomeMessages = StringUtils.addToArray(biomeMessages, biomeMessages.length, "default" + splitCharacter + "Playing in &biome&");
-                        properties.setProperty(property, Arrays.toString(biomeMessages));
-                        save();
-                    }
-                }
-                if (property.equals(NAME_dimensionMessages) && dimensionMessages != null) {
-                    boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(dimensionMessages, "default", 0, 1, splitCharacter, null));
-                    if (!defaultFound) {
-                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", property));
-                        dimensionMessages = StringUtils.addToArray(dimensionMessages, dimensionMessages.length, "default" + splitCharacter + "In The &dimension&");
-                        properties.setProperty(property, Arrays.toString(dimensionMessages));
-                        save();
-                    }
-                }
-                if (property.equals(NAME_serverMessages) && serverMessages != null) {
-                    boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(serverMessages, "default", 0, 1, splitCharacter, null));
-                    if (!defaultFound) {
-                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", property));
-                        serverMessages = StringUtils.addToArray(serverMessages, serverMessages.length, "default" + splitCharacter + "Playing on &motd&");
-                        properties.setProperty(property, Arrays.toString(serverMessages));
-                        save();
-                    }
-                }
-                if (property.equals(NAME_guiMessages) && guiMessages != null) {
-                    boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(guiMessages, "default", 0, 1, splitCharacter, null));
-                    if (!defaultFound) {
-                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", property));
-                        guiMessages = StringUtils.addToArray(guiMessages, guiMessages.length, "default" + splitCharacter + "In &gui&");
-                        properties.setProperty(property, Arrays.toString(guiMessages));
-                        save();
-                    }
-                }
-                if (property.equals(NAME_itemMessages) && itemMessages != null) {
-                    boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(itemMessages, "default", 0, 1, splitCharacter, null));
-                    if (!defaultFound) {
-                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", property));
-                        itemMessages = StringUtils.addToArray(itemMessages, itemMessages.length, "default" + splitCharacter + "Holding &main&");
-                        properties.setProperty(property, Arrays.toString(itemMessages));
-                        save();
-                    }
-                }
-            }
-        }
-
-        if (!properties.stringPropertyNames().isEmpty() && !StringUtils.isNullOrEmpty(queuedSplitCharacter)) {
-            // Transfer Split Character, if needed and able to
-            for (String propertyName : configPropertyMappings.values()) {
-                if (properties.stringPropertyNames().contains(propertyName) && properties.getProperty(propertyName).contains(splitCharacter)) {
-                    properties.setProperty(propertyName, properties.getProperty(propertyName).replace(splitCharacter, queuedSplitCharacter));
-                    save();
-                }
-            }
-
-            needsFullUpdate = true;
-            queuedSplitCharacter = null;
-        }
-
-        if (needsFullUpdate) {
-            setupInitialValues();
-            verified = false;
-            if (!properties.stringPropertyNames().isEmpty()) {
-                read(true);
-            }
-            updateConfig();
-        } else {
-            verified = true;
-        }
     }
 
     public void save() {

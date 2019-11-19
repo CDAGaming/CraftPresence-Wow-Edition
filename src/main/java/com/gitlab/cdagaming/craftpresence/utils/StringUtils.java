@@ -571,6 +571,19 @@ public class StringUtils {
         return null;
     }
 
+    public static void updateField(Class<?> classToAccess, Object instance, Tuple<?, ?>... fieldData) {
+        for (Tuple<?, ?> currentData : fieldData) {
+            try {
+                Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
+                if (lookupField != null) {
+                    lookupField.setAccessible(true);
+                    lookupField.set(instance, currentData.getSecond());
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     public static void executeMethod(Class<?> classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {
         for (String methodName : methodNames) {
             try {

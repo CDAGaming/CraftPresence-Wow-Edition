@@ -20,8 +20,6 @@ import com.sun.jna.NativeLibrary;
 
 import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DiscordUtils {
     static {

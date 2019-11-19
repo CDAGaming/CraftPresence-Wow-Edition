@@ -27,7 +27,7 @@ public class KeyUtils {
                     CraftPresence.GUIS.openConfigGUI = true;
                 }
             } catch (Exception ex) {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keybind", CraftPresence.CONFIG.NAME_configKeycode.replaceAll("_", " ")));
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keybind", CraftPresence.CONFIG.NAME_configKeyCode.replaceAll("_", " ")));
                 CraftPresence.CONFIG.configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
                 CraftPresence.CONFIG.updateConfig();
             }
