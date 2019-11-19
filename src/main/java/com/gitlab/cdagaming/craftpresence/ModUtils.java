@@ -38,13 +38,10 @@ public class ModUtils {
     static void loadDLL(final boolean Update) {
         boolean UpdateStatus = Update;
 
-        final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
-        final boolean is64Bit = x64.contains(CraftPresence.SYSTEM.OS_ARCH);
-
         final String fileName = (CraftPresence.SYSTEM.IS_WINDOWS ? "discord-rpc.dll"
                 : CraftPresence.SYSTEM.IS_LINUX ? "libdiscord-rpc.so"
                 : CraftPresence.SYSTEM.IS_MAC ? "libdiscord-rpc.dylib" : "");
-        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (CraftPresence.SYSTEM.IS_WINDOWS ? (is64Bit ? "win32-x86-64" : "win32-x86")
+        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (CraftPresence.SYSTEM.IS_WINDOWS ? (CraftPresence.SYSTEM.IS_64_BIT ? "win32-x86-64" : "win32-x86")
                 : CraftPresence.SYSTEM.IS_LINUX ? "linux-x86-64"
                 : CraftPresence.SYSTEM.IS_MAC ? "darwin" : "") + "/" + fileName;
         final File file = new File(MODID + File.separator + fileName);

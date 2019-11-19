@@ -20,7 +20,7 @@ public class KeyUtils {
         return sourceKeyCode > keyStartLimit && !invalidKeys.contains(sourceKeyCode);
     }
 
-    public void onTick() {
+    void onTick() {
         if (CraftPresence.CONFIG != null) {
             try {
                 if (isValidKeyCode(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {

@@ -48,7 +48,7 @@ public class TranslationUtils {
         checkUnicode();
     }
 
-    void tick() {
+    void onTick() {
         if (CraftPresence.CONFIG != null && !languageID.equals(CraftPresence.CONFIG.languageID) &&
                 (!requestMap.containsKey(CraftPresence.CONFIG.languageID) || requestMap.get(CraftPresence.CONFIG.languageID))) {
             setLanguage(CraftPresence.CONFIG.languageID);

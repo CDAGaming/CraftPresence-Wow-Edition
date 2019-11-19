@@ -7,15 +7,18 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils
 import com.gitlab.cdagaming.craftpresence.utils.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.utils.multimc.MultiMCUtils;
 import com.gitlab.cdagaming.craftpresence.utils.technic.TechnicUtils;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 public class CommandUtils {
     public static boolean isInMainMenu = false;
 
     public static void reloadData(final boolean forceUpdateRPC) {
-        ModUtils.TRANSLATOR.tick();
-        CraftPresence.SYSTEM.tick();
-
+        ModUtils.TRANSLATOR.onTick();
+        CraftPresence.SYSTEM.onTick();
         CraftPresence.KEYBINDINGS.onTick();
+
         CraftPresence.BIOMES.onTick();
         CraftPresence.DIMENSIONS.onTick();
         CraftPresence.GUIS.onTick();
@@ -69,28 +72,26 @@ public class CommandUtils {
     }
 
     public static void setMainMenuPresence() {
-        CraftPresence.CLIENT.STATUS = "ready";
-        clearPartyData(false, false);
+        // Form Argument Lists
+        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), mainMenuArgs = Lists.newArrayList(), modsArgs = Lists.newArrayList();
 
-        CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CONFIG.mainmenuMSG.replace("&ign&", CraftPresence.CONFIG.playerPlaceholderMSG.replace("&name&", ModUtils.USERNAME)).replace("&mods&", CraftPresence.CONFIG.modsPlaceholderMSG.replace("&modcount&", Integer.toString(FileUtils.getModCount()))), false);
+        // Player Data Arguments
+        playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
+
+        // Mods Arguments
+        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
+
+        // Main Menu Arguments
+        mainMenuArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+        mainMenuArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
+
+        CraftPresence.CLIENT.STATUS = "ready";
+        CraftPresence.CLIENT.clearPartyData(true, false);
+
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainmenuMSG, mainMenuArgs), false);
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CONFIG.defaultIcon, true);
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
 
         isInMainMenu = true;
-    }
-
-    public static void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
-        if (clearRequesterData) {
-            CraftPresence.awaitingReply = false;
-            CraftPresence.CLIENT.REQUESTER_USER = null;
-            CraftPresence.SYSTEM.TIMER = 0;
-        }
-        CraftPresence.CLIENT.JOIN_SECRET = null;
-        CraftPresence.CLIENT.PARTY_ID = null;
-        CraftPresence.CLIENT.PARTY_SIZE = 0;
-        CraftPresence.CLIENT.PARTY_MAX = 0;
-        if (updateRPC) {
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-        }
     }
 }

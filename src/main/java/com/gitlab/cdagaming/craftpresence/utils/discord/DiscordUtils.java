@@ -195,22 +195,37 @@ public class DiscordUtils {
         }
     }
 
+    public void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
+        if (clearRequesterData) {
+            CraftPresence.awaitingReply = false;
+            REQUESTER_USER = null;
+            CraftPresence.SYSTEM.TIMER = 0;
+        }
+        JOIN_SECRET = null;
+        PARTY_ID = null;
+        PARTY_SIZE = 0;
+        PARTY_MAX = 0;
+        if (updateRPC) {
+            updatePresence(buildRichPresence());
+        }
+    }
+
     public synchronized void shutDown() {
         DiscordRPC.INSTANCE.Discord_ClearPresence();
         DiscordRPC.INSTANCE.Discord_Shutdown();
+
+        // Clear User Data before final clear and shutdown
+        STATUS = "disconnected";
+        lastDisconnectErrorCode = 0;
+        lastErrorCode = 0;
+        clearPartyData(true, false);
+        CURRENT_USER = null;
 
         CraftPresence.DIMENSIONS.clearClientData();
         CraftPresence.ENTITIES.clearClientData();
         CraftPresence.BIOMES.clearClientData();
         CraftPresence.SERVER.clearClientData();
         CraftPresence.GUIS.clearClientData();
-
-        STATUS = "disconnected";
-        lastDisconnectErrorCode = 0;
-        lastErrorCode = 0;
-        CraftPresence.SYSTEM.TIMER = 0;
-        CURRENT_USER = null;
-        REQUESTER_USER = null;
 
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
     }

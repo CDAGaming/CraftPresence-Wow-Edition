@@ -2,11 +2,14 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 public class SystemUtils {
     public int TIMER = 0;
     public String OS_NAME, OS_ARCH, USER_DIR;
-    public boolean IS_LINUX = false, IS_MAC = false, IS_WINDOWS = false;
+    public boolean IS_LINUX = false, IS_MAC = false, IS_WINDOWS = false, IS_64_BIT = false;
     public long CURRENT_TIMESTAMP;
     private boolean isTiming = false, refreshedCallbacks = false;
     private long BEGINNING_TIMESTAMP, ELAPSED_TIME;
@@ -21,13 +24,18 @@ public class SystemUtils {
             IS_MAC = OS_NAME.startsWith("Mac");
             IS_WINDOWS = OS_NAME.startsWith("Windows");
             CURRENT_TIMESTAMP = System.currentTimeMillis();
+            ELAPSED_TIME = 0;
+
+            // Calculate if 64-Bit Architecture
+            final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
+            IS_64_BIT = x64.contains(OS_ARCH);
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.system"));
             ex.printStackTrace();
         }
     }
 
-    public void tick() {
+    void onTick() {
         ELAPSED_TIME = (System.currentTimeMillis() - CURRENT_TIMESTAMP) / 1000L;
 
         if (TIMER > 0) {
