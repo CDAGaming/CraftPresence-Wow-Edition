@@ -164,21 +164,6 @@ public class DiscordUtils {
         }
     }
 
-    private String removeFollowingMatches(final String regexValue, final String original, final int maxMatches) {
-        Pattern pattern = Pattern.compile(regexValue);
-        StringBuilder finalString = new StringBuilder();
-        Matcher m = pattern.matcher(original);
-
-        int found = 0;
-        while (m.find() && found < maxMatches) {
-            finalString.append(m.group());
-            found++;
-        }
-
-        finalString.append(m.replaceAll(""));
-        return finalString.toString();
-    }
-
     private void syncPackArguments() {
         // Add &PACK& Placeholder to ArgumentData
         String foundPackName = "", foundPackIcon = "";
@@ -274,8 +259,8 @@ public class DiscordUtils {
         DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));
         GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData));
 
-        setImage(StringUtils.sequentialReplaceAnyCase(removeFollowingMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey, 1), iconData), DiscordAsset.AssetType.LARGE);
-        setImage(StringUtils.sequentialReplaceAnyCase(removeFollowingMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey, 1), iconData), DiscordAsset.AssetType.SMALL);
+        setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true), iconData), DiscordAsset.AssetType.LARGE);
+        setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true), iconData), DiscordAsset.AssetType.SMALL);
 
         LARGEIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData);
         SMALLIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData);

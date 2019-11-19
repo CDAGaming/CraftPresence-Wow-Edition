@@ -56,6 +56,43 @@ public class StringUtils {
         return builder.toString().toUpperCase();
     }
 
+    public static Tuple<String, List<String>> getMatches(final String regexValue, final String original) {
+        List<String> matches = Lists.newArrayList();
+
+        if (!isNullOrEmpty(original)) {
+            Pattern pattern = Pattern.compile(regexValue);
+            Matcher m = pattern.matcher(original);
+
+            while (m.find()) {
+                matches.add(m.group());
+            }
+        }
+
+        return new Tuple<>(original, matches);
+    }
+
+    public static String removeMatches(final Tuple<String, List<String>> matchData, final int maxMatches, final boolean useMax) {
+        String finalString = "";
+
+        if (matchData != null) {
+            finalString = matchData.getFirst();
+            List<String> matchList = matchData.getSecond();
+
+            if (!matchList.isEmpty()) {
+                int foundMatches = 0;
+
+                for (String match : matchList) {
+                    if (!useMax || foundMatches > maxMatches) {
+                        finalString = finalString.replaceFirst(match, "");
+                    }
+                    foundMatches++;
+                }
+            }
+        }
+
+        return finalString;
+    }
+
     public static String replaceAnyCase(String source, String targetToReplace, String replaceWith) {
         if (!isNullOrEmpty(source)) {
             return Pattern.compile(targetToReplace, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(source)

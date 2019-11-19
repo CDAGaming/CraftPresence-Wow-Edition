@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -13,7 +14,7 @@ import net.minecraft.util.NonNullList;
 import java.util.List;
 
 public class EntityUtils {
-    public boolean isInUse = false, allItemsEmpty = false, enabled = false;
+    public boolean isInUse = false, enabled = false;
 
     public List<String> ENTITY_NAMES = Lists.newArrayList();
     private List<String> BLOCK_NAMES = Lists.newArrayList();
@@ -37,6 +38,8 @@ public class EntityUtils {
     private String CURRENT_CHEST_NAME;
     private String CURRENT_LEGS_NAME;
     private String CURRENT_BOOTS_NAME;
+
+    private boolean allItemsEmpty = false, currentlyCleared = true;
 
     private void emptyData() {
         BLOCK_NAMES.clear();
@@ -65,6 +68,7 @@ public class EntityUtils {
 
         allItemsEmpty = true;
         isInUse = false;
+        currentlyCleared = true;
     }
 
     public void onTick() {
@@ -133,14 +137,28 @@ public class EntityUtils {
         final String NEW_CURRENT_BOOTS_NAME = !isEmpty(NEW_CURRENT_BOOTS) ?
                 StringUtils.stripColors(NEW_CURRENT_BOOTS.getDisplayName()) : "";
 
-        final boolean hasMainHandChanged = (!isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) || (isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !isEmpty(CURRENT_MAINHAND_ITEM));
-        final boolean hasOffHandChanged = (!isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) || (isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !isEmpty(CURRENT_OFFHAND_ITEM));
-        final boolean hasHelmetChanged = (!isEmpty(NEW_CURRENT_HELMET) && !NEW_CURRENT_HELMET.equals(CURRENT_HELMET) || !NEW_CURRENT_HELMET_NAME.equals(CURRENT_HELMET_NAME)) || (isEmpty(NEW_CURRENT_HELMET) && !isEmpty(CURRENT_HELMET));
-        final boolean hasChestChanged = (!isEmpty(NEW_CURRENT_CHEST) && !NEW_CURRENT_CHEST.equals(CURRENT_CHEST) || !NEW_CURRENT_CHEST_NAME.equals(CURRENT_CHEST_NAME)) || (isEmpty(NEW_CURRENT_CHEST) && !isEmpty(CURRENT_CHEST));
-        final boolean hasLegsChanged = (!isEmpty(NEW_CURRENT_LEGS) && !NEW_CURRENT_LEGS.equals(CURRENT_LEGS) || !NEW_CURRENT_LEGS_NAME.equals(CURRENT_LEGS_NAME)) || (isEmpty(NEW_CURRENT_LEGS) && !isEmpty(CURRENT_LEGS));
-        final boolean hasBootsChanged = (!isEmpty(NEW_CURRENT_BOOTS) && !NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) || !NEW_CURRENT_BOOTS_NAME.equals(CURRENT_BOOTS_NAME)) || (isEmpty(NEW_CURRENT_BOOTS) && !isEmpty(CURRENT_BOOTS));
+        final boolean hasMainHandChanged = (!isEmpty(NEW_CURRENT_MAINHAND_ITEM) &&
+                !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) ||
+                (isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !isEmpty(CURRENT_MAINHAND_ITEM));
+        final boolean hasOffHandChanged = (!isEmpty(NEW_CURRENT_OFFHAND_ITEM) &&
+                !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) ||
+                (isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !isEmpty(CURRENT_OFFHAND_ITEM));
+        final boolean hasHelmetChanged = (!isEmpty(NEW_CURRENT_HELMET) &&
+                !NEW_CURRENT_HELMET.equals(CURRENT_HELMET) || !NEW_CURRENT_HELMET_NAME.equals(CURRENT_HELMET_NAME)) ||
+                (isEmpty(NEW_CURRENT_HELMET) && !isEmpty(CURRENT_HELMET));
+        final boolean hasChestChanged = (!isEmpty(NEW_CURRENT_CHEST) &&
+                !NEW_CURRENT_CHEST.equals(CURRENT_CHEST) || !NEW_CURRENT_CHEST_NAME.equals(CURRENT_CHEST_NAME)) ||
+                (isEmpty(NEW_CURRENT_CHEST) && !isEmpty(CURRENT_CHEST));
+        final boolean hasLegsChanged = (!isEmpty(NEW_CURRENT_LEGS) &&
+                !NEW_CURRENT_LEGS.equals(CURRENT_LEGS) || !NEW_CURRENT_LEGS_NAME.equals(CURRENT_LEGS_NAME)) ||
+                (isEmpty(NEW_CURRENT_LEGS) && !isEmpty(CURRENT_LEGS));
+        final boolean hasBootsChanged = (!isEmpty(NEW_CURRENT_BOOTS) &&
+                !NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) || !NEW_CURRENT_BOOTS_NAME.equals(CURRENT_BOOTS_NAME)) ||
+                (isEmpty(NEW_CURRENT_BOOTS) && !isEmpty(CURRENT_BOOTS));
 
-        if (hasMainHandChanged || hasOffHandChanged || hasHelmetChanged || hasChestChanged || hasLegsChanged || hasBootsChanged) {
+        if (hasMainHandChanged || hasOffHandChanged ||
+                hasHelmetChanged || hasChestChanged ||
+                hasLegsChanged || hasBootsChanged) {
             CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
             CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
             CURRENT_HELMET = NEW_CURRENT_HELMET;
@@ -161,43 +179,28 @@ public class EntityUtils {
     }
 
     public void updateEntityPresence() {
-        // Form Entity Argument List - TODO
-        /*List<Tuple<String, String>> entityArgs = Lists.newArrayList();
+        // Form Entity/Item Argument List
+        // TODO: Fully Update Logic
+        List<Tuple<String, String>> entityArgs = Lists.newArrayList();
 
-        //entityArgs.add(new Tuple<>("&MAIN&"))
+        entityArgs.add(new Tuple<>("&MAIN&", CURRENT_MAINHAND_ITEM_NAME));
+        entityArgs.add(new Tuple<>("&OFFHAND&", CURRENT_OFFHAND_ITEM_NAME));
+        entityArgs.add(new Tuple<>("&HELMET&", CURRENT_HELMET_NAME));
+        entityArgs.add(new Tuple<>("&CHEST&", CURRENT_CHEST_NAME));
+        entityArgs.add(new Tuple<>("&LEGS&", CURRENT_LEGS_NAME));
+        entityArgs.add(new Tuple<>("&BOOTS&", CURRENT_BOOTS_NAME));
 
         final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+        final String CURRENT_ITEM_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultItemMSG, entityArgs);
 
-        final String offHandItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_OFFHAND_ITEM_NAME);
-        final String offHandSelector = !isEmpty(CURRENT_OFFHAND_ITEM) && !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ? CURRENT_OFFHAND_ITEM_NAME : "";
-        final String formattedOffHandItemMSG = offHandItemMSG.replace("&main&", offHandSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
-
-        final String mainHandSelector = !isEmpty(CURRENT_MAINHAND_ITEM) && !StringUtils.isNullOrEmpty(CURRENT_MAINHAND_ITEM_NAME) ? CURRENT_MAINHAND_ITEM_NAME : offHandSelector;
-        final String mainItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_MAINHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultItemMSG);
-
-        final String helmetSelector = !isEmpty(CURRENT_HELMET) && !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ? CURRENT_HELMET_NAME : "";
-        final String helmetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_HELMET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_HELMET_NAME);
-        final String formattedHelmetMSG = helmetMSG.replace("&main&", helmetSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
-
-        final String chestSelector = !isEmpty(CURRENT_CHEST) && !StringUtils.isNullOrEmpty(CURRENT_CHEST_NAME) ? CURRENT_CHEST_NAME : "";
-        final String chestMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_CHEST_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_CHEST_NAME);
-        final String formattedChestMSG = chestMSG.replace("&main&", chestSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
-
-        final String legsSelector = !isEmpty(CURRENT_LEGS) && !StringUtils.isNullOrEmpty(CURRENT_LEGS_NAME) ? CURRENT_LEGS_NAME : "";
-        final String legsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_LEGS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_LEGS_NAME);
-        final String formattedLegsMSG = legsMSG.replace("&main&", legsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
-
-        final String bootsSelector = !isEmpty(CURRENT_BOOTS) && !StringUtils.isNullOrEmpty(CURRENT_BOOTS_NAME) ? CURRENT_BOOTS_NAME : "";
-        final String bootsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, CURRENT_BOOTS_NAME);
-        final String formattedBootsMSG = bootsMSG.replace("&main&", bootsSelector).replace("&offhand&", "").replace("&helmet&", "").replace("&chest&", "").replace("&legs&", "").replace("&boots&", "");
-
-        // NOTE: Overrides Dimensions unless All Items are Empty
+        // NOTE: Only Apply if Items are not Empty, otherwise Clear Argument
         if (!allItemsEmpty) {
-            CraftPresence.CLIENT.LARGEIMAGETEXT = mainItemMSG.replace("&main&", mainHandSelector).replace("&offhand&", formattedOffHandItemMSG).replace("&helmet&", formattedHelmetMSG).replace("&chest&", formattedChestMSG).replace("&legs&", formattedLegsMSG).replace("&boots&", formattedBootsMSG);
-        } else if (CraftPresence.DIMENSIONS.isInUse) {
-            CraftPresence.CLIENT.LARGEIMAGETEXT = CraftPresence.CLIENT.DETAILS;
+            CraftPresence.CLIENT.syncArgument("&ENTITY&", CURRENT_ITEM_MESSAGE, false);
+            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
+        } else if (!currentlyCleared) {
+            CraftPresence.CLIENT.initArgumentData("&ENTITY&");
+            CraftPresence.CLIENT.initIconData("&ENTITY&");
         }
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());*/
     }
 
     public void getEntities() {
