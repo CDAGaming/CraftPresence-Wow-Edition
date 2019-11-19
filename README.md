@@ -23,14 +23,14 @@ As an example, this is how the mod will convert the pack name to an iconKey:
 
 `All the Mods 3 == allthemods3`
 
-(Note the above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)
+_(Note the above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)_
 
 ## Commands
 CraftPresence currently offers the following Commands:
 
 (Commands must be prefixed by either `/craftpresence` or `/cp`)
 
-*(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands" in the Config GUI)*
+_(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands" in the Config GUI)_
 
 *   `/cp view` - Help Command to display Commands available to view a variety of Display Data
 *   `/cp reload` - Reloads Mod Data (In v1.4.8 and Above, this forces a Tick Event)
@@ -49,16 +49,16 @@ CraftPresence currently offers the following Commands:
 ## KeyBinds
 CraftPresence currently contains the following KeyBinds:
 
-*(In v1.5.5 and Above, KeyBinds are now customized in the Accessibility Settings in the Config GUI)*
+_(In v1.5.5 and Above, KeyBinds are now customized in the Accessibility Settings in the Config GUI)_
 
 *   `Open Config GUI` - KeyBind to Open the CraftPresence ConfigGUI (Default: GRAVE Key)
 
 ## Placeholders
 In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
 
-*(In v1.6.0 and Above, You can now define where in the Rich Presence the Messages should go)*
+_(In v1.6.0 and Above, You can now define where in the Rich Presence the Messages should go)_
 
-*(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)*
+_(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)_
 
 ### Presence Display Placeholders
 *   &DIMENSION& - The Dimension Message from your Dimension Settings, if enabled and in use
@@ -67,8 +67,8 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 *   &GUI& - The GUI Message from your GUI Settings, if enabled and in use
 *   &ENTITY& - The Entity/Item Message from your Advanced -> Entity/Item Setting, if enabled and in use
 
-*(All Placeholders must be present in one of the RPC Areas)*
-*(For Image Keys, it works as a priority list going in sequential order)*
+_(All Placeholders must be present in one of the RPC Areas)_
+_(For Image Keys, it works as a priority list going in sequential order)_
 
 ### Main Menu Message Placeholders
 *   &IGN& - Your Minecraft Username
@@ -118,7 +118,7 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
     *   Server Support is unavailable in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
     *   Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with ModLoader + ModLoaderMP
 
-*Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited*
+_Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited_
 
 ## Disclaimers & Additional Info
 

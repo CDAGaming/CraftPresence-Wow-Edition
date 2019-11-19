@@ -7,7 +7,6 @@
 *   Added Specific Presence Display Settings to ConfigGUI
 
     *   Now allows users to set where in the RPC they'd like each message
-    
 *   `/cp view currentData` will now show the Current User the RPC is attached to
 
 *   Added a New Config Message in Logs for Initial Setups

@@ -257,3 +257,4 @@ craftpresence.logger.warning.config.conflict.biomestate=showCurrentBiome and sho
 craftpresence.logger.warning.config.conflict.pergui=enablePerGUI and showGameState are both enabled, giving priority to showGameState!
 craftpresence.logger.warning.fingerprintviolation=Invalid Certificate Detected, this Build will not receive Support!
 craftpresence.logger.warning.debugmode=You are Running CraftPresence in a Debugging Environment, some features may not function properly!
+craftpresence.exception.config.nullprop=Property Value for "%1$s" cannot be null

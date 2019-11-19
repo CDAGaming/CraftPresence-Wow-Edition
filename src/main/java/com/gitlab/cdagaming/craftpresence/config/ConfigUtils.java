@@ -255,7 +255,7 @@ public class ConfigUtils {
             ex.printStackTrace();
         } finally {
             int currentIndex = 0;
-            List<String> propertyList = Lists.newArrayList(properties.stringPropertyNames());
+            final List<String> propertyList = Lists.newArrayList(properties.stringPropertyNames());
 
             for (Tuple<String, String> configProperty : configPropertyMappings) {
                 Object fieldObject = null, foundProperty;
@@ -267,7 +267,13 @@ public class ConfigUtils {
 
                     try {
                         // Case 1: Attempt to Automatically Cast to Expected Variable
+                        // *This will likely only work for strings or simplistic conversions*
                         fieldObject = expectedClass.cast(foundProperty);
+
+                        // If null or toString is null, throw NPE to reset value to Prior/Default Value
+                        if (fieldObject == null || StringUtils.isNullOrEmpty(fieldObject.toString())) {
+                            throw new NullPointerException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", configDataMappings.get(currentIndex).getFirst()));
+                        }
                     } catch (Exception ex) {
                         // Case 2: Manually Convert Variable based on Expected Type
                         if ((expectedClass == boolean.class || expectedClass == Boolean.class) &&
@@ -337,6 +343,9 @@ public class ConfigUtils {
     }
 
     public void updateConfig() {
+        // Track if in need of a data re-sync
+        boolean needsDataSync = false;
+
         // Sync Edits from Read Events that may have occurred
         syncMappings();
 
@@ -346,11 +355,28 @@ public class ConfigUtils {
 
             try {
                 if (expectedClass == String[].class) {
-                    // Save as String Array
-                    finalOutput = Arrays.toString((String[]) configDataSet.getSecond());
+                    // Save as String Array, after ensuring default argument exists
+
+                    // Ensure default Value for String Array is available
+                    // If default value is not present, give it a dummy value
+                    String[] finalArray = (String[]) configDataSet.getSecond();
+                    boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(finalArray, "default", 0, 1, splitCharacter, null));
+                    if (!defaultFound) {
+                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", configDataSet.getFirst()));
+                        finalArray = StringUtils.addToArray(finalArray, finalArray.length, "default" + splitCharacter + "null");
+                        needsDataSync = true;
+                    }
+
+                    finalOutput = Arrays.toString(finalArray);
                 } else {
                     // If not a Convertible Type, Attempt Auto Conversion
                     finalOutput = configDataSet.getSecond().toString();
+                }
+
+                // Replace Split Character if needed
+                if (!StringUtils.isNullOrEmpty(queuedSplitCharacter) && finalOutput.contains(splitCharacter)) {
+                    finalOutput = finalOutput.replace(splitCharacter, queuedSplitCharacter);
+                    needsDataSync = true;
                 }
 
                 // Save Final Output Value in Properties
@@ -360,7 +386,15 @@ public class ConfigUtils {
             }
         }
 
-        save();
+        // Save Queued Split Character, if any
+        splitCharacter = queuedSplitCharacter;
+        queuedSplitCharacter = null;
+
+        if (needsDataSync) {
+            read(true);
+        } else {
+            save();
+        }
     }
 
     public void save() {
