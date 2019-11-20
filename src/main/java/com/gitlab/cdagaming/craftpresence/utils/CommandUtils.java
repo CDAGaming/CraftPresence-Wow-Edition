@@ -75,17 +75,13 @@ public class CommandUtils {
 
     public static void setMainMenuPresence() {
         // Form Argument Lists
-        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), mainMenuArgs = Lists.newArrayList(), modsArgs = Lists.newArrayList();
+        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), mainMenuArgs = Lists.newArrayList();
 
         // Player Data Arguments
         playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
-        // Mods Arguments
-        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
-
         // Main Menu Arguments
         mainMenuArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
-        mainMenuArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
 
         CraftPresence.CLIENT.STATUS = "ready";
         CraftPresence.CLIENT.clearPartyData(true, false);

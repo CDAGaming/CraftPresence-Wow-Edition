@@ -2,7 +2,6 @@ package com.gitlab.cdagaming.craftpresence.utils.server;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
@@ -235,7 +234,7 @@ public class ServerUtils {
 
     public void updateServerPresence() {
         // Form General Argument Lists
-        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), gameTimeArgs = Lists.newArrayList(), modsArgs = Lists.newArrayList();
+        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), gameTimeArgs = Lists.newArrayList();
 
         // Player Data Arguments
         playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
@@ -243,9 +242,6 @@ public class ServerUtils {
 
         // Game Time Arguments
         gameTimeArgs.add(new Tuple<>("&WORLDTIME&", !StringUtils.isNullOrEmpty(timeString) ? timeString : ""));
-
-        // Mods Arguments
-        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
 
         if (!CraftPresence.instance.isSingleplayer() && currentServerData != null) {
             String CURRENT_SERVER_ICON;
@@ -264,7 +260,6 @@ public class ServerUtils {
             serverArgs.add(new Tuple<>("&PLAYERS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerAmountPlaceholderMSG, playerAmountArgs)));
             serverArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
             serverArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
-            serverArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
 
             if (isOnLAN) {
                 // NOTE: LAN-Only Presence Updates
@@ -309,7 +304,6 @@ public class ServerUtils {
 
             soloArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
             soloArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
-            soloArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
 
             // NOTE: SinglePlayer-Only Presence Updates
             currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;

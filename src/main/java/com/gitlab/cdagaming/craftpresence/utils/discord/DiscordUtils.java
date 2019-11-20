@@ -3,6 +3,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
@@ -46,7 +47,8 @@ public class DiscordUtils {
     public String MATCH_SECRET;
     public String SPECTATE_SECRET;
     public byte INSTANCE;
-    private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList();
+    private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList(),
+            modsArgs = Lists.newArrayList();
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
     private int lastErrorCode, lastDisconnectErrorCode;
 
@@ -119,12 +121,16 @@ public class DiscordUtils {
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
 
         // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
-        initArgumentData("&MAINMENU&", "&MCVERSION&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
-        initIconData("&MAINMENU&", "&MCVERSION&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initArgumentData("&MAINMENU&", "&MCVERSION&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initIconData("&MAINMENU&", "&MCVERSION&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
 
         CommandUtils.isInMainMenu = false;
 
+        // Add Any Generalized Argument Data needed
+        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
+
         syncArgument("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion), false);
+        syncArgument("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs), false);
         syncPackArguments();
     }
 
