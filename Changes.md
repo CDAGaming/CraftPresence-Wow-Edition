@@ -56,6 +56,12 @@ As Elements such as the Config System and General RPC Elements have undergone va
 
 v1.5.x is Generally Recommended at this time for new users, has the systems used in v1.6.0 may have a variety of issues, and considered bleeding-edge
 
+Migration Notes:
+
+*   `overwriteServerIcon` has been deprecated, instead use the Presence Formatting GUI to define the priority for icons
+
+    *   Example: `overwriteServerIcon` = Setting `smallImageKey` to `&PACK&&SERVER&` (Having `&PACK&` be before anything else)
+
 #### 1.13.x Build Info
 
 The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift) and contains the following differences to take Note of:

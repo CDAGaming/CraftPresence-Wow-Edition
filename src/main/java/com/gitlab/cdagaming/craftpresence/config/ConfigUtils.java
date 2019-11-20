@@ -32,7 +32,7 @@ public class ConfigUtils {
             NAME_packPlaceholderMSG, NAME_playerPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
             NAME_gameTimePlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_overwriteServerIcon, NAME_renderTooltips,
+    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_renderTooltips,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
@@ -58,7 +58,7 @@ public class ConfigUtils {
             playerPlaceholderMSG, playerAmountPlaceholderMSG,
             gameTimePlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem, overwriteServerIcon, renderTooltips;
+    public boolean enableCommands, enablePERGUI, enablePERItem, renderTooltips;
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
@@ -154,7 +154,6 @@ public class ConfigUtils {
         NAME_enableCommands = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enablecommands").replaceAll(" ", "_");
         NAME_enablePERGUI = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
         NAME_enablePERItem = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enableperitem").replaceAll(" ", "_");
-        NAME_overwriteServerIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.overwriteservericon").replaceAll(" ", "_");
         NAME_renderTooltips = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.rendertooltips").replaceAll(" ", "_");
         NAME_splitCharacter = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
         NAME_guiMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.guimessages").replaceAll(" ", "_");
@@ -162,7 +161,6 @@ public class ConfigUtils {
         enableCommands = true;
         enablePERGUI = false;
         enablePERItem = false;
-        overwriteServerIcon = false;
         renderTooltips = true;
         splitCharacter = ";";
         guiMessages = new String[]{"default;In &gui&"};

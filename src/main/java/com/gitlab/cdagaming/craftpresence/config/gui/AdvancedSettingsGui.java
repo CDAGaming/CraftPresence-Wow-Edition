@@ -17,7 +17,7 @@ public class AdvancedSettingsGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, characterEditorButton;
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
-            enablePerItemButton, overwriteServerIconButton, renderTooltipsButton;
+            enablePerItemButton, renderTooltipsButton;
     private GuiTextField splitCharacter;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
@@ -45,8 +45,7 @@ public class AdvancedSettingsGui extends GuiScreen {
         enableCommandsButton = new CheckBoxControl(200, calc1, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
         enablePerGUIButton = new CheckBoxControl(300, calc2, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new CheckBoxControl(400, calc1, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
-        overwriteServerIconButton = new CheckBoxControl(500, calc2, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        renderTooltipsButton = new CheckBoxControl(600, calc1, CraftPresence.GUIS.getButtonY(6) - 20, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
+        renderTooltipsButton = new CheckBoxControl(500, (width / 2) - 90, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
         proceedButton = new ExtendedButtonControl(900, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
@@ -55,7 +54,6 @@ public class AdvancedSettingsGui extends GuiScreen {
         buttonList.add(enableCommandsButton);
         buttonList.add(enablePerGUIButton);
         buttonList.add(enablePerItemButton);
-        buttonList.add(overwriteServerIconButton);
         buttonList.add(renderTooltipsButton);
         buttonList.add(proceedButton);
 
@@ -93,9 +91,6 @@ public class AdvancedSettingsGui extends GuiScreen {
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerItemButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, overwriteServerIconButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, renderTooltipsButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.rendertooltips")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
@@ -146,11 +141,6 @@ public class AdvancedSettingsGui extends GuiScreen {
                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 }
                 CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
-            }
-            if (overwriteServerIconButton.isChecked() != CraftPresence.CONFIG.overwriteServerIcon) {
-                CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                CraftPresence.CONFIG.overwriteServerIcon = overwriteServerIconButton.isChecked();
             }
             if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
                 CraftPresence.CONFIG.hasChanged = true;
