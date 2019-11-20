@@ -120,10 +120,10 @@ gui.config.name.accessibility.guibgcolor=GUI Background Color
 gui.config.name.accessibility.languageid=Language ID
 gui.config.name.accessibility.striptranslationcolors=Strip Translation Colors
 gui.config.name.accessibility.showlogginginchat=Show Logging in Chat
-gui.config.name.display.smallimagemsg=Small Image Display Message
-gui.config.name.display.largeimagemsg=Large Image Display Message
-gui.config.name.display.detailsmsg=Details Display Message
-gui.config.name.display.gamestatemsg=Game State Display Message
+gui.config.name.display.smallimagemsg=Small Image Text Format
+gui.config.name.display.largeimagemsg=Large Image Text Format
+gui.config.name.display.detailsmsg=Details Message Format
+gui.config.name.display.gamestatemsg=Game State Message Format
 gui.config.name.display.smallimagekey=Small Image Key Format
 gui.config.name.display.largeimagekey=Large Image Key Format
 ## CONFIG MESSAGES - COMMENTS ##
@@ -156,7 +156,7 @@ gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mo
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs \n (You'll need to change each of your variables manually)
 gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Enables Command GUI in Main Config GUI)
-gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - Overwrites Biomes \n - Requires an Option in GUI Messages \n - Minecraft's GUIs must be Opened once before Configuring due to Obfuscation
+gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - Requires an Option in GUI Messages \n - Minecraft's GUIs must be Opened once before Configuring due to Obfuscation
 gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding \n Note the Following: \n - Requires an Option in Item Messages
 gui.config.comment.advanced.rendertooltips=Allow CraftPresence to render Hover Tooltips (when available)
 gui.config.comment.advanced.guimessages=Customize Messages to display with GUIs \n (Manual Format: gui;message) \n Available Placeholders: \n - &gui& = GUI Name \n - &class& = GUI Class Name \n - &screen& = GUI Screen Instance Name
