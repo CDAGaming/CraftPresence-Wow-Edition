@@ -36,6 +36,7 @@
 
 ### Fixes
 
+*   Changed PG Left and Right KeyBind Triggers to `KEY_UP` and `KEY_DOWN` to resolve a conflict of changing pages while editing something
 *   Fixed Config Conflicts with a more dynamic system
 *   Fixes a Bug where the ConfigGUI KeyBind could still reset to Left Control (IE the old KeyBind) if a Keycode Error occurs
 *   Fixed Icon Support for MCUpdater (Will now use the Pack Name like Curse/Twitch)

@@ -217,11 +217,11 @@ public class StatusMessagesGui extends GuiScreen {
             CraftPresence.GUIS.openScreen(parentScreen);
         }
 
-        if (keyCode == Keyboard.KEY_LEFT && pageNumber != 0) {
+        if (keyCode == Keyboard.KEY_UP && pageNumber != 0) {
             pageNumber--;
         }
 
-        if (keyCode == Keyboard.KEY_RIGHT && pageNumber != 1) {
+        if (keyCode == Keyboard.KEY_DOWN && pageNumber != 1) {
             pageNumber++;
         }
 
