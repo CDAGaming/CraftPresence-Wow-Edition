@@ -225,7 +225,7 @@ public class ServerUtils {
                 CraftPresence.player.world.sendQuittingDisconnectingPacket();
                 CraftPresence.instance.loadWorld(null);
             }
-            CraftPresence.instance.displayGuiScreen(new GuiConnecting(CraftPresence.instance.currentScreen != null ? CraftPresence.instance.currentScreen : new GuiMainMenu(), CraftPresence.instance, serverData));
+            CraftPresence.GUIS.openScreen(new GuiConnecting(CraftPresence.instance.currentScreen != null ? CraftPresence.instance.currentScreen : new GuiMainMenu(), CraftPresence.instance, serverData));
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {

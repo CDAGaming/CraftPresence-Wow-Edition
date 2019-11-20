@@ -53,7 +53,7 @@ public class SelectorGui extends GuiScreen {
 
             super.initGui();
         } else {
-            mc.displayGuiScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.emptylist"))));
+            CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.emptylist"))));
         }
     }
 
@@ -102,7 +102,7 @@ public class SelectorGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
-            mc.displayGuiScreen(new DynamicEditorGui(parentScreen, null, configOption));
+            CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null, configOption));
         } else if (button.id == proceedButton.id) {
             if (allowContinuing && scrollList.currentValue != null) {
                 if (originalValue != null) {
@@ -111,17 +111,17 @@ public class SelectorGui extends GuiScreen {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultIcon = scrollList.currentValue;
-                            mc.displayGuiScreen(parentScreen);
+                            CraftPresence.GUIS.openScreen(parentScreen);
                         } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
-                            mc.displayGuiScreen(parentScreen);
+                            CraftPresence.GUIS.openScreen(parentScreen);
                         } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon)) {
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                             CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
-                            mc.displayGuiScreen(parentScreen);
+                            CraftPresence.GUIS.openScreen(parentScreen);
                         } else if (configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
                             final String defaultDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                             final String currentDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
@@ -131,7 +131,7 @@ public class SelectorGui extends GuiScreen {
                                 CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
                             }
                             CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                            mc.displayGuiScreen(parentScreen);
+                            CraftPresence.GUIS.openScreen(parentScreen);
                         } else if (configOption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
                             final String defaultServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                             final String currentServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
@@ -141,22 +141,22 @@ public class SelectorGui extends GuiScreen {
                                 CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
                             }
                             CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                            mc.displayGuiScreen(parentScreen);
+                            CraftPresence.GUIS.openScreen(parentScreen);
                         } else {
-                            mc.displayGuiScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
+                            CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
                         }
                     } else {
-                        mc.displayGuiScreen(parentScreen);
+                        CraftPresence.GUIS.openScreen(parentScreen);
                     }
                 } else {
                     if (configOption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configOption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configOption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                        mc.displayGuiScreen(new DynamicEditorGui(parentScreen, scrollList.currentValue, configOption));
+                        CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, scrollList.currentValue, configOption));
                     } else {
-                        mc.displayGuiScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
+                        CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
                     }
                 }
             } else {
-                mc.displayGuiScreen(parentScreen);
+                CraftPresence.GUIS.openScreen(parentScreen);
             }
         }
     }
@@ -164,7 +164,7 @@ public class SelectorGui extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
         searchBox.textboxKeyTyped(typedChar, keyCode);
     }

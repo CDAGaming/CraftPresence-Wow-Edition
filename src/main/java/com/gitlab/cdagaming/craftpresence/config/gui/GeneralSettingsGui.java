@@ -180,16 +180,16 @@ public class GeneralSettingsGui extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.enableJoinRequest = enableJoinRequestButton.isChecked();
             }
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == defaultIconButton.id) {
-            mc.displayGuiScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null, true));
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null, true));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
         clientID.textboxKeyTyped(typedChar, keyCode);
     }

@@ -149,20 +149,20 @@ public class AdvancedSettingsGui extends GuiScreen {
                 }
                 CraftPresence.CONFIG.renderTooltips = renderTooltipsButton.isChecked();
             }
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true));
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
         } else if (button.id == characterEditorButton.id) {
-            mc.displayGuiScreen(new CharacterEditorGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new CharacterEditorGui(currentScreen));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
         splitCharacter.textboxKeyTyped(typedChar, keyCode);
     }

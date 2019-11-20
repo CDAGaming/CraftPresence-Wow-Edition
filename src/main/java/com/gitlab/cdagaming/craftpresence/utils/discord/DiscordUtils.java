@@ -104,7 +104,7 @@ public class DiscordUtils {
                 REQUESTER_USER = request;
 
                 if (!(CraftPresence.instance.currentScreen instanceof CommandsGui)) {
-                    CraftPresence.instance.displayGuiScreen(new CommandsGui(CraftPresence.instance.currentScreen));
+                    CraftPresence.GUIS.openScreen(new CommandsGui(CraftPresence.instance.currentScreen));
                 }
                 CommandsGui.executeCommand("request");
             }

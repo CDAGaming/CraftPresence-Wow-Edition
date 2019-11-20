@@ -165,14 +165,14 @@ public class PresenceSettingsGui extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.smallImageKey = smallImageKeyFormat.getText();
             }
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
 
         if (keyCode == Keyboard.KEY_LEFT && pageNumber != 0) {

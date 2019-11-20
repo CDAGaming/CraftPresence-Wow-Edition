@@ -123,21 +123,21 @@ public class MainGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == generalSet.id) {
-            mc.displayGuiScreen(new GeneralSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new GeneralSettingsGui(currentScreen));
         } else if (button.id == biomeSet.id) {
-            mc.displayGuiScreen(new BiomeSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new BiomeSettingsGui(currentScreen));
         } else if (button.id == dimensionSet.id) {
-            mc.displayGuiScreen(new DimensionSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new DimensionSettingsGui(currentScreen));
         } else if (button.id == serverSet.id) {
-            mc.displayGuiScreen(new ServerSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new ServerSettingsGui(currentScreen));
         } else if (button.id == statusSet.id) {
-            mc.displayGuiScreen(new StatusMessagesGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new StatusMessagesGui(currentScreen));
         } else if (button.id == advancedSet.id) {
-            mc.displayGuiScreen(new AdvancedSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new AdvancedSettingsGui(currentScreen));
         } else if (button.id == accessibilitySet.id) {
-            mc.displayGuiScreen(new AccessibilitySettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new AccessibilitySettingsGui(currentScreen));
         } else if (button.id == presenceSet.id) {
-            mc.displayGuiScreen(new PresenceSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new PresenceSettingsGui(currentScreen));
         } else if (button.id == proceedButton.id) {
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
@@ -154,12 +154,12 @@ public class MainGui extends GuiScreen {
             if (mc.player != null) {
                 mc.player.closeScreen();
             } else {
-                mc.displayGuiScreen(parentScreen);
+                CraftPresence.GUIS.openScreen(parentScreen);
             }
         } else if (button.id == aboutButton.id) {
-            mc.displayGuiScreen(new AboutGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new AboutGui(currentScreen));
         } else if (button.id == commandGUIButton.id) {
-            mc.displayGuiScreen(new CommandsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new CommandsGui(currentScreen));
         } else if (button.id == resetConfigButton.id) {
             CraftPresence.CONFIG.setupInitialValues();
             CraftPresence.CONFIG.hasChanged = true;

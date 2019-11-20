@@ -91,11 +91,11 @@ public class AccessibilitySettingsGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == tooltipBGButton.id) {
-            mc.displayGuiScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor));
+            CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor));
         } else if (button.id == tooltipBorderButton.id) {
-            mc.displayGuiScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor));
+            CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor));
         } else if (button.id == guiBGButton.id) {
-            mc.displayGuiScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor));
+            CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor));
         } else if (button.id == configKeyBindingButton.id && !entryMode) {
             configKeyBindingButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
             entryMode = true;
@@ -116,7 +116,7 @@ public class AccessibilitySettingsGui extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.showLoggingInChat = showLoggingInChatButton.isChecked();
             }
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
     }
 
@@ -132,7 +132,7 @@ public class AccessibilitySettingsGui extends GuiScreen {
             currentKeyCode = Integer.toString(keyToSubmit);
             entryMode = false;
         } else if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
         languageIDText.textboxKeyTyped(typedChar, keyCode);
     }

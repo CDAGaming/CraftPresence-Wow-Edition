@@ -53,14 +53,14 @@ public class MessageGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == backButton.id) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
     }
 
