@@ -142,11 +142,11 @@ public class MainGui extends GuiScreen {
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
                 CraftPresence.CONFIG.read(false);
-                CommandUtils.reloadData(true);
                 if (CraftPresence.CONFIG.hasClientPropertiesChanged) {
                     CommandUtils.rebootRPC();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = false;
                 }
+                CommandUtils.reloadData(true);
                 CraftPresence.CONFIG.hasChanged = false;
             }
 

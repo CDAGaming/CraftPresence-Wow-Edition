@@ -71,4 +71,21 @@ public class Tuple<U, V> {
         this.first = first;
         this.second = second;
     }
+
+    /**
+     * Determines if elements in two different Tuple's are equivalent
+     *
+     * @param obj The Tuple to compare against
+     * @return If the Two Opposing Tuple's are equivalent
+     */
+    public boolean equals(Tuple<?, ?> obj) {
+        try {
+            // Case 1: Attempt ToString Conversion Checking
+            return (this.getFirst().toString().equals(obj.getFirst().toString())) && (this.getSecond().toString().equals(obj.getSecond().toString()));
+        } catch (Exception ex) {
+            // Case 2: Automated Checking
+            // Note: Can Likely return false positives depending on conditions
+            return ((this.getFirst() == obj.getFirst()) && (this.getSecond() == obj.getSecond())) || (this == obj);
+        }
+    }
 }

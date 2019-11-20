@@ -18,28 +18,30 @@ public class CommandUtils {
         ModUtils.TRANSLATOR.onTick();
         CraftPresence.SYSTEM.onTick();
         CraftPresence.KEYBINDINGS.onTick();
-
-        CraftPresence.BIOMES.onTick();
-        CraftPresence.DIMENSIONS.onTick();
         CraftPresence.GUIS.onTick();
-        CraftPresence.ENTITIES.onTick();
-        CraftPresence.SERVER.onTick();
 
-        if (forceUpdateRPC) {
-            if (CraftPresence.DIMENSIONS.isInUse) {
-                CraftPresence.DIMENSIONS.updateDimensionPresence();
-            }
-            if (CraftPresence.GUIS.isInUse) {
-                CraftPresence.GUIS.updateGUIPresence();
-            }
-            if (CraftPresence.ENTITIES.isInUse) {
-                CraftPresence.ENTITIES.updateEntityPresence();
-            }
-            if (CraftPresence.SERVER.isInUse) {
-                CraftPresence.SERVER.updateServerPresence();
-            }
-            if (CraftPresence.BIOMES.isInUse) {
-                CraftPresence.BIOMES.updateBiomePresence();
+        if (!isInMainMenu) {
+            CraftPresence.BIOMES.onTick();
+            CraftPresence.DIMENSIONS.onTick();
+            CraftPresence.ENTITIES.onTick();
+            CraftPresence.SERVER.onTick();
+
+            if (forceUpdateRPC) {
+                if (CraftPresence.DIMENSIONS.isInUse) {
+                    CraftPresence.DIMENSIONS.updateDimensionPresence();
+                }
+                if (CraftPresence.GUIS.isInUse) {
+                    CraftPresence.GUIS.updateGUIPresence();
+                }
+                if (CraftPresence.ENTITIES.isInUse) {
+                    CraftPresence.ENTITIES.updateEntityPresence();
+                }
+                if (CraftPresence.SERVER.isInUse) {
+                    CraftPresence.SERVER.updateServerPresence();
+                }
+                if (CraftPresence.BIOMES.isInUse) {
+                    CraftPresence.BIOMES.updateBiomePresence();
+                }
             }
         }
     }

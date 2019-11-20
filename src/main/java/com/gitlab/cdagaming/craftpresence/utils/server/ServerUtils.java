@@ -20,6 +20,7 @@ public class ServerUtils {
     public List<String> knownAddresses = Lists.newArrayList();
     private String currentServer_IP, currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
     private int currentPlayers, maxPlayers, serverIndex;
+    private Tuple<Double, Double> currentCoordinates = new Tuple<>(0.0D, 0.0D);
     private ServerData currentServerData, requestedServerData;
     private NetHandlerPlayClient currentConnection;
 
@@ -37,6 +38,7 @@ public class ServerUtils {
         currentServer_Name = null;
         currentServerData = null;
         currentConnection = null;
+        currentCoordinates = new Tuple<>(0.0D, 0.0D);
         timeString = null;
         currentPlayers = 0;
         maxPlayers = 0;
@@ -95,7 +97,6 @@ public class ServerUtils {
                             newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.cannot_resolve")) ||
                             newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.polling")) ||
                             newServerData.serverMOTD.equalsIgnoreCase(ModUtils.TRANSLATOR.translate("craftpresence.multiplayer.status.pinging"))) ? StringUtils.stripColors(newServerData.serverMOTD) : CraftPresence.CONFIG.defaultServerMOTD;
-            final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
 
             if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) ||
                     (newServerData == null && currentServerData != null)) ||
@@ -123,11 +124,25 @@ public class ServerUtils {
 
             // NOTE: Universal Events
             if (!StringUtils.isNullOrEmpty(currentServerMSG)) {
-                if (currentServerMSG.toLowerCase().contains("&time&") && (!StringUtils.isNullOrEmpty(newGameTime) && !newGameTime.equals(timeString))) {
-                    timeString = newGameTime;
-                    queuedForUpdate = true;
+                // &time& Argument = Current Time in World
+                if (currentServerMSG.toLowerCase().contains("&time&")) {
+                    final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
+                    if (!StringUtils.isNullOrEmpty(newGameTime) && !newGameTime.equals(timeString)) {
+                        timeString = newGameTime;
+                        queuedForUpdate = true;
+                    }
                 }
 
+                // &coords& Argument = Current Coordinates of Player (Within &IGN& Placeholder)
+                if (currentServerMSG.toLowerCase().contains("&ign&") && CraftPresence.CONFIG.playerPlaceholderMSG.toLowerCase().contains("&coords&")) {
+                    final Tuple<Double, Double> newCoordinates = CraftPresence.player != null ? new Tuple<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)) : new Tuple<>(0.0D, 0.0D);
+                    if (!newCoordinates.equals(currentCoordinates)) {
+                        currentCoordinates = newCoordinates;
+                        queuedForUpdate = true;
+                    }
+                }
+
+                // &players& Argument = Current and Maximum Allowed Players in Server/World
                 if ((currentServerMSG.toLowerCase().contains("&players&") || CraftPresence.CONFIG.enableJoinRequest) && (newCurrentPlayers != currentPlayers || newMaxPlayers != maxPlayers)) {
                     currentPlayers = newCurrentPlayers;
                     maxPlayers = newMaxPlayers;
@@ -224,6 +239,7 @@ public class ServerUtils {
 
         // Player Data Arguments
         playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
+        playerDataArgs.add(new Tuple<>("&COORDS&", currentCoordinates != null ? ("Coords: " + currentCoordinates.getFirst() + ", " + currentCoordinates.getSecond()) : "")); // TODO: Localization
 
         // Game Time Arguments
         gameTimeArgs.add(new Tuple<>("&WORLDTIME&", !StringUtils.isNullOrEmpty(timeString) ? timeString : ""));
@@ -299,7 +315,7 @@ public class ServerUtils {
             currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, soloArgs), false);
-            CraftPresence.CLIENT.initIconData("&SERVER&"); // TODO: ???
+            CraftPresence.CLIENT.initIconData("&SERVER&");
             CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         }

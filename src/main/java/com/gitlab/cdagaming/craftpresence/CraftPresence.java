@@ -47,7 +47,7 @@ public class CraftPresence {
         // If running in Developer Mode, Warn of Possible Issues and Log OS Info
         if (ModUtils.IS_DEV) {
             ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
-            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", CraftPresence.SYSTEM.OS_NAME, CraftPresence.SYSTEM.OS_ARCH, CraftPresence.SYSTEM.IS_64_BIT));
+            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
         }
 
         SYSTEM = new SystemUtils();
@@ -118,6 +118,7 @@ public class CraftPresence {
 
                     CLIENT.initArgumentData("&MAINMENU&");
                     CLIENT.initIconData("&MAINMENU&");
+                    CLIENT.updatePresence(CLIENT.buildRichPresence());
                 }
 
                 if (awaitingReply && SYSTEM.TIMER == 0) {

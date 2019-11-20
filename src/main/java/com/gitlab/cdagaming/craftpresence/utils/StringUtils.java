@@ -10,6 +10,8 @@ import java.awt.*;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -41,6 +43,17 @@ public class StringUtils {
             }
         } catch (Exception ex) {
             return Color.white;
+        }
+    }
+
+    public static double roundDouble(double value, int places) {
+        if (places > 0) {
+            BigDecimal bd = new BigDecimal(Double.toString(value));
+            bd = bd.setScale(places, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        } else {
+            // Do not Round if Places is less then or equal to 0
+            return value;
         }
     }
 

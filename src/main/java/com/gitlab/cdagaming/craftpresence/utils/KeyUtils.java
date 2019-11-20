@@ -21,14 +21,14 @@ public class KeyUtils {
     }
 
     void onTick() {
-        if (CraftPresence.CONFIG != null) {
+        if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
                 if (isValidKeyCode(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                     CraftPresence.GUIS.openConfigGUI = true;
                 }
             } catch (Exception | Error ex) {
                 ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keybind", CraftPresence.CONFIG.NAME_configKeyCode.replaceAll("_", " ")));
-                CraftPresence.CONFIG.configKeyCode = Integer.toString(Keyboard.KEY_LCONTROL);
+                CraftPresence.CONFIG.configKeyCode = Integer.toString(Keyboard.KEY_GRAVE);
                 CraftPresence.CONFIG.updateConfig();
             }
         }
