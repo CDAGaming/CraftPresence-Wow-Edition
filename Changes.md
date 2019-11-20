@@ -12,7 +12,13 @@
 
 *   Added a New Config Message in Logs for Initial Setups
 
+*   Pressing the `Reset to Default` Button will no longer save automatically, to prevent accidental misuse
+
+    * The `Back` Button will turn to `Save` if it detects a queued reset or change
+
 *   The Mod will now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
+
+*   Removed and Cleaned Unused Localization Strings
 
 *   (Code-Behind) Change `isValidInteger` and `isValidLong` to Getters powered by Tuple's for both getting a boolean and the number itself
 
