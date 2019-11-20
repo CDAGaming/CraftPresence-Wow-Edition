@@ -2,6 +2,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
@@ -117,9 +118,11 @@ public class DiscordUtils {
 
         DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
 
-        // Initialize and Sync any Pre-made Arguments
+        // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
         initArgumentData("&MAINMENU&", "&MCVERSION&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
         initIconData("&MAINMENU&", "&MCVERSION&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+
+        CommandUtils.isInMainMenu = false;
 
         syncArgument("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion), false);
         syncPackArguments();
