@@ -20,6 +20,30 @@ public class KeyUtils {
         return sourceKeyCode > keyStartLimit && !invalidKeys.contains(sourceKeyCode);
     }
 
+    public String getKeyName(String original) {
+        if (!StringUtils.isNullOrEmpty(original)) {
+            Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
+
+            if (integerData.getFirst() && isValidKeyCode(integerData.getSecond())) {
+                // Input is a valid Integer and Valid KeyCode
+                final String keyName = Keyboard.getKeyName(integerData.getSecond());
+
+                // If Key Name is not Empty or Null, use that, otherwise use original
+                if (!StringUtils.isNullOrEmpty(keyName)) {
+                    return keyName;
+                } else {
+                    return original;
+                }
+            } else {
+                // If Not a Valid Integer or Valid KeyCode, return NONE
+                return Keyboard.getKeyName(Keyboard.KEY_NONE);
+            }
+        } else {
+            // If input is a Null Value, return NONE
+            return Keyboard.getKeyName(Keyboard.KEY_NONE);
+        }
+    }
+
     void onTick() {
         if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {

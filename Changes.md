@@ -10,6 +10,8 @@
 
 *   `/cp view currentData` will now show the Current User the RPC is attached to
 
+*   Extended KeyBinding System to expand to future KeyBinds
+
 *   Added a New Config Message in Logs for Initial Setups
 
 *   Pressing the `Reset to Default` Button will no longer save automatically, to prevent accidental misuse
@@ -18,7 +20,7 @@
 
 *   Added Placeholders to `&IGN&` within Server Settings:
 
-    *   `&coords&` has been added to display you X and Z Axis Coordinated
+    *   `&coords&` has been added to display your X and Z Axis Coordinates
 
 *   The Mod will now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
 
