@@ -9,7 +9,6 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.google.common.base.Functions;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandsGui extends GuiScreen {
     private static String[] executionCommandArgs;
@@ -45,7 +45,7 @@ public class CommandsGui extends GuiScreen {
         List<String> list = Lists.newArrayList();
 
         if (!possibleCompletions.isEmpty()) {
-            for (String s1 : Iterables.transform(possibleCompletions, Functions.toStringFunction())) {
+            for (String s1 : possibleCompletions.stream().map(Functions.toStringFunction()).collect(Collectors.toList())) {
                 if (doesStringStartWith(s, s1)) {
                     list.add(s1);
                 }
