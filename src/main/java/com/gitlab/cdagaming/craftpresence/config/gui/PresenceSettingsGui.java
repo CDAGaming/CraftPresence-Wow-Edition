@@ -143,26 +143,32 @@ public class PresenceSettingsGui extends GuiScreen {
         if (button.id == backButton.id) {
             if (!detailsFormat.getText().equals(CraftPresence.CONFIG.detailsMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.detailsMSG = detailsFormat.getText();
             }
             if (!gameStateFormat.getText().equals(CraftPresence.CONFIG.gameStateMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.gameStateMSG = gameStateFormat.getText();
             }
             if (!largeImageFormat.getText().equals(CraftPresence.CONFIG.largeImageMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.largeImageMSG = largeImageFormat.getText();
             }
             if (!smallImageFormat.getText().equals(CraftPresence.CONFIG.smallImageMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.smallImageMSG = smallImageFormat.getText();
             }
             if (!largeImageKeyFormat.getText().equals(CraftPresence.CONFIG.largeImageKey)) {
                 CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.largeImageKey = largeImageKeyFormat.getText();
             }
             if (!smallImageKeyFormat.getText().equals(CraftPresence.CONFIG.smallImageKey)) {
                 CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.smallImageKey = smallImageKeyFormat.getText();
             }
             CraftPresence.GUIS.openScreen(parentScreen);
