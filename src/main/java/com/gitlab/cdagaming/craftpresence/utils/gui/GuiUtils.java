@@ -167,14 +167,11 @@ public class GuiUtils {
 
         final String defaultGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
-        final String currentGuiIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_GUI_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_GUI_NAME);
-        final String formattedIconKey = StringUtils.formatPackIcon(currentGuiIcon.replace(" ", "_"));
 
-        final String CURRENT_GUI_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultBiomeIcon); // TODO: ???
         final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGUIMSG, guiArgs);
 
         CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_MESSAGE, false);
-        CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_ICON, true);
+        CraftPresence.CLIENT.initIconData("&GUI&");
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

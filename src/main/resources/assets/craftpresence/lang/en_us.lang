@@ -90,7 +90,6 @@ gui.config.name.general.showbiome=Show Biome
 gui.config.name.general.showdimension=Show Dimension
 gui.config.name.general.showstate=Show Game Status
 gui.config.name.general.enablejoinrequest=Enable Join Requests
-gui.config.name.biomemessages.biomeicon=Default Biome Icon
 gui.config.name.biomemessages.biomemessages=Biome Messages
 gui.config.name.dimensionmessages.dimensionicon=Default Dimension Icon
 gui.config.name.dimensionmessages.dimensionmessages=Dimension Messages

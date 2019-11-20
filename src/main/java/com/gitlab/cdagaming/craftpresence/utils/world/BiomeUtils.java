@@ -89,14 +89,11 @@ public class BiomeUtils {
 
         final String defaultBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMSG);
-        final String currentBiomeIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_BIOME_NAME);
-        final String formattedIconKey = StringUtils.formatPackIcon(currentBiomeIcon.replace(" ", "_"));
 
-        final String CURRENT_BIOME_ICON = formattedIconKey.replace("&icon&", CraftPresence.CONFIG.defaultBiomeIcon);
         final String CURRENT_BIOME_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentBiomeMSG, biomeArgs);
 
         CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_MESSAGE, false);
-        CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_ICON, true);
+        CraftPresence.CLIENT.initIconData("&BIOME&");
         CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 

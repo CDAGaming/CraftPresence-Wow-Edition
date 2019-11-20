@@ -21,7 +21,7 @@ public class ConfigUtils {
             NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
             NAME_showGameState, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest;
     // BIOME MESSAGES
-    public String NAME_defaultBiomeIcon, NAME_biomeMessages;
+    public String NAME_biomeMessages;
     // DIMENSION MESSAGES
     public String NAME_defaultDimensionIcon, NAME_dimensionMessages;
     // SERVER MESSAGES
@@ -45,7 +45,6 @@ public class ConfigUtils {
             showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
     public String clientID, defaultIcon;
     // BIOME MESSAGES
-    public String defaultBiomeIcon;
     public String[] biomeMessages;
     // DIMENSION MESSAGES
     public String defaultDimensionIcon;
@@ -113,9 +112,7 @@ public class ConfigUtils {
         defaultIcon = "grass";
         enableJoinRequest = false;
         // BIOME MESSAGES
-        NAME_defaultBiomeIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biomemessages.biomeicon").replaceAll(" ", "_");
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biomemessages.biomemessages").replaceAll(" ", "_");
-        defaultBiomeIcon = "plains";
         biomeMessages = new String[]{"default;Playing in &biome&"};
         // DIMENSION MESSAGES
         NAME_defaultDimensionIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimensionmessages.dimensionicon").replaceAll(" ", "_");
