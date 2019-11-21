@@ -190,6 +190,11 @@ public class EntityUtils {
         entityArgs.add(new Tuple<>("&LEGS&", CURRENT_LEGS_NAME));
         entityArgs.add(new Tuple<>("&BOOTS&", CURRENT_BOOTS_NAME));
 
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            entityArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
+
         final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String CURRENT_ITEM_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultItemMSG, entityArgs);
 

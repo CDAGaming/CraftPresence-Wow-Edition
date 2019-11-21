@@ -17,9 +17,11 @@ public class ServerUtils {
     public boolean enabled = false, isInUse = false;
 
     public List<String> knownAddresses = Lists.newArrayList();
-    private String currentServer_IP, currentServer_Name, currentServer_MOTD, currentServerMSG, timeString;
+    private String currentServer_IP, currentServer_Name, currentServer_MOTD, currentServerMSG,
+            timeString, currentDifficulty, currentWorldName;
     private int currentPlayers, maxPlayers, serverIndex;
     private Tuple<Double, Double> currentCoordinates = new Tuple<>(0.0D, 0.0D);
+    private Tuple<Float, Float> currentHealth = new Tuple<>(0.0f, 0.0f);
     private ServerData currentServerData, requestedServerData;
     private NetHandlerPlayClient currentConnection;
 
@@ -38,6 +40,9 @@ public class ServerUtils {
         currentServerData = null;
         currentConnection = null;
         currentCoordinates = new Tuple<>(0.0D, 0.0D);
+        currentHealth = new Tuple<>(0.0f, 0.0f);
+        currentDifficulty = null;
+        currentWorldName = null;
         timeString = null;
         currentPlayers = 0;
         maxPlayers = 0;
@@ -132,13 +137,46 @@ public class ServerUtils {
                     }
                 }
 
-                // &coords& Argument = Current Coordinates of Player (Within &IGN& Placeholder)
-                if (currentServerMSG.toLowerCase().contains("&ign&") && CraftPresence.CONFIG.playerPlaceholderMSG.toLowerCase().contains("&coords&")) {
-                    final Tuple<Double, Double> newCoordinates = CraftPresence.player != null ? new Tuple<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)) : new Tuple<>(0.0D, 0.0D);
-                    if (!newCoordinates.equals(currentCoordinates)) {
-                        currentCoordinates = newCoordinates;
-                        queuedForUpdate = true;
+                // &PLAYERINFO& Sub-Arguments
+                if (currentServerMSG.toLowerCase().contains("&playerinfo&")) {
+                    // &coords& Argument = Current Coordinates of Player
+                    if (CraftPresence.CONFIG.playerPlaceholderMSG.toLowerCase().contains("&coords&")) {
+                        final Tuple<Double, Double> newCoordinates = CraftPresence.player != null ? new Tuple<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)) : new Tuple<>(0.0D, 0.0D);
+                        if (!newCoordinates.equals(currentCoordinates)) {
+                            currentCoordinates = newCoordinates;
+                            queuedForUpdate = true;
+                        }
                     }
+
+                    // &health& Argument = Current and Maximum Health of Player
+                    if (CraftPresence.CONFIG.playerPlaceholderMSG.toLowerCase().contains("&health&")) {
+                        final Tuple<Float, Float> newHealth = CraftPresence.player != null ? new Tuple<>(CraftPresence.player.getHealth(), CraftPresence.player.getMaxHealth()) : new Tuple<>(0.0f, 0.0f);
+                        if (!newHealth.equals(currentHealth)) {
+                            currentHealth = newHealth;
+                            queuedForUpdate = true;
+                        }
+                    }
+                }
+
+                // &WORLDINFO& Sub-Arguments
+                if (currentServerMSG.toLowerCase().contains("&worldinfo")) {
+                    // &difficulty& Argument = Current Difficulty of the World - TODO: Configure.
+                    /*if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&difficulty")) {
+                        final String newDifficulty = CraftPresence.player != null ? CraftPresence.player.world.getDifficulty().name() : "";
+                        if (!newDifficulty.equals(currentDifficulty)) {
+                            currentDifficulty = newDifficulty;
+                            queuedForUpdate = true;
+                        }
+                    }*/
+
+                    // &worldname& Argument = Current Name of the World - TODO: Configure.
+                    /*if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&worldname&")) {
+                        final String newWorldName = CraftPresence.player != null ? CraftPresence.player.world.getWorldInfo().getWorldName() : "";
+                        if (!newWorldName.equals(currentWorldName)) {
+                            currentWorldName = newWorldName;
+                            queuedForUpdate = true;
+                        }
+                    }*/
                 }
 
                 // &players& Argument = Current and Maximum Allowed Players in Server/World
@@ -234,10 +272,16 @@ public class ServerUtils {
 
     public void updateServerPresence() {
         // Form General Argument Lists
-        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), gameTimeArgs = Lists.newArrayList();
+        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), worldDataArgs = Lists.newArrayList(), gameTimeArgs = Lists.newArrayList();
 
         // Player Data Arguments
-        playerDataArgs.add(new Tuple<>("&COORDS&", currentCoordinates != null ? ("Coords: " + currentCoordinates.getFirst() + ", " + currentCoordinates.getSecond()) : "")); // TODO: Localization
+        // TODO: Localization and Config Options
+        playerDataArgs.add(new Tuple<>("&COORDS&", currentCoordinates != null ? ("Coords: " + currentCoordinates.getFirst() + ", " + currentCoordinates.getSecond()) : ""));
+        playerDataArgs.add(new Tuple<>("&HEALTH&", currentHealth != null ? ("Health: " + currentHealth.getFirst() + "/" + currentHealth.getSecond()) : ""));
+
+        // World Data Arguments
+        worldDataArgs.add(new Tuple<>("&DIFFICULTY&", !StringUtils.isNullOrEmpty(currentDifficulty) ? currentDifficulty : ""));
+        worldDataArgs.add(new Tuple<>("&WORLDNAME&", !StringUtils.isNullOrEmpty(currentWorldName) ? currentWorldName : ""));
 
         // Game Time Arguments
         gameTimeArgs.add(new Tuple<>("&WORLDTIME&", !StringUtils.isNullOrEmpty(timeString) ? timeString : ""));
@@ -259,6 +303,12 @@ public class ServerUtils {
             serverArgs.add(new Tuple<>("&PLAYERS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerAmountPlaceholderMSG, playerAmountArgs)));
             serverArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
             serverArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
+            //serverArgs.add(new Tuple<>("&WORLDINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.worldPlaceholderMSG, worldDataArgs)));
+
+            // Add All Generalized Arguments, if any
+            if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+                serverArgs.addAll(CraftPresence.CLIENT.generalArgs);
+            }
 
             if (isOnLAN) {
                 // NOTE: LAN-Only Presence Updates
@@ -301,8 +351,13 @@ public class ServerUtils {
             // Form SinglePlayer Tuple Argument List
             List<Tuple<String, String>> soloArgs = Lists.newArrayList();
 
-            soloArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+            soloArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
             soloArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
+
+            // Add All Generalized Arguments, if any
+            if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+                soloArgs.addAll(CraftPresence.CLIENT.generalArgs);
+            }
 
             // NOTE: SinglePlayer-Only Presence Updates
             currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;

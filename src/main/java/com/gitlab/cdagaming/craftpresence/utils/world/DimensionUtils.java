@@ -97,6 +97,11 @@ public class DimensionUtils {
         dimensionArgs.add(new Tuple<>("&DIMENSION&", CURRENT_DIMENSION_NAME));
         dimensionArgs.add(new Tuple<>("&ID&", CURRENT_DIMENSION_ID.toString()));
 
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            dimensionArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
+
         final String defaultDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
         final String currentDimensionIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, CURRENT_DIMENSION_NAME_ID, 0, 2, CraftPresence.CONFIG.splitCharacter, CURRENT_DIMENSION_NAME_ID);

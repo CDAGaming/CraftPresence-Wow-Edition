@@ -165,6 +165,11 @@ public class GuiUtils {
         guiArgs.add(new Tuple<>("&CLASS&", CURRENT_GUI_CLASS.getSimpleName()));
         guiArgs.add(new Tuple<>("&SCREEN&", CURRENT_SCREEN.toString()));
 
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            guiArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
+
         final String defaultGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
 

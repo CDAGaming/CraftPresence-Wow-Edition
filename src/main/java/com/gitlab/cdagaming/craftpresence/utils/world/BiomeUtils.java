@@ -87,6 +87,11 @@ public class BiomeUtils {
         biomeArgs.add(new Tuple<>("&BIOME&", CURRENT_BIOME_NAME));
         biomeArgs.add(new Tuple<>("&ID&", CURRENT_BIOME_ID.toString()));
 
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            biomeArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
+
         final String defaultBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentBiomeMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, CURRENT_BIOME_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMSG);
 

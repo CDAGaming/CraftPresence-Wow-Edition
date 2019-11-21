@@ -47,6 +47,7 @@ public class DiscordUtils {
     public String MATCH_SECRET;
     public String SPECTATE_SECRET;
     public byte INSTANCE;
+    public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
     private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList(),
             modsArgs = Lists.newArrayList(), playerInfoArgs = Lists.newArrayList();
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
@@ -124,16 +125,23 @@ public class DiscordUtils {
         initArgumentData("&MAINMENU&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
         initIconData("&MAINMENU&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
 
+        // Ensure Main Menu RPC Resets properly
         CommandUtils.isInMainMenu = false;
 
         // Add Any Generalized Argument Data needed
         modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
-
         playerInfoArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
-        syncArgument("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion), false);
-        syncArgument("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs), false);
-        syncArgument("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerInfoArgs), false);
+        generalArgs.add(new Tuple<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion)));
+        generalArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
+        generalArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerInfoArgs)));
+
+        for (Tuple<String, String> generalArgument : generalArgs) {
+            // For each General (Can be used Anywhere) Argument
+            // Ensure they sync as Formatter Arguments too
+            syncArgument(generalArgument.getFirst(), generalArgument.getSecond(), false);
+        }
+
         syncPackArguments();
     }
 
