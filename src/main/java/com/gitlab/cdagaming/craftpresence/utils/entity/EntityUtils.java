@@ -179,23 +179,52 @@ public class EntityUtils {
     }
 
     public void updateEntityPresence() {
+        // Retrieve Messages
+        final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
+                null);
+
+        final String offHandItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                CURRENT_OFFHAND_ITEM_NAME);
+        final String mainItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                CURRENT_MAINHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                defaultItemMSG);
+
+        final String helmetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                CURRENT_HELMET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                CURRENT_HELMET_NAME);
+        final String chestMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                CURRENT_CHEST_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                CURRENT_CHEST_NAME);
+        final String legsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                CURRENT_LEGS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                CURRENT_LEGS_NAME);
+        final String bootsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+                CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                CURRENT_BOOTS_NAME);
+
         // Form Entity/Item Argument List
-        // TODO: Fully Update Logic
         List<Tuple<String, String>> entityArgs = Lists.newArrayList();
 
-        entityArgs.add(new Tuple<>("&MAIN&", CURRENT_MAINHAND_ITEM_NAME));
-        entityArgs.add(new Tuple<>("&OFFHAND&", CURRENT_OFFHAND_ITEM_NAME));
-        entityArgs.add(new Tuple<>("&HELMET&", CURRENT_HELMET_NAME));
-        entityArgs.add(new Tuple<>("&CHEST&", CURRENT_CHEST_NAME));
-        entityArgs.add(new Tuple<>("&LEGS&", CURRENT_LEGS_NAME));
-        entityArgs.add(new Tuple<>("&BOOTS&", CURRENT_BOOTS_NAME));
+        entityArgs.add(new Tuple<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAINHAND_ITEM_NAME) ?
+                StringUtils.replaceAnyCase(mainItemMSG, "&item&", CURRENT_MAINHAND_ITEM_NAME) : ""));
+        entityArgs.add(new Tuple<>("&OFFHAND&", !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ?
+                StringUtils.replaceAnyCase(offHandItemMSG, "&item&", CURRENT_OFFHAND_ITEM_NAME) : ""));
+        entityArgs.add(new Tuple<>("&HELMET&", !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ?
+                StringUtils.replaceAnyCase(helmetMSG, "&item&", CURRENT_HELMET_NAME) : ""));
+        entityArgs.add(new Tuple<>("&CHEST&", !StringUtils.isNullOrEmpty(CURRENT_CHEST_NAME) ?
+                StringUtils.replaceAnyCase(chestMSG, "&item&", CURRENT_CHEST_NAME) : ""));
+        entityArgs.add(new Tuple<>("&LEGS&", !StringUtils.isNullOrEmpty(CURRENT_LEGS_NAME) ?
+                StringUtils.replaceAnyCase(legsMSG, "&item&", CURRENT_LEGS_NAME) : ""));
+        entityArgs.add(new Tuple<>("&BOOTS&", !StringUtils.isNullOrEmpty(CURRENT_BOOTS_NAME) ?
+                StringUtils.replaceAnyCase(bootsMSG, "&item&", CURRENT_BOOTS_NAME) : ""));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
             entityArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String CURRENT_ITEM_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultItemMSG, entityArgs);
 
         // NOTE: Only Apply if Items are not Empty, otherwise Clear Argument
