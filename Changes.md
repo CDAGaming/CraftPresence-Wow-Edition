@@ -61,7 +61,9 @@ v1.5.x is Generally Recommended at this time for new users, has the systems used
 
 Migration Notes:
 
-*   `&mods&` is now a Generalized Placeholder and can only be called within the Presence Formatting GUI
+*   `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
+
+    *   `&ign` in Server Messages should be changed to `&playerinfo&`
 
 *   `overwriteServerIcon` has been deprecated, instead use the Presence Formatting GUI to define the priority for icons
 

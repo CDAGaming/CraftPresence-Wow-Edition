@@ -237,7 +237,6 @@ public class ServerUtils {
         List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), gameTimeArgs = Lists.newArrayList();
 
         // Player Data Arguments
-        playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
         playerDataArgs.add(new Tuple<>("&COORDS&", currentCoordinates != null ? ("Coords: " + currentCoordinates.getFirst() + ", " + currentCoordinates.getSecond()) : "")); // TODO: Localization
 
         // Game Time Arguments
@@ -258,7 +257,7 @@ public class ServerUtils {
             serverArgs.add(new Tuple<>("&NAME&", currentServer_Name));
             serverArgs.add(new Tuple<>("&MOTD&", currentServer_MOTD));
             serverArgs.add(new Tuple<>("&PLAYERS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerAmountPlaceholderMSG, playerAmountArgs)));
-            serverArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+            serverArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
             serverArgs.add(new Tuple<>("&TIME&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameTimePlaceholderMSG, gameTimeArgs)));
 
             if (isOnLAN) {
