@@ -16,7 +16,7 @@ public class StatusMessagesGui extends GuiScreen {
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
     private GuiTextField mainMenuMSG, lanMSG, singleplayerMSG, packMSG,
-            playerMSG, playerAmountMSG, gameTimeMSG, modsMSG, viveCraftMSG;
+            playerMSG, playerAmountMSG, worldMSG, modsMSG, viveCraftMSG;
 
     StatusMessagesGui(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -37,7 +37,7 @@ public class StatusMessagesGui extends GuiScreen {
         packMSG = new GuiTextField(140, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1), 180, 20);
         playerMSG = new GuiTextField(150, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(2), 180, 20);
         playerAmountMSG = new GuiTextField(160, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
-        gameTimeMSG = new GuiTextField(170, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
+        worldMSG = new GuiTextField(170, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
         modsMSG = new GuiTextField(180, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
         viveCraftMSG = new GuiTextField(190, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
 
@@ -47,7 +47,7 @@ public class StatusMessagesGui extends GuiScreen {
         packMSG.setText(CraftPresence.CONFIG.packPlaceholderMSG);
         playerMSG.setText(CraftPresence.CONFIG.playerPlaceholderMSG);
         playerAmountMSG.setText(CraftPresence.CONFIG.playerAmountPlaceholderMSG);
-        gameTimeMSG.setText(CraftPresence.CONFIG.gameTimePlaceholderMSG);
+        worldMSG.setText(CraftPresence.CONFIG.worldPlaceholderMSG);
         modsMSG.setText(CraftPresence.CONFIG.modsPlaceholderMSG);
         viveCraftMSG.setText(CraftPresence.CONFIG.vivecraftMessage);
 
@@ -75,7 +75,7 @@ public class StatusMessagesGui extends GuiScreen {
         final String packText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.packmsg");
         final String playerText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playermsg");
         final String playerAmountText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playeramountmsg");
-        final String gameTimeText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.gametimemsg");
+        final String worldDataText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.worldmsg");
         final String modsText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.modsmsg");
         final String viveCraftText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.special.vivecraftmsg");
 
@@ -96,21 +96,21 @@ public class StatusMessagesGui extends GuiScreen {
             drawString(mc.fontRenderer, packText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
             drawString(mc.fontRenderer, playerText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
             drawString(mc.fontRenderer, playerAmountText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            drawString(mc.fontRenderer, gameTimeText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            drawString(mc.fontRenderer, worldDataText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
             drawString(mc.fontRenderer, modsText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
             drawString(mc.fontRenderer, viveCraftText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
 
             packMSG.drawTextBox();
             playerMSG.drawTextBox();
             playerAmountMSG.drawTextBox();
-            gameTimeMSG.drawTextBox();
+            worldMSG.drawTextBox();
             modsMSG.drawTextBox();
             viveCraftMSG.drawTextBox();
         }
 
         previousPageButton.enabled = pageNumber != 0;
         nextPageButton.enabled = pageNumber != 1;
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(mainMenuMSG.getText()) && !StringUtils.isNullOrEmpty(singleplayerMSG.getText()) && !StringUtils.isNullOrEmpty(packMSG.getText()) && !StringUtils.isNullOrEmpty(playerMSG.getText()) && !StringUtils.isNullOrEmpty(playerAmountMSG.getText()) && !StringUtils.isNullOrEmpty(gameTimeMSG.getText()) && !StringUtils.isNullOrEmpty(viveCraftMSG.getText());
+        proceedButton.enabled = !StringUtils.isNullOrEmpty(mainMenuMSG.getText()) && !StringUtils.isNullOrEmpty(singleplayerMSG.getText()) && !StringUtils.isNullOrEmpty(packMSG.getText()) && !StringUtils.isNullOrEmpty(playerMSG.getText()) && !StringUtils.isNullOrEmpty(playerAmountMSG.getText()) && !StringUtils.isNullOrEmpty(worldMSG.getText()) && !StringUtils.isNullOrEmpty(viveCraftMSG.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -142,9 +142,9 @@ public class StatusMessagesGui extends GuiScreen {
             if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(playerAmountText), mc.fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.playeramountmsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             }
-            // Hovering over Game Time Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(4) + 5, StringUtils.getStringWidth(gameTimeText), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.gametimemsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            // Hovering over World Data Message Label
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(4) + 5, StringUtils.getStringWidth(worldDataText), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             }
             // Hovering over Mods Message Label
             if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(5) + 5, StringUtils.getStringWidth(modsText), mc.fontRenderer.FONT_HEIGHT)) {
@@ -201,10 +201,10 @@ public class StatusMessagesGui extends GuiScreen {
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                 CraftPresence.CONFIG.playerAmountPlaceholderMSG = playerAmountMSG.getText();
             }
-            if (!gameTimeMSG.getText().equals(CraftPresence.CONFIG.gameTimePlaceholderMSG)) {
+            if (!worldMSG.getText().equals(CraftPresence.CONFIG.worldPlaceholderMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                CraftPresence.CONFIG.gameTimePlaceholderMSG = gameTimeMSG.getText();
+                CraftPresence.CONFIG.worldPlaceholderMSG = worldMSG.getText();
             }
             if (!modsMSG.getText().equals(CraftPresence.CONFIG.modsPlaceholderMSG)) {
                 CraftPresence.CONFIG.hasChanged = true;
@@ -244,7 +244,7 @@ public class StatusMessagesGui extends GuiScreen {
             packMSG.textboxKeyTyped(typedChar, keyCode);
             playerMSG.textboxKeyTyped(typedChar, keyCode);
             playerAmountMSG.textboxKeyTyped(typedChar, keyCode);
-            gameTimeMSG.textboxKeyTyped(typedChar, keyCode);
+            worldMSG.textboxKeyTyped(typedChar, keyCode);
             modsMSG.textboxKeyTyped(typedChar, keyCode);
             viveCraftMSG.textboxKeyTyped(typedChar, keyCode);
         }
@@ -262,7 +262,7 @@ public class StatusMessagesGui extends GuiScreen {
             packMSG.mouseClicked(mouseX, mouseY, mouseButton);
             playerMSG.mouseClicked(mouseX, mouseY, mouseButton);
             playerAmountMSG.mouseClicked(mouseX, mouseY, mouseButton);
-            gameTimeMSG.mouseClicked(mouseX, mouseY, mouseButton);
+            worldMSG.mouseClicked(mouseX, mouseY, mouseButton);
             modsMSG.mouseClicked(mouseX, mouseY, mouseButton);
             viveCraftMSG.mouseClicked(mouseX, mouseY, mouseButton);
         }
@@ -282,7 +282,7 @@ public class StatusMessagesGui extends GuiScreen {
             packMSG.updateCursorCounter();
             playerMSG.updateCursorCounter();
             playerAmountMSG.updateCursorCounter();
-            gameTimeMSG.updateCursorCounter();
+            worldMSG.updateCursorCounter();
             modsMSG.updateCursorCounter();
             viveCraftMSG.updateCursorCounter();
         }

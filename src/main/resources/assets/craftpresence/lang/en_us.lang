@@ -102,8 +102,10 @@ gui.config.name.statusmessages.lanmsg=LAN Game Message
 gui.config.name.statusmessages.singleplayermsg=Singleplayer Game Message
 gui.config.name.statusmessages.placeholder.packmsg=ModPack Message
 gui.config.name.statusmessages.placeholder.playermsg=Player Name Placeholder
+gui.config.name.statusmessages.placeholder.playercoordinatemsg=Player Coordinate Placeholder
+gui.config.name.statusmessages.placeholder.playerhealthmsg=Player Health Placeholder
 gui.config.name.statusmessages.placeholder.playeramountmsg=Player List Placeholder
-gui.config.name.statusmessages.placeholder.gametimemsg=Game Time Placeholder
+gui.config.name.statusmessages.placeholder.worldmsg=World Data Placeholder
 gui.config.name.statusmessages.placeholder.modsmsg=Mods Placeholder
 gui.config.name.statusmessages.special.vivecraftmsg=Vivecraft Message
 gui.config.name.advanced.splitcharacter=Split Character
@@ -150,7 +152,6 @@ gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Si
 gui.config.comment.statusmessages.placeholder.packmsg=Message to display in Rich Presence when using a valid ModPack \n (Curse, Twitch, Technic, MCUpdater, or MultiMC) \n Available Placeholders: \n - &name& = The Pack's Name
 gui.config.comment.statusmessages.placeholder.playermsg=Message to use for the &ign& Placeholder \n Available Placeholders: \n - &name& = Your Username
 gui.config.comment.statusmessages.placeholder.playeramountmsg=Message to use for the &players& Placeholder \n Available Placeholders: \n - &current& = Current Player Count \n - &max& = Maximum Player Count
-gui.config.comment.statusmessages.placeholder.gametimemsg=Message to use for the &time& Placeholder \n Available Placeholders: \n - &worldtime& = The Current World Time, in format of HH:MM
 gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder \n Available Placeholders: \n - &modcount& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs \n (You'll need to change each of your variables manually)
@@ -173,8 +174,10 @@ craftpresence.defaults.state.lan=Playing on a LAN Server
 craftpresence.defaults.state.singleplayer=Playing Singleplayer
 craftpresence.defaults.placeholder.pack=&name&
 craftpresence.defaults.placeholder.players=&current& / &max& Players
-craftpresence.defaults.placeholder.ign=&name&
-craftpresence.defaults.placeholder.time=&worldtime&
+craftpresence.defaults.placeholder.playerinfo=&name&
+craftpresence.defaults.placeholder.playerinfo.coordinate=At &xPosition&, &yPosition&
+craftpresence.defaults.placeholder.playerinfo.health=Health: &current&/&max&
+craftpresence.defaults.placeholder.worldinfo=On &worldname&
 craftpresence.defaults.placeholder.mods=&modcount& Mods
 craftpresence.defaults.special.vivecraft=Playing in VR via Vivecraft
 craftpresence.multiplayer.status.cannot_connect=Can't connect to server

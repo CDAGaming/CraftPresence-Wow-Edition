@@ -61,10 +61,11 @@ v1.5.x is Generally Recommended at this time for new users, has the systems used
 
 Migration Notes:
 
+*   `gameTimePlaceholder` is now combined into the `&worldinfo&` Placeholder
+
 *   Entity Messages now use the Default Message as the Format, while specific Item Messages are considered placeholders for the formatter
 
     *   This means, only `&item&` (The Specific Item's Name) will work for specific Items
-
     *   Otherwise, the more familiar placeholders such as `&main&` and `&offhand&` will retrieve these message when part of the default format setting
 
 *   `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
