@@ -24,7 +24,10 @@ public class AccessibilitySettingsGui extends GuiScreen {
 
     private GuiTextField languageIDText;
     private CheckBoxControl stripTranslationColorsButton, showLoggingInChatButton;
-    private ExtendedButtonControl proceedButton, tooltipBGButton, tooltipBorderButton, guiBGButton, configKeyCodeButton;
+    private ExtendedButtonControl proceedButton;
+    private ExtendedButtonControl tooltipBGButton;
+    private ExtendedButtonControl tooltipBorderButton;
+    private ExtendedButtonControl guiBGButton;
 
     AccessibilitySettingsGui(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -47,10 +50,10 @@ public class AccessibilitySettingsGui extends GuiScreen {
         languageIDText.setText(CraftPresence.CONFIG.languageID);
 
         stripTranslationColorsButton = new CheckBoxControl(500, calc1, CraftPresence.GUIS.getButtonY(4) + 10, ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.striptranslationcolors"), CraftPresence.CONFIG.stripTranslationColors);
-
         showLoggingInChatButton = new CheckBoxControl(600, calc2, CraftPresence.GUIS.getButtonY(4) + 10, ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.showlogginginchat"), CraftPresence.CONFIG.showLoggingInChat);
 
-        configKeyCodeButton = new ExtendedButtonControl(700, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode), "configKeyCode");
+        // KeyCode Buttons
+        final ExtendedButtonControl configKeyCodeButton = new ExtendedButtonControl(700, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode), "configKeyCode");
 
         proceedButton = new ExtendedButtonControl(800, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
@@ -59,7 +62,10 @@ public class AccessibilitySettingsGui extends GuiScreen {
         buttonList.add(guiBGButton);
         buttonList.add(stripTranslationColorsButton);
         buttonList.add(showLoggingInChatButton);
+
+        // KeyCode Buttons
         buttonList.add(configKeyCodeButton);
+
         buttonList.add(proceedButton);
 
         super.initGui();

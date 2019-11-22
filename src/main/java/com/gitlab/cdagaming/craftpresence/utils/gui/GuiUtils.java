@@ -473,14 +473,31 @@ public class GuiUtils {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
-                                          int topBorder, int bottomBorder, int leftBorder, int rightBorder, double zLevel, ResourceLocation res) {
+    public void drawContinuousTexturedBox(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> uVLevels, Tuple<Integer, Integer> screenDimensions, Tuple<Integer, Integer> textureDimensions,
+                                          Tuple<Integer, Integer> verticalBorderData, Tuple<Integer, Integer> sideBorderData, double zLevel, ResourceLocation res) {
         if (res != null) {
             CraftPresence.instance.getTextureManager().bindTexture(res);
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        int x = positionData.getFirst();
+        int y = positionData.getSecond();
+
+        int u = uVLevels.getFirst();
+        int v = uVLevels.getSecond();
+
+        int width = screenDimensions.getFirst();
+        int height = screenDimensions.getSecond();
+
+        int textureWidth = textureDimensions.getFirst();
+        int textureHeight = textureDimensions.getSecond();
+
+        int topBorder = verticalBorderData.getFirst();
+        int bottomBorder = verticalBorderData.getSecond();
+        int leftBorder = sideBorderData.getFirst();
+        int rightBorder = sideBorderData.getSecond();
 
         int fillerWidth = textureWidth - leftBorder - rightBorder;
         int fillerHeight = textureHeight - topBorder - bottomBorder;
