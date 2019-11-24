@@ -382,7 +382,7 @@ public final class IPCClient implements Closeable {
                 if (listener != null)
                     listener.onDisconnect(this, ex);
             }
-        });
+        }, "DiscordIPC-Reader");
 
         if (ModUtils.IS_DEV) {
             ModUtils.LOG.info("Starting IPCClient reading thread!");

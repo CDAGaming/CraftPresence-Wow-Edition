@@ -31,6 +31,7 @@ public class AFUNIXServerSocket extends ServerSocket {
     private final AFUNIXSocketImpl implementation;
 
     private AFUNIXSocketAddress boundEndpoint;
+
     /**
      * Constructs a new, unconnected instance.
      *
