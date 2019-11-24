@@ -27,10 +27,10 @@ import java.lang.ref.WeakReference;
  *
  * @author Christian Kohlschütter
  */
-public final class AncillaryFileDescriptors {
+public final class AncillaryFileDescriptorHelper {
     private static final ThreadLocal<WeakReference<Support>> TL_SUPPORT_REF = new ThreadLocal<>();
 
-    private AncillaryFileDescriptors() {
+    private AncillaryFileDescriptorHelper() {
         throw new UnsupportedOperationException("No instances");
     }
 

@@ -29,7 +29,7 @@ import java.net.SocketException;
  *
  * @author Christian Kohlschütter
  */
-public final class AFUNIXSocket extends Socket implements AncillaryFileDescriptors.Support {
+public final class AFUNIXSocket extends Socket implements AncillaryFileDescriptorHelper.Support {
     static String loadedLibrary; // set by NativeLibraryLoader
 
     private static Integer capabilities = null;
@@ -120,7 +120,7 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
      * @return {@code true} iff supported.
      */
     private static boolean isSupported() {
-        return NativeUnixSocket.isLoaded();
+        return NativeUnixSocketHelper.isLoaded();
     }
 
     /**
@@ -140,7 +140,7 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
             if (!isSupported()) {
                 capabilities = 0;
             } else {
-                capabilities = NativeUnixSocket.capabilities();
+                capabilities = NativeUnixSocketHelper.capabilities();
             }
         }
         return capabilities;
@@ -159,7 +159,7 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
 
     private void setIsCreated() throws IOException {
         try {
-            NativeUnixSocket.setCreated(this);
+            NativeUnixSocketHelper.setCreated(this);
         } catch (LinkageError e) {
             throw new IOException("Couldn't load native library", e);
         }
@@ -183,14 +183,12 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
     @Override
     public void connect(SocketAddress endpoint, int timeout) throws IOException {
         if (!(endpoint instanceof AFUNIXSocketAddress)) {
-            if (socketFactory != null) {
-                if (endpoint instanceof InetSocketAddress) {
-                    InetSocketAddress isa = (InetSocketAddress) endpoint;
+            if (socketFactory != null && endpoint instanceof InetSocketAddress) {
+                InetSocketAddress isa = (InetSocketAddress) endpoint;
 
-                    String hostname = isa.getHostString();
-                    if (socketFactory.isHostnameSupported(hostname)) {
-                        endpoint = socketFactory.addressFromHost(hostname, isa.getPort());
-                    }
+                String hostname = isa.getHostString();
+                if (socketFactory.isHostnameSupported(hostname)) {
+                    endpoint = socketFactory.addressFromHost(hostname, isa.getPort());
                 }
             }
             if (!(endpoint instanceof AFUNIXSocketAddress)) {
@@ -200,8 +198,8 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
         }
         impl.connect(endpoint, timeout);
         this.addr = (AFUNIXSocketAddress) endpoint;
-        NativeUnixSocket.setBound(this);
-        NativeUnixSocket.setConnected(this);
+        NativeUnixSocketHelper.setBound(this);
+        NativeUnixSocketHelper.setConnected(this);
     }
 
     @Override

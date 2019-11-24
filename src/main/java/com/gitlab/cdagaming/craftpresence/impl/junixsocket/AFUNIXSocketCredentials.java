@@ -122,7 +122,6 @@ public final class AFUNIXSocketCredentials {
     }
 
     @Override
-    @SuppressWarnings("all")
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -138,10 +137,7 @@ public final class AFUNIXSocketCredentials {
         if (uid != other.uid)
             return false;
         if (uuid == null) {
-            if (other.uuid != null)
-                return false;
-        } else if (!uuid.equals(other.uuid))
-            return false;
-        return true;
+            return other.uuid == null;
+        } else return uuid.equals(other.uuid);
     }
 }

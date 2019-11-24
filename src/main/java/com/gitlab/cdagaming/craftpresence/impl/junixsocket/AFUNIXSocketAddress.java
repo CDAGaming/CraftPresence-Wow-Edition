@@ -89,7 +89,7 @@ public final class AFUNIXSocketAddress extends InetSocketAddress {
     private AFUNIXSocketAddress(final byte[] socketAddress, int port) throws IOException {
         super(0);
         if (port != 0) {
-            NativeUnixSocket.setPort1(this, port);
+            NativeUnixSocketHelper.setPort1(this, port);
         }
 
         if (socketAddress.length == 0) {

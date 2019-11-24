@@ -41,11 +41,13 @@ public class DiscordUtils {
     public String SPECTATE_SECRET;
     public byte INSTANCE;
     public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
+
     public IPCClient ipcInstance;
+    public RichPresence currentPresence;
+
     private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList(),
             modsArgs = Lists.newArrayList(), playerInfoArgs = Lists.newArrayList();
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
-    private int lastErrorCode, lastDisconnectErrorCode;
 
     public synchronized void setup() {
         final Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
@@ -107,17 +109,6 @@ public class DiscordUtils {
                     CommandsGui.executeCommand("request");
                 }*/
                 ModUtils.LOG.info("OnJoinRequest: " + packet.toString());
-            }));
-
-            // Error Event
-            ipcInstance.subscribe(IPCClient.Event.ERROR, new Callback(packet -> {
-                /*if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
-                    STATUS = "errored";
-                    lastErrorCode = errorCode;
-                    shutDown();
-                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
-                }*/
-                ModUtils.LOG.info("OnError: " + packet.toString());
             }));
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -212,8 +203,11 @@ public class DiscordUtils {
     }
 
     public void updatePresence(final RichPresence presence) {
-        if (presence != null && ipcInstance.getStatus() == PipeStatus.CONNECTED) {
+        if (presence != null &&
+                (currentPresence == null || !presence.toJson().toString().equals(currentPresence.toJson().toString())) &&
+                ipcInstance.getStatus() == PipeStatus.CONNECTED) {
             ipcInstance.sendRichPresence(presence);
+            currentPresence = presence;
         }
     }
 
@@ -241,8 +235,7 @@ public class DiscordUtils {
 
         // Clear User Data before final clear and shutdown
         STATUS = "disconnected";
-        lastDisconnectErrorCode = 0;
-        lastErrorCode = 0;
+        currentPresence = null;
         clearPartyData(true, false);
         CURRENT_USER = null;
 

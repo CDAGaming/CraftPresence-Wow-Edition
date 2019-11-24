@@ -37,9 +37,6 @@ final class NativeLibraryLoader implements Closeable {
         TEMP_DIR = (dir == null) ? null : new File(dir);
     }
 
-    NativeLibraryLoader() {
-    }
-
     private static String architectureAndOS() {
         return System.getProperty("os.arch") + "-" + System.getProperty("os.name").replaceAll(" ", "");
     }
@@ -87,7 +84,7 @@ final class NativeLibraryLoader implements Closeable {
             loaded = true;
             AFUNIXSocket.loadedLibrary = library;
             try {
-                NativeUnixSocket.init();
+                NativeUnixSocketHelper.init();
             } catch (RuntimeException e) {
                 throw e;
             } catch (Exception e) {
@@ -212,6 +209,7 @@ final class NativeLibraryLoader implements Closeable {
 
     @Override
     public void close() {
+        // N/A
     }
 
     private abstract static class LibraryCandidate implements Closeable {
@@ -248,6 +246,7 @@ final class NativeLibraryLoader implements Closeable {
 
         @Override
         public void close() {
+            // N/A
         }
 
         @Override

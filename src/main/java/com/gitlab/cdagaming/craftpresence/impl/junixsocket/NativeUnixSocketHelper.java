@@ -27,7 +27,7 @@ import java.nio.ByteBuffer;
  *
  * @author Christian Kohlschütter
  */
-final class NativeUnixSocket {
+final class NativeUnixSocketHelper {
     private static boolean loaded;
 
     static {
@@ -37,7 +37,7 @@ final class NativeUnixSocket {
         loaded = true;
     }
 
-    private NativeUnixSocket() {
+    private NativeUnixSocketHelper() {
         throw new UnsupportedOperationException("No instances");
     }
 
@@ -46,6 +46,7 @@ final class NativeUnixSocket {
     }
 
     static void checkSupported() {
+        // N/A
     }
 
     static native void init() throws Exception;

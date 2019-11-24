@@ -45,9 +45,9 @@ public class AFUNIXServerSocket extends ServerSocket {
         setReuseAddress(true);
 
         this.implementation = (mode == Mode.RMI) ? new AFUNIXSocketImpl.ForRMI() : new AFUNIXSocketImpl();
-        NativeUnixSocket.initServerImpl(this, implementation);
+        NativeUnixSocketHelper.initServerImpl(this, implementation);
 
-        NativeUnixSocket.setCreatedServer(this);
+        NativeUnixSocketHelper.setCreatedServer(this);
     }
 
     /**
@@ -80,7 +80,7 @@ public class AFUNIXServerSocket extends ServerSocket {
      * @return {@code true} if supported.
      */
     public static boolean isSupported() {
-        return NativeUnixSocket.isLoaded();
+        return NativeUnixSocketHelper.isLoaded();
     }
 
     @Override
@@ -120,7 +120,7 @@ public class AFUNIXServerSocket extends ServerSocket {
         AFUNIXSocket as = newSocketInstance();
         implementation.accept(as.impl);
         as.addr = boundEndpoint;
-        NativeUnixSocket.setConnected(as);
+        NativeUnixSocketHelper.setConnected(as);
         return as;
     }
 
