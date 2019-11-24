@@ -1,5 +1,5 @@
 # CraftPresence
-Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the JNA (Java Native Access) API!
+Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the DiscordIPC API by [jagrosh](https://github.com/jagrosh)!
 
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
 [![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
@@ -138,6 +138,16 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 
 *   If Requesting an Icon be Modified or Removed from the Default Client ID, please specify a reason why
     *   Mostly just so It can be logged why it was changed for future reference
+
+#### Licensing
+This Mod is licensed under the MIT License as well as the Apache 2.0 License
+
+This Project makes usage of the following dependencies internally:
+
+*   [DiscordIPC API](https://github.com/jagrosh/DiscordIPC) by [jagrosh](https://github.com/jagrosh)
+    *   [JUnixSocket](https://github.com/kohlschutter/junixsocket) by [kohlschutter](https://github.com/kohlschutter)
+
+*   [JNA API](https://github.com/java-native-access/jna) on v1.5.x and Below
 
 #### Discord TOS
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party

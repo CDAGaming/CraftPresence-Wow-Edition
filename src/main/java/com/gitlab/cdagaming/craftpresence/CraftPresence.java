@@ -3,10 +3,8 @@ package com.gitlab.cdagaming.craftpresence;
 import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
-import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.SystemUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.DiscordUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.utils.entity.EntityUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import com.gitlab.cdagaming.craftpresence.utils.server.ServerUtils;
@@ -55,7 +53,7 @@ public class CraftPresence {
         CONFIG.initialize();
 
         final File CP_DIR = new File(ModUtils.MODID);
-        ModUtils.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
+        //ModUtils.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
         ModUtils.loadCharData(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         CommandUtils.init();
@@ -118,12 +116,13 @@ public class CraftPresence {
 
                     CLIENT.initArgumentData("&MAINMENU&");
                     CLIENT.initIconData("&MAINMENU&");
+
                     CLIENT.updatePresence(CLIENT.buildRichPresence());
                 }
 
                 if (awaitingReply && SYSTEM.TIMER == 0) {
-                    StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
-                    DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
+                    //StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
+                    //DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
                     awaitingReply = false;
                     CLIENT.STATUS = "ready";
                 } else if (!awaitingReply && CLIENT.REQUESTER_USER != null) {

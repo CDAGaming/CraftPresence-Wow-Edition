@@ -6,7 +6,6 @@ import com.gitlab.cdagaming.craftpresence.config.gui.SelectorGui;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
@@ -109,10 +108,10 @@ public class CommandsGui extends GuiScreen {
                     if (executionCommandArgs.length == 1) {
                         if (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
                             if (CraftPresence.CONFIG.enableJoinRequest) {
-                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.username, CraftPresence.SYSTEM.TIMER);
+                                //executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.username, CraftPresence.SYSTEM.TIMER);
                                 CraftPresence.awaitingReply = true;
                             } else {
-                                DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
+                                //DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
@@ -124,14 +123,14 @@ public class CommandsGui extends GuiScreen {
                     } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[1])) {
                         if (CraftPresence.awaitingReply && CraftPresence.CONFIG.enableJoinRequest) {
                             if (executionCommandArgs[1].equalsIgnoreCase("accept")) {
-                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.username);
-                                DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
+                                //executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.username);
+                                //DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
                             } else if (executionCommandArgs[1].equalsIgnoreCase("deny")) {
-                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.username);
-                                DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
+                                //executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.username);
+                                //DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
@@ -189,7 +188,7 @@ public class CommandsGui extends GuiScreen {
                                 executionString = ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showdimension"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("currentData")) {
-                            executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.currentdata", CraftPresence.CLIENT.CURRENT_USER.username, CraftPresence.CLIENT.DETAILS, CraftPresence.CLIENT.GAME_STATE, CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, CraftPresence.CLIENT.LARGEIMAGEKEY, CraftPresence.CLIENT.LARGEIMAGETEXT, CraftPresence.CLIENT.SMALLIMAGEKEY, CraftPresence.CLIENT.SMALLIMAGETEXT, CraftPresence.CLIENT.PARTY_ID, CraftPresence.CLIENT.PARTY_SIZE, CraftPresence.CLIENT.PARTY_MAX, CraftPresence.CLIENT.JOIN_SECRET, CraftPresence.CLIENT.END_TIMESTAMP, CraftPresence.CLIENT.MATCH_SECRET, CraftPresence.CLIENT.SPECTATE_SECRET, CraftPresence.CLIENT.INSTANCE);
+                            executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.currentdata", CraftPresence.CLIENT.CURRENT_USER.getName(), CraftPresence.CLIENT.DETAILS, CraftPresence.CLIENT.GAME_STATE, CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, CraftPresence.CLIENT.LARGEIMAGEKEY, CraftPresence.CLIENT.LARGEIMAGETEXT, CraftPresence.CLIENT.SMALLIMAGEKEY, CraftPresence.CLIENT.SMALLIMAGETEXT, CraftPresence.CLIENT.PARTY_ID, CraftPresence.CLIENT.PARTY_SIZE, CraftPresence.CLIENT.PARTY_MAX, CraftPresence.CLIENT.JOIN_SECRET, CraftPresence.CLIENT.END_TIMESTAMP, CraftPresence.CLIENT.MATCH_SECRET, CraftPresence.CLIENT.SPECTATE_SECRET, CraftPresence.CLIENT.INSTANCE);
                         } else if (executionCommandArgs[1].equalsIgnoreCase("assets")) {
                             if (executionCommandArgs.length == 2) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.assets");

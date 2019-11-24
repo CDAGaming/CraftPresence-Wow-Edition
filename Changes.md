@@ -4,6 +4,10 @@
 
 ### Changes
 
+*   Deprecate Usage of the Java Native Access API and DLL Usage
+
+    *   Now hooks directly into the API endpoints to determine and directly interpret RPC
+
 *   Added Specific Presence Display Settings to ConfigGUI
 
     *   Now allows users to set where in the RPC they'd like each message
@@ -38,6 +42,7 @@
 
 ### Fixes
 
+*   Fixes any Rare Sustaining Presence of SSL Issues with the DiscordRPC Dll...by removing the dll even being needed
 *   Changed PG Left and Right KeyBind Triggers to `KEY_UP` and `KEY_DOWN` to resolve a conflict of changing pages while editing something
 *   Fixed Config Conflicts with a more dynamic system
 *   Fixes a Bug where the ConfigGUI KeyBind could still reset to Left Control (IE the old KeyBind) if a Keycode Error occurs
@@ -60,6 +65,10 @@ As Elements such as the Config System and General RPC Elements have undergone va
 v1.5.x is Generally Recommended at this time for new users, has the systems used in v1.6.0 may have a variety of issues, and considered bleeding-edge
 
 Migration Notes:
+
+*   The RPC System has changed to an internal IPC System hooking into Discord's official endpoints
+
+    *   As a result, you can remove any discord-rpc dlls present in CraftPresence's folders as they are no longer being used
 
 *   `gameTimePlaceholder` is now combined into the `&worldinfo&` Placeholder
 

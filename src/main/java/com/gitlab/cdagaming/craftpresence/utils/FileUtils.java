@@ -5,6 +5,8 @@ import com.google.common.collect.Lists;
 import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.net.URL;
@@ -20,6 +22,15 @@ public class FileUtils {
 
     public static <T> T getJSONFromFile(File file, Class<T> classObj) throws Exception {
         return getJSONFromFile(fileToString(file), classObj);
+    }
+
+    public static JsonObject parseJson(String json) {
+        if (!StringUtils.isNullOrEmpty(json)) {
+            final JsonParser dataParser = new JsonParser();
+            return dataParser.parse(json).getAsJsonObject();
+        } else {
+            return null;
+        }
     }
 
     public static void downloadFile(final String urlString, final File file) {

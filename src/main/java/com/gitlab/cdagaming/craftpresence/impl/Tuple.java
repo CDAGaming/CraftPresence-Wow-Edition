@@ -1,4 +1,4 @@
-package com.gitlab.cdagaming.craftpresence.utils;
+package com.gitlab.cdagaming.craftpresence.impl;
 
 public class Tuple<U, V> {
 

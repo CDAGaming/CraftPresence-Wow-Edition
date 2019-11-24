@@ -1,6 +1,7 @@
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +13,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -43,6 +45,14 @@ public class StringUtils {
             }
         } catch (Exception ex) {
             return Color.white;
+        }
+    }
+
+    public static String getUnicodeString(String original) {
+        if (!isNullOrEmpty(original)) {
+            return new String(original.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ");
+        } else {
+            return original;
         }
     }
 

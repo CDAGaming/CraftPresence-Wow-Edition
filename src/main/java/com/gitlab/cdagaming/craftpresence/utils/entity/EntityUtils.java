@@ -1,8 +1,8 @@
 package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;

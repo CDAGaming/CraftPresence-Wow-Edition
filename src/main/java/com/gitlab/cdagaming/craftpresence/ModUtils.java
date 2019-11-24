@@ -1,6 +1,5 @@
 package com.gitlab.cdagaming.craftpresence;
 
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
 import com.google.common.collect.Lists;
@@ -34,24 +33,6 @@ public class ModUtils {
     public static final TranslationUtils TRANSLATOR = new TranslationUtils(MODID, false);
     public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
     public static boolean forceBlockTooltipRendering = false;
-
-    static void loadDLL(final boolean Update) {
-        boolean UpdateStatus = Update;
-
-        final String fileName = (CraftPresence.SYSTEM.IS_WINDOWS ? "discord-rpc.dll"
-                : CraftPresence.SYSTEM.IS_LINUX ? "libdiscord-rpc.so"
-                : CraftPresence.SYSTEM.IS_MAC ? "libdiscord-rpc.dylib" : "");
-        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (CraftPresence.SYSTEM.IS_WINDOWS ? (CraftPresence.SYSTEM.IS_64_BIT ? "win32-x86-64" : "win32-x86")
-                : CraftPresence.SYSTEM.IS_LINUX ? "linux-x86-64"
-                : CraftPresence.SYSTEM.IS_MAC ? "darwin" : "") + "/" + fileName;
-        final File file = new File(MODID + File.separator + fileName);
-        UpdateStatus = UpdateStatus || !file.exists();
-
-        if (UpdateStatus) {
-            FileUtils.downloadFile(url, file);
-        }
-        FileUtils.loadFileAsDLL(file);
-    }
 
     public static void loadCharData(final boolean Update) {
         LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.init"));

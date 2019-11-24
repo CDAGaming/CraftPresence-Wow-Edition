@@ -2,34 +2,27 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.Tuple;
-import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.curse.CurseUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordEventHandlers;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRichPresence;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordUser;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.RichPresence;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
 import com.gitlab.cdagaming.craftpresence.utils.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.utils.multimc.MultiMCUtils;
 import com.gitlab.cdagaming.craftpresence.utils.technic.TechnicUtils;
 import com.google.common.collect.Lists;
-import com.sun.jna.NativeLibrary;
 
-import java.io.File;
 import java.util.List;
 
 public class DiscordUtils {
-    static {
-        NativeLibrary.addSearchPath("discord-rpc", new File(ModUtils.MODID).getAbsolutePath());
-    }
-
-    private final DiscordEventHandlers handlers = new DiscordEventHandlers();
-    public DiscordUser CURRENT_USER, REQUESTER_USER;
+    public User CURRENT_USER, REQUESTER_USER;
     public String STATUS;
     public String GAME_STATE;
     public String DETAILS;
@@ -48,6 +41,7 @@ public class DiscordUtils {
     public String SPECTATE_SECRET;
     public byte INSTANCE;
     public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
+    public IPCClient ipcInstance;
     private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList(),
             modsArgs = Lists.newArrayList(), playerInfoArgs = Lists.newArrayList();
     private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
@@ -68,15 +62,7 @@ public class DiscordUtils {
     }
 
     public synchronized void init() {
-        handlers.errored = (errorCode, message) -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
-                STATUS = "errored";
-                lastErrorCode = errorCode;
-                shutDown();
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
-            }
-        };
-
+        /*
         handlers.disconnected = (errorCode, message) -> {
             if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
                 STATUS = "disconnected";
@@ -84,42 +70,58 @@ public class DiscordUtils {
                 shutDown();
             }
         };
+        */
 
-        handlers.ready = user -> {
-            if ((StringUtils.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
-                STATUS = "ready";
-                CURRENT_USER = user;
-                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
-            }
-        };
+        try {
+            // Create IPC Instance and Make a Connection if possible
+            ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID));
+            ipcInstance.connect();
 
-        handlers.joinGame = secret -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
-                STATUS = "joinGame";
-                CraftPresence.SERVER.verifyAndJoin(secret);
-            }
-        };
-
-        handlers.joinRequest = request -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
-                CraftPresence.SYSTEM.TIMER = 30;
-                STATUS = "joinRequest";
-                REQUESTER_USER = request;
-
-                if (!(CraftPresence.instance.currentScreen instanceof CommandsGui)) {
-                    CraftPresence.GUIS.openScreen(new CommandsGui(CraftPresence.instance.currentScreen));
+            // Add RPC Events
+            // Join Request Accept Event
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN, new Callback(packet -> {
+                if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
+                    //STATUS = "joinGame";
+                    //CraftPresence.SERVER.verifyAndJoin(packet.getJson());
                 }
-                CommandsGui.executeCommand("request");
-            }
-        };
+                ModUtils.LOG.info("OnJoin: " + packet.toString());
+            }));
 
-        handlers.spectateGame = secret -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
-                STATUS = "spectateGame";
-            }
-        };
+            // Spectate Event
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_SPECTATE, new Callback(packet -> {
+                if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
+                    STATUS = "spectateGame";
+                }
+            }));
 
-        DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
+            // Join Request (Received) Event
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN_REQUEST, new Callback(packet -> {
+                /*if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
+                    CraftPresence.SYSTEM.TIMER = 30;
+                    STATUS = "joinRequest";
+                    REQUESTER_USER = request;
+
+                    if (!(CraftPresence.instance.currentScreen instanceof CommandsGui)) {
+                        CraftPresence.GUIS.openScreen(new CommandsGui(CraftPresence.instance.currentScreen));
+                    }
+                    CommandsGui.executeCommand("request");
+                }*/
+                ModUtils.LOG.info("OnJoinRequest: " + packet.toString());
+            }));
+
+            // Error Event
+            ipcInstance.subscribe(IPCClient.Event.ERROR, new Callback(packet -> {
+                /*if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
+                    STATUS = "errored";
+                    lastErrorCode = errorCode;
+                    shutDown();
+                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
+                }*/
+                ModUtils.LOG.info("OnError: " + packet.toString());
+            }));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
         initArgumentData("&MAINMENU&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
@@ -209,9 +211,9 @@ public class DiscordUtils {
         syncArgument("&PACK&", !StringUtils.isNullOrEmpty(foundPackIcon) ? StringUtils.formatPackIcon(foundPackIcon) : "", true);
     }
 
-    public void updatePresence(final DiscordRichPresence presence) {
-        if (presence != null) {
-            DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
+    public void updatePresence(final RichPresence presence) {
+        if (presence != null && ipcInstance.getStatus() == PipeStatus.CONNECTED) {
+            ipcInstance.sendRichPresence(presence);
         }
     }
 
@@ -231,8 +233,11 @@ public class DiscordUtils {
     }
 
     public synchronized void shutDown() {
-        DiscordRPC.INSTANCE.Discord_ClearPresence();
-        DiscordRPC.INSTANCE.Discord_Shutdown();
+        try {
+            ipcInstance.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
         // Clear User Data before final clear and shutdown
         STATUS = "disconnected";
@@ -287,7 +292,7 @@ public class DiscordUtils {
         }
     }
 
-    public DiscordRichPresence buildRichPresence() {
+    public RichPresence buildRichPresence() {
         // Format Presence based on Arguments available in argumentData
         DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));
         GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData));
@@ -298,6 +303,27 @@ public class DiscordUtils {
         LARGEIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData);
         SMALLIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData);
 
-        return new DiscordRichPresence(GAME_STATE, DETAILS, START_TIMESTAMP, END_TIMESTAMP, LARGEIMAGEKEY, LARGEIMAGETEXT, SMALLIMAGEKEY, SMALLIMAGETEXT, PARTY_ID, PARTY_SIZE, PARTY_MAX, MATCH_SECRET, JOIN_SECRET, SPECTATE_SECRET, INSTANCE);
+        // Format Data to UTF_8
+        GAME_STATE = StringUtils.getUnicodeString(GAME_STATE);
+        DETAILS = StringUtils.getUnicodeString(DETAILS);
+
+        LARGEIMAGEKEY = StringUtils.getUnicodeString(LARGEIMAGEKEY);
+        SMALLIMAGEKEY = StringUtils.getUnicodeString(SMALLIMAGEKEY);
+
+        LARGEIMAGETEXT = StringUtils.getUnicodeString(LARGEIMAGETEXT);
+        SMALLIMAGETEXT = StringUtils.getUnicodeString(SMALLIMAGETEXT);
+
+        return new RichPresence.Builder()
+                .setState(GAME_STATE)
+                .setDetails(DETAILS)
+                .setStartTimestamp(START_TIMESTAMP)
+                .setEndTimestamp(END_TIMESTAMP)
+                .setLargeImage(LARGEIMAGEKEY, LARGEIMAGETEXT)
+                .setSmallImage(SMALLIMAGEKEY, SMALLIMAGETEXT)
+                .setParty(PARTY_ID, PARTY_SIZE, PARTY_MAX)
+                .setMatchSecret(MATCH_SECRET)
+                .setJoinSecret(JOIN_SECRET)
+                .setSpectateSecret(SPECTATE_SECRET)
+                .build();
     }
 }

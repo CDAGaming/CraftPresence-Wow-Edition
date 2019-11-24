@@ -1,9 +1,9 @@
 package com.gitlab.cdagaming.craftpresence.utils.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;

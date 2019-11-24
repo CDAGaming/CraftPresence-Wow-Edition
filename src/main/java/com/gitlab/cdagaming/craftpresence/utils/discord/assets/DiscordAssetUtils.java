@@ -23,27 +23,27 @@ public class DiscordAssetUtils {
     private static Map<String, DiscordAsset> ASSET_LIST = Maps.newHashMap();
 
     public static boolean contains(final String key) {
-        final String formattedKey = StringUtils.formatPackIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
         return ASSET_LIST.containsKey(formattedKey);
     }
 
     public static DiscordAsset get(final String key) {
-        final String formattedKey = StringUtils.formatPackIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey) : null;
     }
 
     public static String getKey(final String key) {
-        final String formattedKey = StringUtils.formatPackIcon(key.replace(" ", "_"));
-        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getName() : null;
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
+        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getName() : "";
     }
 
     public static String getID(final String key) {
-        final String formattedKey = StringUtils.formatPackIcon(key.replace(" ", "_"));
-        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getId() : null;
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
+        return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getId() : "";
     }
 
     public static DiscordAsset.AssetType getType(final String key) {
-        final String formattedKey = key.replace(" ", "_").toLowerCase();
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : key.replace(" ", "_").toLowerCase();
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getType() : DiscordAsset.AssetType.LARGE;
     }
 
