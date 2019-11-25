@@ -70,7 +70,7 @@ public class Packet {
      * @return The JSONObject value of this Packet.
      */
     public JsonObject getRawJson() {
-        return data;
+        return data != null ? data : new JsonObject();
     }
 
     /**
@@ -79,7 +79,7 @@ public class Packet {
      * @return The parsed/formatted JSONObject value of this Packet.
      */
     public JsonObject getJson() {
-        return FileUtils.parseJson(data.toString());
+        return FileUtils.parseJson(data != null ? data.toString() : "");
     }
 
     @Override

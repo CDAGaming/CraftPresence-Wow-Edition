@@ -46,11 +46,14 @@ public class UnixPipe extends Pipe {
         InputStream is = socket.getInputStream();
 
         // Await byte retrieval
-        while (is.available() == 0 && status == PipeStatus.CONNECTED) {
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException ignored) {
+        try {
+            while (is.available() == 0 && status == PipeStatus.CONNECTED) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ignored) {
+                }
             }
+        } catch (Exception ignored) {
         }
 
         if (status == PipeStatus.DISCONNECTED)

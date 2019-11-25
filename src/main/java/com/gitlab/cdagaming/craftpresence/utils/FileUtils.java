@@ -29,7 +29,7 @@ public class FileUtils {
             final JsonParser dataParser = new JsonParser();
             return dataParser.parse(json).getAsJsonObject();
         } else {
-            return null;
+            return new JsonObject();
         }
     }
 
