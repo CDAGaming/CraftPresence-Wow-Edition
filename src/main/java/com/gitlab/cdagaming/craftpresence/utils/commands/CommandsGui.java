@@ -6,6 +6,7 @@ import com.gitlab.cdagaming.craftpresence.config.gui.SelectorGui;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
@@ -108,10 +109,10 @@ public class CommandsGui extends GuiScreen {
                     if (executionCommandArgs.length == 1) {
                         if (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
                             if (CraftPresence.CONFIG.enableJoinRequest) {
-                                //executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.username, CraftPresence.SYSTEM.TIMER);
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.getName(), CraftPresence.SYSTEM.TIMER);
                                 CraftPresence.awaitingReply = true;
                             } else {
-                                //DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
+                                CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
@@ -123,14 +124,14 @@ public class CommandsGui extends GuiScreen {
                     } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[1])) {
                         if (CraftPresence.awaitingReply && CraftPresence.CONFIG.enableJoinRequest) {
                             if (executionCommandArgs[1].equalsIgnoreCase("accept")) {
-                                //executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.username);
-                                //DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_YES);
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.getName());
+                                CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.ACCEPT, null);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;
                             } else if (executionCommandArgs[1].equalsIgnoreCase("deny")) {
-                                //executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.username);
-                                //DiscordRPC.INSTANCE.Discord_Respond(CraftPresence.CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_NO);
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.getName());
+                                CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.awaitingReply = false;

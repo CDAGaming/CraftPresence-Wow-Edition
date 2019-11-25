@@ -24,6 +24,7 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCListener;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordBuild;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.exceptions.NoDiscordClientException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -41,6 +42,7 @@ public abstract class Pipe {
     PipeStatus status = PipeStatus.CONNECTING;
     IPCListener listener;
     private DiscordBuild build;
+    private User currentUser;
 
     Pipe(IPCClient ipcClient, HashMap<String, Callback> callbacks) {
         this.ipcClient = ipcClient;
@@ -82,9 +84,19 @@ public abstract class Pipe {
 
                 JsonObject parsedData = FileUtils.parseJson(p.getJson().getAsJsonPrimitive("").getAsString());
                 if (parsedData != null) {
-                    pipe.build = DiscordBuild.from(parsedData.getAsJsonObject("data")
+                    final JsonObject data = parsedData.getAsJsonObject("data");
+                    final JsonObject userData = data.getAsJsonObject("user");
+
+                    pipe.build = DiscordBuild.from(data
                             .getAsJsonObject("config")
                             .get("api_endpoint").getAsString());
+
+                    pipe.currentUser = new User(
+                            userData.getAsJsonPrimitive("username").getAsString(),
+                            userData.getAsJsonPrimitive("discriminator").getAsString(),
+                            Long.parseLong(userData.getAsJsonPrimitive("id").getAsString()),
+                            userData.has("avatar") ? userData.getAsJsonPrimitive("avatar").getAsString() : null
+                    );
                 } else {
                     pipe.build = DiscordBuild.ANY;
                 }
@@ -92,6 +104,7 @@ public abstract class Pipe {
                 // CDAGaming Start
                 if (ModUtils.IS_DEV) {
                     ModUtils.LOG.info(String.format("Found a valid client (%s) with packet: %s", pipe.build.name(), p.toString()));
+                    ModUtils.LOG.info(String.format("Found a valid user (%s) with id: %s", pipe.currentUser.getName(), pipe.currentUser.getId()));
                 }
 
                 // we're done if we found our first choice
@@ -267,5 +280,9 @@ public abstract class Pipe {
 
     public DiscordBuild getDiscordBuild() {
         return build;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 }

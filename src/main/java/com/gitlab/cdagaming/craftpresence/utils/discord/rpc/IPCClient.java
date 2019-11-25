@@ -16,6 +16,8 @@
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
+import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.*;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet.OpCode;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.Pipe;
@@ -226,6 +228,26 @@ public final class IPCClient implements Closeable {
         pipe.send(OpCode.FRAME, pipeData, callback);
     }
 
+    public void respondToJoinRequest(User user, ApprovalMode approvalMode, Callback callback) {
+        checkConnected(true);
+
+        if (user != null) {
+            if (ModUtils.IS_DEV) {
+                ModUtils.LOG.info(String.format("Sending response to %s as %s", user.getName(), approvalMode.name()));
+            }
+
+            JsonObject pipeData = new JsonObject();
+            pipeData.addProperty("cmd", approvalMode == ApprovalMode.ACCEPT ? "SEND_ACTIVITY_JOIN_INVITE" : "CLOSE_ACTIVITY_REQUEST");
+
+            JsonObject args = new JsonObject();
+            args.addProperty("user_id", user.getId());
+
+            pipeData.add("args", args);
+
+            pipe.send(OpCode.FRAME, pipeData, callback);
+        }
+    }
+
     /**
      * Gets the IPCClient's current {@link PipeStatus}.
      *
@@ -277,6 +299,22 @@ public final class IPCClient implements Closeable {
         return pipe.getDiscordBuild();
     }
 
+    /**
+     * Gets the IPCClient's current {@link User} attached to the target {@link DiscordBuild}.<p>
+     * <p>
+     * This is always the User Data attached to the DiscordBuild found when
+     * making a call to {@link #connect(DiscordBuild...)}
+     * <p>
+     * Note that this value should NOT return null under any circumstances.
+     *
+     * @return The current {@link User} of this IPCClient from the target {@link DiscordBuild}, or null if not found.
+     */
+    public User getCurrentUser() {
+        if (pipe == null) return null;
+
+        return pipe.getCurrentUser();
+    }
+
 
     // Private methods
 
@@ -303,69 +341,73 @@ public final class IPCClient implements Closeable {
             try {
                 Packet p;
                 while ((p = pipe.read()).getOp() != OpCode.CLOSE) {
-                    JsonObject json = p.getJson();
-                    Event event = Event.of(json.has("evt") ? json.getAsJsonObject("evt").getAsString() : null);
-                    String nonce = json.has("nonce") ? json.getAsJsonObject("nonce").getAsString() : null;
-                    switch (event) {
-                        case NULL:
-                            if (nonce != null && callbacks.containsKey(nonce))
-                                callbacks.remove(nonce).succeed(p);
-                            break;
+                    JsonObject json = FileUtils.parseJson(p.getJson().getAsJsonPrimitive("").getAsString());
 
-                        case ERROR:
-                            if (nonce != null && callbacks.containsKey(nonce))
-                                callbacks.remove(nonce).fail(json.getAsJsonObject("data").has("message") ? json.getAsJsonObject("data").getAsJsonObject("message").getAsString() : null);
-                            break;
+                    if (json != null) {
+                        Event event = Event.of(json.has("evt") && !json.get("evt").isJsonNull() ? json.getAsJsonPrimitive("evt").getAsString() : null);
+                        String nonce = json.has("nonce") && !json.get("nonce").isJsonNull() ? json.getAsJsonPrimitive("nonce").getAsString() : null;
 
-                        case ACTIVITY_JOIN:
-                            if (ModUtils.IS_DEV) {
-                                ModUtils.LOG.info("Reading thread received a 'join' event.");
+                        switch (event) {
+                            case NULL:
+                                if (nonce != null && callbacks.containsKey(nonce))
+                                    callbacks.remove(nonce).succeed(p);
+                                break;
+
+                            case ERROR:
+                                if (nonce != null && callbacks.containsKey(nonce))
+                                    callbacks.remove(nonce).fail(json.getAsJsonObject("data").has("message") ? json.getAsJsonObject("data").getAsJsonObject("message").getAsString() : null);
+                                break;
+
+                            case ACTIVITY_JOIN:
+                                if (ModUtils.IS_DEV) {
+                                    ModUtils.LOG.info("Reading thread received a 'join' event.");
+                                }
+                                break;
+
+                            case ACTIVITY_SPECTATE:
+                                if (ModUtils.IS_DEV) {
+                                    ModUtils.LOG.info("Reading thread received a 'spectate' event.");
+                                }
+                                break;
+
+                            case ACTIVITY_JOIN_REQUEST:
+                                if (ModUtils.IS_DEV) {
+                                    ModUtils.LOG.info("Reading thread received a 'join request' event.");
+                                }
+                                break;
+
+                            case UNKNOWN:
+                                if (ModUtils.IS_DEV) {
+                                    ModUtils.LOG.info("Reading thread encountered an event with an unknown type: " + json.getAsJsonPrimitive("evt").getAsString());
+                                }
+                                break;
+                        }
+                        if (listener != null && json.has("cmd") && json.getAsJsonPrimitive("cmd").getAsString().equals("DISPATCH")) {
+                            try {
+                                final JsonObject data = json.getAsJsonObject("data");
+                                switch (Event.of(json.getAsJsonPrimitive("evt").getAsString())) {
+                                    case ACTIVITY_JOIN:
+                                        listener.onActivityJoin(this, data.getAsJsonObject("secret").getAsString());
+                                        break;
+
+                                    case ACTIVITY_SPECTATE:
+                                        listener.onActivitySpectate(this, data.getAsJsonObject("secret").getAsString());
+                                        break;
+
+                                    case ACTIVITY_JOIN_REQUEST:
+                                        final JsonObject u = data.getAsJsonObject("user");
+                                        final User user = new User(
+                                                u.getAsJsonPrimitive("username").getAsString(),
+                                                u.getAsJsonPrimitive("discriminator").getAsString(),
+                                                Long.parseLong(u.getAsJsonPrimitive("id").getAsString()),
+                                                u.has("avatar") ? u.getAsJsonPrimitive("avatar").getAsString() : null
+                                        );
+                                        listener.onActivityJoinRequest(this, data.has("secret") ? data.getAsJsonObject("secret").getAsString() : null, user);
+                                        break;
+                                }
+                            } catch (Exception e) {
+                                ModUtils.LOG.error("Exception when handling event: ", e);
                             }
-                            break;
-
-                        case ACTIVITY_SPECTATE:
-                            if (ModUtils.IS_DEV) {
-                                ModUtils.LOG.info("Reading thread received a 'spectate' event.");
-                            }
-                            break;
-
-                        case ACTIVITY_JOIN_REQUEST:
-                            if (ModUtils.IS_DEV) {
-                                ModUtils.LOG.info("Reading thread received a 'join request' event.");
-                            }
-                            break;
-
-                        case UNKNOWN:
-                            if (ModUtils.IS_DEV) {
-                                ModUtils.LOG.info("Reading thread encountered an event with an unknown type: " + json.getAsJsonObject("evt").getAsString());
-                            }
-                            break;
-                    }
-                    if (listener != null && json.has("cmd") && json.getAsJsonObject("cmd").getAsString().equals("DISPATCH")) {
-                        try {
-                            JsonObject data = json.getAsJsonObject("data");
-                            switch (Event.of(json.getAsJsonObject("evt").getAsString())) {
-                                case ACTIVITY_JOIN:
-                                    listener.onActivityJoin(this, data.getAsJsonObject("secret").getAsString());
-                                    break;
-
-                                case ACTIVITY_SPECTATE:
-                                    listener.onActivitySpectate(this, data.getAsJsonObject("secret").getAsString());
-                                    break;
-
-                                case ACTIVITY_JOIN_REQUEST:
-                                    JsonObject u = data.getAsJsonObject("user");
-                                    User user = new User(
-                                            u.getAsJsonObject("username").getAsString(),
-                                            u.getAsJsonObject("discriminator").getAsString(),
-                                            Long.parseLong(u.getAsJsonObject("id").getAsString()),
-                                            u.has("avatar") ? u.getAsJsonObject("avatar").getAsString() : null
-                                    );
-                                    listener.onActivityJoinRequest(this, data.has("secret") ? data.getAsJsonObject("secret").getAsString() : null, user);
-                                    break;
-                            }
-                        } catch (Exception e) {
-                            ModUtils.LOG.error("Exception when handling event: ", e);
                         }
                     }
                 }
@@ -391,6 +433,10 @@ public final class IPCClient implements Closeable {
     }
 
     // Private static methods
+
+    public enum ApprovalMode {
+        ACCEPT, DENY
+    }
 
     /**
      * Constants representing events that can be subscribed to

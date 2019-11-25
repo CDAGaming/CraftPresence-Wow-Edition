@@ -10,7 +10,6 @@ import com.gitlab.cdagaming.craftpresence.utils.curse.CurseUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.RichPresence;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
@@ -64,52 +63,16 @@ public class DiscordUtils {
     }
 
     public synchronized void init() {
-        /*
-        handlers.disconnected = (errorCode, message) -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
-                STATUS = "disconnected";
-                lastDisconnectErrorCode = errorCode;
-                shutDown();
-            }
-        };
-        */
-
         try {
-            // Create IPC Instance and Make a Connection if possible
+            // Create IPC Instance and Listener and Make a Connection if possible
             ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID));
+            ipcInstance.setListener(new ModIPCListener());
             ipcInstance.connect();
 
-            // Add RPC Events
-            // Join Request Accept Event
-            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN, new Callback(packet -> {
-                if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
-                    //STATUS = "joinGame";
-                    //CraftPresence.SERVER.verifyAndJoin(packet.getJson());
-                }
-                ModUtils.LOG.info("OnJoin: " + packet.toString());
-            }));
-
-            // Spectate Event
-            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_SPECTATE, new Callback(packet -> {
-                if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
-                    STATUS = "spectateGame";
-                }
-            }));
-
-            // Join Request (Received) Event
-            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN_REQUEST, new Callback(packet -> {
-                /*if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
-                    CraftPresence.SYSTEM.TIMER = 30;
-                    STATUS = "joinRequest";
-                    REQUESTER_USER = request;
-
-                    if (!(CraftPresence.instance.currentScreen instanceof CommandsGui)) {
-                        CraftPresence.GUIS.openScreen(new CommandsGui(CraftPresence.instance.currentScreen));
-                    }
-                    CommandsGui.executeCommand("request");
-                }*/
-                ModUtils.LOG.info("OnJoinRequest: " + packet.toString());
-            }));
+            // Subscribe to RPC Events after Connection
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN);
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN_REQUEST);
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_SPECTATE);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -290,8 +253,8 @@ public class DiscordUtils {
         DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));
         GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData));
 
-        setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true), iconData), DiscordAsset.AssetType.LARGE);
-        setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true), iconData), DiscordAsset.AssetType.SMALL);
+        //setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true), iconData), DiscordAsset.AssetType.LARGE);
+        //setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true), iconData), DiscordAsset.AssetType.SMALL);
 
         LARGEIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData);
         SMALLIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData);

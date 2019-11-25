@@ -1,5 +1,6 @@
 package com.gitlab.cdagaming.craftpresence.utils;
 
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.google.common.collect.Lists;
 
@@ -48,7 +49,7 @@ public class SystemUtils {
         // Every Two Seconds, refresh Callbacks
         if (ELAPSED_TIME % 2 == 0) {
             if (!refreshedCallbacks) {
-                //.Discord_RunCallbacks();
+                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.currentPresence);
                 refreshedCallbacks = true;
             }
         } else {
