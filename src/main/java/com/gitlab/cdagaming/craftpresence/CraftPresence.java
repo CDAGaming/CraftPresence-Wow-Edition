@@ -117,8 +117,6 @@ public class CraftPresence {
 
                     CLIENT.initArgumentData("&MAINMENU&");
                     CLIENT.initIconData("&MAINMENU&");
-
-                    CLIENT.updatePresence(CLIENT.buildRichPresence());
                 }
 
                 if (awaitingReply && SYSTEM.TIMER == 0) {

@@ -230,7 +230,6 @@ public class EntityUtils {
         // NOTE: Only Apply if Items are not Empty, otherwise Clear Argument
         if (!allItemsEmpty) {
             CraftPresence.CLIENT.syncArgument("&ENTITY&", CURRENT_ITEM_MESSAGE, false);
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         } else if (!currentlyCleared) {
             CraftPresence.CLIENT.initArgumentData("&ENTITY&");
             CraftPresence.CLIENT.initIconData("&ENTITY&");

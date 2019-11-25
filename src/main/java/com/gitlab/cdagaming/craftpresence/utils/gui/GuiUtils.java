@@ -71,7 +71,6 @@ public class GuiUtils {
         isInUse = false;
         CraftPresence.CLIENT.initArgumentData("&GUI&");
         CraftPresence.CLIENT.initIconData("&GUI&");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -104,31 +103,27 @@ public class GuiUtils {
     }
 
     private void updateGUIData() {
-        if ((CURRENT_SCREEN != null && CraftPresence.instance.currentScreen == null) || (CURRENT_SCREEN == null && !StringUtils.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE))) {
+        if (CraftPresence.instance.currentScreen == null) {
             clearClientData();
-            CraftPresence.CLIENT.GAME_STATE = "";
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         } else {
-            if (CraftPresence.instance.currentScreen != null) {
-                final GuiScreen newScreen = CraftPresence.instance.currentScreen;
-                final Class newScreenClass = newScreen.getClass();
-                final String newScreenName = newScreenClass.getSimpleName();
+            final GuiScreen newScreen = CraftPresence.instance.currentScreen;
+            final Class newScreenClass = newScreen.getClass();
+            final String newScreenName = newScreenClass.getSimpleName();
 
-                if (!newScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
-                    CURRENT_SCREEN = newScreen;
-                    CURRENT_GUI_CLASS = newScreenClass;
-                    CURRENT_GUI_NAME = newScreenName;
+            if (!newScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
+                CURRENT_SCREEN = newScreen;
+                CURRENT_GUI_CLASS = newScreenClass;
+                CURRENT_GUI_NAME = newScreenName;
 
-                    if (!GUI_NAMES.contains(newScreenName)) {
-                        GUI_NAMES.add(newScreenName);
-                    }
-
-                    if (!GUI_CLASSES.contains(newScreenClass)) {
-                        GUI_CLASSES.add(newScreenClass);
-                    }
-
-                    updateGUIPresence();
+                if (!GUI_NAMES.contains(newScreenName)) {
+                    GUI_NAMES.add(newScreenName);
                 }
+
+                if (!GUI_CLASSES.contains(newScreenClass)) {
+                    GUI_CLASSES.add(newScreenClass);
+                }
+
+                updateGUIPresence();
             }
         }
     }
@@ -177,7 +172,6 @@ public class GuiUtils {
 
         CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_MESSAGE, false);
         CraftPresence.CLIENT.initIconData("&GUI&");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void drawMultiLineString(final List<String> textToInput, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {

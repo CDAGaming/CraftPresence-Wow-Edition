@@ -55,7 +55,6 @@ public class CommandUtils {
         }
         DiscordAssetUtils.loadAssets();
         CraftPresence.CLIENT.init();
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public static void init() {
@@ -89,7 +88,6 @@ public class CommandUtils {
 
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainmenuMSG, mainMenuArgs), false);
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CONFIG.defaultIcon, true);
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
 
         isInMainMenu = true;
     }

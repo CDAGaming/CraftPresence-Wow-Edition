@@ -4,7 +4,6 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
 import com.google.common.collect.Lists;
 import net.minecraft.world.biome.Biome;
 
@@ -33,9 +32,6 @@ public class BiomeUtils {
         isInUse = false;
         CraftPresence.CLIENT.initArgumentData("&BIOME&");
         CraftPresence.CLIENT.initIconData("&BIOME&");
-        if (CraftPresence.CLIENT.ipcInstance.getStatus() == PipeStatus.CONNECTED) {
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-        }
     }
 
     public void onTick() {
@@ -102,7 +98,6 @@ public class BiomeUtils {
 
         CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_MESSAGE, false);
         CraftPresence.CLIENT.initIconData("&BIOME&");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     private List<Biome> getBiomeTypes() {

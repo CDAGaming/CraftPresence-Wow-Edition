@@ -17,7 +17,6 @@ package com.gitlab.cdagaming.craftpresence.utils.discord.rpc;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
-import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.*;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet.OpCode;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.Pipe;

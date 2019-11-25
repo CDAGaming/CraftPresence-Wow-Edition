@@ -57,7 +57,6 @@ public class ServerUtils {
 
         CraftPresence.CLIENT.initArgumentData("&SERVER&");
         CraftPresence.CLIENT.initIconData("&SERVER&");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -349,7 +348,6 @@ public class ServerUtils {
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, serverArgs), false);
             CraftPresence.CLIENT.syncArgument("&SERVER&", CURRENT_SERVER_ICON, true);
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         } else if (CraftPresence.instance.isSingleplayer()) {
             // Form SinglePlayer Tuple Argument List
@@ -368,7 +366,6 @@ public class ServerUtils {
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, soloArgs), false);
             CraftPresence.CLIENT.initIconData("&SERVER&");
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
             queuedForUpdate = false;
         }
     }

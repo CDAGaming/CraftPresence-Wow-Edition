@@ -35,7 +35,6 @@ public class DimensionUtils {
         isInUse = false;
         CraftPresence.CLIENT.initArgumentData("&DIMENSION&");
         CraftPresence.CLIENT.initIconData("&DIMENSION&");
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     public void onTick() {
@@ -112,7 +111,6 @@ public class DimensionUtils {
 
         CraftPresence.CLIENT.syncArgument("&DIMENSION&", CURRENT_DIMENSION_MESSAGE, false);
         CraftPresence.CLIENT.syncArgument("&DIMENSION&", CURRENT_DIMENSION_ICON, true);
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
     }
 
     private List<DimensionType> getDimensionTypes() {

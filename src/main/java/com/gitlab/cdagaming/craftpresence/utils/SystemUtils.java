@@ -49,7 +49,7 @@ public class SystemUtils {
         // Every Two Seconds, refresh Callbacks
         if (ELAPSED_TIME % 2 == 0) {
             if (!refreshedCallbacks) {
-                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.currentPresence);
+                CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 refreshedCallbacks = true;
             }
         } else {

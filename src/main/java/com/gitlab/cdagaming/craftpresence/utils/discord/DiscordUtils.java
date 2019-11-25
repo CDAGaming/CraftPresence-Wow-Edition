@@ -253,8 +253,8 @@ public class DiscordUtils {
         DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));
         GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData));
 
-        //setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true), iconData), DiscordAsset.AssetType.LARGE);
-        //setImage(StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true), iconData), DiscordAsset.AssetType.SMALL);
+        LARGEIMAGEKEY = StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true), iconData);
+        SMALLIMAGEKEY = StringUtils.sequentialReplaceAnyCase(StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true), iconData);
 
         LARGEIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData);
         SMALLIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData);
