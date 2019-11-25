@@ -61,21 +61,6 @@ public final class AFUNIXSocketAddress extends InetSocketAddress {
 
     /**
      * Creates a new {@link AFUNIXSocketAddress} that points to the AF_UNIX socket specified by the
-     * given byte sequence.
-     * <p>
-     * NOTE: By specifying a byte array that starts with a zero byte, you indicate that the abstract
-     * namespace is to be used. This feature is not available on all target platforms.
-     *
-     * @param socketAddress The socket address (as bytes).
-     * @throws IOException if the operation fails.
-     * @see AFUNIXSocketAddress#inAbstractNamespace(String)
-     */
-    public AFUNIXSocketAddress(final byte[] socketAddress) throws IOException {
-        this(socketAddress, 0);
-    }
-
-    /**
-     * Creates a new {@link AFUNIXSocketAddress} that points to the AF_UNIX socket specified by the
      * given byte sequence, assigning the given port to it.
      * <p>
      * NOTE: By specifying a byte array that starts with a zero byte, you indicate that the abstract
@@ -84,7 +69,7 @@ public final class AFUNIXSocketAddress extends InetSocketAddress {
      * @param socketAddress The socket address (as bytes).
      * @param port          The port associated with this socket, or {@code 0} when no port should be assigned.
      * @throws IOException if the operation fails.
-     * @see AFUNIXSocketAddress#inAbstractNamespace(String, int)
+     *                     Reference: AFUNIXSocketAddress#inAbstractNamespace(String, int)
      */
     private AFUNIXSocketAddress(final byte[] socketAddress, int port) throws IOException {
         super(0);
@@ -97,40 +82,6 @@ public final class AFUNIXSocketAddress extends InetSocketAddress {
         }
 
         this.bytes = socketAddress.clone();
-    }
-
-    /**
-     * Convenience method to create an {@link AFUNIXSocketAddress} in the abstract namespace.
-     * <p>
-     * The returned socket address will use the byte representation of this identifier (using the
-     * system's default character encoding), prefixed with a null byte (to indicate the abstract
-     * namespace is used).
-     *
-     * @param name The identifier in the abstract namespace, without trailing zero or @.
-     * @return The address.
-     * @throws IOException if the operation fails.
-     */
-    private static AFUNIXSocketAddress inAbstractNamespace(String name) throws IOException {
-        return inAbstractNamespace(name, 0);
-    }
-
-    /**
-     * Convenience method to create an {@link AFUNIXSocketAddress} in the abstract namespace.
-     * <p>
-     * The returned socket address will use the byte representation of this identifier (using the
-     * system's default character encoding), prefixed with a null byte (to indicate the abstract
-     * namespace is used).
-     *
-     * @param name The identifier in the abstract namespace, without trailing zero or @.
-     * @param port The port associated with this socket, or {@code 0} when no port should be assigned.
-     * @return The address.
-     * @throws IOException if the operation fails.
-     */
-    private static AFUNIXSocketAddress inAbstractNamespace(String name, int port) throws IOException {
-        byte[] bytes = name.getBytes(Charset.defaultCharset());
-        byte[] addr = new byte[bytes.length + 1];
-        System.arraycopy(bytes, 0, addr, 1, bytes.length);
-        return new AFUNIXSocketAddress(addr, port);
     }
 
     private static String prettyPrint(byte[] data) {

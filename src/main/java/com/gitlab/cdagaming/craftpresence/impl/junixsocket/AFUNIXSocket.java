@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 
 /**
  * Implementation of an AF_UNIX domain socket.
@@ -83,22 +82,6 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
     }
 
     /**
-     * Creates a new, unbound, "strict" {@link AFUNIXSocket}.
-     * <p>
-     * This call uses an implementation that tries to be closer to the specification than
-     * {@link #newInstance()}, at least for some cases.
-     *
-     * @return A new, unbound socket.
-     * @throws IOException if the operation fails.
-     */
-    public static AFUNIXSocket newStrictInstance() throws IOException {
-        final AFUNIXSocketImpl impl = new AFUNIXSocketImpl();
-        AFUNIXSocket instance = new AFUNIXSocket(impl, null);
-        instance.impl = impl;
-        return instance;
-    }
-
-    /**
      * Creates a new {@link AFUNIXSocket} and connects it to the given {@link AFUNIXSocketAddress}.
      *
      * @param addr The address to connect to.
@@ -121,18 +104,6 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
      */
     private static boolean isSupported() {
         return NativeUnixSocketHelper.isLoaded();
-    }
-
-    /**
-     * Returns an identifier of the loaded native library, or {@code null} if the library hasn't been
-     * loaded yet.
-     * <p>
-     * The identifier is useful mainly for debugging purposes.
-     *
-     * @return The identifier of the loaded junixsocket-native library, or {@code null}.
-     */
-    public static String getLoadedLibrary() {
-        return loadedLibrary;
     }
 
     private static synchronized int getCapabilities() {
@@ -181,7 +152,8 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
     }
 
     @Override
-    public void connect(SocketAddress endpoint, int timeout) throws IOException {
+    public void connect(SocketAddress originalEndpoint, int timeout) throws IOException {
+        SocketAddress endpoint = originalEndpoint;
         if (!(endpoint instanceof AFUNIXSocketAddress)) {
             if (socketFactory != null && endpoint instanceof InetSocketAddress) {
                 InetSocketAddress isa = (InetSocketAddress) endpoint;
@@ -210,44 +182,9 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
         return "AFUNIXSocket[unconnected]";
     }
 
-    /**
-     * Retrieves the "peer credentials" for this connection.
-     * <p>
-     * These credentials may be useful to authenticate the other end of the socket (client or server).
-     *
-     * @return The peer's credentials.
-     * @throws IOException If there was an error returning these credentials.
-     */
-    public AFUNIXSocketCredentials getPeerCredentials() throws IOException {
-        if (isClosed() || !isConnected()) {
-            throw new SocketException("Not connected");
-        }
-        return impl.getPeerCredentials();
-    }
-
     @Override
     public boolean isClosed() {
         return super.isClosed() || (isConnected() && !impl.getFD().valid());
-    }
-
-    /**
-     * Returns the size of the receive buffer for ancillary messages (in bytes).
-     *
-     * @return The size.
-     */
-    public int getAncillaryReceiveBufferSize() {
-        return impl.getAncillaryReceiveBufferSize();
-    }
-
-    /**
-     * Sets the size of the receive buffer for ancillary messages (in bytes).
-     * <p>
-     * To disable handling ancillary messages, set it to 0 (default).
-     *
-     * @param size The size.
-     */
-    public void setAncillaryReceiveBufferSize(int size) {
-        impl.setAncillaryReceiveBufferSize(size);
     }
 
     @Override
@@ -256,7 +193,7 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
     }
 
     @Override
-    public FileDescriptor[] getReceivedFileDescriptors() throws IOException {
+    public FileDescriptor[] getReceivedFileDescriptors() {
         return impl.getReceivedFileDescriptors();
     }
 

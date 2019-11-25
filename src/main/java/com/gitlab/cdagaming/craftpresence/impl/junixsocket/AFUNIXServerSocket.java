@@ -32,15 +32,6 @@ public class AFUNIXServerSocket extends ServerSocket {
 
     private AFUNIXSocketAddress boundEndpoint;
 
-    /**
-     * Constructs a new, unconnected instance.
-     *
-     * @throws IOException if the operation fails.
-     */
-    AFUNIXServerSocket() throws IOException {
-        this(Mode.DEFAULT);
-    }
-
     AFUNIXServerSocket(Mode mode) throws IOException {
         super();
         setReuseAddress(true);
@@ -49,39 +40,6 @@ public class AFUNIXServerSocket extends ServerSocket {
         NativeUnixSocketHelper.initServerImpl(this, implementation);
 
         NativeUnixSocketHelper.setCreatedServer(this);
-    }
-
-    /**
-     * Returns a new, unbound AF_UNIX {@link ServerSocket}.
-     *
-     * @return The new, unbound {@link AFUNIXServerSocket}.
-     * @throws IOException if the operation fails.
-     */
-    private static AFUNIXServerSocket newInstance() throws IOException {
-        return new AFUNIXServerSocket(Mode.DEFAULT);
-    }
-
-    /**
-     * Returns a new AF_UNIX {@link ServerSocket} that is bound to the given
-     * {@link AFUNIXSocketAddress}.
-     *
-     * @param addr The socket file to bind to.
-     * @return The new, unbound {@link AFUNIXServerSocket}.
-     * @throws IOException if the operation fails.
-     */
-    public static AFUNIXServerSocket bindOn(final AFUNIXSocketAddress addr) throws IOException {
-        AFUNIXServerSocket socket = newInstance();
-        socket.bind(addr);
-        return socket;
-    }
-
-    /**
-     * Checks whether everything is setup to support AF_UNIX sockets.
-     *
-     * @return {@code true} if supported.
-     */
-    public static boolean isSupported() {
-        return NativeUnixSocketHelper.isLoaded();
     }
 
     @Override
@@ -125,7 +83,7 @@ public class AFUNIXServerSocket extends ServerSocket {
         return as;
     }
 
-    protected AFUNIXSocket newSocketInstance() throws IOException {
+    private AFUNIXSocket newSocketInstance() throws IOException {
         return AFUNIXSocket.newInstance();
     }
 
@@ -151,24 +109,4 @@ public class AFUNIXServerSocket extends ServerSocket {
         DEFAULT, RMI
     }
 
-    public static class ForRMI extends AFUNIXServerSocket {
-        ForRMI() throws IOException {
-            super(Mode.RMI);
-        }
-
-        public static AFUNIXServerSocket newInstance() throws IOException {
-            return new AFUNIXServerSocket(Mode.RMI);
-        }
-
-        public static AFUNIXServerSocket bindOn(final AFUNIXSocketAddress addr) throws IOException {
-            AFUNIXServerSocket socket = new AFUNIXServerSocket.ForRMI();
-            socket.bind(addr);
-            return socket;
-        }
-
-        @Override
-        protected AFUNIXSocket newSocketInstance() throws IOException {
-            return AFUNIXSocket.newInstanceForRMI();
-        }
-    }
 }

@@ -32,60 +32,6 @@ public final class AFUNIXSocketCredentials {
     AFUNIXSocketCredentials() {
     }
 
-    /**
-     * Returns the "pid" (process ID), or {@code -1} if it could not be retrieved.
-     *
-     * @return The pid, or -1.
-     */
-    public long getPid() {
-        return pid;
-    }
-
-    /**
-     * Returns the "uid" (user ID), or {@code -1} if it could not be retrieved.
-     *
-     * @return The uid, or -1.
-     */
-    public long getUid() {
-        return uid;
-    }
-
-    /**
-     * Returns the primary "gid" (group ID), or {@code -1} if it could not be retrieved.
-     *
-     * @return The gid, or -1.
-     */
-    public long getGid() {
-        return gids == null ? -1 : gids.length == 0 ? -1 : gids[0];
-    }
-
-    /**
-     * Returns all "gid" values (group IDs), or {@code null} if they could not be retrieved.
-     *
-     * @return The gids, or null.
-     */
-    public long[] getGids() {
-        return gids == null ? null : gids.clone();
-    }
-
-    void setGids(long[] gids) {
-        this.gids = gids.clone();
-    }
-
-    /**
-     * Returns the process' unique identifier, or {@code null} if no such identifier could be
-     * retrieved. Note that all processes run by the same Java runtime may share the same UUID.
-     *
-     * @return The UUID, or null.
-     */
-    public UUID getUUID() {
-        return uuid;
-    }
-
-    void setUUID(String uuidStr) {
-        this.uuid = UUID.fromString(uuidStr);
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

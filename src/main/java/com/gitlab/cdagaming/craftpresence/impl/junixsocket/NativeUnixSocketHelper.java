@@ -17,7 +17,6 @@
  */
 package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
 
-import java.io.Closeable;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -45,13 +44,7 @@ final class NativeUnixSocketHelper {
         return loaded;
     }
 
-    static void checkSupported() {
-        // N/A
-    }
-
     static native void init() throws Exception;
-
-    static native void destroy() throws Exception;
 
     static native int capabilities();
 
@@ -83,9 +76,6 @@ final class NativeUnixSocketHelper {
 
     static native int available(final FileDescriptor fd) throws IOException;
 
-    static native AFUNIXSocketCredentials peerCredentials(FileDescriptor fd,
-                                                          AFUNIXSocketCredentials creds) throws IOException;
-
     static native void initServerImpl(final AFUNIXServerSocket serverSocket,
                                       final AFUNIXSocketImpl impl) throws IOException;
 
@@ -97,17 +87,9 @@ final class NativeUnixSocketHelper {
 
     static native void setCreatedServer(final AFUNIXServerSocket socket);
 
-    static native void setBoundServer(final AFUNIXServerSocket socket);
-
     static native void setPort(final AFUNIXSocketAddress addr, int port);
 
-    static native void initFD(FileDescriptor fdesc, int fd) throws IOException;
-
     static native int getFD(FileDescriptor fdesc) throws IOException;
-
-    static native void attachCloseable(FileDescriptor fdsec, Closeable closeable);
-
-    static native int maxAddressLength();
 
     static void setPort1(AFUNIXSocketAddress addr, int port) throws IOException {
         if (port < 0) {

@@ -70,7 +70,7 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
      * @param address The address to check.
      * @return {@code true} if supported.
      */
-    private boolean isInetAddressSupported(InetAddress address) {
+    private boolean isINetAddressSupported(InetAddress address) {
         return address != null && isHostnameSupported(address.getHostName());
     }
 
@@ -107,7 +107,7 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
 
     @Override
     public Socket createSocket(InetAddress address, int port) throws IOException {
-        if (!isInetAddressSupported(address)) {
+        if (!isINetAddressSupported(address)) {
             throw new UnknownHostException();
         }
         String hostname = address.getHostName();
@@ -120,7 +120,7 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
     @Override
     public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
             throws IOException {
-        if (!isInetAddressSupported(address)) {
+        if (!isINetAddressSupported(address)) {
             throw new UnknownHostException();
         }
         if (localAddress == null || localPort < 0) {
@@ -229,7 +229,8 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
         private static final String FILE_SCHEME_PREFIX_ENCODED = "file%";
         private static final String FILE_SCHEME_LOCALHOST = "localhost";
 
-        private static String stripBrackets(String host) {
+        private static String stripBrackets(String originalHost) {
+            String host = originalHost;
             if (host.startsWith("[")) {
                 if (host.endsWith("]")) {
                     host = host.substring(1, host.length() - 1);
@@ -241,14 +242,14 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
         }
 
         @Override
-        protected boolean isHostnameSupported(String host) {
-            host = stripBrackets(host);
+        protected boolean isHostnameSupported(String originalHost) {
+            String host = stripBrackets(originalHost);
             return host.startsWith(FILE_SCHEME_PREFIX) || host.startsWith(FILE_SCHEME_PREFIX_ENCODED);
         }
 
         @Override
-        protected AFUNIXSocketAddress addressFromHost(String host, int port) throws IOException {
-            host = stripBrackets(host);
+        protected AFUNIXSocketAddress addressFromHost(String originalHost, int port) throws IOException {
+            String host = stripBrackets(originalHost);
             if (host.startsWith(FILE_SCHEME_PREFIX_ENCODED)) {
                 try {
                     host = URLDecoder.decode(host, "UTF-8");

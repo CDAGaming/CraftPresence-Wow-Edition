@@ -35,19 +35,7 @@ public final class AncillaryFileDescriptorHelper {
     }
 
     static void setSupportRef(Support ref) {
-        TL_SUPPORT_REF.set(new WeakReference<Support>(ref));
-    }
-
-    /**
-     * DO NOT USE. This is for junixsocket-rmi's RemoteFileDescriptor only.
-     */
-    public static Support getAndClearSupportRef() {
-        WeakReference<Support> ref = TL_SUPPORT_REF.get();
-        if (ref == null) {
-            return null;
-        }
-        TL_SUPPORT_REF.remove();
-        return ref.get();
+        TL_SUPPORT_REF.set(new WeakReference<>(ref));
     }
 
     /**
