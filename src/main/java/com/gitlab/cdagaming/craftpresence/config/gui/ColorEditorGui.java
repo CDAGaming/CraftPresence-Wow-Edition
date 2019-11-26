@@ -5,6 +5,7 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.SliderControl;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -23,7 +24,8 @@ public class ColorEditorGui extends GuiScreen {
     // Page 1 Variables
     private String currentNormalHexValue, currentConvertedHexValue, startingHexValue;
     private int currentRed, currentGreen, currentBlue, currentAlpha;
-    private GuiTextField hexText, redText, greenText, blueText, alphaText;
+    private GuiTextField hexText;
+    private SliderControl redText, greenText, blueText, alphaText;
     // Page 2 Variables
     private String currentNormalMCTexturePath, currentConvertedMCTexturePath, startingMCTexturePath;
     private GuiTextField mcTextureText;
@@ -40,13 +42,26 @@ public class ColorEditorGui extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
+        int calc1 = (width / 2) - 183;
+        int calc2 = (width / 2) + 3;
+
         // Page 1 Items
+        final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.redcolorvalue");
+        final String greenTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.greencolorvalue");
+        final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.bluecolorvalue");
+        final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.alphacolorvalue");
+
         hexText = new GuiTextField(100, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
 
-        redText = new GuiTextField(110, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(3), 180, 20);
-        greenText = new GuiTextField(120, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(4), 180, 20);
-        blueText = new GuiTextField(130, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(5), 180, 20);
-        alphaText = new GuiTextField(140, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(6), 180, 20);
+        redText = new SliderControl(110, new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(3)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, redTitle);
+        greenText = new SliderControl(120, new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(3)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, greenTitle);
+        blueText = new SliderControl(130, new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(4)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, blueTitle);
+        alphaText = new SliderControl(140, new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(4)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, alphaTitle);
+
+        buttonList.add(redText);
+        buttonList.add(greenText);
+        buttonList.add(blueText);
+        buttonList.add(alphaText);
 
         // Page 2 Items
         mcTextureText = new GuiTextField(150, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
@@ -82,23 +97,10 @@ public class ColorEditorGui extends GuiScreen {
         // Page 1 Items
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.hexcode");
-            final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.redcolorvalue");
-            final String greenTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.greencolorvalue");
-            final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.bluecolorvalue");
-            final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.alphacolorvalue");
 
             drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
-            drawString(mc.fontRenderer, redTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            drawString(mc.fontRenderer, greenTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
-            drawString(mc.fontRenderer, blueTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
-            drawString(mc.fontRenderer, alphaTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
 
             hexText.drawTextBox();
-
-            redText.drawTextBox();
-            greenText.drawTextBox();
-            blueText.drawTextBox();
-            alphaText.drawTextBox();
 
             proceedButton.enabled = !StringUtils.isNullOrEmpty(hexText.getText());
 
@@ -180,13 +182,13 @@ public class ColorEditorGui extends GuiScreen {
             CraftPresence.GUIS.openScreen(parentScreen);
         }
 
-        if (keyCode == Keyboard.KEY_LEFT && pageNumber != 0) {
+        if (keyCode == Keyboard.KEY_UP && pageNumber != 0) {
             pageNumber--;
             initValues();
             syncValues();
         }
 
-        if (keyCode == Keyboard.KEY_RIGHT && pageNumber != 1) {
+        if (keyCode == Keyboard.KEY_DOWN && pageNumber != 1) {
             pageNumber++;
             initValues();
             syncValues();
@@ -195,10 +197,6 @@ public class ColorEditorGui extends GuiScreen {
         // Page 1 Items
         if (pageNumber == 0) {
             hexText.textboxKeyTyped(typedChar, keyCode);
-            redText.textboxKeyTyped(typedChar, keyCode);
-            greenText.textboxKeyTyped(typedChar, keyCode);
-            blueText.textboxKeyTyped(typedChar, keyCode);
-            alphaText.textboxKeyTyped(typedChar, keyCode);
         }
 
         // Page 2 Items
@@ -216,10 +214,6 @@ public class ColorEditorGui extends GuiScreen {
         // Page 1 Items
         if (pageNumber == 0) {
             hexText.mouseClicked(mouseX, mouseY, mouseButton);
-            redText.mouseClicked(mouseX, mouseY, mouseButton);
-            greenText.mouseClicked(mouseX, mouseY, mouseButton);
-            blueText.mouseClicked(mouseX, mouseY, mouseButton);
-            alphaText.mouseClicked(mouseX, mouseY, mouseButton);
         }
 
         // Page 2 Items
@@ -235,10 +229,6 @@ public class ColorEditorGui extends GuiScreen {
         // Page 1 Items
         if (pageNumber == 0) {
             hexText.updateCursorCounter();
-            redText.updateCursorCounter();
-            greenText.updateCursorCounter();
-            blueText.updateCursorCounter();
-            alphaText.updateCursorCounter();
         }
 
         // Page 2 Items
@@ -315,40 +305,32 @@ public class ColorEditorGui extends GuiScreen {
                 currentGreen = (localValue >> 8 & 255);
                 currentBlue = (localValue & 255);
 
-                alphaText.setText(Integer.toString(currentAlpha));
-                redText.setText(Integer.toString(currentRed));
-                greenText.setText(Integer.toString(currentGreen));
-                blueText.setText(Integer.toString(currentBlue));
+                alphaText.setSliderValue(currentAlpha);
+                redText.setSliderValue(currentRed);
+                greenText.setSliderValue(currentGreen);
+                blueText.setSliderValue(currentBlue);
 
                 currentNormalHexValue = hexText.getText();
                 currentConvertedHexValue = Integer.toString(localValue);
-            } else if (!StringUtils.isNullOrEmpty(redText.getText()) && !StringUtils.isNullOrEmpty(greenText.getText()) && !StringUtils.isNullOrEmpty(blueText.getText()) && !StringUtils.isNullOrEmpty(alphaText.getText())) {
-                Tuple<Boolean, Integer> redData = StringUtils.getValidInteger(redText.getText()),
-                        greenData = StringUtils.getValidInteger(greenText.getText()),
-                        blueData = StringUtils.getValidInteger(blueText.getText()),
-                        alphaData = StringUtils.getValidInteger(alphaText.getText());
+            } else {
+                boolean isRedDifferent = alphaText.getSliderValue(false) != currentRed,
+                        isGreenDifferent = greenText.getSliderValue(false) != currentGreen,
+                        isBlueDifferent = blueText.getSliderValue(false) != currentBlue,
+                        isAlphaDifferent = alphaText.getSliderValue(false) != currentAlpha;
 
-                // Check if all RGBA Values are Valid
-                if (redData.getFirst() && greenData.getFirst() && blueData.getFirst() && alphaData.getFirst()) {
-                    boolean isRedDifferent = redData.getSecond() != currentRed,
-                            isGreenDifferent = greenData.getSecond() != currentGreen,
-                            isBlueDifferent = blueData.getSecond() != currentBlue,
-                            isAlphaDifferent = alphaData.getSecond() != currentAlpha;
+                // Determine if any Values DO need updates
+                if (isRedDifferent || isGreenDifferent || isBlueDifferent || isAlphaDifferent) {
+                    currentRed = (int)redText.getSliderValue(false) & 255;
+                    currentGreen = (int)greenText.getSliderValue(false) & 255;
+                    currentBlue = (int)blueText.getSliderValue(false) & 255;
+                    currentAlpha = (int)alphaText.getSliderValue(false) & 255;
 
-                    // Determine if any Values DO need updates
-                    if (isRedDifferent || isGreenDifferent || isBlueDifferent || isAlphaDifferent) {
-                        currentRed = redData.getSecond() & 255;
-                        currentGreen = greenData.getSecond() & 255;
-                        currentBlue = blueData.getSecond() & 255;
-                        currentAlpha = alphaData.getSecond() & 255;
+                    localColor = new Color(currentRed, currentGreen, currentBlue, currentAlpha);
 
-                        localColor = new Color(currentRed, currentGreen, currentBlue, currentAlpha);
+                    currentNormalHexValue = StringUtils.getHexFromColor(localColor);
+                    hexText.setText(currentNormalHexValue);
 
-                        currentNormalHexValue = StringUtils.getHexFromColor(localColor);
-                        hexText.setText(currentNormalHexValue);
-
-                        currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
-                    }
+                    currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
                 }
             }
         }

@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 
 public class SliderControl extends ExtendedButtonControl
 {
-    private float sliderValue;
+    private float sliderValue, denormalizedSlideValue;
     private String windowTitle;
     private boolean dragging;
 
@@ -18,11 +18,11 @@ public class SliderControl extends ExtendedButtonControl
     {
         super(buttonId, positionData.getFirst(), positionData.getSecond(), dimensions.getFirst(), dimensions.getSecond(), "");
 
-        this.sliderValue = startValue;
+        setSliderValue(startValue);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.valueStep = valueStep;
-        this.displayString = displayString + ": " + sliderValue;
+        this.displayString = displayString + ": " + denormalizedSlideValue;
         this.windowTitle = displayString;
     }
 
@@ -48,9 +48,10 @@ public class SliderControl extends ExtendedButtonControl
             {
                 sliderValue = (float)(mouseX - (x + 4)) / (float)(width - 8);
                 sliderValue = clamp(sliderValue, 0.0F, 1.0F);
-                float f = denormalizeValue(sliderValue);
-                sliderValue = normalizeValue(f);
-                displayString = windowTitle + ": " + sliderValue;
+                denormalizedSlideValue = denormalizeValue(sliderValue);
+                //sliderValue = normalizeValue(denormalizedSlideValue);
+
+                displayString = windowTitle + ": " + denormalizedSlideValue;
             }
 
             CraftPresence.GUIS.renderSlider(x + (int)(sliderValue * (float)(width - 8)), y, 0, 66, 4, 20, zLevel, BUTTON_TEXTURES);
@@ -68,7 +69,9 @@ public class SliderControl extends ExtendedButtonControl
         {
             sliderValue = (float)(mouseX - (x + 4)) / (float)(width - 8);
             sliderValue = clamp(sliderValue, 0.0F, 1.0F);
-            displayString = windowTitle + ": " + sliderValue;
+            denormalizedSlideValue = denormalizeValue(sliderValue);
+
+            displayString = windowTitle + ": " + denormalizedSlideValue;
             dragging = true;
             return true;
         }
@@ -76,6 +79,21 @@ public class SliderControl extends ExtendedButtonControl
         {
             return false;
         }
+    }
+
+    public void setSliderValue(float newValue) {
+        if (newValue >= 0.0f && newValue <= 1.0f) {
+            sliderValue = newValue;
+            denormalizedSlideValue = denormalizeValue(newValue);
+        } else {
+            sliderValue = normalizeValue(newValue);
+            denormalizedSlideValue = newValue;
+        }
+        displayString = windowTitle + ": " + denormalizedSlideValue;
+    }
+
+    public float getSliderValue(boolean useNormal) {
+        return useNormal ? sliderValue : denormalizedSlideValue;
     }
 
     private float clamp(float num, float min, float max) {
