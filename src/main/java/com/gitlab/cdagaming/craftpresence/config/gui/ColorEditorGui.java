@@ -320,10 +320,10 @@ public class ColorEditorGui extends GuiScreen {
 
                 // Determine if any Values DO need updates
                 if (isRedDifferent || isGreenDifferent || isBlueDifferent || isAlphaDifferent) {
-                    currentRed = (int)redText.getSliderValue(false) & 255;
-                    currentGreen = (int)greenText.getSliderValue(false) & 255;
-                    currentBlue = (int)blueText.getSliderValue(false) & 255;
-                    currentAlpha = (int)alphaText.getSliderValue(false) & 255;
+                    currentRed = (int) redText.getSliderValue(false) & 255;
+                    currentGreen = (int) greenText.getSliderValue(false) & 255;
+                    currentBlue = (int) blueText.getSliderValue(false) & 255;
+                    currentAlpha = (int) alphaText.getSliderValue(false) & 255;
 
                     localColor = new Color(currentRed, currentGreen, currentBlue, currentAlpha);
 

@@ -4,18 +4,15 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import net.minecraft.client.Minecraft;
 
-public class SliderControl extends ExtendedButtonControl
-{
+public class SliderControl extends ExtendedButtonControl {
+    private final float minValue;
+    private final float maxValue;
+    private final float valueStep;
     private float sliderValue, denormalizedSlideValue;
     private String windowTitle;
     private boolean dragging;
 
-    private final float minValue;
-    private final float maxValue;
-    private final float valueStep;
-
-    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString)
-    {
+    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
         super(buttonId, positionData.getFirst(), positionData.getSecond(), dimensions.getFirst(), dimensions.getSecond(), "");
 
         setSliderValue(startValue);
@@ -31,8 +28,7 @@ public class SliderControl extends ExtendedButtonControl
      * this button.
      */
     @Override
-    protected int getHoverState(boolean mouseOver)
-    {
+    protected int getHoverState(boolean mouseOver) {
         return 0;
     }
 
@@ -40,13 +36,10 @@ public class SliderControl extends ExtendedButtonControl
      * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent e).
      */
     @Override
-    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY)
-    {
-        if (visible)
-        {
-            if (dragging)
-            {
-                sliderValue = (float)(mouseX - (x + 4)) / (float)(width - 8);
+    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
+        if (visible) {
+            if (dragging) {
+                sliderValue = (float) (mouseX - (x + 4)) / (float) (width - 8);
                 sliderValue = clamp(sliderValue, 0.0F, 1.0F);
                 denormalizedSlideValue = denormalizeValue(sliderValue);
                 //sliderValue = normalizeValue(denormalizedSlideValue);
@@ -54,7 +47,7 @@ public class SliderControl extends ExtendedButtonControl
                 displayString = windowTitle + ": " + denormalizedSlideValue;
             }
 
-            CraftPresence.GUIS.renderSlider(x + (int)(sliderValue * (float)(width - 8)), y, 0, 66, 4, 20, zLevel, BUTTON_TEXTURES);
+            CraftPresence.GUIS.renderSlider(x + (int) (sliderValue * (float) (width - 8)), y, 0, 66, 4, 20, zLevel, BUTTON_TEXTURES);
         }
     }
 
@@ -63,20 +56,16 @@ public class SliderControl extends ExtendedButtonControl
      * e).
      */
     @Override
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY)
-    {
-        if (super.mousePressed(mc, mouseX, mouseY))
-        {
-            sliderValue = (float)(mouseX - (x + 4)) / (float)(width - 8);
+    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+        if (super.mousePressed(mc, mouseX, mouseY)) {
+            sliderValue = (float) (mouseX - (x + 4)) / (float) (width - 8);
             sliderValue = clamp(sliderValue, 0.0F, 1.0F);
             denormalizedSlideValue = denormalizeValue(sliderValue);
 
             displayString = windowTitle + ": " + denormalizedSlideValue;
             dragging = true;
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -97,38 +86,30 @@ public class SliderControl extends ExtendedButtonControl
     }
 
     private float clamp(float num, float min, float max) {
-        if (num < min)
-        {
+        if (num < min) {
             return min;
-        }
-        else
-        {
+        } else {
             return Math.min(num, max);
         }
     }
 
-    private float normalizeValue(float value)
-    {
+    private float normalizeValue(float value) {
         return clamp((snapToStepClamp(value) - minValue) / (maxValue - minValue), 0.0F, 1.0F);
     }
 
-    private float denormalizeValue(float value)
-    {
+    private float denormalizeValue(float value) {
         return snapToStepClamp(minValue + (maxValue - minValue) * clamp(value, 0.0F, 1.0F));
     }
 
-    private float snapToStepClamp(float originalValue)
-    {
+    private float snapToStepClamp(float originalValue) {
         float value = snapToStep(originalValue);
         return clamp(value, minValue, maxValue);
     }
 
-    private float snapToStep(float originalValue)
-    {
+    private float snapToStep(float originalValue) {
         float value = originalValue;
-        if (valueStep > 0.0F)
-        {
-            value = valueStep * (float)Math.round(value / valueStep);
+        if (valueStep > 0.0F) {
+            value = valueStep * (float) Math.round(value / valueStep);
         }
 
         return value;
@@ -138,8 +119,7 @@ public class SliderControl extends ExtendedButtonControl
      * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
      */
     @Override
-    public void mouseReleased(int mouseX, int mouseY)
-    {
+    public void mouseReleased(int mouseX, int mouseY) {
         dragging = false;
     }
 }

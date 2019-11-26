@@ -347,7 +347,7 @@ public class ServerUtils {
             }
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, serverArgs), false);
-            CraftPresence.CLIENT.syncArgument("&SERVER&", CraftPresence.CLIENT.imageOf(CURRENT_SERVER_ICON, CraftPresence.CONFIG.defaultServerIcon), true);
+            CraftPresence.CLIENT.syncArgument("&SERVER&", CraftPresence.CLIENT.imageOf(CURRENT_SERVER_ICON, CraftPresence.CONFIG.defaultServerIcon, true), true);
             queuedForUpdate = false;
         } else if (CraftPresence.instance.isSingleplayer()) {
             // Form SinglePlayer Tuple Argument List

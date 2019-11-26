@@ -39,9 +39,10 @@ public class DiscordUtils {
     public String SPECTATE_SECRET;
     public byte INSTANCE;
     public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
-
     public IPCClient ipcInstance;
-    public RichPresence currentPresence;
+    // Format: <lastEvalKey, lastResult>
+    private Tuple<String, String> lastRequestedImageData = new Tuple<>();
+    private RichPresence currentPresence;
 
     private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList(),
             modsArgs = Lists.newArrayList(), playerInfoArgs = Lists.newArrayList();
@@ -172,8 +173,34 @@ public class DiscordUtils {
         }
     }
 
-    public String imageOf(final String evalString, final String defaultString) {
-        return DiscordAssetUtils.contains(evalString) ? evalString : defaultString;
+    public String imageOf(final String evalString, final String alternativeString, final boolean allowNull) {
+        if (StringUtils.isNullOrEmpty(lastRequestedImageData.getFirst()) || !lastRequestedImageData.getFirst().equalsIgnoreCase(evalString)) {
+            final String defaultIcon = DiscordAssetUtils.contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : DiscordAssetUtils.getRandomAsset();
+            lastRequestedImageData.setFirst(evalString);
+
+            String finalKey = evalString;
+
+            if (!DiscordAssetUtils.contains(finalKey)) {
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.fallback", evalString, alternativeString));
+                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.request", evalString));
+                if (DiscordAssetUtils.contains(alternativeString)) {
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.fallback", evalString, alternativeString));
+                    finalKey = alternativeString;
+                } else {
+                    if (allowNull) {
+                        finalKey = "";
+                    } else {
+                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.default", evalString));
+                        finalKey = defaultIcon;
+                    }
+                }
+            }
+
+            lastRequestedImageData.setSecond(finalKey);
+            return finalKey;
+        } else {
+            return lastRequestedImageData.getSecond();
+        }
     }
 
     public void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
@@ -203,6 +230,8 @@ public class DiscordUtils {
         currentPresence = null;
         clearPartyData(true, false);
         CURRENT_USER = null;
+
+        lastRequestedImageData = new Tuple<>();
 
         CraftPresence.DIMENSIONS.clearClientData();
         CraftPresence.ENTITIES.clearClientData();
