@@ -31,7 +31,7 @@ public class GuiUtils {
     private GuiScreen CURRENT_SCREEN;
     private List<Class> GUI_CLASSES = Lists.newArrayList();
 
-    private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, double zLevel) {
+    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, double zLevel) {
         final float uScale = 1f / 0x100;
         final float vScale = 1f / 0x100;
 
@@ -385,6 +385,16 @@ public class GuiUtils {
                 drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, loc);
             }
         }
+    }
+
+    public void renderSlider(int x, int y, int u, int v, int width, int height, double zLevel, ResourceLocation texLocation) {
+        if (texLocation != null) {
+            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        }
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        drawTexturedModalRect(x, y, u, v, width, height, zLevel);
+        drawTexturedModalRect(x + 4, y, u + 196, v, width, height, zLevel);
     }
 
     public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, ResourceLocation texLocation) {
