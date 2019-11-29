@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.server;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -13,26 +36,129 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 
 import java.util.List;
 
+/**
+ * Server Utilities used to Parse Server Data and handle related RPC Events
+ *
+ * @author CDAGaming
+ */
 public class ServerUtils {
-    public boolean enabled = false, isInUse = false;
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
 
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+
+    /**
+     * A List of the detected Server Addresses
+     */
     public List<String> knownAddresses = Lists.newArrayList();
-    private String currentServer_IP, currentServer_Name, currentServer_MOTD, currentServerMSG,
-            timeString, currentDifficulty, currentWorldName;
-    private int currentPlayers, maxPlayers, serverIndex;
+
+    /**
+     * The IP Address of the Current Server the Player is in
+     */
+    private String currentServer_IP;
+
+    /**
+     * The Name of the Current Server the Player is in
+     */
+    private String currentServer_Name;
+
+    /**
+     * The Message of the Day of the Current Server the Player is in
+     */
+    private String currentServer_MOTD;
+
+    /**
+     * The Current Server RPC Message being used, with Arguments
+     */
+    private String currentServerMSG;
+
+    /**
+     * The Current Formatted World Time, as a String
+     */
+    private String timeString;
+
+    /**
+     * The Current World's Difficulty
+     */
+    private String currentDifficulty;
+
+    /**
+     * The Current World's Name
+     */
+    private String currentWorldName;
+
+    /**
+     * The Amount of Players in the Current Server the Player is in
+     */
+    private int currentPlayers;
+
+    /**
+     * The Maximum Amount of Players allowed in the Current Server the Player is in
+     */
+    private int maxPlayers;
+
+    /**
+     * The amount of Currently detected Server Addresses
+     */
+    private int serverIndex;
+
+    /**
+     * Mapping storing the Current X and Z Position of the Player in a World
+     */
     private Tuple<Double, Double> currentCoordinates = new Tuple<>(0.0D, 0.0D);
+
+    /**
+     * Mapping storing the Current and Maximum Health the Player currently has in a World
+     */
     private Tuple<Float, Float> currentHealth = new Tuple<>(0.0f, 0.0f);
-    private ServerData currentServerData, requestedServerData;
+
+    /**
+     * The Current Server Connection Data and Info
+     */
+    private ServerData currentServerData;
+
+    /**
+     * The Queued Server Connection Data and Info to Join, if any
+     */
+    private ServerData requestedServerData;
+
+    /**
+     * The Player's Current Connection Data
+     */
     private NetHandlerPlayClient currentConnection;
 
-    // Note: queuedForUpdate is needed here for Multiple-Condition RPC Triggers
-    private boolean queuedForUpdate = false, joinInProgress = false, isOnLAN = false;
+    /**
+     * If the RPC needs to be Updated or Re-Synchronized<p>
+     * Needed here for Multiple-Condition RPC Triggers
+     */
+    private boolean queuedForUpdate = false;
 
+    /**
+     * If in Progress of Joining a World/Server from another World/Server
+     */
+    private boolean joinInProgress = false;
+
+    /**
+     * If the Current Server is on a LAN-Based Connection (A Local Network Game)
+     */
+    private boolean isOnLAN = false;
+
+    /**
+     * Clears FULL Data from this Module
+     */
     private void emptyData() {
         knownAddresses.clear();
         clearClientData();
     }
 
+    /**
+     * Clears Runtime Client Data from this Module (PARTIAL Clear)
+     */
     public void clearClientData() {
         currentServer_IP = null;
         currentServer_MOTD = null;
@@ -59,6 +185,9 @@ public class ServerUtils {
         CraftPresence.CLIENT.initIconData("&SERVER&");
     }
 
+    /**
+     * Module Event to Occur on each tick within the Application
+     */
     public void onTick() {
         joinInProgress = StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame") || CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame"));
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showGameState : enabled;
@@ -84,6 +213,9 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Synchronizes Data related to this module, if needed
+     */
     private void updateServerData() {
         final ServerData newServerData = CraftPresence.instance.getCurrentServerData();
         final NetHandlerPlayClient newConnection = CraftPresence.instance.getConnection();
@@ -192,6 +324,12 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Converts a Raw World Time Long into a Readable 24-Hour Time String
+     *
+     * @param worldTime The raw World Time
+     * @return The converted and readable 24-hour time string
+     */
     private String getTimeString(long worldTime) {
         long hour = 0;
         long minute = 0;
@@ -216,6 +354,11 @@ public class ServerUtils {
         return formattedHour + ":" + formattedMinute;
     }
 
+    /**
+     * Creates a Secret Key to use in Sending Requested Server Data from Discord Join Requests
+     *
+     * @return The Parsable Secret Key
+     */
     private String makeSecret() {
         String formattedKey = CraftPresence.CLIENT.CLIENT_ID + "";
         boolean containsServerName = false;
@@ -234,6 +377,11 @@ public class ServerUtils {
         return formattedKey;
     }
 
+    /**
+     * Verifies the Inputted secret Key, and upon match, Form Server Data to join a Server
+     *
+     * @param secret The secret key to test against for validity
+     */
     public void verifyAndJoin(final String secret) {
         String[] boolParts = secret.split(";");
         String[] stringParts = boolParts[0].split("-");
@@ -255,6 +403,11 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Joins a Server/World based on Server Data requested
+     *
+     * @param serverData The Requested Server Data to Join
+     */
     private void joinServer(final ServerData serverData) {
         try {
             if (CraftPresence.player != null) {
@@ -269,6 +422,9 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Updates RPC Data related to this Module
+     */
     public void updateServerPresence() {
         // Form General Argument Lists & Sub Argument Lists
         List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), worldDataArgs = Lists.newArrayList();
@@ -370,6 +526,9 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Retrieves and Synchronizes detected Server Addresses from the Server List
+     */
     public void getServerAddresses() {
         final ServerList serverList = new ServerList(CraftPresence.instance);
         serverList.loadServerList();

@@ -20,7 +20,7 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
 import com.google.gson.JsonObject;
 
 /**
- * An implementable listener used to handle events caught by an {@link IPCClient}.<p>
+ * An implementable listener used to handle events caught by an {@link IPCClient}.
  * <p>
  * Can be attached to an IPCClient using {@link IPCClient#setListener(IPCListener)}.
  *
@@ -67,7 +67,7 @@ public interface IPCListener {
 
     /**
      * Fired whenever a RichPresence activity informs us that
-     * a user has clicked a "ask to join" button.<p>
+     * a user has clicked a "ask to join" button.
      * <p>
      * As opposed to {@link #onActivityJoin(IPCClient, String)},
      * this also provides packaged {@link User} data.

@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -12,9 +35,22 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
+/**
+ * Command Utilities for Synchronizing and Initializing Data
+ *
+ * @author CDAGaming
+ */
 public class CommandUtils {
+    /**
+     * Whether you are on the Main Menu in Minecraft
+     */
     public static boolean isInMainMenu = false;
 
+    /**
+     * Reloads and Synchronizes Data, as needed, and performs onTick Events
+     *
+     * @param forceUpdateRPC Whether to Force an Update to the RPC Data
+     */
     public static void reloadData(final boolean forceUpdateRPC) {
         ModUtils.TRANSLATOR.onTick();
         CraftPresence.SYSTEM.onTick();
@@ -47,6 +83,9 @@ public class CommandUtils {
         }
     }
 
+    /**
+     * Restarts and Initializes the RPC Data
+     */
     public static void rebootRPC() {
         CraftPresence.CLIENT.shutDown();
         if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientID)) {
@@ -57,6 +96,10 @@ public class CommandUtils {
         CraftPresence.CLIENT.init();
     }
 
+    /**
+     * Initializes Essential Data<p>
+     * (In this case, Pack Data and Available RPC Icons)
+     */
     public static void init() {
         if (CraftPresence.CONFIG.detectCurseManifest && !CraftPresence.packFound) {
             CurseUtils.loadManifest();
@@ -73,6 +116,9 @@ public class CommandUtils {
         DiscordAssetUtils.loadAssets();
     }
 
+    /**
+     * Synchronizes RPC Data towards that of being in the Main Menu
+     */
     public static void setMainMenuPresence() {
         // Form Argument Lists
         List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), mainMenuArgs = Lists.newArrayList();

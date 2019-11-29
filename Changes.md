@@ -16,6 +16,8 @@
 
 *   Extended KeyBinding System to expand to future KeyBinds
 
+*   Added Documentation for the Mod's Utilities, now available [here](https://cdagaming.gitlab.io/craftpresence-documentation/)
+
 *   Added a New Config Message in Logs for Initial Setups
 
 *   Pressing the `Reset to Default` Button will no longer save automatically, to prevent accidental misuse
@@ -27,6 +29,8 @@
     *   `&coords&` has been added to display your X and Z Axis Coordinates
 
 *   The Mod will now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
+
+*   Sliders have now been added to the Config Gui where appropriate, such as the RGBA section of the ColorUI's
 
 *   Removed and Cleaned Unused Localization Strings
 
@@ -79,7 +83,7 @@ Migration Notes:
 
 *   `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
 
-    *   `&ign` in Server Messages should be changed to `&playerinfo&`
+    *   `&ign&` in Server Messages should be changed to `&playerinfo&`
 
 *   `overwriteServerIcon` has been deprecated, instead use the Presence Formatting GUI to define the priority for icons
 

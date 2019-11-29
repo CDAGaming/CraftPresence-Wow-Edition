@@ -1,17 +1,85 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import net.minecraft.client.Minecraft;
 
+/**
+ * Gui Widget for a Movable Slider between a beginning and maximum value
+ *
+ * @author CDAGaming
+ */
 public class SliderControl extends ExtendedButtonControl {
+    /**
+     * The Minimum Value the Slider can reach
+     */
     private final float minValue;
+
+    /**
+     * The Maximum Value the Slider can Reach
+     */
     private final float maxValue;
+
+    /**
+     * The rate at which the Slider is able to move at on each move
+     */
     private final float valueStep;
-    private float sliderValue, denormalizedSlideValue;
+
+    /**
+     * The Normalized Slider Value between 0.0f and 1.0f
+     */
+    private float sliderValue;
+
+    /**
+     * The denormalized Slider value between the minimum and maximum values
+     */
+    private float denormalizedSlideValue;
+
+    /**
+     * The Starting Slider Name to display as
+     */
     private String windowTitle;
+
+    /**
+     * Whether the Slider is currently being dragged
+     */
     private boolean dragging;
 
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param buttonId The ID for the control to Identify as
+     * @param positionData The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions The Width and Height dimensions for the control
+     * @param startValue The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     */
     public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
         super(buttonId, positionData.getFirst(), positionData.getSecond(), dimensions.getFirst(), dimensions.getSecond(), "");
 
@@ -24,8 +92,11 @@ public class SliderControl extends ExtendedButtonControl {
     }
 
     /**
-     * Returns 0 if the button is disabled, 1 if the mouse is NOT hovering over this button and 2 if it IS hovering over
-     * this button.
+     * Returns the current Hover state of this control
+     * <p>
+     * 0 if the button is disabled<p>
+     * 1 if the mouse is NOT hovering over this button<p>
+     * 2 if it IS hovering over this button.
      */
     @Override
     protected int getHoverState(boolean mouseOver) {
@@ -33,7 +104,8 @@ public class SliderControl extends ExtendedButtonControl {
     }
 
     /**
-     * Fired when the mouse button is dragged. Equivalent of MouseListener.mouseDragged(MouseEvent e).
+     * Fired when the mouse button is dragged.<p>
+     * Equivalent of MouseListener.mouseDragged(MouseEvent e).
      */
     @Override
     protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
@@ -42,7 +114,6 @@ public class SliderControl extends ExtendedButtonControl {
                 sliderValue = (float) (mouseX - (x + 4)) / (float) (width - 8);
                 sliderValue = clamp(sliderValue, 0.0F, 1.0F);
                 denormalizedSlideValue = denormalizeValue(sliderValue);
-                //sliderValue = normalizeValue(denormalizedSlideValue);
 
                 displayString = windowTitle + ": " + denormalizedSlideValue;
             }
@@ -52,8 +123,8 @@ public class SliderControl extends ExtendedButtonControl {
     }
 
     /**
-     * Returns true if the mouse has been pressed on this control. Equivalent of MouseListener.mousePressed(MouseEvent
-     * e).
+     * Returns true if the mouse has been pressed on this control.<p>
+     * Equivalent of MouseListener.mousePressed(MouseEvent e).
      */
     @Override
     public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
@@ -70,6 +141,12 @@ public class SliderControl extends ExtendedButtonControl {
         }
     }
 
+    /**
+     * Updates the Current Slider Value<p>
+     * Note: Both Normalized and denormalized values are supported
+     *
+     * @param newValue The New Slider Value
+     */
     public void setSliderValue(float newValue) {
         if (newValue >= 0.0f && newValue <= 1.0f) {
             sliderValue = newValue;
@@ -81,10 +158,24 @@ public class SliderControl extends ExtendedButtonControl {
         displayString = windowTitle + ": " + denormalizedSlideValue;
     }
 
+    /**
+     * Retrieves the Current Normalized / denormalized Slider Value
+     *
+     * @param useNormal Whether to get the normalized value
+     * @return The Current Normalized / denormalized Slider Value
+     */
     public float getSliderValue(boolean useNormal) {
         return useNormal ? sliderValue : denormalizedSlideValue;
     }
 
+    /**
+     * Clamps the Specified Number between a minimum and maximum limit
+     *
+     * @param num The number to clamp upon
+     * @param min The Minimum Limit for the number
+     * @param max The Maximum Limit for the number
+     * @return The adjusted and clamped number
+     */
     private float clamp(float num, float min, float max) {
         if (num < min) {
             return min;
@@ -93,19 +184,43 @@ public class SliderControl extends ExtendedButtonControl {
         }
     }
 
+    /**
+     * Normalize and Clamp the specified value to a number between 0.0f and 1.0f
+     *
+     * @param value The denormalized value to normalize
+     * @return The converted normalized value
+     */
     private float normalizeValue(float value) {
         return clamp((snapToStepClamp(value) - minValue) / (maxValue - minValue), 0.0F, 1.0F);
     }
 
+    /**
+     * Denormalize and Expand the specified value to a number between the minimum and maximum slider value
+     *
+     * @param value The normalized value to denormalize
+     * @return The converted denormalized value
+     */
     private float denormalizeValue(float value) {
         return snapToStepClamp(minValue + (maxValue - minValue) * clamp(value, 0.0F, 1.0F));
     }
 
+    /**
+     * Snaps the Specified Value to the nearest Step Rate Value, then clamps said value within bounds
+     *
+     * @param originalValue The original value to adjust, if needed
+     * @return The Snapped and Clamped proper Slider Value
+     */
     private float snapToStepClamp(float originalValue) {
         float value = snapToStep(originalValue);
         return clamp(value, minValue, maxValue);
     }
 
+    /**
+     * Rounds the Specified Value to the nearest value, using the Step Rate Value
+     *
+     * @param originalValue The non-rounded value to interpret
+     * @return The Step-Rounded Value at a valid step
+     */
     private float snapToStep(float originalValue) {
         float value = originalValue;
         if (valueStep > 0.0F) {
@@ -116,7 +231,8 @@ public class SliderControl extends ExtendedButtonControl {
     }
 
     /**
-     * Fired when the mouse button is released. Equivalent of MouseListener.mouseReleased(MouseEvent e).
+     * Fired when the mouse button is released.<p>
+     * Equivalent of MouseListener.mouseReleased(MouseEvent e).
      */
     @Override
     public void mouseReleased(int mouseX, int mouseY) {

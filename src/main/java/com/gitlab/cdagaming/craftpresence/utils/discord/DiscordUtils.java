@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.discord;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -19,34 +42,159 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
+/**
+ * Variables and Methods used to update the RPC Presence States to display within Discord
+ *
+ * @author CDAGaming
+ */
 public class DiscordUtils {
-    public User CURRENT_USER, REQUESTER_USER;
+    /**
+     * The Current User, tied to the Rich Presence
+     */
+    public User CURRENT_USER;
+
+    /**
+     * The Join Request User Data, if any
+     */
+    public User REQUESTER_USER;
+
+    /**
+     * The current RPC Status (Ex: ready, errored, disconnected)
+     */
     public String STATUS;
+
+    /**
+     * The Current Message tied to the Party/Game Status Field of the RPC
+     */
     public String GAME_STATE;
+
+    /**
+     * The Current Message tied to the current action / Details Field of the RPC
+     */
     public String DETAILS;
+
+    /**
+     * The Current Small Image Icon being displayed in the RPC, if any
+     */
     public String SMALLIMAGEKEY;
+
+    /**
+     * The Current Message tied to the Small Image, if any
+     */
     public String SMALLIMAGETEXT;
+
+    /**
+     * The Current Large Image Icon being displayed in the RPC, if any
+     */
     public String LARGEIMAGEKEY;
+
+    /**
+     * The Current Message tied to the Large Image, if any
+     */
     public String LARGEIMAGETEXT;
+
+    /**
+     * The 18-character Client ID Number, tied to the game profile data attached to the RPC
+     */
     public String CLIENT_ID;
+
+    /**
+     * The Current Starting Unix Timestamp from Epoch, used for Elapsed Time
+     */
     public long START_TIMESTAMP;
+
+    /**
+     * The Party Session ID that's tied to the RPC, if any
+     */
     public String PARTY_ID;
+
+    /**
+     * The Current Size of the Party Session, if in a Party
+     */
     public int PARTY_SIZE;
+
+    /**
+     * The Maximum Size of the Party Session, if in a Party
+     */
     public int PARTY_MAX;
+
+    /**
+     * The Current Party Join Secret Key, if in a Party
+     */
     public String JOIN_SECRET;
+
+    /**
+     * The Current Ending Unix Timestamp from Epoch, used for Time Until if combined with {@link DiscordUtils#START_TIMESTAMP}
+     */
     public long END_TIMESTAMP;
+
+    /**
+     * The Current Match Secret Key tied to the RPC, if any
+     */
     public String MATCH_SECRET;
+
+    /**
+     * The Current Spectate Secret Key tied to the RPC, if any
+     */
     public String SPECTATE_SECRET;
+
+    /**
+     * The Instance Code attached to the RPC, if any
+     */
     public byte INSTANCE;
+
+    /**
+     * A Mapping of the General RPC Arguments allowed in adjusting Presence Messages
+     */
     public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
+
+    /**
+     * An Instance of the {@link IPCClient}, responsible for sending and receiving RPC Events
+     */
     public IPCClient ipcInstance;
-    // Format: <lastEvalKey, lastResult>
+
+    /**
+     * A Mapping of the Last Requested Image Data
+     * <p>Used to prevent sending duplicate packets and cache data for repeated images in other areas
+     * <p>Format: lastAttemptedKey, lastResultingKey
+     */
     private Tuple<String, String> lastRequestedImageData = new Tuple<>();
+
+    /**
+     * An Instance containing the Current Rich Presence Data
+     * <p>Also used to prevent sending duplicate packets with the same presence data, if any
+     */
     private RichPresence currentPresence;
 
-    private List<Tuple<String, String>> messageData = Lists.newArrayList(), iconData = Lists.newArrayList(),
-            modsArgs = Lists.newArrayList(), playerInfoArgs = Lists.newArrayList();
+    /**
+     * Whether Discord is currently awaiting a response to a Ask to Join or Spectate Request, if any
+     */
+    public boolean awaitingReply = false;
 
+    /**
+     * A Mapping of the Arguments available to use as RPC Message Placeholders
+     */
+    private List<Tuple<String, String>> messageData = Lists.newArrayList();
+
+    /**
+     * A Mapping of the Arguments available to use as Icon Key Placeholders
+     */
+    private List<Tuple<String, String>> iconData = Lists.newArrayList();
+
+    /**
+     * A Mapping of the Arguments attached to the &MODS& RPC Message placeholder
+     */
+    private List<Tuple<String, String>> modsArgs = Lists.newArrayList();
+
+    /**
+     * A Mapping of the Arguments attached to the &IGN& RPC Message Placeholder
+     */
+    private List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
+
+    /**
+     * Setup any Critical Methods needed for the RPC
+     * <p>In this case, ensures a Thread is in place to shut down the RPC onExit
+     */
     public synchronized void setup() {
         final Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
             @Override
@@ -61,6 +209,9 @@ public class DiscordUtils {
         Runtime.getRuntime().addShutdownHook(shutdownThread);
     }
 
+    /**
+     * Initializes and Synchronizes Initial Rich Presence Data
+     */
     public synchronized void init() {
         try {
             // Create IPC Instance and Listener and Make a Connection if possible
@@ -100,12 +251,22 @@ public class DiscordUtils {
         syncPackArguments();
     }
 
+    /**
+     * Updates the Starting Unix Timestamp, if allowed
+     */
     public void updateTimestamp() {
         if (CraftPresence.CONFIG.showTime) {
             START_TIMESTAMP = CraftPresence.SYSTEM.CURRENT_TIMESTAMP / 1000L;
         }
     }
 
+    /**
+     * Synchronizes the Specified Argument as an RPC Message or an Icon Placeholder
+     *
+     * @param argumentName The Specified Argument to Synchronize for
+     * @param insertString The String to attach to the Specified Argument
+     * @param isIconData Whether the Argument is an RPC Message or an Icon Placeholder
+     */
     public void syncArgument(String argumentName, String insertString, boolean isIconData) {
         // Remove and Replace Placeholder Data, if the placeholder needs Updates
         if (!StringUtils.isNullOrEmpty(argumentName)) {
@@ -121,22 +282,35 @@ public class DiscordUtils {
         }
     }
 
+    /**
+     * Initialize the Specified RPC Arguments as Empty Data
+     *
+     * @param args The Arguments to Initialize
+     */
     public void initArgumentData(String... args) {
-        // Initialize Available Arguments to Empty Data
+        // Initialize Specified Arguments to Empty Data
         for (String argumentName : args) {
             messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
             messageData.add(new Tuple<>(argumentName, ""));
         }
     }
 
+    /**
+     * Initialize the Specified Icon Arguments as Empty Data
+     *
+     * @param args The Arguments to Initialize
+     */
     public void initIconData(String... args) {
-        // Initialize available Icon Arguments to Empty Data
+        // Initialize Specified Icon Arguments to Empty Data
         for (String iconArgumentName : args) {
             iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(iconArgumentName));
             iconData.add(new Tuple<>(iconArgumentName, ""));
         }
     }
 
+    /**
+     * Synchronizes the &PACK& Argument, based on any found Launcher Pack/Instance Data
+     */
     private void syncPackArguments() {
         // Add &PACK& Placeholder to ArgumentData
         String foundPackName = "", foundPackIcon = "";
@@ -164,6 +338,11 @@ public class DiscordUtils {
         syncArgument("&PACK&", !StringUtils.isNullOrEmpty(foundPackIcon) ? StringUtils.formatPackIcon(foundPackIcon) : "", true);
     }
 
+    /**
+     * Synchronizes and Updates the Rich Presence Data, if needed and connected
+     *
+     * @param presence The New Presence Data to apply
+     */
     public void updatePresence(final RichPresence presence) {
         if (presence != null &&
                 (currentPresence == null || !presence.toJson().toString().equals(currentPresence.toJson().toString())) &&
@@ -173,6 +352,14 @@ public class DiscordUtils {
         }
     }
 
+    /**
+     * Attempts to lookup the specified Image, and if not existent, use the alternative String, and null if allowed
+     *
+     * @param evalString The Specified Icon Key to search for from the {@link DiscordUtils#CLIENT_ID} Assets
+     * @param alternativeString The Alternative Icon Key to use if unable to locate the Original Icon Key
+     * @param allowNull If allowed to return null if unable to find any matches, otherwise uses the Default Icon in Config
+     * @return The found or alternative matching Icon Key
+     */
     public String imageOf(final String evalString, final String alternativeString, final boolean allowNull) {
         if (StringUtils.isNullOrEmpty(lastRequestedImageData.getFirst()) || !lastRequestedImageData.getFirst().equalsIgnoreCase(evalString)) {
             final String defaultIcon = DiscordAssetUtils.contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : DiscordAssetUtils.getRandomAsset();
@@ -203,9 +390,15 @@ public class DiscordUtils {
         }
     }
 
+    /**
+     * Clears Related Party Session Information from the RPC, and updates if needed
+     *
+     * @param clearRequesterData Whether to clear Ask to Join / Spectate Request Data
+     * @param updateRPC Whether to immediately update the RPC following changes
+     */
     public void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
         if (clearRequesterData) {
-            CraftPresence.awaitingReply = false;
+            awaitingReply = false;
             REQUESTER_USER = null;
             CraftPresence.SYSTEM.TIMER = 0;
         }
@@ -218,6 +411,9 @@ public class DiscordUtils {
         }
     }
 
+    /**
+     * Shutdown the RPC and close related resources, as well as Clearing any remaining Runtime Client Data
+     */
     public synchronized void shutDown() {
         try {
             ipcInstance.close();
@@ -242,6 +438,11 @@ public class DiscordUtils {
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
     }
 
+    /**
+     * Builds a New Instance of {@link RichPresence} based on Queued Data
+     *
+     * @return A New Instance of {@link RichPresence}
+     */
     public RichPresence buildRichPresence() {
         // Format Presence based on Arguments available in argumentData
         DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));

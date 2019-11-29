@@ -129,7 +129,7 @@ public class User {
     }
 
     /**
-     * Gets whether or not this User is a bot.<p>
+     * Gets whether or not this User is a bot.
      * <p>
      * While, at the time of writing this documentation, bots cannot
      * use Rich Presence features, there may be a time in the future
@@ -142,7 +142,7 @@ public class User {
     }
 
     /**
-     * Gets the User as a discord formatted mention.<p>
+     * Gets the User as a discord formatted mention.
      * <p>
      * {@code <@SNOWFLAKE_ID> }
      *

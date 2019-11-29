@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -12,15 +35,55 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Dimension Utilities used to Parse Dimension Data and handle related RPC Events
+ *
+ * @author CDAGaming
+ */
 public class DimensionUtils {
-    public boolean isInUse = false, enabled = false;
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
+
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+
+    /**
+     * A List of the detected Dimension Names
+     */
     public List<String> DIMENSION_NAMES = Lists.newArrayList();
 
-    private String CURRENT_DIMENSION_NAME, CURRENT_DIMENSION_NAME_ID;
+    /**
+     * The Name of the Current Dimension the Player is in
+     */
+    private String CURRENT_DIMENSION_NAME;
+
+    /**
+     * The alternative name for the Current Dimension the Player is in, if any
+     */
+    private String CURRENT_DIMENSION_NAME_ID;
+
+    /**
+     * A List of the detected Dimension ID's
+     */
     private List<Integer> DIMENSION_IDS = Lists.newArrayList();
+
+    /**
+     * A List of the detected Dimension Type's
+     */
     private List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
+
+    /**
+     * The ID Number for the Current Dimension the Player is in
+     */
     private Integer CURRENT_DIMENSION_ID;
 
+    /**
+     * Clears FULL Data from this Module
+     */
     private void emptyData() {
         DIMENSION_NAMES.clear();
         DIMENSION_IDS.clear();
@@ -28,6 +91,9 @@ public class DimensionUtils {
         clearClientData();
     }
 
+    /**
+     * Clears Runtime Client Data from this Module (PARTIAL Clear)
+     */
     public void clearClientData() {
         CURRENT_DIMENSION_NAME = null;
         CURRENT_DIMENSION_ID = null;
@@ -37,6 +103,9 @@ public class DimensionUtils {
         CraftPresence.CLIENT.initIconData("&DIMENSION&");
     }
 
+    /**
+     * Module Event to Occur on each tick within the Application
+     */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
         final boolean needsUpdate = enabled && (
@@ -59,6 +128,9 @@ public class DimensionUtils {
         }
     }
 
+    /**
+     * Synchronizes Data related to this module, if needed
+     */
     private void updateDimensionData() {
         final WorldProvider newProvider = CraftPresence.player.world.provider;
         final DimensionType newDimensionType = newProvider.getDimensionType();
@@ -89,6 +161,9 @@ public class DimensionUtils {
         }
     }
 
+    /**
+     * Updates RPC Data related to this Module
+     */
     public void updateDimensionPresence() {
         // Form Dimension Argument List
         List<Tuple<String, String>> dimensionArgs = Lists.newArrayList();
@@ -113,6 +188,11 @@ public class DimensionUtils {
         CraftPresence.CLIENT.syncArgument("&DIMENSION&", CraftPresence.CLIENT.imageOf(CURRENT_DIMENSION_ICON, CraftPresence.CONFIG.defaultDimensionIcon, true), true);
     }
 
+    /**
+     * Retrieves a List of detected Dimension Types
+     *
+     * @return The detected Dimension Types found
+     */
     private List<DimensionType> getDimensionTypes() {
         List<DimensionType> dimensionTypes = Lists.newArrayList();
         Map<?, ?> reflectedDimensionTypes = (Map<?, ?>) StringUtils.lookupObject(DimensionType.class, null, "dimensionTypes");
@@ -131,7 +211,7 @@ public class DimensionUtils {
                 }
             } else {
                 // Fallback 2: Use Manual Class Lookup
-                for (Class classObj : FileUtils.getClassNamesMatchingSuperType(WorldProvider.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+                for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(WorldProvider.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
                     if (classObj != null) {
                         try {
                             WorldProvider providerObj = (WorldProvider) classObj.newInstance();
@@ -151,6 +231,9 @@ public class DimensionUtils {
         return dimensionTypes;
     }
 
+    /**
+     * Updates and Initializes Module Data, based on found Information
+     */
     public void getDimensions() {
         for (DimensionType TYPE : getDimensionTypes()) {
             if (TYPE != null) {

@@ -19,7 +19,7 @@ import com.gitlab.cdagaming.craftpresence.impl.DataConsumer;
 
 /**
  * A callback for asynchronous logic when dealing processes that
- * would normally block the calling thread.<p>
+ * would normally block the calling thread.
  * <p>
  * This is most visibly implemented in {@link com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient IPCClient}.
  *
@@ -85,7 +85,7 @@ public class Callback {
      * constructor ({@link #Callback()}) or another constructor that leaves
      * one or both parameters {@code null}.
      *
-     * @return {@code true} if and only if the
+     * @return {@code true} if and only if the Callback is "empty"
      */
     public boolean isEmpty() {
         return success == null && failure == null;
@@ -93,6 +93,8 @@ public class Callback {
 
     /**
      * Launches the success {@link DataConsumer}.
+     *
+     * @param packet The packet to succeed upon
      */
     public void succeed(Packet packet) {
         if (success != null)

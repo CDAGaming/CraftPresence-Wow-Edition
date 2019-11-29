@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -13,34 +36,135 @@ import net.minecraft.util.NonNullList;
 
 import java.util.List;
 
+/**
+ * Entity Utilities used to Parse Entity Data and handle related RPC Events
+ *
+ * @author CDAGaming
+ */
 public class EntityUtils {
-    public boolean isInUse = false, enabled = false;
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
 
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+
+    /**
+     * A List of the detected Entity (Blocks + Items) Names
+     */
     public List<String> ENTITY_NAMES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Block Names
+     */
     private List<String> BLOCK_NAMES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Block Class Names
+     */
     private List<String> BLOCK_CLASSES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Item Names
+     */
     private List<String> ITEM_NAMES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Item Class Names
+     */
     private List<String> ITEM_CLASSES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Entity (Blocks + Items) Class Names
+     */
     private List<String> ENTITY_CLASSES = Lists.newArrayList();
 
+    /**
+     * An Instance of an Empty Item
+     */
     private Item EMPTY_ITEM = null;
+
+    /**
+     * An Instance of an Empty ItemStack
+     */
     private ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
+
+    /**
+     * The Player's Current Main Hand Item, if any
+     */
     private ItemStack CURRENT_MAINHAND_ITEM;
+
+    /**
+     * The Player's Current Off Hand Item, if any
+     */
     private ItemStack CURRENT_OFFHAND_ITEM;
+
+    /**
+     * The Player's Currently Equipped Helmet, if any
+     */
     private ItemStack CURRENT_HELMET;
+
+    /**
+     * The Player's Currently Equipped ChestPlate, if any
+     */
     private ItemStack CURRENT_CHEST;
+
+    /**
+     * The Player's Currently Equipped Leggings, if any
+     */
     private ItemStack CURRENT_LEGS;
+
+    /**
+     * The Player's Currently Equipped Boots, if any
+     */
     private ItemStack CURRENT_BOOTS;
 
+    /**
+     * The Player's Current Main Hand Item Name, if any
+     */
     private String CURRENT_MAINHAND_ITEM_NAME;
+
+    /**
+     * The Player's Current Off Hand Item Name, if any
+     */
     private String CURRENT_OFFHAND_ITEM_NAME;
+
+    /**
+     * The Player's Currently Equipped Helmet Name, if any
+     */
     private String CURRENT_HELMET_NAME;
+
+    /**
+     * The Player's Currently Equipped ChestPlate Name, if any
+     */
     private String CURRENT_CHEST_NAME;
+
+    /**
+     * The Player's Currently Equipped Leggings Name, if any
+     */
     private String CURRENT_LEGS_NAME;
+
+    /**
+     * The Player's Currently Equipped Boots Name, if any
+     */
     private String CURRENT_BOOTS_NAME;
 
-    private boolean allItemsEmpty = false, currentlyCleared = true;
+    /**
+     * If the Player doesn't have any Items in the Critical Slots such as Main & Off Hand or Armor
+     */
+    private boolean allItemsEmpty = false;
 
+    /**
+     * If this Module's Runtime Data is currently Cleared
+     */
+    private boolean currentlyCleared = true;
+
+    /**
+     * Clears FULL Data from this Module
+     */
     private void emptyData() {
         BLOCK_NAMES.clear();
         BLOCK_CLASSES.clear();
@@ -51,6 +175,9 @@ public class EntityUtils {
         clearClientData();
     }
 
+    /**
+     * Clears Runtime Client Data from this Module (PARTIAL Clear)
+     */
     public void clearClientData() {
         CURRENT_MAINHAND_ITEM = EMPTY_STACK;
         CURRENT_OFFHAND_ITEM = EMPTY_STACK;
@@ -71,6 +198,9 @@ public class EntityUtils {
         currentlyCleared = true;
     }
 
+    /**
+     * Module Event to Occur on each tick within the Application
+     */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
         isInUse = enabled && CraftPresence.player != null;
@@ -90,18 +220,42 @@ public class EntityUtils {
         }
     }
 
+    /**
+     * Determines whether the Specified Item classifies as NULL or EMPTY
+     *
+     * @param item The Item to Evaluate
+     * @return {@code true} if the Item classifies as NULL or EMPTY
+     */
     private boolean isEmpty(final Item item) {
         return item == null || isEmpty(getDefaultInstance(item));
     }
 
+    /**
+     * Determines whether the Specified Block classifies as NULL or EMPTY
+     *
+     * @param block The Block to evaluate
+     * @return {@code true} if the Block classifies as NULL or EMPTY
+     */
     private boolean isEmpty(final Block block) {
         return block == null || isEmpty(Item.getItemFromBlock(block));
     }
 
+    /**
+     * Returns the Default Variant of the Specified Item
+     *
+     * @param itemIn The Item to evaluate
+     * @return The default variant of the item
+     */
     private ItemStack getDefaultInstance(final Item itemIn) {
         return new ItemStack(itemIn);
     }
 
+    /**
+     * Determines whether the Specified ItemStack classifies as NULL or EMPTY
+     *
+     * @param itemStack The ItemStack to evaluate
+     * @return {@code true} if the ItemStack classifies as NULL or EMPTY
+     */
     private boolean isEmpty(final ItemStack itemStack) {
         if (itemStack == null || itemStack.equals(EMPTY_STACK)) {
             return true;
@@ -116,6 +270,9 @@ public class EntityUtils {
         }
     }
 
+    /**
+     * Synchronizes Data related to this module, if needed
+     */
     private void updateEntityData() {
         final ItemStack NEW_CURRENT_MAINHAND_ITEM = CraftPresence.player.getHeldItemMainhand();
         final ItemStack NEW_CURRENT_OFFHAND_ITEM = CraftPresence.player.getHeldItemOffhand();
@@ -178,6 +335,9 @@ public class EntityUtils {
         }
     }
 
+    /**
+     * Updates RPC Data related to this Module
+     */
     public void updateEntityPresence() {
         // Retrieve Messages
         final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
@@ -236,6 +396,9 @@ public class EntityUtils {
         }
     }
 
+    /**
+     * Retrieves and Synchronizes detected Entities
+     */
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
             if (!isEmpty(block)) {
@@ -316,6 +479,9 @@ public class EntityUtils {
         verifyEntities();
     }
 
+    /**
+     * Verifies, Synchronizes and Removes any Invalid Items and Blocks from their Lists
+     */
     private void verifyEntities() {
         List<String> removingBlocks = Lists.newArrayList();
         List<String> removingItems = Lists.newArrayList();

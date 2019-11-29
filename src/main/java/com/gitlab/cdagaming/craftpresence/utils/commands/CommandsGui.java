@@ -110,31 +110,31 @@ public class CommandsGui extends GuiScreen {
                         if (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
                             if (CraftPresence.CONFIG.enableJoinRequest) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.getName(), CraftPresence.SYSTEM.TIMER);
-                                CraftPresence.awaitingReply = true;
+                                CraftPresence.CLIENT.awaitingReply = true;
                             } else {
                                 CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
-                                CraftPresence.awaitingReply = false;
+                                CraftPresence.CLIENT.awaitingReply = false;
                             }
                         } else {
                             executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.none");
-                            CraftPresence.awaitingReply = false;
+                            CraftPresence.CLIENT.awaitingReply = false;
                         }
                     } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[1])) {
-                        if (CraftPresence.awaitingReply && CraftPresence.CONFIG.enableJoinRequest) {
+                        if (CraftPresence.CLIENT.awaitingReply && CraftPresence.CONFIG.enableJoinRequest) {
                             if (executionCommandArgs[1].equalsIgnoreCase("accept")) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.getName());
                                 CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.ACCEPT, null);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
-                                CraftPresence.awaitingReply = false;
+                                CraftPresence.CLIENT.awaitingReply = false;
                             } else if (executionCommandArgs[1].equalsIgnoreCase("deny")) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.getName());
                                 CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
                                 CraftPresence.CLIENT.STATUS = "ready";
                                 CraftPresence.SYSTEM.TIMER = 0;
-                                CraftPresence.awaitingReply = false;
+                                CraftPresence.CLIENT.awaitingReply = false;
                             } else {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.unrecognized");
                             }

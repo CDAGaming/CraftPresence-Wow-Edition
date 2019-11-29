@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -9,15 +32,50 @@ import net.minecraft.world.biome.Biome;
 
 import java.util.List;
 
+/**
+ * Biome Utilities used to Parse Biome Data and handle related RPC Events
+ *
+ * @author CDAGaming
+ */
 public class BiomeUtils {
-    public boolean isInUse = false, enabled = false;
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
 
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+
+    /**
+     * A List of the detected Biome Names
+     */
     public List<String> BIOME_NAMES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Biome Type's
+     */
     private List<Biome> BIOME_TYPES = Lists.newArrayList();
+
+    /**
+     * A List of the detected Biome ID's
+     */
     private List<Integer> BIOME_IDS = Lists.newArrayList();
+
+    /**
+     * The Name of the Current Biome the Player is in
+     */
     private String CURRENT_BIOME_NAME;
+
+    /**
+     * The ID Number for the Current Biome the Player is in
+     */
     private Integer CURRENT_BIOME_ID;
 
+    /**
+     * Clears FULL Data from this Module
+     */
     private void emptyData() {
         BIOME_NAMES.clear();
         BIOME_IDS.clear();
@@ -25,6 +83,9 @@ public class BiomeUtils {
         clearClientData();
     }
 
+    /**
+     * Clears Runtime Client Data from this Module (PARTIAL Clear)
+     */
     public void clearClientData() {
         CURRENT_BIOME_NAME = null;
         CURRENT_BIOME_ID = null;
@@ -34,6 +95,9 @@ public class BiomeUtils {
         CraftPresence.CLIENT.initIconData("&BIOME&");
     }
 
+    /**
+     * Module Event to Occur on each tick within the Application
+     */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome && !CraftPresence.CONFIG.showGameState : enabled;
         final boolean needsUpdate = enabled && (
@@ -56,6 +120,9 @@ public class BiomeUtils {
         }
     }
 
+    /**
+     * Synchronizes Data related to this module, if needed
+     */
     private void updateBiomeData() {
         final Biome newBiome = CraftPresence.player.world.getBiome(CraftPresence.player.getPosition());
         final String newBiomeName = newBiome.getBiomeName();
@@ -79,6 +146,9 @@ public class BiomeUtils {
         }
     }
 
+    /**
+     * Updates RPC Data related to this Module
+     */
     public void updateBiomePresence() {
         // Form Biome Argument List
         List<Tuple<String, String>> biomeArgs = Lists.newArrayList();
@@ -100,6 +170,11 @@ public class BiomeUtils {
         CraftPresence.CLIENT.initIconData("&BIOME&");
     }
 
+    /**
+     * Retrieves a List of detected Biome Types
+     *
+     * @return The detected Biome Types found
+     */
     private List<Biome> getBiomeTypes() {
         List<Biome> biomeTypes = Lists.newArrayList();
 
@@ -113,7 +188,7 @@ public class BiomeUtils {
 
         if (biomeTypes.isEmpty()) {
             // Fallback: Use Manual Class Lookup
-            for (Class classObj : FileUtils.getClassNamesMatchingSuperType(Biome.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+            for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Biome.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
                 if (classObj != null) {
                     try {
                         Biome biomeObj = (Biome) classObj.newInstance();
@@ -132,6 +207,9 @@ public class BiomeUtils {
         return biomeTypes;
     }
 
+    /**
+     * Updates and Initializes Module Data, based on found Information
+     */
     public void getBiomes() {
         for (Biome biome : getBiomeTypes()) {
             if (biome != null) {

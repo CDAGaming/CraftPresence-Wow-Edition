@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
@@ -17,13 +40,48 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+/**
+ * File Utilities for interpreting Files and Class Objects
+ *
+ * @author CDAGaming
+ */
 public class FileUtils {
+    /**
+     * A GSON Json Builder Instance
+     */
     private static Gson GSON = new GsonBuilder().create();
 
+    /**
+     * Retrieves File Data and Converts it into a Parsed Json Syntax
+     *
+     * @param file The File to access
+     * @param classObj The target class to base the output on
+     * @param <T> The Result and Class Type
+     * @return The Parsed Json as the Class Type's Syntax
+     * @throws Exception If Unable to read the File
+     */
     public static <T> T getJSONFromFile(File file, Class<T> classObj) throws Exception {
         return getJSONFromFile(fileToString(file), classObj);
     }
 
+    /**
+     * Retrieves File Data and Converts it into a Parsed Json Syntax
+     *
+     * @param file The file data to access, as a string
+     * @param classObj The target class to base the output on
+     * @param <T> The Result and Class Type
+     * @return The Parsed Json as the Class Type's Syntax
+     */
+    public static <T> T getJSONFromFile(String file, Class<T> classObj) {
+        return GSON.fromJson(file, classObj);
+    }
+
+    /**
+     * Parses inputted raw json into a valid JsonObject
+     *
+     * @param json The raw Input Json String
+     * @return A Parsed and Valid JsonObject
+     */
     public static JsonObject parseJson(String json) {
         if (!StringUtils.isNullOrEmpty(json)) {
             final JsonParser dataParser = new JsonParser();
@@ -33,6 +91,12 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Downloads a File from a Url, then stores it at the target location
+     *
+     * @param urlString The Download Link
+     * @param file The destination and filename to store the download as
+     */
     public static void downloadFile(final String urlString, final File file) {
         try {
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.download.init", file.getName(), file.getAbsolutePath(), urlString));
@@ -52,6 +116,11 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Attempts to load the specified file as a DLL
+     *
+     * @param file The file to attempt to load
+     */
     public static void loadFileAsDLL(final File file) {
         try {
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.dll.init", file.getName()));
@@ -66,14 +135,23 @@ public class FileUtils {
         }
     }
 
-    public static <T> T getJSONFromFile(String file, Class<T> clazz) {
-        return GSON.fromJson(file, clazz);
-    }
-
+    /**
+     * Attempts to convert a File's data into a readable String
+     *
+     * @param file The file to access
+     * @return The file's data as a String
+     * @throws Exception If Unable to read the file
+     */
     public static String fileToString(File file) throws Exception {
         return org.apache.commons.io.FileUtils.readFileToString(file, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Gets the File Extension of a File (Ex: txt)
+     *
+     * @param file The file to access
+     * @return The file's extension String
+     */
     public static String getFileExtension(File file) {
         String name = file.getName();
         int lastIndexOf = name.lastIndexOf(".");
@@ -83,8 +161,15 @@ public class FileUtils {
         return name.substring(lastIndexOf);
     }
 
+    /**
+     * Retrieve the Amount of Active Mods in the {@link ModUtils#modsDir}
+     *
+     * @return The Mods that are active in the directory
+     */
     public static int getModCount() {
-        int modCount = 0;
+        // Mod is within ClassLoader if in a Dev Environment
+        // and is thus automatically counted if this is the case
+        int modCount = ModUtils.IS_DEV ? 1 : 0;
         final File[] mods = new File(ModUtils.modsDir).listFiles();
 
         if (mods != null) {
@@ -97,9 +182,16 @@ public class FileUtils {
         return modCount;
     }
 
+    /**
+     * Retrieve a List of Classes that extend or implement anything in the search list
+     *
+     * @param searchList The Super Type Classes to look for within the source packages specified
+     * @param sourcePackages The root package directories to search within
+     * @return The List of found classes from the search
+     */
     @SuppressWarnings("UnstableApiUsage")
-    public static List<Class> getClassNamesMatchingSuperType(final List<Class> searchList, final String... sourcePackages) {
-        final List<Class> matchingClasses = Lists.newArrayList(), availableClassList = Lists.newArrayList();
+    public static List<Class<?>> getClassNamesMatchingSuperType(final List<Class<?>> searchList, final String... sourcePackages) {
+        final List<Class<?>> matchingClasses = Lists.newArrayList(), availableClassList = Lists.newArrayList();
         final List<ClassPath.ClassInfo> classList = Lists.newArrayList();
 
         // Attempt to Get Top Level Classes from the JVM Class Loader
@@ -114,9 +206,9 @@ public class FileUtils {
                 // Attempt to Add Classes Matching any of the Source Packages
                 if (classInfo.getName().startsWith(startString) && (!classInfo.getName().contains("FMLServerHandler") && !classInfo.getName().toLowerCase().contains("mixin"))) {
                     try {
-                        Class classObj = Class.forName(classInfo.getName());
+                        Class<?> classObj = Class.forName(classInfo.getName());
                         availableClassList.add(classObj);
-                        for (Class subClassObj : classObj.getClasses()) {
+                        for (Class<?> subClassObj : classObj.getClasses()) {
                             if (!availableClassList.contains(subClassObj)) {
                                 availableClassList.add(subClassObj);
                             }
@@ -130,9 +222,9 @@ public class FileUtils {
             }
         }
 
-        for (Class classObj : availableClassList) {
-            Class currentClassObj = classObj;
-            List<Class> superClassList = Lists.newArrayList();
+        for (Class<?> classObj : availableClassList) {
+            Class<?> currentClassObj = classObj;
+            List<Class<?>> superClassList = Lists.newArrayList();
 
             // Add All SuperClasses of this Class to a List
             while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
@@ -149,8 +241,8 @@ public class FileUtils {
 
         // Attempt to Retrieve Mod Classes
         for (String modClassString : getModClassNames()) {
-            Class modClassObj, currentClassObj;
-            List<Class> superClassList = Lists.newArrayList();
+            Class<?> modClassObj, currentClassObj;
+            List<Class<?>> superClassList = Lists.newArrayList();
 
             if (!modClassString.toLowerCase().contains("mixin")) {
                 try {
@@ -180,10 +272,22 @@ public class FileUtils {
         return matchingClasses;
     }
 
-    public static List<Class> getClassNamesMatchingSuperType(final Class searchTarget, final String... sourcePackages) {
+    /**
+     * Retrieve a List of Classes that extend or implement anything in the search list
+     *
+     * @param searchTarget The Super Type Class to look for within the source packages specified
+     * @param sourcePackages The root package directories to search within
+     * @return The List of found classes from the search
+     */
+    public static List<Class<?>> getClassNamesMatchingSuperType(final Class<?> searchTarget, final String... sourcePackages) {
         return getClassNamesMatchingSuperType(Collections.singletonList(searchTarget), sourcePackages);
     }
 
+    /**
+     * Retrieves a List of all readable Class Names for the active mods
+     *
+     * @return The list of viewable Mod Class Names
+     */
     public static List<String> getModClassNames() {
         List<String> classNames = Lists.newArrayList();
         final File[] mods = new File(ModUtils.modsDir).listFiles();
@@ -193,7 +297,7 @@ public class FileUtils {
                 if (getFileExtension(modFile).equals(".jar")) {
                     try {
                         JarFile jarFile = new JarFile(modFile.getAbsolutePath());
-                        Enumeration allEntries = jarFile.entries();
+                        Enumeration<?> allEntries = jarFile.entries();
                         while (allEntries.hasMoreElements()) {
                             JarEntry entry = (JarEntry) allEntries.nextElement();
                             String file = entry.getName();

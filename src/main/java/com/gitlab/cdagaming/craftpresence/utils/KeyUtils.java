@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -8,19 +31,42 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
+/**
+ * Keyboard Utilities to Parse KeyCodes and handle KeyCode Events
+ *
+ * @author CDAGaming
+ */
 public class KeyUtils {
-    // Allowed KeyCode Start Limit and Individual Filters
-    // After ESC and Including any KeyCodes under 0x00
-    // Notes:
-    // LWJGL 2: ESC = 0x01
-    // LWJGL 3: ESC = 256
+    /**
+     * Allowed KeyCode Start Limit and Individual Filters
+     * After ESC and Including any KeyCodes under 0x00
+     * <p>
+     * Notes:
+     * LWJGL 2: ESC = 0x01
+     * LWJGL 3: ESC = 256
+     */
     private int keyStartLimit = 0x00;
     private List<Integer> invalidKeys = Lists.newArrayList(0x01, 256);
 
+    /**
+     * Determine if the Source KeyCode fulfills the following conditions
+     * <p>
+     * 1) Is After the {@link KeyUtils#keyStartLimit}<p>
+     * 2) Is Not Contained or Listed within {@link KeyUtils#invalidKeys}
+     *
+     * @param sourceKeyCode The Source KeyCode to Check
+     * @return {@code true} if and only if a Valid KeyCode
+     */
     public boolean isValidKeyCode(int sourceKeyCode) {
         return sourceKeyCode > keyStartLimit && !invalidKeys.contains(sourceKeyCode);
     }
 
+    /**
+     * Determine the LWJGL KeyCode Name for the inputted KeyCode
+     *
+     * @param original A KeyCode, converted to String
+     * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
+     */
     public String getKeyName(String original) {
         if (!StringUtils.isNullOrEmpty(original)) {
             Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
@@ -45,6 +91,11 @@ public class KeyUtils {
         }
     }
 
+    /**
+     * Tick Method for KeyUtils, that runs on each tick
+     * <p>
+     * Implemented @ {@link CommandUtils#reloadData}
+     */
     void onTick() {
         if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
