@@ -152,25 +152,21 @@ public class DiscordUtils {
      * An Instance of the {@link IPCClient}, responsible for sending and receiving RPC Events
      */
     public IPCClient ipcInstance;
-
+    /**
+     * Whether Discord is currently awaiting a response to a Ask to Join or Spectate Request, if any
+     */
+    public boolean awaitingReply = false;
     /**
      * A Mapping of the Last Requested Image Data
      * <p>Used to prevent sending duplicate packets and cache data for repeated images in other areas
      * <p>Format: lastAttemptedKey, lastResultingKey
      */
     private Tuple<String, String> lastRequestedImageData = new Tuple<>();
-
     /**
      * An Instance containing the Current Rich Presence Data
      * <p>Also used to prevent sending duplicate packets with the same presence data, if any
      */
     private RichPresence currentPresence;
-
-    /**
-     * Whether Discord is currently awaiting a response to a Ask to Join or Spectate Request, if any
-     */
-    public boolean awaitingReply = false;
-
     /**
      * A Mapping of the Arguments available to use as RPC Message Placeholders
      */
@@ -265,7 +261,7 @@ public class DiscordUtils {
      *
      * @param argumentName The Specified Argument to Synchronize for
      * @param insertString The String to attach to the Specified Argument
-     * @param isIconData Whether the Argument is an RPC Message or an Icon Placeholder
+     * @param isIconData   Whether the Argument is an RPC Message or an Icon Placeholder
      */
     public void syncArgument(String argumentName, String insertString, boolean isIconData) {
         // Remove and Replace Placeholder Data, if the placeholder needs Updates
@@ -355,9 +351,9 @@ public class DiscordUtils {
     /**
      * Attempts to lookup the specified Image, and if not existent, use the alternative String, and null if allowed
      *
-     * @param evalString The Specified Icon Key to search for from the {@link DiscordUtils#CLIENT_ID} Assets
+     * @param evalString        The Specified Icon Key to search for from the {@link DiscordUtils#CLIENT_ID} Assets
      * @param alternativeString The Alternative Icon Key to use if unable to locate the Original Icon Key
-     * @param allowNull If allowed to return null if unable to find any matches, otherwise uses the Default Icon in Config
+     * @param allowNull         If allowed to return null if unable to find any matches, otherwise uses the Default Icon in Config
      * @return The found or alternative matching Icon Key
      */
     public String imageOf(final String evalString, final String alternativeString, final boolean allowNull) {
@@ -394,7 +390,7 @@ public class DiscordUtils {
      * Clears Related Party Session Information from the RPC, and updates if needed
      *
      * @param clearRequesterData Whether to clear Ask to Join / Spectate Request Data
-     * @param updateRPC Whether to immediately update the RPC following changes
+     * @param updateRPC          Whether to immediately update the RPC following changes
      */
     public void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
         if (clearRequesterData) {

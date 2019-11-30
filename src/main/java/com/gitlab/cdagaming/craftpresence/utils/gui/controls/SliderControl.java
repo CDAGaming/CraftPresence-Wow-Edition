@@ -71,13 +71,13 @@ public class SliderControl extends ExtendedButtonControl {
     /**
      * Initialization Event for this Control, assigning defined arguments
      *
-     * @param buttonId The ID for the control to Identify as
-     * @param positionData The Starting X and Y Positions to place the control in a Gui
-     * @param dimensions The Width and Height dimensions for the control
-     * @param startValue The Starting Value between the minimum and maximum value to set the slider at
-     * @param minValue The Minimum Value the Slider is allowed to be -- denormalized
-     * @param maxValue The Maximum Value the Slider is allowed to be -- denormalized
-     * @param valueStep The rate at which each move to the slider adjusts it's value
+     * @param buttonId      The ID for the control to Identify as
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
      * @param displayString The title to display in the center of the slider
      */
     public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {

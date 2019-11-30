@@ -27,11 +27,9 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.google.common.collect.Maps;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Map;
 
 /**
  * Set of Utilities used to Parse Curse/Twitch Manifest Information

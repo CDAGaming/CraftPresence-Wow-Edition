@@ -54,9 +54,9 @@ public class FileUtils {
     /**
      * Retrieves File Data and Converts it into a Parsed Json Syntax
      *
-     * @param file The File to access
+     * @param file     The File to access
      * @param classObj The target class to base the output on
-     * @param <T> The Result and Class Type
+     * @param <T>      The Result and Class Type
      * @return The Parsed Json as the Class Type's Syntax
      * @throws Exception If Unable to read the File
      */
@@ -67,9 +67,9 @@ public class FileUtils {
     /**
      * Retrieves File Data and Converts it into a Parsed Json Syntax
      *
-     * @param file The file data to access, as a string
+     * @param file     The file data to access, as a string
      * @param classObj The target class to base the output on
-     * @param <T> The Result and Class Type
+     * @param <T>      The Result and Class Type
      * @return The Parsed Json as the Class Type's Syntax
      */
     public static <T> T getJSONFromFile(String file, Class<T> classObj) {
@@ -95,7 +95,7 @@ public class FileUtils {
      * Downloads a File from a Url, then stores it at the target location
      *
      * @param urlString The Download Link
-     * @param file The destination and filename to store the download as
+     * @param file      The destination and filename to store the download as
      */
     public static void downloadFile(final String urlString, final File file) {
         try {
@@ -185,7 +185,7 @@ public class FileUtils {
     /**
      * Retrieve a List of Classes that extend or implement anything in the search list
      *
-     * @param searchList The Super Type Classes to look for within the source packages specified
+     * @param searchList     The Super Type Classes to look for within the source packages specified
      * @param sourcePackages The root package directories to search within
      * @return The List of found classes from the search
      */
@@ -275,7 +275,7 @@ public class FileUtils {
     /**
      * Retrieve a List of Classes that extend or implement anything in the search list
      *
-     * @param searchTarget The Super Type Class to look for within the source packages specified
+     * @param searchTarget   The Super Type Class to look for within the source packages specified
      * @param sourcePackages The root package directories to search within
      * @return The List of found classes from the search
      */

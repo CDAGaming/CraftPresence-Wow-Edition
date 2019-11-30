@@ -111,7 +111,7 @@ public class TranslationUtils {
     /**
      * Sets initial Data and Retrieves Valid Translations
      *
-     * @param modID Sets the Target Mod ID to locate Language Files
+     * @param modID   Sets the Target Mod ID to locate Language Files
      * @param useJSON Toggles whether to use .Json or .Lang, if present
      */
     public TranslationUtils(final String modID, final boolean useJSON) {
@@ -249,9 +249,9 @@ public class TranslationUtils {
     /**
      * Translates an Unlocalized String, based on the Translations retrieved
      *
-     * @param stripColors Whether to Remove Color and Formatting Codes
+     * @param stripColors    Whether to Remove Color and Formatting Codes
      * @param translationKey The unLocalized String to translate
-     * @param parameters Extra Formatting Arguments, if needed
+     * @param parameters     Extra Formatting Arguments, if needed
      * @return The Localized Translated String
      */
     public String translate(boolean stripColors, String translationKey, Object... parameters) {
@@ -279,7 +279,7 @@ public class TranslationUtils {
      * Translates an Unlocalized String, based on the Translations retrieved
      *
      * @param translationKey The unLocalized String to translate
-     * @param parameters Extra Formatting Arguments, if needed
+     * @param parameters     Extra Formatting Arguments, if needed
      * @return The Localized Translated String
      */
     public String translate(String translationKey, Object... parameters) {

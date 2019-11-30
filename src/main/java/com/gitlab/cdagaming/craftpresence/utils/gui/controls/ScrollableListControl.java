@@ -47,13 +47,13 @@ public class ScrollableListControl extends GuiSlot {
     /**
      * Initialization Event for this Control, assigning defined arguments
      *
-     * @param mc The Minecraft Instance for this Control
-     * @param width The Width of this Control
-     * @param height The Height of this Control
-     * @param topIn How far from the top of the Screen the List should render at
-     * @param bottomIn How far from the bottom of the Screen the List should render at
+     * @param mc           The Minecraft Instance for this Control
+     * @param width        The Width of this Control
+     * @param height       The Height of this Control
+     * @param topIn        How far from the top of the Screen the List should render at
+     * @param bottomIn     How far from the bottom of the Screen the List should render at
      * @param slotHeightIn The height of each slot in the list
-     * @param itemList The List of items to allocate for the slots in the Gui
+     * @param itemList     The List of items to allocate for the slots in the Gui
      * @param currentValue The current value, if any, to select upon initialization of the Gui
      */
     public ScrollableListControl(Minecraft mc, int width, int height, int topIn, int bottomIn, int slotHeightIn, List<String> itemList, String currentValue) {
@@ -75,10 +75,10 @@ public class ScrollableListControl extends GuiSlot {
     /**
      * The Event to Occur if a Slot/Element is Clicked within the List
      *
-     * @param slotIndex The Slot Number that was Clicked
+     * @param slotIndex     The Slot Number that was Clicked
      * @param isDoubleClick Whether the Click was a Double or Single Click
-     * @param mouseX The Mouse's Current X Position
-     * @param mouseY The Mouse's Current Y Position
+     * @param mouseX        The Mouse's Current X Position
+     * @param mouseY        The Mouse's Current Y Position
      */
     @Override
     public void elementClicked(int slotIndex, boolean isDoubleClick, int mouseX, int mouseY) {
@@ -107,12 +107,12 @@ public class ScrollableListControl extends GuiSlot {
     /**
      * Renders the Slots for this Control
      *
-     * @param slotIndex The Slot Identification Number
-     * @param xPos The Starting X Position to render the Object at
-     * @param yPos The Starting Y Position to render the Object at
-     * @param heightIn The Height for the Object to render to
-     * @param mouseXIn The Mouse's Current X Position
-     * @param mouseYIn The Mouse's Current Y Position
+     * @param slotIndex    The Slot Identification Number
+     * @param xPos         The Starting X Position to render the Object at
+     * @param yPos         The Starting Y Position to render the Object at
+     * @param heightIn     The Height for the Object to render to
+     * @param mouseXIn     The Mouse's Current X Position
+     * @param mouseYIn     The Mouse's Current Y Position
      * @param partialTicks The Current Partial Tick Ratio
      */
     @Override

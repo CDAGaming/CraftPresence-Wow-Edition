@@ -124,7 +124,7 @@ public class MCUpdaterInstance {
     /**
      * Sets the status of the Specified Optional Mod, if any
      *
-     * @param key The optional mod name to set
+     * @param key   The optional mod name to set
      * @param value The optional Mod's Status to set
      */
     public void setModStatus(String key, Boolean value) {

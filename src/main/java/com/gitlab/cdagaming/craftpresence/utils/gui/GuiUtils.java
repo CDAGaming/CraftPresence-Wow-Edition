@@ -105,11 +105,11 @@ public class GuiUtils {
     /**
      * Draws a Textured Rectangle (Modal Version), following the defined arguments
      *
-     * @param x The Starting X Position of the Object
-     * @param y The Starting Y Position of the Object
-     * @param u The U Mapping Value
-     * @param v The V Mapping Value
-     * @param width The Width of the Object
+     * @param x      The Starting X Position of the Object
+     * @param y      The Starting Y Position of the Object
+     * @param u      The U Mapping Value
+     * @param v      The V Mapping Value
+     * @param width  The Width of the Object
      * @param height The Height of the Object
      * @param zLevel The Z Level Position of the Object
      */
@@ -130,11 +130,11 @@ public class GuiUtils {
     /**
      * Determines if the Mouse is over an element, following the defined Arguments
      *
-     * @param mouseX The Mouse's Current X Position
-     * @param mouseY The Mouse's Current Y Position
-     * @param elementX The Object's starting X Position
-     * @param elementY The Object's starting Y Position
-     * @param elementWidth The total width of the object
+     * @param mouseX        The Mouse's Current X Position
+     * @param mouseY        The Mouse's Current Y Position
+     * @param elementX      The Object's starting X Position
+     * @param elementY      The Object's starting Y Position
+     * @param elementWidth  The total width of the object
      * @param elementHeight The total height of the object
      * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
      */
@@ -157,8 +157,8 @@ public class GuiUtils {
     /**
      * Determines if the Mouse is over an element, following the defined Arguments
      *
-     * @param mouseX The Mouse's Current X Position
-     * @param mouseY The Mouse's Current Y Position
+     * @param mouseX   The Mouse's Current X Position
+     * @param mouseY   The Mouse's Current Y Position
      * @param checkBox The Object to check bounds and position
      * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
      */
@@ -309,13 +309,13 @@ public class GuiUtils {
     /**
      * Renders a Specified Multi-Line String, constrained by position and dimension arguments
      *
-     * @param textToInput The Specified Multi-Line String, split by lines into a list
-     * @param posX The starting X position to render the String
-     * @param posY The starting Y position to render the String
-     * @param screenWidth The maximum width to allow rendering to (Text will wrap if output is greater)
-     * @param screenHeight The maximum height to allow rendering to (Text will wrap if output is greater)
-     * @param maxTextWidth The maximum width the output can be before wrapping
-     * @param font The font renderer to use to render the String
+     * @param textToInput    The Specified Multi-Line String, split by lines into a list
+     * @param posX           The starting X position to render the String
+     * @param posY           The starting Y position to render the String
+     * @param screenWidth    The maximum width to allow rendering to (Text will wrap if output is greater)
+     * @param screenHeight   The maximum height to allow rendering to (Text will wrap if output is greater)
+     * @param maxTextWidth   The maximum width the output can be before wrapping
+     * @param font           The font renderer to use to render the String
      * @param withBackground Whether a background should display around and under the String, like a tooltip
      */
     public void drawMultiLineString(final List<String> textToInput, int posX, int posY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
@@ -508,7 +508,7 @@ public class GuiUtils {
     /**
      * Draws a Background onto a Gui, supporting RGBA Codes, Game Textures and Hexadecimal Colors
      *
-     * @param width The width to render the background to
+     * @param width  The width to render the background to
      * @param height The height to render the background to
      */
     public void drawBackground(final double width, final double height) {
@@ -540,13 +540,13 @@ public class GuiUtils {
     /**
      * Renders a Slider Object from the defined arguments
      *
-     * @param x The Starting X Position to render the slider
-     * @param y The Starting Y Position to render the slider
-     * @param u The U Mapping Value
-     * @param v The V Mapping Value
-     * @param width The full width for the slider to render to
-     * @param height The full height for the slider to render to
-     * @param zLevel The Z level position for the slider to render at
+     * @param x           The Starting X Position to render the slider
+     * @param y           The Starting Y Position to render the slider
+     * @param u           The U Mapping Value
+     * @param v           The V Mapping Value
+     * @param width       The full width for the slider to render to
+     * @param height      The full height for the slider to render to
+     * @param zLevel      The Z level position for the slider to render at
      * @param texLocation The game texture to render the slider as
      */
     public void renderSlider(int x, int y, int u, int v, int width, int height, double zLevel, ResourceLocation texLocation) {
@@ -562,12 +562,12 @@ public class GuiUtils {
     /**
      * Draws a Textured Rectangle, following the defined arguments
      *
-     * @param zLevel The Z Level Position of the Object
-     * @param xPos The Starting X Position of the Object
-     * @param yPos The Starting Y Position of the Object
-     * @param width The Width of the Object
-     * @param height The Height of the Object
-     * @param tint The Tinting Level of the Object
+     * @param zLevel      The Z Level Position of the Object
+     * @param xPos        The Starting X Position of the Object
+     * @param yPos        The Starting Y Position of the Object
+     * @param width       The Width of the Object
+     * @param height      The Height of the Object
+     * @param tint        The Tinting Level of the Object
      * @param texLocation The game texture to render the object as
      */
     public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, ResourceLocation texLocation) {
@@ -594,13 +594,13 @@ public class GuiUtils {
     /**
      * Draws a Gradient Rectangle, following the defined arguments
      *
-     * @param zLevel The Z Level Position of the Object
-     * @param left The Left side length of the Object
-     * @param top The top length of the Object
-     * @param right The Right side length of the Object
-     * @param bottom The bottom length of the Object
+     * @param zLevel         The Z Level Position of the Object
+     * @param left           The Left side length of the Object
+     * @param top            The top length of the Object
+     * @param right          The Right side length of the Object
+     * @param bottom         The bottom length of the Object
      * @param startColorCode The Starting Hexadecimal or RGBA Color Code
-     * @param endColorCode The ending Hexadecimal or RGBA Color Code
+     * @param endColorCode   The ending Hexadecimal or RGBA Color Code
      */
     public void drawGradientRect(float zLevel, double left, double top, double right, double bottom, String startColorCode, String endColorCode) {
         Color startColorObj = null, endColorObj = null;
@@ -664,14 +664,14 @@ public class GuiUtils {
     /**
      * Draws a Continuously Textured Box, following the defined arguments
      *
-     * @param positionData The Starting X and Y Positions to place the Object
-     * @param uVLevels The U and V Value Mappings for the Object
-     * @param screenDimensions The Maximum length and height to render the object as
-     * @param textureDimensions The Width and Height for the Object's Texture
+     * @param positionData       The Starting X and Y Positions to place the Object
+     * @param uVLevels           The U and V Value Mappings for the Object
+     * @param screenDimensions   The Maximum length and height to render the object as
+     * @param textureDimensions  The Width and Height for the Object's Texture
      * @param verticalBorderData The Top and Bottom Border Lengths for the Object
-     * @param sideBorderData The Left and Right Side Lengths for the Object
-     * @param zLevel The Z Level position of the Object
-     * @param res The game texture to render the object as
+     * @param sideBorderData     The Left and Right Side Lengths for the Object
+     * @param zLevel             The Z Level position of the Object
+     * @param res                The game texture to render the object as
      */
     public void drawContinuousTexturedBox(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> uVLevels, Tuple<Integer, Integer> screenDimensions, Tuple<Integer, Integer> textureDimensions,
                                           Tuple<Integer, Integer> verticalBorderData, Tuple<Integer, Integer> sideBorderData, double zLevel, ResourceLocation res) {

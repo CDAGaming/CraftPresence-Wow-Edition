@@ -118,7 +118,7 @@ public class StringUtils {
     /**
      * Rounds a Double to the defined decimal place, if possible
      *
-     * @param value the original value to round
+     * @param value  the original value to round
      * @param places The amount of places to round upon
      * @return The rounded Double value
      */
@@ -161,7 +161,7 @@ public class StringUtils {
      * Retrieve Matching Values from an input that matches the defined regex
      *
      * @param regexValue The Regex Value to test against
-     * @param original The original String to get matches from
+     * @param original   The original String to get matches from
      * @return A Tuple with the Format of originalString:listOfMatches
      */
     public static Tuple<String, List<String>> getMatches(final String regexValue, final String original) {
@@ -182,9 +182,9 @@ public class StringUtils {
     /**
      * Remove an Amount of Matches from an inputted Match Set
      *
-     * @param matchData The Match Data to remove from with the form of originalString:listOfMatches
+     * @param matchData  The Match Data to remove from with the form of originalString:listOfMatches
      * @param maxMatches The maximum amount of matches to remove
-     * @param useMax Whether to use the Maximum Value or remove all matches
+     * @param useMax     Whether to use the Maximum Value or remove all matches
      * @return The original String from Match Data with the matches up to maxMatches removed
      */
     public static String removeMatches(final Tuple<String, List<String>> matchData, final int maxMatches, final boolean useMax) {
@@ -212,9 +212,9 @@ public class StringUtils {
     /**
      * Replaces Data in a String with Case-Insensitivity
      *
-     * @param source The original String to replace within
+     * @param source          The original String to replace within
      * @param targetToReplace The value to replace on
-     * @param replaceWith The value to replace the target with
+     * @param replaceWith     The value to replace the target with
      * @return The completed and replaced String
      */
     public static String replaceAnyCase(String source, String targetToReplace, String replaceWith) {
@@ -229,7 +229,7 @@ public class StringUtils {
     /**
      * Replaces Data in a sequential order, following Case-Insensitivity
      *
-     * @param source The original String to replace within
+     * @param source      The original String to replace within
      * @param replaceData The replacement list to follow with the form of: targetToReplace:replaceWithValue
      * @return The completed and replaced String
      */
@@ -327,7 +327,7 @@ public class StringUtils {
     /**
      * Formats an IP Address based on Input
      *
-     * @param input The original String to evaluate
+     * @param input      The original String to evaluate
      * @param returnPort Whether to return the port or the IP without the Port
      * @return Either the IP or the port on their own, depending on conditions
      */
@@ -374,8 +374,9 @@ public class StringUtils {
      * Expands or Contracts an Array, depending on Conditions
      *
      * <p>TODO: Remove Operation ID Argument and base it on if greater then or less then 0, with 0 just returning the original array
-     * @param theArray The original Array to adjust
-     * @param adjustBy The value to either expand or contract, based on operationID
+     *
+     * @param theArray    The original Array to adjust
+     * @param adjustBy    The value to either expand or contract, based on operationID
      * @param operationID Whether to Expand (0) or Contract (1) the Array Size
      * @return The evaluated and adjusted array
      */
@@ -398,8 +399,8 @@ public class StringUtils {
     /**
      * Adds the Specified message to the defined index in the target Array
      *
-     * @param array The original Array to evaluate
-     * @param index The index to add at
+     * @param array   The original Array to evaluate
+     * @param index   The index to add at
      * @param message The String Message to input at the index of the array
      * @return The evaluated array
      */
@@ -418,9 +419,9 @@ public class StringUtils {
     /**
      * Removes specified search term at specified index of an array
      *
-     * @param originalArray The original array
-     * @param searchTerm The search term to look for
-     * @param searchIndex The index to remove at
+     * @param originalArray  The original array
+     * @param searchTerm     The search term to look for
+     * @param searchIndex    The index to remove at
      * @param splitCharacter The delimiter to split parts of the array at (Optional)
      * @return The evaluated array
      */
@@ -444,10 +445,10 @@ public class StringUtils {
      * Retrieves a config entry from an Array, following the specified Search Terms
      * <p><b>Internal Use Only</b>
      *
-     * @param original The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
-     * @param searchTerm The search term to locate
-     * @param searchIndex The expected index to locate the search term at within an Array Element
-     * @param resultIndex The part of the found Array Element index to retrieve
+     * @param original       The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
+     * @param searchTerm     The search term to locate
+     * @param searchIndex    The expected index to locate the search term at within an Array Element
+     * @param resultIndex    The part of the found Array Element index to retrieve
      * @param splitCharacter The delimiter being expected to separate chunks of an Array Element
      * @param alternativeMSG The alternative value to return if no matches found in the target Array Element Index
      * @return The found or Alternative value from the search within the Array
@@ -470,12 +471,12 @@ public class StringUtils {
      * Sets new config Entry for Array Data Types with delimiter
      * <p><b>Internal Use Only</b>
      *
-     * @param original The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
-     * @param searchTerm The search term to locate
-     * @param searchIndex The expected index to locate the search term at within an Array Element
-     * @param resultIndex The part of the found Array Element index to modify
+     * @param original       The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
+     * @param searchTerm     The search term to locate
+     * @param searchIndex    The expected index to locate the search term at within an Array Element
+     * @param resultIndex    The part of the found Array Element index to modify
      * @param splitCharacter The delimiter being expected to separate chunks of an Array Element
-     * @param newMessage The new value to insert into the target Array Element Index
+     * @param newMessage     The new value to insert into the target Array Element Index
      * @return The modified Array from the original
      */
     public static String[] setConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String newMessage) {
@@ -569,7 +570,7 @@ public class StringUtils {
     /**
      * Converts input into a properly formatted and interpretable Dimension Name
      *
-     * @param dimName The Dimension Name to format
+     * @param dimName    The Dimension Name to format
      * @param formatToID Whether to format as an Icon Key
      * @return The formatted dimension name/icon key
      */
@@ -615,7 +616,7 @@ public class StringUtils {
      * Separated by newline characters, as needed
      *
      * @param stringInput The original String to wrap
-     * @param wrapWidth The target width per line, to wrap the input around
+     * @param wrapWidth   The target width per line, to wrap the input around
      * @return The converted and wrapped version of the original input
      */
     public static String wrapFormattedStringToWidth(String stringInput, int wrapWidth) {
@@ -679,7 +680,7 @@ public class StringUtils {
      * Returns the Render Character/Glyph Width of the specified character
      *
      * @param characterInput The character to evaluate
-     * @param usingUnicode Whether the specified character is a Unicode Character
+     * @param usingUnicode   Whether the specified character is a Unicode Character
      * @return The expected render character/glyph width for the input
      */
     public static int getCharWidth(char characterInput, boolean usingUnicode) {
@@ -710,7 +711,7 @@ public class StringUtils {
      * Returns the Wrapped Width of a String, defined by the target wrapWidth
      *
      * @param stringEntry The original String to evaluate
-     * @param wrapWidth The target width to wrap within
+     * @param wrapWidth   The target width to wrap within
      * @return The expected wrapped width the String should be
      */
     public static int sizeStringToWidth(String stringEntry, int wrapWidth) {
@@ -808,7 +809,7 @@ public class StringUtils {
     /**
      * Display a Message to the Player, via the in-game Chat Hud
      *
-     * @param sender The Entity to Send to (Must be a Player)
+     * @param sender  The Entity to Send to (Must be a Player)
      * @param message The Message to send and display in chat
      */
     public static void sendMessageToPlayer(final Entity sender, final String message) {
@@ -827,7 +828,7 @@ public class StringUtils {
      * Attempts to Retrieve the Specified Resource as an InputStream
      *
      * @param fallbackClass Alternative Class Loader to Use to Locate the Resource
-     * @param pathToSearch The File Path to search for
+     * @param pathToSearch  The File Path to search for
      * @return The InputStream for the specified resource, if successful
      */
     public static InputStream getResourceAsStream(final Class<?> fallbackClass, final String pathToSearch) {
@@ -849,7 +850,7 @@ public class StringUtils {
     /**
      * Determines if the Specified index exists in the List with a non-null value
      *
-     * @param data The Array of Strings to check within
+     * @param data  The Array of Strings to check within
      * @param index The index to check
      * @return {@code true} if the index element exists in the list with a non-null value
      */
@@ -860,7 +861,7 @@ public class StringUtils {
     /**
      * Determines if the Specified index exists in the List with a non-null value
      *
-     * @param data The List of Strings to check within
+     * @param data  The List of Strings to check within
      * @param index The index to check
      * @return {@code true} if the index element exists in the list with a non-null value
      */
@@ -878,8 +879,8 @@ public class StringUtils {
      * Retrieves the Specified Field(s) via Reflection
      *
      * @param classToAccess The class to access with the field(s)
-     * @param instance An Instance of the Class, if needed
-     * @param fieldNames A List of Field Names to search for
+     * @param instance      An Instance of the Class, if needed
+     * @param fieldNames    A List of Field Names to search for
      * @return The Found Field Data, if any
      */
     public static Object lookupObject(Class<?> classToAccess, Object instance, String... fieldNames) {
@@ -900,8 +901,8 @@ public class StringUtils {
      * Adjusts the Specified Field(s) in the Target Class via Reflection
      *
      * @param classToAccess The class to access with the field(s)
-     * @param instance An Instance of the Class, if needed
-     * @param fieldData A Tuple with the format of fieldName:valueToSet
+     * @param instance      An Instance of the Class, if needed
+     * @param fieldData     A Tuple with the format of fieldName:valueToSet
      */
     public static void updateField(Class<?> classToAccess, Object instance, Tuple<?, ?>... fieldData) {
         for (Tuple<?, ?> currentData : fieldData) {
@@ -920,10 +921,11 @@ public class StringUtils {
      * Invokes the specified Method(s) in the Target Class via Reflection
      *
      * <p>TODO: Change Method Names and Args to List of Tuples with the format of methodName:argsForMethod as methodData, if possible
+     *
      * @param classToAccess The class to access with the method(s)
-     * @param instance An Instance of the Class, if needed
-     * @param methodNames A List of Method Names to attempt invoking upon
-     * @param args Additional Arguments for the Methods
+     * @param instance      An Instance of the Class, if needed
+     * @param methodNames   A List of Method Names to attempt invoking upon
+     * @param args          Additional Arguments for the Methods
      * @param argumentTypes The parameter of the arguments to target
      */
     public static void executeMethod(Class<?> classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {

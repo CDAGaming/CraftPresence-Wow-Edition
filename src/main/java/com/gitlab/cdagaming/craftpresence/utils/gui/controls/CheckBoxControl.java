@@ -48,11 +48,11 @@ public class CheckBoxControl extends ExtendedButtonControl {
     /**
      * Initialization Event for this Control, assigning defined arguments
      *
-     * @param id The ID for the control to Identify as
-     * @param xPos The Starting X Position for this Control
-     * @param yPos The Starting Y Position for this Control
+     * @param id            The ID for the control to Identify as
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
      * @param displayString The display text, to display within this control
-     * @param isChecked The beginning check state for this Control
+     * @param isChecked     The beginning check state for this Control
      */
     public CheckBoxControl(int id, int xPos, int yPos, String displayString, boolean isChecked) {
         super(id, xPos, yPos, displayString);
