@@ -89,11 +89,6 @@ public class ServerUtils {
     private String currentDifficulty;
 
     /**
-     * The Current Player's GameMode
-     */
-    private String currentGameMode;
-
-    /**
      * The Current World's Name
      */
     private String currentWorldName;
@@ -134,11 +129,6 @@ public class ServerUtils {
     private ServerData requestedServerData;
 
     /**
-     * The Current World Interaction Manager
-     */
-    private PlayerInteractionManager currentInteractionManager;
-
-    /**
      * The Player's Current Connection Data
      */
     private NetHandlerPlayClient currentConnection;
@@ -175,12 +165,10 @@ public class ServerUtils {
         currentServer_MOTD = null;
         currentServer_Name = null;
         currentServerData = null;
-        currentInteractionManager = null;
         currentConnection = null;
         currentCoordinates = new Tuple<>(0.0D, 0.0D);
         currentHealth = new Tuple<>(0.0f, 0.0f);
         currentDifficulty = null;
-        currentGameMode = null;
         currentWorldName = null;
         timeString = null;
         currentPlayers = 0;
@@ -232,7 +220,6 @@ public class ServerUtils {
     private void updateServerData() {
         final ServerData newServerData = CraftPresence.instance.getCurrentServerData();
         final NetHandlerPlayClient newConnection = CraftPresence.instance.getConnection();
-        final PlayerInteractionManager newInteractionManager = new PlayerInteractionManager(CraftPresence.player.world);
 
         if (!joinInProgress) {
             final int newCurrentPlayers = newConnection != null ? newConnection.getPlayerInfoMap().size() : 1;
@@ -249,7 +236,6 @@ public class ServerUtils {
 
             if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) ||
                     (newServerData == null && currentServerData != null)) ||
-                    (!newInteractionManager.equals(currentInteractionManager)) ||
                     (newConnection != null && !newConnection.equals(currentConnection)) || !newServer_IP.equals(currentServer_IP) ||
                     (!StringUtils.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) ||
                     (!StringUtils.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name))) {
@@ -258,7 +244,6 @@ public class ServerUtils {
                 currentServer_Name = newServer_Name;
                 currentServerData = newServerData;
                 currentConnection = newConnection;
-                currentInteractionManager = newInteractionManager;
                 isOnLAN = newLANStatus;
                 queuedForUpdate = true;
 
@@ -291,15 +276,6 @@ public class ServerUtils {
                         final Tuple<Float, Float> newHealth = CraftPresence.player != null ? new Tuple<>(CraftPresence.player.getHealth(), CraftPresence.player.getMaxHealth()) : new Tuple<>(0.0f, 0.0f);
                         if (!newHealth.equals(currentHealth)) {
                             currentHealth = newHealth;
-                            queuedForUpdate = true;
-                        }
-                    }
-
-                    // &gamemode Argument = The Current Game Mode you are currently in
-                    if (CraftPresence.CONFIG.innerPlayerPlaceholderMSG.toLowerCase().contains("&gamemode&")) {
-                        final String newGameMode = currentInteractionManager != null ? currentInteractionManager.getGameType().getName() : "";
-                        if (!newGameMode.equals(currentGameMode)) {
-                            currentGameMode = newGameMode;
                             queuedForUpdate = true;
                         }
                     }
@@ -465,7 +441,6 @@ public class ServerUtils {
         // Player Data Arguments
         playerDataArgs.add(new Tuple<>("&COORDS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerCoordinatePlaceholderMSG, coordinateArgs)));
         playerDataArgs.add(new Tuple<>("&HEALTH&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerHealthPlaceholderMSG, healthArgs)));
-        playerDataArgs.add(new Tuple<>("&GAMEMODE&", !StringUtils.isNullOrEmpty(currentGameMode) ? currentGameMode : ""));
 
         // World Data Arguments
         worldDataArgs.add(new Tuple<>("&DIFFICULTY&", !StringUtils.isNullOrEmpty(currentDifficulty) ? currentDifficulty : ""));
