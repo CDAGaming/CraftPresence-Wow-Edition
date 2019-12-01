@@ -42,6 +42,11 @@ import java.util.Random;
  */
 public class DiscordAssetUtils {
     /**
+     * If the Asset Check had completed
+     */
+    public static boolean syncCompleted = false;
+
+    /**
      * A List of the Icons available as ImageType SMALL
      */
     public static List<String> SMALL_ICONS = Lists.newArrayList();
@@ -142,6 +147,15 @@ public class DiscordAssetUtils {
         LARGE_IDS.clear();
         ICON_LIST.clear();
         ICON_IDS.clear();
+
+        clearClientData();
+    }
+
+    /**
+     * Clears Runtime Client Data from this Module (PARTIAL Clear)
+     */
+    public static void clearClientData() {
+        syncCompleted = false;
     }
 
     /**
@@ -206,6 +220,7 @@ public class DiscordAssetUtils {
             ex.printStackTrace();
         } finally {
             verifyConfigAssets();
+            syncCompleted = true;
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.detected", String.valueOf(ASSET_LIST.size())));
         }
     }

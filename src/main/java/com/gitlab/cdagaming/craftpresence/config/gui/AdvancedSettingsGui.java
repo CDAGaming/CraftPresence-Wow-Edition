@@ -45,7 +45,7 @@ public class AdvancedSettingsGui extends GuiScreen {
         enableCommandsButton = new CheckBoxControl(200, calc1, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
         enablePerGUIButton = new CheckBoxControl(300, calc2, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new CheckBoxControl(400, calc1, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
-        renderTooltipsButton = new CheckBoxControl(500, (width / 2) - 90, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
+        renderTooltipsButton = new CheckBoxControl(500, calc2, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
         proceedButton = new ExtendedButtonControl(900, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);

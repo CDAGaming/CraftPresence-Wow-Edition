@@ -36,12 +36,13 @@ gui.config.title.selector.view.guis=CraftPresence - Available GUIs
 gui.config.title.selector.view.items=CraftPresence - Available Items
 ## CONFIG MESSAGES - TITLE COMMENTS ##
 gui.config.comment.title.general=General Settings for Displaying Info
-gui.config.comment.title.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n - &id& = Biome ID
-gui.config.comment.title.dimensionmessages=Customize Messages to display with Dimensions \n (Manual Format: dimension_name;message) \n Available Placeholders: \n - &dimension& = Dimension Name \n - &id& = Dimension ID \n - &icon& = Default Dimension Icon
-gui.config.comment.title.servermessages=Customize Messages to display with Servers \n (Manual Format: server_IP;message;icon) \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
+gui.config.comment.title.biomemessages=Customize Messages to display with Biomes\n (Manual Format: biome_name;message)\n Available Placeholders:\n - &biome& = Biome Name\n - &id& = Biome ID
+gui.config.comment.title.dimensionmessages=Customize Messages to display with Dimensions\n (Manual Format: dimension_name;message)\n Available Placeholders:\n - &dimension& = Dimension Name\n - &id& = Dimension ID\n - &icon& = Default Dimension Icon
+gui.config.comment.title.servermessages=Customize Messages to display with Servers\n (Manual Format: server_IP;message;icon)\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
 gui.config.comment.title.statusmessages=Customize Messages relating to different Game States
 gui.config.comment.title.advanced=Customize Additional Settings of the Mod
-gui.config.comment.title.accessibility= Customize Accessibility Settings of the Mod \n Includes: \n - Language ID \n - KeyBindings \n - Additional GUI Customization Options
+gui.config.comment.title.accessibility=Customize Accessibility Settings of the Mod\n Includes:\n - Language ID\n - KeyBindings\n - Additional GUI Customization Options
+gui.config.comment.presencesettings=Customize the Formatting and Locations of the Different Messages to display in the Rich Presence
 ## CONFIG GUI - BUTTONS AND NAMES ##
 gui.config.buttonMessage.back=Back
 gui.config.buttonMessage.save=Save
@@ -70,11 +71,13 @@ gui.config.editorMessage.greencolorvalue=Green Color Value
 gui.config.editorMessage.bluecolorvalue=Blue Color Value
 gui.config.editorMessage.alphacolorvalue=Alpha Color Value
 gui.config.editorMessage.refresh=**Press ENTER to Refresh Values**
-gui.config.message.character.notice=Notice on Syncing \n\n Syncing may not yield accurate Results on Older Minecraft Versions
-gui.config.message.credits=This Configuration GUI was made from scratch by \n Jonathing, and will continue to be maintained by \n CDAGaming. A lot of effort went into making this \n custom GUI, so show him some support! Thanks. \n\n Feel free to learn from this GUI's code on \n the CraftPresence GitLab repository.
+gui.config.presenceMessage.generalArgs=General Message Formatting Arguments:\n* Placeholders Configuable in Status Messages and other areas\n* Some Placeholders are Empty unless they are assigned\n\n - &MAINMENU& = The Main Menu Message, while in the Main Menu\n - &MCVERSION& = The Minecraft Version Label\n - &BRAND& = The Minecraft Branding Label\n - &IGN& = The Non-World Player Info Message\n - &MODS& = The Message displaying your Mod Count\n - &PACK& = The Pack's Message, if using a pack\n - &DIMENSION& = The Current Dimension Message\n - &BIOME& = The Current Biome Message\n - &SERVER& = The Current Server Message\n - &GUI& = The Current Gui Message\n - &ENTITY& = The Current Entity Message
+gui.config.presenceMessage.iconArgs=General Icon Formatting Arguments:\n* Placeholders Configuable in Status Messages and other areas\n* Only One Placeholder is allowed at one time\n* Some Placeholders are Empty unless they are assigned\n\n - &DEFAULT& = The Default Icon, specified in config\n - &MAINMENU& = The Icon used in the Main Menu\n  * Use this instead of &DEFAULT& to only show the default icon in the main menu\n - &PACK& = The Pack's Icon, if using a pack\n - &DIMENSION& = The Current Dimension Icon\n - &SERVER& = The Current Server Icon
+gui.config.message.character.notice=Notice on Syncing\n\n Syncing may not yield accurate Results on Older Minecraft Versions
+gui.config.message.credits=This Configuration GUI was made from scratch by\n Jonathing, and will continue to be maintained by\n CDAGaming. A lot of effort went into making this\n custom GUI, so show him some support! Thanks.\n\n Feel free to learn from this GUI's code on\n the CraftPresence GitLab repository.
 gui.config.message.remove=**Remove Message Text to Remove this Value**
-gui.config.message.null=This Area is not Implemented just yet! \n\n Please Check Back Later...
-gui.config.message.emptylist=This List is Empty and Cannot be Displayed! \n\n Please Try Again...
+gui.config.message.null=This Area is not Implemented just yet!\n\n Please Check Back Later...
+gui.config.message.emptylist=This List is Empty and Cannot be Displayed!\n\n Please Try Again...
 gui.config.hoverMessage.access=**Enable "%1$s" to use this Menu**
 gui.config.hoverMessage.defaultempty=**Default Info cannot be Empty and Must be Valid**
 gui.config.hoverMessage.valuename=Name to Identify this Value
@@ -101,7 +104,8 @@ gui.config.name.statusmessages.mainmenumsg=Main Menu Message
 gui.config.name.statusmessages.lanmsg=LAN Game Message
 gui.config.name.statusmessages.singleplayermsg=Singleplayer Game Message
 gui.config.name.statusmessages.placeholder.packmsg=ModPack Message
-gui.config.name.statusmessages.placeholder.playermsg=Player Name Placeholder
+gui.config.name.statusmessages.placeholder.playermsg.out=Player Outer Info Placeholder
+gui.config.name.statusmessages.placeholder.playermsg.in=Player Inner Info Placeholder
 gui.config.name.statusmessages.placeholder.playercoordinatemsg=Player Coordinate Placeholder
 gui.config.name.statusmessages.placeholder.playerhealthmsg=Player Health Placeholder
 gui.config.name.statusmessages.placeholder.playeramountmsg=Player List Placeholder
@@ -129,7 +133,7 @@ gui.config.name.display.smallimagekey=Small Image Key Format
 gui.config.name.display.largeimagekey=Large Image Key Format
 ## CONFIG MESSAGES - COMMENTS ##
 gui.config.comment.general.clientid=Client ID Used for retrieving Assets, Icon Keys, and titles
-gui.config.comment.general.defaulticon=Default Icon \n (Used in Main Menu, Dimensions and Servers)
+gui.config.comment.general.defaulticon=Default Icon\n (Used in Main Menu, Dimensions and Servers)
 gui.config.comment.general.detectcursemanifest=Enable Detection for Twitch/Curse Manifest Data?
 gui.config.comment.general.detectmultimcmanifest=Enable Detection for MultiMC Instance Data?
 gui.config.comment.general.detectmcupdaterinstance=Enable Detection for MCUpdater Instance Data?
@@ -139,28 +143,32 @@ gui.config.comment.general.showbiome=Show Current Biome in Rich Presence?
 gui.config.comment.general.showdimension=Show Current Dimension in Rich Presence?
 gui.config.comment.general.showstate=Show Specific Game Data in Rich Presence?
 gui.config.comment.general.enablejoinrequest=Allows Sending or Accepting Join Requests in Discord
-gui.config.comment.biomemessages.biomemessages=Customize Messages to display with Biomes \n (Manual Format: biome_name;message) \n Available Placeholders: \n - &biome& = Biome Name \n - &id& = Biome ID
+gui.config.comment.biomemessages.biomemessages=Customize Messages to display with Biomes\n (Manual Format: biome_name;message)\n Available Placeholders:\n - &biome& = Biome Name\n - &id& = Biome ID
 gui.config.comment.dimensionmessages.dimensionicon=Dimension Icon to Default to when in an Unsupported Dimension
-gui.config.comment.dimensionmessages.dimensionmessages=Customize Messages to display with Dimensions \n (Manual Format: dimension_name;message) \n Available Placeholders: \n - &dimension& = Dimension Name \n - &id& = Dimension ID \n - &icon& = Default Dimension Icon
+gui.config.comment.dimensionmessages.dimensionmessages=Customize Messages to display with Dimensions\n (Manual Format: dimension_name;message)\n Available Placeholders:\n - &dimension& = Dimension Name\n - &id& = Dimension ID\n - &icon& = Default Dimension Icon
 gui.config.comment.servermessages.servericon=Server Icon to default to when in an Unsupported Server
-gui.config.comment.servermessages.servermotd=Server MOTD to default to, in the case of a null MOTD \n (And in Direct Connects)
-gui.config.comment.servermessages.servername=Server Display Name to default to, in the case of a null Name \n (And in Direct Connects)
-gui.config.comment.servermessages.servermessages=Customize Messages to display with Servers \n (Manual Format: server_IP;message;icon) \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
-gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Main Menu \n Available Placeholders: \n - &ign& = Your Minecraft Username \n - &mods& = The Amount of Mods currently in your Mods Folder
-gui.config.comment.statusmessages.lanmsg=Message to Display while in a LAN Game \n Available Placeholders: \n - &ip& = Server IP \n - &name& = Server Name \n - &motd& = Server MOTD \n - &icon& = Default Server Icon \n - &players& = Server Player Counter \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
-gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer \n Available Placeholders: \n - &ign& = Your Minecraft Username \n - &time& = Your World Game Time \n - &mods& = The Amount of Mods currently in your Mods Folder
-gui.config.comment.statusmessages.placeholder.packmsg=Message to display in Rich Presence when using a valid ModPack \n (Curse, Twitch, Technic, MCUpdater, or MultiMC) \n Available Placeholders: \n - &name& = The Pack's Name
-gui.config.comment.statusmessages.placeholder.playermsg=Message to use for the &ign& Placeholder \n Available Placeholders: \n - &name& = Your Username
-gui.config.comment.statusmessages.placeholder.playeramountmsg=Message to use for the &players& Placeholder \n Available Placeholders: \n - &current& = Current Player Count \n - &max& = Maximum Player Count
-gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder \n Available Placeholders: \n - &modcount& = The Amount of Mods currently in your Mods Folder
+gui.config.comment.servermessages.servermotd=Server MOTD to default to, in the case of a null MOTD\n (Also Applies for Direct Connects)
+gui.config.comment.servermessages.servername=Server Display Name to default to, in the case of a null Name\n (Also Applies for Direct Connects)
+gui.config.comment.servermessages.servermessages=Customize Messages to display with Servers\n (Manual Format: server_IP;message;icon)\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
+gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Main Menu
+gui.config.comment.statusmessages.lanmsg=Message to Display while in a LAN Game\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
+gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer\n Available Placeholders:\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
+gui.config.comment.statusmessages.placeholder.packmsg=Message to use for the &pack& placeholder in Presence Settings\n (If a Curse, Twitch, Technic, MCUpdater, or MultiMC Pack is Detected)\n Available Placeholders:\n - &name& = The Pack's Name
+gui.config.comment.statusmessages.placeholder.playermsg.out=Message to use for the &ign& General Placeholder in Presence Settings and the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &name& = Your Username
+gui.config.comment.statusmessages.placeholder.playermsg.in=Message to use for the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &coords& = The Player's Coordinate Placeholder Message\n - &health& = The Player's Health Placeholder Message\n - &gamemode& = The Player's Current Game Mode
+gui.config.comment.statusmessages.placeholder.playercoordinatemsg=Message to use for the &coords& Argument for the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &xPosition& = Your Current In-Game X Position\n - &zPosition& = Your Current In-Game Z Position
+gui.config.comment.statusmessages.placeholder.playerhealthmsg=Message to use for the &health& Argument for the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &current& = Your Current In-Game Health\n - &max& = Your Current In-Game Maximum Health
+gui.config.comment.statusmessages.placeholder.playeramountmsg=Message to use for the &players& Placeholder in Server Settings\n Available Placeholders:\n - &current& = Current Player Count\n - &max& = Maximum Player Count
+gui.config.comment.statusmessages.placeholder.worldmsg=Message to use for the &worldinfo& Placeholder in Server Settings\n Available Placeholders:\n - &difficulty& = The Current World's Difficulty\n - &worldname& = The Name of the Current World\n - &worldtime& = The Current World's In-Game Time
+gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder in Presence Settings\n Available Placeholders:\n - &modcount& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
-gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs \n (You'll need to change each of your variables manually)
-gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands \n (Enables Command GUI in Main Config GUI)
-gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in \n Note the Following: \n - Requires an Option in GUI Messages \n - Minecraft's GUIs must be Opened once before Configuring due to Obfuscation
-gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding \n Note the Following: \n - Requires an Option in Item Messages
+gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs
+gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands\n (Enables Command GUI in Main Config GUI)
+gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the GUI your in\n Note the Following:\n - Requires an Option in GUI Messages\n - Minecraft's GUIs must be Opened once before Configuring due to Obfuscation
+gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding\n Note the Following:\n - Requires an Option in Item Messages
 gui.config.comment.advanced.rendertooltips=Allow CraftPresence to render Hover Tooltips (when available)
-gui.config.comment.advanced.guimessages=Customize Messages to display with GUIs \n (Manual Format: gui;message) \n Available Placeholders: \n - &gui& = GUI Name \n - &class& = GUI Class Name \n - &screen& = GUI Screen Instance Name
-gui.config.comment.advanced.itemmessages=Customize Messages to display with Items \n (Manual Format: item;message) \n Available Placeholders: \n - &main& = Current Main Hand Item \n - &offhand& = Current OffHand Item \n - &helmet& = Currently Equipped Helmet \n - &chest& = Currently Equipped ChestPiece \n - &legs& = Currently Equipped Leggings \n - &boots& = Currently Equipped Boots
+gui.config.comment.advanced.guimessages=Customize Messages to display with GUIs\n (Manual Format: gui;message)\n Available Placeholders:\n - &gui& = GUI Name\n - &class& = GUI Class Name\n - &screen& = GUI Screen Instance Name
+gui.config.comment.advanced.itemmessages=Customize Messages to display with Items\n (Manual Format: item;message)\n Available Placeholders:\n - &main& = Current Main Hand Item\n - &offhand& = Current OffHand Item\n - &helmet& = Currently Equipped Helmet\n - &chest& = Currently Equipped ChestPiece\n - &legs& = Currently Equipped Leggings\n - &boots& = Currently Equipped Boots
 ## KEYBIND MESSAGES ##
 key.craftpresence.category=CraftPresence - KeyBindings
 key.craftpresence.config_keybind=Config KeyBinding
@@ -174,8 +182,9 @@ craftpresence.defaults.state.lan=Playing on a LAN Server
 craftpresence.defaults.state.singleplayer=Playing Singleplayer
 craftpresence.defaults.placeholder.pack=&name&
 craftpresence.defaults.placeholder.players=&current& / &max& Players
-craftpresence.defaults.placeholder.playerinfo=&name&
-craftpresence.defaults.placeholder.playerinfo.coordinate=At &xPosition&, &yPosition&
+craftpresence.defaults.placeholder.playerinfo.out=As &name&
+craftpresence.defaults.placeholder.playerinfo.in=(&health&)
+craftpresence.defaults.placeholder.playerinfo.coordinate=At &xPosition&, &zPosition&
 craftpresence.defaults.placeholder.playerinfo.health=Health: &current&/&max&
 craftpresence.defaults.placeholder.worldinfo=On &worldname&
 craftpresence.defaults.placeholder.mods=&modcount& Mods
@@ -185,20 +194,20 @@ craftpresence.multiplayer.status.pinging=Pinging...
 craftpresence.multiplayer.status.polling=Polling...
 craftpresence.multiplayer.status.cannot_resolve=Can't resolve hostname
 ## COMMAND MESSAGES ##
-craftpresence.command.usage.main=§lCraftPresence - Sub-Commands: \n §rSyntax: §6/<cp|craftpresence> <command> \n\n §6§lreboot §r- Reboot RPC \n §6§lshutdown §r- Shut Down RPC \n §6§lreload §r- Reloads CraftPresence Data based on Settings \n §6§lrequest §r- View Join Request Info \n §6§lview §r- View a Variety of Display Data \n §6§lhelp §r- Views this Page
-craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands: \n\n §6§lcurrentData §r- Shows your Current RPC Data, in text \n §6§lassets §r- Displays all Asset Icons available \n §6§ldimensions §r- Displays available Dimension Names \n §6§lbiomes §r- Displays available Biome Names \n §6§lservers §r- Displays available Server Addresses \n §6§lguis §r- Displays available GUI Names \n §6§litems §r- Displays available Item Names
-craftpresence.command.usage.assets=§lCraftPresence - Assets Sub-Commands: \n\n §6§llarge §r- View Discord Assets with Size LARGE \n §6§lsmall §r- View Discord Assets with Size SMALL \n §6§lall §r- View All Discord Assets
+craftpresence.command.usage.main=§lCraftPresence - Sub-Commands:\n §rSyntax: §6/<cp|craftpresence> <command>\n\n §6§lreboot §r- Reboot RPC\n §6§lshutdown §r- Shut Down RPC\n §6§lreload §r- Reloads CraftPresence Data based on Settings\n §6§lrequest §r- View Join Request Info\n §6§lview §r- View a Variety of Display Data\n §6§lhelp §r- Views this Page
+craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands:\n\n §6§lcurrentData §r- Shows your Current RPC Data, in text\n §6§lassets §r- Displays all Asset Icons available\n §6§ldimensions §r- Displays available Dimension Names\n §6§lbiomes §r- Displays available Biome Names\n §6§lservers §r- Displays available Server Addresses\n §6§lguis §r- Displays available GUI Names\n §6§litems §r- Displays available Item Names
+craftpresence.command.usage.assets=§lCraftPresence - Assets Sub-Commands:\n\n §6§llarge §r- View Discord Assets with Size LARGE\n §6§lsmall §r- View Discord Assets with Size SMALL\n §6§lall §r- View All Discord Assets
 craftpresence.command.unrecognized=§c§lUnknown Command - use §6§l/craftpresence help
-craftpresence.command.currentdata=§lCurrent RPC Data (Logged in as %1$s):§r \n §6§lDetails:§r %2$s \n §6§lGame State:§r %3$s \n §6§lStart Timestamp:§r %4$s \n §6§lClient ID:§r %5$s \n §6§lLarge Icon Key:§r %6$s \n §6§lLarge Icon Text:§r %7$s \n §6§lSmall Icon Key:§r %8$s \n §6§lSmall Icon Text:§r %9$s \n §6§lParty ID:§r %10$s \n §6§lParty Size:§r %11$s \n §6§lParty Max:§r %12$s \n §6§lJoin Secret:§r %13$s \n §6§lEnd Timestamp:§r %14$s \n §6§lMatch Secret:§r %15$s \n §6§lSpectate Secret:§r %16$s \n §6§lInstance:§r %17$s
+craftpresence.command.currentdata=§lCurrent RPC Data (Logged in as %1$s):§r\n §6§lDetails:§r %2$s\n §6§lGame State:§r %3$s\n §6§lStart Timestamp:§r %4$s\n §6§lClient ID:§r %5$s\n §6§lLarge Icon Key:§r %6$s\n §6§lLarge Icon Text:§r %7$s\n §6§lSmall Icon Key:§r %8$s\n §6§lSmall Icon Text:§r %9$s\n §6§lParty ID:§r %10$s\n §6§lParty Size:§r %11$s\n §6§lParty Max:§r %12$s\n §6§lJoin Secret:§r %13$s\n §6§lEnd Timestamp:§r %14$s\n §6§lMatch Secret:§r %15$s\n §6§lSpectate Secret:§r %16$s\n §6§lInstance:§r %17$s
 craftpresence.command.reload=§6§lReloading CraftPresence Data, depending on Settings!
 craftpresence.command.reload.complete=§2§lReloaded CraftPresence Data!
-craftpresence.command.request.info=§6§lRequest Info:§r \n §6§lRequester Username: %1$s \n\n §6§lUse /cp request <accept|deny> or Wait %2$s Seconds to Ignore
+craftpresence.command.request.info=§6§lRequest Info:§r\n §6§lRequester Username: %1$s\n\n §6§lUse /cp request <accept|deny> or Wait %2$s Seconds to Ignore
 craftpresence.command.request.none=§6§lYou do not have any available Join Requests!
 craftpresence.command.request.accept=§6§lJoin Request Accepted! %1$s has been sent an Invite!
 craftpresence.command.request.denied=§6§lJoin Request Denied from %1$s!
 craftpresence.command.request.ignored=§6§lJoin Request Ignored from %1$s!
 craftpresence.command.shutdown.pre=§6§lShutting Down CraftPresence...
-craftpresence.command.shutdown.post=§2§lCraftPresence has been Shutdown! \n §6§lUse /cp reboot to Reboot
+craftpresence.command.shutdown.post=§2§lCraftPresence has been Shutdown!\n §6§lUse /cp reboot to Reboot
 craftpresence.command.reboot.pre=§6§lRebooting CraftPresence...
 craftpresence.command.reboot.post=§2§lCraftPresence has been Rebooted!
 ## LOGGING MESSAGES ##
@@ -228,7 +237,7 @@ craftpresence.logger.info.discord.assets.request=To Add Support for this Icon, P
 craftpresence.logger.info.discord.assets.fallback=Fallback Icon for "%1$s" Found! Using Fallback Icon with Name "%2$s"!
 craftpresence.logger.error.system=CraftPresence was unable to retrieve System Info, Things may not work well...
 craftpresence.logger.error.rpc=CraftPresence has encountered the following RPC Error, and has been Shut Down to prevent a crash: %1$s
-craftpresence.logger.error.download=Failed to Download "%1$s" from "%2$s" \n Manually Download "%1$s" from "%2$s" to "%3$s"
+craftpresence.logger.error.download=Failed to Download "%1$s" from "%2$s"\n Manually Download "%1$s" from "%2$s" to "%3$s"
 craftpresence.logger.error.chardata=Failed to Retrieve Character & Glyph Width Data, Some Rendering Functions have been disabled...
 craftpresence.logger.error.dataclose=Failed to Close a Data Stream, Resource Depletion may Occur, Please Report this Issue...
 craftpresence.logger.error.dll=Failed to Load "%1$s" as a DLL, Things may not work well...

@@ -224,8 +224,8 @@ public class DiscordUtils {
         }
 
         // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
-        initArgumentData("&MAINMENU&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
-        initIconData("&MAINMENU&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initArgumentData("&MAINMENU&", "&BRAND&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initIconData("&DEFAULT&", "&MAINMENU&", "&PACK&", "&DIMENSION&", "&SERVER&");
 
         // Ensure Main Menu RPC Resets properly
         CommandUtils.isInMainMenu = false;
@@ -235,14 +235,18 @@ public class DiscordUtils {
         playerInfoArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
         generalArgs.add(new Tuple<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion)));
+        generalArgs.add(new Tuple<>("&BRAND&", ModUtils.BRAND));
         generalArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
-        generalArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerInfoArgs)));
+        generalArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMSG, playerInfoArgs)));
 
         for (Tuple<String, String> generalArgument : generalArgs) {
             // For each General (Can be used Anywhere) Argument
             // Ensure they sync as Formatter Arguments too
             syncArgument(generalArgument.getFirst(), generalArgument.getSecond(), false);
         }
+
+        // Sync the Default Icon Argument
+        syncArgument("&DEFAULT&", CraftPresence.CONFIG.defaultIcon, true);
 
         syncPackArguments();
     }
@@ -357,32 +361,37 @@ public class DiscordUtils {
      * @return The found or alternative matching Icon Key
      */
     public String imageOf(final String evalString, final String alternativeString, final boolean allowNull) {
-        if (StringUtils.isNullOrEmpty(lastRequestedImageData.getFirst()) || !lastRequestedImageData.getFirst().equalsIgnoreCase(evalString)) {
-            final String defaultIcon = DiscordAssetUtils.contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : DiscordAssetUtils.getRandomAsset();
-            lastRequestedImageData.setFirst(evalString);
+        // Ensures Assets were fully synced from the Client ID before running
+        if (DiscordAssetUtils.syncCompleted) {
+            if (StringUtils.isNullOrEmpty(lastRequestedImageData.getFirst()) || !lastRequestedImageData.getFirst().equalsIgnoreCase(evalString)) {
+                final String defaultIcon = DiscordAssetUtils.contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : DiscordAssetUtils.getRandomAsset();
+                lastRequestedImageData.setFirst(evalString);
 
-            String finalKey = evalString;
+                String finalKey = evalString;
 
-            if (!DiscordAssetUtils.contains(finalKey)) {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.fallback", evalString, alternativeString));
-                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.request", evalString));
-                if (DiscordAssetUtils.contains(alternativeString)) {
-                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.fallback", evalString, alternativeString));
-                    finalKey = alternativeString;
-                } else {
-                    if (allowNull) {
-                        finalKey = "";
+                if (!DiscordAssetUtils.contains(finalKey)) {
+                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.fallback", evalString, alternativeString));
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.request", evalString));
+                    if (DiscordAssetUtils.contains(alternativeString)) {
+                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.fallback", evalString, alternativeString));
+                        finalKey = alternativeString;
                     } else {
-                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.default", evalString));
-                        finalKey = defaultIcon;
+                        if (allowNull) {
+                            finalKey = "";
+                        } else {
+                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.default", evalString));
+                            finalKey = defaultIcon;
+                        }
                     }
                 }
-            }
 
-            lastRequestedImageData.setSecond(finalKey);
-            return finalKey;
+                lastRequestedImageData.setSecond(finalKey);
+                return finalKey;
+            } else {
+                return lastRequestedImageData.getSecond();
+            }
         } else {
-            return lastRequestedImageData.getSecond();
+            return "";
         }
     }
 

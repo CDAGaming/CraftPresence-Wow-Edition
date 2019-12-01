@@ -64,17 +64,20 @@
 #### v1.6.0 Mod Rewrite Info
 
 In v1.6.0, CraftPresence has undergone numerous performance and under-the-hood improvements, to both acknowledge user feedback over the last several months and pursue the goal of further modularity.
+
 As Elements such as the Config System and General RPC Elements have undergone various changes, please report any bugs found to [the Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues)
 
-v1.5.x is Generally Recommended at this time for new users, has the systems used in v1.6.0 may have a variety of issues, and considered bleeding-edge
+v1.5.x is Generally Recommended at this time for new users, as the systems used in v1.6.0 may have a variety of issues, and are considered bleeding-edge for the time being
 
 Migration Notes:
 
 *   The RPC System has changed to an internal IPC System hooking into Discord's official endpoints
 
-    *   As a result, you can remove any discord-rpc dlls present in CraftPresence's folders as they are no longer being used
+    *   As a result, you can remove any discord-rpc DLL files present in CraftPresence's folders as they are no longer being used
 
 *   `gameTimePlaceholder` is now combined into the `&worldinfo&` Placeholder
+
+*   Some of the other placeholders within Server and Status Messages have been changed or renamed, please refer to the in-game tooltips for these new names
 
 *   Entity Messages now use the Default Message as the Format, while specific Item Messages are considered placeholders for the formatter
 
@@ -83,7 +86,7 @@ Migration Notes:
 
 *   `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
 
-    *   `&ign&` in Server Messages should be changed to `&playerinfo&`
+    *   `&ign&` in Server Messages should be changed to using `&playerinfo&` for in-world Player Data and `&ign&` for out-of-world Player Data
 
 *   `overwriteServerIcon` has been deprecated, instead use the Presence Formatting GUI to define the priority for icons
 

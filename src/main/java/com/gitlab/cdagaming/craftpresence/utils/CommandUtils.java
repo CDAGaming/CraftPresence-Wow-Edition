@@ -91,6 +91,8 @@ public class CommandUtils {
         if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientID)) {
             DiscordAssetUtils.emptyData();
             CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientID;
+        } else {
+            DiscordAssetUtils.clearClientData();
         }
         DiscordAssetUtils.loadAssets();
         CraftPresence.CLIENT.init();
@@ -121,13 +123,12 @@ public class CommandUtils {
      */
     public static void setMainMenuPresence() {
         // Form Argument Lists
-        List<Tuple<String, String>> playerDataArgs = Lists.newArrayList(), mainMenuArgs = Lists.newArrayList();
+        List<Tuple<String, String>> mainMenuArgs = Lists.newArrayList();
 
-        // Player Data Arguments
-        playerDataArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
-
-        // Main Menu Arguments
-        mainMenuArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            mainMenuArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
 
         CraftPresence.CLIENT.STATUS = "ready";
         CraftPresence.CLIENT.clearPartyData(true, false);

@@ -29,8 +29,8 @@ public class ConfigUtils {
             NAME_defaultServerMOTD, NAME_serverMessages;
     // STATUS MESSAGES
     public String NAME_mainmenuMSG, NAME_lanMSG, NAME_singleplayerMSG, NAME_packPlaceholderMSG,
-            NAME_playerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG, NAME_playerAmountPlaceholderMSG,
-            NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
+            NAME_outerPlayerPlaceholderMSG, NAME_innerPlayerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG,
+            NAME_playerAmountPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_renderTooltips,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
@@ -54,8 +54,8 @@ public class ConfigUtils {
     public String[] serverMessages;
     // STATUS MESSAGES
     public String mainmenuMSG, lanMSG, singleplayerMSG, packPlaceholderMSG,
-            playerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG, playerAmountPlaceholderMSG,
-            worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
+            outerPlayerPlaceholderMSG, innerPlayerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG,
+            playerAmountPlaceholderMSG, worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
     public boolean enableCommands, enablePERGUI, enablePERItem, renderTooltips;
     public String splitCharacter;
@@ -133,7 +133,8 @@ public class ConfigUtils {
         NAME_lanMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.lanmsg").replaceAll(" ", "_");
         NAME_singleplayerMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
         NAME_packPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.packmsg").replaceAll(" ", "_");
-        NAME_playerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.playermsg").replaceAll(" ", "_");
+        NAME_outerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.playermsg.out").replaceAll(" ", "_");
+        NAME_innerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.playermsg.in").replaceAll(" ", "_");
         NAME_playerCoordinatePlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.playercoordinatemsg").replaceAll(" ", "_");
         NAME_playerHealthPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.playerhealthmsg").replaceAll(" ", "_");
         NAME_playerAmountPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.playeramountmsg").replaceAll(" ", "_");
@@ -144,7 +145,8 @@ public class ConfigUtils {
         lanMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.lan");
         singleplayerMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.singleplayer");
         packPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.pack");
-        playerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.playerinfo");
+        outerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.playerinfo.out");
+        innerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.playerinfo.in");
         playerCoordinatePlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.playerinfo.coordinate");
         playerHealthPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.playerinfo.health");
         playerAmountPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.players");
@@ -191,7 +193,7 @@ public class ConfigUtils {
         gameStateMSG = "&SERVER& &PACK&";
         detailsMSG = "&MAINMENU&&DIMENSION&";
         largeImageMSG = "&MAINMENU&&DIMENSION&";
-        smallImageMSG = "&SERVER&";
+        smallImageMSG = "&SERVER& &PACK&";
         largeImageKey = "&MAINMENU&&DIMENSION&";
         smallImageKey = "&SERVER&&PACK&";
 

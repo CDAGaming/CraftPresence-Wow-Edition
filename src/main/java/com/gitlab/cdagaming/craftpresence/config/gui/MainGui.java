@@ -116,7 +116,7 @@ public class MainGui extends GuiScreen {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.accessibility")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, presenceSet)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.presencesettings")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 

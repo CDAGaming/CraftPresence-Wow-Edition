@@ -33,6 +33,7 @@ import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.server.management.PlayerInteractionManager;
 
 import java.util.List;
 
@@ -88,6 +89,11 @@ public class ServerUtils {
     private String currentDifficulty;
 
     /**
+     * The Current Player's GameMode
+     */
+    private String currentGameMode;
+
+    /**
      * The Current World's Name
      */
     private String currentWorldName;
@@ -128,6 +134,11 @@ public class ServerUtils {
     private ServerData requestedServerData;
 
     /**
+     * The Current World Interaction Manager
+     */
+    private PlayerInteractionManager currentInteractionManager;
+
+    /**
      * The Player's Current Connection Data
      */
     private NetHandlerPlayClient currentConnection;
@@ -164,10 +175,12 @@ public class ServerUtils {
         currentServer_MOTD = null;
         currentServer_Name = null;
         currentServerData = null;
+        currentInteractionManager = null;
         currentConnection = null;
         currentCoordinates = new Tuple<>(0.0D, 0.0D);
         currentHealth = new Tuple<>(0.0f, 0.0f);
         currentDifficulty = null;
+        currentGameMode = null;
         currentWorldName = null;
         timeString = null;
         currentPlayers = 0;
@@ -219,6 +232,7 @@ public class ServerUtils {
     private void updateServerData() {
         final ServerData newServerData = CraftPresence.instance.getCurrentServerData();
         final NetHandlerPlayClient newConnection = CraftPresence.instance.getConnection();
+        final PlayerInteractionManager newInteractionManager = new PlayerInteractionManager(CraftPresence.player.world);
 
         if (!joinInProgress) {
             final int newCurrentPlayers = newConnection != null ? newConnection.getPlayerInfoMap().size() : 1;
@@ -235,6 +249,7 @@ public class ServerUtils {
 
             if (newLANStatus != isOnLAN || ((newServerData != null && !newServerData.equals(currentServerData)) ||
                     (newServerData == null && currentServerData != null)) ||
+                    (!newInteractionManager.equals(currentInteractionManager)) ||
                     (newConnection != null && !newConnection.equals(currentConnection)) || !newServer_IP.equals(currentServer_IP) ||
                     (!StringUtils.isNullOrEmpty(newServer_MOTD) && !newServer_MOTD.equals(currentServer_MOTD)) ||
                     (!StringUtils.isNullOrEmpty(newServer_Name) && !newServer_Name.equals(currentServer_Name))) {
@@ -243,6 +258,7 @@ public class ServerUtils {
                 currentServer_Name = newServer_Name;
                 currentServerData = newServerData;
                 currentConnection = newConnection;
+                currentInteractionManager = newInteractionManager;
                 isOnLAN = newLANStatus;
                 queuedForUpdate = true;
 
@@ -259,19 +275,10 @@ public class ServerUtils {
 
             // NOTE: Universal Events
             if (!StringUtils.isNullOrEmpty(currentServerMSG)) {
-                // &time& Argument = Current Time in World
-                if (currentServerMSG.toLowerCase().contains("&time&")) {
-                    final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
-                    if (!StringUtils.isNullOrEmpty(newGameTime) && !newGameTime.equals(timeString)) {
-                        timeString = newGameTime;
-                        queuedForUpdate = true;
-                    }
-                }
-
                 // &PLAYERINFO& Sub-Arguments
                 if (currentServerMSG.toLowerCase().contains("&playerinfo&")) {
                     // &coords& Argument = Current Coordinates of Player
-                    if (CraftPresence.CONFIG.playerPlaceholderMSG.toLowerCase().contains("&coords&")) {
+                    if (CraftPresence.CONFIG.innerPlayerPlaceholderMSG.toLowerCase().contains("&coords&")) {
                         final Tuple<Double, Double> newCoordinates = CraftPresence.player != null ? new Tuple<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)) : new Tuple<>(0.0D, 0.0D);
                         if (!newCoordinates.equals(currentCoordinates)) {
                             currentCoordinates = newCoordinates;
@@ -280,17 +287,26 @@ public class ServerUtils {
                     }
 
                     // &health& Argument = Current and Maximum Health of Player
-                    if (CraftPresence.CONFIG.playerPlaceholderMSG.toLowerCase().contains("&health&")) {
+                    if (CraftPresence.CONFIG.innerPlayerPlaceholderMSG.toLowerCase().contains("&health&")) {
                         final Tuple<Float, Float> newHealth = CraftPresence.player != null ? new Tuple<>(CraftPresence.player.getHealth(), CraftPresence.player.getMaxHealth()) : new Tuple<>(0.0f, 0.0f);
                         if (!newHealth.equals(currentHealth)) {
                             currentHealth = newHealth;
                             queuedForUpdate = true;
                         }
                     }
+
+                    // &gamemode Argument = The Current Game Mode you are currently in
+                    if (CraftPresence.CONFIG.innerPlayerPlaceholderMSG.toLowerCase().contains("&gamemode&")) {
+                        final String newGameMode = currentInteractionManager != null ? currentInteractionManager.getGameType().getName() : "";
+                        if (!newGameMode.equals(currentGameMode)) {
+                            currentGameMode = newGameMode;
+                            queuedForUpdate = true;
+                        }
+                    }
                 }
 
                 // &WORLDINFO& Sub-Arguments
-                if (currentServerMSG.toLowerCase().contains("&worldinfo")) {
+                if (currentServerMSG.toLowerCase().contains("&worldinfo&")) {
                     // &difficulty& Argument = Current Difficulty of the World
                     if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&difficulty")) {
                         final String newDifficulty = CraftPresence.player != null ? CraftPresence.player.world.getDifficulty().name() : "";
@@ -305,6 +321,15 @@ public class ServerUtils {
                         final String newWorldName = CraftPresence.player != null ? CraftPresence.player.world.getWorldInfo().getWorldName() : "";
                         if (!newWorldName.equals(currentWorldName)) {
                             currentWorldName = newWorldName;
+                            queuedForUpdate = true;
+                        }
+                    }
+
+                    // &worldtime& Argument = Current Time in World
+                    if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&worldtime&")) {
+                        final String newGameTime = CraftPresence.player != null ? getTimeString(CraftPresence.player.world.getWorldTime()) : null;
+                        if (!StringUtils.isNullOrEmpty(newGameTime) && !newGameTime.equals(timeString)) {
+                            timeString = newGameTime;
                             queuedForUpdate = true;
                         }
                     }
@@ -440,6 +465,7 @@ public class ServerUtils {
         // Player Data Arguments
         playerDataArgs.add(new Tuple<>("&COORDS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerCoordinatePlaceholderMSG, coordinateArgs)));
         playerDataArgs.add(new Tuple<>("&HEALTH&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerHealthPlaceholderMSG, healthArgs)));
+        playerDataArgs.add(new Tuple<>("&GAMEMODE&", !StringUtils.isNullOrEmpty(currentGameMode) ? currentGameMode : ""));
 
         // World Data Arguments
         worldDataArgs.add(new Tuple<>("&DIFFICULTY&", !StringUtils.isNullOrEmpty(currentDifficulty) ? currentDifficulty : ""));
@@ -461,7 +487,7 @@ public class ServerUtils {
             serverArgs.add(new Tuple<>("&NAME&", currentServer_Name));
             serverArgs.add(new Tuple<>("&MOTD&", currentServer_MOTD));
             serverArgs.add(new Tuple<>("&PLAYERS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerAmountPlaceholderMSG, playerAmountArgs)));
-            serverArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+            serverArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.innerPlayerPlaceholderMSG, playerDataArgs)));
             serverArgs.add(new Tuple<>("&WORLDINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.worldPlaceholderMSG, worldDataArgs)));
 
             // Add All Generalized Arguments, if any
@@ -509,7 +535,7 @@ public class ServerUtils {
             // Form SinglePlayer Tuple Argument List
             List<Tuple<String, String>> soloArgs = Lists.newArrayList();
 
-            soloArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerPlaceholderMSG, playerDataArgs)));
+            soloArgs.add(new Tuple<>("&PLAYERINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.innerPlayerPlaceholderMSG, playerDataArgs)));
             soloArgs.add(new Tuple<>("&WORLDINFO&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.worldPlaceholderMSG, worldDataArgs)));
 
             // Add All Generalized Arguments, if any
