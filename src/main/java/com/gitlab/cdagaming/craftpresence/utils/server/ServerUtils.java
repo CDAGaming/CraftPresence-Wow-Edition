@@ -33,7 +33,6 @@ import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.server.management.PlayerInteractionManager;
 
 import java.util.List;
 

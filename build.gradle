@@ -50,7 +50,7 @@ minecraft {
     replace "GRADLE:mod_name", mod_name
     replace "GRADLE:certFingerprint", certfingerprint
 
-    replaceIn "Constants.java"
+    replaceIn "ModUtils.java"
     makeObfSourceJar = false
 }
 
