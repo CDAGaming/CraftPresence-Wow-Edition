@@ -1,5 +1,5 @@
 # CraftPresence
-Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the JNA (Java Native Access) API!
+Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the DiscordIPC API by [jagrosh](https://github.com/jagrosh)!
 
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
 [![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
@@ -56,7 +56,19 @@ CraftPresence currently contains the following KeyBinds:
 ## Placeholders
 In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
 
+(In v1.6.0 and Above, You can now define where in the Rich Presence the Messages should go)
+
 (Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)
+
+### Presence Display Placeholders
+*   &DIMENSION& - The Dimension Message from your Dimension Settings, if enabled and in use
+*   &BIOME& - The Biome Message from your Biome Settings, if enabled and in use
+*   &SERVER& - The Server/SinglePlayer Message from your Server Settings, if enabled and in use
+*   &GUI& - The GUI Message from your GUI Settings, if enabled and in use
+*   &ENTITY& - The Entity/Item Message from your Advanced -> Entity/Item Setting, if enabled and in use
+
+(All Placeholders must be present in one of the RPC Areas)
+(For Image Keys, it works as a priority list going in sequential order)
 
 ### Main Menu Message Placeholders
 *   &IGN& - Your Minecraft Username
@@ -106,7 +118,7 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
     *   Server Support is unavailable in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
     *   Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with ModLoader + ModLoaderMP
 
-*Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited*
+(Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited)
 
 ## Disclaimers & Additional Info
 
@@ -126,6 +138,16 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 
 *   If Requesting an Icon be Modified or Removed from the Default Client ID, please specify a reason why
     *   Mostly just so It can be logged why it was changed for future reference
+
+#### Licensing
+This Mod is licensed under the MIT License as well as the Apache 2.0 License
+
+This Project makes usage of the following dependencies internally:
+
+*   [DiscordIPC API](https://github.com/jagrosh/DiscordIPC) by [jagrosh](https://github.com/jagrosh)
+    *   [JUnixSocket](https://github.com/kohlschutter/junixsocket) by [kohlschutter](https://github.com/kohlschutter)
+
+*   [JNA API](https://github.com/java-native-access/jna) on v1.5.x and Below
 
 #### Discord TOS
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party

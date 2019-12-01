@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence;
 
 import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
@@ -6,7 +29,7 @@ import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.SystemUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.DiscordUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.entity.EntityUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import com.gitlab.cdagaming.craftpresence.utils.server.ServerUtils;
@@ -20,32 +43,105 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * The Primary Application Class and Utilities
+ *
+ * @author CDAGaming
+ */
 @Mod(modid = ModUtils.MODID, name = ModUtils.NAME, version = ModUtils.VERSION_ID, clientSideOnly = true, guiFactory = ModUtils.GUI_FACTORY, canBeDeactivated = true, updateJSON = ModUtils.UPDATE_JSON, certificateFingerprint = ModUtils.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
-    public static boolean packFound = false, awaitingReply = false, closing = false;
-    public static Minecraft instance = Minecraft.getMinecraft();
-    public static EntityPlayer player = instance.player;
+    /**
+     * Whether Pack Data was able to be Found and Parsed
+     */
+    public static boolean packFound = false;
 
-    public static ConfigUtils CONFIG;
-    public static SystemUtils SYSTEM = new SystemUtils();
-    public static KeyUtils KEYBINDINGS = new KeyUtils();
-    public static DiscordUtils CLIENT = new DiscordUtils();
-    public static ServerUtils SERVER = new ServerUtils();
-    public static BiomeUtils BIOMES = new BiomeUtils();
-    public static DimensionUtils DIMENSIONS = new DimensionUtils();
-    public static EntityUtils ENTITIES = new EntityUtils();
-    public static GuiUtils GUIS = new GuiUtils();
+    /**
+     * If the Mod is Currently Closing and Clearing Data
+     */
+    public static boolean closing = false;
+
+    /**
+     * Timer Instance for this Class, used for Scheduling Events
+     */
     public static Timer timerObj = new Timer(CraftPresence.class.getSimpleName());
 
+    /**
+     * The Minecraft Instance attached to this Mod
+     */
+    public static Minecraft instance = Minecraft.getMinecraft();
+
+    /**
+     * The Current Player detected from the Minecraft Instance
+     */
+    public static EntityPlayer player = instance.player;
+
+    /**
+     * The {@link ConfigUtils} Instance for this Mod
+     */
+    public static ConfigUtils CONFIG;
+
+    /**
+     * The {@link SystemUtils} Instance for this Mod
+     */
+    public static SystemUtils SYSTEM = new SystemUtils();
+
+    /**
+     * The {@link KeyUtils} Instance for this Mod
+     */
+    public static KeyUtils KEYBINDINGS = new KeyUtils();
+
+    /**
+     * The {@link DiscordUtils} Instance for this Mod
+     */
+    public static DiscordUtils CLIENT = new DiscordUtils();
+
+    /**
+     * The {@link ServerUtils} Instance for this Mod
+     */
+    public static ServerUtils SERVER = new ServerUtils();
+
+    /**
+     * The {@link BiomeUtils} Instance for this Mod
+     */
+    public static BiomeUtils BIOMES = new BiomeUtils();
+
+    /**
+     * The {@link DimensionUtils} Instance for this Mod
+     */
+    public static DimensionUtils DIMENSIONS = new DimensionUtils();
+
+    /**
+     * The {@link EntityUtils} Instance for this Mod
+     */
+    public static EntityUtils ENTITIES = new EntityUtils();
+
+    /**
+     * The {@link GuiUtils} Instance for this Mod
+     */
+    public static GuiUtils GUIS = new GuiUtils();
+
+    /**
+     * Whether the Mod has completed it's Initialization Phase
+     */
     private boolean initialized = false;
 
+    /**
+     * Begins Scheduling Ticks on Class Initialization
+     */
     public CraftPresence() {
         scheduleTick();
     }
 
+    /**
+     * The Mod's Initialization Event
+     * <p>
+     * Comprises of Data Initialization and RPC Setup
+     */
     private void init() {
+        // If running in Developer Mode, Warn of Possible Issues and Log OS Info
         if (ModUtils.IS_DEV) {
-            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.debugmode"));
+            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.debugmode"));
+            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
         }
 
         SYSTEM = new SystemUtils();
@@ -53,7 +149,6 @@ public class CraftPresence {
         CONFIG.initialize();
 
         final File CP_DIR = new File(ModUtils.MODID);
-        ModUtils.loadDLL(!CP_DIR.exists() || CP_DIR.listFiles() == null);
         ModUtils.loadCharData(!CP_DIR.exists() || CP_DIR.listFiles() == null);
 
         CommandUtils.init();
@@ -71,6 +166,9 @@ public class CraftPresence {
         }
     }
 
+    /**
+     * Schedules the Next Tick to Occur if not currently closing
+     */
     private void scheduleTick() {
         if (!closing) {
             timerObj.schedule(
@@ -85,6 +183,11 @@ public class CraftPresence {
         }
     }
 
+    /**
+     * The Event to Run on each Client Tick, if passed initialization events
+     * <p>
+     * Comprises of Synchronizing Data, and Updating RPC Data as needed
+     */
     private void clientTick() {
         if (initialized) {
             instance = Minecraft.getMinecraft();
@@ -109,16 +212,21 @@ public class CraftPresence {
             }
 
             if (!CONFIG.hasChanged) {
-                if ((!CommandUtils.isOnMainMenuPresence() && player == null) && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandUtils.setMainMenuPresence();
+                } else if (CommandUtils.isInMainMenu && player != null) {
+                    CommandUtils.isInMainMenu = false;
+
+                    CLIENT.initArgumentData("&MAINMENU&");
+                    CLIENT.initIconData("&MAINMENU&");
                 }
 
-                if (awaitingReply && SYSTEM.TIMER == 0) {
-                    StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.username));
-                    DiscordRPC.INSTANCE.Discord_Respond(CLIENT.REQUESTER_USER.userId, DiscordRPC.DISCORD_REPLY_IGNORE);
-                    awaitingReply = false;
+                if (CLIENT.awaitingReply && SYSTEM.TIMER == 0) {
+                    StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.getName()));
+                    CLIENT.ipcInstance.respondToJoinRequest(CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
+                    CLIENT.awaitingReply = false;
                     CLIENT.STATUS = "ready";
-                } else if (!awaitingReply && CLIENT.REQUESTER_USER != null) {
+                } else if (!CLIENT.awaitingReply && CLIENT.REQUESTER_USER != null) {
                     CLIENT.REQUESTER_USER = null;
                     CLIENT.STATUS = "ready";
                 }

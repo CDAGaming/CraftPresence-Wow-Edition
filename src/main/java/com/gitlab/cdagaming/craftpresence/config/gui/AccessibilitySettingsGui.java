@@ -2,6 +2,8 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -14,18 +16,23 @@ import java.io.IOException;
 
 public class AccessibilitySettingsGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private boolean entryMode = false;
-    private String currentKeyCode;
+
+    // Tuple Format: buttonToModify, Config Field to Edit
+    // (Store a Backup of Prior Text just in case)
+    private String backupKeyString;
+    private Tuple<ExtendedButtonControl, String> entryData = null;
+
     private GuiTextField languageIDText;
     private CheckBoxControl stripTranslationColorsButton, showLoggingInChatButton;
-    private ExtendedButtonControl proceedButton, tooltipBGButton, tooltipBorderButton, guiBGButton, configKeyBindingButton;
+    private ExtendedButtonControl proceedButton;
+    private ExtendedButtonControl tooltipBGButton;
+    private ExtendedButtonControl tooltipBorderButton;
+    private ExtendedButtonControl guiBGButton;
 
     AccessibilitySettingsGui(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
         currentScreen = this;
         this.parentScreen = parentScreen;
-
-        currentKeyCode = CraftPresence.CONFIG.configKeyCode;
     }
 
     @Override
@@ -43,10 +50,10 @@ public class AccessibilitySettingsGui extends GuiScreen {
         languageIDText.setText(CraftPresence.CONFIG.languageID);
 
         stripTranslationColorsButton = new CheckBoxControl(500, calc1, CraftPresence.GUIS.getButtonY(4) + 10, ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.striptranslationcolors"), CraftPresence.CONFIG.stripTranslationColors);
-
         showLoggingInChatButton = new CheckBoxControl(600, calc2, CraftPresence.GUIS.getButtonY(4) + 10, ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.showlogginginchat"), CraftPresence.CONFIG.showLoggingInChat);
 
-        configKeyBindingButton = new ExtendedButtonControl(700, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, !StringUtils.isNullOrEmpty(Keyboard.getKeyName(Integer.parseInt(currentKeyCode))) ? Keyboard.getKeyName(Integer.parseInt(currentKeyCode)) : currentKeyCode);
+        // KeyCode Buttons
+        final ExtendedButtonControl configKeyCodeButton = new ExtendedButtonControl(700, calc2 + 50, CraftPresence.GUIS.getButtonY(6), 90, 20, CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode), "configKeyCode");
 
         proceedButton = new ExtendedButtonControl(800, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
@@ -55,7 +62,10 @@ public class AccessibilitySettingsGui extends GuiScreen {
         buttonList.add(guiBGButton);
         buttonList.add(stripTranslationColorsButton);
         buttonList.add(showLoggingInChatButton);
-        buttonList.add(configKeyBindingButton);
+
+        // KeyCode Buttons
+        buttonList.add(configKeyCodeButton);
+
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -91,19 +101,12 @@ public class AccessibilitySettingsGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == tooltipBGButton.id) {
-            mc.displayGuiScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor));
+            CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor));
         } else if (button.id == tooltipBorderButton.id) {
-            mc.displayGuiScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor));
+            CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor));
         } else if (button.id == guiBGButton.id) {
-            mc.displayGuiScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor));
-        } else if (button.id == configKeyBindingButton.id && !entryMode) {
-            configKeyBindingButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
-            entryMode = true;
-        } else if (button.id == proceedButton.id && !entryMode) {
-            if (!currentKeyCode.equals(CraftPresence.CONFIG.configKeyCode)) {
-                CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.configKeyCode = currentKeyCode;
-            }
+            CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor));
+        } else if (button.id == proceedButton.id && entryData == null) {
             if (!languageIDText.getText().equals(CraftPresence.CONFIG.languageID)) {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.languageID = languageIDText.getText();
@@ -116,23 +119,46 @@ public class AccessibilitySettingsGui extends GuiScreen {
                 CraftPresence.CONFIG.hasChanged = true;
                 CraftPresence.CONFIG.showLoggingInChat = showLoggingInChatButton.isChecked();
             }
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
+        } else if (entryData == null) {
+            // Setup for Key Entry and Save Backup of Prior Setting
+            final ExtendedButtonControl extendedButton = (ExtendedButtonControl) button;
+            entryData = new Tuple<>(extendedButton, extendedButton.getOptionalArgs() != null ? extendedButton.getOptionalArgs()[0] : null);
+
+            backupKeyString = button.displayString;
+            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (entryMode) {
+        if (entryData != null) {
             int keyToSubmit = keyCode;
+
+            // Ensure a Valid KeyCode is entered
             if (!CraftPresence.KEYBINDINGS.isValidKeyCode(keyToSubmit)) {
                 keyToSubmit = Keyboard.KEY_NONE;
             }
 
-            configKeyBindingButton.displayString = !StringUtils.isNullOrEmpty(Keyboard.getKeyName(keyToSubmit)) ? Keyboard.getKeyName(keyToSubmit) : Integer.toString(keyToSubmit);
-            currentKeyCode = Integer.toString(keyToSubmit);
-            entryMode = false;
+            final String parsedKey = Integer.toString(keyToSubmit);
+            final String formattedKey = CraftPresence.KEYBINDINGS.getKeyName(parsedKey);
+
+            // If KeyCode Field to modify is not null or empty, attempt to queue change
+            try {
+                StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(entryData.getSecond(), parsedKey));
+                CraftPresence.CONFIG.hasChanged = true;
+
+                entryData.getFirst().displayString = formattedKey;
+            } catch (Exception | Error ex) {
+                entryData.getFirst().displayString = backupKeyString;
+                ex.printStackTrace();
+            }
+
+            // Clear Data
+            backupKeyString = null;
+            entryData = null;
         } else if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
         languageIDText.textboxKeyTyped(typedChar, keyCode);
     }

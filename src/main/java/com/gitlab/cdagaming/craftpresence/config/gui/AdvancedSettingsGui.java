@@ -17,7 +17,7 @@ public class AdvancedSettingsGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, characterEditorButton;
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
-            enablePerItemButton, overwriteServerIconButton, renderTooltipsButton;
+            enablePerItemButton, renderTooltipsButton;
     private GuiTextField splitCharacter;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
@@ -45,8 +45,7 @@ public class AdvancedSettingsGui extends GuiScreen {
         enableCommandsButton = new CheckBoxControl(200, calc1, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablecommands"), CraftPresence.CONFIG.enableCommands);
         enablePerGUIButton = new CheckBoxControl(300, calc2, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new CheckBoxControl(400, calc1, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
-        overwriteServerIconButton = new CheckBoxControl(500, calc2, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.overwriteservericon"), CraftPresence.CONFIG.overwriteServerIcon);
-        renderTooltipsButton = new CheckBoxControl(600, calc1, CraftPresence.GUIS.getButtonY(6) - 20, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
+        renderTooltipsButton = new CheckBoxControl(500, calc2, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
         proceedButton = new ExtendedButtonControl(900, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
@@ -55,7 +54,6 @@ public class AdvancedSettingsGui extends GuiScreen {
         buttonList.add(enableCommandsButton);
         buttonList.add(enablePerGUIButton);
         buttonList.add(enablePerItemButton);
-        buttonList.add(overwriteServerIconButton);
         buttonList.add(renderTooltipsButton);
         buttonList.add(proceedButton);
 
@@ -93,9 +91,6 @@ public class AdvancedSettingsGui extends GuiScreen {
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerItemButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, overwriteServerIconButton)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.overwriteservericon")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, renderTooltipsButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.rendertooltips")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
@@ -147,11 +142,6 @@ public class AdvancedSettingsGui extends GuiScreen {
                 }
                 CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
             }
-            if (overwriteServerIconButton.isChecked() != CraftPresence.CONFIG.overwriteServerIcon) {
-                CraftPresence.CONFIG.hasChanged = true;
-                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                CraftPresence.CONFIG.overwriteServerIcon = overwriteServerIconButton.isChecked();
-            }
             if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
                 CraftPresence.CONFIG.hasChanged = true;
                 if (renderTooltipsButton.isChecked() && (Arrays.equals(StringUtils.MC_CHAR_WIDTH, new int[256]) || Arrays.equals(StringUtils.MC_GLYPH_WIDTH, new byte[65536]))) {
@@ -159,20 +149,20 @@ public class AdvancedSettingsGui extends GuiScreen {
                 }
                 CraftPresence.CONFIG.renderTooltips = renderTooltipsButton.isChecked();
             }
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {
-            mc.displayGuiScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true));
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true));
         } else if (button.id == itemMessagesButton.id) {
-            mc.displayGuiScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
         } else if (button.id == characterEditorButton.id) {
-            mc.displayGuiScreen(new CharacterEditorGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new CharacterEditorGui(currentScreen));
         }
     }
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
         splitCharacter.textboxKeyTyped(typedChar, keyCode);
     }

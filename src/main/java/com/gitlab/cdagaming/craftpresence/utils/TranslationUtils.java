@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -10,14 +33,49 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+/**
+ * Translation and Localization Utilities based on Language Code
+ *
+ * @author CDAGaming
+ */
 public class TranslationUtils {
-    public static TranslationUtils instance;
+    /**
+     * Whether the Translations are utilizing Unicode Characters
+     */
     public boolean isUnicode = false;
-    private String languageID = "en_US", modID;
+
+    /**
+     * The Language ID to Locate and Retrieve Translations
+     */
+    private String languageID = "en_US";
+
+    /**
+     * The Target ID to locate the Language File
+     */
+    private String modID;
+
+    /**
+     * The Stored Mapping of Valid Translations
+     * <p>
+     * Format: unlocalizedKey:localizedString
+     */
     private Map<String, String> translationMap = Maps.newHashMap();
+
+    /**
+     * The Stored Mapping of Language Request History
+     * <p>
+     * Format: languageID:doesExist
+     */
     private Map<String, Boolean> requestMap = Maps.newHashMap();
+
+    /**
+     * If using a .Json or .Lang Language File
+     */
     private boolean usingJSON = false;
 
+    /**
+     * Sets initial Data and Retrieves Valid Translations
+     */
     public TranslationUtils() {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setUsingJSON(false);
@@ -25,6 +83,11 @@ public class TranslationUtils {
         checkUnicode();
     }
 
+    /**
+     * Sets initial Data and Retrieves Valid Translations
+     *
+     * @param useJSON Toggles whether to use .Json or .Lang, if present
+     */
     public TranslationUtils(final boolean useJSON) {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setUsingJSON(useJSON);
@@ -32,6 +95,11 @@ public class TranslationUtils {
         checkUnicode();
     }
 
+    /**
+     * Sets initial Data and Retrieves Valid Translations
+     *
+     * @param modID Sets the Target Mod ID to locate Language Files
+     */
     public TranslationUtils(final String modID) {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setModID(modID);
@@ -40,6 +108,12 @@ public class TranslationUtils {
         checkUnicode();
     }
 
+    /**
+     * Sets initial Data and Retrieves Valid Translations
+     *
+     * @param modID   Sets the Target Mod ID to locate Language Files
+     * @param useJSON Toggles whether to use .Json or .Lang, if present
+     */
     public TranslationUtils(final String modID, final boolean useJSON) {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setModID(modID);
@@ -48,7 +122,12 @@ public class TranslationUtils {
         checkUnicode();
     }
 
-    void tick() {
+    /**
+     * The Event to Run on each Client Tick, if passed initialization events
+     * <p>
+     * Comprises of Synchronizing Data, and Updating Translation Data as needed
+     */
+    void onTick() {
         if (CraftPresence.CONFIG != null && !languageID.equals(CraftPresence.CONFIG.languageID) &&
                 (!requestMap.containsKey(CraftPresence.CONFIG.languageID) || requestMap.get(CraftPresence.CONFIG.languageID))) {
             setLanguage(CraftPresence.CONFIG.languageID);
@@ -61,6 +140,9 @@ public class TranslationUtils {
         }
     }
 
+    /**
+     * Determines whether the translations contain Unicode Characters
+     */
     private void checkUnicode() {
         isUnicode = false;
         int i = 0;
@@ -81,10 +163,20 @@ public class TranslationUtils {
         isUnicode = (double) f > 0.1D || (CraftPresence.instance.gameSettings != null && CraftPresence.instance.gameSettings.forceUnicodeFont);
     }
 
+    /**
+     * Toggles whether to use .Lang or .Json Language Files
+     *
+     * @param usingJSON Toggles whether to use .Json or .Lang, if present
+     */
     private void setUsingJSON(final boolean usingJSON) {
         this.usingJSON = usingJSON;
     }
 
+    /**
+     * Sets the Language ID to Retrieve Translations for, if present
+     *
+     * @param languageID The Language ID (Default: en_US)
+     */
     private void setLanguage(final String languageID) {
         if (!StringUtils.isNullOrEmpty(languageID)) {
             this.languageID = languageID;
@@ -93,6 +185,11 @@ public class TranslationUtils {
         }
     }
 
+    /**
+     * Sets the Mod ID to target when locating Language Files
+     *
+     * @param modID The Mod ID to target
+     */
     private void setModID(final String modID) {
         if (!StringUtils.isNullOrEmpty(modID)) {
             this.modID = modID;
@@ -101,6 +198,9 @@ public class TranslationUtils {
         }
     }
 
+    /**
+     * Retrieves and Synchronizes a List of Translations from a Language File
+     */
     private void getTranslationMap() {
         translationMap = Maps.newHashMap();
 
@@ -146,6 +246,14 @@ public class TranslationUtils {
         }
     }
 
+    /**
+     * Translates an Unlocalized String, based on the Translations retrieved
+     *
+     * @param stripColors    Whether to Remove Color and Formatting Codes
+     * @param translationKey The unLocalized String to translate
+     * @param parameters     Extra Formatting Arguments, if needed
+     * @return The Localized Translated String
+     */
     public String translate(boolean stripColors, String translationKey, Object... parameters) {
         boolean hasError = false;
         String translatedString = translationKey;
@@ -167,6 +275,13 @@ public class TranslationUtils {
         return stripColors ? StringUtils.stripColors(translatedString) : translatedString;
     }
 
+    /**
+     * Translates an Unlocalized String, based on the Translations retrieved
+     *
+     * @param translationKey The unLocalized String to translate
+     * @param parameters     Extra Formatting Arguments, if needed
+     * @return The Localized Translated String
+     */
     public String translate(String translationKey, Object... parameters) {
         return translate(CraftPresence.CONFIG != null && CraftPresence.CONFIG.stripTranslationColors, translationKey, parameters);
     }

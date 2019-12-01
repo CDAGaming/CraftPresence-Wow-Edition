@@ -1,11 +1,34 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.google.common.collect.Lists;
@@ -22,18 +45,75 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Gui Utilities used to Parse Gui Data and handle related RPC Events, and rendering tasks
+ *
+ * @author CDAGaming
+ */
 public class GuiUtils {
-    public boolean openConfigGUI = false, configGUIOpened = false, isInUse = false, isFocused = false, enabled = false;
+    /**
+     * If the Config GUI should open
+     */
+    public boolean openConfigGUI = false;
 
+    /**
+     * If the Config GUI is currently open
+     */
+    public boolean configGUIOpened = false;
+
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
+
+    /**
+     * If an Element is being focused on in a GUI or if a GUI is currently open
+     * <p>Conditions depend on Game Version
+     */
+    public boolean isFocused = false;
+
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+
+    /**
+     * A List of the detected Gui Screen Names
+     */
     public List<String> GUI_NAMES = Lists.newArrayList();
+
+    /**
+     * The name of the Current Gui the player is in
+     */
     private String CURRENT_GUI_NAME;
-    private Class CURRENT_GUI_CLASS;
+
+    /**
+     * The Class Type of the Current Gui the player is in
+     */
+    private Class<?> CURRENT_GUI_CLASS;
+
+    /**
+     * The Current Instance of the Gui the player is in
+     */
     private GuiScreen CURRENT_SCREEN;
-    private List<Class> GUI_CLASSES = Lists.newArrayList();
 
-    private boolean queuedForUpdate = false;
+    /**
+     * A List of the detected Gui Screen Classes
+     */
+    private List<Class<?>> GUI_CLASSES = Lists.newArrayList();
 
-    private static void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, double zLevel) {
+    /**
+     * Draws a Textured Rectangle (Modal Version), following the defined arguments
+     *
+     * @param x      The Starting X Position of the Object
+     * @param y      The Starting Y Position of the Object
+     * @param u      The U Mapping Value
+     * @param v      The V Mapping Value
+     * @param width  The Width of the Object
+     * @param height The Height of the Object
+     * @param zLevel The Z Level Position of the Object
+     */
+    public void drawTexturedModalRect(int x, int y, int u, int v, int width, int height, double zLevel) {
         final float uScale = 1f / 0x100;
         final float vScale = 1f / 0x100;
 
@@ -47,33 +127,70 @@ public class GuiUtils {
         tessellator.draw();
     }
 
+    /**
+     * Determines if the Mouse is over an element, following the defined Arguments
+     *
+     * @param mouseX        The Mouse's Current X Position
+     * @param mouseY        The Mouse's Current Y Position
+     * @param elementX      The Object's starting X Position
+     * @param elementY      The Object's starting Y Position
+     * @param elementWidth  The total width of the object
+     * @param elementHeight The total height of the object
+     * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
+     */
     public boolean isMouseOver(final double mouseX, final double mouseY, final double elementX, final double elementY, final double elementWidth, final double elementHeight) {
         return mouseX >= elementX && mouseX <= elementX + elementWidth && mouseY >= elementY && mouseY <= elementY + elementHeight;
     }
 
+    /**
+     * Determines if the Mouse is over an element, following the defined Arguments
+     *
+     * @param mouseX The Mouse's Current X Position
+     * @param mouseY The Mouse's Current Y Position
+     * @param button The Object to check bounds and position
+     * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
+     */
     public boolean isMouseOver(final double mouseX, final double mouseY, final ExtendedButtonControl button) {
         return isMouseOver(mouseX, mouseY, button.x, button.y, button.getWidth() - 1, button.getHeight() - 1);
     }
 
+    /**
+     * Determines if the Mouse is over an element, following the defined Arguments
+     *
+     * @param mouseX   The Mouse's Current X Position
+     * @param mouseY   The Mouse's Current Y Position
+     * @param checkBox The Object to check bounds and position
+     * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
+     */
     public boolean isMouseOver(final double mouseX, final double mouseY, final CheckBoxControl checkBox) {
         return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth - 1, checkBox.getHeight() - 1);
     }
 
+    /**
+     * Clears FULL Data from this Module
+     */
     private void emptyData() {
         GUI_NAMES.clear();
         GUI_CLASSES.clear();
         clearClientData();
     }
 
+    /**
+     * Clears Runtime Client Data from this Module (PARTIAL Clear)
+     */
     public void clearClientData() {
         CURRENT_GUI_NAME = null;
         CURRENT_SCREEN = null;
         CURRENT_GUI_CLASS = null;
 
-        queuedForUpdate = false;
         isInUse = false;
+        CraftPresence.CLIENT.initArgumentData("&GUI&");
+        CraftPresence.CLIENT.initIconData("&GUI&");
     }
 
+    /**
+     * Module Event to Occur on each tick within the Application
+     */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
         isInUse = enabled && (CraftPresence.instance.currentScreen != null || CURRENT_SCREEN != null);
@@ -99,49 +216,53 @@ public class GuiUtils {
         }
     }
 
+    /**
+     * Adds a Scheduled/Queued Task to Display the Specified Gui Screen
+     *
+     * @param targetScreen The target Gui Screen to display
+     */
     public void openScreen(final GuiScreen targetScreen) {
         CraftPresence.instance.addScheduledTask(() -> CraftPresence.instance.displayGuiScreen(targetScreen));
     }
 
+    /**
+     * Synchronizes Data related to this module, if needed
+     */
     private void updateGUIData() {
-        if ((CURRENT_SCREEN != null && CraftPresence.instance.currentScreen == null) || (CURRENT_SCREEN == null && !StringUtils.isNullOrEmpty(CraftPresence.CLIENT.GAME_STATE))) {
+        if (CraftPresence.instance.currentScreen == null) {
             clearClientData();
-            CraftPresence.CLIENT.GAME_STATE = "";
-            CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
         } else {
-            if (CraftPresence.instance.currentScreen != null) {
-                final GuiScreen newScreen = CraftPresence.instance.currentScreen;
-                final Class newScreenClass = newScreen.getClass();
-                final String newScreenName = newScreenClass.getSimpleName();
+            final GuiScreen newScreen = CraftPresence.instance.currentScreen;
+            final Class<?> newScreenClass = newScreen.getClass();
+            final String newScreenName = newScreenClass.getSimpleName();
 
-                if (!newScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
-                    CURRENT_SCREEN = newScreen;
-                    CURRENT_GUI_CLASS = newScreenClass;
-                    CURRENT_GUI_NAME = newScreenName;
-                    queuedForUpdate = true;
+            if (!newScreen.equals(CURRENT_SCREEN) || !newScreenClass.equals(CURRENT_GUI_CLASS) || !newScreenName.equals(CURRENT_GUI_NAME)) {
+                CURRENT_SCREEN = newScreen;
+                CURRENT_GUI_CLASS = newScreenClass;
+                CURRENT_GUI_NAME = newScreenName;
 
-                    if (!GUI_NAMES.contains(newScreenName)) {
-                        GUI_NAMES.add(newScreenName);
-                    }
-
-                    if (!GUI_CLASSES.contains(newScreenClass)) {
-                        GUI_CLASSES.add(newScreenClass);
-                    }
+                if (!GUI_NAMES.contains(newScreenName)) {
+                    GUI_NAMES.add(newScreenName);
                 }
-            }
-        }
 
-        if (queuedForUpdate) {
-            updateGUIPresence();
+                if (!GUI_CLASSES.contains(newScreenClass)) {
+                    GUI_CLASSES.add(newScreenClass);
+                }
+
+                updateGUIPresence();
+            }
         }
     }
 
+    /**
+     * Retrieves and Synchronizes detected Gui Screen Classes
+     */
     public void getGUIs() {
-        final Class[] searchClasses = new Class[]{
+        final Class<?>[] searchClasses = new Class[]{
                 GuiScreen.class, GuiContainer.class
         };
 
-        for (Class classObj : FileUtils.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+        for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
             if (!GUI_NAMES.contains(classObj.getSimpleName())) {
                 GUI_NAMES.add(classObj.getSimpleName());
             }
@@ -160,17 +281,44 @@ public class GuiUtils {
         }
     }
 
+    /**
+     * Updates RPC Data related to this Module
+     */
     public void updateGUIPresence() {
+        // Form GUI Argument List
+        List<Tuple<String, String>> guiArgs = Lists.newArrayList();
+
+        guiArgs.add(new Tuple<>("&GUI&", CURRENT_GUI_NAME));
+        guiArgs.add(new Tuple<>("&CLASS&", CURRENT_GUI_CLASS.getSimpleName()));
+        guiArgs.add(new Tuple<>("&SCREEN&", CURRENT_SCREEN.toString()));
+
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            guiArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
+
         final String defaultGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
         final String currentGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
 
-        // NOTE: Overrides Biomes
-        CraftPresence.CLIENT.GAME_STATE = currentGUIMSG.replace("&gui&", CURRENT_GUI_NAME).replace("&class&", CURRENT_GUI_CLASS.getSimpleName()).replace("&screen&", CURRENT_SCREEN.toString());
-        CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
-        queuedForUpdate = false;
+        final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGUIMSG, guiArgs);
+
+        CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_MESSAGE, false);
+        CraftPresence.CLIENT.initIconData("&GUI&");
     }
 
-    public void drawMultiLineString(final List<String> textToInput, int mouseX, int mouseY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
+    /**
+     * Renders a Specified Multi-Line String, constrained by position and dimension arguments
+     *
+     * @param textToInput    The Specified Multi-Line String, split by lines into a list
+     * @param posX           The starting X position to render the String
+     * @param posY           The starting Y position to render the String
+     * @param screenWidth    The maximum width to allow rendering to (Text will wrap if output is greater)
+     * @param screenHeight   The maximum height to allow rendering to (Text will wrap if output is greater)
+     * @param maxTextWidth   The maximum width the output can be before wrapping
+     * @param font           The font renderer to use to render the String
+     * @param withBackground Whether a background should display around and under the String, like a tooltip
+     */
+    public void drawMultiLineString(final List<String> textToInput, int posX, int posY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
         if (CraftPresence.CONFIG.renderTooltips && !ModUtils.forceBlockTooltipRendering && !textToInput.isEmpty() && font != null) {
             List<String> textLines = textToInput;
             int tooltipTextWidth = 0;
@@ -186,15 +334,15 @@ public class GuiUtils {
             boolean needsWrap = false;
 
             int titleLinesCount = 1;
-            int tooltipX = mouseX + 12;
+            int tooltipX = posX + 12;
             if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
-                tooltipX = mouseX - 16 - tooltipTextWidth;
+                tooltipX = posX - 16 - tooltipTextWidth;
                 if (tooltipX < 4) // if the tooltip doesn't fit on the screen
                 {
-                    if (mouseX > screenWidth / 2) {
-                        tooltipTextWidth = mouseX - 12 - 8;
+                    if (posX > screenWidth / 2) {
+                        tooltipTextWidth = posX - 12 - 8;
                     } else {
-                        tooltipTextWidth = screenWidth - 16 - mouseX;
+                        tooltipTextWidth = screenWidth - 16 - posX;
                     }
                     needsWrap = true;
                 }
@@ -226,14 +374,14 @@ public class GuiUtils {
                 tooltipTextWidth = wrappedTooltipWidth;
                 textLines = wrappedTextLines;
 
-                if (mouseX > screenWidth / 2) {
-                    tooltipX = mouseX - 16 - tooltipTextWidth;
+                if (posX > screenWidth / 2) {
+                    tooltipX = posX - 16 - tooltipTextWidth;
                 } else {
-                    tooltipX = mouseX + 12;
+                    tooltipX = posX + 12;
                 }
             }
 
-            int tooltipY = mouseY - 12;
+            int tooltipY = posY - 12;
             int tooltipHeight = 8;
 
             if (textLines.size() > 1) {
@@ -357,6 +505,12 @@ public class GuiUtils {
         }
     }
 
+    /**
+     * Draws a Background onto a Gui, supporting RGBA Codes, Game Textures and Hexadecimal Colors
+     *
+     * @param width  The width to render the background to
+     * @param height The height to render the background to
+     */
     public void drawBackground(final double width, final double height) {
         if (CraftPresence.instance.world != null) {
             drawGradientRect(300, 0, 0, width, height, "-1072689136", "-804253680");
@@ -383,6 +537,39 @@ public class GuiUtils {
         }
     }
 
+    /**
+     * Renders a Slider Object from the defined arguments
+     *
+     * @param x           The Starting X Position to render the slider
+     * @param y           The Starting Y Position to render the slider
+     * @param u           The U Mapping Value
+     * @param v           The V Mapping Value
+     * @param width       The full width for the slider to render to
+     * @param height      The full height for the slider to render to
+     * @param zLevel      The Z level position for the slider to render at
+     * @param texLocation The game texture to render the slider as
+     */
+    public void renderSlider(int x, int y, int u, int v, int width, int height, double zLevel, ResourceLocation texLocation) {
+        if (texLocation != null) {
+            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        }
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        drawTexturedModalRect(x, y, u, v, width, height, zLevel);
+        drawTexturedModalRect(x + 4, y, u + 196, v, width, height, zLevel);
+    }
+
+    /**
+     * Draws a Textured Rectangle, following the defined arguments
+     *
+     * @param zLevel      The Z Level Position of the Object
+     * @param xPos        The Starting X Position of the Object
+     * @param yPos        The Starting Y Position of the Object
+     * @param width       The Width of the Object
+     * @param height      The Height of the Object
+     * @param tint        The Tinting Level of the Object
+     * @param texLocation The game texture to render the object as
+     */
     public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, ResourceLocation texLocation) {
         if (texLocation != null) {
             CraftPresence.instance.getTextureManager().bindTexture(texLocation);
@@ -404,6 +591,17 @@ public class GuiUtils {
         tessellator.draw();
     }
 
+    /**
+     * Draws a Gradient Rectangle, following the defined arguments
+     *
+     * @param zLevel         The Z Level Position of the Object
+     * @param left           The Left side length of the Object
+     * @param top            The top length of the Object
+     * @param right          The Right side length of the Object
+     * @param bottom         The bottom length of the Object
+     * @param startColorCode The Starting Hexadecimal or RGBA Color Code
+     * @param endColorCode   The ending Hexadecimal or RGBA Color Code
+     */
     public void drawGradientRect(float zLevel, double left, double top, double right, double bottom, String startColorCode, String endColorCode) {
         Color startColorObj = null, endColorObj = null;
         int startColor = 0xFFFFFF, endColor = 0xFFFFFF;
@@ -463,14 +661,43 @@ public class GuiUtils {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
-    public void drawContinuousTexturedBox(int x, int y, int u, int v, int width, int height, int textureWidth, int textureHeight,
-                                          int topBorder, int bottomBorder, int leftBorder, int rightBorder, double zLevel, ResourceLocation res) {
+    /**
+     * Draws a Continuously Textured Box, following the defined arguments
+     *
+     * @param positionData       The Starting X and Y Positions to place the Object
+     * @param uVLevels           The U and V Value Mappings for the Object
+     * @param screenDimensions   The Maximum length and height to render the object as
+     * @param textureDimensions  The Width and Height for the Object's Texture
+     * @param verticalBorderData The Top and Bottom Border Lengths for the Object
+     * @param sideBorderData     The Left and Right Side Lengths for the Object
+     * @param zLevel             The Z Level position of the Object
+     * @param res                The game texture to render the object as
+     */
+    public void drawContinuousTexturedBox(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> uVLevels, Tuple<Integer, Integer> screenDimensions, Tuple<Integer, Integer> textureDimensions,
+                                          Tuple<Integer, Integer> verticalBorderData, Tuple<Integer, Integer> sideBorderData, double zLevel, ResourceLocation res) {
         if (res != null) {
             CraftPresence.instance.getTextureManager().bindTexture(res);
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        int x = positionData.getFirst();
+        int y = positionData.getSecond();
+
+        int u = uVLevels.getFirst();
+        int v = uVLevels.getSecond();
+
+        int width = screenDimensions.getFirst();
+        int height = screenDimensions.getSecond();
+
+        int textureWidth = textureDimensions.getFirst();
+        int textureHeight = textureDimensions.getSecond();
+
+        int topBorder = verticalBorderData.getFirst();
+        int bottomBorder = verticalBorderData.getSecond();
+        int leftBorder = sideBorderData.getFirst();
+        int rightBorder = sideBorderData.getSecond();
 
         int fillerWidth = textureWidth - leftBorder - rightBorder;
         int fillerHeight = textureHeight - topBorder - bottomBorder;
@@ -512,6 +739,12 @@ public class GuiUtils {
         }
     }
 
+    /**
+     * Calculate the Y Value for Buttons in a Standard-Sized Gui
+     *
+     * @param order Current Order of buttons above it, or 1 if none
+     * @return The Calculated Y Value to place the Button at
+     */
     public int getButtonY(int order) {
         return (40 + (25 * (order - 1)));
     }

@@ -1,6 +1,28 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence;
 
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
 import com.google.common.collect.Lists;
@@ -14,48 +36,113 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Constant Variables and Methods used throughout the Application
+ *
+ * @author CDAGaming
+ */
 public class ModUtils {
+    /**
+     * The Application's Name
+     */
     public static final String NAME = "GRADLE:mod_name";
+
+    /**
+     * The Application's Major Revision Number (Ex: 1 in 1.0.2)
+     */
     public static final String majorVersion = "GRADLE:majorVersion";
+
+    /**
+     * The Application's Minor Revision Number (Ex: 0 in 1.0.2)
+     */
     public static final String minorVersion = "GRADLE:minorVersion";
+
+    /**
+     * The Application's Revision Version Number (Ex: 2 in 1.0.2)
+     */
     public static final String revisionVersion = "GRADLE:revisionVersion";
+
+    /**
+     * The Application's Formatted Version ID
+     */
     public static final String VERSION_ID = "v" + majorVersion + "." + minorVersion + "." + revisionVersion;
+
+    /**
+     * The Application's Identifier
+     */
     public static final String MODID = "craftpresence";
+
+    /**
+     * The Application's GUI Factory, if any
+     */
     public static final String GUI_FACTORY = "com.gitlab.cdagaming.craftpresence.config.ConfigGuiDataFactory";
+
+    /**
+     * The Detected Minecraft Version
+     */
     public static final String MCVersion = RealmsSharedConstants.VERSION_STRING;
+
+    /**
+     * The Detected Brand Information within Minecraft
+     */
     public static final String BRAND = ClientBrandRetriever.getClientModName();
+
+    /**
+     * The Application's Configuration Directory
+     */
     public static final String configDir = CraftPresence.SYSTEM.USER_DIR + File.separator + "config";
+
+    /**
+     * The Application's "mods" Directory
+     */
     public static final String modsDir = CraftPresence.SYSTEM.USER_DIR + File.separator + "mods";
+
+    /**
+     * The Detected Username within Minecraft
+     */
     public static final String USERNAME = Minecraft.getMinecraft().getSession().getUsername();
+
+    /**
+     * The URL to receive Update Information from
+     */
     public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
+
+    /**
+     * The Certificate Fingerprint, assigned in CI, to check against for violations
+     */
     public static final String FINGERPRINT = "GRADLE:certFingerprint";
+
+    /**
+     * The Application's Instance of {@link ModLogger} for Logging Information
+     */
     public static final ModLogger LOG = new ModLogger(MODID);
+
+    /**
+     * The Current Thread's Class Loader, used to dynamically receive data as needed
+     */
     public static final ClassLoader CLASS_LOADER = Thread.currentThread().getContextClassLoader();
+
+    /**
+     * The Application's Instance of {@link TranslationUtils} for Localization and Translating Data Strings
+     */
     public static final TranslationUtils TRANSLATOR = new TranslationUtils(MODID, false);
+
+    /**
+     * If this Application should be run in a Developer or Debug State
+     */
     public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+
+    /**
+     * Whether to forcibly block any tooltips related to this Application from rendering
+     */
     public static boolean forceBlockTooltipRendering = false;
 
-    static void loadDLL(final boolean Update) {
-        boolean UpdateStatus = Update;
-
-        final List<String> x64 = Lists.newArrayList("amd64", "x86_64");
-        final boolean is64Bit = x64.contains(CraftPresence.SYSTEM.OS_ARCH);
-
-        final String fileName = (CraftPresence.SYSTEM.IS_WINDOWS ? "discord-rpc.dll"
-                : CraftPresence.SYSTEM.IS_LINUX ? "libdiscord-rpc.so"
-                : CraftPresence.SYSTEM.IS_MAC ? "libdiscord-rpc.dylib" : "");
-        final String url = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/resources/DLL/" + (CraftPresence.SYSTEM.IS_WINDOWS ? (is64Bit ? "win32-x86-64" : "win32-x86")
-                : CraftPresence.SYSTEM.IS_LINUX ? "linux-x86-64"
-                : CraftPresence.SYSTEM.IS_MAC ? "darwin" : "") + "/" + fileName;
-        final File file = new File(MODID + File.separator + fileName);
-        UpdateStatus = UpdateStatus || !file.exists();
-
-        if (UpdateStatus) {
-            FileUtils.downloadFile(url, file);
-        }
-        FileUtils.loadFileAsDLL(file);
-    }
-
+    /**
+     * Retrieves and Initializes Character Data<p>
+     * Primarily used for ensuring proper Tooltip Rendering
+     *
+     * @param Update Whether to Force Update and Initialization of Character Data
+     */
     public static void loadCharData(final boolean Update) {
         LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.init"));
         final String fileName = "chardata.properties", charDataPath = "/assets/" + MODID + "/" + fileName;
@@ -154,6 +241,9 @@ public class ModUtils {
         }
     }
 
+    /**
+     * Saves and Synchronizes Current Character Data
+     */
     public static void writeToCharData() {
         List<String> textData = Lists.newArrayList();
         InputStream inputData = null;

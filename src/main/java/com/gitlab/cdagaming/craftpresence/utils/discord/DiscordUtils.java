@@ -1,52 +1,198 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils.discord;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.curse.CurseUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordEventHandlers;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRPC;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordRichPresence;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.DiscordUser;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.RichPresence;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
 import com.gitlab.cdagaming.craftpresence.utils.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.utils.multimc.MultiMCUtils;
 import com.gitlab.cdagaming.craftpresence.utils.technic.TechnicUtils;
-import com.sun.jna.NativeLibrary;
+import com.google.common.collect.Lists;
 
-import java.io.File;
+import java.util.List;
 
+/**
+ * Variables and Methods used to update the RPC Presence States to display within Discord
+ *
+ * @author CDAGaming
+ */
 public class DiscordUtils {
-    static {
-        NativeLibrary.addSearchPath("discord-rpc", new File(ModUtils.MODID).getAbsolutePath());
-    }
+    /**
+     * The Current User, tied to the Rich Presence
+     */
+    public User CURRENT_USER;
 
-    private final DiscordEventHandlers handlers = new DiscordEventHandlers();
-    public DiscordUser CURRENT_USER, REQUESTER_USER;
+    /**
+     * The Join Request User Data, if any
+     */
+    public User REQUESTER_USER;
+
+    /**
+     * The current RPC Status (Ex: ready, errored, disconnected)
+     */
     public String STATUS;
-    public String GAME_STATE;
-    public String DETAILS;
-    public String SMALLIMAGEKEY;
-    public String SMALLIMAGETEXT;
-    public String LARGEIMAGEKEY;
-    public String LARGEIMAGETEXT;
-    public String CLIENT_ID;
-    public long START_TIMESTAMP;
-    public String PARTY_ID;
-    public int PARTY_SIZE;
-    public int PARTY_MAX;
-    public String JOIN_SECRET;
-    public long END_TIMESTAMP;
-    public String MATCH_SECRET;
-    public String SPECTATE_SECRET;
-    public byte INSTANCE;
-    private String lastImageRequested, lastImageTypeRequested, lastClientIDRequested;
-    private int lastErrorCode, lastDisconnectErrorCode;
 
+    /**
+     * The Current Message tied to the Party/Game Status Field of the RPC
+     */
+    public String GAME_STATE;
+
+    /**
+     * The Current Message tied to the current action / Details Field of the RPC
+     */
+    public String DETAILS;
+
+    /**
+     * The Current Small Image Icon being displayed in the RPC, if any
+     */
+    public String SMALLIMAGEKEY;
+
+    /**
+     * The Current Message tied to the Small Image, if any
+     */
+    public String SMALLIMAGETEXT;
+
+    /**
+     * The Current Large Image Icon being displayed in the RPC, if any
+     */
+    public String LARGEIMAGEKEY;
+
+    /**
+     * The Current Message tied to the Large Image, if any
+     */
+    public String LARGEIMAGETEXT;
+
+    /**
+     * The 18-character Client ID Number, tied to the game profile data attached to the RPC
+     */
+    public String CLIENT_ID;
+
+    /**
+     * The Current Starting Unix Timestamp from Epoch, used for Elapsed Time
+     */
+    public long START_TIMESTAMP;
+
+    /**
+     * The Party Session ID that's tied to the RPC, if any
+     */
+    public String PARTY_ID;
+
+    /**
+     * The Current Size of the Party Session, if in a Party
+     */
+    public int PARTY_SIZE;
+
+    /**
+     * The Maximum Size of the Party Session, if in a Party
+     */
+    public int PARTY_MAX;
+
+    /**
+     * The Current Party Join Secret Key, if in a Party
+     */
+    public String JOIN_SECRET;
+
+    /**
+     * The Current Ending Unix Timestamp from Epoch, used for Time Until if combined with {@link DiscordUtils#START_TIMESTAMP}
+     */
+    public long END_TIMESTAMP;
+
+    /**
+     * The Current Match Secret Key tied to the RPC, if any
+     */
+    public String MATCH_SECRET;
+
+    /**
+     * The Current Spectate Secret Key tied to the RPC, if any
+     */
+    public String SPECTATE_SECRET;
+
+    /**
+     * The Instance Code attached to the RPC, if any
+     */
+    public byte INSTANCE;
+
+    /**
+     * A Mapping of the General RPC Arguments allowed in adjusting Presence Messages
+     */
+    public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
+
+    /**
+     * An Instance of the {@link IPCClient}, responsible for sending and receiving RPC Events
+     */
+    public IPCClient ipcInstance;
+    /**
+     * Whether Discord is currently awaiting a response to a Ask to Join or Spectate Request, if any
+     */
+    public boolean awaitingReply = false;
+    /**
+     * A Mapping of the Last Requested Image Data
+     * <p>Used to prevent sending duplicate packets and cache data for repeated images in other areas
+     * <p>Format: lastAttemptedKey, lastResultingKey
+     */
+    private Tuple<String, String> lastRequestedImageData = new Tuple<>();
+    /**
+     * An Instance containing the Current Rich Presence Data
+     * <p>Also used to prevent sending duplicate packets with the same presence data, if any
+     */
+    private RichPresence currentPresence;
+    /**
+     * A Mapping of the Arguments available to use as RPC Message Placeholders
+     */
+    private List<Tuple<String, String>> messageData = Lists.newArrayList();
+
+    /**
+     * A Mapping of the Arguments available to use as Icon Key Placeholders
+     */
+    private List<Tuple<String, String>> iconData = Lists.newArrayList();
+
+    /**
+     * A Mapping of the Arguments attached to the &MODS& RPC Message placeholder
+     */
+    private List<Tuple<String, String>> modsArgs = Lists.newArrayList();
+
+    /**
+     * A Mapping of the Arguments attached to the &IGN& RPC Message Placeholder
+     */
+    private List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
+
+    /**
+     * Setup any Critical Methods needed for the RPC
+     * <p>In this case, ensures a Thread is in place to shut down the RPC onExit
+     */
     public synchronized void setup() {
-        Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
+        final Thread shutdownThread = new Thread("CraftPresence-ShutDown-Handler") {
             @Override
             public void run() {
                 CraftPresence.closing = true;
@@ -59,111 +205,234 @@ public class DiscordUtils {
         Runtime.getRuntime().addShutdownHook(shutdownThread);
     }
 
+    /**
+     * Initializes and Synchronizes Initial Rich Presence Data
+     */
     public synchronized void init() {
-        handlers.errored = (errorCode, message) -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("errored") || lastErrorCode != errorCode))) {
-                STATUS = "errored";
-                lastErrorCode = errorCode;
-                shutDown();
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.rpc", errorCode, message));
-            }
-        };
+        try {
+            // Create IPC Instance and Listener and Make a Connection if possible
+            ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID));
+            ipcInstance.setListener(new ModIPCListener());
+            ipcInstance.connect();
 
-        handlers.disconnected = (errorCode, message) -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("disconnected") || lastDisconnectErrorCode != errorCode))) {
-                STATUS = "disconnected";
-                lastDisconnectErrorCode = errorCode;
-                shutDown();
-            }
-        };
+            // Subscribe to RPC Events after Connection
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN);
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_JOIN_REQUEST);
+            ipcInstance.subscribe(IPCClient.Event.ACTIVITY_SPECTATE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-        handlers.ready = user -> {
-            if ((StringUtils.isNullOrEmpty(STATUS) || CURRENT_USER == null) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("ready") || !CURRENT_USER.equals(user)))) {
-                STATUS = "ready";
-                CURRENT_USER = user;
-                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.load", CLIENT_ID, CURRENT_USER.username));
-            }
-        };
+        // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
+        initArgumentData("&MAINMENU&", "&BRAND&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initIconData("&DEFAULT&", "&MAINMENU&", "&PACK&", "&DIMENSION&", "&SERVER&");
 
-        handlers.joinGame = secret -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("joinGame"))) {
-                STATUS = "joinGame";
-                CraftPresence.SERVER.verifyAndJoin(secret);
-            }
-        };
+        // Ensure Main Menu RPC Resets properly
+        CommandUtils.isInMainMenu = false;
 
-        handlers.joinRequest = request -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && (!STATUS.equalsIgnoreCase("joinRequest") || !REQUESTER_USER.equals(request)))) {
-                CraftPresence.SYSTEM.TIMER = 30;
-                STATUS = "joinRequest";
-                REQUESTER_USER = request;
+        // Add Any Generalized Argument Data needed
+        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
+        playerInfoArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
-                if (!(CraftPresence.instance.currentScreen instanceof CommandsGui)) {
-                    CraftPresence.instance.displayGuiScreen(new CommandsGui(CraftPresence.instance.currentScreen));
-                }
-                CommandsGui.executeCommand("request");
-            }
-        };
+        generalArgs.add(new Tuple<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion)));
+        generalArgs.add(new Tuple<>("&BRAND&", ModUtils.BRAND));
+        generalArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
+        generalArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMSG, playerInfoArgs)));
 
-        handlers.spectateGame = secret -> {
-            if (StringUtils.isNullOrEmpty(STATUS) || (!StringUtils.isNullOrEmpty(STATUS) && !STATUS.equalsIgnoreCase("spectateGame"))) {
-                STATUS = "spectateGame";
-            }
-        };
+        for (Tuple<String, String> generalArgument : generalArgs) {
+            // For each General (Can be used Anywhere) Argument
+            // Ensure they sync as Formatter Arguments too
+            syncArgument(generalArgument.getFirst(), generalArgument.getSecond(), false);
+        }
 
-        DiscordRPC.INSTANCE.Discord_Initialize(CLIENT_ID, handlers, true, null);
+        // Sync the Default Icon Argument
+        syncArgument("&DEFAULT&", CraftPresence.CONFIG.defaultIcon, true);
+
+        syncPackArguments();
     }
 
+    /**
+     * Updates the Starting Unix Timestamp, if allowed
+     */
     public void updateTimestamp() {
         if (CraftPresence.CONFIG.showTime) {
             START_TIMESTAMP = CraftPresence.SYSTEM.CURRENT_TIMESTAMP / 1000L;
         }
     }
 
-    public void updatePresence(final DiscordRichPresence presence) {
-        if (presence != null) {
-            if (ModUtils.BRAND.contains("vivecraft")) {
-                CraftPresence.packFound = true;
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.vivecraftMessage;
-            } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(CurseUtils.manifest.name));
-            } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME)) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MultiMCUtils.INSTANCE_NAME));
-            } else if (MCUpdaterUtils.instance != null && !StringUtils.isNullOrEmpty(MCUpdaterUtils.instance.getPackName())) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MCUpdaterUtils.instance.getPackName()));
-            } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
-                presence.details = presence.details + (!StringUtils.isNullOrEmpty(presence.details) ? " | " : "") + CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(TechnicUtils.PACK_NAME));
-            }
-
-            if ((StringUtils.isNullOrEmpty(presence.smallImageKey) && StringUtils.isNullOrEmpty(presence.smallImageText)) || (CraftPresence.CONFIG.overwriteServerIcon)) {
-                if (ModUtils.BRAND.contains("vivecraft") && DiscordAssetUtils.contains("vivecraft")) {
-                    presence.smallImageKey = "vivecraft";
-                    presence.smallImageText = CraftPresence.CONFIG.vivecraftMessage;
-                } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
-                    final String iconKey = StringUtils.formatPackIcon(CurseUtils.manifest.name);
-                    if (DiscordAssetUtils.contains(iconKey)) {
-                        presence.smallImageKey = iconKey;
-                        presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(CurseUtils.manifest.name));
-                    }
-                } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME) && !StringUtils.isNullOrEmpty(MultiMCUtils.ICON_KEY) && DiscordAssetUtils.contains(MultiMCUtils.ICON_KEY)) {
-                    presence.smallImageKey = MultiMCUtils.ICON_KEY;
-                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", StringUtils.formatWord(MultiMCUtils.INSTANCE_NAME));
-                } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME) && !StringUtils.isNullOrEmpty(TechnicUtils.ICON_NAME) && DiscordAssetUtils.contains(TechnicUtils.ICON_NAME)) {
-                    presence.smallImageKey = TechnicUtils.ICON_NAME;
-                    presence.smallImageText = CraftPresence.CONFIG.packPlaceholderMSG.replace("&name&", TechnicUtils.PACK_NAME);
+    /**
+     * Synchronizes the Specified Argument as an RPC Message or an Icon Placeholder
+     *
+     * @param argumentName The Specified Argument to Synchronize for
+     * @param insertString The String to attach to the Specified Argument
+     * @param isIconData   Whether the Argument is an RPC Message or an Icon Placeholder
+     */
+    public void syncArgument(String argumentName, String insertString, boolean isIconData) {
+        // Remove and Replace Placeholder Data, if the placeholder needs Updates
+        if (!StringUtils.isNullOrEmpty(argumentName)) {
+            if (isIconData) {
+                if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                    iconData.add(new Tuple<>(argumentName, insertString));
+                }
+            } else {
+                if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                    messageData.add(new Tuple<>(argumentName, insertString));
                 }
             }
-
-            presence.largeImageKey = StringUtils.isNullOrEmpty(presence.largeImageKey) ? CraftPresence.CONFIG.defaultIcon : presence.largeImageKey;
-            presence.largeImageText = StringUtils.isNullOrEmpty(presence.largeImageText) ? ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion) : presence.largeImageText;
-
-            DiscordRPC.INSTANCE.Discord_UpdatePresence(presence);
         }
     }
 
+    /**
+     * Initialize the Specified RPC Arguments as Empty Data
+     *
+     * @param args The Arguments to Initialize
+     */
+    public void initArgumentData(String... args) {
+        // Initialize Specified Arguments to Empty Data
+        for (String argumentName : args) {
+            messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
+            messageData.add(new Tuple<>(argumentName, ""));
+        }
+    }
+
+    /**
+     * Initialize the Specified Icon Arguments as Empty Data
+     *
+     * @param args The Arguments to Initialize
+     */
+    public void initIconData(String... args) {
+        // Initialize Specified Icon Arguments to Empty Data
+        for (String iconArgumentName : args) {
+            iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(iconArgumentName));
+            iconData.add(new Tuple<>(iconArgumentName, ""));
+        }
+    }
+
+    /**
+     * Synchronizes the &PACK& Argument, based on any found Launcher Pack/Instance Data
+     */
+    private void syncPackArguments() {
+        // Add &PACK& Placeholder to ArgumentData
+        String foundPackName = "", foundPackIcon = "";
+
+        if (ModUtils.BRAND.contains("vivecraft")) {
+            CraftPresence.packFound = true;
+
+            foundPackName = CraftPresence.CONFIG.vivecraftMessage;
+            foundPackIcon = "vivecraft";
+        } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
+            foundPackName = CurseUtils.manifest.name;
+            foundPackIcon = foundPackName;
+        } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME)) {
+            foundPackName = MultiMCUtils.INSTANCE_NAME;
+            foundPackIcon = MultiMCUtils.ICON_KEY;
+        } else if (MCUpdaterUtils.instance != null && !StringUtils.isNullOrEmpty(MCUpdaterUtils.instance.getPackName())) {
+            foundPackName = MCUpdaterUtils.instance.getPackName();
+            foundPackIcon = foundPackName;
+        } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
+            foundPackName = TechnicUtils.PACK_NAME;
+            foundPackIcon = TechnicUtils.ICON_NAME;
+        }
+
+        syncArgument("&PACK&", StringUtils.formatWord(StringUtils.replaceAnyCase(CraftPresence.CONFIG.packPlaceholderMSG, "&NAME&", !StringUtils.isNullOrEmpty(foundPackName) ? foundPackName : "")), false);
+        syncArgument("&PACK&", !StringUtils.isNullOrEmpty(foundPackIcon) ? StringUtils.formatPackIcon(foundPackIcon) : "", true);
+    }
+
+    /**
+     * Synchronizes and Updates the Rich Presence Data, if needed and connected
+     *
+     * @param presence The New Presence Data to apply
+     */
+    public void updatePresence(final RichPresence presence) {
+        if (presence != null &&
+                (currentPresence == null || !presence.toJson().toString().equals(currentPresence.toJson().toString())) &&
+                ipcInstance.getStatus() == PipeStatus.CONNECTED) {
+            ipcInstance.sendRichPresence(presence);
+            currentPresence = presence;
+        }
+    }
+
+    /**
+     * Attempts to lookup the specified Image, and if not existent, use the alternative String, and null if allowed
+     *
+     * @param evalString        The Specified Icon Key to search for from the {@link DiscordUtils#CLIENT_ID} Assets
+     * @param alternativeString The Alternative Icon Key to use if unable to locate the Original Icon Key
+     * @param allowNull         If allowed to return null if unable to find any matches, otherwise uses the Default Icon in Config
+     * @return The found or alternative matching Icon Key
+     */
+    public String imageOf(final String evalString, final String alternativeString, final boolean allowNull) {
+        // Ensures Assets were fully synced from the Client ID before running
+        if (DiscordAssetUtils.syncCompleted) {
+            if (StringUtils.isNullOrEmpty(lastRequestedImageData.getFirst()) || !lastRequestedImageData.getFirst().equalsIgnoreCase(evalString)) {
+                final String defaultIcon = DiscordAssetUtils.contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : DiscordAssetUtils.getRandomAsset();
+                lastRequestedImageData.setFirst(evalString);
+
+                String finalKey = evalString;
+
+                if (!DiscordAssetUtils.contains(finalKey)) {
+                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.fallback", evalString, alternativeString));
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.request", evalString));
+                    if (DiscordAssetUtils.contains(alternativeString)) {
+                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.discord.assets.fallback", evalString, alternativeString));
+                        finalKey = alternativeString;
+                    } else {
+                        if (allowNull) {
+                            finalKey = "";
+                        } else {
+                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.default", evalString));
+                            finalKey = defaultIcon;
+                        }
+                    }
+                }
+
+                lastRequestedImageData.setSecond(finalKey);
+                return finalKey;
+            } else {
+                return lastRequestedImageData.getSecond();
+            }
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Clears Related Party Session Information from the RPC, and updates if needed
+     *
+     * @param clearRequesterData Whether to clear Ask to Join / Spectate Request Data
+     * @param updateRPC          Whether to immediately update the RPC following changes
+     */
+    public void clearPartyData(boolean clearRequesterData, boolean updateRPC) {
+        if (clearRequesterData) {
+            awaitingReply = false;
+            REQUESTER_USER = null;
+            CraftPresence.SYSTEM.TIMER = 0;
+        }
+        JOIN_SECRET = null;
+        PARTY_ID = null;
+        PARTY_SIZE = 0;
+        PARTY_MAX = 0;
+        if (updateRPC) {
+            updatePresence(buildRichPresence());
+        }
+    }
+
+    /**
+     * Shutdown the RPC and close related resources, as well as Clearing any remaining Runtime Client Data
+     */
     public synchronized void shutDown() {
-        DiscordRPC.INSTANCE.Discord_ClearPresence();
-        DiscordRPC.INSTANCE.Discord_Shutdown();
+        try {
+            ipcInstance.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        // Clear User Data before final clear and shutdown
+        STATUS = "disconnected";
+        currentPresence = null;
+        clearPartyData(true, false);
+        CURRENT_USER = null;
+
+        lastRequestedImageData = new Tuple<>();
 
         CraftPresence.DIMENSIONS.clearClientData();
         CraftPresence.ENTITIES.clearClientData();
@@ -171,87 +440,49 @@ public class DiscordUtils {
         CraftPresence.SERVER.clearClientData();
         CraftPresence.GUIS.clearClientData();
 
-        STATUS = "disconnected";
-        lastDisconnectErrorCode = 0;
-        lastErrorCode = 0;
-        CraftPresence.SYSTEM.TIMER = 0;
-        CURRENT_USER = null;
-        REQUESTER_USER = null;
-
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
     }
 
-    public void setImage(final String key, final DiscordAsset.AssetType type) {
-        if (!StringUtils.isNullOrEmpty(key) && type != null) {
-            final String formattedKey = StringUtils.formatPackIcon(key);
+    /**
+     * Builds a New Instance of {@link RichPresence} based on Queued Data
+     *
+     * @return A New Instance of {@link RichPresence}
+     */
+    public RichPresence buildRichPresence() {
+        // Format Presence based on Arguments available in argumentData
+        DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));
+        GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData));
 
-            if (((StringUtils.isNullOrEmpty(lastImageRequested) || !lastImageRequested.equals(key)) || (StringUtils.isNullOrEmpty(lastImageTypeRequested) || !lastImageTypeRequested.equals(type.name()))) || (StringUtils.isNullOrEmpty(lastClientIDRequested) || !lastClientIDRequested.equals(CLIENT_ID))) {
-                lastClientIDRequested = CLIENT_ID;
-                lastImageRequested = key;
-                lastImageTypeRequested = type.name();
+        final String baseLargeImage = StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true);
+        LARGEIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseLargeImage, iconData);
 
-                if (DiscordAssetUtils.contains(formattedKey)) {
-                    if (type.equals(DiscordAsset.AssetType.LARGE)) {
-                        LARGEIMAGEKEY = formattedKey;
-                    }
+        final String baseSmallImage = StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true);
+        SMALLIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseSmallImage, iconData);
 
-                    if (type.equals(DiscordAsset.AssetType.SMALL)) {
-                        SMALLIMAGEKEY = formattedKey;
-                    }
-                } else {
-                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.fallback", formattedKey, type.name()));
-                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.request", formattedKey, type.name()));
+        LARGEIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData);
+        SMALLIMAGETEXT = StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData);
 
-                    final String defaultIcon = StringUtils.formatPackIcon(CraftPresence.CONFIG.defaultIcon);
-                    final String defaultDimensionIcon = StringUtils.formatPackIcon(StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon).replace("&icon&", defaultIcon));
-                    final String defaultServerIcon = StringUtils.formatPackIcon(StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon).replace("&icon&", defaultIcon));
+        // Format Data to UTF_8
+        GAME_STATE = StringUtils.getUnicodeString(GAME_STATE);
+        DETAILS = StringUtils.getUnicodeString(DETAILS);
 
-                    if (type.equals(DiscordAsset.AssetType.LARGE)) {
-                        if (CraftPresence.DIMENSIONS.isInUse) {
-                            // NOTE: Fallback for when Using showCurrentDimension is the Dimension Name (Or Dimension ID if Dimension Name is Empty)
-                            final String formattedCurrentDIMNameIcon = StringUtils.formatPackIcon(!StringUtils.isNullOrEmpty(CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME) ? CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME : CraftPresence.DIMENSIONS.CURRENT_DIMENSION_NAME_ID);
-                            if (DiscordAssetUtils.contains(formattedCurrentDIMNameIcon)) {
-                                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedCurrentDIMNameIcon));
-                                LARGEIMAGEKEY = formattedCurrentDIMNameIcon;
-                            } else {
-                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                                LARGEIMAGEKEY = DiscordAssetUtils.contains(defaultDimensionIcon) ? defaultDimensionIcon : defaultIcon;
-                            }
-                        } else {
-                            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                            LARGEIMAGEKEY = defaultIcon;
-                        }
-                    }
+        LARGEIMAGEKEY = StringUtils.getUnicodeString(LARGEIMAGEKEY);
+        SMALLIMAGEKEY = StringUtils.getUnicodeString(SMALLIMAGEKEY);
 
-                    if (type.equals(DiscordAsset.AssetType.SMALL)) {
-                        if (CraftPresence.SERVER.isInUse) {
-                            // NOTE: Fallback for when On a Server is The Parts of Your IP
-                            boolean matched = false;
-                            for (String ipPart : CraftPresence.SERVER.currentServer_IP.split("\\.")) {
-                                final String formattedIPPart = StringUtils.formatPackIcon(ipPart);
-                                if (DiscordAssetUtils.contains(formattedIPPart)) {
-                                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.fallback", formattedKey, type.name(), formattedIPPart));
-                                    SMALLIMAGEKEY = formattedIPPart;
-                                    matched = true;
-                                    break;
-                                }
-                            }
+        LARGEIMAGETEXT = StringUtils.getUnicodeString(LARGEIMAGETEXT);
+        SMALLIMAGETEXT = StringUtils.getUnicodeString(SMALLIMAGETEXT);
 
-                            if (!matched) {
-                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                                SMALLIMAGEKEY = DiscordAssetUtils.contains(defaultServerIcon) ? defaultServerIcon : defaultIcon;
-                            }
-                        } else {
-                            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.default", formattedKey, type.name()));
-                            SMALLIMAGEKEY = defaultIcon;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public DiscordRichPresence buildRichPresence() {
-        return new DiscordRichPresence(GAME_STATE, DETAILS, START_TIMESTAMP, END_TIMESTAMP, LARGEIMAGEKEY, LARGEIMAGETEXT, SMALLIMAGEKEY, SMALLIMAGETEXT, PARTY_ID, PARTY_SIZE, PARTY_MAX, MATCH_SECRET, JOIN_SECRET, SPECTATE_SECRET, INSTANCE);
+        return new RichPresence.Builder()
+                .setState(GAME_STATE)
+                .setDetails(DETAILS)
+                .setStartTimestamp(START_TIMESTAMP)
+                .setEndTimestamp(END_TIMESTAMP)
+                .setLargeImage(LARGEIMAGEKEY, LARGEIMAGETEXT)
+                .setSmallImage(SMALLIMAGEKEY, SMALLIMAGETEXT)
+                .setParty(PARTY_ID, PARTY_SIZE, PARTY_MAX)
+                .setMatchSecret(MATCH_SECRET)
+                .setJoinSecret(JOIN_SECRET)
+                .setSpectateSecret(SPECTATE_SECRET)
+                .build();
     }
 }

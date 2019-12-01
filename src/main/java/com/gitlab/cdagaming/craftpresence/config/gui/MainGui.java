@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class MainGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
-    private ExtendedButtonControl generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, accessibilitySet, proceedButton, aboutButton, commandGUIButton, resetConfigButton;
+    private ExtendedButtonControl generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, accessibilitySet, presenceSet, proceedButton, aboutButton, commandGUIButton, resetConfigButton;
 
     public MainGui(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
@@ -36,12 +36,13 @@ public class MainGui extends GuiScreen {
         serverSet = new ExtendedButtonControl(400, calc2, CraftPresence.GUIS.getButtonY(2), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.title.servermessages"));
         statusSet = new ExtendedButtonControl(500, calc1, CraftPresence.GUIS.getButtonY(3), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.title.statusmessages"));
         advancedSet = new ExtendedButtonControl(600, calc2, CraftPresence.GUIS.getButtonY(3), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.title.advanced"));
-        accessibilitySet = new ExtendedButtonControl(700, (width / 2) - 90, CraftPresence.GUIS.getButtonY(4), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.title.accessibility"));
+        accessibilitySet = new ExtendedButtonControl(700, calc1, CraftPresence.GUIS.getButtonY(4), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.title.accessibility"));
+        presenceSet = new ExtendedButtonControl(800, calc2, CraftPresence.GUIS.getButtonY(4), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.title.presencesettings"));
 
-        proceedButton = new ExtendedButtonControl(800, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        aboutButton = new ExtendedButtonControl(900, (width - 30), 10, 20, 20, "?");
-        commandGUIButton = new ExtendedButtonControl(1000, (width - 105), (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.title.commands"));
-        resetConfigButton = new ExtendedButtonControl(1100, 10, (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.reset"));
+        proceedButton = new ExtendedButtonControl(900, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        aboutButton = new ExtendedButtonControl(1000, (width - 30), 10, 20, 20, "?");
+        commandGUIButton = new ExtendedButtonControl(1100, (width - 105), (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.title.commands"));
+        resetConfigButton = new ExtendedButtonControl(1200, 10, (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.reset"));
 
         buttonList.add(generalSet);
         buttonList.add(biomeSet);
@@ -50,6 +51,7 @@ public class MainGui extends GuiScreen {
         buttonList.add(statusSet);
         buttonList.add(advancedSet);
         buttonList.add(accessibilitySet);
+        buttonList.add(presenceSet);
         buttonList.add(proceedButton);
         buttonList.add(aboutButton);
         buttonList.add(commandGUIButton);
@@ -113,33 +115,38 @@ public class MainGui extends GuiScreen {
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, accessibilitySet)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.accessibility")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, presenceSet)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.presencesettings")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+        }
     }
 
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == generalSet.id) {
-            mc.displayGuiScreen(new GeneralSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new GeneralSettingsGui(currentScreen));
         } else if (button.id == biomeSet.id) {
-            mc.displayGuiScreen(new BiomeSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new BiomeSettingsGui(currentScreen));
         } else if (button.id == dimensionSet.id) {
-            mc.displayGuiScreen(new DimensionSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new DimensionSettingsGui(currentScreen));
         } else if (button.id == serverSet.id) {
-            mc.displayGuiScreen(new ServerSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new ServerSettingsGui(currentScreen));
         } else if (button.id == statusSet.id) {
-            mc.displayGuiScreen(new StatusMessagesGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new StatusMessagesGui(currentScreen));
         } else if (button.id == advancedSet.id) {
-            mc.displayGuiScreen(new AdvancedSettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new AdvancedSettingsGui(currentScreen));
         } else if (button.id == accessibilitySet.id) {
-            mc.displayGuiScreen(new AccessibilitySettingsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new AccessibilitySettingsGui(currentScreen));
+        } else if (button.id == presenceSet.id) {
+            CraftPresence.GUIS.openScreen(new PresenceSettingsGui(currentScreen));
         } else if (button.id == proceedButton.id) {
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
                 CraftPresence.CONFIG.read(false);
-                CommandUtils.reloadData(true);
                 if (CraftPresence.CONFIG.hasClientPropertiesChanged) {
                     CommandUtils.rebootRPC();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = false;
                 }
+                CommandUtils.reloadData(true);
                 CraftPresence.CONFIG.hasChanged = false;
             }
 
@@ -147,20 +154,16 @@ public class MainGui extends GuiScreen {
             if (mc.player != null) {
                 mc.player.closeScreen();
             } else {
-                mc.displayGuiScreen(parentScreen);
+                CraftPresence.GUIS.openScreen(parentScreen);
             }
         } else if (button.id == aboutButton.id) {
-            mc.displayGuiScreen(new AboutGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new AboutGui(currentScreen));
         } else if (button.id == commandGUIButton.id) {
-            mc.displayGuiScreen(new CommandsGui(currentScreen));
+            CraftPresence.GUIS.openScreen(new CommandsGui(currentScreen));
         } else if (button.id == resetConfigButton.id) {
-            CraftPresence.CONFIG.hasChanged = false;
-            CraftPresence.CONFIG.hasClientPropertiesChanged = false;
             CraftPresence.CONFIG.setupInitialValues();
-            CraftPresence.CONFIG.updateConfig();
-
-            CommandUtils.reloadData(true);
-            CommandUtils.rebootRPC();
+            CraftPresence.CONFIG.hasChanged = true;
+            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
         }
     }
 

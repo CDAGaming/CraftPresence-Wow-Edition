@@ -1,6 +1,30 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,17 +34,51 @@ import java.awt.*;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * String Utilities for interpreting Strings and Basic Data Types
+ *
+ * @author CDAGaming
+ */
 public class StringUtils {
+    /**
+     * The Character to be interpreted as the start to a Formatting Character
+     */
     private static final char COLOR_CHAR = '\u00A7';
+
+    /**
+     * Regex Pattern for Color and Formatting Codes
+     */
     private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
+
+    /**
+     * Regex Pattern for Brackets containing Digits
+     */
     private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
+
+    /**
+     * The Stored Character Render Widths to interpret when rendering tooltips
+     */
     public static int[] MC_CHAR_WIDTH = new int[256];
+
+    /**
+     * The Stored Unicode Character Glyph Render Widths to interpret when rendering tooltips
+     */
     public static byte[] MC_GLYPH_WIDTH = new byte[65536];
 
+    /**
+     * Attempts to Convert a Hexadecimal String into a Valid interpretable Java Color
+     *
+     * @param hexColor The inputted Hexadecimal Color String
+     * @return A Valid Java Color, if successful
+     */
     public static Color getColorFromHex(final String hexColor) {
         try {
             if (hexColor.length() == 7 && !StringUtils.isNullOrEmpty(hexColor.substring(1))) {
@@ -43,10 +101,54 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Converts a String and it's bytes to that of the UTF_8 Charset
+     *
+     * @param original The original String
+     * @return The converted UTF_8 String, if successful
+     */
+    public static String getUnicodeString(String original) {
+        if (!isNullOrEmpty(original)) {
+            return new String(original.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ");
+        } else {
+            return original;
+        }
+    }
+
+    /**
+     * Rounds a Double to the defined decimal place, if possible
+     *
+     * @param value  the original value to round
+     * @param places The amount of places to round upon
+     * @return The rounded Double value
+     */
+    public static double roundDouble(double value, int places) {
+        if (places > 0) {
+            BigDecimal bd = new BigDecimal(Double.toString(value));
+            bd = bd.setScale(places, RoundingMode.HALF_UP);
+            return bd.doubleValue();
+        } else {
+            // Do not Round if Places is less then or equal to 0
+            return value;
+        }
+    }
+
+    /**
+     * Converts a Java Color Variable into a Hexadecimal String
+     *
+     * @param color The original Java Color Type to interpret
+     * @return The converted hexadecimal String
+     */
     public static String getHexFromColor(Color color) {
         return "0x" + toSafeHexValue(color.getAlpha()) + toSafeHexValue(color.getRed()) + toSafeHexValue(color.getGreen()) + toSafeHexValue(color.getBlue());
     }
 
+    /**
+     * Converts an inputted number to a compatible Hexadecimal String
+     *
+     * @param number The original number
+     * @return The converted and compatible hexadecimal String
+     */
     private static String toSafeHexValue(int number) {
         StringBuilder builder = new StringBuilder(Integer.toHexString(number & 0xff));
         while (builder.length() < 2) {
@@ -55,18 +157,133 @@ public class StringUtils {
         return builder.toString().toUpperCase();
     }
 
+    /**
+     * Retrieve Matching Values from an input that matches the defined regex
+     *
+     * @param regexValue The Regex Value to test against
+     * @param original   The original String to get matches from
+     * @return A Tuple with the Format of originalString:listOfMatches
+     */
+    public static Tuple<String, List<String>> getMatches(final String regexValue, final String original) {
+        List<String> matches = Lists.newArrayList();
+
+        if (!isNullOrEmpty(original)) {
+            Pattern pattern = Pattern.compile(regexValue);
+            Matcher m = pattern.matcher(original);
+
+            while (m.find()) {
+                matches.add(m.group());
+            }
+        }
+
+        return new Tuple<>(original, matches);
+    }
+
+    /**
+     * Remove an Amount of Matches from an inputted Match Set
+     *
+     * @param matchData  The Match Data to remove from with the form of originalString:listOfMatches
+     * @param maxMatches The maximum amount of matches to remove
+     * @param useMax     Whether to use the Maximum Value or remove all matches
+     * @return The original String from Match Data with the matches up to maxMatches removed
+     */
+    public static String removeMatches(final Tuple<String, List<String>> matchData, final int maxMatches, final boolean useMax) {
+        String finalString = "";
+
+        if (matchData != null) {
+            finalString = matchData.getFirst();
+            List<String> matchList = matchData.getSecond();
+
+            if (!matchList.isEmpty()) {
+                int foundMatches = 0;
+
+                for (String match : matchList) {
+                    if (!useMax || foundMatches > maxMatches) {
+                        finalString = finalString.replaceFirst(match, "");
+                    }
+                    foundMatches++;
+                }
+            }
+        }
+
+        return finalString;
+    }
+
+    /**
+     * Replaces Data in a String with Case-Insensitivity
+     *
+     * @param source          The original String to replace within
+     * @param targetToReplace The value to replace on
+     * @param replaceWith     The value to replace the target with
+     * @return The completed and replaced String
+     */
+    public static String replaceAnyCase(String source, String targetToReplace, String replaceWith) {
+        if (!isNullOrEmpty(source)) {
+            return Pattern.compile(targetToReplace, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(source)
+                    .replaceAll(Matcher.quoteReplacement(replaceWith));
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Replaces Data in a sequential order, following Case-Insensitivity
+     *
+     * @param source      The original String to replace within
+     * @param replaceData The replacement list to follow with the form of: targetToReplace:replaceWithValue
+     * @return The completed and replaced String
+     */
+    public static String sequentialReplaceAnyCase(String source, List<Tuple<String, String>> replaceData) {
+        if (!isNullOrEmpty(source)) {
+            String finalResult = source;
+
+            if (!replaceData.isEmpty()) {
+                for (Tuple<String, String> replacementData : replaceData) {
+                    finalResult = replaceAnyCase(finalResult, replacementData.getFirst(), replacementData.getSecond());
+                }
+            }
+            return finalResult;
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Determines whether a String classifies as NULL or EMPTY
+     *
+     * @param entry The String to evaluate
+     * @return {@code true} if Entry is classified as NULL or EMPTY
+     */
     public static boolean isNullOrEmpty(final String entry) {
         return entry == null || entry.isEmpty() || entry.equalsIgnoreCase("null");
     }
 
+    /**
+     * Determines whether a String classifies as a valid Boolean
+     *
+     * @param entry The String to evaluate
+     * @return {@code true} if Entry is classified as a valid Boolean
+     */
     public static boolean isValidBoolean(final String entry) {
         return !isNullOrEmpty(entry) && (entry.equalsIgnoreCase("true") || entry.equalsIgnoreCase("false"));
     }
 
+    /**
+     * Determines whether a String classifies as a valid Color Code
+     *
+     * @param entry The String to evaluate
+     * @return {@code true} if Entry is classified as a valid Color Code
+     */
     public static boolean isValidColorCode(final String entry) {
         return !isNullOrEmpty(entry) && ((entry.startsWith("#") || entry.length() == 6) || entry.startsWith("0x") || getValidInteger(entry).getFirst());
     }
 
+    /**
+     * Determine whether an inputted String classifies as a valid Integer
+     *
+     * @param entry The String to evaluate
+     * @return A Tuple with the format of isValid:parsedStringIfTrue
+     */
     public static Tuple<Boolean, Integer> getValidInteger(final String entry) {
         Tuple<Boolean, Integer> finalSet = new Tuple<>();
 
@@ -84,6 +301,12 @@ public class StringUtils {
         return finalSet;
     }
 
+    /**
+     * Determine whether an inputted String classifies as a valid Long
+     *
+     * @param entry The String to evaluate
+     * @return A Tuple with the format of isValid:parsedStringIfTrue
+     */
     public static Tuple<Boolean, Long> getValidLong(final String entry) {
         Tuple<Boolean, Long> finalSet = new Tuple<>();
 
@@ -101,15 +324,28 @@ public class StringUtils {
         return finalSet;
     }
 
+    /**
+     * Formats an IP Address based on Input
+     *
+     * @param input      The original String to evaluate
+     * @param returnPort Whether to return the port or the IP without the Port
+     * @return Either the IP or the port on their own, depending on conditions
+     */
     public static String formatIP(final String input, final boolean returnPort) {
         if (!isNullOrEmpty(input)) {
             final String[] formatted = input.split(":", 2);
-            return !returnPort ? (elementExists(formatted, 0) ? formatted[0] : "127.0.0.1") : (elementExists(formatted, 1) ? formatted[1] : "25565");
+            return !returnPort ? (elementExists(formatted, 0) ? formatted[0].trim() : "127.0.0.1") : (elementExists(formatted, 1) ? formatted[1].trim() : "25565");
         } else {
             return !returnPort ? "127.0.0.1" : "25565";
         }
     }
 
+    /**
+     * Converts a String into a Valid and Acceptable Icon Format
+     *
+     * @param original The original String to evaluate
+     * @return The converted and valid String, in an iconKey Format
+     */
     public static String formatPackIcon(final String original) {
         String formattedKey = original;
         if (isNullOrEmpty(formattedKey)) {
@@ -130,10 +366,20 @@ public class StringUtils {
             if (STRIP_COLOR_PATTERN.matcher(formattedKey).find()) {
                 formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
             }
-            return formattedKey.toLowerCase();
+            return formattedKey.toLowerCase().trim();
         }
     }
 
+    /**
+     * Expands or Contracts an Array, depending on Conditions
+     *
+     * <p>TODO: Remove Operation ID Argument and base it on if greater then or less then 0, with 0 just returning the original array
+     *
+     * @param theArray    The original Array to adjust
+     * @param adjustBy    The value to either expand or contract, based on operationID
+     * @param operationID Whether to Expand (0) or Contract (1) the Array Size
+     * @return The evaluated and adjusted array
+     */
     public static String[] adjustArraySize(final String[] theArray, final int adjustBy, final int operationID) {
         int i = theArray.length;
         int n = i + adjustBy;
@@ -150,6 +396,14 @@ public class StringUtils {
         return newArray;
     }
 
+    /**
+     * Adds the Specified message to the defined index in the target Array
+     *
+     * @param array   The original Array to evaluate
+     * @param index   The index to add at
+     * @param message The String Message to input at the index of the array
+     * @return The evaluated array
+     */
     public static String[] addToArray(final String[] array, final int index, final String message) {
         if (array.length <= index) {
             int extendNum = index - array.length;
@@ -162,6 +416,15 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Removes specified search term at specified index of an array
+     *
+     * @param originalArray  The original array
+     * @param searchTerm     The search term to look for
+     * @param searchIndex    The index to remove at
+     * @param splitCharacter The delimiter to split parts of the array at (Optional)
+     * @return The evaluated array
+     */
     public static String[] removeFromArray(final String[] originalArray, final String searchTerm, final int searchIndex, final String splitCharacter) {
         int indexNumber = 0;
         List<String> formatted = Lists.newLinkedList(Arrays.asList(originalArray));
@@ -178,6 +441,18 @@ public class StringUtils {
         return formatted.toArray(new String[0]);
     }
 
+    /**
+     * Retrieves a config entry from an Array, following the specified Search Terms
+     * <p><b>Internal Use Only</b>
+     *
+     * @param original       The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
+     * @param searchTerm     The search term to locate
+     * @param searchIndex    The expected index to locate the search term at within an Array Element
+     * @param resultIndex    The part of the found Array Element index to retrieve
+     * @param splitCharacter The delimiter being expected to separate chunks of an Array Element
+     * @param alternativeMSG The alternative value to return if no matches found in the target Array Element Index
+     * @return The found or Alternative value from the search within the Array
+     */
     public static String getConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String alternativeMSG) {
         String formattedKey = "";
         boolean matched = false;
@@ -192,6 +467,18 @@ public class StringUtils {
         return !matched && !isNullOrEmpty(alternativeMSG) ? alternativeMSG : formattedKey;
     }
 
+    /**
+     * Sets new config Entry for Array Data Types with delimiter
+     * <p><b>Internal Use Only</b>
+     *
+     * @param original       The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
+     * @param searchTerm     The search term to locate
+     * @param searchIndex    The expected index to locate the search term at within an Array Element
+     * @param resultIndex    The part of the found Array Element index to modify
+     * @param splitCharacter The delimiter being expected to separate chunks of an Array Element
+     * @param newMessage     The new value to insert into the target Array Element Index
+     * @return The modified Array from the original
+     */
     public static String[] setConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String newMessage) {
         int indexNumber = -1;
         boolean replacing = false;
@@ -224,6 +511,12 @@ public class StringUtils {
         return formatted;
     }
 
+    /**
+     * Converts input into a Properly Readable String
+     *
+     * @param original The original String to format
+     * @return The formatted and evaluated String
+     */
     public static String formatWord(final String original) {
         String formattedKey = original;
         if (isNullOrEmpty(formattedKey)) {
@@ -249,6 +542,12 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Removes Duplicated Words within an inputted String
+     *
+     * @param original The original String
+     * @return The evaluated String without duplicate words
+     */
     public static String removeRepeatWords(final String original) {
         if (isNullOrEmpty(original)) {
             return original;
@@ -268,6 +567,13 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Converts input into a properly formatted and interpretable Dimension Name
+     *
+     * @param dimName    The Dimension Name to format
+     * @param formatToID Whether to format as an Icon Key
+     * @return The formatted dimension name/icon key
+     */
     public static String formatDimensionName(final String dimName, final boolean formatToID) {
         StringBuilder formattedKey = new StringBuilder(dimName);
         if (isNullOrEmpty(formattedKey.toString())) {
@@ -297,7 +603,7 @@ public class StringUtils {
                 return "the_end";
             } else {
                 if (formatToID) {
-                    return formattedKey.toString().trim().toLowerCase().replace(" ", "_");
+                    return formatPackIcon(formattedKey.toString().replace(" ", "_"));
                 } else {
                     return formatWord(formattedKey.toString());
                 }
@@ -305,6 +611,14 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Wraps a String based on the specified target width per line<p>
+     * Separated by newline characters, as needed
+     *
+     * @param stringInput The original String to wrap
+     * @param wrapWidth   The target width per line, to wrap the input around
+     * @return The converted and wrapped version of the original input
+     */
     public static String wrapFormattedStringToWidth(String stringInput, int wrapWidth) {
         int stringSizeToWidth = sizeStringToWidth(stringInput, wrapWidth);
 
@@ -319,6 +633,13 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Returns the Color and Formatting Characters within a String<p>
+     * Defined by {@link StringUtils#STRIP_COLOR_PATTERN}
+     *
+     * @param text The original String to evaluate
+     * @return The formatting and color codes found within the input
+     */
     public static String getFormatFromString(String text) {
         StringBuilder s = new StringBuilder();
         int index = -1;
@@ -337,6 +658,12 @@ public class StringUtils {
         return s.toString();
     }
 
+    /**
+     * Returns the combined rendering width of the String entry
+     *
+     * @param stringEntry The original String to evaluate
+     * @return The expected rendering width for the input
+     */
     public static int getStringWidth(String stringEntry) {
         if (isNullOrEmpty(stringEntry)) {
             return 0;
@@ -349,6 +676,13 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Returns the Render Character/Glyph Width of the specified character
+     *
+     * @param characterInput The character to evaluate
+     * @param usingUnicode   Whether the specified character is a Unicode Character
+     * @return The expected render character/glyph width for the input
+     */
     public static int getCharWidth(char characterInput, boolean usingUnicode) {
         if (Character.isSpaceChar(characterInput) || characterInput == 160) {
             return 4;
@@ -373,6 +707,13 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Returns the Wrapped Width of a String, defined by the target wrapWidth
+     *
+     * @param stringEntry The original String to evaluate
+     * @param wrapWidth   The target width to wrap within
+     * @return The expected wrapped width the String should be
+     */
     public static int sizeStringToWidth(String stringEntry, int wrapWidth) {
         int stringLength = stringEntry.length();
         int charWidth = 0;
@@ -412,6 +753,12 @@ public class StringUtils {
         return currentLine != stringLength && currentIndex != -1 && currentIndex < currentLine ? currentIndex : currentLine;
     }
 
+    /**
+     * Capitalizes the words within a specified string
+     *
+     * @param str The String to capitalize
+     * @return The capitalized output string
+     */
     public static String capitalizeWord(String str) {
         StringBuilder s = new StringBuilder();
 
@@ -435,6 +782,12 @@ public class StringUtils {
         return s.toString().trim();
     }
 
+    /**
+     * Converts a String into a List of Strings, split up by new lines
+     *
+     * @param original The original String
+     * @return The converted, newline-split list from the original String
+     */
     public static List<String> splitTextByNewLine(final String original) {
         if (!isNullOrEmpty(original)) {
             String formattedText = original;
@@ -453,6 +806,12 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Display a Message to the Player, via the in-game Chat Hud
+     *
+     * @param sender  The Entity to Send to (Must be a Player)
+     * @param message The Message to send and display in chat
+     */
     public static void sendMessageToPlayer(final Entity sender, final String message) {
         if (sender instanceof EntityPlayer) {
             final EntityPlayer player = (EntityPlayer) sender;
@@ -465,6 +824,13 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Attempts to Retrieve the Specified Resource as an InputStream
+     *
+     * @param fallbackClass Alternative Class Loader to Use to Locate the Resource
+     * @param pathToSearch  The File Path to search for
+     * @return The InputStream for the specified resource, if successful
+     */
     public static InputStream getResourceAsStream(final Class<?> fallbackClass, final String pathToSearch) {
         InputStream in = null;
         boolean useFallback = false;
@@ -481,10 +847,24 @@ public class StringUtils {
         return in;
     }
 
+    /**
+     * Determines if the Specified index exists in the List with a non-null value
+     *
+     * @param data  The Array of Strings to check within
+     * @param index The index to check
+     * @return {@code true} if the index element exists in the list with a non-null value
+     */
     public static boolean elementExists(final String[] data, final int index) {
         return elementExists(Arrays.asList(data), index);
     }
 
+    /**
+     * Determines if the Specified index exists in the List with a non-null value
+     *
+     * @param data  The List of Strings to check within
+     * @param index The index to check
+     * @return {@code true} if the index element exists in the list with a non-null value
+     */
     public static boolean elementExists(final List<String> data, final int index) {
         boolean result;
         try {
@@ -495,6 +875,14 @@ public class StringUtils {
         return result;
     }
 
+    /**
+     * Retrieves the Specified Field(s) via Reflection
+     *
+     * @param classToAccess The class to access with the field(s)
+     * @param instance      An Instance of the Class, if needed
+     * @param fieldNames    A List of Field Names to search for
+     * @return The Found Field Data, if any
+     */
     public static Object lookupObject(Class<?> classToAccess, Object instance, String... fieldNames) {
         for (String fieldName : fieldNames) {
             try {
@@ -509,6 +897,37 @@ public class StringUtils {
         return null;
     }
 
+    /**
+     * Adjusts the Specified Field(s) in the Target Class via Reflection
+     *
+     * @param classToAccess The class to access with the field(s)
+     * @param instance      An Instance of the Class, if needed
+     * @param fieldData     A Tuple with the format of fieldName:valueToSet
+     */
+    public static void updateField(Class<?> classToAccess, Object instance, Tuple<?, ?>... fieldData) {
+        for (Tuple<?, ?> currentData : fieldData) {
+            try {
+                Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
+                if (lookupField != null) {
+                    lookupField.setAccessible(true);
+                    lookupField.set(instance, currentData.getSecond());
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
+    /**
+     * Invokes the specified Method(s) in the Target Class via Reflection
+     *
+     * <p>TODO: Change Method Names and Args to List of Tuples with the format of methodName:argsForMethod as methodData, if possible
+     *
+     * @param classToAccess The class to access with the method(s)
+     * @param instance      An Instance of the Class, if needed
+     * @param methodNames   A List of Method Names to attempt invoking upon
+     * @param args          Additional Arguments for the Methods
+     * @param argumentTypes The parameter of the arguments to target
+     */
     public static void executeMethod(Class<?> classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {
         for (String methodName : methodNames) {
             try {
@@ -522,10 +941,22 @@ public class StringUtils {
         }
     }
 
+    /**
+     * Generates a Hash Code from a Set of Objects
+     *
+     * @param values The object set to generate for
+     * @return The resulting hash code of the object set
+     */
     public static int generateHash(Object... values) {
         return Arrays.hashCode(values);
     }
 
+    /**
+     * Strips Color and Formatting Codes from the inputted String
+     *
+     * @param input The original String to evaluate
+     * @return The Stripped and evaluated String
+     */
     public static String stripColors(final String input) {
         return isNullOrEmpty(input) ? input : STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
     }

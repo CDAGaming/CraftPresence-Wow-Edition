@@ -56,7 +56,7 @@ public class AboutGui extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == backButton.id) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == viewSource.id) {
             try {
                 Desktop.getDesktop().browse(new URI(SOURCE_URL));
@@ -70,7 +70,7 @@ public class AboutGui extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
-            mc.displayGuiScreen(parentScreen);
+            CraftPresence.GUIS.openScreen(parentScreen);
         }
     }
 

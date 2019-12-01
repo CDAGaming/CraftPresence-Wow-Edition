@@ -1,14 +1,38 @@
 # CraftPresence Changes
 
-## v1.5.8 (11/29/2019)
+## v1.6.0 (12/15/2019)
 
 ### Changes
 
+*   Deprecate Usage of the Java Native Access API and DLL Usage
+
+    *   Now hooks directly into the API endpoints to determine and directly interpret RPC
+
+*   Added Specific Presence Display Settings to ConfigGUI
+
+    *   Now allows users to set where in the RPC they'd like each message
+
 *   `/cp view currentData` will now show the Current User the RPC is attached to
+
+*   Extended KeyBinding System to expand to future KeyBinds
+
+*   Added Documentation for the Mod's Utilities, now available [here](https://cdagaming.gitlab.io/craftpresence-documentation/)
 
 *   Added a New Config Message in Logs for Initial Setups
 
+*   Pressing the `Reset to Default` Button will no longer save automatically, to prevent accidental misuse
+
+    *   The `Back` Button will turn to `Save` if it detects a queued reset or change
+
+*   Added Placeholders to `&IGN&` within Server Settings:
+
+    *   `&coords&` has been added to display your X and Z Axis Coordinates
+
 *   The Mod will now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
+
+*   Sliders have now been added to the Config Gui where appropriate, such as the RGBA section of the ColorUI's
+
+*   Removed and Cleaned Unused Localization Strings
 
 *   (Code-Behind) Change `isValidInteger` and `isValidLong` to Getters powered by Tuple's for both getting a boolean and the number itself
 
@@ -22,6 +46,11 @@
 
 ### Fixes
 
+*   Fixes any Rare Sustaining Presence of SSL Issues with the DiscordRPC Dll...by removing the dll even being needed
+*   Changed PG Left and Right KeyBind Triggers to `KEY_UP` and `KEY_DOWN` to resolve a conflict of changing pages while editing something
+*   Fixed Config Conflicts with a more dynamic system
+*   Fixes a Bug where the ConfigGUI KeyBind could still reset to Left Control (IE the old KeyBind) if a Keycode Error occurs
+*   Fixed Icon Support for MCUpdater (Will now use the Pack Name like Curse/Twitch)
 *   Code Compliance Adjustments as well as multiple refactors
 *   Corrected Credits Message for ItsDizzy
 *   Code Warning Fixes and Cleanups
@@ -32,17 +61,36 @@
 
 ### More Information
 
-#### Command Rewrite Info
+#### v1.6.0 Mod Rewrite Info
 
-Starting In v1.5.0, Commands for CraftPresence are now within a new menu of the Config Gui.
+In v1.6.0, CraftPresence has undergone numerous performance and under-the-hood improvements, to both acknowledge user feedback over the last several months and pursue the goal of further modularity.
 
-Along with this rewrite, take note of the following:
+As Elements such as the Config System and General RPC Elements have undergone various changes, please report any bugs found to [the Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues)
 
-*   Tab Completion will only work for the most likely suggestion, and will only suggest for more then two characters in a word.
-*   Only CraftPresence Commands, started with /cp or /craftpresence are Supported!
-*   At this time, in 1.13.2 and 1.14, The Config GUI can only open in-game due to an unknown issue.
+v1.5.x is Generally Recommended at this time for new users, as the systems used in v1.6.0 may have a variety of issues, and are considered bleeding-edge for the time being
 
-This GUI is subject to improve as future updates are released.
+Migration Notes:
+
+*   The RPC System has changed to an internal IPC System hooking into Discord's official endpoints
+
+    *   As a result, you can remove any discord-rpc DLL files present in CraftPresence's folders as they are no longer being used
+
+*   `gameTimePlaceholder` is now combined into the `&worldinfo&` Placeholder
+
+*   Some of the other placeholders within Server and Status Messages have been changed or renamed, please refer to the in-game tooltips for these new names
+
+*   Entity Messages now use the Default Message as the Format, while specific Item Messages are considered placeholders for the formatter
+
+    *   This means, only `&item&` (The Specific Item's Name) will work for specific Items
+    *   Otherwise, the more familiar placeholders such as `&main&` and `&offhand&` will retrieve these message when part of the default format setting
+
+*   `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
+
+    *   `&ign&` in Server Messages should be changed to using `&playerinfo&` for in-world Player Data and `&ign&` for out-of-world Player Data
+
+*   `overwriteServerIcon` has been deprecated, instead use the Presence Formatting GUI to define the priority for icons
+
+    *   Example: `overwriteServerIcon` = Setting `smallImageKey` to `&PACK&&SERVER&` (Having `&PACK&` be before anything else)
 
 #### 1.13.x Build Info
 
