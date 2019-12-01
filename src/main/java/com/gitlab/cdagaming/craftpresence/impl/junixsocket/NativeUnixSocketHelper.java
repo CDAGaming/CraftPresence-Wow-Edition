@@ -30,8 +30,13 @@ final class NativeUnixSocketHelper {
     private static boolean loaded;
 
     static {
-        try (NativeLibraryLoader nll = new NativeLibraryLoader()) {
+        NativeLibraryLoader nll = new NativeLibraryLoader();
+        try {
             nll.loadLibrary();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            nll.close();
         }
         loaded = true;
     }

@@ -46,6 +46,19 @@ public class User {
     }
 
     /**
+     * Returns a hash code for a {@code long} value; compatible with
+     * {@code Long.hashCode()}.
+     *
+     * <p>Cloned from JDK8 for Lower Version Compatibility</p>
+     *
+     * @param value the value to hash
+     * @return a hash code value for a {@code long} value.
+     */
+    public static int hashCode(long value) {
+        return (int) (value ^ (value >>> 32));
+    }
+
+    /**
      * Gets the Users account name.
      *
      * @return The Users account name.
@@ -162,7 +175,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Long.hashCode(id);
+        return hashCode(id);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class Callback {
      * Constructs an empty Callback.
      */
     public Callback() {
-        this((DataConsumer<Packet>) null, null);
+        this(null, null);
     }
 
     /**
@@ -58,23 +58,6 @@ public class Callback {
     public Callback(DataConsumer<Packet> success, DataConsumer<String> failure) {
         this.success = success;
         this.failure = failure;
-    }
-
-    /**
-     * @param success The Runnable to launch after a successful process.
-     * @param failure The Consumer to launch if the process has an error.
-     */
-    @Deprecated
-    public Callback(Runnable success, DataConsumer<String> failure) {
-        this(p -> success.run(), failure);
-    }
-
-    /**
-     * @param success The Runnable to launch after a successful process.
-     */
-    @Deprecated
-    public Callback(Runnable success) {
-        this(p -> success.run(), null);
     }
 
     /**

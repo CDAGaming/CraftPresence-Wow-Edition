@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath "com.github.CDAGaming:ForgeGradle:FG_2.3-SNAPSHOT"
-        classpath "com.github.liachmodded:CurseGradle:master-SNAPSHOT"
+        classpath "com.github.CDAGaming:CurseGradle:master-SNAPSHOT"
     }
 }
 

@@ -18,28 +18,5 @@ public interface DataConsumer<T> {
      * @param t the input argument
      */
     void accept(T t);
-
-    /**
-     * Returns a composed {@code DataConsumer} that performs, in sequence, this
-     * operation followed by the {@code after} operation. If performing either
-     * operation throws an exception, it is reported to the original caller.
-     * <p>
-     * If performing this operation throws an exception or is null,
-     * the {@code after} operation will not be performed.
-     *
-     * @param after the operation to perform after this operation
-     * @return a composed {@code Consumer} that performs in sequence this
-     * operation followed by the {@code after} operation
-     */
-    default DataConsumer<T> andThen(DataConsumer<? super T> after) {
-        if (after != null) {
-            return (T t) -> {
-                accept(t);
-                after.accept(t);
-            };
-        } else {
-            return null;
-        }
-    }
 }
 

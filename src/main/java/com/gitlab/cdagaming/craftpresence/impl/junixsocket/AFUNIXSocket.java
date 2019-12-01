@@ -158,7 +158,7 @@ public final class AFUNIXSocket extends Socket implements AncillaryFileDescripto
             if (socketFactory != null && endpoint instanceof InetSocketAddress) {
                 InetSocketAddress isa = (InetSocketAddress) endpoint;
 
-                String hostname = isa.getHostString();
+                String hostname = isa.getHostName();
                 if (socketFactory.isHostnameSupported(hostname)) {
                     endpoint = socketFactory.addressFromHost(hostname, isa.getPort());
                 }

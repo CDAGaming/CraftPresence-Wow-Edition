@@ -69,7 +69,7 @@ public class KeyUtils {
      */
     public String getKeyName(String original) {
         if (!StringUtils.isNullOrEmpty(original)) {
-            Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
+            final Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
 
             if (integerData.getFirst() && isValidKeyCode(integerData.getSecond())) {
                 // Input is a valid Integer and Valid KeyCode

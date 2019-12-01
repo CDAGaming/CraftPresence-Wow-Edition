@@ -154,6 +154,11 @@ public class ModUtils {
         BufferedReader reader = null;
 
         if (UpdateStatus) {
+            // Create Data Directory if non-existent
+            if (!charDataDir.getParentFile().exists() && !charDataDir.getParentFile().mkdirs()) {
+                errored = true;
+            }
+
             LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
             inputData = StringUtils.getResourceAsStream(ModUtils.class, charDataPath);
 

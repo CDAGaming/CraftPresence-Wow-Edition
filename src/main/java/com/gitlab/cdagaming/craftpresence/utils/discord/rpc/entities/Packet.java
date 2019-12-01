@@ -48,7 +48,7 @@ public class Packet {
      */
     public byte[] toBytes() {
         byte[] d = data.toString().getBytes();
-        ByteBuffer packet = ByteBuffer.allocate(d.length + 2 * Integer.BYTES);
+        ByteBuffer packet = ByteBuffer.allocate(d.length + 2 * (Integer.SIZE / Byte.SIZE));
         packet.putInt(Integer.reverseBytes(op.ordinal()));
         packet.putInt(Integer.reverseBytes(d.length));
         packet.put(d);

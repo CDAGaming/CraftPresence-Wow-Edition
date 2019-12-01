@@ -15,6 +15,10 @@ import java.util.List;
 import java.util.Properties;
 
 public class ConfigUtils {
+    // CONSTANTS
+    private final String[] blackListedCharacters = new String[]{",", "[", "]"},
+            keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"};
+
     // Config Names
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
@@ -283,18 +287,50 @@ public class ConfigUtils {
                             fieldObject = Boolean.parseBoolean(foundProperty.toString());
                         } else if ((expectedClass == int.class || expectedClass == Integer.class) &&
                                 StringUtils.getValidInteger(foundProperty.toString()).getFirst()) {
-                            // Convert to Integer if Valid
-                            fieldObject = StringUtils.getValidInteger(foundProperty.toString()).getSecond();
+                            // Convert to Integer if Valid, and if not reset it
+                            final Tuple<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty.toString());
+
+                            if (boolData.getFirst()) {
+                                // Pre-Verification Check to trigger if the Field Name contains KeyCode Triggers
+                                // If the Property Name contains KeyCode or KeyBinding, verify if the KeyCode is valid
+                                for (String keyTrigger : keyCodeTriggers) {
+                                    if (configProperty.getSecond().contains(keyTrigger)) {
+                                        if (!CraftPresence.KEYBINDINGS.isValidKeyCode(boolData.getSecond())) {
+                                            // If not a valid KeyCode, Revert Value to prior Data
+                                            if (!skipLogging) {
+                                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                                            }
+                                            fieldObject = configDataMappings.get(currentIndex).getSecond();
+                                        }
+                                        break;
+                                    }
+                                }
+
+                                if (fieldObject == null) {
+                                    fieldObject = boolData.getSecond();
+                                }
+                            } else {
+                                // If not a valid Integer, Revert Value to prior Data
+                                if (!skipLogging) {
+                                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                                }
+                                fieldObject = configDataMappings.get(currentIndex).getSecond();
+                            }
                         } else if (expectedClass == String[].class) {
                             // Convert to String Array (After Verifying it is a single Array)
                             final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("^\\[([^\\s]+?)\\]", foundProperty.toString()), 1, true);
 
                             if (!StringUtils.isNullOrEmpty(convertedString) &&
-                                    (convertedString.startsWith("\\[") && convertedString.endsWith("]")) &&
-                                    convertedString.contains(", ")) {
-                                fieldObject = foundProperty.toString()
-                                        .replaceAll("\\[", "").replaceAll("]", "")
-                                        .split(", ");
+                                    (convertedString.startsWith("[") && convertedString.endsWith("]"))) {
+                                // If Valid, interpret into formatted Array
+                                final String preArrayString = convertedString.replaceAll("\\[", "").replaceAll("]", "");
+                                if (preArrayString.contains(", ")) {
+                                    fieldObject = preArrayString.split(", ");
+                                } else if (preArrayString.contains(",")) {
+                                    fieldObject = preArrayString.split(",");
+                                } else {
+                                    fieldObject = new String[]{preArrayString};
+                                }
                             }
                         } else {
                             // If not a Convertible Type, Revert Value to prior Data
@@ -308,6 +344,11 @@ public class ConfigUtils {
                             StringUtils.updateField(getClass(), CraftPresence.CONFIG, new Tuple<>(configProperty.getSecond(), fieldObject));
                         }
                     }
+                } else {
+                    // If a Config Variable is not present in the Properties File, queue a Config Update
+                    if (!skipLogging) {
+                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                    }
                 }
                 currentIndex++;
             }
@@ -315,11 +356,14 @@ public class ConfigUtils {
             for (String remainingProp : propertyList) {
                 // Removes any Invalid Properties, that were not checked off during read
                 if (!skipLogging) {
-                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", remainingProp));
+                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", remainingProp));
                 }
                 properties.remove(remainingProp);
                 save();
             }
+
+            // Execute a Config Update, to ensure validity
+            updateConfig();
         }
 
         try {
@@ -364,7 +408,7 @@ public class ConfigUtils {
                     boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(finalArray, "default", 0, 1, splitCharacter, null));
                     if (!defaultFound) {
                         ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", configDataSet.getFirst()));
-                        finalArray = StringUtils.addToArray(finalArray, finalArray.length, "default" + splitCharacter + "null");
+                        finalArray = StringUtils.addToArray(finalArray, finalArray.length, "default" + splitCharacter + "NaN");
                         needsDataSync = true;
                     }
 
@@ -374,8 +418,8 @@ public class ConfigUtils {
                     finalOutput = configDataSet.getSecond().toString();
                 }
 
-                // Replace Split Character if needed
-                if (!StringUtils.isNullOrEmpty(queuedSplitCharacter) && finalOutput.contains(splitCharacter)) {
+                // Replace Split Character if needed, and is not a blacklisted character
+                if (!StringUtils.isNullOrEmpty(queuedSplitCharacter) && finalOutput.contains(splitCharacter) && !Arrays.asList(blackListedCharacters).contains(queuedSplitCharacter)) {
                     finalOutput = finalOutput.replace(splitCharacter, queuedSplitCharacter);
                     needsDataSync = true;
                 }
@@ -388,13 +432,16 @@ public class ConfigUtils {
         }
 
         // Save Queued Split Character, if any
-        splitCharacter = queuedSplitCharacter;
-        queuedSplitCharacter = null;
+        if (!StringUtils.isNullOrEmpty(queuedSplitCharacter) && !Arrays.asList(blackListedCharacters).contains(queuedSplitCharacter)) {
+            splitCharacter = queuedSplitCharacter;
+            queuedSplitCharacter = null;
+        }
 
+        save();
+
+        // Re-Sync the Config Mappings and Fields if needed
         if (needsDataSync) {
             read(true);
-        } else {
-            save();
         }
     }
 

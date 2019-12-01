@@ -121,12 +121,14 @@ public class AccessibilitySettingsGui extends GuiScreen {
             }
             CraftPresence.GUIS.openScreen(parentScreen);
         } else if (entryData == null) {
-            // Setup for Key Entry and Save Backup of Prior Setting
+            // Setup for Key Entry and Save Backup of Prior Setting, if a valid Key Button
             final ExtendedButtonControl extendedButton = (ExtendedButtonControl) button;
-            entryData = new Tuple<>(extendedButton, extendedButton.getOptionalArgs() != null ? extendedButton.getOptionalArgs()[0] : null);
+            if (extendedButton.getOptionalArgs() != null) {
+                entryData = new Tuple<>(extendedButton, extendedButton.getOptionalArgs()[0]);
 
-            backupKeyString = button.displayString;
-            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
+                backupKeyString = button.displayString;
+                button.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
+            }
         }
     }
 

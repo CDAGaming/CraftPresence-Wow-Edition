@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.6.0 (12/15/2019)
+## v1.6.0 (12/13/2019)
 
 ### Changes
 
@@ -17,6 +17,10 @@
 *   Extended KeyBinding System to expand to future KeyBinds
 
 *   Added Documentation for the Mod's Utilities, now available [here](https://cdagaming.gitlab.io/craftpresence-documentation/)
+
+*   Added a Verification Check for KeyBindings to ensure within Limits
+
+    *   This will NOT catch/migrate Keys between LWJGL 2 and 3
 
 *   Added a New Config Message in Logs for Initial Setups
 
@@ -38,14 +42,17 @@
 
 *   Compatibility Changes:
 
-    *   Now Compiled under Gradle 5.x on 1.8.9 and Above
+    *   Now Compiled under Gradle 5.6.4 on 1.8.9 and Above
 
         *   1.7.10 and 1.6.4 utilize Gradle 2.14.1
 
-    *   Now Targets Java 8 and uses Java 8 Functions on 1.12.2 and Above
+    *   Now Targets Java 8 and uses Java 8 Functions on Some MC Versions
 
 ### Fixes
 
+*   Fixed and Prevent Cases of Array Types being Messed up in the Config if you set your split character in the Config Gui as a comma or Square bracket
+*   Fixed Focus Gui Issues preventing some versions from displaying the Config Gui in any menu
+*   Fixed the Server Maximum Players Placeholder yielding invalid info on some versions
 *   Fixes any Rare Sustaining Presence of SSL Issues with the DiscordRPC Dll...by removing the dll even being needed
 *   Changed PG Left and Right KeyBind Triggers to `KEY_UP` and `KEY_DOWN` to resolve a conflict of changing pages while editing something
 *   Fixed Config Conflicts with a more dynamic system

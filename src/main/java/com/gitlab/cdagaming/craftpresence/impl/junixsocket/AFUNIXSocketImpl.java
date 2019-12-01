@@ -17,10 +17,14 @@
  */
 package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -35,10 +39,8 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
     private final AFUNIXInputStream in = newInputStream();
     private final AFUNIXOutputStream out = newOutputStream();
     private final AtomicInteger pendingAccepts = new AtomicInteger(0);
-    private final List<FileDescriptor[]> receivedFileDescriptors = Collections.synchronizedList(
-            new LinkedList<>());
-    private final Map<FileDescriptor, Integer> closeableFileDescriptors = Collections.synchronizedMap(
-            new HashMap<>());
+    private final List<FileDescriptor[]> receivedFileDescriptors = Lists.newArrayList();
+    private final Map<FileDescriptor, Integer> closeableFileDescriptors = Maps.newHashMap();
     private AFUNIXSocketAddress socketAddress;
     /**
      * We keep track of the server's inode to detect when another server connects to our address.
@@ -426,7 +428,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         if (receivedFileDescriptors.isEmpty()) {
             return null;
         }
-        List<FileDescriptor[]> copy = new ArrayList<>(receivedFileDescriptors);
+        List<FileDescriptor[]> copy = Lists.newArrayList(receivedFileDescriptors);
         if (copy.isEmpty()) {
             return null;
         }

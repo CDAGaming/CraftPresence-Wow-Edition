@@ -17,8 +17,9 @@
  */
 package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
 
+import com.google.common.collect.Lists;
+
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -61,7 +62,9 @@ final class NativeLibraryLoader implements Closeable {
             Properties p = new Properties();
             String resource = "/META-INF/maven/com.kohlschutter.junixsocket/" + artifactName
                     + "/pom.properties";
-            try (InputStream in = providerClass.getResourceAsStream(resource)) {
+            InputStream in = providerClass.getResourceAsStream(resource);
+
+            try {
                 if (in == null) {
                     throw new FileNotFoundException("Could not find resource " + resource + " relative to "
                             + providerClass);
@@ -74,6 +77,10 @@ final class NativeLibraryLoader implements Closeable {
                 } else {
                     throw new IllegalArgumentException("Could not read version from pom.properties");
                 }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } finally {
+                in.close();
             }
         }
         throw new IllegalStateException("No artifact names specified");
@@ -107,8 +114,8 @@ final class NativeLibraryLoader implements Closeable {
                 return;
             }
 
-            List<LibraryCandidate> candidates = new ArrayList<>();
-            List<Throwable> suppressedThrowables = new ArrayList<>();
+            List<LibraryCandidate> candidates = Lists.newArrayList();
+            List<Throwable> suppressedThrowables = Lists.newArrayList();
 
             try {
                 candidates.add(new StandardLibraryCandidate(getArtifactVersion(getClass(),
@@ -158,10 +165,9 @@ final class NativeLibraryLoader implements Closeable {
                 }
 
                 UnsatisfiedLinkError e = new UnsatisfiedLinkError(message);
-                for (Throwable suppressed : suppressedThrowables) {
-                    e.addSuppressed(suppressed);
+                if (!suppressedThrowables.contains(e.getCause())) {
+                    throw e;
                 }
-                throw e;
             }
         }
     }
@@ -170,7 +176,7 @@ final class NativeLibraryLoader implements Closeable {
                                                          String libraryNameAndVersion, Class<?> providerClass) {
         String mappedName = System.mapLibraryName(libraryNameAndVersion);
 
-        List<LibraryCandidate> list = new ArrayList<>();
+        List<LibraryCandidate> list = Lists.newArrayList();
         for (String compiler : new String[]{
                 "gpp", "g++", "linker", "clang", "gcc", "cc", "CC", "icpc", "icc", "xlC", "xlC_r", "msvc",
                 "icl", "ecpc", "ecc"}) {
@@ -276,13 +282,16 @@ final class NativeLibraryLoader implements Closeable {
             }
             File libFile;
             libFile = createTempFile("libtmp", System.mapLibraryName(libraryNameAndVersion));
-            try (OutputStream out = new FileOutputStream(libFile)) {
+            OutputStream out = new FileOutputStream(libFile);
+
+            try {
                 byte[] buf = new byte[4096];
                 int read;
                 while ((read = libraryIn.read(buf)) >= 0) {
                     out.write(buf, 0, read);
                 }
             } finally {
+                out.close();
                 libraryIn.close();
             }
             System.load(libFile.getAbsolutePath());

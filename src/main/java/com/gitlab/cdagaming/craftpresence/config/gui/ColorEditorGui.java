@@ -94,6 +94,16 @@ public class ColorEditorGui extends GuiScreen {
         drawString(mc.fontRenderer, previewTitle, width - 90, height - 25, 0xFFFFFF);
         drawString(mc.fontRenderer, noticeTitle, (width / 2) - 90, CraftPresence.GUIS.getButtonY(1) - 5, 0xFFFFFF);
 
+        // Ensure Button Activity on Page 1
+        redText.enabled = pageNumber == 0;
+        redText.visible = redText.enabled;
+        greenText.enabled = pageNumber == 0;
+        greenText.visible = greenText.enabled;
+        blueText.enabled = pageNumber == 0;
+        blueText.visible = blueText.enabled;
+        alphaText.enabled = pageNumber == 0;
+        alphaText.visible = alphaText.enabled;
+
         // Page 1 Items
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.hexcode");

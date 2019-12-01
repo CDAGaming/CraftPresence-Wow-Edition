@@ -18,6 +18,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 /**
  * An encapsulation of all data needed to properly construct a JSON RichPresence payload.
@@ -110,10 +111,10 @@ public class RichPresence {
             JsonArray partyData = new JsonArray();
 
             if (partySize > 0) {
-                partyData.add(partySize);
+                partyData.add(new JsonPrimitive(partySize));
 
                 if (partyMax >= partySize) {
-                    partyData.add(partyMax);
+                    partyData.add(new JsonPrimitive(partyMax));
                 }
             }
             party.add("size", partyData);

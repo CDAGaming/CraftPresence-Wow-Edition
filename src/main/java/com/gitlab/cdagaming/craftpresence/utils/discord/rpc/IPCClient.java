@@ -22,6 +22,7 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet.OpCo
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.Pipe;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.exceptions.NoDiscordClientException;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
@@ -55,7 +56,7 @@ import java.util.HashMap;
  */
 public final class IPCClient implements Closeable {
     private final long clientId;
-    private final HashMap<String, Callback> callbacks = new HashMap<>();
+    private final HashMap<String, Callback> callbacks = Maps.newHashMap();
     private volatile Pipe pipe;
     private IPCListener listener = null;
     private Thread readThread = null;
@@ -336,6 +337,7 @@ public final class IPCClient implements Closeable {
      * and calls the first {@link Pipe#read()}.
      */
     private void startReading() {
+        final IPCClient localInstance = this;
         readThread = new Thread(() -> {
             try {
                 Packet p;
@@ -380,17 +382,19 @@ public final class IPCClient implements Closeable {
                                     ModUtils.LOG.info("Reading thread encountered an event with an unknown type: " + json.getAsJsonPrimitive("evt").getAsString());
                                 }
                                 break;
+                            default:
+                                break;
                         }
                         if (listener != null && json.has("cmd") && json.getAsJsonPrimitive("cmd").getAsString().equals("DISPATCH")) {
                             try {
                                 final JsonObject data = json.getAsJsonObject("data");
                                 switch (Event.of(json.getAsJsonPrimitive("evt").getAsString())) {
                                     case ACTIVITY_JOIN:
-                                        listener.onActivityJoin(this, data.getAsJsonObject("secret").getAsString());
+                                        listener.onActivityJoin(localInstance, data.getAsJsonObject("secret").getAsString());
                                         break;
 
                                     case ACTIVITY_SPECTATE:
-                                        listener.onActivitySpectate(this, data.getAsJsonObject("secret").getAsString());
+                                        listener.onActivitySpectate(localInstance, data.getAsJsonObject("secret").getAsString());
                                         break;
 
                                     case ACTIVITY_JOIN_REQUEST:
@@ -401,7 +405,9 @@ public final class IPCClient implements Closeable {
                                                 Long.parseLong(u.getAsJsonPrimitive("id").getAsString()),
                                                 u.has("avatar") ? u.getAsJsonPrimitive("avatar").getAsString() : null
                                         );
-                                        listener.onActivityJoinRequest(this, data.has("secret") ? data.getAsJsonObject("secret").getAsString() : null, user);
+                                        listener.onActivityJoinRequest(localInstance, data.has("secret") ? data.getAsJsonObject("secret").getAsString() : null, user);
+                                        break;
+                                    default:
                                         break;
                                 }
                             } catch (Exception e) {
@@ -412,16 +418,13 @@ public final class IPCClient implements Closeable {
                 }
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)
-                    listener.onClose(this, p.getJson());
+                    listener.onClose(localInstance, p.getJson());
             } catch (IOException | JsonParseException ex) {
-                if (ex instanceof IOException)
-                    ModUtils.LOG.error("Reading thread encountered an IOException", ex);
-                else
-                    ModUtils.LOG.error("Reading thread encountered an JSONException", ex);
+                ModUtils.LOG.error("Reading thread encountered an Exception", ex);
 
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)
-                    listener.onDisconnect(this, ex);
+                    listener.onDisconnect(localInstance, ex);
             }
         }, "DiscordIPC-Reader");
 

@@ -34,7 +34,6 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -280,7 +279,7 @@ public class FileUtils {
      * @return The List of found classes from the search
      */
     public static List<Class<?>> getClassNamesMatchingSuperType(final Class<?> searchTarget, final String... sourcePackages) {
-        return getClassNamesMatchingSuperType(Collections.singletonList(searchTarget), sourcePackages);
+        return getClassNamesMatchingSuperType(Lists.newArrayList(searchTarget), sourcePackages);
     }
 
     /**
@@ -313,7 +312,7 @@ public class FileUtils {
             }
             return classNames;
         } else {
-            return Collections.emptyList();
+            return Lists.newArrayList();
         }
     }
 }

@@ -124,6 +124,7 @@ public class GuiUtils {
         wr.pos(x + width, y + height, zLevel).tex((u + width) * uScale, ((v + height) * vScale)).endVertex();
         wr.pos(x + width, y, zLevel).tex((u + width) * uScale, (v * vScale)).endVertex();
         wr.pos(x, y, zLevel).tex(u * uScale, (v * vScale)).endVertex();
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
         tessellator.draw();
     }
 
@@ -192,7 +193,7 @@ public class GuiUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI && !CraftPresence.CONFIG.showGameState : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI : enabled;
         isInUse = enabled && (CraftPresence.instance.currentScreen != null || CURRENT_SCREEN != null);
         isFocused = CraftPresence.instance.currentScreen != null && CraftPresence.instance.currentScreen.isFocused();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
