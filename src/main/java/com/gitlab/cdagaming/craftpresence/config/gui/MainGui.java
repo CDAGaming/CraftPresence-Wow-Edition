@@ -16,6 +16,9 @@ public class MainGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private ExtendedButtonControl generalSet, biomeSet, dimensionSet, serverSet, statusSet, advancedSet, accessibilitySet, presenceSet, proceedButton, aboutButton, commandGUIButton, resetConfigButton;
 
+    // Variable Needed to ensure all buttons are initialized before rendering to prevent an NPE
+    private boolean initialized = false;
+
     public MainGui(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
         currentScreen = this;
@@ -58,65 +61,69 @@ public class MainGui extends GuiScreen {
         buttonList.add(resetConfigButton);
 
         super.initGui();
+        initialized = true;
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        CraftPresence.GUIS.drawBackground(width, height);
+        // Ensures initialization events have run first, preventing an NPE
+        if (initialized) {
+            CraftPresence.GUIS.drawBackground(width, height);
 
-        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
+            final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+            drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
-        biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
-        dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;
-        serverSet.enabled = CraftPresence.CONFIG.showGameState;
-        statusSet.enabled = CraftPresence.CONFIG.showGameState;
-        commandGUIButton.enabled = CraftPresence.CONFIG.enableCommands;
+            biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
+            dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;
+            serverSet.enabled = CraftPresence.CONFIG.showGameState;
+            statusSet.enabled = CraftPresence.CONFIG.showGameState;
+            commandGUIButton.enabled = CraftPresence.CONFIG.enableCommands;
 
-        proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.save") : ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back");
+            proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.save") : ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
+            super.drawScreen(mouseX, mouseY, partialTicks);
 
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, generalSet)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.general")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, biomeSet)) {
-            if (!biomeSet.enabled) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showbiome"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-            } else {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, generalSet)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.general")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             }
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, dimensionSet)) {
-            if (!dimensionSet.enabled) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showdimension"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-            } else {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimensionmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, biomeSet)) {
+                if (!biomeSet.enabled) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showbiome"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                }
             }
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, serverSet)) {
-            if (!serverSet.enabled) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-            } else {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.servermessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, dimensionSet)) {
+                if (!dimensionSet.enabled) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showdimension"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimensionmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                }
             }
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, statusSet)) {
-            if (!statusSet.enabled) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-            } else {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.statusmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, serverSet)) {
+                if (!serverSet.enabled) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.servermessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                }
             }
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, advancedSet)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.advanced")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, accessibilitySet)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.accessibility")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
-        }
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, presenceSet)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.presencesettings")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, statusSet)) {
+                if (!statusSet.enabled) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.statusmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                }
+            }
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, advancedSet)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.advanced")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, accessibilitySet)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.accessibility")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, presenceSet)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.presencesettings")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
         }
     }
 
