@@ -133,6 +133,11 @@ public class ModUtils {
     public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
     /**
+     * If this Application is running/needs Legacy Data
+     */
+    public static final boolean IS_LEGACY = false;
+
+    /**
      * Whether to forcibly block any tooltips related to this Application from rendering
      */
     public static boolean forceBlockTooltipRendering = false;

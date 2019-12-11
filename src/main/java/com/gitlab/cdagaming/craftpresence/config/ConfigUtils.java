@@ -182,7 +182,7 @@ public class ConfigUtils {
         NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keybind").replaceAll(" ", "_");
         tooltipBGColor = "-267386864";
         tooltipBorderColor = "1347420415";
-        guiBGColor = "minecraft" + splitCharacter + "textures/gui/options_background.png";
+        guiBGColor = "minecraft" + splitCharacter + (ModUtils.IS_LEGACY ? "/gui/background.png" : "textures/gui/options_background.png");
         languageID = "en_US";
         stripTranslationColors = false;
         showLoggingInChat = false;

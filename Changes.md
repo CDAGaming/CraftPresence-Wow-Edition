@@ -1,70 +1,21 @@
 # CraftPresence Changes
 
-## v1.6.0 (12/13/2019)
+## v1.6.1 (1/??/2020)
 
 ### Changes
 
-*   Deprecate Usage of the Java Native Access API and DLL Usage
+*   All Builds, except for those with META-INF Errors, are now Signed
 
-    *   Now hooks directly into the API endpoints to determine and directly interpret RPC
+    *   Before, this only applied to 1.8.9 and above
 
-*   Added Specific Presence Display Settings to ConfigGUI
-
-    *   Now allows users to set where in the RPC they'd like each message
-
-*   `/cp view currentData` will now show the Current User the RPC is attached to
-
-*   Extended KeyBinding System to expand to future KeyBinds
-
-*   Added Documentation for the Mod's Utilities, now available [here](https://cdagaming.gitlab.io/craftpresence-documentation/)
-
-*   Added a Verification Check for KeyBindings to ensure within Limits
-
-    *   This will NOT catch/migrate Keys between LWJGL 2 and 3
-
-*   Added a New Config Message in Logs for Initial Setups
-
-*   Pressing the `Reset to Default` Button will no longer save automatically, to prevent accidental misuse
-
-    *   The `Back` Button will turn to `Save` if it detects a queued reset or change
-
-*   Added Placeholders to `&IGN&` within Server Settings:
-
-    *   `&coords&` has been added to display your X and Z Axis Coordinates
-
-*   The Mod will now use the Dimension ID, if any, if the Current Dimension Name returns null (Primarily a fallback)
-
-*   Sliders have now been added to the Config Gui where appropriate, such as the RGBA section of the ColorUI's
-
-*   Removed and Cleaned Unused Localization Strings
-
-*   (Code-Behind) Change `isValidInteger` and `isValidLong` to Getters powered by Tuple's for both getting a boolean and the number itself
-
-*   Compatibility Changes:
-
-    *   Now Compiled under Gradle 5.6.4 on 1.8.9 and Above
-
-        *   1.7.10 and 1.6.4 utilize Gradle 2.14.1
-
-    *   Now Targets Java 8 and uses Java 8 Functions on Some MC Versions
+*   Added a Parser for Update Data, so any Updates will display in the Gui, regardless if using Forge
 
 ### Fixes
 
-*   Fixed and Prevent Cases of Array Types being Messed up in the Config if you set your split character in the Config Gui as a comma or Square bracket
-*   Fixed Focus Gui Issues preventing some versions from displaying the Config Gui in any menu
-*   Fixed the Server Maximum Players Placeholder yielding invalid info on some versions
-*   Fixes any Rare Sustaining Presence of SSL Issues with the DiscordRPC Dll...by removing the dll even being needed
-*   Changed PG Left and Right KeyBind Triggers to `KEY_UP` and `KEY_DOWN` to resolve a conflict of changing pages while editing something
-*   Fixed Config Conflicts with a more dynamic system
-*   Fixes a Bug where the ConfigGUI KeyBind could still reset to Left Control (IE the old KeyBind) if a Keycode Error occurs
-*   Fixed Icon Support for MCUpdater (Will now use the Pack Name like Curse/Twitch)
-*   Code Compliance Adjustments as well as multiple refactors
-*   Corrected Credits Message for ItsDizzy
-*   Code Warning Fixes and Cleanups
-*   Fixes an NPE that may occur when on the Texture Input GUI
-*   Fixes a Race Case Issue preventing Inputting RGBA Values for color customization UIs
-*   Fixed an Unintentional Warning from a false positive Fingerprint Violation
-*   Minor Performance Improvements
+*   Fixed Default Tooltip Color Values so just visiting the Gui doesn't trigger a hasChanged State
+*   Fixed Some Versions of Minecraft having incorrect Dimension Names (Below 1.5.2)
+*   Fixed Slider and Escape Button Functionality on MC 1.14+ Ports
+*   Fixed an Incorrect GUI Background Texture Name on MC 1.5.2- Ports
 
 ### More Information
 
@@ -107,9 +58,9 @@ The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforg
 
 Starting In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
-#### 1.14.x Build Info
+#### 1.14.x - 1.15.x Build Info
 
-The 1.14.x Port of this Mod Requires the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api) and contains the same differences as the 1.13.x Port
+The 1.14.x and 1.15.x Ports of this Mod Require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api) and contains the same differences as the 1.13.x Port
 
 #### Snapshot Build Info
 
