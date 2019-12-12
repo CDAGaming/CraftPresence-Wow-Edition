@@ -69,6 +69,24 @@ public class UrlUtils {
     }
 
     /**
+     * Retrieve Output from a URL as a readable String
+     *
+     * @param url The URL to Access
+     * @return The Output from the url as a String
+     * @throws Exception If connection or Input is unable to be established
+     */
+    public static String getURLText(final String url) throws Exception {
+        final BufferedReader in = getURLReader(url);
+        final StringBuilder response = new StringBuilder();
+        String inputLine;
+        while (!StringUtils.isNullOrEmpty((inputLine = in.readLine()))) {
+            response.append(inputLine);
+        }
+        in.close();
+        return response.toString();
+    }
+
+    /**
      * Retrieve a {@link BufferedReader} to read a response from a URL
      *
      * @param url The URL to access (To be converted to a URL)

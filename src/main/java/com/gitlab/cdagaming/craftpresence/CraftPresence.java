@@ -144,6 +144,9 @@ public class CraftPresence {
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
         }
 
+        // Check for Updates before continuing
+        ModUtils.UPDATER.checkForUpdates();
+
         SYSTEM = new SystemUtils();
         CONFIG = new ConfigUtils(ModUtils.configDir + File.separator + ModUtils.MODID + ".properties");
         CONFIG.initialize();

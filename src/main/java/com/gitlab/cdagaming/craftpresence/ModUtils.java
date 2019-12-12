@@ -25,6 +25,7 @@ package com.gitlab.cdagaming.craftpresence;
 
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
+import com.gitlab.cdagaming.craftpresence.utils.updater.ModUpdaterUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
@@ -126,6 +127,11 @@ public class ModUtils {
      * The Application's Instance of {@link TranslationUtils} for Localization and Translating Data Strings
      */
     public static final TranslationUtils TRANSLATOR = new TranslationUtils(MODID, false);
+
+    /**
+     * The Application's Instance of {@link ModUpdaterUtils} for Retrieving if the Application has an update
+     */
+    public static final ModUpdaterUtils UPDATER = new ModUpdaterUtils(MODID, UPDATE_JSON, VERSION_ID);
 
     /**
      * If this Application should be run in a Developer or Debug State

@@ -4,6 +4,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.updater.UpdateInfoGui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
@@ -14,11 +15,12 @@ import java.util.List;
 
 public class AboutGui extends GuiScreen {
     private static final String SOURCE_URL = "https://gitlab.com/CDAGaming/CraftPresence";
-    private final GuiScreen parentScreen;
-    private ExtendedButtonControl viewSource, backButton;
+    private final GuiScreen parentScreen, currentScreen;
+    private ExtendedButtonControl viewSource, versionCheck, backButton;
 
     AboutGui(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
+        currentScreen = this;
         this.parentScreen = parentScreen;
     }
 
@@ -26,9 +28,12 @@ public class AboutGui extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        backButton = new ExtendedButtonControl(700, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
+        versionCheck = new ExtendedButtonControl(600, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.versionInfo"));
+
+        backButton = new ExtendedButtonControl(700, 10, (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
         viewSource = new ExtendedButtonControl(810, (width / 2) - 90, (height - 55), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.viewsource"));
 
+        buttonList.add(versionCheck);
         buttonList.add(backButton);
         buttonList.add(viewSource);
 
@@ -55,7 +60,9 @@ public class AboutGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button.id == backButton.id) {
+        if (button.id == versionCheck.id) {
+            CraftPresence.GUIS.openScreen(new UpdateInfoGui(currentScreen, ModUtils.UPDATER));
+        } else if (button.id == backButton.id) {
             CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == viewSource.id) {
             try {
