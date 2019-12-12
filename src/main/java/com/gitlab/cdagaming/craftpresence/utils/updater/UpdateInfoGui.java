@@ -42,10 +42,17 @@ public class UpdateInfoGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         CraftPresence.GUIS.drawBackground(width, height);
 
-        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.changes");
+        downloadButton.enabled = modUpdater.currentState == ModUpdaterUtils.UpdateState.OUTDATED ||
+                modUpdater.currentState == ModUpdaterUtils.UpdateState.BETA_OUTDATED;
+
+        checkButton.enabled = modUpdater.currentState != ModUpdaterUtils.UpdateState.PENDING;
+
+        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
+        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.changes", modUpdater.currentState.name());
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.changelog", modUpdater.targetVersion, modUpdater.targetChangelogData));
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
         CraftPresence.GUIS.drawMultiLineString(notice, 25, 45, width, height, -1, mc.fontRenderer, false);
 
