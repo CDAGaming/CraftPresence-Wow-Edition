@@ -180,8 +180,8 @@ public class ConfigUtils {
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.striptranslationcolors").replaceAll(" ", "_");
         NAME_showLoggingInChat = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.showlogginginchat").replaceAll(" ", "_");
         NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keybind").replaceAll(" ", "_");
-        tooltipBGColor = "-267386864";
-        tooltipBorderColor = "1347420415";
+        tooltipBGColor = "0xF0100010";
+        tooltipBorderColor = "0x505000FF";
         guiBGColor = "minecraft" + splitCharacter + (ModUtils.IS_LEGACY ? "/gui/background.png" : "textures/gui/options_background.png");
         languageID = "en_US";
         stripTranslationColors = false;
