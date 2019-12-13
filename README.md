@@ -58,7 +58,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 
 (In v1.6.0 and Above, You can now define where in the Rich Presence the Messages should go)
 
-(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them)
+(Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them on v1.5.x and below)
 
 ### Presence Display Placeholders
 *   &DIMENSION& - The Dimension Message from your Dimension Settings, if enabled and in use
@@ -67,8 +67,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 *   &GUI& - The GUI Message from your GUI Settings, if enabled and in use
 *   &ENTITY& - The Entity/Item Message from your Advanced -> Entity/Item Setting, if enabled and in use
 
-(All Placeholders must be present in one of the RPC Areas)
-(For Image Keys, it works as a priority list going in sequential order)
+(For Image Keys, only the first placeholder and an additional suffix if any will be used)
 
 ### Main Menu Message Placeholders
 *   &IGN& - Your Minecraft Username
@@ -147,7 +146,7 @@ This Project makes usage of the following dependencies internally:
 *   [DiscordIPC API](https://github.com/jagrosh/DiscordIPC) by [jagrosh](https://github.com/jagrosh)
     *   [JUnixSocket](https://github.com/kohlschutter/junixsocket) by [kohlschutter](https://github.com/kohlschutter)
 
-*   [JNA API](https://github.com/java-native-access/jna) on v1.5.x and Below
+*   [Java Native Access (JNA) API](https://github.com/java-native-access/jna) on v1.5.x and Below
 
 #### Discord TOS
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
