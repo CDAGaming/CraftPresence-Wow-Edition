@@ -49,7 +49,7 @@ public class WindowsPipe extends Pipe {
     public Packet read() throws IOException, JsonParseException {
         // Await byte retrieval
         try {
-            while (file.length() == 0 && status == PipeStatus.CONNECTED) {
+            while ((status == PipeStatus.CONNECTED || status == PipeStatus.CLOSING) && file.length() == 0) {
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException ignored) {
@@ -87,6 +87,7 @@ public class WindowsPipe extends Pipe {
         if (ModUtils.IS_DEV) {
             ModUtils.LOG.info("Closing IPC pipe...");
         }
+        status = PipeStatus.CLOSING;
         send(Packet.OpCode.CLOSE, new JsonObject(), null);
         status = PipeStatus.CLOSED;
         file.close();
