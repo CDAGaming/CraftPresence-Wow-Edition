@@ -27,9 +27,11 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
@@ -156,5 +158,54 @@ public class UrlUtils {
      */
     public static <T> T getJSONFromURL(URL url, Class<T> targetClass) throws Exception {
         return GSON.fromJson(getURLStreamReader(url), targetClass);
+    }
+
+    /**
+     * Opens the Specified Url in a Browser, if able
+     *
+     * @param targetUrl The URL to Open, as a String
+     */
+    public static void openUrl(final String targetUrl) {
+        try {
+            openUrl(new URI(targetUrl));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Opens the Specified Url in a Browser, if able
+     *
+     * @param targetUrl The URL to Open, as a URL
+     */
+    public static void openUrl(final URL targetUrl) {
+        try {
+            openUrl(targetUrl.toURI());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Opens the Specified Url in a Browser, if able
+     *
+     * @param targetUrl The URL to Open, as a URI
+     */
+    public static void openUrl(final URI targetUrl) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            final Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.browse(targetUrl);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            final Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec("xdg-open " + targetUrl.toString());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
