@@ -1,30 +1,26 @@
 /*
  * junixsocket
- *
+ * <p>
  * Copyright 2009-2019 Christian Kohlschütter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+package org.newsclub.net.unix;
 
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -32,15 +28,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Christian Kohlschütter
  */
-class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelper.Support {
+class AFUNIXSocketImpl extends SocketImpl {
     private static final int SHUT_RD = 0;
     private static final int SHUT_WR = 1;
     private static final int SHUT_RD_WR = 2;
     private final AFUNIXInputStream in = newInputStream();
     private final AFUNIXOutputStream out = newOutputStream();
     private final AtomicInteger pendingAccepts = new AtomicInteger(0);
-    private final List<FileDescriptor[]> receivedFileDescriptors = Lists.newArrayList();
-    private final Map<FileDescriptor, Integer> closeableFileDescriptors = Maps.newHashMap();
+    private final List<FileDescriptor[]> receivedFileDescriptors = Collections.synchronizedList(
+            new LinkedList<>());
+    private final Map<FileDescriptor, Integer> closeableFileDescriptors = Collections.synchronizedMap(
+            new HashMap<>());
     private AFUNIXSocketAddress socketAddress;
     /**
      * We keep track of the server's inode to detect when another server connects to our address.
@@ -56,9 +54,10 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
     private int[] pendingFileDescriptors = null;
     private int timeout = 0;
 
-    AFUNIXSocketImpl() {
+    protected AFUNIXSocketImpl() {
         super();
         this.fd = new FileDescriptor();
+        this.address = InetAddress.getLoopbackAddress();
     }
 
     private static int expectInteger(Object value) throws SocketException {
@@ -108,7 +107,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         try {
             synchronized (closeableFileDescriptors) {
                 for (FileDescriptor fd : closeableFileDescriptors.keySet()) {
-                    NativeUnixSocketHelper.close(fd);
+                    NativeUnixSocket.close(fd);
                 }
             }
         } catch (Throwable t) {
@@ -129,15 +128,15 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
                     throw new SocketException("Socket is closed");
                 }
 
-                NativeUnixSocketHelper.accept(socketAddress.getBytes(), fdesc, si.fd, inode, this.timeout);
+                NativeUnixSocket.accept(socketAddress.getBytes(), fdesc, si.fd, inode, this.timeout);
                 if (!bound || closed) {
                     try {
-                        NativeUnixSocketHelper.shutdown(si.fd, SHUT_RD_WR);
+                        NativeUnixSocket.shutdown(si.fd, SHUT_RD_WR);
                     } catch (Exception e) {
                         // ignore
                     }
                     try {
-                        NativeUnixSocketHelper.close(si.fd);
+                        NativeUnixSocket.close(si.fd);
                     } catch (Exception e) {
                         // ignore
                     }
@@ -149,28 +148,36 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         }
         si.socketAddress = socketAddress;
         si.connected = true;
+        si.port = socketAddress.getPort();
+        si.address = socketAddress.getAddress();
     }
 
     @Override
     protected int available() throws IOException {
         FileDescriptor fdesc = validFdOrException();
-        return NativeUnixSocketHelper.available(fdesc);
+        return NativeUnixSocket.available(fdesc);
     }
 
-    void bind(SocketAddress addr, int options) throws IOException {
+    protected void bind(SocketAddress addr) throws IOException {
+        bind(addr, -1);
+    }
+
+    protected void bind(SocketAddress addr, int options) throws IOException {
         if (!(addr instanceof AFUNIXSocketAddress)) {
             throw new SocketException("Cannot bind to this type of address: " + addr.getClass());
         }
 
         this.socketAddress = (AFUNIXSocketAddress) addr;
+        this.address = socketAddress.getAddress();
 
-        this.inode = NativeUnixSocketHelper.bind(socketAddress.getBytes(), fd, options);
+        this.inode = NativeUnixSocket.bind(socketAddress.getBytes(), fd, options);
         validFdOrException();
         bound = true;
         this.localport = socketAddress.getPort();
     }
 
     @Override
+    @SuppressWarnings("hiding")
     protected void bind(InetAddress host, int port) throws IOException {
         throw new SocketException("Cannot bind to this type of address: " + InetAddress.class);
     }
@@ -190,18 +197,18 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
                 FileDescriptor tmpFd = new FileDescriptor();
 
                 try {
-                    NativeUnixSocketHelper.connect(socketAddress.getBytes(), tmpFd, inode);
+                    NativeUnixSocket.connect(socketAddress.getBytes(), tmpFd, inode);
                 } catch (IOException e) {
                     // there's nothing we can do to unlock these accepts
                     return;
                 }
                 try {
-                    NativeUnixSocketHelper.shutdown(tmpFd, SHUT_RD_WR);
+                    NativeUnixSocket.shutdown(tmpFd, SHUT_RD_WR);
                 } catch (Exception e) {
                     // ignore
                 }
                 try {
-                    NativeUnixSocketHelper.close(tmpFd);
+                    NativeUnixSocket.close(tmpFd);
                 } catch (Exception e) {
                     // ignore
                 }
@@ -218,24 +225,26 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
 
         FileDescriptor fdesc = validFd();
         if (fdesc != null) {
-            NativeUnixSocketHelper.shutdown(fdesc, SHUT_RD_WR);
+            NativeUnixSocket.shutdown(fdesc, SHUT_RD_WR);
 
             closed = true;
             if (wasBound && socketAddress != null && socketAddress.getBytes() != null && inode >= 0) {
                 unblockAccepts();
             }
 
-            NativeUnixSocketHelper.close(fdesc);
+            NativeUnixSocket.close(fdesc);
         }
         closed = true;
     }
 
     @Override
+    @SuppressWarnings("hiding")
     protected void connect(String host, int port) throws IOException {
         throw new SocketException("Cannot bind to this type of address: " + InetAddress.class);
     }
 
     @Override
+    @SuppressWarnings("hiding")
     protected void connect(InetAddress address, int port) throws IOException {
         throw new SocketException("Cannot bind to this type of address: " + InetAddress.class);
     }
@@ -246,7 +255,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             throw new SocketException("Cannot bind to this type of address: " + addr.getClass());
         }
         this.socketAddress = (AFUNIXSocketAddress) addr;
-        NativeUnixSocketHelper.connect(socketAddress.getBytes(), fd, -1);
+        NativeUnixSocket.connect(socketAddress.getBytes(), fd, -1);
         validFdOrException();
         this.address = socketAddress.getAddress();
         this.port = socketAddress.getPort();
@@ -256,7 +265,6 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
 
     @Override
     protected void create(boolean stream) {
-        // N/A
     }
 
     @Override
@@ -278,19 +286,18 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
     }
 
     @Override
-    protected void listen(int originalBacklog) throws IOException {
-        int backlog = originalBacklog;
+    protected void listen(int backlog) throws IOException {
         FileDescriptor fdesc = validFdOrException();
         if (backlog <= 0) {
             backlog = 50;
         }
-        NativeUnixSocketHelper.listen(fdesc, backlog);
+        NativeUnixSocket.listen(fdesc, backlog);
     }
 
     @Override
     protected void sendUrgentData(int data) throws IOException {
         FileDescriptor fdesc = validFdOrException();
-        NativeUnixSocketHelper.write(AFUNIXSocketImpl.this, fdesc, new byte[]{(byte) (data & 0xFF)}, 0, 1,
+        NativeUnixSocket.write(AFUNIXSocketImpl.this, fdesc, new byte[]{(byte) (data & 0xFF)}, 0, 1,
                 pendingFileDescriptors);
     }
 
@@ -307,8 +314,10 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             return null;
         }
         FileDescriptor descriptor = this.fd;
-        if (descriptor != null && descriptor.valid()) {
-            return descriptor;
+        if (descriptor != null) {
+            if (descriptor.valid()) {
+                return descriptor;
+            }
         }
         return null;
     }
@@ -330,14 +339,14 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             switch (optID) {
                 case SocketOptions.SO_KEEPALIVE:
                 case SocketOptions.TCP_NODELAY:
-                    return NativeUnixSocketHelper.getSocketOptionInt(fdesc, optID) != 0;
+                    return NativeUnixSocket.getSocketOptionInt(fdesc, optID) != 0;
                 case SocketOptions.SO_TIMEOUT:
-                    return Math.max(timeout, Math.max(NativeUnixSocketHelper.getSocketOptionInt(fdesc, 0x1005),
-                            NativeUnixSocketHelper.getSocketOptionInt(fdesc, 0x1006)));
+                    return Math.max(timeout, Math.max(NativeUnixSocket.getSocketOptionInt(fdesc, 0x1005),
+                            NativeUnixSocket.getSocketOptionInt(fdesc, 0x1006)));
                 case SocketOptions.SO_LINGER:
                 case SocketOptions.SO_RCVBUF:
                 case SocketOptions.SO_SNDBUF:
-                    return NativeUnixSocketHelper.getSocketOptionInt(fdesc, optID);
+                    return NativeUnixSocket.getSocketOptionInt(fdesc, optID);
                 default:
                     throw new SocketException("Unsupported option: " + optID);
             }
@@ -365,23 +374,23 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
                         if (b) {
                             throw new SocketException("Only accepting Boolean.FALSE here");
                         }
-                        NativeUnixSocketHelper.setSocketOptionInt(fdesc, optID, -1);
+                        NativeUnixSocket.setSocketOptionInt(fdesc, optID, -1);
                         return;
                     }
-                    NativeUnixSocketHelper.setSocketOptionInt(fdesc, optID, expectInteger(value));
+                    NativeUnixSocket.setSocketOptionInt(fdesc, optID, expectInteger(value));
                     return;
                 case SocketOptions.SO_TIMEOUT:
                     this.timeout = expectInteger(value);
-                    NativeUnixSocketHelper.setSocketOptionInt(fdesc, 0x1005, timeout);
-                    NativeUnixSocketHelper.setSocketOptionInt(fdesc, 0x1006, timeout);
+                    NativeUnixSocket.setSocketOptionInt(fdesc, 0x1005, timeout);
+                    NativeUnixSocket.setSocketOptionInt(fdesc, 0x1006, timeout);
                     return;
                 case SocketOptions.SO_RCVBUF:
                 case SocketOptions.SO_SNDBUF:
-                    NativeUnixSocketHelper.setSocketOptionInt(fdesc, optID, expectInteger(value));
+                    NativeUnixSocket.setSocketOptionInt(fdesc, optID, expectInteger(value));
                     return;
                 case SocketOptions.SO_KEEPALIVE:
                 case SocketOptions.TCP_NODELAY:
-                    NativeUnixSocketHelper.setSocketOptionInt(fdesc, optID, expectBoolean(value));
+                    NativeUnixSocket.setSocketOptionInt(fdesc, optID, expectBoolean(value));
                     return;
                 default:
                     throw new SocketException("Unsupported option: " + optID);
@@ -397,7 +406,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
     protected void shutdownInput() throws IOException {
         FileDescriptor fdesc = validFd();
         if (fdesc != null) {
-            NativeUnixSocketHelper.shutdown(fdesc, SHUT_RD);
+            NativeUnixSocket.shutdown(fdesc, SHUT_RD);
         }
     }
 
@@ -405,15 +414,22 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
     protected void shutdownOutput() throws IOException {
         FileDescriptor fdesc = validFd();
         if (fdesc != null) {
-            NativeUnixSocketHelper.shutdown(fdesc, SHUT_WR);
+            NativeUnixSocket.shutdown(fdesc, SHUT_WR);
         }
     }
 
-    private void setAncillaryReceiveBufferSize(int size) {
+    AFUNIXSocketCredentials getPeerCredentials() throws IOException {
+        return NativeUnixSocket.peerCredentials(fd, new AFUNIXSocketCredentials());
+    }
+
+    int getAncillaryReceiveBufferSize() {
+        return ancillaryReceiveBuffer.capacity();
+    }
+
+    void setAncillaryReceiveBufferSize(int size) {
         this.ancillaryReceiveBuffer = ByteBuffer.allocateDirect(size);
     }
 
-    @Override
     public final void ensureAncillaryReceiveBufferSize(int minSize) {
         if (minSize <= 0) {
             return;
@@ -423,12 +439,11 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         }
     }
 
-    @Override
     public final FileDescriptor[] getReceivedFileDescriptors() {
         if (receivedFileDescriptors.isEmpty()) {
             return null;
         }
-        List<FileDescriptor[]> copy = Lists.newArrayList(receivedFileDescriptors);
+        List<FileDescriptor[]> copy = new ArrayList<>(receivedFileDescriptors);
         if (copy.isEmpty()) {
             return null;
         }
@@ -449,17 +464,42 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         return oneArray;
     }
 
-    @Override
     public final void clearReceivedFileDescriptors() {
         receivedFileDescriptors.clear();
     }
 
+    // called from native code
+    final void receiveFileDescriptors(int[] fds) throws IOException {
+        if (fds == null || fds.length == 0) {
+            return;
+        }
+        final int fdsLength = fds.length;
+        FileDescriptor[] descriptors = new FileDescriptor[fdsLength];
+        for (int i = 0; i < fdsLength; i++) {
+            FileDescriptor fdesc = new FileDescriptor();
+            NativeUnixSocket.initFD(fdesc, fds[i]);
+            descriptors[i] = fdesc;
+
+            closeableFileDescriptors.put(fdesc, fds[i]);
+
+            @SuppressWarnings("resource") final Closeable cleanup = new Closeable() {
+
+                @Override
+                public void close() {
+                    closeableFileDescriptors.remove(fdesc);
+                }
+            };
+            NativeUnixSocket.attachCloseable(fdesc, cleanup);
+        }
+
+        this.receivedFileDescriptors.add(descriptors);
+    }
+
     // called from native code, too (but only with null)
-    private void setOutboundFileDescriptors(int... fds) {
+    final void setOutboundFileDescriptors(int... fds) {
         this.pendingFileDescriptors = (fds == null || fds.length == 0) ? null : fds;
     }
 
-    @Override
     public final void setOutboundFileDescriptors(FileDescriptor... fdescs) throws IOException {
         if (fdescs == null || fdescs.length == 0) {
             this.setOutboundFileDescriptors((int[]) null);
@@ -468,7 +508,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             final int[] fds = new int[numFdescs];
             for (int i = 0; i < numFdescs; i++) {
                 FileDescriptor fdesc = fdescs[i];
-                fds[i] = NativeUnixSocketHelper.getFD(fdesc);
+                fds[i] = NativeUnixSocket.getFD(fdesc);
             }
             this.setOutboundFileDescriptors(fds);
         }
@@ -509,25 +549,9 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         }
     }
 
-    /**
-     * Special implementation to support ancillary file descriptors over RMI.
-     *
-     * @author Christian Kohlschütter
-     */
-    static final class ForRMI extends AFUNIXSocketImpl {
-        @Override
-        protected AFUNIXInputStream newInputStream() {
-            return new AFUNIXRMIInputStream();
-        }
-
-        @Override
-        protected AFUNIXOutputStream newOutputStream() {
-            return new AFUNIXRMIOutputStream();
-        }
-    }
-
     private class AFUNIXInputStream extends InputStream {
         private volatile boolean streamClosed = false;
+        private boolean eofReached = false;
 
         @Override
         public int read(byte[] buf, int off, int len) throws IOException {
@@ -541,15 +565,19 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
                 throw new IndexOutOfBoundsException();
             }
 
-            return NativeUnixSocketHelper.read(AFUNIXSocketImpl.this, fdesc, buf, off, len,
+            return NativeUnixSocket.read(AFUNIXSocketImpl.this, fdesc, buf, off, len,
                     ancillaryReceiveBuffer);
         }
 
         @Override
         public int read() throws IOException {
+            if (eofReached) {
+                return -1;
+            }
             final byte[] buf1 = new byte[1];
             final int numRead = read(buf1, 0, 1);
             if (numRead <= 0) {
+                eofReached = true;
                 return -1;
             } else {
                 return buf1[0] & 0xFF;
@@ -561,7 +589,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             streamClosed = true;
             FileDescriptor fdesc = validFd();
             if (fdesc != null) {
-                NativeUnixSocketHelper.shutdown(fdesc, SHUT_RD);
+                NativeUnixSocket.shutdown(fdesc, SHUT_RD);
             }
 
             closedInputStream = true;
@@ -575,7 +603,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             }
             FileDescriptor fdesc = validFdOrException();
 
-            return NativeUnixSocketHelper.available(fdesc);
+            return NativeUnixSocket.available(fdesc);
         }
     }
 
@@ -589,9 +617,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
         }
 
         @Override
-        public void write(byte[] buf, int originalOff, int originalLen) throws IOException {
-            int off = originalOff;
-            int len = originalLen;
+        public void write(byte[] buf, int off, int len) throws IOException {
             if (streamClosed) {
                 throw new SocketException("This OutputStream has already been closed.");
             }
@@ -609,7 +635,7 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
                     throw ex;
                 }
 
-                final int written = NativeUnixSocketHelper.write(AFUNIXSocketImpl.this, fdesc, buf, off, len,
+                final int written = NativeUnixSocket.write(AFUNIXSocketImpl.this, fdesc, buf, off, len,
                         pendingFileDescriptors);
                 if (written < 0) {
                     throw new IOException("Unspecific error while writing");
@@ -628,26 +654,10 @@ class AFUNIXSocketImpl extends SocketImpl implements AncillaryFileDescriptorHelp
             streamClosed = true;
             FileDescriptor fdesc = validFd();
             if (fdesc != null) {
-                NativeUnixSocketHelper.shutdown(fdesc, SHUT_WR);
+                NativeUnixSocket.shutdown(fdesc, SHUT_WR);
             }
             closedOutputStream = true;
             checkClose();
-        }
-    }
-
-    final class AFUNIXRMIInputStream extends AFUNIXInputStream {
-        @Override
-        public int available() throws IOException {
-            AncillaryFileDescriptorHelper.setSupportRef(AFUNIXSocketImpl.this);
-            return super.available();
-        }
-    }
-
-    final class AFUNIXRMIOutputStream extends AFUNIXOutputStream {
-        @Override
-        public void flush() throws IOException {
-            super.flush();
-            AncillaryFileDescriptorHelper.setSupportRef(AFUNIXSocketImpl.this);
         }
     }
 }

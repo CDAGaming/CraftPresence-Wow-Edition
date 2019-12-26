@@ -15,7 +15,6 @@
  */
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities;
 
-import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -89,18 +88,18 @@ public class RichPresence {
             }
         }
 
-        if (!StringUtils.isNullOrEmpty(largeImageKey)) {
+        if (largeImageKey != null && !largeImageKey.isEmpty()) {
             assets.addProperty("large_image", largeImageKey);
 
-            if (!StringUtils.isNullOrEmpty(largeImageText)) {
+            if (largeImageText != null && !largeImageText.isEmpty()) {
                 assets.addProperty("large_text", largeImageText);
             }
         }
 
-        if (!StringUtils.isNullOrEmpty(smallImageKey)) {
+        if (smallImageKey != null && !smallImageKey.isEmpty()) {
             assets.addProperty("small_image", smallImageKey);
 
-            if (!StringUtils.isNullOrEmpty(smallImageText)) {
+            if (smallImageText != null && !smallImageText.isEmpty()) {
                 assets.addProperty("small_text", smallImageText);
             }
         }
@@ -120,20 +119,20 @@ public class RichPresence {
             party.add("size", partyData);
         }
 
-        if (!StringUtils.isNullOrEmpty(joinSecret)) {
+        if (joinSecret != null && !joinSecret.isEmpty()) {
             secrets.addProperty("join", joinSecret);
         }
-        if (!StringUtils.isNullOrEmpty(spectateSecret)) {
+        if (spectateSecret != null && !spectateSecret.isEmpty()) {
             secrets.addProperty("spectate", spectateSecret);
         }
-        if (!StringUtils.isNullOrEmpty(matchSecret)) {
+        if (matchSecret != null && !matchSecret.isEmpty()) {
             secrets.addProperty("match", matchSecret);
         }
 
-        if (!StringUtils.isNullOrEmpty(state)) {
+        if (state != null && !state.isEmpty()) {
             finalObject.addProperty("state", state);
         }
-        if (!StringUtils.isNullOrEmpty(details)) {
+        if (details != null && !details.isEmpty()) {
             finalObject.addProperty("details", details);
         }
         if (timestamps.has("start")) {
@@ -195,9 +194,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setState(String state) {
-            if (!StringUtils.isNullOrEmpty(state)) {
-                this.state = state;
-            }
+            this.state = state;
             return this;
         }
 
@@ -208,9 +205,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setDetails(String details) {
-            if (!StringUtils.isNullOrEmpty(details)) {
-                this.details = details;
-            }
+            this.details = details;
             return this;
         }
 
@@ -221,9 +216,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setStartTimestamp(long startTimestamp) {
-            if (startTimestamp != 0) {
-                this.startTimestamp = startTimestamp;
-            }
+            this.startTimestamp = startTimestamp;
             return this;
         }
 
@@ -234,9 +227,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setEndTimestamp(long endTimestamp) {
-            if (endTimestamp != 0) {
-                this.endTimestamp = endTimestamp;
-            }
+            this.endTimestamp = endTimestamp;
             return this;
         }
 
@@ -252,10 +243,8 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setLargeImage(String largeImageKey, String largeImageText) {
-            if (!StringUtils.isNullOrEmpty(largeImageKey)) {
-                this.largeImageKey = largeImageKey;
-                this.largeImageText = largeImageText;
-            }
+            this.largeImageKey = largeImageKey;
+            this.largeImageText = largeImageText;
             return this;
         }
 
@@ -284,10 +273,8 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setSmallImage(String smallImageKey, String smallImageText) {
-            if (!StringUtils.isNullOrEmpty(smallImageKey)) {
-                this.smallImageKey = smallImageKey;
-                this.smallImageText = smallImageText;
-            }
+            this.smallImageKey = smallImageKey;
+            this.smallImageText = smallImageText;
             return this;
         }
 
@@ -317,11 +304,9 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setParty(String partyId, int partySize, int partyMax) {
-            if (!StringUtils.isNullOrEmpty(partyId)) {
-                this.partyId = partyId;
-                this.partySize = partySize;
-                this.partyMax = partyMax;
-            }
+            this.partyId = partyId;
+            this.partySize = partySize;
+            this.partyMax = partyMax;
             return this;
         }
 
@@ -332,9 +317,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setMatchSecret(String matchSecret) {
-            if (!StringUtils.isNullOrEmpty(matchSecret)) {
-                this.matchSecret = matchSecret;
-            }
+            this.matchSecret = matchSecret;
             return this;
         }
 
@@ -345,9 +328,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setJoinSecret(String joinSecret) {
-            if (!StringUtils.isNullOrEmpty(joinSecret)) {
-                this.joinSecret = joinSecret;
-            }
+            this.joinSecret = joinSecret;
             return this;
         }
 
@@ -358,9 +339,7 @@ public class RichPresence {
          * @return This Builder.
          */
         public Builder setSpectateSecret(String spectateSecret) {
-            if (!StringUtils.isNullOrEmpty(spectateSecret)) {
-                this.spectateSecret = spectateSecret;
-            }
+            this.spectateSecret = spectateSecret;
             return this;
         }
 

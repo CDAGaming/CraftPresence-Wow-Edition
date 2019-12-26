@@ -1,21 +1,21 @@
 /*
  * junixsocket
- *
+ * <p>
  * Copyright 2009-2019 Christian Kohlschütter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
+package org.newsclub.net.unix;
 
 import javax.net.SocketFactory;
 import java.io.File;
@@ -24,6 +24,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.util.Objects;
 
 /**
  * The base for a SocketFactory that connects to UNIX sockets.
@@ -70,7 +71,7 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
      * @param address The address to check.
      * @return {@code true} if supported.
      */
-    private boolean isINetAddressSupported(InetAddress address) {
+    protected boolean isInetAddressSupported(InetAddress address) {
         return address != null && isHostnameSupported(address.getHostName());
     }
 
@@ -107,7 +108,7 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
 
     @Override
     public Socket createSocket(InetAddress address, int port) throws IOException {
-        if (!isINetAddressSupported(address)) {
+        if (!isInetAddressSupported(address)) {
             throw new UnknownHostException();
         }
         String hostname = address.getHostName();
@@ -120,10 +121,11 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
     @Override
     public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
             throws IOException {
-        if (!isINetAddressSupported(address)) {
+        if (!isInetAddressSupported(address)) {
             throw new UnknownHostException();
         }
-        if (localAddress == null || localPort < 0) {
+        Objects.requireNonNull(localAddress, "Local address was null");
+        if (localPort < 0) {
             throw new IllegalArgumentException("Illegal local port");
         }
         // NOTE: we simply ignore localAddress and localPort
@@ -163,21 +165,16 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
 
         public FactoryArg(String socketPath) {
             super();
-            if (socketPath != null) {
-                this.socketFile = new File(socketPath);
-            } else {
-                throw new IllegalArgumentException("Socket path was null");
-            }
+            Objects.requireNonNull(socketPath, "Socket path was null");
+
+            this.socketFile = new File(socketPath);
         }
 
         public FactoryArg(File file) {
             super();
+            Objects.requireNonNull(file, "File was null");
 
-            if (file != null) {
-                this.socketFile = file;
-            } else {
-                throw new IllegalArgumentException("File was null");
-            }
+            this.socketFile = file;
         }
 
         @Override
@@ -229,8 +226,7 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
         private static final String FILE_SCHEME_PREFIX_ENCODED = "file%";
         private static final String FILE_SCHEME_LOCALHOST = "localhost";
 
-        private static String stripBrackets(String originalHost) {
-            String host = originalHost;
+        private static String stripBrackets(String host) {
             if (host.startsWith("[")) {
                 if (host.endsWith("]")) {
                     host = host.substring(1, host.length() - 1);
@@ -242,14 +238,14 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
         }
 
         @Override
-        protected boolean isHostnameSupported(String originalHost) {
-            String host = stripBrackets(originalHost);
+        protected boolean isHostnameSupported(String host) {
+            host = stripBrackets(host);
             return host.startsWith(FILE_SCHEME_PREFIX) || host.startsWith(FILE_SCHEME_PREFIX_ENCODED);
         }
 
         @Override
-        protected AFUNIXSocketAddress addressFromHost(String originalHost, int port) throws IOException {
-            String host = stripBrackets(originalHost);
+        protected AFUNIXSocketAddress addressFromHost(String host, int port) throws IOException {
+            host = stripBrackets(host);
             if (host.startsWith(FILE_SCHEME_PREFIX_ENCODED)) {
                 try {
                     host = URLDecoder.decode(host, "UTF-8");

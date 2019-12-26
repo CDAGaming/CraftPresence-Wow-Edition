@@ -112,9 +112,7 @@ public class ModUpdaterUtils {
             JsonObject rootUpdateData = FileUtils.parseJson(UrlUtils.getURLText(updateUrl));
 
             if (rootUpdateData != null) {
-                if (ModUtils.IS_DEV) {
-                    ModUtils.LOG.info("Received Update Data: " + rootUpdateData.toString());
-                }
+                ModUtils.LOG.debugInfo("Received Update Data: " + rootUpdateData.toString());
 
                 if (rootUpdateData.has("homepage")) {
                     downloadUrl = rootUpdateData.get("homepage").toString().replace("\"", "").trim();
@@ -151,16 +149,12 @@ public class ModUpdaterUtils {
                             // Case 2: Find only the Minecraft Version, if present, but do not break the loop
                             targetRecommendedVersion = jsonSegment.getValue().toString().replaceAll("[a-zA-Z]", "").replace("\"", "").trim();
                         } else {
-                            if (ModUtils.IS_DEV) {
-                                ModUtils.LOG.warn("Json Segment " + jsonSegment.getKey() + " is of an incompatible format...");
-                            }
+                            ModUtils.LOG.debugWarn("Json Segment " + jsonSegment.getKey() + " is of an incompatible format...");
                         }
                     }
 
-                    if (ModUtils.IS_DEV) {
-                        ModUtils.LOG.info("Detected Latest Version for " + ModUtils.MCVersion + ": " + targetLatestVersion);
-                        ModUtils.LOG.info("Detected Recommended Version for " + ModUtils.MCVersion + ": " + targetRecommendedVersion);
-                    }
+                    ModUtils.LOG.debugInfo("Detected Latest Version for " + ModUtils.MCVersion + ": " + targetLatestVersion);
+                    ModUtils.LOG.debugInfo("Detected Recommended Version for " + ModUtils.MCVersion + ": " + targetRecommendedVersion);
 
                     // Update Current Update State
                     int recommendedState = compareVersions(currentVersion, targetRecommendedVersion);
@@ -197,10 +191,7 @@ public class ModUpdaterUtils {
                                 final JsonElement changelogData = semanticVersionData != null ? semanticVersionData : annotatedVersionData;
 
                                 targetChangelogData = changelogData.toString().replace("\"", "").trim();
-
-                                if (ModUtils.IS_DEV) {
-                                    ModUtils.LOG.info("Received Changelog: " + targetChangelogData);
-                                }
+                                ModUtils.LOG.debugInfo("Received Changelog: " + targetChangelogData);
                             } else {
                                 ModUtils.LOG.error("Failed to Locate Changelog Data for " + modID + "@" + targetVersion);
                             }

@@ -34,7 +34,7 @@ public class User {
      * Only implemented internally.
      *
      * @param name          user's name
-     * @param discriminator user's discriminator name
+     * @param discriminator user's discrim
      * @param id            user's id
      * @param avatar        user's avatar hash, or {@code null} if they have no avatar
      */
@@ -43,19 +43,6 @@ public class User {
         this.discriminator = discriminator;
         this.id = id;
         this.avatar = avatar;
-    }
-
-    /**
-     * Returns a hash code for a {@code long} value; compatible with
-     * {@code Long.hashCode()}.
-     *
-     * <p>Cloned from JDK8 for Lower Version Compatibility</p>
-     *
-     * @param value the value to hash
-     * @return a hash code value for a {@code long} value.
-     */
-    public static int hashCode(long value) {
-        return (int) (value ^ (value >>> 32));
     }
 
     /**
@@ -142,7 +129,7 @@ public class User {
     }
 
     /**
-     * Gets whether or not this User is a bot.
+     * Gets whether or not this User is a bot.<p>
      * <p>
      * While, at the time of writing this documentation, bots cannot
      * use Rich Presence features, there may be a time in the future
@@ -155,7 +142,7 @@ public class User {
     }
 
     /**
-     * Gets the User as a discord formatted mention.
+     * Gets the User as a discord formatted mention.<p>
      * <p>
      * {@code <@SNOWFLAKE_ID> }
      *
@@ -175,7 +162,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return hashCode(id);
+        return Long.hashCode(id);
     }
 
     @Override

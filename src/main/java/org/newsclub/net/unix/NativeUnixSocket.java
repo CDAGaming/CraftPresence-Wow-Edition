@@ -1,24 +1,26 @@
 /*
  * junixsocket
- *
+ * <p>
  * Copyright 2009-2019 Christian Kohlschütter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
+package org.newsclub.net.unix;
 
+import java.io.Closeable;
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.net.Socket;
 import java.nio.ByteBuffer;
 
 /**
@@ -26,22 +28,17 @@ import java.nio.ByteBuffer;
  *
  * @author Christian Kohlschütter
  */
-final class NativeUnixSocketHelper {
-    private static boolean loaded;
+final class NativeUnixSocket {
+    private static boolean loaded = false;
 
     static {
-        NativeLibraryLoader nll = new NativeLibraryLoader();
-        try {
+        try (NativeLibraryLoader nll = new NativeLibraryLoader()) {
             nll.loadLibrary();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            nll.close();
         }
         loaded = true;
     }
 
-    private NativeUnixSocketHelper() {
+    private NativeUnixSocket() {
         throw new UnsupportedOperationException("No instances");
     }
 
@@ -49,7 +46,12 @@ final class NativeUnixSocketHelper {
         return loaded;
     }
 
+    static void checkSupported() {
+    }
+
     static native void init() throws Exception;
+
+    static native void destroy() throws Exception;
 
     static native int capabilities();
 
@@ -81,6 +83,9 @@ final class NativeUnixSocketHelper {
 
     static native int available(final FileDescriptor fd) throws IOException;
 
+    static native AFUNIXSocketCredentials peerCredentials(FileDescriptor fd,
+                                                          AFUNIXSocketCredentials creds) throws IOException;
+
     static native void initServerImpl(final AFUNIXServerSocket serverSocket,
                                       final AFUNIXSocketImpl impl) throws IOException;
 
@@ -92,9 +97,17 @@ final class NativeUnixSocketHelper {
 
     static native void setCreatedServer(final AFUNIXServerSocket socket);
 
+    static native void setBoundServer(final AFUNIXServerSocket socket);
+
     static native void setPort(final AFUNIXSocketAddress addr, int port);
 
+    static native void initFD(FileDescriptor fdesc, int fd) throws IOException;
+
     static native int getFD(FileDescriptor fdesc) throws IOException;
+
+    static native void attachCloseable(FileDescriptor fdsec, Closeable closeable);
+
+    static native int maxAddressLength();
 
     static void setPort1(AFUNIXSocketAddress addr, int port) throws IOException {
         if (port < 0) {
@@ -109,4 +122,6 @@ final class NativeUnixSocketHelper {
             throw new IOException("Could not set port", e);
         }
     }
+
+    static native Socket currentRMISocket();
 }

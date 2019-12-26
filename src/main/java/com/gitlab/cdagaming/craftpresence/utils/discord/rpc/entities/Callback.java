@@ -77,7 +77,7 @@ public class Callback {
     /**
      * Launches the success {@link DataConsumer}.
      *
-     * @param packet The packet to succeed upon
+     * @param packet The packet to execute after success
      */
     public void succeed(Packet packet) {
         if (success != null)

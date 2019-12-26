@@ -211,7 +211,7 @@ public class DiscordUtils {
     public synchronized void init() {
         try {
             // Create IPC Instance and Listener and Make a Connection if possible
-            ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID));
+            ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID), ModUtils.IS_DEV);
             ipcInstance.setListener(new ModIPCListener());
             ipcInstance.connect();
 

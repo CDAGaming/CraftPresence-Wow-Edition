@@ -16,13 +16,11 @@
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.*;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet.OpCode;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.Pipe;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.exceptions.NoDiscordClientException;
-import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
@@ -33,17 +31,17 @@ import java.util.HashMap;
 
 /**
  * Represents a Discord IPC Client that can send and receive
- * Rich Presence data.
+ * Rich Presence data.<p>
  * <p>
  * The ID provided should be the <b>client ID of the particular
  * application providing Rich Presence</b>, which can be found
- * <a href=https://discordapp.com/developers/applications/me>here</a>.
+ * <a href=https://discordapp.com/developers/applications/me>here</a>.<p>
  * <p>
  * When initially created using {@link #IPCClient(long)} the client will
  * be inactive awaiting a call to {@link #connect(DiscordBuild...)}.<br>
  * After the call, this client can send and receive Rich Presence data
  * to and from discord via {@link #sendRichPresence(RichPresence)} and
- * {@link #setListener(IPCListener)} respectively.
+ * {@link #setListener(IPCListener)} respectively.<p>
  * <p>
  * Please be mindful that the client created is initially unconnected,
  * and calling any methods that exchange data between this client and
@@ -56,10 +54,12 @@ import java.util.HashMap;
  */
 public final class IPCClient implements Closeable {
     private final long clientId;
-    private final HashMap<String, Callback> callbacks = Maps.newHashMap();
+    private final boolean debugMode;
+    private final HashMap<String, Callback> callbacks = new HashMap<>();
     private volatile Pipe pipe;
     private IPCListener listener = null;
     private Thread readThread = null;
+    private String encoding = "UTF-8";
 
     /**
      * Constructs a new IPCClient using the provided {@code clientId}.<br>
@@ -70,6 +70,20 @@ public final class IPCClient implements Closeable {
      */
     public IPCClient(long clientId) {
         this.clientId = clientId;
+        this.debugMode = false;
+    }
+
+    /**
+     * Constructs a new IPCClient using the provided {@code clientId}.<br>
+     * This is initially unconnected to Discord.
+     *
+     * @param clientId  The Rich Presence application's client ID, which can be found
+     *                  <a href=https://discordapp.com/developers/applications/me>here</a>
+     * @param debugMode Whether Debug Logging should be shown for this client
+     */
+    public IPCClient(long clientId, boolean debugMode) {
+        this.clientId = clientId;
+        this.debugMode = debugMode;
     }
 
     /**
@@ -83,10 +97,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sets this IPCClient's {@link IPCListener} to handle received events.
+     * Sets this IPCClient's {@link IPCListener} to handle received events.<p>
      * <p>
      * A single IPCClient can only have one of these set at any given time.<br>
-     * Setting this {@code null} will remove the currently active one.
+     * Setting this {@code null} will remove the currently active one.<p>
      * <p>
      * This can be set safely before a call to {@link #connect(DiscordBuild...)}
      * is made.
@@ -98,6 +112,49 @@ public final class IPCClient implements Closeable {
         this.listener = listener;
         if (pipe != null)
             pipe.setListener(listener);
+    }
+
+    /**
+     * Gets encoding to send packets in.<p>
+     * Default: UTF-8
+     *
+     * @return encoding
+     */
+    public String getEncoding() {
+        return this.encoding;
+    }
+
+    /**
+     * Sets the encoding to send packets in.<p>
+     * <p>
+     * This can be set safely before a call to {@link #connect(DiscordBuild...)}
+     * is made.<p>
+     * <p>
+     * Default: UTF-8
+     *
+     * @param encoding for this IPCClient.
+     */
+    public void setEncoding(final String encoding) {
+        this.encoding = encoding;
+    }
+
+    /**
+     * Gets the client ID associated with this IPCClient
+     *
+     * @return the client id
+     */
+    public long getClientID() {
+        return this.clientId;
+    }
+
+    /**
+     * Gets whether this IPCClient is in Debug Mode
+     * Default: False
+     *
+     * @return The Debug Mode Status
+     */
+    public boolean isDebugMode() {
+        return debugMode;
     }
 
     /**
@@ -117,11 +174,9 @@ public final class IPCClient implements Closeable {
 
         pipe = Pipe.openPipe(this, clientId, callbacks, preferredOrder);
 
-        // CDAGaming Start
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info("Client is now connected and ready!");
+        if (debugMode) {
+            ModUtils.LOG.debugInfo("Client is now connected and ready!");
         }
-        // CDAGaming End
 
         if (listener != null)
             listener.onReady(this);
@@ -129,10 +184,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sends a {@link RichPresence} to the Discord client.
+     * Sends a {@link RichPresence} to the Discord client.<p>
      * <p>
      * This is where the IPCClient will officially display
-     * a Rich Presence in the Discord client.
+     * a Rich Presence in the Discord client.<p>
      * <p>
      * Sending this again will overwrite the last provided
      * {@link RichPresence}.
@@ -147,10 +202,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sends a {@link RichPresence} to the Discord client.
+     * Sends a {@link RichPresence} to the Discord client.<p>
      * <p>
      * This is where the IPCClient will officially display
-     * a Rich Presence in the Discord client.
+     * a Rich Presence in the Discord client.<p>
      * <p>
      * Sending this again will overwrite the last provided
      * {@link RichPresence}.
@@ -164,9 +219,8 @@ public final class IPCClient implements Closeable {
     public void sendRichPresence(RichPresence presence, Callback callback) {
         checkConnected(true);
 
-        // CDAGaming Start
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info("Sending RichPresence to discord: " + (presence == null ? null : presence.toJson().toString()));
+        if (debugMode) {
+            ModUtils.LOG.debugInfo("Sending RichPresence to discord: " + (presence == null ? null : presence.toJson().toString()));
         }
 
         // Setup and Send JsonObject Data Representing an RPC Update
@@ -176,11 +230,10 @@ public final class IPCClient implements Closeable {
         finalObject.addProperty("cmd", "SET_ACTIVITY");
 
         args.addProperty("pid", getPID());
-        args.add("activity", presence == null ? null : presence.toJson());
+        args.add("activity", presence == null ? new JsonObject() : presence.toJson());
 
         finalObject.add("args", args);
         pipe.send(OpCode.FRAME, finalObject, callback);
-        // CDAGaming end
     }
 
     /**
@@ -217,8 +270,8 @@ public final class IPCClient implements Closeable {
         if (!sub.isSubscribable())
             throw new IllegalStateException("Cannot subscribe to " + sub + " event!");
 
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info(String.format("Subscribing to Event: %s", sub.name()));
+        if (debugMode) {
+            ModUtils.LOG.debugInfo(String.format("Subscribing to Event: %s", sub.name()));
         }
 
         JsonObject pipeData = new JsonObject();
@@ -232,8 +285,8 @@ public final class IPCClient implements Closeable {
         checkConnected(true);
 
         if (user != null) {
-            if (ModUtils.IS_DEV) {
-                ModUtils.LOG.info(String.format("Sending response to %s as %s", user.getName(), approvalMode.name()));
+            if (debugMode) {
+                ModUtils.LOG.debugInfo(String.format("Sending response to %s as %s", user.getName(), approvalMode.name()));
             }
 
             JsonObject pipeData = new JsonObject();
@@ -247,6 +300,7 @@ public final class IPCClient implements Closeable {
             pipe.send(OpCode.FRAME, pipeData, callback);
         }
     }
+
 
     /**
      * Gets the IPCClient's current {@link PipeStatus}.
@@ -273,19 +327,19 @@ public final class IPCClient implements Closeable {
         try {
             pipe.close();
         } catch (IOException e) {
-            if (ModUtils.IS_DEV) {
-                ModUtils.LOG.error("Failed to close pipe", e);
+            if (debugMode) {
+                ModUtils.LOG.debugInfo(String.format("Failed to close pipe: %s", e));
             }
         }
     }
 
     /**
-     * Gets the IPCClient's {@link DiscordBuild}.
+     * Gets the IPCClient's {@link DiscordBuild}.<p>
      * <p>
      * This is always the first specified DiscordBuild when
      * making a call to {@link #connect(DiscordBuild...)},
      * or the first one found if none or {@link DiscordBuild#ANY}
-     * is specified.
+     * is specified.<p>
      * <p>
      * Note that specifying ANY doesn't mean that this will return
      * ANY. In fact this method should <b>never</b> return the
@@ -338,11 +392,12 @@ public final class IPCClient implements Closeable {
      */
     private void startReading() {
         final IPCClient localInstance = this;
+
         readThread = new Thread(() -> {
             try {
                 Packet p;
                 while ((p = pipe.read()).getOp() != OpCode.CLOSE) {
-                    JsonObject json = FileUtils.parseJson(p.getJson().getAsJsonPrimitive("").getAsString());
+                    JsonObject json = p.getParsedJson();
 
                     if (json != null) {
                         Event event = Event.of(json.has("evt") && !json.get("evt").isJsonNull() ? json.getAsJsonPrimitive("evt").getAsString() : null);
@@ -356,38 +411,38 @@ public final class IPCClient implements Closeable {
 
                             case ERROR:
                                 if (nonce != null && callbacks.containsKey(nonce))
-                                    callbacks.remove(nonce).fail(json.getAsJsonObject("data").has("message") ? json.getAsJsonObject("data").getAsJsonObject("message").getAsString() : null);
+                                    callbacks.remove(nonce).fail(json.has("data") && json.getAsJsonObject("data").has("message") ? json.getAsJsonObject("data").getAsJsonObject("message").getAsString() : null);
                                 break;
 
                             case ACTIVITY_JOIN:
-                                if (ModUtils.IS_DEV) {
-                                    ModUtils.LOG.info("Reading thread received a 'join' event.");
+                                if (debugMode) {
+                                    ModUtils.LOG.debugInfo("Reading thread received a 'join' event.");
                                 }
                                 break;
 
                             case ACTIVITY_SPECTATE:
-                                if (ModUtils.IS_DEV) {
-                                    ModUtils.LOG.info("Reading thread received a 'spectate' event.");
+                                if (debugMode) {
+                                    ModUtils.LOG.debugInfo("Reading thread received a 'spectate' event.");
                                 }
                                 break;
 
                             case ACTIVITY_JOIN_REQUEST:
-                                if (ModUtils.IS_DEV) {
-                                    ModUtils.LOG.info("Reading thread received a 'join request' event.");
+                                if (debugMode) {
+                                    ModUtils.LOG.debugInfo("Reading thread received a 'join request' event.");
                                 }
                                 break;
 
                             case UNKNOWN:
-                                if (ModUtils.IS_DEV) {
-                                    ModUtils.LOG.info("Reading thread encountered an event with an unknown type: " + json.getAsJsonPrimitive("evt").getAsString());
+                                if (debugMode) {
+                                    ModUtils.LOG.debugInfo("Reading thread encountered an event with an unknown type: " +
+                                            json.getAsJsonPrimitive("evt").getAsString());
                                 }
                                 break;
-                            default:
-                                break;
                         }
+
                         if (listener != null && json.has("cmd") && json.getAsJsonPrimitive("cmd").getAsString().equals("DISPATCH")) {
                             try {
-                                final JsonObject data = json.getAsJsonObject("data");
+                                JsonObject data = json.getAsJsonObject("data");
                                 switch (Event.of(json.getAsJsonPrimitive("evt").getAsString())) {
                                     case ACTIVITY_JOIN:
                                         listener.onActivityJoin(localInstance, data.getAsJsonObject("secret").getAsString());
@@ -407,42 +462,46 @@ public final class IPCClient implements Closeable {
                                         );
                                         listener.onActivityJoinRequest(localInstance, data.has("secret") ? data.getAsJsonObject("secret").getAsString() : null, user);
                                         break;
-                                    default:
-                                        break;
                                 }
                             } catch (Exception e) {
-                                ModUtils.LOG.error("Exception when handling event: ", e);
+                                ModUtils.LOG.error(String.format("Exception when handling event: %s", e));
                             }
                         }
                     }
                 }
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)
-                    listener.onClose(localInstance, p.getJson());
+                    listener.onClose(localInstance, p.getParsedJson());
             } catch (IOException | JsonParseException ex) {
-                ModUtils.LOG.error("Reading thread encountered an Exception", ex);
+                if (ex instanceof IOException)
+                    ModUtils.LOG.error(String.format("Reading thread encountered an IOException: %s", ex));
+                else
+                    ModUtils.LOG.error(String.format("Reading thread encountered an JSONException: %s", ex));
 
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)
                     listener.onDisconnect(localInstance, ex);
             }
-        }, "DiscordIPC-Reader");
+        }, "IPCClient-Reader");
 
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info("Starting IPCClient reading thread!");
+        if (debugMode) {
+            ModUtils.LOG.debugInfo("Starting IPCClient reading thread!");
         }
         readThread.start();
     }
 
     // Private static methods
 
+    /**
+     * Constants representing a Response to an Ask to Join or Spectate Request
+     */
     public enum ApprovalMode {
         ACCEPT, DENY
     }
 
     /**
      * Constants representing events that can be subscribed to
-     * using {@link #subscribe(Event)}.
+     * using {@link #subscribe(Event)}.<p>
      * <p>
      * Each event corresponds to a different function as a
      * component of the Rich Presence.<br>

@@ -15,9 +15,10 @@
  */
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities;
 
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
 /**
@@ -29,6 +30,20 @@ import java.nio.ByteBuffer;
 public class Packet {
     private final OpCode op;
     private final JsonObject data;
+    private final String encoding;
+
+    /**
+     * Constructs a new Packet using an {@link OpCode} and {@link JsonObject}.
+     *
+     * @param op       The OpCode value of this new Packet.
+     * @param data     The JSONObject payload of this new Packet.
+     * @param encoding encoding to send packets as
+     */
+    public Packet(OpCode op, JsonObject data, String encoding) {
+        this.op = op;
+        this.data = data;
+        this.encoding = encoding;
+    }
 
     /**
      * Constructs a new Packet using an {@link OpCode} and {@link JsonObject}.
@@ -36,9 +51,9 @@ public class Packet {
      * @param op   The OpCode value of this new Packet.
      * @param data The JSONObject payload of this new Packet.
      */
+    @Deprecated
     public Packet(OpCode op, JsonObject data) {
-        this.op = op;
-        this.data = data;
+        this(op, data, "UTF-8");
     }
 
     /**
@@ -47,8 +62,16 @@ public class Packet {
      * @return This Packet as a {@code byte} array.
      */
     public byte[] toBytes() {
-        byte[] d = data.toString().getBytes();
-        ByteBuffer packet = ByteBuffer.allocate(d.length + 2 * (Integer.SIZE / Byte.SIZE));
+        String s = data.toString();
+
+        byte[] d;
+        try {
+            d = s.getBytes(encoding);
+        } catch (UnsupportedEncodingException e) {
+            d = s.getBytes();
+        }
+
+        ByteBuffer packet = ByteBuffer.allocate(d.length + 2 * Integer.BYTES);
         packet.putInt(Integer.reverseBytes(op.ordinal()));
         packet.putInt(Integer.reverseBytes(d.length));
         packet.put(d);
@@ -65,26 +88,31 @@ public class Packet {
     }
 
     /**
-     * Gets the raw {@link JsonObject} value as a part of this {@link Packet}.
+     * Gets the Raw {@link JsonObject} value as a part of this {@link Packet}.
      *
      * @return The JSONObject value of this Packet.
      */
-    public JsonObject getRawJson() {
-        return data != null ? data : new JsonObject();
+    public JsonObject getJson() {
+        return data;
     }
 
     /**
-     * Gets the parsed {@link JsonObject} value as a part of this {@link Packet} from getRawJson.
+     * Gets the Parsed {@link JsonObject} value as a part of this {@link Packet}.
      *
-     * @return The parsed/formatted JSONObject value of this Packet.
+     * @return The JSONObject value of this Packet.
      */
-    public JsonObject getJson() {
-        return FileUtils.parseJson(data != null ? data.toString() : "");
+    public JsonObject getParsedJson() {
+        try {
+            final JsonParser jsonParser = new JsonParser();
+            return jsonParser.parse(data.getAsJsonPrimitive("").getAsString()).getAsJsonObject();
+        } catch (Exception ex) {
+            return data;
+        }
     }
 
     @Override
     public String toString() {
-        return "Pkt: " + getOp() + getJson().toString();
+        return "Pkt:" + getOp() + getParsedJson().toString();
     }
 
     /**

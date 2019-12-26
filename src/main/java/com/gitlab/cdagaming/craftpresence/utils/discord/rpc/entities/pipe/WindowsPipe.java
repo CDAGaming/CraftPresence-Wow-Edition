@@ -29,14 +29,14 @@ import java.io.RandomAccessFile;
 import java.util.HashMap;
 
 public class WindowsPipe extends Pipe {
-    private final RandomAccessFile file;
+    public RandomAccessFile file;
 
     WindowsPipe(IPCClient ipcClient, HashMap<String, Callback> callbacks, String location) {
         super(ipcClient, callbacks);
         try {
             this.file = new RandomAccessFile(location, "rw");
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            this.file = null;
         }
     }
 
@@ -47,34 +47,31 @@ public class WindowsPipe extends Pipe {
 
     @Override
     public Packet read() throws IOException, JsonParseException {
-        // Await byte retrieval
-        try {
-            while ((status == PipeStatus.CONNECTED || status == PipeStatus.CLOSING) && file.length() == 0) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ignored) {
-                }
+        while ((status == PipeStatus.CONNECTED || status == PipeStatus.CLOSING) && file.length() == 0) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ignored) {
             }
-        } catch (Exception ignored) {
         }
 
         if (status == PipeStatus.DISCONNECTED)
             throw new IOException("Disconnected!");
 
         if (status == PipeStatus.CLOSED)
-            return new Packet(Packet.OpCode.CLOSE, null);
+            return new Packet(Packet.OpCode.CLOSE, null, ipcClient.getEncoding());
 
         Packet.OpCode op = Packet.OpCode.values()[Integer.reverseBytes(file.readInt())];
         int len = Integer.reverseBytes(file.readInt());
         byte[] d = new byte[len];
 
         file.readFully(d);
+
         JsonObject packetData = new JsonObject();
         packetData.addProperty("", new String(d));
-        Packet p = new Packet(op, packetData);
+        Packet p = new Packet(op, packetData, ipcClient.getEncoding());
 
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info(String.format("Received packet: %s", p.toString()));
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo(String.format("Received packet: %s", p.toString()));
         }
 
         if (listener != null)
@@ -84,9 +81,10 @@ public class WindowsPipe extends Pipe {
 
     @Override
     public void close() throws IOException {
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info("Closing IPC pipe...");
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo("Closing IPC pipe...");
         }
+
         status = PipeStatus.CLOSING;
         send(Packet.OpCode.CLOSE, new JsonObject(), null);
         status = PipeStatus.CLOSED;

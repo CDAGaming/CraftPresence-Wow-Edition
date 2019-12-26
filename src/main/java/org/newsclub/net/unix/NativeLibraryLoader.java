@@ -1,28 +1,29 @@
 /*
  * junixsocket
- *
+ * <p>
  * Copyright 2009-2019 Christian Kohlschütter
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.gitlab.cdagaming.craftpresence.impl.junixsocket;
-
-import com.google.common.collect.Lists;
+package org.newsclub.net.unix;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
 
+@SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE")
 final class NativeLibraryLoader implements Closeable {
     private static final String PROP_LIBRARY_OVERRIDE = "org.newsclub.net.unix.library.override";
     private static final String PROP_LIBRARY_TMPDIR = "org.newsclub.net.unix.library.tmpdir";
@@ -36,6 +37,34 @@ final class NativeLibraryLoader implements Closeable {
     static {
         String dir = System.getProperty(PROP_LIBRARY_TMPDIR, null);
         TEMP_DIR = (dir == null) ? null : new File(dir);
+    }
+
+    NativeLibraryLoader() {
+    }
+
+    public static String getJunixsocketVersion() throws IOException {
+        return getArtifactVersion(AFUNIXSocket.class, "junixsocket-common");
+    }
+
+    private static String getArtifactVersion(Class<?> providerClass, String... artifactNames)
+            throws IOException {
+        for (String artifactName : artifactNames) {
+            Properties p = new Properties();
+            String resource = "/META-INF/maven/com.kohlschutter.junixsocket/" + artifactName
+                    + "/pom.properties";
+            try (InputStream in = providerClass.getResourceAsStream(resource)) {
+                if (in == null) {
+                    throw new FileNotFoundException("Could not find resource " + resource + " relative to "
+                            + providerClass);
+                }
+                p.load(in);
+                String version = p.getProperty("version");
+
+                Objects.requireNonNull(version, "Could not read version from pom.properties");
+                return version;
+            }
+        }
+        throw new IllegalStateException("No artifact names specified");
     }
 
     private static String architectureAndOS() {
@@ -56,42 +85,12 @@ final class NativeLibraryLoader implements Closeable {
         return findLibraryCandidates(artifactName, libraryNameAndVersion, providerClass);
     }
 
-    private String getArtifactVersion(Class<?> providerClass, String... artifactNames)
-            throws IOException {
-        for (String artifactName : artifactNames) {
-            Properties p = new Properties();
-            String resource = "/META-INF/maven/com.kohlschutter.junixsocket/" + artifactName
-                    + "/pom.properties";
-            InputStream in = providerClass.getResourceAsStream(resource);
-
-            try {
-                if (in == null) {
-                    throw new FileNotFoundException("Could not find resource " + resource + " relative to "
-                            + providerClass);
-                }
-                p.load(in);
-                String version = p.getProperty("version");
-
-                if (version != null) {
-                    return version;
-                } else {
-                    throw new IllegalArgumentException("Could not read version from pom.properties");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            } finally {
-                in.close();
-            }
-        }
-        throw new IllegalStateException("No artifact names specified");
-    }
-
     private synchronized void setLoaded(String library) {
         if (!loaded) {
             loaded = true;
             AFUNIXSocket.loadedLibrary = library;
             try {
-                NativeUnixSocketHelper.init();
+                NativeUnixSocket.init();
             } catch (RuntimeException e) {
                 throw e;
             } catch (Exception e) {
@@ -100,7 +99,9 @@ final class NativeLibraryLoader implements Closeable {
         }
     }
 
-    synchronized void loadLibrary() {
+    @SuppressWarnings("resource")
+    // NOPMD
+    public synchronized void loadLibrary() {
         synchronized (getClass().getClassLoader()) { // NOPMD We want to lock this class' classloader.
             if (loaded) {
                 // Already loaded
@@ -114,8 +115,8 @@ final class NativeLibraryLoader implements Closeable {
                 return;
             }
 
-            List<LibraryCandidate> candidates = Lists.newArrayList();
-            List<Throwable> suppressedThrowables = Lists.newArrayList();
+            List<LibraryCandidate> candidates = new ArrayList<>();
+            List<Throwable> suppressedThrowables = new ArrayList<>();
 
             try {
                 candidates.add(new StandardLibraryCandidate(getArtifactVersion(getClass(),
@@ -165,18 +166,20 @@ final class NativeLibraryLoader implements Closeable {
                 }
 
                 UnsatisfiedLinkError e = new UnsatisfiedLinkError(message);
-                if (!suppressedThrowables.contains(e.getCause())) {
-                    throw e;
+                for (Throwable suppressed : suppressedThrowables) {
+                    e.addSuppressed(suppressed);
                 }
+                throw e;
             }
         }
     }
 
+    @SuppressWarnings("resource")
     private List<LibraryCandidate> findLibraryCandidates(String artifactName,
                                                          String libraryNameAndVersion, Class<?> providerClass) {
         String mappedName = System.mapLibraryName(libraryNameAndVersion);
 
-        List<LibraryCandidate> list = Lists.newArrayList();
+        List<LibraryCandidate> list = new ArrayList<>();
         for (String compiler : new String[]{
                 "gpp", "g++", "linker", "clang", "gcc", "cc", "CC", "icpc", "icc", "xlC", "xlC_r", "msvc",
                 "icl", "ecpc", "ecc"}) {
@@ -215,13 +218,12 @@ final class NativeLibraryLoader implements Closeable {
 
     @Override
     public void close() {
-        // N/A
     }
 
     private abstract static class LibraryCandidate implements Closeable {
-        final String libraryNameAndVersion;
+        protected final String libraryNameAndVersion;
 
-        LibraryCandidate(String libraryNameAndVersion) {
+        protected LibraryCandidate(String libraryNameAndVersion) {
             this.libraryNameAndVersion = libraryNameAndVersion;
         }
 
@@ -252,7 +254,6 @@ final class NativeLibraryLoader implements Closeable {
 
         @Override
         public void close() {
-            // N/A
         }
 
         @Override
@@ -282,16 +283,13 @@ final class NativeLibraryLoader implements Closeable {
             }
             File libFile;
             libFile = createTempFile("libtmp", System.mapLibraryName(libraryNameAndVersion));
-            OutputStream out = new FileOutputStream(libFile);
-
-            try {
+            try (OutputStream out = new FileOutputStream(libFile)) {
                 byte[] buf = new byte[4096];
                 int read;
                 while ((read = libraryIn.read(buf)) >= 0) {
                     out.write(buf, 0, read);
                 }
             } finally {
-                out.close();
                 libraryIn.close();
             }
             System.load(libFile.getAbsolutePath());

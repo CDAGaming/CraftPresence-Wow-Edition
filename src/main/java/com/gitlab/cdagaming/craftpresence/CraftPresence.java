@@ -139,10 +139,8 @@ public class CraftPresence {
      */
     private void init() {
         // If running in Developer Mode, Warn of Possible Issues and Log OS Info
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.debugmode"));
-            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
-        }
+        ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.debugmode"));
+        ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
 
         // Check for Updates before continuing
         ModUtils.UPDATER.checkForUpdates();

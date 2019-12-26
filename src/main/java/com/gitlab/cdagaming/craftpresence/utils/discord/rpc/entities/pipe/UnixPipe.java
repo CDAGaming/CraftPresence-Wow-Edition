@@ -17,13 +17,13 @@
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.junixsocket.AFUNIXSocket;
-import com.gitlab.cdagaming.craftpresence.impl.junixsocket.AFUNIXSocketAddress;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import org.newsclub.net.unix.AFUNIXSocket;
+import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,54 +45,47 @@ public class UnixPipe extends Pipe {
     public Packet read() throws IOException, JsonParseException {
         InputStream is = socket.getInputStream();
 
-        // Await byte retrieval
-        try {
-            while ((status == PipeStatus.CONNECTED || status == PipeStatus.CLOSING)  && is.available() == 0) {
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException ignored) {
-                }
+        while ((status == PipeStatus.CONNECTED || status == PipeStatus.CLOSING) && is.available() == 0) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ignored) {
             }
-        } catch (Exception ignored) {
         }
 
         if (status == PipeStatus.DISCONNECTED)
             throw new IOException("Disconnected!");
 
         if (status == PipeStatus.CLOSED)
-            return new Packet(Packet.OpCode.CLOSE, null);
+            return new Packet(Packet.OpCode.CLOSE, null, ipcClient.getEncoding());
 
         // Read the op and length. Both are signed ints
-        byte[] d = new byte[is.available()];
-        int result = is.read(d, 0, d.length);
-
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info(String.format("Read Byte Data: %s with result %s", new String(d), result));
-        }
+        byte[] d = new byte[8];
+        int readResult = is.read(d);
         ByteBuffer bb = ByteBuffer.wrap(d);
+
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo(String.format("Read Byte Data: %s with result %s", new String(d), readResult));
+        }
 
         Packet.OpCode op = Packet.OpCode.values()[Integer.reverseBytes(bb.getInt())];
         d = new byte[Integer.reverseBytes(bb.getInt())];
 
-        int opResult = is.read(d);
+        int reversedResult = is.read(d);
 
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info(String.format("Read Op Byte Data: %s with result %s", new String(d), opResult));
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo(String.format("Read Reversed Byte Data: %s with result %s", new String(d), reversedResult));
         }
 
         JsonObject packetData = new JsonObject();
         packetData.addProperty("", new String(d));
-        Packet p = new Packet(op, packetData);
+        Packet p = new Packet(op, packetData, ipcClient.getEncoding());
 
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info(String.format("Received packet: %s", p.toString()));
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo(String.format("Received packet: %s", p.toString()));
         }
 
         if (listener != null)
             listener.onPacketReceived(ipcClient, p);
-
-        // Close Resources
-        is.close();
         return p;
     }
 
@@ -103,9 +96,10 @@ public class UnixPipe extends Pipe {
 
     @Override
     public void close() throws IOException {
-        if (ModUtils.IS_DEV) {
-            ModUtils.LOG.info("Closing IPC pipe...");
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo("Closing IPC pipe...");
         }
+
         status = PipeStatus.CLOSING;
         send(Packet.OpCode.CLOSE, new JsonObject(), null);
         status = PipeStatus.CLOSED;

@@ -16,9 +16,7 @@
 
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe;
 
-import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCListener;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
@@ -62,28 +60,22 @@ public abstract class Pipe {
         for (int i = 0; i < 10; i++) {
             try {
                 String location = getPipeLocation(i);
-
-                // CDAGaming start
-                if (ModUtils.IS_DEV) {
-                    ModUtils.LOG.info(String.format("Searching for IPC: %s", location));
+                if (ipcClient.isDebugMode()) {
+                    ModUtils.LOG.debugInfo(String.format("Searching for IPC: %s", location));
                 }
-                // CDAGaming end
-
                 pipe = createPipe(ipcClient, callbacks, location);
 
-                // CDAGaming start
-                JsonObject finalObject = new JsonObject();
+                if (pipe != null) {
+                    JsonObject finalObject = new JsonObject();
 
-                finalObject.addProperty("v", VERSION);
-                finalObject.addProperty("client_id", Long.toString(clientId));
+                    finalObject.addProperty("v", VERSION);
+                    finalObject.addProperty("client_id", Long.toString(clientId));
 
-                pipe.send(Packet.OpCode.HANDSHAKE, finalObject, null);
-                // CDAGaming end
+                    pipe.send(Packet.OpCode.HANDSHAKE, finalObject, null);
 
-                Packet p = pipe.read(); // this is a valid client at this point
+                    Packet p = pipe.read(); // this is a valid client at this point
 
-                JsonObject parsedData = FileUtils.parseJson(p.getJson().getAsJsonPrimitive("").getAsString());
-                if (parsedData != null) {
+                    final JsonObject parsedData = p.getParsedJson();
                     final JsonObject data = parsedData.getAsJsonObject("data");
                     final JsonObject userData = data.getAsJsonObject("user");
 
@@ -97,30 +89,26 @@ public abstract class Pipe {
                             Long.parseLong(userData.getAsJsonPrimitive("id").getAsString()),
                             userData.has("avatar") ? userData.getAsJsonPrimitive("avatar").getAsString() : null
                     );
-                } else {
-                    pipe.build = DiscordBuild.ANY;
-                }
 
-                // CDAGaming Start
-                if (ModUtils.IS_DEV) {
-                    ModUtils.LOG.info(String.format("Found a valid client (%s) with packet: %s", pipe.build.name(), p.toString()));
-                    ModUtils.LOG.info(String.format("Found a valid user (%s) with id: %s", pipe.currentUser.getName(), pipe.currentUser.getId()));
-                }
-
-                // we're done if we found our first choice
-                if (pipe.build == preferredOrder[0] || DiscordBuild.ANY == preferredOrder[0]) {
-                    if (ModUtils.IS_DEV) {
-                        ModUtils.LOG.info(String.format("Found preferred client: %s", pipe.build.name()));
+                    if (ipcClient.isDebugMode()) {
+                        ModUtils.LOG.debugInfo(String.format("Found a valid client (%s) with packet: %s", pipe.build.name(), p.toString()));
+                        ModUtils.LOG.debugInfo(String.format("Found a valid user (%s) with id: %s", pipe.currentUser.getName(), pipe.currentUser.getId()));
                     }
-                    break;
+
+                    // we're done if we found our first choice
+                    if (pipe.build == preferredOrder[0] || DiscordBuild.ANY == preferredOrder[0]) {
+                        if (ipcClient.isDebugMode()) {
+                            ModUtils.LOG.debugInfo(String.format("Found preferred client: %s", pipe.build.name()));
+                        }
+                        break;
+                    }
+
+                    open[pipe.build.ordinal()] = pipe; // didn't find first choice yet, so store what we have
+                    open[DiscordBuild.ANY.ordinal()] = pipe; // also store in 'any' for use later
+
+                    pipe.build = null;
+                    pipe = null;
                 }
-                // CDAGaming End
-
-                open[pipe.build.ordinal()] = pipe; // didn't find first choice yet, so store what we have
-                open[DiscordBuild.ANY.ordinal()] = pipe; // also store in 'any' for use later
-
-                pipe.build = null;
-                pipe = null;
             } catch (IOException | JsonParseException ex) {
                 pipe = null;
             }
@@ -131,12 +119,9 @@ public abstract class Pipe {
             // check each of the rest to see if we have that
             for (int i = 1; i < preferredOrder.length; i++) {
                 DiscordBuild cb = preferredOrder[i];
-
-                // CDAGaming Start
-                if (ModUtils.IS_DEV) {
-                    ModUtils.LOG.info(String.format("Looking for client build: %s", cb.name()));
+                if (ipcClient.isDebugMode()) {
+                    ModUtils.LOG.debugInfo(String.format("Looking for client build: %s", cb.name()));
                 }
-                // CDAGaming end
 
                 if (open[cb.ordinal()] != null) {
                     pipe = open[cb.ordinal()];
@@ -151,7 +136,9 @@ public abstract class Pipe {
                         }
                     } else pipe.build = cb;
 
-                    ModUtils.LOG.info(String.format("Found preferred client: %s", pipe.build.name()));
+                    if (ipcClient.isDebugMode()) {
+                        ModUtils.LOG.debugInfo(String.format("Found preferred client: %s", pipe.build.name()));
+                    }
                     break;
                 }
             }
@@ -169,8 +156,8 @@ public abstract class Pipe {
                 } catch (IOException ex) {
                     // This isn't really important to applications and better
                     // as debug info
-                    if (ModUtils.IS_DEV) {
-                        ModUtils.LOG.info("Failed to close an open IPC pipe!", ex);
+                    if (ipcClient.isDebugMode()) {
+                        ModUtils.LOG.debugError(String.format("Failed to close an open IPC pipe: %s", ex));
                     }
                 }
             }
@@ -182,16 +169,19 @@ public abstract class Pipe {
     }
 
     private static Pipe createPipe(IPCClient ipcClient, HashMap<String, Callback> callbacks, String location) {
-        if (CraftPresence.SYSTEM.IS_WINDOWS) {
-            return new WindowsPipe(ipcClient, callbacks, location);
-        } else if (CraftPresence.SYSTEM.IS_LINUX || CraftPresence.SYSTEM.IS_MAC) {
+        String osName = System.getProperty("os.name").toLowerCase();
+
+        if (osName.contains("win")) {
+            WindowsPipe attemptedPipe = new WindowsPipe(ipcClient, callbacks, location);
+            return attemptedPipe.file != null ? attemptedPipe : null;
+        } else if (osName.contains("linux") || osName.contains("mac")) {
             try {
                 return new UnixPipe(ipcClient, callbacks, location);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
-            throw new RuntimeException("Unsupported OS: " + CraftPresence.SYSTEM.OS_NAME);
+            throw new RuntimeException("Unsupported OS: " + osName);
         }
     }
 
@@ -235,13 +225,12 @@ public abstract class Pipe {
         try {
             String nonce = generateNonce();
             data.addProperty("nonce", nonce);
-            Packet p = new Packet(op, data);
-            if (callback != null)
+            Packet p = new Packet(op, data, ipcClient.getEncoding());
+            if (callback != null && !callback.isEmpty())
                 callbacks.put(nonce, callback);
             write(p.toBytes());
-
-            if (ModUtils.IS_DEV) {
-                ModUtils.LOG.info(String.format("Sent packet: %s", p.toString()));
+            if (ipcClient.isDebugMode()) {
+                ModUtils.LOG.debugInfo(String.format("Sent packet: %s", p.toString()));
             }
 
             if (listener != null)

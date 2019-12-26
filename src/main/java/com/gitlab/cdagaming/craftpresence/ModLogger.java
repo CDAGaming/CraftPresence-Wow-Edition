@@ -89,4 +89,40 @@ public class ModLogger {
             logInstance.info(logMessage, logArguments);
         }
     }
+
+    /**
+     * Sends a Message with an INFO Level to either Chat or Logs, if in Debug Mode
+     *
+     * @param logMessage   The Log Message to Send
+     * @param logArguments Additional Formatting Arguments
+     */
+    public void debugInfo(final String logMessage, Object... logArguments) {
+        if (ModUtils.IS_DEV) {
+            info("[Debug] " + logMessage, logArguments);
+        }
+    }
+
+    /**
+     * Sends a Message with an WARNING Level to either Chat or Logs, if in Debug Mode
+     *
+     * @param logMessage   The Log Message to Send
+     * @param logArguments Additional Formatting Arguments
+     */
+    public void debugWarn(final String logMessage, Object... logArguments) {
+        if (ModUtils.IS_DEV) {
+            warn("[Debug] " + logMessage, logArguments);
+        }
+    }
+
+    /**
+     * Sends a Message with an ERROR Level to either Chat or Logs, if in Debug Mode
+     *
+     * @param logMessage   The Log Message to Send
+     * @param logArguments Additional Formatting Arguments
+     */
+    public void debugError(final String logMessage, Object... logArguments) {
+        if (ModUtils.IS_DEV) {
+            error("[Debug] " + logMessage, logArguments);
+        }
+    }
 }

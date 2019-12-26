@@ -12,6 +12,7 @@
 
 ### Fixes
 
+*   Fixed Issues pertaining to Non-Functional RPC Displays on Unix Systems
 *   Fixed Default Tooltip Color Values so just visiting the Gui doesn't trigger a hasChanged State
 *   Fixed Some Versions of Minecraft having incorrect Dimension Names (Below 1.5.2)
 *   Fixed Slider and Escape Button Functionality on MC 1.14+ Ports

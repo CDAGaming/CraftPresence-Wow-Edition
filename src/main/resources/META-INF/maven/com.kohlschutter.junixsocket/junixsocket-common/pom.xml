@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>junixsocket-common</artifactId>
+    <packaging>jar</packaging>
+    <parent>
+        <groupId>com.kohlschutter.junixsocket</groupId>
+        <artifactId>junixsocket-parent</artifactId>
+        <version>2.2.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <name>junixsocket-common</name>
+    <properties>
+        <kohlschutter.project.base.directory>${project.parent.basedir}</kohlschutter.project.base.directory>
+        <kohlschutter.parent.directory>${project.parent.parent.basedir}</kohlschutter.parent.directory>
+        <junixsocket.custom.arch></junixsocket.custom.arch>
+    </properties>
+
+    <description>The public, core API</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- Build JNI headers automatically -->
+                <configuration>
+                    <compilerArgs>
+                        <arg>-h</arg>
+                        <arg>${kohlschutter.project.base.directory}/junixsocket-native/src/main/c</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>com.kohlschutter.junixsocket</groupId>
+            <artifactId>junixsocket-native-common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.kohlschutter.junixsocket</groupId>
+            <artifactId>junixsocket-native-custom</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <classifier>${junixsocket.custom.arch}</classifier>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+</project>
