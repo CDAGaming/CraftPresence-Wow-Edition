@@ -265,6 +265,7 @@ class AFUNIXSocketImpl extends SocketImpl {
 
     @Override
     protected void create(boolean stream) {
+        // N/A
     }
 
     @Override
@@ -286,7 +287,8 @@ class AFUNIXSocketImpl extends SocketImpl {
     }
 
     @Override
-    protected void listen(int backlog) throws IOException {
+    protected void listen(int originalBacklog) throws IOException {
+        int backlog = originalBacklog;
         FileDescriptor fdesc = validFdOrException();
         if (backlog <= 0) {
             backlog = 50;
@@ -314,10 +316,8 @@ class AFUNIXSocketImpl extends SocketImpl {
             return null;
         }
         FileDescriptor descriptor = this.fd;
-        if (descriptor != null) {
-            if (descriptor.valid()) {
-                return descriptor;
-            }
+        if (descriptor != null && descriptor.valid()) {
+            return descriptor;
         }
         return null;
     }
@@ -617,7 +617,9 @@ class AFUNIXSocketImpl extends SocketImpl {
         }
 
         @Override
-        public void write(byte[] buf, int off, int len) throws IOException {
+        public void write(byte[] buf, int originalOff, int originalLen) throws IOException {
+            int off = originalOff;
+            int len = originalLen;
             if (streamClosed) {
                 throw new SocketException("This OutputStream has already been closed.");
             }

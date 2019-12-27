@@ -226,7 +226,8 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
         private static final String FILE_SCHEME_PREFIX_ENCODED = "file%";
         private static final String FILE_SCHEME_LOCALHOST = "localhost";
 
-        private static String stripBrackets(String host) {
+        private static String stripBrackets(String originalHost) {
+            String host = originalHost;
             if (host.startsWith("[")) {
                 if (host.endsWith("]")) {
                     host = host.substring(1, host.length() - 1);
@@ -238,13 +239,15 @@ public abstract class AFUNIXSocketFactory extends SocketFactory {
         }
 
         @Override
-        protected boolean isHostnameSupported(String host) {
+        protected boolean isHostnameSupported(String originalHost) {
+            String host = originalHost;
             host = stripBrackets(host);
             return host.startsWith(FILE_SCHEME_PREFIX) || host.startsWith(FILE_SCHEME_PREFIX_ENCODED);
         }
 
         @Override
-        protected AFUNIXSocketAddress addressFromHost(String host, int port) throws IOException {
+        protected AFUNIXSocketAddress addressFromHost(String originalHost, int port) throws IOException {
+            String host = originalHost;
             host = stripBrackets(host);
             if (host.startsWith(FILE_SCHEME_PREFIX_ENCODED)) {
                 try {

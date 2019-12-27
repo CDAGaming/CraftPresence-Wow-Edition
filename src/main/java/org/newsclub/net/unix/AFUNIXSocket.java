@@ -186,16 +186,15 @@ public final class AFUNIXSocket extends Socket {
     }
 
     @Override
-    public void connect(SocketAddress endpoint, int timeout) throws IOException {
+    public void connect(SocketAddress originalEndPoint, int timeout) throws IOException {
+        SocketAddress endpoint = originalEndPoint;
         if (!(endpoint instanceof AFUNIXSocketAddress)) {
-            if (socketFactory != null) {
-                if (endpoint instanceof InetSocketAddress) {
-                    InetSocketAddress isa = (InetSocketAddress) endpoint;
+            if (socketFactory != null && endpoint instanceof InetSocketAddress) {
+                InetSocketAddress isa = (InetSocketAddress) endpoint;
 
-                    String hostname = isa.getHostString();
-                    if (socketFactory.isHostnameSupported(hostname)) {
-                        endpoint = socketFactory.addressFromHost(hostname, isa.getPort());
-                    }
+                String hostname = isa.getHostString();
+                if (socketFactory.isHostnameSupported(hostname)) {
+                    endpoint = socketFactory.addressFromHost(hostname, isa.getPort());
                 }
             }
             if (!(endpoint instanceof AFUNIXSocketAddress)) {

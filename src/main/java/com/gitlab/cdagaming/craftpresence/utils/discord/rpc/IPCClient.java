@@ -438,6 +438,8 @@ public final class IPCClient implements Closeable {
                                             json.getAsJsonPrimitive("evt").getAsString());
                                 }
                                 break;
+                            default:
+                                break;
                         }
 
                         if (listener != null && json.has("cmd") && json.getAsJsonPrimitive("cmd").getAsString().equals("DISPATCH")) {
@@ -462,6 +464,8 @@ public final class IPCClient implements Closeable {
                                         );
                                         listener.onActivityJoinRequest(localInstance, data.has("secret") ? data.getAsJsonObject("secret").getAsString() : null, user);
                                         break;
+                                    default:
+                                        break;
                                 }
                             } catch (Exception e) {
                                 ModUtils.LOG.error(String.format("Exception when handling event: %s", e));
@@ -473,10 +477,7 @@ public final class IPCClient implements Closeable {
                 if (listener != null)
                     listener.onClose(localInstance, p.getParsedJson());
             } catch (IOException | JsonParseException ex) {
-                if (ex instanceof IOException)
-                    ModUtils.LOG.error(String.format("Reading thread encountered an IOException: %s", ex));
-                else
-                    ModUtils.LOG.error(String.format("Reading thread encountered an JSONException: %s", ex));
+                ModUtils.LOG.error(String.format("Reading thread encountered an Exception: %s", ex));
 
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)

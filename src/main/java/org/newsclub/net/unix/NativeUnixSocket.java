@@ -47,6 +47,7 @@ final class NativeUnixSocket {
     }
 
     static void checkSupported() {
+        // N/A
     }
 
     static native void init() throws Exception;

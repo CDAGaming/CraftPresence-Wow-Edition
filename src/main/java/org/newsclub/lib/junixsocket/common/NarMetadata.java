@@ -18,7 +18,7 @@
 package org.newsclub.lib.junixsocket.common;
 
 public final class NarMetadata {
-    private NarMetadata() {
+    NarMetadata() {
         throw new IllegalStateException("No instances");
     }
 }

@@ -39,9 +39,6 @@ final class NativeLibraryLoader implements Closeable {
         TEMP_DIR = (dir == null) ? null : new File(dir);
     }
 
-    NativeLibraryLoader() {
-    }
-
     public static String getJunixsocketVersion() throws IOException {
         return getArtifactVersion(AFUNIXSocket.class, "junixsocket-common");
     }
@@ -218,6 +215,7 @@ final class NativeLibraryLoader implements Closeable {
 
     @Override
     public void close() {
+        // N/A
     }
 
     private abstract static class LibraryCandidate implements Closeable {
@@ -254,6 +252,7 @@ final class NativeLibraryLoader implements Closeable {
 
         @Override
         public void close() {
+            // N/A
         }
 
         @Override
