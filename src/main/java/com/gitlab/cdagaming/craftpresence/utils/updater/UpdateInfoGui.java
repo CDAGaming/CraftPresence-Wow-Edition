@@ -3,13 +3,12 @@ package com.gitlab.cdagaming.craftpresence.utils.updater;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
-import java.net.URI;
 import java.util.List;
 
 public class UpdateInfoGui extends GuiScreen {
@@ -67,7 +66,7 @@ public class UpdateInfoGui extends GuiScreen {
             CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == downloadButton.id) {
             try {
-                Desktop.getDesktop().browse(new URI(modUpdater.downloadUrl));
+                UrlUtils.openUrl(modUpdater.downloadUrl);
             } catch (Exception ex) {
                 ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.web", modUpdater.downloadUrl));
                 ex.printStackTrace();
