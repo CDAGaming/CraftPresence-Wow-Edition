@@ -29,6 +29,7 @@ import com.gitlab.cdagaming.craftpresence.utils.updater.ModUpdaterUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.realms.RealmsSharedConstants;
 
 import java.io.*;
@@ -135,7 +136,7 @@ public class ModUtils {
     /**
      * If this Application should be run in a Developer or Debug State
      */
-    public static final boolean IS_DEV = true;//(Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+    public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
     /**
      * If this Application is running/needs Legacy Data
