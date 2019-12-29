@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.6.1 (1/??/2020)
+## v1.6.1 (1/11/2020)
 
 ### Changes
 
@@ -8,7 +8,9 @@
 
     *   Before, this only applied to 1.8.9 and above
 
-*   Added a Parser for Update Data, so any Updates will display in the Gui, regardless if using Forge
+*   Added a Parser for Update Data, so any Updates will display in the Gui, regardless if using Forge or not
+
+*   Added a Debug Mode Option in Advanced Setting, useful to see Debugging Logging and further features in the future
 
 ### Fixes
 

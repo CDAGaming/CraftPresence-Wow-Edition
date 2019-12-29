@@ -17,7 +17,7 @@ public class AdvancedSettingsGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
     private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, characterEditorButton;
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
-            enablePerItemButton, renderTooltipsButton;
+            enablePerItemButton, renderTooltipsButton, debugModeButton;
     private GuiTextField splitCharacter;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
@@ -46,6 +46,7 @@ public class AdvancedSettingsGui extends GuiScreen {
         enablePerGUIButton = new CheckBoxControl(300, calc2, CraftPresence.GUIS.getButtonY(4), ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enablepergui"), CraftPresence.CONFIG.enablePERGUI);
         enablePerItemButton = new CheckBoxControl(400, calc1, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enableperitem"), CraftPresence.CONFIG.enablePERItem);
         renderTooltipsButton = new CheckBoxControl(500, calc2, CraftPresence.GUIS.getButtonY(5) - 10, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.rendertooltips"), CraftPresence.CONFIG.renderTooltips);
+        debugModeButton = new CheckBoxControl(600, calc1, CraftPresence.GUIS.getButtonY(6) - 20, ModUtils.TRANSLATOR.translate("gui.config.name.advanced.debugmode"), CraftPresence.CONFIG.debugMode);
         proceedButton = new ExtendedButtonControl(900, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
 
         buttonList.add(guiMessagesButton);
@@ -55,6 +56,7 @@ public class AdvancedSettingsGui extends GuiScreen {
         buttonList.add(enablePerGUIButton);
         buttonList.add(enablePerItemButton);
         buttonList.add(renderTooltipsButton);
+        buttonList.add(debugModeButton);
         buttonList.add(proceedButton);
 
         super.initGui();
@@ -94,6 +96,9 @@ public class AdvancedSettingsGui extends GuiScreen {
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, renderTooltipsButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.rendertooltips")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+        }
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, debugModeButton)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.debugmode")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, guiMessagesButton)) {
             if (!guiMessagesButton.enabled) {
@@ -148,6 +153,10 @@ public class AdvancedSettingsGui extends GuiScreen {
                     ModUtils.loadCharData(true);
                 }
                 CraftPresence.CONFIG.renderTooltips = renderTooltipsButton.isChecked();
+            }
+            if (debugModeButton.isChecked() != CraftPresence.CONFIG.debugMode) {
+                CraftPresence.CONFIG.hasChanged = true;
+                CraftPresence.CONFIG.debugMode = debugModeButton.isChecked();
             }
             CraftPresence.GUIS.openScreen(parentScreen);
         } else if (button.id == guiMessagesButton.id) {

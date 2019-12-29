@@ -134,11 +134,6 @@ public class ModUtils {
     public static final ModUpdaterUtils UPDATER = new ModUpdaterUtils(MODID, UPDATE_JSON, VERSION_ID);
 
     /**
-     * If this Application should be run in a Developer or Debug State
-     */
-    public static final boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
-
-    /**
      * If this Application is running/needs Legacy Data
      */
     public static final boolean IS_LEGACY = false;
@@ -147,6 +142,11 @@ public class ModUtils {
      * Whether to forcibly block any tooltips related to this Application from rendering
      */
     public static boolean forceBlockTooltipRendering = false;
+
+    /**
+     * If this Application should be run in a Developer or Debug State
+     */
+    public static boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
     /**
      * Retrieves and Initializes Character Data<p>

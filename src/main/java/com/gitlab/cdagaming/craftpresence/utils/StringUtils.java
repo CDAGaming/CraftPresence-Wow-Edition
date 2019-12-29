@@ -105,7 +105,7 @@ public class StringUtils {
      *
      * @param original The original String
      * @param encoding The Charset to encode the String under
-     * @param decode If we are Decoding an already encoded String
+     * @param decode   If we are Decoding an already encoded String
      * @return The converted UTF_8 String, if successful
      */
     public static String getConvertedString(String original, String encoding, boolean decode) {

@@ -37,6 +37,7 @@ import com.gitlab.cdagaming.craftpresence.utils.world.BiomeUtils;
 import com.gitlab.cdagaming.craftpresence.utils.world.DimensionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.Mod;
 
 import java.io.File;
@@ -193,6 +194,11 @@ public class CraftPresence {
         if (initialized) {
             instance = Minecraft.getMinecraft();
             player = instance.player;
+
+            // Synchronize Developer Mode
+            ModUtils.IS_DEV = CONFIG.debugMode ||
+                    ((Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) &&
+                            (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment"));
 
             CommandUtils.reloadData(false);
 
