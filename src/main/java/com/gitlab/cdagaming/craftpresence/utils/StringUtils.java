@@ -36,7 +36,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -102,15 +101,21 @@ public class StringUtils {
     }
 
     /**
-     * Converts a String and it's bytes to that of the UTF_8 Charset
+     * Converts a String and it's bytes to that of the Specified Charset
      *
      * @param original The original String
+     * @param encoding The Charset to encode the String under
+     * @param decode If we are Decoding an already encoded String
      * @return The converted UTF_8 String, if successful
      */
-    public static String getUnicodeString(String original) {
-        if (!isNullOrEmpty(original)) {
-            return new String(original.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s+", " ");
-        } else {
+    public static String getConvertedString(String original, String encoding, boolean decode) {
+        try {
+            if (decode) {
+                return new String(original.getBytes(), encoding).replaceAll("\\s+", " ");
+            } else {
+                return new String(original.getBytes(encoding)).replaceAll("\\s+", " ");
+            }
+        } catch (Exception ex) {
             return original;
         }
     }

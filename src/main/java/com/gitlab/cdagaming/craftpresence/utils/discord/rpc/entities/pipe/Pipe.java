@@ -230,7 +230,7 @@ public abstract class Pipe {
                 callbacks.put(nonce, callback);
             write(p.toBytes());
             if (ipcClient.isDebugMode()) {
-                ModUtils.LOG.debugInfo(String.format("Sent packet: %s", p.toString()));
+                ModUtils.LOG.debugInfo(String.format("Sent packet: %s", p.toDecodedString()));
             }
 
             if (listener != null)

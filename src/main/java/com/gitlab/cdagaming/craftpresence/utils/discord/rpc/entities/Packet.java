@@ -115,6 +115,14 @@ public class Packet {
         return "Pkt:" + getOp() + getParsedJson().toString();
     }
 
+    public String toDecodedString() {
+        try {
+            return "Pkt:" + getOp() + new String(getParsedJson().toString().getBytes(encoding));
+        } catch (UnsupportedEncodingException e) {
+            return "Pkt:" + getOp() + getParsedJson().toString();
+        }
+    }
+
     /**
      * Discord response OpCode values that are
      * sent with response data to and from Discord

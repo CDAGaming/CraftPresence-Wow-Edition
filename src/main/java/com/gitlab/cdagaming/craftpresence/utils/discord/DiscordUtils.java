@@ -462,17 +462,7 @@ public class DiscordUtils {
         LARGEIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData));
         SMALLIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData));
 
-        // Format Data to UTF_8
-        GAME_STATE = StringUtils.getUnicodeString(GAME_STATE);
-        DETAILS = StringUtils.getUnicodeString(DETAILS);
-
-        LARGEIMAGEKEY = StringUtils.getUnicodeString(LARGEIMAGEKEY);
-        SMALLIMAGEKEY = StringUtils.getUnicodeString(SMALLIMAGEKEY);
-
-        LARGEIMAGETEXT = StringUtils.getUnicodeString(LARGEIMAGETEXT);
-        SMALLIMAGETEXT = StringUtils.getUnicodeString(SMALLIMAGETEXT);
-
-        return new RichPresence.Builder()
+        RichPresence newRPCData = new RichPresence.Builder()
                 .setState(GAME_STATE)
                 .setDetails(DETAILS)
                 .setStartTimestamp(START_TIMESTAMP)
@@ -484,5 +474,17 @@ public class DiscordUtils {
                 .setJoinSecret(JOIN_SECRET)
                 .setSpectateSecret(SPECTATE_SECRET)
                 .build();
+
+        // Format Data to UTF_8 after Sent to RPC (RPC has it's own Encoding)
+        GAME_STATE = StringUtils.getConvertedString(GAME_STATE, "UTF-8", false);
+        DETAILS = StringUtils.getConvertedString(DETAILS, "UTF-8", false);
+
+        LARGEIMAGEKEY = StringUtils.getConvertedString(LARGEIMAGEKEY, "UTF-8", false);
+        SMALLIMAGEKEY = StringUtils.getConvertedString(SMALLIMAGEKEY, "UTF-8", false);
+
+        LARGEIMAGETEXT = StringUtils.getConvertedString(LARGEIMAGETEXT, "UTF-8", false);
+        SMALLIMAGETEXT = StringUtils.getConvertedString(SMALLIMAGETEXT, "UTF-8", false);
+
+        return newRPCData;
     }
 }

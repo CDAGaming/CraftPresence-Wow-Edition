@@ -152,6 +152,14 @@ public class RichPresence {
         return finalObject;
     }
 
+    public String toDecodedJson(String encoding) {
+        try {
+            return new String(toJson().toString().getBytes(encoding));
+        } catch (Exception ex) {
+            return toJson().toString();
+        }
+    }
+
     /**
      * A chain builder for a {@link RichPresence} object.
      *

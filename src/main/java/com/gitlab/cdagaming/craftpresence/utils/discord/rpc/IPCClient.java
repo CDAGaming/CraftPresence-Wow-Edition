@@ -220,7 +220,7 @@ public final class IPCClient implements Closeable {
         checkConnected(true);
 
         if (debugMode) {
-            ModUtils.LOG.debugInfo("Sending RichPresence to discord: " + (presence == null ? null : presence.toJson().toString()));
+            ModUtils.LOG.debugInfo("Sending RichPresence to discord: " + (presence == null ? null : presence.toDecodedJson(encoding)));
         }
 
         // Setup and Send JsonObject Data Representing an RPC Update
