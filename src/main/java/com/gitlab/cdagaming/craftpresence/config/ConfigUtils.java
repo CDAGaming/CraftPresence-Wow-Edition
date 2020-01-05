@@ -9,7 +9,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -244,18 +244,18 @@ public class ConfigUtils {
                 if (isConfigNew) {
                     updateConfig();
                 }
-                read(false);
+                read(false, "UTF-8");
             }
         }
     }
 
-    public void read(final boolean skipLogging) {
+    public void read(final boolean skipLogging, final String encoding) {
         Reader configReader = null;
         FileInputStream inputStream = null;
 
         try {
             inputStream = new FileInputStream(configFile);
-            configReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+            configReader = new InputStreamReader(inputStream, Charset.forName(encoding));
             properties.load(configReader);
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.save"));
@@ -320,7 +320,7 @@ public class ConfigUtils {
                             }
                         } else if (expectedClass == String[].class) {
                             // Convert to String Array (After Verifying it is a single Array)
-                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("\\[([^\\s]+?)\\]", foundProperty.toString()), null, 1, true);
+                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("\\[([^\\s]+?)\\]", foundProperty.toString()), null, 1);
 
                             if (!StringUtils.isNullOrEmpty(convertedString) &&
                                     (convertedString.startsWith("[") && convertedString.endsWith("]"))) {
@@ -361,7 +361,7 @@ public class ConfigUtils {
                     ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.invalidprop", remainingProp));
                 }
                 properties.remove(remainingProp);
-                save();
+                save("UTF-8");
             }
 
             // Execute a Config Update, to ensure validity
@@ -439,21 +439,21 @@ public class ConfigUtils {
             queuedSplitCharacter = null;
         }
 
-        save();
+        save("UTF-8");
 
         // Re-Sync the Config Mappings and Fields if needed
         if (needsDataSync) {
-            read(true);
+            read(true, "UTF-8");
         }
     }
 
-    public void save() {
+    public void save(final String encoding) {
         Writer configWriter = null;
         FileOutputStream outputStream = null;
 
         try {
             outputStream = new FileOutputStream(configFile);
-            configWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+            configWriter = new OutputStreamWriter(outputStream, Charset.forName(encoding));
             properties.store(configWriter, null);
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.save"));

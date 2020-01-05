@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -87,8 +87,9 @@ public class ModUpdaterUtils {
     /**
      * Initializes this Module from the Specified Arguments
      *
-     * @param modID     The Mod Id for this Instance
-     * @param updateUrl The Update Url to attach to this Instance
+     * @param modID          The Mod Id for this Instance
+     * @param updateUrl      The Update Url to attach to this Instance
+     * @param currentVersion The Current Version to attach to this Instance
      */
     public ModUpdaterUtils(final String modID, final String updateUrl, final String currentVersion) {
         this.modID = modID;
@@ -109,7 +110,7 @@ public class ModUpdaterUtils {
         downloadUrl = "";
 
         try {
-            JsonObject rootUpdateData = FileUtils.parseJson(UrlUtils.getURLText(updateUrl));
+            JsonObject rootUpdateData = FileUtils.parseJson(UrlUtils.getURLText(updateUrl, "UTF-8"));
 
             if (rootUpdateData != null) {
                 ModUtils.LOG.debugInfo("Received Update Data: " + rootUpdateData.toString());
@@ -253,13 +254,13 @@ public class ModUpdaterUtils {
 
     /**
      * Mapping for CFU State (Based on https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/)
-     * <p>
-     * FAILED: The version checker could not connect to the URL provided or was unable to retrieve/parse data
-     * UP_TO_DATE: The current version is equal to or newer than the latest stable version
-     * OUTDATED: There is a new stable version available to download
-     * BETA_OUTDATED: There is a new unstable version available to download
-     * BETA: The current version is equal to or newer than the latest unstable version
-     * PENDING: The version checker has not completed at this time
+     *
+     * <p>FAILED: The version checker could not connect to the URL provided or was unable to retrieve/parse data
+     * <p>UP_TO_DATE: The current version is equal to or newer than the latest stable version
+     * <p>OUTDATED: There is a new stable version available to download
+     * <p>BETA_OUTDATED: There is a new unstable version available to download
+     * <p>BETA: The current version is equal to or newer than the latest unstable version
+     * <p>PENDING: The version checker has not completed at this time
      */
     public enum UpdateState {
         FAILED,

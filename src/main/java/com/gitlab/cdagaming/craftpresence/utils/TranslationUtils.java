@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import com.google.common.collect.Maps;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -53,6 +53,11 @@ public class TranslationUtils {
      * The Target ID to locate the Language File
      */
     private String modID;
+
+    /**
+     * The Charset Encoding to parse translations in
+     */
+    private String encoding;
 
     /**
      * The Stored Mapping of Valid Translations
@@ -79,7 +84,8 @@ public class TranslationUtils {
     public TranslationUtils() {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setUsingJSON(false);
-        getTranslationMap();
+        setEncoding("UTF-8");
+        getTranslationMap(encoding);
         checkUnicode();
     }
 
@@ -91,7 +97,8 @@ public class TranslationUtils {
     public TranslationUtils(final boolean useJSON) {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setUsingJSON(useJSON);
-        getTranslationMap();
+        setEncoding("UTF-8");
+        getTranslationMap(encoding);
         checkUnicode();
     }
 
@@ -104,7 +111,8 @@ public class TranslationUtils {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setModID(modID);
         setUsingJSON(false);
-        getTranslationMap();
+        setEncoding("UTF-8");
+        getTranslationMap(encoding);
         checkUnicode();
     }
 
@@ -118,7 +126,24 @@ public class TranslationUtils {
         setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
         setModID(modID);
         setUsingJSON(useJSON);
-        getTranslationMap();
+        setEncoding("UTF-8");
+        getTranslationMap(encoding);
+        checkUnicode();
+    }
+
+    /**
+     * Sets initial Data and Retrieves Valid Translations
+     *
+     * @param modID    Sets the Target Mod ID to locate Language Files
+     * @param useJSON  Toggles whether to use .Json or .Lang, if present
+     * @param encoding The Charset Encoding to parse Language Files
+     */
+    public TranslationUtils(final String modID, final boolean useJSON, final String encoding) {
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
+        setModID(modID);
+        setUsingJSON(useJSON);
+        setEncoding(encoding);
+        getTranslationMap(encoding);
         checkUnicode();
     }
 
@@ -131,7 +156,7 @@ public class TranslationUtils {
         if (CraftPresence.CONFIG != null && !languageID.equals(CraftPresence.CONFIG.languageID) &&
                 (!requestMap.containsKey(CraftPresence.CONFIG.languageID) || requestMap.get(CraftPresence.CONFIG.languageID))) {
             setLanguage(CraftPresence.CONFIG.languageID);
-            getTranslationMap();
+            getTranslationMap(encoding);
             checkUnicode();
         }
 
@@ -186,6 +211,19 @@ public class TranslationUtils {
     }
 
     /**
+     * Sets the Charset Encoding to parse Translations in, if present
+     *
+     * @param encoding The Charset Encoding (Default: UTF-8)
+     */
+    private void setEncoding(final String encoding) {
+        if (!StringUtils.isNullOrEmpty(encoding)) {
+            this.encoding = encoding;
+        } else {
+            this.encoding = "UTF-8";
+        }
+    }
+
+    /**
      * Sets the Mod ID to target when locating Language Files
      *
      * @param modID The Mod ID to target
@@ -201,7 +239,7 @@ public class TranslationUtils {
     /**
      * Retrieves and Synchronizes a List of Translations from a Language File
      */
-    private void getTranslationMap() {
+    private void getTranslationMap(final String encoding) {
         translationMap = Maps.newHashMap();
 
         InputStream in = StringUtils.getResourceAsStream(TranslationUtils.class, "/assets/"
@@ -212,7 +250,7 @@ public class TranslationUtils {
                 "lang/" + languageID.toLowerCase() + (usingJSON ? ".json" : ".lang"));
 
         if (in != null || fallbackIn != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn, StandardCharsets.UTF_8));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn, Charset.forName(encoding)));
             try {
                 String currentString;
                 while ((currentString = reader.readLine()) != null) {

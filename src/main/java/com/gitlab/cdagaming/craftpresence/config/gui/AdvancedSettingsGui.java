@@ -150,7 +150,7 @@ public class AdvancedSettingsGui extends GuiScreen {
             if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
                 CraftPresence.CONFIG.hasChanged = true;
                 if (renderTooltipsButton.isChecked() && (Arrays.equals(StringUtils.MC_CHAR_WIDTH, new int[256]) || Arrays.equals(StringUtils.MC_GLYPH_WIDTH, new byte[65536]))) {
-                    ModUtils.loadCharData(true);
+                    ModUtils.loadCharData(true, "UTF-8");
                 }
                 CraftPresence.CONFIG.renderTooltips = renderTooltipsButton.isChecked();
             }

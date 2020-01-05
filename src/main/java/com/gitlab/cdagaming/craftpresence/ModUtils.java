@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraft.realms.RealmsSharedConstants;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -152,9 +152,10 @@ public class ModUtils {
      * Retrieves and Initializes Character Data<p>
      * Primarily used for ensuring proper Tooltip Rendering
      *
-     * @param Update Whether to Force Update and Initialization of Character Data
+     * @param Update   Whether to Force Update and Initialization of Character Data
+     * @param encoding The Charset Encoding to parse character data in
      */
-    public static void loadCharData(final boolean Update) {
+    public static void loadCharData(final boolean Update, final String encoding) {
         LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.init"));
         final String fileName = "chardata.properties", charDataPath = "/assets/" + MODID + "/" + fileName;
         final File charDataDir = new File(MODID + File.separator + fileName);
@@ -195,7 +196,7 @@ public class ModUtils {
         if (!errored) {
             try {
                 inputData = new FileInputStream(charDataDir);
-                inputStream = new InputStreamReader(inputData, StandardCharsets.UTF_8);
+                inputStream = new InputStreamReader(inputData, Charset.forName(encoding));
                 reader = new BufferedReader(inputStream);
 
                 String currentString;
@@ -226,7 +227,7 @@ public class ModUtils {
                     errored = true;
                 }
             } catch (Exception ex) {
-                loadCharData(true);
+                loadCharData(true, "UTF-8");
             }
         }
 
@@ -259,8 +260,10 @@ public class ModUtils {
 
     /**
      * Saves and Synchronizes Current Character Data
+     *
+     * @param encoding The Charset Encoding to write character data in
      */
-    public static void writeToCharData() {
+    public static void writeToCharData(final String encoding) {
         List<String> textData = Lists.newArrayList();
         InputStream inputData = null;
         InputStreamReader inputStream = null;
@@ -274,7 +277,7 @@ public class ModUtils {
             try {
                 // Read and Queue Character Data
                 inputData = new FileInputStream(charDataDir);
-                inputStream = new InputStreamReader(inputData, StandardCharsets.UTF_8);
+                inputStream = new InputStreamReader(inputData, Charset.forName(encoding));
                 br = new BufferedReader(inputStream);
 
                 String currentString;
@@ -290,7 +293,7 @@ public class ModUtils {
 
                 // Write Queued Character Data
                 outputData = new FileOutputStream(charDataDir);
-                outputStream = new OutputStreamWriter(outputData, StandardCharsets.UTF_8);
+                outputStream = new OutputStreamWriter(outputData, Charset.forName(encoding));
                 bw = new BufferedWriter(outputStream);
 
                 if (!textData.isEmpty()) {
@@ -300,7 +303,7 @@ public class ModUtils {
                     }
                 } else {
                     // If charWidth and glyphWidth don't exist, Reset Character Data
-                    loadCharData(true);
+                    loadCharData(true, "UTF-8");
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -330,7 +333,7 @@ public class ModUtils {
                 }
             }
         } else {
-            loadCharData(true);
+            loadCharData(true, "UTF-8");
         }
     }
 }

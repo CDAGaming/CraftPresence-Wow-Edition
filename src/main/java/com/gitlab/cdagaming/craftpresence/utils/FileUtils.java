@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -60,7 +60,7 @@ public class FileUtils {
      * @throws Exception If Unable to read the File
      */
     public static <T> T getJSONFromFile(File file, Class<T> classObj) throws Exception {
-        return getJSONFromFile(fileToString(file), classObj);
+        return getJSONFromFile(fileToString(file, "UTF-8"), classObj);
     }
 
     /**
@@ -137,12 +137,13 @@ public class FileUtils {
     /**
      * Attempts to convert a File's data into a readable String
      *
-     * @param file The file to access
+     * @param file     The file to access
+     * @param encoding The encoding to parse the file as
      * @return The file's data as a String
      * @throws Exception If Unable to read the file
      */
-    public static String fileToString(File file) throws Exception {
-        return org.apache.commons.io.FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+    public static String fileToString(File file, String encoding) throws Exception {
+        return org.apache.commons.io.FileUtils.readFileToString(file, Charset.forName(encoding));
     }
 
     /**

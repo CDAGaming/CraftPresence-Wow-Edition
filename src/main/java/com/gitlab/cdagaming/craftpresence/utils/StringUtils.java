@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -187,13 +187,12 @@ public class StringUtils {
     /**
      * Remove an Amount of Matches from an inputted Match Set
      *
-     * @param matchData  The Match Data to remove from with the form of originalString:listOfMatches
+     * @param matchData       The Match Data to remove from with the form of originalString:listOfMatches
      * @param parsedMatchData The Parsed Argument Data to match against, if available, to prevent Null Arguments
-     * @param maxMatches The maximum amount of matches to remove
-     * @param useMax     Whether to use the Maximum Value or remove all matches
+     * @param maxMatches      The maximum amount of matches to remove (Set to -1 to Remove All)
      * @return The original String from Match Data with the matches up to maxMatches removed
      */
-    public static String removeMatches(final Tuple<String, List<String>> matchData, List<Tuple<String, String>> parsedMatchData, final int maxMatches, final boolean useMax) {
+    public static String removeMatches(final Tuple<String, List<String>> matchData, List<Tuple<String, String>> parsedMatchData, final int maxMatches) {
         String finalString = "";
 
         if (matchData != null) {
@@ -204,25 +203,27 @@ public class StringUtils {
                 int foundMatches = 0;
 
                 for (String match : matchList) {
-                    boolean isValidScan = foundMatches < maxMatches;
+                    boolean isValidScan = foundMatches >= maxMatches;
+                    boolean alreadyRemoved = false;
 
-                    if (!useMax || isValidScan) {
+                    if (parsedMatchData != null && !parsedMatchData.isEmpty()) {
                         // Scan through Parsed Argument Data if Possible
-                        if (parsedMatchData != null && !parsedMatchData.isEmpty()) {
-                            for (Tuple<String, String> parsedArgument : parsedMatchData) {
-                                // If found a matching argument to the match, and the parsed argument is null, remove the match without counting it as a found match
-                                if (parsedArgument.getFirst().equalsIgnoreCase(match) && isNullOrEmpty(parsedArgument.getSecond())) {
-                                    isValidScan = false;
-                                    break;
-                                }
+                        for (Tuple<String, String> parsedArgument : parsedMatchData) {
+                            // If found a matching argument to the match, and the parsed argument is null
+                            // Remove the match without counting it as a found match
+                            if (parsedArgument.getFirst().equalsIgnoreCase(match) && isNullOrEmpty(parsedArgument.getSecond())) {
+                                finalString = finalString.replaceFirst(match, "");
+                                alreadyRemoved = true;
+                                break;
                             }
                         }
                     }
 
-                    if (isValidScan) {
+                    if (!alreadyRemoved) {
+                        if (isValidScan) {
+                            finalString = finalString.replaceFirst(match, "");
+                        }
                         foundMatches++;
-                    } else {
-                        finalString = finalString.replaceFirst(match, "");
                     }
                 }
             }
@@ -395,25 +396,15 @@ public class StringUtils {
     /**
      * Expands or Contracts an Array, depending on Conditions
      *
-     * <p>TODO: Remove Operation ID Argument and base it on if greater then or less then 0, with 0 just returning the original array
-     *
-     * @param theArray    The original Array to adjust
-     * @param adjustBy    The value to either expand or contract, based on operationID
-     * @param operationID Whether to Expand (0) or Contract (1) the Array Size
+     * @param theArray The original Array to adjust
+     * @param adjustBy The value to either expand (Positive Number) or contract (Negative Number)
      * @return The evaluated and adjusted array
      */
-    public static String[] adjustArraySize(final String[] theArray, final int adjustBy, final int operationID) {
-        int i = theArray.length;
-        int n = i + adjustBy;
+    public static String[] adjustArraySize(final String[] theArray, final int adjustBy) {
+        int currentSize = theArray.length;
+        int newSize = currentSize + adjustBy;
 
-        if (operationID == 0) {
-            n = i + adjustBy;
-        }
-        if (operationID == 1) {
-            n = i - adjustBy;
-        }
-
-        String[] newArray = new String[n];
+        String[] newArray = new String[newSize];
         System.arraycopy(theArray, 0, newArray, 0, theArray.length);
         return newArray;
     }
@@ -429,7 +420,7 @@ public class StringUtils {
     public static String[] addToArray(final String[] array, final int index, final String message) {
         if (array.length <= index) {
             int extendNum = index - array.length;
-            String[] newArray = adjustArraySize(array, extendNum + 1, 0);
+            String[] newArray = adjustArraySize(array, extendNum + 1);
             newArray[index] = message;
             return newArray;
         } else {
@@ -942,21 +933,17 @@ public class StringUtils {
     /**
      * Invokes the specified Method(s) in the Target Class via Reflection
      *
-     * <p>TODO: Change Method Names and Args to List of Tuples with the format of methodName:argsForMethod as methodData, if possible
-     *
      * @param classToAccess The class to access with the method(s)
      * @param instance      An Instance of the Class, if needed
-     * @param methodNames   A List of Method Names to attempt invoking upon
-     * @param args          Additional Arguments for the Methods
-     * @param argumentTypes The parameter of the arguments to target
+     * @param methodData    The Methods and Necessary Argument Data for execution, in the form of methodName:argsAndTypesForMethod
      */
-    public static void executeMethod(Class<?> classToAccess, Object instance, String[] methodNames, Object[] args, Class<?>... argumentTypes) {
-        for (String methodName : methodNames) {
+    public static void executeMethod(Class<?> classToAccess, Object instance, List<Tuple<String, Tuple<Object[], Class<?>[]>>> methodData) {
+        for (Tuple<String, Tuple<Object[], Class<?>[]>> methodInstance : methodData) {
             try {
-                Method lookupMethod = classToAccess.getDeclaredMethod(methodName, argumentTypes);
+                Method lookupMethod = classToAccess.getDeclaredMethod(methodInstance.getFirst(), methodInstance.getSecond().getSecond());
                 if (lookupMethod != null) {
                     lookupMethod.setAccessible(true);
-                    lookupMethod.invoke(instance, args);
+                    lookupMethod.invoke(instance, methodInstance.getSecond().getFirst());
                 }
             } catch (Exception ignored) {
             }

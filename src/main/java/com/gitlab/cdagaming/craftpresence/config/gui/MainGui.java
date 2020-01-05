@@ -148,7 +148,7 @@ public class MainGui extends GuiScreen {
         } else if (button.id == proceedButton.id) {
             if (CraftPresence.CONFIG.hasChanged) {
                 CraftPresence.CONFIG.updateConfig();
-                CraftPresence.CONFIG.read(false);
+                CraftPresence.CONFIG.read(false, "UTF-8");
                 if (CraftPresence.CONFIG.hasClientPropertiesChanged) {
                     CommandUtils.rebootRPC();
                     CraftPresence.CONFIG.hasClientPropertiesChanged = false;
@@ -179,7 +179,7 @@ public class MainGui extends GuiScreen {
         if (keyCode == Keyboard.KEY_ESCAPE) {
             if (CraftPresence.CONFIG.hasChanged || CraftPresence.CONFIG.hasClientPropertiesChanged) {
                 CraftPresence.CONFIG.setupInitialValues();
-                CraftPresence.CONFIG.read(false);
+                CraftPresence.CONFIG.read(false, "UTF-8");
                 CraftPresence.CONFIG.hasChanged = false;
                 CraftPresence.CONFIG.hasClientPropertiesChanged = false;
             }

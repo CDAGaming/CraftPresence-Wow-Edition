@@ -38,7 +38,7 @@ public enum DiscordBuild {
     /**
      * 'Wildcard' build constant used in {@link com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient#connect(DiscordBuild...)
      * IPCClient#connect(DiscordBuild...)} to signify that the build to target is not important, and
-     * that the first valid build will be used.<p>
+     * that the first valid build will be used.
      * <p>
      * Other than this exact function, there is no use for this value.
      */
@@ -55,7 +55,7 @@ public enum DiscordBuild {
     }
 
     /**
-     * Gets a {@link DiscordBuild} matching the specified endpoint.<p>
+     * Gets a {@link DiscordBuild} matching the specified endpoint.
      * <p>
      * This is only internally implemented.
      *

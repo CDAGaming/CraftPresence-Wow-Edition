@@ -31,17 +31,17 @@ import java.util.HashMap;
 
 /**
  * Represents a Discord IPC Client that can send and receive
- * Rich Presence data.<p>
+ * Rich Presence data.
  * <p>
  * The ID provided should be the <b>client ID of the particular
  * application providing Rich Presence</b>, which can be found
- * <a href=https://discordapp.com/developers/applications/me>here</a>.<p>
+ * <a href=https://discordapp.com/developers/applications/me>here</a>.
  * <p>
  * When initially created using {@link #IPCClient(long)} the client will
  * be inactive awaiting a call to {@link #connect(DiscordBuild...)}.<br>
  * After the call, this client can send and receive Rich Presence data
  * to and from discord via {@link #sendRichPresence(RichPresence)} and
- * {@link #setListener(IPCListener)} respectively.<p>
+ * {@link #setListener(IPCListener)} respectively.
  * <p>
  * Please be mindful that the client created is initially unconnected,
  * and calling any methods that exchange data between this client and
@@ -97,10 +97,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sets this IPCClient's {@link IPCListener} to handle received events.<p>
+     * Sets this IPCClient's {@link IPCListener} to handle received events.
      * <p>
      * A single IPCClient can only have one of these set at any given time.<br>
-     * Setting this {@code null} will remove the currently active one.<p>
+     * Setting this {@code null} will remove the currently active one.
      * <p>
      * This can be set safely before a call to {@link #connect(DiscordBuild...)}
      * is made.
@@ -125,10 +125,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sets the encoding to send packets in.<p>
+     * Sets the encoding to send packets in.
      * <p>
      * This can be set safely before a call to {@link #connect(DiscordBuild...)}
-     * is made.<p>
+     * is made.
      * <p>
      * Default: UTF-8
      *
@@ -184,10 +184,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sends a {@link RichPresence} to the Discord client.<p>
+     * Sends a {@link RichPresence} to the Discord client.
      * <p>
      * This is where the IPCClient will officially display
-     * a Rich Presence in the Discord client.<p>
+     * a Rich Presence in the Discord client.
      * <p>
      * Sending this again will overwrite the last provided
      * {@link RichPresence}.
@@ -202,10 +202,10 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Sends a {@link RichPresence} to the Discord client.<p>
+     * Sends a {@link RichPresence} to the Discord client.
      * <p>
      * This is where the IPCClient will officially display
-     * a Rich Presence in the Discord client.<p>
+     * a Rich Presence in the Discord client.
      * <p>
      * Sending this again will overwrite the last provided
      * {@link RichPresence}.
@@ -334,12 +334,12 @@ public final class IPCClient implements Closeable {
     }
 
     /**
-     * Gets the IPCClient's {@link DiscordBuild}.<p>
+     * Gets the IPCClient's {@link DiscordBuild}.
      * <p>
      * This is always the first specified DiscordBuild when
      * making a call to {@link #connect(DiscordBuild...)},
      * or the first one found if none or {@link DiscordBuild#ANY}
-     * is specified.<p>
+     * is specified.
      * <p>
      * Note that specifying ANY doesn't mean that this will return
      * ANY. In fact this method should <b>never</b> return the
@@ -502,7 +502,7 @@ public final class IPCClient implements Closeable {
 
     /**
      * Constants representing events that can be subscribed to
-     * using {@link #subscribe(Event)}.<p>
+     * using {@link #subscribe(Event)}.
      * <p>
      * Each event corresponds to a different function as a
      * component of the Rich Presence.<br>

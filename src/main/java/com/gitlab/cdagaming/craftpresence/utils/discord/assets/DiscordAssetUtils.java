@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -241,8 +241,8 @@ public class DiscordAssetUtils {
         }
 
         if (needsFullUpdate) {
-            CraftPresence.CONFIG.save();
-            CraftPresence.CONFIG.read(false);
+            CraftPresence.CONFIG.save("UTF-8");
+            CraftPresence.CONFIG.read(false, "UTF-8");
         }
     }
 }

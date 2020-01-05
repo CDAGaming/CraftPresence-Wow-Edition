@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2018 - 2019 CDAGaming (cstack2011@yahoo.com)
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 
 /**
  * URL Utilities for parsing URL and relative Json Data
@@ -55,12 +55,13 @@ public class UrlUtils {
     /**
      * Retrieve Output from a URL as a readable String
      *
-     * @param url The URL to Access
+     * @param url      The URL to Access
+     * @param encoding The Charset Encoding to parse URL Contents in
      * @return The Output from the url as a String
      * @throws Exception If connection or Input is unable to be established
      */
-    public static String getURLText(final URL url) throws Exception {
-        final BufferedReader in = getURLReader(url);
+    public static String getURLText(final URL url, final String encoding) throws Exception {
+        final BufferedReader in = getURLReader(url, encoding);
         final StringBuilder response = new StringBuilder();
         String inputLine;
         while (!StringUtils.isNullOrEmpty((inputLine = in.readLine()))) {
@@ -73,12 +74,13 @@ public class UrlUtils {
     /**
      * Retrieve Output from a URL as a readable String
      *
-     * @param url The URL to Access
+     * @param url      The URL to Access
+     * @param encoding The Charset Encoding to parse URL Contents in
      * @return The Output from the url as a String
      * @throws Exception If connection or Input is unable to be established
      */
-    public static String getURLText(final String url) throws Exception {
-        final BufferedReader in = getURLReader(url);
+    public static String getURLText(final String url, final String encoding) throws Exception {
+        final BufferedReader in = getURLReader(url, encoding);
         final StringBuilder response = new StringBuilder();
         String inputLine;
         while (!StringUtils.isNullOrEmpty((inputLine = in.readLine()))) {
@@ -91,23 +93,25 @@ public class UrlUtils {
     /**
      * Retrieve a {@link BufferedReader} to read a response from a URL
      *
-     * @param url The URL to access (To be converted to a URL)
+     * @param url      The URL to access (To be converted to a URL)
+     * @param encoding The Charset Encoding to parse URL Contents in
      * @return a {@link BufferedReader} to read an output response from
      * @throws Exception If a connection is unable to be established
      */
-    public static BufferedReader getURLReader(final String url) throws Exception {
-        return getURLReader(new URL(url));
+    public static BufferedReader getURLReader(final String url, final String encoding) throws Exception {
+        return getURLReader(new URL(url), encoding);
     }
 
     /**
      * Retrieve a {@link BufferedReader} to read a response from a URL
      *
-     * @param url The URL to access
+     * @param url      The URL to access
+     * @param encoding The Charset Encoding to parse URL Contents in
      * @return a {@link BufferedReader} to read an output response from
      * @throws Exception If a connection is unable to be established
      */
-    public static BufferedReader getURLReader(final URL url) throws Exception {
-        return new BufferedReader(getURLStreamReader(url));
+    public static BufferedReader getURLReader(final URL url, final String encoding) throws Exception {
+        return new BufferedReader(getURLStreamReader(url, encoding));
     }
 
     /**
@@ -126,12 +130,13 @@ public class UrlUtils {
     /**
      * Retrieve an {@link InputStreamReader} from a URL
      *
-     * @param url The URL to access
+     * @param url      The URL to access
+     * @param encoding The Charset Encoding to parse URL Contents in
      * @return an {@link InputStreamReader} from the URL
      * @throws Exception If a connection is unable to be established
      */
-    public static InputStreamReader getURLStreamReader(final URL url) throws Exception {
-        return new InputStreamReader(getURLStream(url), StandardCharsets.UTF_8);
+    public static InputStreamReader getURLStreamReader(final URL url, final String encoding) throws Exception {
+        return new InputStreamReader(getURLStream(url), Charset.forName(encoding));
     }
 
     /**
@@ -157,7 +162,7 @@ public class UrlUtils {
      * @throws Exception If a connection is unable to be established or parsing fails
      */
     public static <T> T getJSONFromURL(URL url, Class<T> targetClass) throws Exception {
-        return GSON.fromJson(getURLStreamReader(url), targetClass);
+        return GSON.fromJson(getURLStreamReader(url, "UTF-8"), targetClass);
     }
 
     /**

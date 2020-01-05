@@ -140,14 +140,14 @@ public class CharacterEditorGui extends GuiScreen {
                 StringUtils.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getStringWidth(Character.toString(lastScannedChar));
             }
         } else if (button.id == resetCharsButton.id) {
-            ModUtils.loadCharData(true);
+            ModUtils.loadCharData(true, "UTF-8");
         }
     }
 
     private void checkValues() {
         if (!Arrays.equals(originalCharArray, StringUtils.MC_CHAR_WIDTH) || !Arrays.equals(originalGlyphArray, StringUtils.MC_GLYPH_WIDTH)) {
             // Write to Char Data and Re-Set originalCharArray and originalGlyphArray
-            ModUtils.writeToCharData();
+            ModUtils.writeToCharData("UTF-8");
             originalCharArray = StringUtils.MC_CHAR_WIDTH.clone();
             originalGlyphArray = StringUtils.MC_GLYPH_WIDTH.clone();
 
