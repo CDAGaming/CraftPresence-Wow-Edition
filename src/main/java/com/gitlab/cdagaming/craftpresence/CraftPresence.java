@@ -155,6 +155,9 @@ public class CraftPresence {
 
         CommandUtils.init();
 
+        // Synchronize Developer Mode
+        ModUtils.IS_DEV = CONFIG.debugMode;
+
         try {
             CLIENT.CLIENT_ID = CONFIG.clientID;
             CLIENT.setup();

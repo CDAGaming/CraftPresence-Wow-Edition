@@ -453,10 +453,10 @@ public class DiscordUtils {
         DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData));
         GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData));
 
-        final String baseLargeImage = StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), 1, true);
+        final String baseLargeImage = StringUtils.removeMatches(StringUtils.getMatches("&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), iconData, 1, true);
         LARGEIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseLargeImage, iconData);
 
-        final String baseSmallImage = StringUtils.removeMatches(StringUtils.getMatches("^&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), 1, true);
+        final String baseSmallImage = StringUtils.removeMatches(StringUtils.getMatches("&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), iconData, 1, true);
         SMALLIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseSmallImage, iconData);
 
         LARGEIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData));

@@ -188,11 +188,12 @@ public class StringUtils {
      * Remove an Amount of Matches from an inputted Match Set
      *
      * @param matchData  The Match Data to remove from with the form of originalString:listOfMatches
+     * @param parsedMatchData The Parsed Argument Data to match against, if available, to prevent Null Arguments
      * @param maxMatches The maximum amount of matches to remove
      * @param useMax     Whether to use the Maximum Value or remove all matches
      * @return The original String from Match Data with the matches up to maxMatches removed
      */
-    public static String removeMatches(final Tuple<String, List<String>> matchData, final int maxMatches, final boolean useMax) {
+    public static String removeMatches(final Tuple<String, List<String>> matchData, List<Tuple<String, String>> parsedMatchData, final int maxMatches, final boolean useMax) {
         String finalString = "";
 
         if (matchData != null) {
@@ -203,10 +204,26 @@ public class StringUtils {
                 int foundMatches = 0;
 
                 for (String match : matchList) {
-                    if (!useMax || foundMatches > maxMatches) {
+                    boolean isValidScan = foundMatches < maxMatches;
+
+                    if (!useMax || isValidScan) {
+                        // Scan through Parsed Argument Data if Possible
+                        if (parsedMatchData != null && !parsedMatchData.isEmpty()) {
+                            for (Tuple<String, String> parsedArgument : parsedMatchData) {
+                                // If found a matching argument to the match, and the parsed argument is null, remove the match without counting it as a found match
+                                if (parsedArgument.getFirst().equalsIgnoreCase(match) && isNullOrEmpty(parsedArgument.getSecond())) {
+                                    isValidScan = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (isValidScan) {
+                        foundMatches++;
+                    } else {
                         finalString = finalString.replaceFirst(match, "");
                     }
-                    foundMatches++;
                 }
             }
         }

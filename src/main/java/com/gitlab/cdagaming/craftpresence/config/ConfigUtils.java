@@ -320,7 +320,7 @@ public class ConfigUtils {
                             }
                         } else if (expectedClass == String[].class) {
                             // Convert to String Array (After Verifying it is a single Array)
-                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("^\\[([^\\s]+?)\\]", foundProperty.toString()), 1, true);
+                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("\\[([^\\s]+?)\\]", foundProperty.toString()), null, 1, true);
 
                             if (!StringUtils.isNullOrEmpty(convertedString) &&
                                     (convertedString.startsWith("[") && convertedString.endsWith("]"))) {
