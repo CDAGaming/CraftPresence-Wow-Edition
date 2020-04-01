@@ -36,12 +36,12 @@ public class ModLogger {
     /**
      * Name of the Logger, primarily used for Chat Formatting
      */
-    private String loggerName;
+    private final String loggerName;
 
     /**
      * The Instance of the Root Logging Manager, for sending messages to logs
      */
-    private Logger logInstance;
+    private final Logger logInstance;
 
     ModLogger(final String loggerName) {
         this.loggerName = loggerName;

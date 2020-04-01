@@ -170,22 +170,22 @@ public class DiscordUtils {
     /**
      * A Mapping of the Arguments available to use as RPC Message Placeholders
      */
-    private List<Tuple<String, String>> messageData = Lists.newArrayList();
+    private final List<Tuple<String, String>> messageData = Lists.newArrayList();
 
     /**
      * A Mapping of the Arguments available to use as Icon Key Placeholders
      */
-    private List<Tuple<String, String>> iconData = Lists.newArrayList();
+    private final List<Tuple<String, String>> iconData = Lists.newArrayList();
 
     /**
      * A Mapping of the Arguments attached to the &MODS& RPC Message placeholder
      */
-    private List<Tuple<String, String>> modsArgs = Lists.newArrayList();
+    private final List<Tuple<String, String>> modsArgs = Lists.newArrayList();
 
     /**
      * A Mapping of the Arguments attached to the &IGN& RPC Message Placeholder
      */
-    private List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
+    private final List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
 
     /**
      * Setup any Critical Methods needed for the RPC

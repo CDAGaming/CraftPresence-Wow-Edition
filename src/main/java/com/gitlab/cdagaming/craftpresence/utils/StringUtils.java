@@ -900,10 +900,8 @@ public class StringUtils {
         for (String fieldName : fieldNames) {
             try {
                 Field lookupField = classToAccess.getDeclaredField(fieldName);
-                if (lookupField != null) {
-                    lookupField.setAccessible(true);
-                    return lookupField.get(instance);
-                }
+                lookupField.setAccessible(true);
+                return lookupField.get(instance);
             } catch (Exception ignored) {
             }
         }
@@ -921,10 +919,8 @@ public class StringUtils {
         for (Tuple<?, ?> currentData : fieldData) {
             try {
                 Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
-                if (lookupField != null) {
-                    lookupField.setAccessible(true);
-                    lookupField.set(instance, currentData.getSecond());
-                }
+                lookupField.setAccessible(true);
+                lookupField.set(instance, currentData.getSecond());
             } catch (Exception ignored) {
             }
         }
@@ -941,10 +937,8 @@ public class StringUtils {
         for (Tuple<String, Tuple<Object[], Class<?>[]>> methodInstance : methodData) {
             try {
                 Method lookupMethod = classToAccess.getDeclaredMethod(methodInstance.getFirst(), methodInstance.getSecond().getSecond());
-                if (lookupMethod != null) {
-                    lookupMethod.setAccessible(true);
-                    lookupMethod.invoke(instance, methodInstance.getSecond().getFirst());
-                }
+                lookupMethod.setAccessible(true);
+                lookupMethod.invoke(instance, methodInstance.getSecond().getFirst());
             } catch (Exception ignored) {
             }
         }

@@ -52,12 +52,12 @@ public class MultiMCUtils {
     /**
      * Mapping of Configuration Data from received Instance Data, if any
      */
-    private static Properties configFile = new Properties();
+    private static final Properties configFile = new Properties();
 
     /**
      * The location of the MultiMC Instance properties, if any
      */
-    private static String instanceFile = new File(CraftPresence.SYSTEM.USER_DIR).getParent() + File.separator + "instance.cfg";
+    private static final String instanceFile = new File(CraftPresence.SYSTEM.USER_DIR).getParent() + File.separator + "instance.cfg";
 
     /**
      * Determines if the Configuration Data has the specified property
@@ -66,7 +66,7 @@ public class MultiMCUtils {
      * @return {@code true} if the property exists in the Configuration Data
      */
     public static boolean contains(String key) {
-        return configFile != null && configFile.containsKey(key);
+        return configFile.containsKey(key);
     }
 
     /**

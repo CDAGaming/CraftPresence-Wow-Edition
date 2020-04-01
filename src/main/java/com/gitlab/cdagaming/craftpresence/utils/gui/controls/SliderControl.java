@@ -27,6 +27,8 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import net.minecraft.client.Minecraft;
 
+import javax.annotation.Nonnull;
+
 /**
  * Gui Widget for a Movable Slider between a beginning and maximum value
  *
@@ -61,7 +63,7 @@ public class SliderControl extends ExtendedButtonControl {
     /**
      * The Starting Slider Name to display as
      */
-    private String windowTitle;
+    private final String windowTitle;
 
     /**
      * Whether the Slider is currently being dragged
@@ -108,7 +110,7 @@ public class SliderControl extends ExtendedButtonControl {
      * Equivalent of MouseListener.mouseDragged(MouseEvent e).
      */
     @Override
-    protected void mouseDragged(Minecraft mc, int mouseX, int mouseY) {
+    protected void mouseDragged(@Nonnull Minecraft mc, int mouseX, int mouseY) {
         if (visible) {
             if (dragging) {
                 sliderValue = (float) (mouseX - (x + 4)) / (float) (width - 8);
@@ -128,7 +130,7 @@ public class SliderControl extends ExtendedButtonControl {
      * Equivalent of MouseListener.mousePressed(MouseEvent e).
      */
     @Override
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+    public boolean mousePressed(@Nonnull Minecraft mc, int mouseX, int mouseY) {
         if (super.mousePressed(mc, mouseX, mouseY)) {
             sliderValue = (float) (mouseX - (x + 4)) / (float) (width - 8);
             sliderValue = clamp(sliderValue, 0.0F, 1.0F);

@@ -100,7 +100,7 @@ public class GuiUtils {
     /**
      * A List of the detected Gui Screen Classes
      */
-    private List<Class<?>> GUI_CLASSES = Lists.newArrayList();
+    private final List<Class<?>> GUI_CLASSES = Lists.newArrayList();
 
     /**
      * Draws a Textured Rectangle (Modal Version), following the defined arguments

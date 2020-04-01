@@ -12,6 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,9 +21,11 @@ public class SelectorGui extends GuiScreen {
     private ExtendedButtonControl proceedButton, addNewButton;
     private ScrollableListControl scrollList;
     private GuiTextField searchBox;
-    private String mainTitle, configOption, attributeName, originalValue, searchTerm;
-    private List<String> itemList, originalList;
-    private boolean allowContinuing;
+    private final String mainTitle, configOption, attributeName, originalValue;
+    private String searchTerm;
+    private List<String> itemList;
+    private final List<String> originalList;
+    private final boolean allowContinuing;
 
     public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing) {
         mc = CraftPresence.instance;
@@ -100,7 +103,7 @@ public class SelectorGui extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
+    protected void actionPerformed(@Nonnull GuiButton button) {
         if (buttonList.contains(addNewButton) && button.id == addNewButton.id) {
             CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null, configOption));
         } else if (button.id == proceedButton.id) {

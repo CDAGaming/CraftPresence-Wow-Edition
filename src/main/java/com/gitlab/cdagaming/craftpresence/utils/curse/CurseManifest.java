@@ -104,7 +104,7 @@ public class CurseManifest {
     /**
      * Mapping for Storing Data for Files related to this Manifest
      */
-    private class File {
+    private static class File {
         /**
          * The Project ID for this File
          */
@@ -127,7 +127,7 @@ public class CurseManifest {
     /**
      * Mapping for storing ModLoader Data
      */
-    private class ModLoader {
+    private static class ModLoader {
         /**
          * The ModLoader's ID
          */

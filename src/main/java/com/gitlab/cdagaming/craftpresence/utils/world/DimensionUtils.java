@@ -69,12 +69,12 @@ public class DimensionUtils {
     /**
      * A List of the detected Dimension ID's
      */
-    private List<Integer> DIMENSION_IDS = Lists.newArrayList();
+    private final List<Integer> DIMENSION_IDS = Lists.newArrayList();
 
     /**
      * A List of the detected Dimension Type's
      */
-    private List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
+    private final List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
 
     /**
      * The ID Number for the Current Dimension the Player is in
@@ -215,7 +215,7 @@ public class DimensionUtils {
                     if (classObj != null) {
                         try {
                             WorldProvider providerObj = (WorldProvider) classObj.newInstance();
-                            if (providerObj != null && !dimensionTypes.contains(providerObj.getDimensionType())) {
+                            if (!dimensionTypes.contains(providerObj.getDimensionType())) {
                                 dimensionTypes.add(providerObj.getDimensionType());
                             }
                         } catch (Exception ignored) {

@@ -56,12 +56,12 @@ public class BiomeUtils {
     /**
      * A List of the detected Biome Type's
      */
-    private List<Biome> BIOME_TYPES = Lists.newArrayList();
+    private final List<Biome> BIOME_TYPES = Lists.newArrayList();
 
     /**
      * A List of the detected Biome ID's
      */
-    private List<Integer> BIOME_IDS = Lists.newArrayList();
+    private final List<Integer> BIOME_IDS = Lists.newArrayList();
 
     /**
      * The Name of the Current Biome the Player is in
@@ -192,7 +192,7 @@ public class BiomeUtils {
                 if (classObj != null) {
                     try {
                         Biome biomeObj = (Biome) classObj.newInstance();
-                        if (biomeObj != null && !biomeTypes.contains(biomeObj)) {
+                        if (!biomeTypes.contains(biomeObj)) {
                             biomeTypes.add(biomeObj);
                         }
                     } catch (Exception ignored) {

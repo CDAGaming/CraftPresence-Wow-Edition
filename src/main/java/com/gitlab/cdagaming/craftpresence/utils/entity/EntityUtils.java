@@ -60,37 +60,37 @@ public class EntityUtils {
     /**
      * A List of the detected Block Names
      */
-    private List<String> BLOCK_NAMES = Lists.newArrayList();
+    private final List<String> BLOCK_NAMES = Lists.newArrayList();
 
     /**
      * A List of the detected Block Class Names
      */
-    private List<String> BLOCK_CLASSES = Lists.newArrayList();
+    private final List<String> BLOCK_CLASSES = Lists.newArrayList();
 
     /**
      * A List of the detected Item Names
      */
-    private List<String> ITEM_NAMES = Lists.newArrayList();
+    private final List<String> ITEM_NAMES = Lists.newArrayList();
 
     /**
      * A List of the detected Item Class Names
      */
-    private List<String> ITEM_CLASSES = Lists.newArrayList();
+    private final List<String> ITEM_CLASSES = Lists.newArrayList();
 
     /**
      * A List of the detected Entity (Blocks + Items) Class Names
      */
-    private List<String> ENTITY_CLASSES = Lists.newArrayList();
+    private final List<String> ENTITY_CLASSES = Lists.newArrayList();
 
     /**
      * An Instance of an Empty Item
      */
-    private Item EMPTY_ITEM = null;
+    private final Item EMPTY_ITEM = null;
 
     /**
      * An Instance of an Empty ItemStack
      */
-    private ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
+    private final ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
 
     /**
      * The Player's Current Main Hand Item, if any

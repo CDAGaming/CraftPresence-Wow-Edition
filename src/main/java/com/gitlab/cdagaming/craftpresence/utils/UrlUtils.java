@@ -50,7 +50,7 @@ public class UrlUtils {
     /**
      * The GSON Json Builder to Use while Parsing Json
      */
-    private static Gson GSON = new GsonBuilder().create();
+    private static final Gson GSON = new GsonBuilder().create();
 
     /**
      * Retrieve Output from a URL as a readable String
@@ -61,13 +61,16 @@ public class UrlUtils {
      * @throws Exception If connection or Input is unable to be established
      */
     public static String getURLText(final URL url, final String encoding) throws Exception {
-        final BufferedReader in = getURLReader(url, encoding);
+        return getString(getURLReader(url, encoding));
+    }
+
+    private static String getString(BufferedReader urlReader) throws Exception {
         final StringBuilder response = new StringBuilder();
         String inputLine;
-        while (!StringUtils.isNullOrEmpty((inputLine = in.readLine()))) {
+        while (!StringUtils.isNullOrEmpty((inputLine = urlReader.readLine()))) {
             response.append(inputLine);
         }
-        in.close();
+        urlReader.close();
         return response.toString();
     }
 
@@ -80,14 +83,7 @@ public class UrlUtils {
      * @throws Exception If connection or Input is unable to be established
      */
     public static String getURLText(final String url, final String encoding) throws Exception {
-        final BufferedReader in = getURLReader(url, encoding);
-        final StringBuilder response = new StringBuilder();
-        String inputLine;
-        while (!StringUtils.isNullOrEmpty((inputLine = in.readLine()))) {
-            response.append(inputLine);
-        }
-        in.close();
-        return response.toString();
+        return getString(getURLReader(url, encoding));
     }
 
     /**

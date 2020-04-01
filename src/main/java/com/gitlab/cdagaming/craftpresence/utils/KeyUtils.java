@@ -45,8 +45,8 @@ public class KeyUtils {
      * LWJGL 2: ESC = 0x01
      * LWJGL 3: ESC = 256
      */
-    private int keyStartLimit = 0x00;
-    private List<Integer> invalidKeys = Lists.newArrayList(0x01, 256);
+    private final int keyStartLimit = 0x00;
+    private final List<Integer> invalidKeys = Lists.newArrayList(0x01, 256);
 
     /**
      * Determine if the Source KeyCode fulfills the following conditions

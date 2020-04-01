@@ -64,17 +64,17 @@ public class DiscordAssetUtils {
     /**
      * A List of the Icon IDs available as ImageType SMALL
      */
-    private static List<String> SMALL_IDS = Lists.newArrayList();
+    private static final List<String> SMALL_IDS = Lists.newArrayList();
 
     /**
      * A List of the Icon IDs available as ImageType LARGE
      */
-    private static List<String> LARGE_IDS = Lists.newArrayList();
+    private static final List<String> LARGE_IDS = Lists.newArrayList();
 
     /**
      * A List of all the Icon IDs available within the Current Client ID
      */
-    private static List<String> ICON_IDS = Lists.newArrayList();
+    private static final List<String> ICON_IDS = Lists.newArrayList();
 
     /**
      * Mapping storing the Icon Keys and Asset Data attached to the Current Client ID

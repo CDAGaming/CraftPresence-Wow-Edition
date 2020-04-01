@@ -71,7 +71,7 @@ public class TranslationUtils {
      * <p>
      * Format: languageID:doesExist
      */
-    private Map<String, Boolean> requestMap = Maps.newHashMap();
+    private final Map<String, Boolean> requestMap = Maps.newHashMap();
 
     /**
      * If using a .Json or .Lang Language File

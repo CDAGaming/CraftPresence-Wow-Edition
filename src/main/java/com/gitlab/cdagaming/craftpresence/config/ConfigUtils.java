@@ -81,10 +81,10 @@ public class ConfigUtils {
     // Mappings:
     // Config Data = Tuple<propertyValue, value>
     // Config Property = Tuple<propertyFieldName, valueFieldName>
-    private List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
-    private List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
+    private final List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
+    private final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
 
-    private String fileName;
+    private final String fileName;
     private boolean initialized = false, isConfigNew = false;
 
     public ConfigUtils(String fileName) {

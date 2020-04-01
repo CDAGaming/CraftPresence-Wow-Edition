@@ -19,7 +19,7 @@ public class ColorEditorGui extends GuiScreen {
     private final GuiScreen parentScreen;
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
-    private String configValueName;
+    private final String configValueName;
 
     // Page 1 Variables
     private String currentNormalHexValue, currentConvertedHexValue, startingHexValue;

@@ -48,7 +48,7 @@ public class FileUtils {
     /**
      * A GSON Json Builder Instance
      */
-    private static Gson GSON = new GsonBuilder().create();
+    private static final Gson GSON = new GsonBuilder().create();
 
     /**
      * Retrieves File Data and Converts it into a Parsed Json Syntax
@@ -249,18 +249,16 @@ public class FileUtils {
                     modClassObj = Class.forName(modClassString);
                     currentClassObj = modClassObj;
 
-                    if (modClassObj != null) {
-                        // Add all SuperClasses of Mod Class to a List
-                        while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
-                            superClassList.add(currentClassObj.getSuperclass());
-                            currentClassObj = currentClassObj.getSuperclass();
-                        }
+                    // Add all SuperClasses of Mod Class to a List
+                    while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
+                        superClassList.add(currentClassObj.getSuperclass());
+                        currentClassObj = currentClassObj.getSuperclass();
+                    }
 
-                        // If Match is Found, add original Class to final List, and add all Super Classes to returning List
-                        if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
-                            matchingClasses.add(modClassObj);
-                            matchingClasses.addAll(superClassList);
-                        }
+                    // If Match is Found, add original Class to final List, and add all Super Classes to returning List
+                    if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+                        matchingClasses.add(modClassObj);
+                        matchingClasses.addAll(superClassList);
                     }
                 } catch (Exception ignored) {
                     // Ignore this Exception and Continue
