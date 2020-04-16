@@ -531,8 +531,19 @@ public class StringUtils {
      * @return The formatted and evaluated String
      */
     public static String formatWord(final String original) {
+        return formatWord(original, false);
+    }
+
+    /**
+     * Converts input into a Properly Readable String
+     *
+     * @param original The original String to format
+     * @param avoid Flag to ignore method if true
+     * @return The formatted and evaluated String
+     */
+    public static String formatWord(final String original, final boolean avoid) {
         String formattedKey = original;
-        if (isNullOrEmpty(formattedKey)) {
+        if (isNullOrEmpty(formattedKey) || avoid) {
             return formattedKey;
         } else {
             if (formattedKey.contains("_")) {
@@ -584,10 +595,22 @@ public class StringUtils {
      * Converts input into a properly formatted and interpretable Dimension Name
      *
      * @param dimName    The Dimension Name to format
-     * @param formatToID Whether to format as an Icon Key
+     * @param formatToId Whether to format as an Icon Key
      * @return The formatted dimension name/icon key
      */
-    public static String formatDimensionName(final String dimName, final boolean formatToID) {
+    public static String formatDimensionName(final String dimName, final boolean formatToId) {
+        return formatDimensionName(dimName, formatToId, false);
+    }
+
+    /**
+     * Converts input into a properly formatted and interpretable Dimension Name
+     *
+     * @param dimName    The Dimension Name to format
+     * @param formatToId Whether to format as an Icon Key
+     * @param avoid Flag to ignore formatting dimension name
+     * @return The formatted dimension name/icon key
+     */
+    public static String formatDimensionName(final String dimName, final boolean formatToId, final boolean avoid) {
         StringBuilder formattedKey = new StringBuilder(dimName);
         if (isNullOrEmpty(formattedKey.toString())) {
             return formattedKey.toString();
@@ -615,10 +638,10 @@ public class StringUtils {
             } else if (formattedKey.toString().equalsIgnoreCase("end") || formattedKey.toString().equalsIgnoreCase("sky")) {
                 return "the_end";
             } else {
-                if (formatToID) {
+                if (formatToId) {
                     return formatPackIcon(formattedKey.toString().replace(" ", "_"));
                 } else {
-                    return formatWord(formattedKey.toString());
+                    return formatWord(formattedKey.toString(), avoid);
                 }
             }
         }

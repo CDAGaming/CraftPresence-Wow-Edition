@@ -36,7 +36,7 @@ public class ConfigUtils {
             NAME_outerPlayerPlaceholderMSG, NAME_innerPlayerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG,
             NAME_playerAmountPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_renderTooltips, NAME_debugMode,
+    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_renderTooltips, NAME_formatWords, NAME_debugMode,
             NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
@@ -61,7 +61,7 @@ public class ConfigUtils {
             outerPlayerPlaceholderMSG, innerPlayerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG,
             playerAmountPlaceholderMSG, worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem, renderTooltips, debugMode;
+    public boolean enableCommands, enablePERGUI, enablePERItem, renderTooltips, formatWords, debugMode;
     public String splitCharacter;
     public String[] guiMessages, itemMessages;
     // ACCESSIBILITY
@@ -122,7 +122,7 @@ public class ConfigUtils {
         NAME_defaultDimensionIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimensionmessages.dimensionicon").replaceAll(" ", "_");
         NAME_dimensionMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimensionmessages.dimensionmessages").replaceAll(" ", "_");
         defaultDimensionIcon = "unknown";
-        dimensionMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In The &dimension&"};
+        dimensionMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In the &dimension&"};
         // SERVER MESSAGES
         NAME_defaultServerIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.servermessages.servericon").replaceAll(" ", "_");
         NAME_defaultServerName = ModUtils.TRANSLATOR.translate(true, "gui.config.name.servermessages.servername").replaceAll(" ", "_");
@@ -162,6 +162,7 @@ public class ConfigUtils {
         NAME_enablePERGUI = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enablepergui").replaceAll(" ", "_");
         NAME_enablePERItem = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enableperitem").replaceAll(" ", "_");
         NAME_renderTooltips = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.rendertooltips").replaceAll(" ", "_");
+        NAME_formatWords = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.formatwords").replaceAll(" ", "_");
         NAME_debugMode = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.debugmode").replaceAll(" ", "_");
         NAME_splitCharacter = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
         NAME_guiMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.guimessages").replaceAll(" ", "_");
@@ -170,6 +171,7 @@ public class ConfigUtils {
         enablePERGUI = false;
         enablePERItem = false;
         renderTooltips = true;
+        formatWords = true;
         debugMode = false;
         splitCharacter = ";";
         guiMessages = new String[]{"default;In &gui&"};
