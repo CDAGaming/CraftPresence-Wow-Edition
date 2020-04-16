@@ -87,7 +87,7 @@ public abstract class Pipe {
                             userData.getAsJsonPrimitive("username").getAsString(),
                             userData.getAsJsonPrimitive("discriminator").getAsString(),
                             Long.parseLong(userData.getAsJsonPrimitive("id").getAsString()),
-                            userData.has("avatar") ? userData.getAsJsonPrimitive("avatar").getAsString() : null
+                            userData.has("avatar") && userData.get("avatar").isJsonPrimitive() ? userData.getAsJsonPrimitive("avatar").getAsString() : null
                     );
 
                     if (ipcClient.isDebugMode()) {
