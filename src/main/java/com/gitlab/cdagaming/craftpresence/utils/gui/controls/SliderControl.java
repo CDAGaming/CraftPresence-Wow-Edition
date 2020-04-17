@@ -49,22 +49,18 @@ public class SliderControl extends ExtendedButtonControl {
      * The rate at which the Slider is able to move at on each move
      */
     private final float valueStep;
-
-    /**
-     * The Normalized Slider Value between 0.0f and 1.0f
-     */
-    private float sliderValue;
-
-    /**
-     * The denormalized Slider value between the minimum and maximum values
-     */
-    private float denormalizedSlideValue;
-
     /**
      * The Starting Slider Name to display as
      */
     private final String windowTitle;
-
+    /**
+     * The Normalized Slider Value between 0.0f and 1.0f
+     */
+    private float sliderValue;
+    /**
+     * The denormalized Slider value between the minimum and maximum values
+     */
+    private float denormalizedSlideValue;
     /**
      * Whether the Slider is currently being dragged
      */

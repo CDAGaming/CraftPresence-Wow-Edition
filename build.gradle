@@ -14,7 +14,9 @@ buildscript {
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.matthewprenger.cursegradle"
 
+
 import net.minecraftforge.gradle.common.task.SignJar
+import org.apache.tools.ant.filters.ReplaceTokens
 
 version = "${majorVersion}.${minorVersion}.${revisionVersion}"
 group = "com.gitlab.cdagaming"
@@ -124,9 +126,8 @@ task signJar(type: SignJar, dependsOn: jar) {
     outputFile = jar.archivePath
 }
 
-import org.apache.tools.ant.filters.ReplaceTokens
 def copyDir = "$compileJava.temporaryDir/replaced"
-task tokenReplace(type:Copy){
+task tokenReplace(type: Copy) {
     from(sourceSets.main.java.sourceDirectories)
     into copyDir
     filter(ReplaceTokens, tokens: [NAME: mod_name, MAJOR_VERSION: majorVersion, MINOR_VERSION: minorVersion, REVISION_VERSION: revisionVersion, FINGERPRINT: certfingerprint])

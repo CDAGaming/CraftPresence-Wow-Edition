@@ -40,24 +40,21 @@ import java.util.Properties;
  */
 public class MultiMCUtils {
     /**
-     * The MultiMC Instance Name
-     */
-    public static String INSTANCE_NAME;
-
-    /**
-     * The Icon Key to use for this Pack
-     */
-    public static String ICON_KEY;
-
-    /**
      * Mapping of Configuration Data from received Instance Data, if any
      */
     private static final Properties configFile = new Properties();
-
     /**
      * The location of the MultiMC Instance properties, if any
      */
     private static final String instanceFile = new File(CraftPresence.SYSTEM.USER_DIR).getParent() + File.separator + "instance.cfg";
+    /**
+     * The MultiMC Instance Name
+     */
+    public static String INSTANCE_NAME;
+    /**
+     * The Icon Key to use for this Pack
+     */
+    public static String ICON_KEY;
 
     /**
      * Determines if the Configuration Data has the specified property

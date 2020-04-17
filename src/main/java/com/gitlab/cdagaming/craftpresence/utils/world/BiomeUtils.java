@@ -39,30 +39,25 @@ import java.util.List;
  */
 public class BiomeUtils {
     /**
-     * Whether this module is active and currently in use
-     */
-    public boolean isInUse = false;
-
-    /**
-     * Whether this module is allowed to start and enabled
-     */
-    public boolean enabled = false;
-
-    /**
-     * A List of the detected Biome Names
-     */
-    public List<String> BIOME_NAMES = Lists.newArrayList();
-
-    /**
      * A List of the detected Biome Type's
      */
     private final List<Biome> BIOME_TYPES = Lists.newArrayList();
-
     /**
      * A List of the detected Biome ID's
      */
     private final List<Integer> BIOME_IDS = Lists.newArrayList();
-
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+    /**
+     * A List of the detected Biome Names
+     */
+    public List<String> BIOME_NAMES = Lists.newArrayList();
     /**
      * The Name of the Current Biome the Player is in
      */

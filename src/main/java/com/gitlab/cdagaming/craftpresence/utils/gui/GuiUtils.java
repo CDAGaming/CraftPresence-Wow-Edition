@@ -52,55 +52,46 @@ import java.util.List;
  */
 public class GuiUtils {
     /**
+     * A List of the detected Gui Screen Classes
+     */
+    private final List<Class<?>> GUI_CLASSES = Lists.newArrayList();
+    /**
      * If the Config GUI should open
      */
     public boolean openConfigGUI = false;
-
     /**
      * If the Config GUI is currently open
      */
     public boolean configGUIOpened = false;
-
     /**
      * Whether this module is active and currently in use
      */
     public boolean isInUse = false;
-
     /**
      * If an Element is being focused on in a GUI or if a GUI is currently open
      * <p>Conditions depend on Game Version
      */
     public boolean isFocused = false;
-
     /**
      * Whether this module is allowed to start and enabled
      */
     public boolean enabled = false;
-
     /**
      * A List of the detected Gui Screen Names
      */
     public List<String> GUI_NAMES = Lists.newArrayList();
-
     /**
      * The name of the Current Gui the player is in
      */
     private String CURRENT_GUI_NAME;
-
     /**
      * The Class Type of the Current Gui the player is in
      */
     private Class<?> CURRENT_GUI_CLASS;
-
     /**
      * The Current Instance of the Gui the player is in
      */
     private GuiScreen CURRENT_SCREEN;
-
-    /**
-     * A List of the detected Gui Screen Classes
-     */
-    private final List<Class<?>> GUI_CLASSES = Lists.newArrayList();
 
     /**
      * Draws a Textured Rectangle (Modal Version), following the defined arguments

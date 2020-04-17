@@ -40,39 +40,33 @@ import java.util.Map;
  */
 public class TranslationUtils {
     /**
+     * The Stored Mapping of Language Request History
+     * <p>
+     * Format: languageID:doesExist
+     */
+    private final Map<String, Boolean> requestMap = Maps.newHashMap();
+    /**
      * Whether the Translations are utilizing Unicode Characters
      */
     public boolean isUnicode = false;
-
     /**
      * The Language ID to Locate and Retrieve Translations
      */
     private String languageID = "en_US";
-
     /**
      * The Target ID to locate the Language File
      */
     private String modID;
-
     /**
      * The Charset Encoding to parse translations in
      */
     private String encoding;
-
     /**
      * The Stored Mapping of Valid Translations
      * <p>
      * Format: unlocalizedKey:localizedString
      */
     private Map<String, String> translationMap = Maps.newHashMap();
-
-    /**
-     * The Stored Mapping of Language Request History
-     * <p>
-     * Format: languageID:doesExist
-     */
-    private final Map<String, Boolean> requestMap = Maps.newHashMap();
-
     /**
      * If using a .Json or .Lang Language File
      */

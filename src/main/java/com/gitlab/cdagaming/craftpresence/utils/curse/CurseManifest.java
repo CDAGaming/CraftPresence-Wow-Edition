@@ -85,23 +85,6 @@ public class CurseManifest {
     public String overrides;
 
     /**
-     * Mapping for Storing MC Related Data
-     */
-    private class Minecraft {
-        /**
-         * The Minecraft Version for this Manifest
-         */
-        @SerializedName("version")
-        public String version;
-
-        /**
-         * The ModLoaders attached to this Manifest
-         */
-        @SerializedName("modLoaders")
-        public List<ModLoader> modLoaders;
-    }
-
-    /**
      * Mapping for Storing Data for Files related to this Manifest
      */
     private static class File {
@@ -139,5 +122,22 @@ public class CurseManifest {
          */
         @SerializedName("primary")
         public Boolean primary;
+    }
+
+    /**
+     * Mapping for Storing MC Related Data
+     */
+    private class Minecraft {
+        /**
+         * The Minecraft Version for this Manifest
+         */
+        @SerializedName("version")
+        public String version;
+
+        /**
+         * The ModLoaders attached to this Manifest
+         */
+        @SerializedName("modLoaders")
+        public List<ModLoader> modLoaders;
     }
 }

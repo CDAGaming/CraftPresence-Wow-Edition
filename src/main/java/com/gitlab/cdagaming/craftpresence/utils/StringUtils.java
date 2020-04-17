@@ -538,7 +538,7 @@ public class StringUtils {
      * Converts input into a Properly Readable String
      *
      * @param original The original String to format
-     * @param avoid Flag to ignore method if true
+     * @param avoid    Flag to ignore method if true
      * @return The formatted and evaluated String
      */
     public static String formatWord(final String original, final boolean avoid) {
@@ -607,7 +607,7 @@ public class StringUtils {
      *
      * @param dimName    The Dimension Name to format
      * @param formatToId Whether to format as an Icon Key
-     * @param avoid Flag to ignore formatting dimension name
+     * @param avoid      Flag to ignore formatting dimension name
      * @return The formatted dimension name/icon key
      */
     public static String formatDimensionName(final String dimName, final boolean formatToId, final boolean avoid) {

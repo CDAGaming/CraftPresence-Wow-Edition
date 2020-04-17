@@ -43,55 +43,45 @@ import java.util.List;
  */
 public class EntityUtils {
     /**
-     * Whether this module is active and currently in use
-     */
-    public boolean isInUse = false;
-
-    /**
-     * Whether this module is allowed to start and enabled
-     */
-    public boolean enabled = false;
-
-    /**
-     * A List of the detected Entity (Blocks + Items) Names
-     */
-    public List<String> ENTITY_NAMES = Lists.newArrayList();
-
-    /**
      * A List of the detected Block Names
      */
     private final List<String> BLOCK_NAMES = Lists.newArrayList();
-
     /**
      * A List of the detected Block Class Names
      */
     private final List<String> BLOCK_CLASSES = Lists.newArrayList();
-
     /**
      * A List of the detected Item Names
      */
     private final List<String> ITEM_NAMES = Lists.newArrayList();
-
     /**
      * A List of the detected Item Class Names
      */
     private final List<String> ITEM_CLASSES = Lists.newArrayList();
-
     /**
      * A List of the detected Entity (Blocks + Items) Class Names
      */
     private final List<String> ENTITY_CLASSES = Lists.newArrayList();
-
     /**
      * An Instance of an Empty Item
      */
     private final Item EMPTY_ITEM = null;
-
     /**
      * An Instance of an Empty ItemStack
      */
     private final ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
-
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+    /**
+     * A List of the detected Entity (Blocks + Items) Names
+     */
+    public List<String> ENTITY_NAMES = Lists.newArrayList();
     /**
      * The Player's Current Main Hand Item, if any
      */

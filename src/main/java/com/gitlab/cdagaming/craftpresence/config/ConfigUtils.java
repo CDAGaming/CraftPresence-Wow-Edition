@@ -18,7 +18,12 @@ public class ConfigUtils {
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
             keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"};
-
+    // Mappings:
+    // Config Data = Tuple<propertyValue, value>
+    // Config Property = Tuple<propertyFieldName, valueFieldName>
+    private final List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
+    private final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
+    private final String fileName;
     // Config Names
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
@@ -42,7 +47,6 @@ public class ConfigUtils {
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
     public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
-
     // Config Variables
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
@@ -69,22 +73,13 @@ public class ConfigUtils {
     public boolean stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
     public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG, largeImageKey, smallImageKey;
-
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
+
+    // CLASS-SPECIFIC - PRIVATE
     public String queuedSplitCharacter;
     public File configFile, parentDir;
     public Properties properties = new Properties();
-
-    // CLASS-SPECIFIC - PRIVATE
-
-    // Mappings:
-    // Config Data = Tuple<propertyValue, value>
-    // Config Property = Tuple<propertyFieldName, valueFieldName>
-    private final List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
-    private final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
-
-    private final String fileName;
     private boolean initialized = false, isConfigNew = false;
 
     public ConfigUtils(String fileName) {

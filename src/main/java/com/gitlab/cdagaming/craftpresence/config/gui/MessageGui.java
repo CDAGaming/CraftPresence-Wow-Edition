@@ -12,9 +12,8 @@ import java.util.List;
 
 public class MessageGui extends GuiScreen {
     private final GuiScreen parentScreen;
-    private ExtendedButtonControl backButton;
-
     private final List<String> messageData;
+    private ExtendedButtonControl backButton;
 
     MessageGui(GuiScreen parentScreen, List<String> messageData) {
         mc = CraftPresence.instance;

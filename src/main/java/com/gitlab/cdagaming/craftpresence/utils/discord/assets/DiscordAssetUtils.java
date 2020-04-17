@@ -42,40 +42,33 @@ import java.util.Random;
  */
 public class DiscordAssetUtils {
     /**
-     * If the Asset Check had completed
-     */
-    public static boolean syncCompleted = false;
-
-    /**
-     * A List of the Icons available as ImageType SMALL
-     */
-    public static List<String> SMALL_ICONS = Lists.newArrayList();
-
-    /**
-     * A List of the Icons available as ImageType LARGE
-     */
-    public static List<String> LARGE_ICONS = Lists.newArrayList();
-
-    /**
-     * A List of all the Icons available within the Current Client ID
-     */
-    public static List<String> ICON_LIST = Lists.newArrayList();
-
-    /**
      * A List of the Icon IDs available as ImageType SMALL
      */
     private static final List<String> SMALL_IDS = Lists.newArrayList();
-
     /**
      * A List of the Icon IDs available as ImageType LARGE
      */
     private static final List<String> LARGE_IDS = Lists.newArrayList();
-
     /**
      * A List of all the Icon IDs available within the Current Client ID
      */
     private static final List<String> ICON_IDS = Lists.newArrayList();
-
+    /**
+     * If the Asset Check had completed
+     */
+    public static boolean syncCompleted = false;
+    /**
+     * A List of the Icons available as ImageType SMALL
+     */
+    public static List<String> SMALL_ICONS = Lists.newArrayList();
+    /**
+     * A List of the Icons available as ImageType LARGE
+     */
+    public static List<String> LARGE_ICONS = Lists.newArrayList();
+    /**
+     * A List of all the Icons available within the Current Client ID
+     */
+    public static List<String> ICON_LIST = Lists.newArrayList();
     /**
      * Mapping storing the Icon Keys and Asset Data attached to the Current Client ID
      */

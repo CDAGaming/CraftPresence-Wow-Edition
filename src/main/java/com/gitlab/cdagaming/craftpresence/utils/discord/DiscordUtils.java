@@ -49,105 +49,101 @@ import java.util.List;
  */
 public class DiscordUtils {
     /**
+     * A Mapping of the Arguments available to use as RPC Message Placeholders
+     */
+    private final List<Tuple<String, String>> messageData = Lists.newArrayList();
+    /**
+     * A Mapping of the Arguments available to use as Icon Key Placeholders
+     */
+    private final List<Tuple<String, String>> iconData = Lists.newArrayList();
+    /**
+     * A Mapping of the Arguments attached to the &MODS& RPC Message placeholder
+     */
+    private final List<Tuple<String, String>> modsArgs = Lists.newArrayList();
+    /**
+     * A Mapping of the Arguments attached to the &IGN& RPC Message Placeholder
+     */
+    private final List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
+    /**
      * The Current User, tied to the Rich Presence
      */
     public User CURRENT_USER;
-
     /**
      * The Join Request User Data, if any
      */
     public User REQUESTER_USER;
-
     /**
      * The current RPC Status (Ex: ready, errored, disconnected)
      */
     public String STATUS;
-
     /**
      * The Current Message tied to the Party/Game Status Field of the RPC
      */
     public String GAME_STATE;
-
     /**
      * The Current Message tied to the current action / Details Field of the RPC
      */
     public String DETAILS;
-
     /**
      * The Current Small Image Icon being displayed in the RPC, if any
      */
     public String SMALLIMAGEKEY;
-
     /**
      * The Current Message tied to the Small Image, if any
      */
     public String SMALLIMAGETEXT;
-
     /**
      * The Current Large Image Icon being displayed in the RPC, if any
      */
     public String LARGEIMAGEKEY;
-
     /**
      * The Current Message tied to the Large Image, if any
      */
     public String LARGEIMAGETEXT;
-
     /**
      * The 18-character Client ID Number, tied to the game profile data attached to the RPC
      */
     public String CLIENT_ID;
-
     /**
      * The Current Starting Unix Timestamp from Epoch, used for Elapsed Time
      */
     public long START_TIMESTAMP;
-
     /**
      * The Party Session ID that's tied to the RPC, if any
      */
     public String PARTY_ID;
-
     /**
      * The Current Size of the Party Session, if in a Party
      */
     public int PARTY_SIZE;
-
     /**
      * The Maximum Size of the Party Session, if in a Party
      */
     public int PARTY_MAX;
-
     /**
      * The Current Party Join Secret Key, if in a Party
      */
     public String JOIN_SECRET;
-
     /**
      * The Current Ending Unix Timestamp from Epoch, used for Time Until if combined with {@link DiscordUtils#START_TIMESTAMP}
      */
     public long END_TIMESTAMP;
-
     /**
      * The Current Match Secret Key tied to the RPC, if any
      */
     public String MATCH_SECRET;
-
     /**
      * The Current Spectate Secret Key tied to the RPC, if any
      */
     public String SPECTATE_SECRET;
-
     /**
      * The Instance Code attached to the RPC, if any
      */
     public byte INSTANCE;
-
     /**
      * A Mapping of the General RPC Arguments allowed in adjusting Presence Messages
      */
     public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
-
     /**
      * An Instance of the {@link IPCClient}, responsible for sending and receiving RPC Events
      */
@@ -167,25 +163,6 @@ public class DiscordUtils {
      * <p>Also used to prevent sending duplicate packets with the same presence data, if any
      */
     private RichPresence currentPresence;
-    /**
-     * A Mapping of the Arguments available to use as RPC Message Placeholders
-     */
-    private final List<Tuple<String, String>> messageData = Lists.newArrayList();
-
-    /**
-     * A Mapping of the Arguments available to use as Icon Key Placeholders
-     */
-    private final List<Tuple<String, String>> iconData = Lists.newArrayList();
-
-    /**
-     * A Mapping of the Arguments attached to the &MODS& RPC Message placeholder
-     */
-    private final List<Tuple<String, String>> modsArgs = Lists.newArrayList();
-
-    /**
-     * A Mapping of the Arguments attached to the &IGN& RPC Message Placeholder
-     */
-    private final List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
 
     /**
      * Setup any Critical Methods needed for the RPC

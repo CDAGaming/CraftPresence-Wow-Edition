@@ -17,10 +17,9 @@ import java.io.IOException;
 
 public class ColorEditorGui extends GuiScreen {
     private final GuiScreen parentScreen;
+    private final String configValueName;
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
-    private final String configValueName;
-
     // Page 1 Variables
     private String currentNormalHexValue, currentConvertedHexValue, startingHexValue;
     private int currentRed, currentGreen, currentBlue, currentAlpha;

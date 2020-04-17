@@ -18,14 +18,14 @@ import java.util.List;
 
 public class SelectorGui extends GuiScreen {
     public final GuiScreen parentScreen;
+    private final String mainTitle, configOption, attributeName, originalValue;
+    private final List<String> originalList;
+    private final boolean allowContinuing;
     private ExtendedButtonControl proceedButton, addNewButton;
     private ScrollableListControl scrollList;
     private GuiTextField searchBox;
-    private final String mainTitle, configOption, attributeName, originalValue;
     private String searchTerm;
     private List<String> itemList;
-    private final List<String> originalList;
-    private final boolean allowContinuing;
 
     public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing) {
         mc = CraftPresence.instance;

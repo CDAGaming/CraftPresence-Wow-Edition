@@ -14,11 +14,11 @@ import java.io.IOException;
 
 public class DynamicEditorGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
+    private final String configOption;
+    private final boolean isNewValue, isDefaultValue;
     private ExtendedButtonControl proceedButton, specificIconButton;
     private GuiTextField specificMessage, newValueName;
     private String attributeName, specificMSG, defaultMSG, mainTitle, removeMSG;
-    private final String configOption;
-    private final boolean isNewValue, isDefaultValue;
 
     DynamicEditorGui(GuiScreen parentScreen, String attributeName, String configOption) {
         mc = CraftPresence.instance;

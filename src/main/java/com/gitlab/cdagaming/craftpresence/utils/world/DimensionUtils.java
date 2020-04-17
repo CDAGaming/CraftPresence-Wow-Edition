@@ -42,40 +42,33 @@ import java.util.Map;
  */
 public class DimensionUtils {
     /**
-     * Whether this module is active and currently in use
-     */
-    public boolean isInUse = false;
-
-    /**
-     * Whether this module is allowed to start and enabled
-     */
-    public boolean enabled = false;
-
-    /**
-     * A List of the detected Dimension Names
-     */
-    public List<String> DIMENSION_NAMES = Lists.newArrayList();
-
-    /**
-     * The Name of the Current Dimension the Player is in
-     */
-    private String CURRENT_DIMENSION_NAME;
-
-    /**
-     * The alternative name for the Current Dimension the Player is in, if any
-     */
-    private String CURRENT_DIMENSION_NAME_ID;
-
-    /**
      * A List of the detected Dimension ID's
      */
     private final List<Integer> DIMENSION_IDS = Lists.newArrayList();
-
     /**
      * A List of the detected Dimension Type's
      */
     private final List<DimensionType> DIMENSION_TYPES = Lists.newArrayList();
-
+    /**
+     * Whether this module is active and currently in use
+     */
+    public boolean isInUse = false;
+    /**
+     * Whether this module is allowed to start and enabled
+     */
+    public boolean enabled = false;
+    /**
+     * A List of the detected Dimension Names
+     */
+    public List<String> DIMENSION_NAMES = Lists.newArrayList();
+    /**
+     * The Name of the Current Dimension the Player is in
+     */
+    private String CURRENT_DIMENSION_NAME;
+    /**
+     * The alternative name for the Current Dimension the Player is in, if any
+     */
+    private String CURRENT_DIMENSION_NAME_ID;
     /**
      * The ID Number for the Current Dimension the Player is in
      */
