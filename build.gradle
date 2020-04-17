@@ -6,13 +6,15 @@ buildscript {
         maven { url = "https://jitpack.io" }
     }
     dependencies {
-        classpath "com.github.CDAGaming:ForgeGradle:FG_2.3-SNAPSHOT"
+        classpath "net.minecraftforge.gradle:ForgeGradle:3.+"
         classpath "com.github.CDAGaming:CurseGradle:master-SNAPSHOT"
     }
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.matthewprenger.cursegradle"
+
+import net.minecraftforge.gradle.common.task.SignJar
 
 version = "${majorVersion}.${minorVersion}.${revisionVersion}"
 group = "com.gitlab.cdagaming"
@@ -40,18 +42,45 @@ curseforge {
 }
 
 minecraft {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
-    mappings = "${mc_mappings}"
+    mappings channel: 'snapshot', version: "${mc_mappings}"
 
-    replace "GRADLE:majorVersion", majorVersion
-    replace "GRADLE:minorVersion", minorVersion
-    replace "GRADLE:revisionVersion", revisionVersion
-    replace "GRADLE:mod_name", mod_name
-    replace "GRADLE:certFingerprint", certfingerprint
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-    replaceIn "ModUtils.java"
-    makeObfSourceJar = false
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                craftpresence {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                craftpresence {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 }
 
 jar {
@@ -65,14 +94,14 @@ tasks.withType(JavaCompile) {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", "${mc_version}"
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
         // replace version and mcversion
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+        expand 'version': project.version, 'mcversion': "${mc_version}"
     }
 
     // copy everything else except the mcmod.info
@@ -81,7 +110,7 @@ processResources {
     }
 }
 
-task signJar(type: SignJar, dependsOn: reobfJar) {
+task signJar(type: SignJar, dependsOn: jar) {
     onlyIf {
         System.getenv("key_MAINPASS") != null
     }
@@ -91,9 +120,19 @@ task signJar(type: SignJar, dependsOn: reobfJar) {
     storePass = System.getenv("key_MAINPASS")
     keyPass = System.getenv("keyPass")
 
-    inputFile = jar.archiveFile
-    outputFile = jar.archiveFile
+    inputFile = jar.archivePath
+    outputFile = jar.archivePath
 }
+
+import org.apache.tools.ant.filters.ReplaceTokens
+def copyDir = "$compileJava.temporaryDir/replaced"
+task tokenReplace(type:Copy){
+    from(sourceSets.main.java.sourceDirectories)
+    into copyDir
+    filter(ReplaceTokens, tokens: [NAME: mod_name, MAJOR_VERSION: majorVersion, MINOR_VERSION: minorVersion, REVISION_VERSION: revisionVersion, FINGERPRINT: certfingerprint])
+}
+compileJava.setSource(copyDir)
+compileJava.dependsOn(tokenReplace)
 
 tasks.build.dependsOn signJar
 tasks.curseforge.dependsOn build

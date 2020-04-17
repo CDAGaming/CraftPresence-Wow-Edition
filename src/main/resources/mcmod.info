@@ -6,7 +6,7 @@
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://minecraft.curseforge.com/projects/craftpresence",
-    "updateJSON": "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json",
+    "updateJSON": "https://raw.githubusercontent.com/CDAGaming/VersionLibrary/master/CraftPresence/update.json",
     "authorList": [
       "CDA_Gaming"
     ],

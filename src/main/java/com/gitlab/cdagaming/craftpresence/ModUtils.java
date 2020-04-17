@@ -46,22 +46,22 @@ public class ModUtils {
     /**
      * The Application's Name
      */
-    public static final String NAME = "GRADLE:mod_name";
+    public static final String NAME = "@NAME@";
 
     /**
      * The Application's Major Revision Number (Ex: 1 in 1.0.2)
      */
-    public static final String majorVersion = "GRADLE:majorVersion";
+    public static final String majorVersion = "@MAJOR_VERSION@";
 
     /**
      * The Application's Minor Revision Number (Ex: 0 in 1.0.2)
      */
-    public static final String minorVersion = "GRADLE:minorVersion";
+    public static final String minorVersion = "@MINOR_VERSION@";
 
     /**
      * The Application's Revision Version Number (Ex: 2 in 1.0.2)
      */
-    public static final String revisionVersion = "GRADLE:revisionVersion";
+    public static final String revisionVersion = "@REVISION_VERSION@";
 
     /**
      * The Application's Formatted Version ID
@@ -106,12 +106,12 @@ public class ModUtils {
     /**
      * The URL to receive Update Information from
      */
-    public static final String UPDATE_JSON = "https://gitlab.com/CDAGaming/VersionLibrary/raw/master/CraftPresence/update.json";
+    public static final String UPDATE_JSON = "https://raw.githubusercontent.com/CDAGaming/VersionLibrary/master/CraftPresence/update.json";
 
     /**
      * The Certificate Fingerprint, assigned in CI, to check against for violations
      */
-    public static final String FINGERPRINT = "GRADLE:certFingerprint";
+    public static final String FINGERPRINT = "@FINGERPRINT@";
 
     /**
      * The Application's Instance of {@link ModLogger} for Logging Information
