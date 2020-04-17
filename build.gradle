@@ -6,7 +6,7 @@ buildscript {
         maven { url = "https://jitpack.io" }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:3.+"
+        classpath "com.github.CDAGaming:ForgeGradle:FG_3.0-SNAPSHOT"
         classpath "com.github.CDAGaming:CurseGradle:master-SNAPSHOT"
     }
 }
