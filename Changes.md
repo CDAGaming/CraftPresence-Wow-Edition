@@ -5,15 +5,12 @@
 ### Changes
 
 *   Source upgrades for ForgeGradle 3.x and Gradle on 1.12.2 and above
-
 *   Added a `Format Words` option in Advanced Settings, used to toggle automatic capitalization in RPC Strings
-
 *   Minor cleanups and backend improvements
 
 ### Fixes
 
 *   Fixed a NPE that occurred without a Discord Avatar
-
 *   Fixed a possible 403 HTTP Error in receiving Update Information
 
 ### More Information
