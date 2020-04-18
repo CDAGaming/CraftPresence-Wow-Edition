@@ -1,25 +1,20 @@
 # CraftPresence Changes
 
-## v1.6.1 (1/11/2020)
+## v1.6.2 (5/22/2020)
 
 ### Changes
 
-*   All Builds, except for those with META-INF Errors, are now Signed
+*   Source upgrades for ForgeGradle 3.x and Gradle on 1.12.2 and above
 
-    *   Before, this only applied to 1.8.9 and above
+*   Added a `Format Words` option in Advanced Settings, used to toggle automatic capitalization in RPC Strings
 
-*   Added a Parser for Update Data, so any Updates will display in the Gui, regardless if using Forge or not
-
-*   Added a Debug Mode Option in Advanced Setting, useful to see Debugging Logging and further features in the future
+*   Minor cleanups and backend improvements
 
 ### Fixes
 
-*   Fixed `java.awt.HeadlessException` when Opening a Url
-*   Fixed Issues pertaining to Non-Functional RPC Displays on Unix Systems
-*   Fixed Default Tooltip Color Values so just visiting the Gui doesn't trigger a hasChanged State
-*   Fixed Some Versions of Minecraft having incorrect Dimension Names (Below 1.5.2)
-*   Fixed Slider and Escape Button Functionality on MC 1.14+ Ports
-*   Fixed an Incorrect GUI Background Texture Name on MC 1.5.2- Ports
+*   Fixed a NPE that occurred without a Discord Avatar
+
+*   Fixed a possible 403 HTTP Error in receiving Update Information
 
 ### More Information
 
@@ -29,8 +24,6 @@ In v1.6.0, CraftPresence has undergone numerous performance and under-the-hood i
 
 As Elements such as the Config System and General RPC Elements have undergone various changes, please report any bugs found to [the Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues)
 
-v1.5.x is Generally Recommended at this time for new users, as the systems used in v1.6.0 may have a variety of issues, and are considered bleeding-edge for the time being
-
 Migration Notes:
 
 *   The RPC System has changed to an internal IPC System hooking into Discord's official endpoints
@@ -39,12 +32,12 @@ Migration Notes:
 
 *   `gameTimePlaceholder` is now combined into the `&worldinfo&` Placeholder
 
-*   Some of the other placeholders within Server and Status Messages have been changed or renamed, please refer to the in-game tooltips for these new names
+*   Some other placeholders within Server and Status Messages have been changed or renamed, please refer to the in-game tooltips for these new names
 
-*   Entity Messages now use the Default Message as the Format, while specific Item Messages are considered placeholders for the formatter
+*   Entity Messages now use the Default Message as the Format, while specific Item Messages are placeholders for the formatted string
 
     *   This means, only `&item&` (The Specific Item's Name) will work for specific Items
-    *   Otherwise, the more familiar placeholders such as `&main&` and `&offhand&` will retrieve these message when part of the default format setting
+    *   Otherwise, the more familiar placeholders such as `&main&` and `&offhand&` will retrieve this message when part of the default format setting
 
 *   `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
 
@@ -58,9 +51,9 @@ Migration Notes:
 
 The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift) and contains the following differences to take Note of:
 
-*   KeyCodes have changed from an LWJGL Upgrade! Be Sure to Check and Edit your KeyBinds if Migrating from 1.12.2 and Below
+*   KeyCodes have changed from an LWJGL Upgrade! Be Sure to check and edit your KeyBinds if migrating from 1.12.2 and below.
 
-Starting In v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
+Starting in v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
 #### 1.14.x - 1.15.x Build Info
 
@@ -70,7 +63,7 @@ The 1.14.x and 1.15.x Ports of this Mod Require the [FabricMC ModLoader](https:/
 
 Some Versions of this Mod are based on Minecraft Snapshots, and as such, caution is advised.
 
-Any Snapshot Build Released will be marked as BETA to match it's Snapshot Status
+Any Snapshot Build Released will be marked as BETA to match its Snapshot Status
 
 #### Legacy Build Info (Minecraft Versions 1.5.2 and Below)
 
@@ -78,7 +71,7 @@ Ports of this Mod for Minecraft Versions 1.5.2 and Lower are on very limited sup
 
 Please Keep in Mind the Following:
 
-*   There is NO Support for Server RPC Displays from MC 1.2.5 and Below, due to Modding Limitations.
-*   Bugs that Relate with or are caused by Issues in the Vanilla CodeBase, are unlikely able to be fixed due to MC's Limitations
+*   There is NO Support for Server RPC Displays from MC 1.2.5 and Below, due to modding limitations.
+*   Bugs that relate with or are caused by issues in the Vanilla Codebase, are unlikely able to be fixed due to MC's limitations
 
-Please See the Mod Description // README for More Info
+See the Mod Description // README for More Info

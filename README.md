@@ -17,7 +17,7 @@ The Customization Possibilities are limitless, with the only real limit being ho
 
 ### Twitch // CursePack // MultiMC // MCUpdater // Technic Support
 At this time, CraftPresence will detect whether your Launch Directory contains a valid Twitch Manifest (manifest.json), a MultiMC Instance (instance.cfg), a MCUpdater Instance (instance.json), or a Technic installedPacks File (installedPacks).
-If so, It'll put the Packs Name in your Display as well as Show it's Icon (when not in a server).
+If so, It'll put the Packs Name in your Display as well as Show its Icon (when not in a server).
 
 As an example, this is how the mod will convert the pack name to an iconKey:
 
@@ -30,7 +30,7 @@ CraftPresence currently offers the following Commands:
 
 (Commands must be prefixed by either `/craftpresence` or `/cp`)
 
-(In v1.5.0 and Above, Commands are now Inputted via a new menu called "Commands" in the Config GUI)
+(In v1.5.0 and Above, Commands are now inputted via a new menu called "Commands" in the Config GUI)
 
 *   `/cp view` - Help Command to display Commands available to view a variety of Display Data
 *   `/cp reload` - Reloads Mod Data (In v1.4.8 and Above, this forces a Tick Event)
@@ -133,10 +133,10 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
     *   This is because specific Icon IDs must be used, which can be found by the mod or from checking your Logs/Chat after entering the dimension as CraftPresence will tell you the ID expected
 
 *   A 512x512 or 1024x1024 Icon to be used
-    *   Icons near these Sizes are also allowed, but may not give a great final quality
+    *   Icons near these sizes are also allowed, but may not give a great final quality
 
-*   If Requesting an Icon be Modified or Removed from the Default Client ID, please specify a reason why
-    *   Mostly just so It can be logged why it was changed for future reference
+*   If requesting an icon be modified or removed from the Default Client ID, please specify a reason why
+    *   Mostly just so it can be logged why it was changed for future reference
 
 #### Licensing
 This Mod is licensed under the MIT License as well as the Apache 2.0 License
