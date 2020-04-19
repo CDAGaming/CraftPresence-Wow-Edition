@@ -31,11 +31,14 @@ import com.gitlab.cdagaming.craftpresence.utils.SystemUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.DiscordUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.entity.EntityUtils;
+import com.gitlab.cdagaming.craftpresence.utils.entity.TileEntityUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import com.gitlab.cdagaming.craftpresence.utils.server.ServerUtils;
 import com.gitlab.cdagaming.craftpresence.utils.world.BiomeUtils;
 import com.gitlab.cdagaming.craftpresence.utils.world.DimensionUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.Mod;
@@ -115,6 +118,11 @@ public class CraftPresence {
      * The {@link EntityUtils} Instance for this Mod
      */
     public static EntityUtils ENTITIES = new EntityUtils();
+
+    /**
+     * The {@link TileEntityUtils} Instance for this Mod
+     */
+    public static TileEntityUtils TILE_ENTITIES = new TileEntityUtils();
 
     /**
      * The {@link GuiUtils} Instance for this Mod
@@ -214,7 +222,10 @@ public class CraftPresence {
             if (CONFIG.enablePERGUI && GUIS.GUI_NAMES.isEmpty()) {
                 GUIS.getGUIs();
             }
-            if (CONFIG.enablePERItem && ENTITIES.ENTITY_NAMES.isEmpty()) {
+            if (CONFIG.enablePERItem && TILE_ENTITIES.TILE_ENTITY_NAMES.isEmpty()) {
+                TILE_ENTITIES.getEntities();
+            }
+            if (CONFIG.enablePEREntity && ENTITIES.ENTITY_NAMES.isEmpty()) {
                 ENTITIES.getEntities();
             }
             if (CONFIG.showGameState && SERVER.knownAddresses.isEmpty()) {
@@ -222,7 +233,7 @@ public class CraftPresence {
             }
 
             if (!CONFIG.hasChanged) {
-                if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandUtils.setMainMenuPresence();
                 } else if (CommandUtils.isInMainMenu && player != null) {
                     CommandUtils.isInMainMenu = false;

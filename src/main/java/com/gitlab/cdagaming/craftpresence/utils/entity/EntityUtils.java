@@ -27,12 +27,9 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
-import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
@@ -43,33 +40,9 @@ import java.util.List;
  */
 public class EntityUtils {
     /**
-     * A List of the detected Block Names
-     */
-    private final List<String> BLOCK_NAMES = Lists.newArrayList();
-    /**
-     * A List of the detected Block Class Names
-     */
-    private final List<String> BLOCK_CLASSES = Lists.newArrayList();
-    /**
-     * A List of the detected Item Names
-     */
-    private final List<String> ITEM_NAMES = Lists.newArrayList();
-    /**
-     * A List of the detected Item Class Names
-     */
-    private final List<String> ITEM_CLASSES = Lists.newArrayList();
-    /**
-     * A List of the detected Entity (Blocks + Items) Class Names
+     * A List of the detected Entity Class Names
      */
     private final List<String> ENTITY_CLASSES = Lists.newArrayList();
-    /**
-     * An Instance of an Empty Item
-     */
-    private final Item EMPTY_ITEM = null;
-    /**
-     * An Instance of an Empty ItemStack
-     */
-    private final ItemStack EMPTY_STACK = new ItemStack(EMPTY_ITEM);
     /**
      * Whether this module is active and currently in use
      */
@@ -79,73 +52,34 @@ public class EntityUtils {
      */
     public boolean enabled = false;
     /**
-     * A List of the detected Entity (Blocks + Items) Names
+     * A List of the detected Entity Names
      */
     public List<String> ENTITY_NAMES = Lists.newArrayList();
-    /**
-     * The Player's Current Main Hand Item, if any
-     */
-    private ItemStack CURRENT_MAINHAND_ITEM;
 
     /**
-     * The Player's Current Off Hand Item, if any
+     * The Player's Current Target Entity, if any
      */
-    private ItemStack CURRENT_OFFHAND_ITEM;
+    private Entity CURRENT_TARGET;
 
     /**
-     * The Player's Currently Equipped Helmet, if any
+     * The Player's Current Riding Entity, if any
      */
-    private ItemStack CURRENT_HELMET;
+    private Entity CURRENT_RIDING;
 
     /**
-     * The Player's Currently Equipped ChestPlate, if any
+     * The Player's Currently Targeted Entity Name, if any
      */
-    private ItemStack CURRENT_CHEST;
+    private String CURRENT_TARGET_NAME;
 
     /**
-     * The Player's Currently Equipped Leggings, if any
+     * The Player's Currently Riding Entity Name, if any
      */
-    private ItemStack CURRENT_LEGS;
+    private String CURRENT_RIDING_NAME;
 
     /**
-     * The Player's Currently Equipped Boots, if any
+     * If the Player doesn't have an Entity in Critical Slots such as Targeted or Riding
      */
-    private ItemStack CURRENT_BOOTS;
-
-    /**
-     * The Player's Current Main Hand Item Name, if any
-     */
-    private String CURRENT_MAINHAND_ITEM_NAME;
-
-    /**
-     * The Player's Current Off Hand Item Name, if any
-     */
-    private String CURRENT_OFFHAND_ITEM_NAME;
-
-    /**
-     * The Player's Currently Equipped Helmet Name, if any
-     */
-    private String CURRENT_HELMET_NAME;
-
-    /**
-     * The Player's Currently Equipped ChestPlate Name, if any
-     */
-    private String CURRENT_CHEST_NAME;
-
-    /**
-     * The Player's Currently Equipped Leggings Name, if any
-     */
-    private String CURRENT_LEGS_NAME;
-
-    /**
-     * The Player's Currently Equipped Boots Name, if any
-     */
-    private String CURRENT_BOOTS_NAME;
-
-    /**
-     * If the Player doesn't have any Items in the Critical Slots such as Main & Off Hand or Armor
-     */
-    private boolean allItemsEmpty = false;
+    private boolean allEntitiesEmpty = false;
 
     /**
      * If this Module's Runtime Data is currently Cleared
@@ -156,10 +90,6 @@ public class EntityUtils {
      * Clears FULL Data from this Module
      */
     private void emptyData() {
-        BLOCK_NAMES.clear();
-        BLOCK_CLASSES.clear();
-        ITEM_NAMES.clear();
-        ITEM_CLASSES.clear();
         ENTITY_NAMES.clear();
         ENTITY_CLASSES.clear();
         clearClientData();
@@ -169,21 +99,12 @@ public class EntityUtils {
      * Clears Runtime Client Data from this Module (PARTIAL Clear)
      */
     public void clearClientData() {
-        CURRENT_MAINHAND_ITEM = EMPTY_STACK;
-        CURRENT_OFFHAND_ITEM = EMPTY_STACK;
-        CURRENT_MAINHAND_ITEM_NAME = null;
-        CURRENT_OFFHAND_ITEM_NAME = null;
+        CURRENT_TARGET = null;
+        CURRENT_RIDING = null;
+        CURRENT_TARGET_NAME = null;
+        CURRENT_RIDING_NAME = null;
 
-        CURRENT_HELMET = EMPTY_STACK;
-        CURRENT_CHEST = EMPTY_STACK;
-        CURRENT_LEGS = EMPTY_STACK;
-        CURRENT_BOOTS = EMPTY_STACK;
-        CURRENT_HELMET_NAME = null;
-        CURRENT_CHEST_NAME = null;
-        CURRENT_LEGS_NAME = null;
-        CURRENT_BOOTS_NAME = null;
-
-        allItemsEmpty = true;
+        allEntitiesEmpty = true;
         isInUse = false;
         currentlyCleared = true;
     }
@@ -192,7 +113,7 @@ public class EntityUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePEREntity : enabled;
         isInUse = enabled && CraftPresence.player != null;
         final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
 
@@ -202,7 +123,7 @@ public class EntityUtils {
 
         if (isInUse) {
             updateEntityData();
-            if (enabled && (CraftPresence.player == null || allItemsEmpty)) {
+            if (enabled && (CraftPresence.player == null || allEntitiesEmpty)) {
                 clearClientData();
             } else if (!enabled) {
                 emptyData();
@@ -211,116 +132,32 @@ public class EntityUtils {
     }
 
     /**
-     * Determines whether the Specified Item classifies as NULL or EMPTY
-     *
-     * @param item The Item to Evaluate
-     * @return {@code true} if the Item classifies as NULL or EMPTY
-     */
-    private boolean isEmpty(final Item item) {
-        return item == null || isEmpty(getDefaultInstance(item));
-    }
-
-    /**
-     * Determines whether the Specified Block classifies as NULL or EMPTY
-     *
-     * @param block The Block to evaluate
-     * @return {@code true} if the Block classifies as NULL or EMPTY
-     */
-    private boolean isEmpty(final Block block) {
-        return block == null || isEmpty(Item.getItemFromBlock(block));
-    }
-
-    /**
-     * Returns the Default Variant of the Specified Item
-     *
-     * @param itemIn The Item to evaluate
-     * @return The default variant of the item
-     */
-    private ItemStack getDefaultInstance(final Item itemIn) {
-        return new ItemStack(itemIn);
-    }
-
-    /**
-     * Determines whether the Specified ItemStack classifies as NULL or EMPTY
-     *
-     * @param itemStack The ItemStack to evaluate
-     * @return {@code true} if the ItemStack classifies as NULL or EMPTY
-     */
-    private boolean isEmpty(final ItemStack itemStack) {
-        if (itemStack == null || itemStack.equals(EMPTY_STACK)) {
-            return true;
-        } else if (itemStack.getItem() != EMPTY_ITEM && itemStack.getItem() != Items.AIR) {
-            if (itemStack.getCount() <= 0) {
-                return true;
-            } else {
-                return itemStack.getItemDamage() < -32768 || itemStack.getItemDamage() > 65535;
-            }
-        } else {
-            return true;
-        }
-    }
-
-    /**
      * Synchronizes Data related to this module, if needed
      */
     private void updateEntityData() {
-        final ItemStack NEW_CURRENT_MAINHAND_ITEM = CraftPresence.player.getHeldItemMainhand();
-        final ItemStack NEW_CURRENT_OFFHAND_ITEM = CraftPresence.player.getHeldItemOffhand();
-        final ItemStack NEW_CURRENT_HELMET = CraftPresence.player.inventory.armorInventory.get(3);
-        final ItemStack NEW_CURRENT_CHEST = CraftPresence.player.inventory.armorInventory.get(2);
-        final ItemStack NEW_CURRENT_LEGS = CraftPresence.player.inventory.armorInventory.get(1);
-        final ItemStack NEW_CURRENT_BOOTS = CraftPresence.player.inventory.armorInventory.get(0);
+        final Entity NEW_CURRENT_TARGET = CraftPresence.player.getAttackingEntity();
+        final Entity NEW_CURRENT_RIDING = CraftPresence.player.getRidingEntity();
 
-        final String NEW_CURRENT_MAINHAND_ITEM_NAME = !isEmpty(NEW_CURRENT_MAINHAND_ITEM) ?
-                StringUtils.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName()) : "";
-        final String NEW_CURRENT_OFFHAND_ITEM_NAME = !isEmpty(NEW_CURRENT_OFFHAND_ITEM) ?
-                StringUtils.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName()) : "";
-        final String NEW_CURRENT_HELMET_NAME = !isEmpty(NEW_CURRENT_HELMET) ?
-                StringUtils.stripColors(NEW_CURRENT_HELMET.getDisplayName()) : "";
-        final String NEW_CURRENT_CHEST_NAME = !isEmpty(NEW_CURRENT_CHEST) ?
-                StringUtils.stripColors(NEW_CURRENT_CHEST.getDisplayName()) : "";
-        final String NEW_CURRENT_LEGS_NAME = !isEmpty(NEW_CURRENT_LEGS) ?
-                StringUtils.stripColors(NEW_CURRENT_LEGS.getDisplayName()) : "";
-        final String NEW_CURRENT_BOOTS_NAME = !isEmpty(NEW_CURRENT_BOOTS) ?
-                StringUtils.stripColors(NEW_CURRENT_BOOTS.getDisplayName()) : "";
+        final String NEW_CURRENT_TARGET_NAME = NEW_CURRENT_TARGET != null ?
+                StringUtils.stripColors(NEW_CURRENT_TARGET.getDisplayName().getFormattedText()) : "";
+        final String NEW_CURRENT_RIDING_NAME = NEW_CURRENT_RIDING != null ?
+                StringUtils.stripColors(NEW_CURRENT_RIDING.getDisplayName().getFormattedText()) : "";
 
-        final boolean hasMainHandChanged = (!isEmpty(NEW_CURRENT_MAINHAND_ITEM) &&
-                !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) ||
-                (isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !isEmpty(CURRENT_MAINHAND_ITEM));
-        final boolean hasOffHandChanged = (!isEmpty(NEW_CURRENT_OFFHAND_ITEM) &&
-                !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) ||
-                (isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !isEmpty(CURRENT_OFFHAND_ITEM));
-        final boolean hasHelmetChanged = (!isEmpty(NEW_CURRENT_HELMET) &&
-                !NEW_CURRENT_HELMET.equals(CURRENT_HELMET) || !NEW_CURRENT_HELMET_NAME.equals(CURRENT_HELMET_NAME)) ||
-                (isEmpty(NEW_CURRENT_HELMET) && !isEmpty(CURRENT_HELMET));
-        final boolean hasChestChanged = (!isEmpty(NEW_CURRENT_CHEST) &&
-                !NEW_CURRENT_CHEST.equals(CURRENT_CHEST) || !NEW_CURRENT_CHEST_NAME.equals(CURRENT_CHEST_NAME)) ||
-                (isEmpty(NEW_CURRENT_CHEST) && !isEmpty(CURRENT_CHEST));
-        final boolean hasLegsChanged = (!isEmpty(NEW_CURRENT_LEGS) &&
-                !NEW_CURRENT_LEGS.equals(CURRENT_LEGS) || !NEW_CURRENT_LEGS_NAME.equals(CURRENT_LEGS_NAME)) ||
-                (isEmpty(NEW_CURRENT_LEGS) && !isEmpty(CURRENT_LEGS));
-        final boolean hasBootsChanged = (!isEmpty(NEW_CURRENT_BOOTS) &&
-                !NEW_CURRENT_BOOTS.equals(CURRENT_BOOTS) || !NEW_CURRENT_BOOTS_NAME.equals(CURRENT_BOOTS_NAME)) ||
-                (isEmpty(NEW_CURRENT_BOOTS) && !isEmpty(CURRENT_BOOTS));
+        final boolean hasTargetChanged = (NEW_CURRENT_TARGET != null &&
+                !NEW_CURRENT_TARGET.equals(CURRENT_TARGET) || !NEW_CURRENT_TARGET_NAME.equals(CURRENT_TARGET_NAME)) ||
+                (NEW_CURRENT_TARGET == null && CURRENT_TARGET != null);
+        final boolean hasRidingChanged = (NEW_CURRENT_RIDING != null &&
+                !NEW_CURRENT_RIDING.equals(CURRENT_RIDING) || !NEW_CURRENT_RIDING_NAME.equals(CURRENT_RIDING_NAME)) ||
+                (NEW_CURRENT_RIDING == null && CURRENT_RIDING != null);
 
-        if (hasMainHandChanged || hasOffHandChanged ||
-                hasHelmetChanged || hasChestChanged ||
-                hasLegsChanged || hasBootsChanged) {
-            CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
-            CURRENT_OFFHAND_ITEM = NEW_CURRENT_OFFHAND_ITEM;
-            CURRENT_HELMET = NEW_CURRENT_HELMET;
-            CURRENT_CHEST = NEW_CURRENT_CHEST;
-            CURRENT_LEGS = NEW_CURRENT_LEGS;
-            CURRENT_BOOTS = NEW_CURRENT_BOOTS;
+        if (hasTargetChanged || hasRidingChanged) {
+            CURRENT_TARGET = NEW_CURRENT_TARGET;
+            CURRENT_RIDING = NEW_CURRENT_RIDING;
 
-            CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
-            CURRENT_OFFHAND_ITEM_NAME = NEW_CURRENT_OFFHAND_ITEM_NAME;
-            CURRENT_HELMET_NAME = NEW_CURRENT_HELMET_NAME;
-            CURRENT_CHEST_NAME = NEW_CURRENT_CHEST_NAME;
-            CURRENT_LEGS_NAME = NEW_CURRENT_LEGS_NAME;
-            CURRENT_BOOTS_NAME = NEW_CURRENT_BOOTS_NAME;
+            CURRENT_TARGET_NAME = NEW_CURRENT_TARGET_NAME;
+            CURRENT_RIDING_NAME = NEW_CURRENT_RIDING_NAME;
 
-            allItemsEmpty = isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS);
+            allEntitiesEmpty = CURRENT_TARGET == null && CURRENT_RIDING == null;
             updateEntityPresence();
         }
     }
@@ -330,59 +167,46 @@ public class EntityUtils {
      */
     public void updateEntityPresence() {
         // Retrieve Messages
-        final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        final String defaultEntityTargetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages,
+                "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
+                null);
+        final String defaultEntityRidingMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages,
                 "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
                 null);
 
-        final String offHandItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                CURRENT_OFFHAND_ITEM_NAME);
-        final String mainItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_MAINHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                defaultItemMSG);
+        final String targetEntityMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages,
+                CURRENT_TARGET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                defaultEntityTargetMSG);
+        final String ridingEntityMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages,
+                CURRENT_RIDING_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                defaultEntityRidingMSG);
 
-        final String helmetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_HELMET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                CURRENT_HELMET_NAME);
-        final String chestMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_CHEST_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                CURRENT_CHEST_NAME);
-        final String legsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_LEGS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                CURRENT_LEGS_NAME);
-        final String bootsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                CURRENT_BOOTS_NAME);
+        // Form Entity Argument List
+        List<Tuple<String, String>> entityTargetArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
 
-        // Form Entity/Item Argument List
-        List<Tuple<String, String>> entityArgs = Lists.newArrayList();
-
-        entityArgs.add(new Tuple<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAINHAND_ITEM_NAME) ?
-                StringUtils.replaceAnyCase(mainItemMSG, "&item&", CURRENT_MAINHAND_ITEM_NAME) : ""));
-        entityArgs.add(new Tuple<>("&OFFHAND&", !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ?
-                StringUtils.replaceAnyCase(offHandItemMSG, "&item&", CURRENT_OFFHAND_ITEM_NAME) : ""));
-        entityArgs.add(new Tuple<>("&HELMET&", !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ?
-                StringUtils.replaceAnyCase(helmetMSG, "&item&", CURRENT_HELMET_NAME) : ""));
-        entityArgs.add(new Tuple<>("&CHEST&", !StringUtils.isNullOrEmpty(CURRENT_CHEST_NAME) ?
-                StringUtils.replaceAnyCase(chestMSG, "&item&", CURRENT_CHEST_NAME) : ""));
-        entityArgs.add(new Tuple<>("&LEGS&", !StringUtils.isNullOrEmpty(CURRENT_LEGS_NAME) ?
-                StringUtils.replaceAnyCase(legsMSG, "&item&", CURRENT_LEGS_NAME) : ""));
-        entityArgs.add(new Tuple<>("&BOOTS&", !StringUtils.isNullOrEmpty(CURRENT_BOOTS_NAME) ?
-                StringUtils.replaceAnyCase(bootsMSG, "&item&", CURRENT_BOOTS_NAME) : ""));
+        entityTargetArgs.add(new Tuple<>("&TARGET&", !StringUtils.isNullOrEmpty(CURRENT_TARGET_NAME) ?
+                StringUtils.replaceAnyCase(targetEntityMSG, "&entity&", CURRENT_TARGET_NAME) : ""));
+        entityRidingArgs.add(new Tuple<>("&RIDING&", !StringUtils.isNullOrEmpty(CURRENT_RIDING_NAME) ?
+                StringUtils.replaceAnyCase(ridingEntityMSG, "&entity&", CURRENT_RIDING_NAME) : ""));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
-            entityArgs.addAll(CraftPresence.CLIENT.generalArgs);
+            entityTargetArgs.addAll(CraftPresence.CLIENT.generalArgs);
+            entityRidingArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String CURRENT_ITEM_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultItemMSG, entityArgs);
+        final String CURRENT_TARGET_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultEntityTargetMSG, entityTargetArgs);
+        final String CURRENT_RIDING_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultEntityRidingMSG, entityRidingArgs);
 
-        // NOTE: Only Apply if Items are not Empty, otherwise Clear Argument
-        if (!allItemsEmpty) {
-            CraftPresence.CLIENT.syncArgument("&ENTITY&", CURRENT_ITEM_MESSAGE, false);
+        // NOTE: Only Apply if Entities are not Empty, otherwise Clear Argument
+        if (!allEntitiesEmpty) {
+            CraftPresence.CLIENT.syncArgument("&TARGETENTITY&", CURRENT_TARGET_MESSAGE, false);
+            CraftPresence.CLIENT.syncArgument("&RIDINGENTITY&", CURRENT_RIDING_MESSAGE, false);
         } else if (!currentlyCleared) {
-            CraftPresence.CLIENT.initArgumentData("&ENTITY&");
-            CraftPresence.CLIENT.initIconData("&ENTITY&");
+            CraftPresence.CLIENT.initArgumentData("&TARGETENTITY&");
+            CraftPresence.CLIENT.initIconData("&TARGETENTITY&");
+            CraftPresence.CLIENT.initArgumentData("&RIDINGENTITY&");
+            CraftPresence.CLIENT.initIconData("&RIDINGENTITY&");
         }
     }
 
@@ -390,77 +214,40 @@ public class EntityUtils {
      * Retrieves and Synchronizes detected Entities
      */
     public void getEntities() {
-        for (Block block : Block.REGISTRY) {
-            if (!isEmpty(block)) {
-                NonNullList<ItemStack> subtypes = NonNullList.create();
-                for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
-                    if (tab != null) {
-                        block.getSubBlocks(tab, subtypes);
-                    }
-                }
-
-                if (!subtypes.isEmpty()) {
-                    for (ItemStack itemStack : subtypes) {
-                        if (!isEmpty(itemStack)) {
-                            if (!BLOCK_NAMES.contains(itemStack.getDisplayName())) {
-                                BLOCK_NAMES.add(itemStack.getDisplayName());
-                            }
-                            if (!BLOCK_CLASSES.contains(itemStack.getItem().getClass().getName())) {
-                                BLOCK_CLASSES.add(itemStack.getItem().getClass().getName());
-                            }
+        if (!EntityList.getEntityNameList().isEmpty()) {
+            for (ResourceLocation entityLocation : EntityList.getEntityNameList()) {
+                if (entityLocation != null) {
+                    final String entityName = !StringUtils.isNullOrEmpty(EntityList.getTranslationName(entityLocation)) ? EntityList.getTranslationName(entityLocation) : "generic";
+                    final Class<?> entityClass = EntityList.getClass(entityLocation);
+                    if (entityClass != null) {
+                        if (!ENTITY_NAMES.contains(entityName)) {
+                            ENTITY_NAMES.add(entityName);
                         }
-                    }
-                } else {
-                    if (!BLOCK_NAMES.contains(block.getLocalizedName())) {
-                        BLOCK_NAMES.add(block.getLocalizedName());
-                    }
-                    if (!BLOCK_CLASSES.contains(block.getClass().getName())) {
-                        BLOCK_CLASSES.add(block.getClass().getName());
+                        if (!ENTITY_CLASSES.contains(entityClass.getName())) {
+                            ENTITY_CLASSES.add(entityClass.getName());
+                        }
                     }
                 }
             }
         }
 
-        for (Item item : Item.REGISTRY) {
-            if (!isEmpty(item)) {
-                NonNullList<ItemStack> subtypes = NonNullList.create();
-                for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
-                    if (tab != null) {
-                        item.getSubItems(tab, subtypes);
-                    }
-                }
-
-                if (!subtypes.isEmpty()) {
-                    for (ItemStack itemStack : subtypes) {
-                        if (!isEmpty(itemStack)) {
-                            if (!ITEM_NAMES.contains(itemStack.getDisplayName())) {
-                                ITEM_NAMES.add(itemStack.getDisplayName());
-                            }
-                            if (!ITEM_CLASSES.contains(itemStack.getItem().getClass().getName())) {
-                                ITEM_CLASSES.add(itemStack.getItem().getClass().getName());
-                            }
-                        }
-                    }
-                } else {
-                    if (!ITEM_NAMES.contains(item.getItemStackDisplayName(getDefaultInstance(item)))) {
-                        ITEM_NAMES.add(item.getItemStackDisplayName(getDefaultInstance(item)));
-                    }
-                    if (!ITEM_CLASSES.contains(item.getClass().getName())) {
-                        ITEM_CLASSES.add(item.getClass().getName());
-                    }
-                }
-            }
-        }
-
-        for (String itemMessage : CraftPresence.CONFIG.itemMessages) {
-            if (!StringUtils.isNullOrEmpty(itemMessage)) {
-                final String[] part = itemMessage.split(CraftPresence.CONFIG.splitCharacter);
+        for (String entityTargetMessage : CraftPresence.CONFIG.entityTargetMessages) {
+            if (!StringUtils.isNullOrEmpty(entityTargetMessage)) {
+                final String[] part = entityTargetMessage.split(CraftPresence.CONFIG.splitCharacter);
                 if (!StringUtils.isNullOrEmpty(part[0])) {
-                    if (!ITEM_NAMES.contains(part[0])) {
-                        ITEM_NAMES.add(part[0]);
+                    if (!ENTITY_NAMES.contains(part[0])) {
+                        ENTITY_NAMES.add(part[0]);
                     }
-                    if (!BLOCK_NAMES.contains(part[0])) {
-                        BLOCK_NAMES.add(part[0]);
+                }
+            }
+        }
+
+        for (String entityRidingMessage : CraftPresence.CONFIG.entityRidingMessages) {
+            if (!StringUtils.isNullOrEmpty(entityRidingMessage)) {
+                final String[] part = entityRidingMessage.split(CraftPresence.CONFIG.splitCharacter);
+                if (!StringUtils.isNullOrEmpty(part[0])) {
+                    if (!ENTITY_NAMES.contains(part[0])) {
+                        ENTITY_NAMES.add(part[0]);
                     }
                 }
             }
@@ -473,35 +260,6 @@ public class EntityUtils {
      * Verifies, Synchronizes and Removes any Invalid Items and Blocks from their Lists
      */
     private void verifyEntities() {
-        List<String> removingBlocks = Lists.newArrayList();
-        List<String> removingItems = Lists.newArrayList();
-        for (String itemName : ITEM_NAMES) {
-            if (!StringUtils.isNullOrEmpty(itemName)) {
-                final String lowerItemName = itemName.toLowerCase();
-                if (lowerItemName.contains("tile.") || lowerItemName.contains("item.") || lowerItemName.contains(".") || lowerItemName.contains(".name")) {
-                    removingItems.add(itemName);
-                }
-            }
-        }
-
-        for (String blockName : BLOCK_NAMES) {
-            if (!StringUtils.isNullOrEmpty(blockName)) {
-                final String lowerBlockName = blockName.toLowerCase();
-                if (lowerBlockName.contains("tile.") || lowerBlockName.contains("item.") || lowerBlockName.contains(".") || lowerBlockName.contains(".name")) {
-                    removingBlocks.add(blockName);
-                }
-            }
-        }
-
-        ITEM_NAMES.removeAll(removingItems);
-        ITEM_NAMES.removeAll(BLOCK_NAMES);
-        BLOCK_NAMES.removeAll(ITEM_NAMES);
-        BLOCK_NAMES.removeAll(removingBlocks);
-
-        ENTITY_NAMES.addAll(BLOCK_NAMES);
-        ENTITY_NAMES.addAll(ITEM_NAMES);
-
-        ENTITY_CLASSES.addAll(BLOCK_CLASSES);
-        ENTITY_CLASSES.addAll(ITEM_CLASSES);
+        // Add Verification here as needed
     }
 }

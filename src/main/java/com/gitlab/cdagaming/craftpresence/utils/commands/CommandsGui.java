@@ -159,10 +159,16 @@ public class CommandsGui extends GuiScreen {
                         executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.view");
                     } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[1])) {
                         if (executionCommandArgs[1].equalsIgnoreCase("items")) {
-                            if (CraftPresence.ENTITIES.enabled) {
-                                CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.items"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, false));
+                            if (CraftPresence.TILE_ENTITIES.enabled) {
+                                CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.items"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, null, null, false));
                             } else {
                                 executionString = ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"));
+                            }
+                        } else if (executionCommandArgs[1].equalsIgnoreCase("entities")) {
+                            if (CraftPresence.ENTITIES.enabled) {
+                                CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entities"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, false));
+                            } else {
+                                executionString = ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entitytargetmessages") + " + " + ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityridingmessages"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("servers")) {
                             if (CraftPresence.SERVER.enabled) {
@@ -284,6 +290,7 @@ public class CommandsGui extends GuiScreen {
         viewCompletions.add("biomes");
         viewCompletions.add("guis");
         viewCompletions.add("items");
+        viewCompletions.add("entities");
         viewCompletions.add("servers");
 
         assetsCompletions.add("all");

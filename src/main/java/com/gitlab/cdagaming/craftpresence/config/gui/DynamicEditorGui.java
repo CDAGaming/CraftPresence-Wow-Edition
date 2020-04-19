@@ -47,6 +47,10 @@ public class DynamicEditorGui extends GuiScreen {
                     specificMSG = defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                     specificMSG = defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
+                    specificMSG = defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
+                    specificMSG = defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 }
             }
         } else {
@@ -71,6 +75,14 @@ public class DynamicEditorGui extends GuiScreen {
                     mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificitem", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificentity", attributeName);
+                    defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                    specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificentity", attributeName);
+                    defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                    specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 }
             }
         }
@@ -150,6 +162,10 @@ public class DynamicEditorGui extends GuiScreen {
                         CraftPresence.CONFIG.guiMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                     } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                         CraftPresence.CONFIG.itemMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
+                    } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
+                        CraftPresence.CONFIG.entityTargetMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.entityTargetMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
+                    } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
+                        CraftPresence.CONFIG.entityRidingMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.entityRidingMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, specificMessage.getText());
                     }
                 }
             }
@@ -177,6 +193,14 @@ public class DynamicEditorGui extends GuiScreen {
                         CraftPresence.GUIS.getGUIs();
                     } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                         CraftPresence.CONFIG.itemMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.itemMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                        CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES.remove(attributeName);
+                        CraftPresence.TILE_ENTITIES.getEntities();
+                    } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
+                        CraftPresence.CONFIG.entityTargetMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.entityTargetMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                        CraftPresence.ENTITIES.ENTITY_NAMES.remove(attributeName);
+                        CraftPresence.ENTITIES.getEntities();
+                    } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
+                        CraftPresence.CONFIG.entityRidingMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.entityRidingMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
                         CraftPresence.ENTITIES.ENTITY_NAMES.remove(attributeName);
                         CraftPresence.ENTITIES.getEntities();
                     }

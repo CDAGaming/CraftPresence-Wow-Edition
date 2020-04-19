@@ -60,6 +60,7 @@ public class CommandUtils {
         if (!isInMainMenu) {
             CraftPresence.BIOMES.onTick();
             CraftPresence.DIMENSIONS.onTick();
+            CraftPresence.TILE_ENTITIES.onTick();
             CraftPresence.ENTITIES.onTick();
             CraftPresence.SERVER.onTick();
 
@@ -69,6 +70,9 @@ public class CommandUtils {
                 }
                 if (CraftPresence.GUIS.isInUse) {
                     CraftPresence.GUIS.updateGUIPresence();
+                }
+                if (CraftPresence.TILE_ENTITIES.isInUse) {
+                    CraftPresence.TILE_ENTITIES.updateEntityPresence();
                 }
                 if (CraftPresence.ENTITIES.isInUse) {
                     CraftPresence.ENTITIES.updateEntityPresence();

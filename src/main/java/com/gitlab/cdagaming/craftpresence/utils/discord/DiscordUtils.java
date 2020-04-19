@@ -412,6 +412,7 @@ public class DiscordUtils {
         lastRequestedImageData = new Tuple<>();
 
         CraftPresence.DIMENSIONS.clearClientData();
+        CraftPresence.TILE_ENTITIES.clearClientData();
         CraftPresence.ENTITIES.clearClientData();
         CraftPresence.BIOMES.clearClientData();
         CraftPresence.SERVER.clearClientData();
