@@ -122,8 +122,8 @@ task signJar(type: SignJar, dependsOn: jar) {
     storePass = System.getenv("key_MAINPASS")
     keyPass = System.getenv("keyPass")
 
-    inputFile = jar.archivePath
-    outputFile = jar.archivePath
+    inputFile = jar.archiveFile
+    outputFile = jar.archiveFile
 }
 
 def copyDir = "$compileJava.temporaryDir/replaced"
