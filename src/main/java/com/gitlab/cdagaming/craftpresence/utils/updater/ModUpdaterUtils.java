@@ -113,12 +113,12 @@ public class ModUpdaterUtils {
             JsonObject rootUpdateData = FileUtils.parseJson(UrlUtils.getURLText(updateUrl, "UTF-8"));
 
             if (rootUpdateData != null) {
-                ModUtils.LOG.debugInfo("Received Update Data: " + rootUpdateData.toString());
+                ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.receive.data", rootUpdateData.toString()));
 
                 if (rootUpdateData.has("homepage")) {
                     downloadUrl = rootUpdateData.get("homepage").toString().replace("\"", "").trim();
                 } else {
-                    ModUtils.LOG.warn("Unable to locate Homepage for this Application...");
+                    ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.updater.homepage"));
                 }
 
                 if (rootUpdateData.has("promos")) {
@@ -150,12 +150,12 @@ public class ModUpdaterUtils {
                             // Case 2: Find only the Minecraft Version, if present, but do not break the loop
                             targetRecommendedVersion = jsonSegment.getValue().toString().replaceAll("[a-zA-Z]", "").replace("\"", "").trim();
                         } else {
-                            ModUtils.LOG.debugWarn("Json Segment " + jsonSegment.getKey() + " is of an incompatible format...");
+                            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.updater.incompatiblejson", jsonSegment.getKey()));
                         }
                     }
 
-                    ModUtils.LOG.debugInfo("Detected Latest Version for " + ModUtils.MCVersion + ": " + targetLatestVersion);
-                    ModUtils.LOG.debugInfo("Detected Recommended Version for " + ModUtils.MCVersion + ": " + targetRecommendedVersion);
+                    ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Latest", ModUtils.MCVersion, targetLatestVersion));
+                    ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Recommended", ModUtils.MCVersion, targetRecommendedVersion));
 
                     // Update Current Update State
                     int recommendedState = compareVersions(currentVersion, targetRecommendedVersion);
@@ -178,7 +178,7 @@ public class ModUpdaterUtils {
                         }
                     }
 
-                    ModUtils.LOG.info("Received Update Status for " + modID + ": " + currentState.name() + " (Target Version: v" + targetVersion + ")");
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.receive.status", modID, currentState.name(), targetVersion));
 
                     // Retrieve Changelog Data, if present
                     if (rootUpdateData.has(ModUtils.MCVersion)) {
@@ -192,9 +192,9 @@ public class ModUpdaterUtils {
                                 final JsonElement changelogData = semanticVersionData != null ? semanticVersionData : annotatedVersionData;
 
                                 targetChangelogData = changelogData.toString().replace("\"", "").trim();
-                                ModUtils.LOG.debugInfo("Received Changelog: " + targetChangelogData);
+                                ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.receive.changelog", targetChangelogData));
                             } else {
-                                ModUtils.LOG.error("Failed to Locate Changelog Data for " + modID + "@" + targetVersion);
+                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.updater.changelog", modID, targetVersion));
                             }
                         }
                     }
@@ -202,7 +202,7 @@ public class ModUpdaterUtils {
             }
         } catch (Exception | Error ex) {
             // Log Failure and Set Update State to FAILED
-            ModUtils.LOG.error("Failed to Check for Updates, enable Debug Mode to See Errors...");
+            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.updater.failed"));
 
             if (ModUtils.IS_DEV) {
                 ex.printStackTrace();

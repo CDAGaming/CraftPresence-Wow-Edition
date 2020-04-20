@@ -8,6 +8,7 @@
 *   Added a `Format Words` option in Advanced Settings, used to toggle automatic capitalization in RPC Strings
 *   Added `Entity Target` and `Entity Riding` Options in Advanced Settings to begin the Per-Entity System
 *   Changed `&ENTITY&` placeholder belonging to Items and Blocks to `&TILEENTITY&`
+*   Localization Updates to Update Checker
 *   Minor cleanups and backend improvements
 
 ### Fixes
