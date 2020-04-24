@@ -184,10 +184,8 @@ public class EntityUtils {
         // Form Entity Argument List
         List<Tuple<String, String>> entityTargetArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
 
-        entityTargetArgs.add(new Tuple<>("&TARGET&", !StringUtils.isNullOrEmpty(CURRENT_TARGET_NAME) ?
-                StringUtils.replaceAnyCase(targetEntityMSG, "&entity&", CURRENT_TARGET_NAME) : ""));
-        entityRidingArgs.add(new Tuple<>("&RIDING&", !StringUtils.isNullOrEmpty(CURRENT_RIDING_NAME) ?
-                StringUtils.replaceAnyCase(ridingEntityMSG, "&entity&", CURRENT_RIDING_NAME) : ""));
+        entityTargetArgs.add(new Tuple<>("&entity&", CURRENT_TARGET_NAME));
+        entityRidingArgs.add(new Tuple<>("&entity&", CURRENT_RIDING_NAME));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
@@ -195,8 +193,8 @@ public class EntityUtils {
             entityRidingArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String CURRENT_TARGET_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultEntityTargetMSG, entityTargetArgs);
-        final String CURRENT_RIDING_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultEntityRidingMSG, entityRidingArgs);
+        final String CURRENT_TARGET_MESSAGE = StringUtils.sequentialReplaceAnyCase(targetEntityMSG, entityTargetArgs);
+        final String CURRENT_RIDING_MESSAGE = StringUtils.sequentialReplaceAnyCase(ridingEntityMSG, entityRidingArgs);
 
         // NOTE: Only Apply if Entities are not Empty, otherwise Clear Argument
         if (!allEntitiesEmpty) {

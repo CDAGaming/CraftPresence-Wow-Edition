@@ -283,7 +283,7 @@ public class ServerUtils {
                 // &WORLDINFO& Sub-Arguments
                 if (currentServerMSG.toLowerCase().contains("&worldinfo&")) {
                     // &difficulty& Argument = Current Difficulty of the World
-                    if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&difficulty")) {
+                    if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&difficulty&")) {
                         final String newDifficulty = CraftPresence.player != null ? CraftPresence.player.world.getDifficulty().name() : "";
                         if (!newDifficulty.equals(currentDifficulty)) {
                             currentDifficulty = newDifficulty;

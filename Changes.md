@@ -13,6 +13,7 @@
 
 ### Fixes
 
+*   Fixed `&difficulty&` placeholder interpretation
 *   Fixed a NPE that occurred without a Discord Avatar
 *   Fixed a possible 403 HTTP Error in receiving Update Information
 

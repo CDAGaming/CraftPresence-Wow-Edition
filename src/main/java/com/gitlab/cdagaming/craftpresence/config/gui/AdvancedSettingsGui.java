@@ -5,7 +5,6 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
-import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -13,7 +12,6 @@ import org.lwjgl.input.Keyboard;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 public class AdvancedSettingsGui extends GuiScreen {
     private final GuiScreen parentScreen, currentScreen;
@@ -107,7 +105,7 @@ public class AdvancedSettingsGui extends GuiScreen {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.enableperitem")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, enablePerEntityButton)) {
-            // TODO
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.enableperentity")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, renderTooltipsButton)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.rendertooltips")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
@@ -133,10 +131,18 @@ public class AdvancedSettingsGui extends GuiScreen {
             }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, entityTargetMessagesButton)) {
-            // TODO
+            if (!entityTargetMessagesButton.enabled) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entitytargetmessages"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            } else {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, entityRidingMessagesButton)) {
-            // TODO
+            if (!entityRidingMessagesButton.enabled) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityridingmessages"))), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            } else {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
         }
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, proceedButton) && !proceedButton.enabled) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
@@ -200,9 +206,9 @@ public class AdvancedSettingsGui extends GuiScreen {
         } else if (button.id == itemMessagesButton.id) {
             CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, null, null, true));
         } else if (button.id == entityTargetMessagesButton.id) {
-            CraftPresence.GUIS.openScreen(new MessageGui(currentScreen, Lists.newArrayList("Unimplemented Function, Come back later!"))); // TODO
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityTargetMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
         } else if (button.id == entityRidingMessagesButton.id) {
-            CraftPresence.GUIS.openScreen(new MessageGui(currentScreen, Lists.newArrayList("Unimplemented Function, Come back later!"))); // TODO
+            CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityRidingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true));
         } else if (button.id == characterEditorButton.id) {
             CraftPresence.GUIS.openScreen(new CharacterEditorGui(currentScreen));
         }
