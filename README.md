@@ -65,7 +65,9 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 *   &BIOME& - The Biome Message from your Biome Settings, if enabled and in use
 *   &SERVER& - The Server/SinglePlayer Message from your Server Settings, if enabled and in use
 *   &GUI& - The GUI Message from your GUI Settings, if enabled and in use
-*   &ENTITY& - The Entity/Item Message from your Advanced -> Entity/Item Setting, if enabled and in use
+*   &TILEENTITY& - The TileEntity (Block/Item) Message from your Advanced -> Item Messages Settings, if enabled and in use
+*   &TARGETENTITY& - The Targeted Entity Message from your Advanced -> Entity Target Messages Setting, if Per-Entity is enabled and in use
+*   &RIDINGENTITY& - The Riding Entity Message from your Advanced -> Entity Riding Messages Setting, if Per-Entity is enabled and in use
 
 (For Image Keys, only the first placeholder and an additional suffix if any will be used)
 

@@ -33,6 +33,7 @@ import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.multiplayer.ServerList;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class ServerUtils {
      * Whether this module is allowed to start and enabled
      */
     public boolean enabled = false;
+
+    /**
+     * The Current Player Map, if available
+     */
+    public List<NetworkPlayerInfo> currentPlayerList = Lists.newArrayList();
 
     /**
      * A List of the detected Server Addresses
@@ -152,6 +158,7 @@ public class ServerUtils {
      * Clears FULL Data from this Module
      */
     private void emptyData() {
+        currentPlayerList.clear();
         knownAddresses.clear();
         clearClientData();
     }
@@ -221,6 +228,7 @@ public class ServerUtils {
         final NetHandlerPlayClient newConnection = CraftPresence.instance.getConnection();
 
         if (!joinInProgress) {
+            final List<NetworkPlayerInfo> newPlayerList = newConnection != null ? Lists.newArrayList(newConnection.getPlayerInfoMap()) : Lists.newArrayList();
             final int newCurrentPlayers = newConnection != null ? newConnection.getPlayerInfoMap().size() : 1;
             final int newMaxPlayers = newConnection != null && newConnection.currentServerMaxPlayers >= newCurrentPlayers ? newConnection.currentServerMaxPlayers : newCurrentPlayers + 1;
             final boolean newLANStatus = (CraftPresence.instance.isSingleplayer() && newCurrentPlayers > 1) || (newServerData != null && newServerData.isOnLAN());
@@ -257,7 +265,7 @@ public class ServerUtils {
                 }
             }
 
-            // NOTE: Universal Events
+            // NOTE: Universal + Custom Events
             if (!StringUtils.isNullOrEmpty(currentServerMSG)) {
                 // &PLAYERINFO& Sub-Arguments
                 if (currentServerMSG.toLowerCase().contains("&playerinfo&")) {
@@ -315,6 +323,15 @@ public class ServerUtils {
                     currentPlayers = newCurrentPlayers;
                     maxPlayers = newMaxPlayers;
                     queuedForUpdate = true;
+                }
+            }
+
+            // Update Player List as needed, and Sync with Entity System if enabled
+            if (!newPlayerList.equals(currentPlayerList)) {
+                currentPlayerList = newPlayerList;
+
+                if (CraftPresence.ENTITIES.enabled) {
+                    CraftPresence.ENTITIES.getEntities();
                 }
             }
         }

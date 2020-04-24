@@ -201,7 +201,7 @@ public class DiscordUtils {
         }
 
         // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
-        initArgumentData("&MAINMENU&", "&BRAND&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&ENTITY&");
+        initArgumentData("&MAINMENU&", "&BRAND&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&TILEENTITY&", "&TARGETENTITY&", "&RIDINGENTITY&");
         initIconData("&DEFAULT&", "&MAINMENU&", "&PACK&", "&DIMENSION&", "&SERVER&");
 
         // Ensure Main Menu RPC Resets properly

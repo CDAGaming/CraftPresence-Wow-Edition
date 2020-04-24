@@ -27,8 +27,10 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -138,10 +140,25 @@ public class EntityUtils {
         final Entity NEW_CURRENT_TARGET = CraftPresence.player.getAttackingEntity();
         final Entity NEW_CURRENT_RIDING = CraftPresence.player.getRidingEntity();
 
-        final String NEW_CURRENT_TARGET_NAME = NEW_CURRENT_TARGET != null ?
-                StringUtils.stripColors(NEW_CURRENT_TARGET.getDisplayName().getFormattedText()) : "";
-        final String NEW_CURRENT_RIDING_NAME = NEW_CURRENT_RIDING != null ?
-                StringUtils.stripColors(NEW_CURRENT_RIDING.getDisplayName().getFormattedText()) : "";
+        String NEW_CURRENT_TARGET_NAME, NEW_CURRENT_RIDING_NAME;
+
+        // Note: Unlike getEntities, this does NOT require Server Module to be enabled
+        // Users are still free to manually add UUID's as they please for this module
+        if (NEW_CURRENT_TARGET instanceof EntityPlayer) {
+            final EntityPlayer NEW_CURRENT_PLAYER_TARGET = (EntityPlayer) NEW_CURRENT_TARGET;
+            NEW_CURRENT_TARGET_NAME = StringUtils.stripColors(NEW_CURRENT_PLAYER_TARGET.getGameProfile().getId().toString());
+        } else {
+            NEW_CURRENT_TARGET_NAME = NEW_CURRENT_TARGET != null ?
+                    StringUtils.stripColors(NEW_CURRENT_TARGET.getDisplayName().getFormattedText()) : "";
+        }
+
+        if (NEW_CURRENT_RIDING instanceof EntityPlayer) {
+            final EntityPlayer NEW_CURRENT_PLAYER_RIDING = (EntityPlayer) NEW_CURRENT_RIDING;
+            NEW_CURRENT_RIDING_NAME = StringUtils.stripColors(NEW_CURRENT_PLAYER_RIDING.getGameProfile().getId().toString());
+        } else {
+            NEW_CURRENT_RIDING_NAME = NEW_CURRENT_RIDING != null ?
+                    StringUtils.stripColors(NEW_CURRENT_RIDING.getDisplayName().getFormattedText()) : "";
+        }
 
         final boolean hasTargetChanged = (NEW_CURRENT_TARGET != null &&
                 !NEW_CURRENT_TARGET.equals(CURRENT_TARGET) || !NEW_CURRENT_TARGET_NAME.equals(CURRENT_TARGET_NAME)) ||
@@ -224,6 +241,18 @@ public class EntityUtils {
                         if (!ENTITY_CLASSES.contains(entityClass.getName())) {
                             ENTITY_CLASSES.add(entityClass.getName());
                         }
+                    }
+                }
+            }
+        }
+
+        // If Server Data is enabled, allow UUIDs to count as entities
+        if (CraftPresence.SERVER.enabled) {
+            for (NetworkPlayerInfo playerInfo : CraftPresence.SERVER.currentPlayerList) {
+                final String uuidString = playerInfo.getGameProfile().getId().toString();
+                if (!StringUtils.isNullOrEmpty(uuidString)) {
+                    if (!ENTITY_NAMES.contains(uuidString)) {
+                        ENTITY_NAMES.add(uuidString);
                     }
                 }
             }
