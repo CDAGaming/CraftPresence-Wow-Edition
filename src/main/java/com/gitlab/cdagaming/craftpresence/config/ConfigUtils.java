@@ -287,13 +287,13 @@ public class ConfigUtils {
                     } catch (Exception ex) {
                         // Case 2: Manually Convert Variable based on Expected Type
                         if ((expectedClass == boolean.class || expectedClass == Boolean.class) &&
-                                StringUtils.isValidBoolean(foundProperty.toString())) {
+                                StringUtils.isValidBoolean(foundProperty)) {
                             // Convert to Boolean if Valid
                             fieldObject = Boolean.parseBoolean(foundProperty.toString());
                         } else if ((expectedClass == int.class || expectedClass == Integer.class) &&
-                                StringUtils.getValidInteger(foundProperty.toString()).getFirst()) {
+                                StringUtils.getValidInteger(foundProperty).getFirst()) {
                             // Convert to Integer if Valid, and if not reset it
-                            final Tuple<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty.toString());
+                            final Tuple<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty);
 
                             if (boolData.getFirst()) {
                                 // Pre-Verification Check to trigger if the Field Name contains KeyCode Triggers
@@ -323,7 +323,7 @@ public class ConfigUtils {
                             }
                         } else if (expectedClass == String[].class) {
                             // Convert to String Array (After Verifying it is a single Array)
-                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("\\[([^\\s]+?)\\]", foundProperty.toString()), null, 1);
+                            final String convertedString = StringUtils.removeMatches(StringUtils.getMatches("\\[([^\\s]+?)\\]", foundProperty), null, 1);
 
                             if (!StringUtils.isNullOrEmpty(convertedString) &&
                                     (convertedString.startsWith("[") && convertedString.endsWith("]"))) {

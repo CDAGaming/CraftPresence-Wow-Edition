@@ -42,6 +42,7 @@ import java.util.List;
  *
  * @author CDAGaming
  */
+@SuppressWarnings("DuplicatedCode")
 public class ModUtils {
     /**
      * The Application's Name

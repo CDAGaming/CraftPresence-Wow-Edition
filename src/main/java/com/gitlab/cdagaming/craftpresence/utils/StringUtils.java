@@ -166,15 +166,26 @@ public class StringUtils {
      * Retrieve Matching Values from an input that matches the defined regex
      *
      * @param regexValue The Regex Value to test against
+     * @param original   The original Object to get matches from
+     * @return A Tuple with the Format of originalString:listOfMatches
+     */
+    public static Tuple<String, List<String>> getMatches(final String regexValue, final Object original) {
+        return original != null ? getMatches(regexValue, original.toString()) : new Tuple<>("", Lists.newArrayList());
+    }
+
+    /**
+     * Retrieve Matching Values from an input that matches the defined regex
+     *
+     * @param regexValue The Regex Value to test against
      * @param original   The original String to get matches from
      * @return A Tuple with the Format of originalString:listOfMatches
      */
     public static Tuple<String, List<String>> getMatches(final String regexValue, final String original) {
-        List<String> matches = Lists.newArrayList();
+        final List<String> matches = Lists.newArrayList();
 
         if (!isNullOrEmpty(original)) {
-            Pattern pattern = Pattern.compile(regexValue);
-            Matcher m = pattern.matcher(original);
+            final Pattern pattern = Pattern.compile(regexValue);
+            final Matcher m = pattern.matcher(original);
 
             while (m.find()) {
                 matches.add(m.group());
@@ -282,6 +293,16 @@ public class StringUtils {
     }
 
     /**
+     * Determines whether the Object's String Interpretation classifies as a valid Boolean
+     *
+     * @param entry The Object to evaluate
+     * @return {@code true} if Entry is classified as a valid Boolean
+     */
+    public static boolean isValidBoolean(final Object entry) {
+        return entry != null && isValidBoolean(entry.toString());
+    }
+
+    /**
      * Determines whether a String classifies as a valid Boolean
      *
      * @param entry The String to evaluate
@@ -292,7 +313,7 @@ public class StringUtils {
     }
 
     /**
-     * Determines whether a String classifies as a valid Color Code
+     * Determines whether an inputted String classifies as a valid Color Code
      *
      * @param entry The String to evaluate
      * @return {@code true} if Entry is classified as a valid Color Code
@@ -302,13 +323,23 @@ public class StringUtils {
     }
 
     /**
+     * Determine whether an inputted Object classifies as a valid Integer
+     *
+     * @param entry The Object to evaluate
+     * @return A Tuple with the format of isValid:parsedStringIfTrue
+     */
+    public static Tuple<Boolean, Integer> getValidInteger(final Object entry) {
+        return entry != null ? getValidInteger(entry.toString()) : new Tuple<>(false, 0);
+    }
+
+    /**
      * Determine whether an inputted String classifies as a valid Integer
      *
      * @param entry The String to evaluate
      * @return A Tuple with the format of isValid:parsedStringIfTrue
      */
     public static Tuple<Boolean, Integer> getValidInteger(final String entry) {
-        Tuple<Boolean, Integer> finalSet = new Tuple<>();
+        final Tuple<Boolean, Integer> finalSet = new Tuple<>();
 
         if (!isNullOrEmpty(entry)) {
             try {
@@ -331,7 +362,7 @@ public class StringUtils {
      * @return A Tuple with the format of isValid:parsedStringIfTrue
      */
     public static Tuple<Boolean, Long> getValidLong(final String entry) {
-        Tuple<Boolean, Long> finalSet = new Tuple<>();
+        final Tuple<Boolean, Long> finalSet = new Tuple<>();
 
         if (!isNullOrEmpty(entry)) {
             try {

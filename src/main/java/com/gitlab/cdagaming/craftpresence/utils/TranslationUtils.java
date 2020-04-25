@@ -76,11 +76,7 @@ public class TranslationUtils {
      * Sets initial Data and Retrieves Valid Translations
      */
     public TranslationUtils() {
-        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
-        setUsingJSON(false);
-        setEncoding("UTF-8");
-        getTranslationMap(encoding);
-        checkUnicode();
+        this(false);
     }
 
     /**
@@ -89,11 +85,7 @@ public class TranslationUtils {
      * @param useJSON Toggles whether to use .Json or .Lang, if present
      */
     public TranslationUtils(final boolean useJSON) {
-        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
-        setUsingJSON(useJSON);
-        setEncoding("UTF-8");
-        getTranslationMap(encoding);
-        checkUnicode();
+        this("", useJSON);
     }
 
     /**
@@ -102,12 +94,7 @@ public class TranslationUtils {
      * @param modID Sets the Target Mod ID to locate Language Files
      */
     public TranslationUtils(final String modID) {
-        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
-        setModID(modID);
-        setUsingJSON(false);
-        setEncoding("UTF-8");
-        getTranslationMap(encoding);
-        checkUnicode();
+        this(modID, false);
     }
 
     /**
@@ -117,12 +104,7 @@ public class TranslationUtils {
      * @param useJSON Toggles whether to use .Json or .Lang, if present
      */
     public TranslationUtils(final String modID, final boolean useJSON) {
-        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
-        setModID(modID);
-        setUsingJSON(useJSON);
-        setEncoding("UTF-8");
-        getTranslationMap(encoding);
-        checkUnicode();
+        this(modID, useJSON, "UTF-8");
     }
 
     /**

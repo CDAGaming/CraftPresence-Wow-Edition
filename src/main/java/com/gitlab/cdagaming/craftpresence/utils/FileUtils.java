@@ -223,43 +223,16 @@ public class FileUtils {
         }
 
         for (Class<?> classObj : availableClassList) {
-            Class<?> currentClassObj = classObj;
-            List<Class<?>> superClassList = Lists.newArrayList();
-
             // Add All SuperClasses of this Class to a List
-            while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
-                superClassList.add(currentClassObj.getSuperclass());
-                currentClassObj = currentClassObj.getSuperclass();
-            }
-
-            // If Match is Found, add original Class to final List, and add all Super Classes to returning List
-            if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
-                matchingClasses.add(classObj);
-                matchingClasses.addAll(superClassList);
-            }
+            matchingClasses.addAll(getMatchedClassesAfter(searchList, classObj));
         }
 
         // Attempt to Retrieve Mod Classes
         for (String modClassString : getModClassNames()) {
-            Class<?> modClassObj, currentClassObj;
-            List<Class<?>> superClassList = Lists.newArrayList();
-
             if (!modClassString.toLowerCase().contains("mixin")) {
                 try {
-                    modClassObj = Class.forName(modClassString);
-                    currentClassObj = modClassObj;
-
                     // Add all SuperClasses of Mod Class to a List
-                    while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
-                        superClassList.add(currentClassObj.getSuperclass());
-                        currentClassObj = currentClassObj.getSuperclass();
-                    }
-
-                    // If Match is Found, add original Class to final List, and add all Super Classes to returning List
-                    if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
-                        matchingClasses.add(modClassObj);
-                        matchingClasses.addAll(superClassList);
-                    }
+                    matchingClasses.addAll(getMatchedClassesAfter(searchList, Class.forName(modClassString)));
                 } catch (Exception ignored) {
                     // Ignore this Exception and Continue
                 } catch (Error ignored) {
@@ -267,6 +240,31 @@ public class FileUtils {
                 }
             }
         }
+        return matchingClasses;
+    }
+
+    /**
+     * Retrieves adjusted matching classes after iterating through a Class + Extensions
+     *
+     * @param searchList The Current Search List for Class Locations to match against
+     * @param currentClassObj The Current (Original) Class Object
+     * @return Adjusted matching classes after iterating through a Class + Extensions
+     */
+    private static List<Class<?>> getMatchedClassesAfter(final List<Class<?>> searchList, Class<?> currentClassObj) {
+        final Class<?> classObj = currentClassObj;
+        final List<Class<?>> superClassList = Lists.newArrayList(), matchingClasses = Lists.newArrayList();
+
+        while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
+            superClassList.add(currentClassObj.getSuperclass());
+            currentClassObj = currentClassObj.getSuperclass();
+        }
+
+        // If Match is Found, add original Class to final List, and add all Super Classes to returning List
+        if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+            matchingClasses.add(classObj);
+            matchingClasses.addAll(superClassList);
+        }
+
         return matchingClasses;
     }
 

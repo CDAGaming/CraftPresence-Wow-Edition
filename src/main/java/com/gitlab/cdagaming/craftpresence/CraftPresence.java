@@ -37,8 +37,6 @@ import com.gitlab.cdagaming.craftpresence.utils.server.ServerUtils;
 import com.gitlab.cdagaming.craftpresence.utils.world.BiomeUtils;
 import com.gitlab.cdagaming.craftpresence.utils.world.DimensionUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.Mod;
