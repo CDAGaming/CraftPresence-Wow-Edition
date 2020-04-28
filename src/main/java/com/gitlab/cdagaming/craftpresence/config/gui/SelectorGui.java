@@ -165,11 +165,12 @@ public class SelectorGui extends ExtendedScreen {
         }
 
         scrollList.itemList = itemList;
-        drawString(mc.fontRenderer, searchText, (30 - (StringUtils.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         proceedButton.displayString = allowContinuing && scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.continue") : ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        drawString(mc.fontRenderer, searchText, (30 - (StringUtils.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
+        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
     }
 }
