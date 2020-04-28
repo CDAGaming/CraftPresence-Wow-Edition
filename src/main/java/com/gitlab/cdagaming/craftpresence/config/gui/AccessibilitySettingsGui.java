@@ -1,3 +1,26 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
@@ -157,15 +180,17 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         }
     }
 
+    /**
+     * Setup for Key Entry and Save Backup of Prior Setting, if a valid Key Button
+     *
+     * @param button The Pressed upon KeyCode Button
+     */
     private void setupEntryData(final ExtendedButtonControl button) {
-        if (entryData == null) {
-            // Setup for Key Entry and Save Backup of Prior Setting, if a valid Key Button
-            if (button.getOptionalArgs() != null) {
-                entryData = new Tuple<>(button, button.getOptionalArgs()[0]);
+        if (entryData == null && button.getOptionalArgs() != null) {
+            entryData = new Tuple<>(button, button.getOptionalArgs()[0]);
 
-                backupKeyString = button.displayString;
-                button.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
-            }
+            backupKeyString = button.displayString;
+            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
         }
     }
 

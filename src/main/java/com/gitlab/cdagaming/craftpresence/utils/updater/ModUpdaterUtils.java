@@ -110,7 +110,7 @@ public class ModUpdaterUtils {
         downloadUrl = "";
 
         try {
-            JsonObject rootUpdateData = FileUtils.parseJson(UrlUtils.getURLText(updateUrl, "UTF-8"));
+            final JsonObject rootUpdateData = FileUtils.parseJson(UrlUtils.getURLText(updateUrl, "UTF-8"));
 
             if (rootUpdateData != null) {
                 ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.receive.data", rootUpdateData.toString()));
@@ -158,8 +158,8 @@ public class ModUpdaterUtils {
                     ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Recommended", ModUtils.MCVersion, targetRecommendedVersion));
 
                     // Update Current Update State
-                    int recommendedState = compareVersions(currentVersion, targetRecommendedVersion);
-                    int latestState = compareVersions(currentVersion, targetLatestVersion);
+                    final int recommendedState = compareVersions(currentVersion, targetRecommendedVersion);
+                    final int latestState = compareVersions(currentVersion, targetLatestVersion);
 
                     if (recommendedState == 0) {
                         currentState = UpdateState.UP_TO_DATE;
@@ -218,11 +218,11 @@ public class ModUpdaterUtils {
      * @param str2 The Second Version Number to Iterate
      * @return 0 if Identical; -1 if Second is Higher; 1 if First is higher
      */
-    int compareVersions(String str1, String str2) {
+    private int compareVersions(String str1, String str2) {
         if (str1.equals(str2)) return 0;
 
-        String[] vals1 = str1.split("\\.");
-        String[] vals2 = str2.split("\\.");
+        final String[] vals1 = str1.split("\\.");
+        final String[] vals2 = str2.split("\\.");
 
         int i = 0;
 

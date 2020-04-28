@@ -250,17 +250,17 @@ public class FileUtils {
      * @param currentClassObj The Current (Original) Class Object
      * @return Adjusted matching classes after iterating through a Class + Extensions
      */
-    private static List<Class<?>> getMatchedClassesAfter(final List<Class<?>> searchList, Class<?> currentClassObj) {
-        final Class<?> classObj = currentClassObj;
+    private static List<Class<?>> getMatchedClassesAfter(final List<Class<?>> searchList, final Class<?> currentClassObj) {
+        Class<?> classObj = currentClassObj;
         final List<Class<?>> superClassList = Lists.newArrayList(), matchingClasses = Lists.newArrayList();
 
-        while (currentClassObj.getSuperclass() != null && !searchList.contains(currentClassObj.getSuperclass())) {
-            superClassList.add(currentClassObj.getSuperclass());
-            currentClassObj = currentClassObj.getSuperclass();
+        while (classObj.getSuperclass() != null && !searchList.contains(classObj.getSuperclass())) {
+            superClassList.add(classObj.getSuperclass());
+            classObj = classObj.getSuperclass();
         }
 
         // If Match is Found, add original Class to final List, and add all Super Classes to returning List
-        if (currentClassObj.getSuperclass() != null && searchList.contains(currentClassObj.getSuperclass())) {
+        if (classObj.getSuperclass() != null && searchList.contains(classObj.getSuperclass())) {
             matchingClasses.add(classObj);
             matchingClasses.addAll(superClassList);
         }

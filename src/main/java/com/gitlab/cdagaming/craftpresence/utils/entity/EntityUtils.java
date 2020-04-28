@@ -199,7 +199,7 @@ public class EntityUtils {
                 defaultEntityRidingMSG);
 
         // Form Entity Argument List
-        List<Tuple<String, String>> entityTargetArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
+        final List<Tuple<String, String>> entityTargetArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
 
         entityTargetArgs.add(new Tuple<>("&entity&", CURRENT_TARGET_NAME));
         entityRidingArgs.add(new Tuple<>("&entity&", CURRENT_RIDING_NAME));
@@ -250,10 +250,8 @@ public class EntityUtils {
         if (CraftPresence.SERVER.enabled) {
             for (NetworkPlayerInfo playerInfo : CraftPresence.SERVER.currentPlayerList) {
                 final String uuidString = playerInfo.getGameProfile().getId().toString();
-                if (!StringUtils.isNullOrEmpty(uuidString)) {
-                    if (!ENTITY_NAMES.contains(uuidString)) {
-                        ENTITY_NAMES.add(uuidString);
-                    }
+                if (!StringUtils.isNullOrEmpty(uuidString) && !ENTITY_NAMES.contains(uuidString)) {
+                    ENTITY_NAMES.add(uuidString);
                 }
             }
         }
@@ -261,10 +259,8 @@ public class EntityUtils {
         for (String entityTargetMessage : CraftPresence.CONFIG.entityTargetMessages) {
             if (!StringUtils.isNullOrEmpty(entityTargetMessage)) {
                 final String[] part = entityTargetMessage.split(CraftPresence.CONFIG.splitCharacter);
-                if (!StringUtils.isNullOrEmpty(part[0])) {
-                    if (!ENTITY_NAMES.contains(part[0])) {
-                        ENTITY_NAMES.add(part[0]);
-                    }
+                if (!StringUtils.isNullOrEmpty(part[0]) && !ENTITY_NAMES.contains(part[0])) {
+                    ENTITY_NAMES.add(part[0]);
                 }
             }
         }
@@ -272,10 +268,8 @@ public class EntityUtils {
         for (String entityRidingMessage : CraftPresence.CONFIG.entityRidingMessages) {
             if (!StringUtils.isNullOrEmpty(entityRidingMessage)) {
                 final String[] part = entityRidingMessage.split(CraftPresence.CONFIG.splitCharacter);
-                if (!StringUtils.isNullOrEmpty(part[0])) {
-                    if (!ENTITY_NAMES.contains(part[0])) {
-                        ENTITY_NAMES.add(part[0]);
-                    }
+                if (!StringUtils.isNullOrEmpty(part[0]) && !ENTITY_NAMES.contains(part[0])) {
+                    ENTITY_NAMES.add(part[0]);
                 }
             }
         }
