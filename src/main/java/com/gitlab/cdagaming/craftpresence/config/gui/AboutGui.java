@@ -5,83 +5,71 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.updater.UpdateInfoGui;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public class AboutGui extends GuiScreen {
+public class AboutGui extends ExtendedScreen {
     private static final String SOURCE_URL = "https://gitlab.com/CDAGaming/CraftPresence";
-    private final GuiScreen parentScreen, currentScreen;
-    private ExtendedButtonControl viewSource, versionCheck, backButton;
 
     AboutGui(GuiScreen parentScreen) {
-        mc = CraftPresence.instance;
-        currentScreen = this;
-        this.parentScreen = parentScreen;
+        super(parentScreen);
     }
 
     @Override
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
+        // Adding Version Check Button
+        addControl(
+                new ExtendedButtonControl(
+                        (width / 2) - 90, (height - 30),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.versionInfo"),
+                        () -> CraftPresence.GUIS.openScreen(new UpdateInfoGui(currentScreen, ModUtils.UPDATER))
+                )
+        );
 
-        versionCheck = new ExtendedButtonControl(600, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.versionInfo"));
+        // Adding Back Button
+        addControl(
+                new ExtendedButtonControl(
+                        10, (height - 30),
+                        95, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        () -> CraftPresence.GUIS.openScreen(parentScreen)
+                )
+        );
 
-        backButton = new ExtendedButtonControl(700, 10, (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        viewSource = new ExtendedButtonControl(810, (width / 2) - 90, (height - 55), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.viewsource"));
-
-        buttonList.add(versionCheck);
-        buttonList.add(backButton);
-        buttonList.add(viewSource);
+        // Adding View Source Button
+        addControl(
+                new ExtendedButtonControl(
+                        (width / 2) - 90, (height - 55),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.viewsource"),
+                        () -> {
+                            try {
+                                UrlUtils.openUrl(SOURCE_URL);
+                            } catch (Exception ex) {
+                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.web", SOURCE_URL));
+                                ex.printStackTrace();
+                            }
+                        }
+                )
+        );
 
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        CraftPresence.GUIS.drawBackground(width, height);
+        preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.about.config");
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.credits"));
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        if (notice != null && !notice.isEmpty()) {
-            for (int i = 0; i < notice.size(); i++) {
-                final String string = notice.get(i);
-                drawString(mc.fontRenderer, string, (width / 2) - (StringUtils.getStringWidth(string) / 2), (height / 3) + (i * 10), 0xFFFFFF);
-            }
-        }
+        drawNotice(notice);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == versionCheck.id) {
-            CraftPresence.GUIS.openScreen(new UpdateInfoGui(currentScreen, ModUtils.UPDATER));
-        } else if (button.id == backButton.id) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        } else if (button.id == viewSource.id) {
-            try {
-                UrlUtils.openUrl(SOURCE_URL);
-            } catch (Exception ex) {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.web", SOURCE_URL));
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
     }
 }

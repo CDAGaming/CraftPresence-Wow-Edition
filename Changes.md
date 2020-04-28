@@ -1,13 +1,15 @@
 # CraftPresence Changes
 
-## v1.6.2 (5/22/2020)
+## v1.6.5 (6/??/2020)
 
 ### Changes
 
 *   Source upgrades for ForgeGradle 3.x and Gradle on 1.12.2 and above
+*   Now Signing 1.13+ Builds
 *   Added a `Format Words` option in Advanced Settings, used to toggle automatic capitalization in RPC Strings
 *   Added `Entity Target` and `Entity Riding` Options in Advanced Settings to begin the Per-Entity System
 *   Changed `&ENTITY&` placeholder belonging to Items and Blocks to `&TILEENTITY&`
+*   Backend Upgrades and Rewrites to Gui Screens and related Utilities
 *   Localization Updates to Update Checker
 *   Minor cleanups and backend improvements
 

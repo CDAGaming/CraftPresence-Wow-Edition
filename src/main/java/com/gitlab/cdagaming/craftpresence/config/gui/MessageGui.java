@@ -4,67 +4,43 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
-import net.minecraft.client.gui.GuiButton;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public class MessageGui extends GuiScreen {
-    private final GuiScreen parentScreen;
+public class MessageGui extends ExtendedScreen {
     private final List<String> messageData;
-    private ExtendedButtonControl backButton;
 
     MessageGui(GuiScreen parentScreen, List<String> messageData) {
-        mc = CraftPresence.instance;
-        this.parentScreen = parentScreen;
+        super(parentScreen);
         this.messageData = messageData;
     }
 
     @Override
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
-
-        backButton = new ExtendedButtonControl(700, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-
-        buttonList.add(backButton);
+        // Adding Back Button
+        addControl(
+                new ExtendedButtonControl(
+                        (width / 2) - 90, (height - 30),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        () -> CraftPresence.GUIS.openScreen(parentScreen)
+                )
+        );
 
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        CraftPresence.GUIS.drawBackground(width, height);
+        preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.message");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        if (messageData != null && !messageData.isEmpty()) {
-            for (int i = 0; i < messageData.size(); i++) {
-                final String string = messageData.get(i);
-                drawString(mc.fontRenderer, string, (width / 2) - (StringUtils.getStringWidth(string) / 2), (height / 3) + (i * 10), 0xFFFFFF);
-            }
-        }
+        drawNotice(messageData);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == backButton.id) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
     }
 }

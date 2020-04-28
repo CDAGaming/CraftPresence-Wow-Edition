@@ -90,6 +90,93 @@ public class SliderControl extends ExtendedButtonControl {
     }
 
     /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param buttonId      The ID for the control to Identify as
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     */
+    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent) {
+        this(buttonId, positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString);
+        setOnClick(onPushEvent);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param buttonId      The ID for the control to Identify as
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     * @param onHoverEvent  The Hover Event to Occur when this control is clicked
+     */
+    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent, Runnable onHoverEvent) {
+        this(buttonId, positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, onPushEvent);
+        setOnHover(onHoverEvent);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     */
+    public SliderControl(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
+        this(CraftPresence.GUIS.getNextIndex(), positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     */
+    public SliderControl(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent) {
+        this(positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString);
+        setOnClick(onPushEvent);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     * @param onHoverEvent  The Hover Event to Occur when this control is clicked
+     */
+    public SliderControl(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent, Runnable onHoverEvent) {
+        this(positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, onPushEvent);
+        setOnHover(onHoverEvent);
+    }
+
+    /**
      * Returns the current Hover state of this control
      * <p>
      * 0 if the button is disabled<p>

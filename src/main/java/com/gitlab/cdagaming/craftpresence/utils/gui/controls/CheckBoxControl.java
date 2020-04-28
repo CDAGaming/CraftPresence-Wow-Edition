@@ -62,6 +62,38 @@ public class CheckBoxControl extends ExtendedButtonControl {
         width = boxWidth + 2 + StringUtils.getStringWidth(displayString);
     }
 
+    public CheckBoxControl(int id, int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent) {
+        this(id, xPos, yPos, displayString, isChecked);
+        setOnClick(onPushEvent);
+    }
+
+    public CheckBoxControl(int id, int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent, Runnable onHoverEvent) {
+        this(id, xPos, yPos, displayString, isChecked, onPushEvent);
+        setOnHover(onHoverEvent);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
+     * @param displayString The display text, to display within this control
+     * @param isChecked     The beginning check state for this Control
+     */
+    public CheckBoxControl(int xPos, int yPos, String displayString, boolean isChecked) {
+        this(CraftPresence.GUIS.getNextIndex(), xPos, yPos, displayString, isChecked);
+    }
+
+    public CheckBoxControl(int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent) {
+        this(xPos, yPos, displayString, isChecked);
+        setOnClick(onPushEvent);
+    }
+
+    public CheckBoxControl(int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent, Runnable onHoverEvent) {
+        this(xPos, yPos, displayString, isChecked, onPushEvent);
+        setOnHover(onHoverEvent);
+    }
+
     /**
      * Draws this button to the screen.
      */

@@ -23,6 +23,7 @@
  */
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import net.minecraft.client.gui.GuiButton;
 
 /**
@@ -35,6 +36,14 @@ public class ExtendedButtonControl extends GuiButton {
      * Optional Arguments used for functions within the Mod, if any
      */
     private String[] optionalArgs;
+    /**
+     * Event to Deploy when this Control is Clicked, if any
+     */
+    private Runnable onPushEvent = null;
+    /**
+     * Event to Deploy when this Control is Hovered Over, if any
+     */
+    private Runnable onHoverEvent = null;
 
     /**
      * Initialization Event for this Control, assigning defined arguments
@@ -56,6 +65,89 @@ public class ExtendedButtonControl extends GuiButton {
     /**
      * Initialization Event for this Control, assigning defined arguments
      *
+     * @param buttonId     The ID for the control to Identify as
+     * @param x            The Starting X Position for this Control
+     * @param y            The Starting Y Position for this Control
+     * @param widthIn      The Width for this Control
+     * @param heightIn     The Height for this Control
+     * @param buttonText   The display text, to display within this control
+     * @param onPushEvent  The Click Event to Occur when this control is clicked
+     * @param optionalArgs The optional Arguments, if any, to associate with this control
+     */
+    public ExtendedButtonControl(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, Runnable onPushEvent, String... optionalArgs) {
+        this(buttonId, x, y, widthIn, heightIn, buttonText, optionalArgs);
+        this.onPushEvent = onPushEvent;
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param buttonId     The ID for the control to Identify as
+     * @param x            The Starting X Position for this Control
+     * @param y            The Starting Y Position for this Control
+     * @param widthIn      The Width for this Control
+     * @param heightIn     The Height for this Control
+     * @param buttonText   The display text, to display within this control
+     * @param onPushEvent  The Click Event to Occur when this control is clicked
+     * @param onHoverEvent The Hover Event to Occur when this control is clicked
+     * @param optionalArgs The optional Arguments, if any, to associate with this control
+     */
+    public ExtendedButtonControl(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, Runnable onPushEvent, Runnable onHoverEvent, String... optionalArgs) {
+        this(buttonId, x, y, widthIn, heightIn, buttonText, onPushEvent, optionalArgs);
+        this.onHoverEvent = onHoverEvent;
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param x            The Starting X Position for this Control
+     * @param y            The Starting Y Position for this Control
+     * @param widthIn      The Width for this Control
+     * @param heightIn     The Height for this Control
+     * @param buttonText   The display text, to display within this control
+     * @param optionalArgs The optional Arguments, if any, to associate with this control
+     */
+    public ExtendedButtonControl(int x, int y, int widthIn, int heightIn, String buttonText, String... optionalArgs) {
+        super(CraftPresence.GUIS.getNextIndex(), x, y, widthIn, heightIn, buttonText);
+        this.optionalArgs = optionalArgs;
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param x            The Starting X Position for this Control
+     * @param y            The Starting Y Position for this Control
+     * @param widthIn      The Width for this Control
+     * @param heightIn     The Height for this Control
+     * @param buttonText   The display text, to display within this control
+     * @param onPushEvent  The Click Event to Occur when this control is clicked
+     * @param optionalArgs The optional Arguments, if any, to associate with this control
+     */
+    public ExtendedButtonControl(int x, int y, int widthIn, int heightIn, String buttonText, Runnable onPushEvent, String... optionalArgs) {
+        this(x, y, widthIn, heightIn, buttonText, optionalArgs);
+        setOnClick(onPushEvent);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param x            The Starting X Position for this Control
+     * @param y            The Starting Y Position for this Control
+     * @param widthIn      The Width for this Control
+     * @param heightIn     The Height for this Control
+     * @param buttonText   The display text, to display within this control
+     * @param onPushEvent  The Click Event to Occur when this control is clicked
+     * @param onHoverEvent The Hover Event to Occur when this control is clicked
+     * @param optionalArgs The optional Arguments, if any, to associate with this control
+     */
+    public ExtendedButtonControl(int x, int y, int widthIn, int heightIn, String buttonText, Runnable onPushEvent, Runnable onHoverEvent, String... optionalArgs) {
+        this(x, y, widthIn, heightIn, buttonText, onPushEvent, optionalArgs);
+        setOnHover(onHoverEvent);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
      * @param id            The ID for the Control to Identify as
      * @param xPos          The Starting X Position for this Control
      * @param yPos          The Starting Y Position for this Control
@@ -63,6 +155,17 @@ public class ExtendedButtonControl extends GuiButton {
      */
     public ExtendedButtonControl(int id, int xPos, int yPos, String displayString) {
         super(id, xPos, yPos, displayString);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
+     * @param displayString The display text, to display within this Control
+     */
+    public ExtendedButtonControl(int xPos, int yPos, String displayString) {
+        this(CraftPresence.GUIS.getNextIndex(), xPos, yPos, displayString);
     }
 
     /**
@@ -90,5 +193,25 @@ public class ExtendedButtonControl extends GuiButton {
      */
     public String[] getOptionalArgs() {
         return optionalArgs;
+    }
+
+    public void setOnClick(Runnable event) {
+        onPushEvent = event;
+    }
+
+    public void onClick() {
+        if (onPushEvent != null) {
+            onPushEvent.run();
+        }
+    }
+
+    public void setOnHover(Runnable event) {
+        onHoverEvent = event;
+    }
+
+    public void onHover() {
+        if (onHoverEvent != null) {
+            onHoverEvent.run();
+        }
     }
 }

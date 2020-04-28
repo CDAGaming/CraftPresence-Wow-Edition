@@ -31,6 +31,7 @@ import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -76,6 +77,10 @@ public class GuiUtils {
      * Whether this module is allowed to start and enabled
      */
     public boolean enabled = false;
+    /**
+     * The Last Used Control Id
+     */
+    public int lastIndex = 0;
     /**
      * A List of the detected Gui Screen Names
      */
@@ -149,6 +154,18 @@ public class GuiUtils {
     /**
      * Determines if the Mouse is over an element, following the defined Arguments
      *
+     * @param mouseX      The Mouse's Current X Position
+     * @param mouseY      The Mouse's Current Y Position
+     * @param textControl The Object to check bounds and position
+     * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
+     */
+    public boolean isMouseOver(final double mouseX, final double mouseY, final ExtendedTextControl textControl) {
+        return isMouseOver(mouseX, mouseY, textControl.x, textControl.y, textControl.getWidth() - 1, textControl.getHeight() - 1);
+    }
+
+    /**
+     * Determines if the Mouse is over an element, following the defined Arguments
+     *
      * @param mouseX   The Mouse's Current X Position
      * @param mouseY   The Mouse's Current Y Position
      * @param checkBox The Object to check bounds and position
@@ -156,6 +173,23 @@ public class GuiUtils {
      */
     public boolean isMouseOver(final double mouseX, final double mouseY, final CheckBoxControl checkBox) {
         return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth - 1, checkBox.getHeight() - 1);
+    }
+
+    /**
+     * Retrieves the Next Available Button Id for use in the currently open Screen
+     *
+     * @return The next available Button Id
+     */
+    public int getNextIndex() {
+        return lastIndex++;
+    }
+
+    /**
+     * Resets the Button Index to 0
+     * Normally used when closing a screen and no longer using the allocated Id's
+     */
+    public void resetIndex() {
+        lastIndex = 0;
     }
 
     /**

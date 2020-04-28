@@ -246,7 +246,7 @@ public class FileUtils {
     /**
      * Retrieves adjusted matching classes after iterating through a Class + Extensions
      *
-     * @param searchList The Current Search List for Class Locations to match against
+     * @param searchList      The Current Search List for Class Locations to match against
      * @param currentClassObj The Current (Original) Class Object
      * @return Adjusted matching classes after iterating through a Class + Extensions
      */

@@ -5,44 +5,39 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.SliderControl;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.io.IOException;
 
-public class ColorEditorGui extends GuiScreen {
-    private final GuiScreen parentScreen;
+public class ColorEditorGui extends ExtendedScreen {
     private final String configValueName;
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
     // Page 1 Variables
     private String currentNormalHexValue, currentConvertedHexValue, startingHexValue;
     private int currentRed, currentGreen, currentBlue, currentAlpha;
-    private GuiTextField hexText;
+    private ExtendedTextControl hexText;
     private SliderControl redText, greenText, blueText, alphaText;
     // Page 2 Variables
     private String currentNormalMCTexturePath, currentConvertedMCTexturePath, startingMCTexturePath;
-    private GuiTextField mcTextureText;
+    private ExtendedTextControl mcTextureText;
     private ResourceLocation currentMCTexture;
 
     ColorEditorGui(GuiScreen parentScreen, String configValueName) {
-        mc = CraftPresence.instance;
-        pageNumber = 0;
-        this.parentScreen = parentScreen;
+        super(parentScreen);
+        this.pageNumber = 0;
         this.configValueName = configValueName;
     }
 
     @Override
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
-
-        int calc1 = (width / 2) - 183;
-        int calc2 = (width / 2) + 3;
+        final int calc1 = (width / 2) - 183;
+        final int calc2 = (width / 2) + 3;
 
         // Page 1 Items
         final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.redcolorvalue");
@@ -50,29 +45,129 @@ public class ColorEditorGui extends GuiScreen {
         final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.bluecolorvalue");
         final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.alphacolorvalue");
 
-        hexText = new GuiTextField(100, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
+        hexText = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15,
+                        180, 20
+                )
+        );
 
-        redText = new SliderControl(110, new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(3)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, redTitle);
-        greenText = new SliderControl(120, new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(3)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, greenTitle);
-        blueText = new SliderControl(130, new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(4)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, blueTitle);
-        alphaText = new SliderControl(140, new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(4)), new Tuple<>(180, 20), 1.0f, 0.0f, 255.0f, 1.0f, alphaTitle);
-
-        buttonList.add(redText);
-        buttonList.add(greenText);
-        buttonList.add(blueText);
-        buttonList.add(alphaText);
+        redText = addControl(
+                new SliderControl(
+                        new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(3)),
+                        new Tuple<>(180, 20),
+                        1.0f, 0.0f,
+                        255.0f, 1.0f,
+                        redTitle
+                )
+        );
+        greenText = addControl(
+                new SliderControl(
+                        new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(3)),
+                        new Tuple<>(180, 20),
+                        1.0f, 0.0f,
+                        255.0f, 1.0f,
+                        greenTitle
+                )
+        );
+        blueText = addControl(
+                new SliderControl(
+                        new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(4)),
+                        new Tuple<>(180, 20),
+                        1.0f, 0.0f,
+                        255.0f, 1.0f,
+                        blueTitle
+                )
+        );
+        alphaText = addControl(
+                new SliderControl(
+                        new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(4)),
+                        new Tuple<>(180, 20),
+                        1.0f, 0.0f,
+                        255.0f, 1.0f,
+                        alphaTitle
+                )
+        );
 
         // Page 2 Items
-        mcTextureText = new GuiTextField(150, mc.fontRenderer, (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15, 180, 20);
+        mcTextureText = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15,
+                        180, 20
+                )
+        );
         mcTextureText.setMaxStringLength(512);
 
-        proceedButton = new ExtendedButtonControl(700, 10, (height - 30), 80, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        previousPageButton = new ExtendedButtonControl(800, (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30), 20, 20, "<");
-        nextPageButton = new ExtendedButtonControl(900, (previousPageButton.x + previousPageButton.getWidth()) + 3, (height - 30), 20, 20, ">");
+        proceedButton = addControl(
+                new ExtendedButtonControl(
+                        10, (height - 30),
+                        80, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        () -> {
+                            syncValues();
 
-        buttonList.add(previousPageButton);
-        buttonList.add(nextPageButton);
-        buttonList.add(proceedButton);
+                            if (!StringUtils.isNullOrEmpty(configValueName)) {
+                                if (pageNumber == 0) {
+                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBGColor)) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.tooltipBGColor = currentNormalHexValue;
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalHexValue;
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.guiBGColor)) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.guiBGColor = currentNormalHexValue;
+                                    }
+                                }
+
+                                if (pageNumber == 1) {
+                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.tooltipBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.guiBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                    }
+                                }
+                            }
+
+                            CraftPresence.GUIS.openScreen(parentScreen);
+                        }
+                )
+        );
+        previousPageButton = addControl(
+                new ExtendedButtonControl(
+                        (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30),
+                        20, 20,
+                        "<",
+                        () -> {
+                            if (pageNumber != 0) {
+                                pageNumber--;
+                                initValues();
+                                syncValues();
+                            }
+                        }
+                )
+        );
+        nextPageButton = addControl(
+                new ExtendedButtonControl(
+                        (previousPageButton.x + previousPageButton.getWidth()) + 3, (height - 30),
+                        20, 20,
+                        ">",
+                        () -> {
+                            if (pageNumber != 1) {
+                                pageNumber++;
+                                initValues();
+                                syncValues();
+                            }
+                        }
+                )
+        );
 
         initValues();
         syncValues();
@@ -81,7 +176,7 @@ public class ColorEditorGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        CraftPresence.GUIS.drawBackground(width, height);
+        preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
@@ -94,6 +189,9 @@ public class ColorEditorGui extends GuiScreen {
         drawString(mc.fontRenderer, noticeTitle, (width / 2) - 90, CraftPresence.GUIS.getButtonY(1) - 5, 0xFFFFFF);
 
         // Ensure Button Activity on Page 1
+        hexText.setVisible(pageNumber == 0);
+        hexText.setEnabled(hexText.getVisible());
+
         redText.enabled = pageNumber == 0;
         redText.visible = redText.enabled;
         greenText.enabled = pageNumber == 0;
@@ -103,13 +201,15 @@ public class ColorEditorGui extends GuiScreen {
         alphaText.enabled = pageNumber == 0;
         alphaText.visible = alphaText.enabled;
 
+        // Ensure Button Activity on Page 2
+        mcTextureText.setVisible(pageNumber == 1);
+        mcTextureText.setEnabled(mcTextureText.getVisible());
+
         // Page 1 Items
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.hexcode");
 
             drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
-
-            hexText.drawTextBox();
 
             proceedButton.enabled = !StringUtils.isNullOrEmpty(hexText.getText());
 
@@ -121,8 +221,6 @@ public class ColorEditorGui extends GuiScreen {
             final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.texturepath");
 
             drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
-
-            mcTextureText.drawTextBox();
 
             proceedButton.enabled = !StringUtils.isNullOrEmpty(mcTextureText.getText());
 
@@ -138,59 +236,7 @@ public class ColorEditorGui extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == previousPageButton.id && pageNumber != 0) {
-            pageNumber--;
-            initValues();
-            syncValues();
-        }
-        if (button.id == nextPageButton.id && pageNumber != 1) {
-            pageNumber++;
-            initValues();
-            syncValues();
-        }
-
-        if (button.id == proceedButton.id) {
-            syncValues();
-
-            if (!StringUtils.isNullOrEmpty(configValueName)) {
-                if (pageNumber == 0) {
-                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBGColor)) {
-                        CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.tooltipBGColor = currentNormalHexValue;
-                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
-                        CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalHexValue;
-                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.guiBGColor)) {
-                        CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.guiBGColor = currentNormalHexValue;
-                    }
-                }
-
-                if (pageNumber == 1) {
-                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
-                        CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.tooltipBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
-                        CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
-                        CraftPresence.CONFIG.hasChanged = true;
-                        CraftPresence.CONFIG.guiBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                    }
-                }
-            }
-
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-    }
-
-    @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-
         if (keyCode == Keyboard.KEY_UP && pageNumber != 0) {
             pageNumber--;
             initValues();
@@ -203,52 +249,11 @@ public class ColorEditorGui extends GuiScreen {
             syncValues();
         }
 
-        // Page 1 Items
-        if (pageNumber == 0) {
-            hexText.textboxKeyTyped(typedChar, keyCode);
-        }
-
-        // Page 2 Items
-        if (pageNumber == 1) {
-            mcTextureText.textboxKeyTyped(typedChar, keyCode);
-        }
+        super.keyTyped(typedChar, keyCode);
 
         if (keyCode == Keyboard.KEY_NUMPADENTER || keyCode == Keyboard.KEY_RETURN) {
             syncValues();
         }
-    }
-
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        // Page 1 Items
-        if (pageNumber == 0) {
-            hexText.mouseClicked(mouseX, mouseY, mouseButton);
-        }
-
-        // Page 2 Items
-        if (pageNumber == 1) {
-            mcTextureText.mouseClicked(mouseX, mouseY, mouseButton);
-        }
-
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    public void updateScreen() {
-        // Page 1 Items
-        if (pageNumber == 0) {
-            hexText.updateCursorCounter();
-        }
-
-        // Page 2 Items
-        if (pageNumber == 1) {
-            mcTextureText.updateCursorCounter();
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
     }
 
     private void initValues() {
