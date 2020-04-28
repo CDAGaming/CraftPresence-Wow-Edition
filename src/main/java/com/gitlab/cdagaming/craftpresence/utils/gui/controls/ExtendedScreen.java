@@ -99,6 +99,14 @@ public class ExtendedScreen extends GuiScreen {
     }
 
     @Override
+    public void handleMouseInput() throws IOException {
+        for (ScrollableListControl listControl : extendedLists) {
+            listControl.handleMouseInput();
+        }
+        super.handleMouseInput();
+    }
+
+    @Override
     protected void actionPerformed(@Nonnull GuiButton button) throws IOException {
         if (button instanceof ExtendedButtonControl) {
             ((ExtendedButtonControl) button).onClick();

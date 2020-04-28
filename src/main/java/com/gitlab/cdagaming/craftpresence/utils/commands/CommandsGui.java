@@ -8,32 +8,27 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.google.common.base.Functions;
 import com.google.common.collect.Lists;
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import org.lwjgl.input.Keyboard;
 
-import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CommandsGui extends GuiScreen {
+public class CommandsGui extends ExtendedScreen {
     private static String[] executionCommandArgs;
-    public final GuiScreen parentScreen, currentScreen;
     public ExtendedButtonControl proceedButton;
-    private GuiTextField commandInput;
+    private ExtendedTextControl commandInput;
     private String executionString;
     private String[] commandArgs, filteredCommandArgs;
     private List<String> tabCompletions = Lists.newArrayList();
 
     public CommandsGui(GuiScreen parentScreen) {
-        mc = CraftPresence.instance;
-        currentScreen = this;
-        this.parentScreen = parentScreen;
+        super(parentScreen);
     }
 
     public static void executeCommand(String... args) {
@@ -69,14 +64,23 @@ public class CommandsGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
-
-        commandInput = new GuiTextField(110, mc.fontRenderer, 115, (height - 30), (width - 120), 20);
+        commandInput = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        115, (height - 30),
+                        (width - 120), 20
+                )
+        );
         commandInput.setMaxStringLength(512);
 
-        proceedButton = new ExtendedButtonControl(700, 10, (height - 30), 100, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-
-        buttonList.add(proceedButton);
+        proceedButton = addControl(
+                new ExtendedButtonControl(
+                        10, (height - 30),
+                        100, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        () -> CraftPresence.GUIS.openScreen(parentScreen)
+                )
+        );
 
         executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.main");
 
@@ -85,7 +89,7 @@ public class CommandsGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        CraftPresence.GUIS.drawBackground(width, height);
+        preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.commands");
@@ -98,7 +102,6 @@ public class CommandsGui extends GuiScreen {
             filteredCommandArgs = commandInput.getText().replace("/", "").replace("cp", "").replace(ModUtils.MODID, "").trim().split(" ");
             tabCompletions = getTabCompletions(filteredCommandArgs);
         }
-        commandInput.drawTextBox();
 
         // COMMANDS START
         if (executionCommandArgs != null) {
@@ -229,17 +232,7 @@ public class CommandsGui extends GuiScreen {
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == proceedButton.id) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-    }
-
-    @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
         if (commandInput.isFocused() && commandInput.getText().startsWith("/") && commandArgs != null &&
                 (commandArgs[0].equalsIgnoreCase("cp") || commandArgs[0].equalsIgnoreCase(ModUtils.MODID))) {
             if (keyCode == Keyboard.KEY_TAB && !tabCompletions.isEmpty()) {
@@ -250,23 +243,7 @@ public class CommandsGui extends GuiScreen {
                 executeCommand(filteredCommandArgs);
             }
         }
-        commandInput.textboxKeyTyped(typedChar, keyCode);
-    }
-
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        commandInput.mouseClicked(mouseX, mouseY, mouseButton);
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    public void updateScreen() {
-        commandInput.updateCursorCounter();
-    }
-
-    @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
+        super.keyTyped(typedChar, keyCode);
     }
 
     private List<String> getTabCompletions(String[] args) {
@@ -308,15 +285,15 @@ public class CommandsGui extends GuiScreen {
             } else if (args[0].equalsIgnoreCase("request")) {
                 return getListOfStringsMatchingLastWord(args, requestCompletions);
             } else {
-                return Collections.emptyList();
+                return Lists.newArrayList();
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("view") && args[1].equalsIgnoreCase("assets")) {
                 return getListOfStringsMatchingLastWord(args, assetsCompletions);
             } else {
-                return Collections.emptyList();
+                return Lists.newArrayList();
             }
         }
-        return Collections.emptyList();
+        return Lists.newArrayList();
     }
 }

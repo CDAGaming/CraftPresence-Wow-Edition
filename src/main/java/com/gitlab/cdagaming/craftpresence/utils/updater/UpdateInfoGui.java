@@ -5,41 +5,61 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
-import net.minecraft.client.gui.GuiButton;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
-public class UpdateInfoGui extends GuiScreen {
-    private final GuiScreen parentScreen;
+public class UpdateInfoGui extends ExtendedScreen {
     private final ModUpdaterUtils modUpdater;
-    private ExtendedButtonControl downloadButton, checkButton, backButton;
+    private ExtendedButtonControl downloadButton, checkButton;
 
     public UpdateInfoGui(GuiScreen parentScreen, ModUpdaterUtils modUpdater) {
-        mc = CraftPresence.instance;
-        this.parentScreen = parentScreen;
+        super(parentScreen);
         this.modUpdater = modUpdater;
     }
 
     @Override
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
-
-        checkButton = new ExtendedButtonControl(600, (width / 2) - 90, (height - 30), 180, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.checkForUpdates"));
-        backButton = new ExtendedButtonControl(700, 10, (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"));
-        downloadButton = new ExtendedButtonControl(810, (width - 105), (height - 30), 95, 20, ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.download"));
-
-        buttonList.add(checkButton);
-        buttonList.add(backButton);
-        buttonList.add(downloadButton);
+        checkButton = addControl(
+                new ExtendedButtonControl(
+                        (width / 2) - 90, (height - 30),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.checkForUpdates"),
+                        modUpdater::checkForUpdates
+                )
+        );
+        // Adding Back Button
+        addControl(
+                new ExtendedButtonControl(
+                        10, (height - 30),
+                        95, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        () -> CraftPresence.GUIS.openScreen(parentScreen)
+                )
+        );
+        downloadButton = addControl(
+                new ExtendedButtonControl(
+                        (width - 105), (height - 30),
+                        95, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.download"),
+                        () -> {
+                            try {
+                                UrlUtils.openUrl(modUpdater.downloadUrl);
+                            } catch (Exception ex) {
+                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.web", modUpdater.downloadUrl));
+                                ex.printStackTrace();
+                            }
+                        }
+                )
+        );
 
         super.initGui();
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        CraftPresence.GUIS.drawBackground(width, height);
+        preDraw();
 
         downloadButton.enabled = modUpdater.currentState == ModUpdaterUtils.UpdateState.OUTDATED ||
                 modUpdater.currentState == ModUpdaterUtils.UpdateState.BETA_OUTDATED;
@@ -56,33 +76,5 @@ public class UpdateInfoGui extends GuiScreen {
         CraftPresence.GUIS.drawMultiLineString(notice, 25, 45, width, height, -1, mc.fontRenderer, false);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
-    protected void actionPerformed(GuiButton button) {
-        if (button.id == checkButton.id) {
-            modUpdater.checkForUpdates();
-        } else if (button.id == backButton.id) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        } else if (button.id == downloadButton.id) {
-            try {
-                UrlUtils.openUrl(modUpdater.downloadUrl);
-            } catch (Exception ex) {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.web", modUpdater.downloadUrl));
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
-    }
-
-    @Override
-    public void onGuiClosed() {
-        Keyboard.enableRepeatEvents(false);
     }
 }
