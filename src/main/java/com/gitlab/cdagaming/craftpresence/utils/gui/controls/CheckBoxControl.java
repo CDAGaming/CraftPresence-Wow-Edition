@@ -62,11 +62,32 @@ public class CheckBoxControl extends ExtendedButtonControl {
         width = boxWidth + 2 + StringUtils.getStringWidth(displayString);
     }
 
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param id            The ID for the control to Identify as
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
+     * @param displayString The display text, to display within this control
+     * @param isChecked     The beginning check state for this Control
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     */
     public CheckBoxControl(int id, int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent) {
         this(id, xPos, yPos, displayString, isChecked);
         setOnClick(onPushEvent);
     }
 
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param id            The ID for the control to Identify as
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
+     * @param displayString The display text, to display within this control
+     * @param isChecked     The beginning check state for this Control
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     * @param onHoverEvent  The Hover Event to Occur when this control is clicked
+     */
     public CheckBoxControl(int id, int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent, Runnable onHoverEvent) {
         this(id, xPos, yPos, displayString, isChecked, onPushEvent);
         setOnHover(onHoverEvent);
@@ -84,11 +105,30 @@ public class CheckBoxControl extends ExtendedButtonControl {
         this(CraftPresence.GUIS.getNextIndex(), xPos, yPos, displayString, isChecked);
     }
 
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
+     * @param displayString The display text, to display within this control
+     * @param isChecked     The beginning check state for this Control
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     */
     public CheckBoxControl(int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent) {
         this(xPos, yPos, displayString, isChecked);
         setOnClick(onPushEvent);
     }
 
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param xPos          The Starting X Position for this Control
+     * @param yPos          The Starting Y Position for this Control
+     * @param displayString The display text, to display within this control
+     * @param isChecked     The beginning check state for this Control
+     * @param onPushEvent   The Click Event to Occur when this control is clicked
+     * @param onHoverEvent  The Hover Event to Occur when this control is clicked
+     */
     public CheckBoxControl(int xPos, int yPos, String displayString, boolean isChecked, Runnable onPushEvent, Runnable onHoverEvent) {
         this(xPos, yPos, displayString, isChecked, onPushEvent);
         setOnHover(onHoverEvent);

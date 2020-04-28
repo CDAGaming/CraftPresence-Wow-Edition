@@ -31,10 +31,22 @@ public class CommandsGui extends ExtendedScreen {
         super(parentScreen);
     }
 
+    /**
+     * Synchronizes the Command Arguments into a List for further use
+     *
+     * @param args The Command Arguments to parse
+     */
     public static void executeCommand(String... args) {
         executionCommandArgs = args;
     }
 
+    /**
+     * Retrieves a List of potential matches for an inputted string
+     *
+     * @param inputArgs           The inputted String
+     * @param possibleCompletions The Potential Tab-Completions
+     * @return A List of potential matches from inputted string
+     */
     private static List<String> getListOfStringsMatchingLastWord(String[] inputArgs, Collection<?> possibleCompletions) {
         String s = inputArgs[inputArgs.length - 1];
         List<String> list = Lists.newArrayList();
@@ -58,6 +70,13 @@ public class CommandsGui extends ExtendedScreen {
         return list;
     }
 
+    /**
+     * Checks if the specified region matches the start of the string
+     *
+     * @param original The Original String to check against
+     * @param region   The region to check for a match
+     * @return {@code true} if the region matches the start of the string
+     */
     private static boolean doesStringStartWith(String original, String region) {
         return region.regionMatches(true, 0, original, 0, original.length());
     }
@@ -246,6 +265,12 @@ public class CommandsGui extends ExtendedScreen {
         super.keyTyped(typedChar, keyCode);
     }
 
+    /**
+     * Retrieves a List of Tab Completions for the Specified Arguments
+     *
+     * @param args The Command Arguments to parse
+     * @return The Possible Tab Completions from the specified arguments
+     */
     private List<String> getTabCompletions(String[] args) {
         List<String> baseCompletions = Lists.newArrayList();
         List<String> assetsCompletions = Lists.newArrayList();

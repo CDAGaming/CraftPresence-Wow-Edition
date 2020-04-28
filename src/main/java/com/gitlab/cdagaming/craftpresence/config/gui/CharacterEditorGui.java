@@ -171,6 +171,9 @@ public class CharacterEditorGui extends ExtendedScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
+    /**
+     * Checks and Modifies Character and Glyph Arrays, depending on conditions
+     */
     private void checkValues() {
         if (!Arrays.equals(originalCharArray, StringUtils.MC_CHAR_WIDTH) || !Arrays.equals(originalGlyphArray, StringUtils.MC_GLYPH_WIDTH)) {
             // Write to Char Data and Re-Set originalCharArray and originalGlyphArray

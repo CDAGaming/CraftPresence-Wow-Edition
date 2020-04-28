@@ -12,21 +12,58 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * An Extended and Globalized Gui Screen
+ *
+ * @author CDAGaming
+ */
 public class ExtendedScreen extends GuiScreen {
-    public final GuiScreen parentScreen, currentScreen;
+    /**
+     * The Parent or Past Screen
+     */
+    public final GuiScreen parentScreen;
+    /**
+     * The Current Screen Instance
+     */
+    public final GuiScreen currentScreen;
+    /**
+     * Similar to buttonList, a list of compatible controls in this Screen
+     */
     private final List<Gui> extendedControls = Lists.newArrayList();
+    /**
+     * Similar to buttonList, a list of compatible ScrollLists in this Screen
+     */
     private final List<ScrollableListControl> extendedLists = Lists.newArrayList();
-    // Variable Needed to ensure all buttons are initialized before rendering to prevent an NPE
+    /**
+     * Variable Needed to ensure all buttons are initialized before rendering to prevent an NPE
+     */
     private boolean initialized = false;
 
-    private int lastMouseX = 0, lastMouseY = 0;
+    /**
+     * The Last Ticked Mouse X Coordinate
+     */
+    private int lastMouseX = 0;
+    /**
+     * The Last Ticked Mouse Y Coordinate
+     */
+    private int lastMouseY = 0;
 
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param parentScreen The Parent Screen for this Instance
+     */
     public ExtendedScreen(GuiScreen parentScreen) {
         mc = CraftPresence.instance;
         currentScreen = this;
         this.parentScreen = parentScreen;
     }
 
+    /**
+     * Initializes this Screen
+     * <p>
+     * Responsible for Setting initial Data and creating controls
+     */
     @Override
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
@@ -34,12 +71,26 @@ public class ExtendedScreen extends GuiScreen {
         initialized = true;
     }
 
+    /**
+     * Adds a Compatible Button to this Screen with specified type
+     *
+     * @param buttonIn The Button to add to this Screen
+     * @param <T>      The Button's Class Type
+     * @return The added button with attached class type
+     */
     @Nonnull
     @Override
     protected <T extends GuiButton> T addButton(@Nonnull T buttonIn) {
         return addControl(buttonIn);
     }
 
+    /**
+     * Adds a Compatible Control to this Screen with specified type
+     *
+     * @param buttonIn The Control to add to this Screen
+     * @param <T>      The Control's Class Type
+     * @return The added control with attached class type
+     */
     @Nonnull
     protected <T extends Gui> T addControl(@Nonnull T buttonIn) {
         if (buttonIn instanceof GuiButton && !buttonList.contains(buttonIn)) {
@@ -52,6 +103,13 @@ public class ExtendedScreen extends GuiScreen {
         return buttonIn;
     }
 
+    /**
+     * Adds a Compatible Scroll List to this Screen with specified type
+     *
+     * @param buttonIn The Scroll List to add to this Screen
+     * @param <T>      The Scroll List's Class Type
+     * @return The added scroll list with attached class type
+     */
     @Nonnull
     protected <T extends ScrollableListControl> T addList(@Nonnull T buttonIn) {
         if (!extendedLists.contains(buttonIn)) {
@@ -61,12 +119,24 @@ public class ExtendedScreen extends GuiScreen {
         return buttonIn;
     }
 
+    /**
+     * Preliminary Drawing Event
+     * <p>
+     * Primarily used for rendering before other elements
+     */
     public void preDraw() {
         if (initialized) {
             CraftPresence.GUIS.drawBackground(width, height);
         }
     }
 
+    /**
+     * Renders this Screen, including controls and post-Hover Events
+     *
+     * @param mouseX       The Event Mouse X Coordinate
+     * @param mouseY       The Event Mouse Y Coordinate
+     * @param partialTicks The Rendering Tick Rate
+     */
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         // Ensures initialization events have run first, preventing an NPE
@@ -98,6 +168,11 @@ public class ExtendedScreen extends GuiScreen {
         }
     }
 
+    /**
+     * Event to trigger upon Mouse Input
+     *
+     * @throws IOException if error occurs in event trigger
+     */
     @Override
     public void handleMouseInput() throws IOException {
         for (ScrollableListControl listControl : extendedLists) {
@@ -106,6 +181,12 @@ public class ExtendedScreen extends GuiScreen {
         super.handleMouseInput();
     }
 
+    /**
+     * Event to trigger upon Button Action, including onClick Events
+     *
+     * @param button The Button to trigger upon
+     * @throws IOException if error occurs in event trigger
+     */
     @Override
     protected void actionPerformed(@Nonnull GuiButton button) throws IOException {
         if (button instanceof ExtendedButtonControl) {
@@ -114,6 +195,12 @@ public class ExtendedScreen extends GuiScreen {
         super.actionPerformed(button);
     }
 
+    /**
+     * Event to trigger upon Typing a Key
+     *
+     * @param typedChar The typed Character, if any
+     * @param keyCode   The KeyCode entered, if any
+     */
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == Keyboard.KEY_ESCAPE) {
@@ -128,6 +215,14 @@ public class ExtendedScreen extends GuiScreen {
         }
     }
 
+    /**
+     * Event to trigger upon the mouse being clicked
+     *
+     * @param mouseX      The Event Mouse X Coordinate
+     * @param mouseY      The Event Mouse Y Coordinate
+     * @param mouseButton The Event Mouse Button Clicked
+     * @throws IOException if error occurs in event trigger
+     */
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         for (Gui extendedControl : extendedControls) {
@@ -139,6 +234,9 @@ public class ExtendedScreen extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+    /**
+     * Event to trigger on each tick
+     */
     @Override
     public void updateScreen() {
         for (Gui extendedControl : extendedControls) {
@@ -149,16 +247,31 @@ public class ExtendedScreen extends GuiScreen {
         }
     }
 
+    /**
+     * Event to trigger upon exiting the Gui
+     */
     @Override
     public void onGuiClosed() {
         CraftPresence.GUIS.resetIndex();
         Keyboard.enableRepeatEvents(false);
     }
 
+    /**
+     * Renders a String in the Screen, in the style of a notice
+     *
+     * @param notice The List of Strings to render
+     */
     public void drawNotice(final List<String> notice) {
         drawNotice(notice, 2, 3);
     }
 
+    /**
+     * Renders a String in the Screen, in the style of a notice
+     *
+     * @param notice      The List of Strings to render
+     * @param widthScale  The Scale away from the center X to render at
+     * @param heightScale The Scale away from the center Y to render at
+     */
     public void drawNotice(final List<String> notice, int widthScale, int heightScale) {
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {

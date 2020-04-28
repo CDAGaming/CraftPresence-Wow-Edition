@@ -5,7 +5,6 @@
 ### Changes
 
 *   Source upgrades for ForgeGradle 3.x and Gradle on 1.12.2 and above
-*   Now Signing 1.13+ Builds
 *   Added a `Format Words` option in Advanced Settings, used to toggle automatic capitalization in RPC Strings
 *   Added `Entity Target` and `Entity Riding` Options in Advanced Settings to begin the Per-Entity System
 *   Changed `&ENTITY&` placeholder belonging to Items and Blocks to `&TILEENTITY&`
@@ -15,6 +14,7 @@
 
 ### Fixes
 
+*   Fixed missing Backend Gradle functions on ForgeGradle 3.x Ports
 *   Fixed `&difficulty&` placeholder interpretation
 *   Fixed a NPE that occurred without a Discord Avatar
 *   Fixed a possible 403 HTTP Error in receiving Update Information

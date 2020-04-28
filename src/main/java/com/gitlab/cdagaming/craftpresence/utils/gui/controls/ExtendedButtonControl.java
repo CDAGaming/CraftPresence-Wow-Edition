@@ -195,20 +195,36 @@ public class ExtendedButtonControl extends GuiButton {
         return optionalArgs;
     }
 
+    /**
+     * Set the Event to occur upon Mouse Click
+     *
+     * @param event The event to occur
+     */
     public void setOnClick(Runnable event) {
         onPushEvent = event;
     }
 
+    /**
+     * Triggers the onClick event to occur
+     */
     public void onClick() {
         if (onPushEvent != null) {
             onPushEvent.run();
         }
     }
 
+    /**
+     * Sets the Event to occur upon Mouse Over
+     *
+     * @param event The event to occur
+     */
     public void setOnHover(Runnable event) {
         onHoverEvent = event;
     }
 
+    /**
+     * Triggers the onHover event to occur
+     */
     public void onHover() {
         if (onHoverEvent != null) {
             onHoverEvent.run();

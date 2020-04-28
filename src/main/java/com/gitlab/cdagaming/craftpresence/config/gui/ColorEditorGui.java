@@ -256,6 +256,9 @@ public class ColorEditorGui extends ExtendedScreen {
         }
     }
 
+    /**
+     * Initialize Texture and Color Values for Initial Preview and Page
+     */
     private void initValues() {
         if (!StringUtils.isNullOrEmpty(configValueName)) {
             if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor)) {
@@ -296,6 +299,9 @@ public class ColorEditorGui extends ExtendedScreen {
         }
     }
 
+    /**
+     * Synchronize RGBA, Hex, and Texture Settings for Preview
+     */
     private void syncValues() {
         // Page 1 - RGBA / Hex Syncing
         if (pageNumber == 0) {
