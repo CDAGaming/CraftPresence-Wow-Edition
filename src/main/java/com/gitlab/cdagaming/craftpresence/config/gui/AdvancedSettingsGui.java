@@ -35,11 +35,11 @@ import net.minecraft.client.gui.GuiScreen;
 import java.util.Arrays;
 
 public class AdvancedSettingsGui extends ExtendedScreen {
-    private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, entityTargetMessagesButton, entityRidingMessagesButton;
+    private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, entityTargetMessagesButton, entityAttackingMessagesButton, entityRidingMessagesButton;
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton;
     private ExtendedTextControl splitCharacter;
-    private String dynamicTargetString, dynamicRidingString;
+    private String dynamicTargetString, dynamicAttackingString, dynamicRidingString;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -161,9 +161,43 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         }
                 )
         );
-        entityRidingMessagesButton = addControl(
+        entityAttackingMessagesButton = addControl(
                 new ExtendedButtonControl(
                         calc2, CraftPresence.GUIS.getButtonY(3),
+                        160, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityattackingmessages"),
+                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityAttackingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
+                        () -> {
+                            if (!entityAttackingMessagesButton.enabled) {
+                                CraftPresence.GUIS.drawMultiLineString(
+                                        StringUtils.splitTextByNewLine(
+                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityattackingmessages"))
+                                        ),
+                                        getMouseX(), getMouseY(),
+                                        width, height,
+                                        -1,
+                                        mc.fontRenderer,
+                                        true
+                                );
+                            } else {
+                                CraftPresence.GUIS.drawMultiLineString(
+                                        StringUtils.splitTextByNewLine(
+                                                dynamicAttackingString
+                                        ),
+                                        getMouseX(), getMouseY(),
+                                        width, height,
+                                        -1,
+                                        mc.fontRenderer,
+                                        true
+                                );
+                            }
+                        }
+                )
+        );
+        entityRidingMessagesButton = addControl(
+                new ExtendedButtonControl(
+                        calc1, CraftPresence.GUIS.getButtonY(4),
                         160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityridingmessages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityRidingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
@@ -199,8 +233,8 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         // Adding Character Editor Button
         addControl(
                 new ExtendedButtonControl(
-                        (width / 2) - 90, CraftPresence.GUIS.getButtonY(4),
-                        180, 20,
+                        calc2, CraftPresence.GUIS.getButtonY(4),
+                        160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.chareditor"),
                         () -> CraftPresence.GUIS.openScreen(new CharacterEditorGui(currentScreen))
                 )
@@ -417,6 +451,11 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
                                 CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_TARGET_NAME, CraftPresence.ENTITIES.CURRENT_TARGET_TAGS)));
 
+        dynamicAttackingString =
+                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityattackingmessages",
+                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_ATTACKING_NAME, CraftPresence.ENTITIES.CURRENT_ATTACKING_TAGS)));
+
         dynamicRidingString =
                 ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
                         ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
@@ -434,6 +473,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         guiMessagesButton.enabled = CraftPresence.GUIS.enabled;
         itemMessagesButton.enabled = CraftPresence.TILE_ENTITIES.enabled;
         entityTargetMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
+        entityAttackingMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
         entityRidingMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
 
         super.drawScreen(mouseX, mouseY, partialTicks);

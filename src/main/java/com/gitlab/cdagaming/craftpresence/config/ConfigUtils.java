@@ -65,7 +65,7 @@ public class ConfigUtils {
             NAME_playerAmountPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode,
-            NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityRidingMessages;
+            NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
@@ -90,7 +90,7 @@ public class ConfigUtils {
     // ADVANCED
     public boolean enableCommands, enablePERGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode;
     public String splitCharacter;
-    public String[] guiMessages, itemMessages, entityTargetMessages, entityRidingMessages;
+    public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
     public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
     public boolean stripTranslationColors, showLoggingInChat;
@@ -187,6 +187,7 @@ public class ConfigUtils {
         NAME_guiMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.guimessages").replaceAll(" ", "_");
         NAME_itemMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
         NAME_entityTargetMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entitytargetmessages").replaceAll(" ", "_");
+        NAME_entityAttackingMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entityattackingmessages").replaceAll(" ", "_");
         NAME_entityRidingMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entityridingmessages").replaceAll(" ", "_");
         enableCommands = true;
         enablePERGUI = false;
@@ -199,6 +200,7 @@ public class ConfigUtils {
         guiMessages = new String[]{"default;In &gui&"};
         itemMessages = new String[]{"default;Holding &main&"};
         entityTargetMessages = new String[]{"default;Targeting &entity&"};
+        entityAttackingMessages = new String[]{"default;Attacking &entity&"};
         entityRidingMessages = new String[]{"default;Riding &entity&"};
         // ACCESSIBILITY
         NAME_tooltipBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltipbgcolor").replaceAll(" ", "_");

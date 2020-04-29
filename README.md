@@ -67,6 +67,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 *   &GUI& - The GUI Message from your GUI Settings, if enabled and in use
 *   &TILEENTITY& - The TileEntity (Block/Item) Message from your Advanced -> Item Messages Settings, if enabled and in use
 *   &TARGETENTITY& - The Targeted Entity Message from your Advanced -> Entity Target Messages Setting, if Per-Entity is enabled and in use
+*   &ATTACKINGENTITY& - The Attacking Entity Message from your Advanced -> Entity Attacking Messages Setting, if Per-Entity is enabled and in use
 *   &RIDINGENTITY& - The Riding Entity Message from your Advanced -> Entity Riding Messages Setting, if Per-Entity is enabled and in use
 
 (For Image Keys, only the first placeholder and an additional suffix if any will be used)
