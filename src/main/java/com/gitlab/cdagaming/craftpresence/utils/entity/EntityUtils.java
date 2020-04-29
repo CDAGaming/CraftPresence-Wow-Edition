@@ -24,6 +24,7 @@
 package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
@@ -223,36 +224,40 @@ public class EntityUtils {
                 !NEW_CURRENT_RIDING.equals(CURRENT_RIDING) || !NEW_CURRENT_RIDING_NAME.equals(CURRENT_RIDING_NAME)) ||
                 (NEW_CURRENT_RIDING == null && CURRENT_RIDING != null);
 
-        if (hasTargetChanged || hasAttackingChanged || hasRidingChanged) {
+        if (hasTargetChanged) {
             CURRENT_TARGET = NEW_CURRENT_TARGET;
-            CURRENT_ATTACKING = NEW_CURRENT_ATTACKING;
-            CURRENT_RIDING = NEW_CURRENT_RIDING;
-
             CURRENT_TARGET_TAG = CURRENT_TARGET != null ? CURRENT_TARGET.writeToNBT(new NBTTagCompound()) : null;
-            CURRENT_ATTACKING_TAG = CURRENT_ATTACKING != null ? CURRENT_ATTACKING.writeToNBT(new NBTTagCompound()) : null;
-            CURRENT_RIDING_TAG = CURRENT_RIDING != null ? CURRENT_RIDING.writeToNBT(new NBTTagCompound()) : null;
+            final List<String> NEW_CURRENT_TARGET_TAGS = CURRENT_TARGET_TAG != null ? Lists.newArrayList(CURRENT_TARGET_TAG.getKeySet()) : Lists.newArrayList();
 
-            // Synchronize Tag List, if applicable
-            CURRENT_TARGET_TAGS.clear();
-            CURRENT_ATTACKING_TAGS.clear();
-            CURRENT_RIDING_TAGS.clear();
-
-            if (CURRENT_TARGET_TAG != null) {
-                CURRENT_TARGET_TAGS.addAll(CURRENT_TARGET_TAG.getKeySet());
+            if (!NEW_CURRENT_TARGET_TAGS.equals(CURRENT_TARGET_TAGS)) {
+                CURRENT_TARGET_TAGS = NEW_CURRENT_TARGET_TAGS;
             }
-
-            if (CURRENT_ATTACKING_TAG != null) {
-                CURRENT_ATTACKING_TAGS.addAll(CURRENT_ATTACKING_TAG.getKeySet());
-            }
-
-            if (CURRENT_RIDING_TAG != null) {
-                CURRENT_RIDING_TAGS.addAll(CURRENT_RIDING_TAG.getKeySet());
-            }
-
             CURRENT_TARGET_NAME = NEW_CURRENT_TARGET_NAME;
-            CURRENT_ATTACKING_NAME = NEW_CURRENT_ATTACKING_NAME;
-            CURRENT_RIDING_NAME = NEW_CURRENT_RIDING_NAME;
+        }
 
+        if (hasAttackingChanged) {
+            CURRENT_ATTACKING = NEW_CURRENT_ATTACKING;
+            CURRENT_ATTACKING_TAG = CURRENT_ATTACKING != null ? CURRENT_ATTACKING.writeToNBT(new NBTTagCompound()) : null;
+            final List<String> NEW_CURRENT_ATTACKING_TAGS = CURRENT_ATTACKING_TAG != null ? Lists.newArrayList(CURRENT_ATTACKING_TAG.getKeySet()) : Lists.newArrayList();
+
+            if (!NEW_CURRENT_ATTACKING_TAGS.equals(CURRENT_ATTACKING_TAGS)) {
+                CURRENT_ATTACKING_TAGS = NEW_CURRENT_ATTACKING_TAGS;
+            }
+            CURRENT_ATTACKING_NAME = NEW_CURRENT_ATTACKING_NAME;
+        }
+
+        if (hasRidingChanged) {
+            CURRENT_RIDING = NEW_CURRENT_RIDING;
+            CURRENT_RIDING_TAG = CURRENT_RIDING != null ? CURRENT_RIDING.writeToNBT(new NBTTagCompound()) : null;
+            final List<String> NEW_CURRENT_RIDING_TAGS = CURRENT_RIDING_TAG != null ? Lists.newArrayList(CURRENT_RIDING_TAG.getKeySet()) : Lists.newArrayList();
+
+            if (!NEW_CURRENT_RIDING_TAGS.equals(CURRENT_RIDING_TAGS)) {
+                CURRENT_RIDING_TAGS = NEW_CURRENT_RIDING_TAGS;
+            }
+            CURRENT_RIDING_NAME = NEW_CURRENT_RIDING_NAME;
+        }
+
+        if (hasTargetChanged || hasAttackingChanged || hasRidingChanged) {
             allEntitiesEmpty = CURRENT_TARGET == null && CURRENT_ATTACKING == null && CURRENT_RIDING == null;
             updateEntityPresence();
         }
@@ -339,6 +344,18 @@ public class EntityUtils {
         if (!tags.isEmpty()) {
             for (String tagName : tags) {
                 finalString.append("\n - &").append(tagName).append("&");
+
+                if (ModUtils.IS_DEV) {
+                    // If in Debug Mode, also append the Tag's value to the placeholder String
+                    final String tagValue =
+                            tags.equals(CURRENT_TARGET_TAGS) ? CURRENT_TARGET_TAG.getTag(tagName).toString() :
+                                    tags.equals(CURRENT_ATTACKING_TAGS) ? CURRENT_ATTACKING_TAG.getTag(tagName).toString() :
+                                            tags.equals(CURRENT_RIDING_TAGS) ? CURRENT_RIDING_TAG.getTag(tagName).toString() : null;
+
+                    if (!StringUtils.isNullOrEmpty(tagValue)) {
+                        finalString.append(" (Value -> ").append(tagValue).append(")");
+                    }
+                }
             }
         }
         return ((!StringUtils.isNullOrEmpty(name) ? name : "None") + " " + (!StringUtils.isNullOrEmpty(finalString.toString()) ? finalString.toString() : "\\n - N/A"));

@@ -39,7 +39,6 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton;
     private ExtendedTextControl splitCharacter;
-    private String dynamicTargetString, dynamicAttackingString, dynamicRidingString;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -149,7 +148,9 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                dynamicTargetString
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_TARGET_NAME, CraftPresence.ENTITIES.CURRENT_TARGET_TAGS)))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -183,7 +184,9 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                dynamicAttackingString
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityattackingmessages",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_ATTACKING_NAME, CraftPresence.ENTITIES.CURRENT_ATTACKING_TAGS)))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -217,7 +220,9 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                dynamicRidingString
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_RIDING_NAME, CraftPresence.ENTITIES.CURRENT_RIDING_TAGS)))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -445,21 +450,6 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         preDraw();
-
-        dynamicTargetString =
-                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages",
-                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
-                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_TARGET_NAME, CraftPresence.ENTITIES.CURRENT_TARGET_TAGS)));
-
-        dynamicAttackingString =
-                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityattackingmessages",
-                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
-                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_ATTACKING_NAME, CraftPresence.ENTITIES.CURRENT_ATTACKING_TAGS)));
-
-        dynamicRidingString =
-                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
-                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
-                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_RIDING_NAME, CraftPresence.ENTITIES.CURRENT_RIDING_TAGS)));
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.advanced");
