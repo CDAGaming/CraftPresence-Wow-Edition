@@ -211,7 +211,7 @@ public class CommandsGui extends ExtendedScreen {
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("entities")) {
                             if (CraftPresence.ENTITIES.enabled) {
-                                CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entities"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, false));
+                                CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, false));
                             } else {
                                 executionString = ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entitytargetmessages") + " + " + ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityridingmessages"));
                             }

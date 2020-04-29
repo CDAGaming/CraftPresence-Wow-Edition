@@ -15,6 +15,7 @@
 ### Fixes
 
 *   Fixed missing Backend Gradle functions on ForgeGradle 3.x Ports
+*   Fixed Possible Gui Rescaling Issues
 *   Fixed `&difficulty&` placeholder interpretation
 *   Fixed a NPE that occurred without a Discord Avatar
 *   Fixed a possible 403 HTTP Error in receiving Update Information

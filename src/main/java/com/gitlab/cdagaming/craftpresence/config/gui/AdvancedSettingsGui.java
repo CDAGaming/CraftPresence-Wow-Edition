@@ -39,6 +39,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton;
     private ExtendedTextControl splitCharacter;
+    private String dynamicTargetString, dynamicRidingString;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -148,7 +149,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages")
+                                                dynamicTargetString
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -182,7 +183,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages")
+                                                dynamicRidingString
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -410,6 +411,16 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         preDraw();
+
+        dynamicTargetString =
+                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages",
+                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_TARGET_NAME, CraftPresence.ENTITIES.CURRENT_TARGET_TAGS)));
+
+        dynamicRidingString =
+                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
+                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_RIDING_NAME, CraftPresence.ENTITIES.CURRENT_RIDING_TAGS)));
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.advanced");

@@ -31,6 +31,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -54,9 +55,25 @@ public class EntityUtils {
      */
     public boolean enabled = false;
     /**
+     * The Player's Currently Targeted Entity Name, if any
+     */
+    public String CURRENT_TARGET_NAME;
+    /**
+     * The Player's Currently Riding Entity Name, if any
+     */
+    public String CURRENT_RIDING_NAME;
+    /**
      * A List of the detected Entity Names
      */
     public List<String> ENTITY_NAMES = Lists.newArrayList();
+    /**
+     * The Player's Currently Targeted Entity's Nbt Tags, if any
+     */
+    public List<String> CURRENT_TARGET_TAGS = Lists.newArrayList();
+    /**
+     * The Player's Currently Riding Entity's Nbt Tags, if any
+     */
+    public List<String> CURRENT_RIDING_TAGS = Lists.newArrayList();
 
     /**
      * The Player's Current Target Entity, if any
@@ -69,14 +86,14 @@ public class EntityUtils {
     private Entity CURRENT_RIDING;
 
     /**
-     * The Player's Currently Targeted Entity Name, if any
+     * The Player's Current Target Tag, if any
      */
-    private String CURRENT_TARGET_NAME;
+    private NBTTagCompound CURRENT_TARGET_TAG;
 
     /**
-     * The Player's Currently Riding Entity Name, if any
+     * The Player's Current Riding Tag, if any
      */
-    private String CURRENT_RIDING_NAME;
+    private NBTTagCompound CURRENT_RIDING_TAG;
 
     /**
      * If the Player doesn't have an Entity in Critical Slots such as Targeted or Riding
@@ -137,7 +154,7 @@ public class EntityUtils {
      * Synchronizes Data related to this module, if needed
      */
     private void updateEntityData() {
-        final Entity NEW_CURRENT_TARGET = CraftPresence.player.getAttackingEntity();
+        final Entity NEW_CURRENT_TARGET = CraftPresence.instance.objectMouseOver.entityHit;
         final Entity NEW_CURRENT_RIDING = CraftPresence.player.getRidingEntity();
 
         String NEW_CURRENT_TARGET_NAME, NEW_CURRENT_RIDING_NAME;
@@ -170,6 +187,21 @@ public class EntityUtils {
         if (hasTargetChanged || hasRidingChanged) {
             CURRENT_TARGET = NEW_CURRENT_TARGET;
             CURRENT_RIDING = NEW_CURRENT_RIDING;
+
+            CURRENT_TARGET_TAG = CURRENT_TARGET != null ? CURRENT_TARGET.serializeNBT() : null;
+            CURRENT_RIDING_TAG = CURRENT_RIDING != null ? CURRENT_RIDING.serializeNBT() : null;
+
+            // Synchronize Tag List, if applicable
+            CURRENT_TARGET_TAGS.clear();
+            CURRENT_RIDING_TAGS.clear();
+
+            if (CURRENT_TARGET_TAG != null) {
+                CURRENT_TARGET_TAGS.addAll(CURRENT_TARGET.serializeNBT().getKeySet());
+            }
+
+            if (CURRENT_RIDING_TAG != null) {
+                CURRENT_RIDING_TAGS.addAll(CURRENT_RIDING.serializeNBT().getKeySet());
+            }
 
             CURRENT_TARGET_NAME = NEW_CURRENT_TARGET_NAME;
             CURRENT_RIDING_NAME = NEW_CURRENT_RIDING_NAME;
@@ -204,6 +236,19 @@ public class EntityUtils {
         entityTargetArgs.add(new Tuple<>("&entity&", CURRENT_TARGET_NAME));
         entityRidingArgs.add(new Tuple<>("&entity&", CURRENT_RIDING_NAME));
 
+        // Extend Arguments, if tags available
+        if (!CURRENT_TARGET_TAGS.isEmpty()) {
+            for (String tagName : CURRENT_TARGET_TAGS) {
+                entityTargetArgs.add(new Tuple<>("&" + tagName + "&", CURRENT_TARGET_TAG.getTag(tagName).toString()));
+            }
+        }
+
+        if (!CURRENT_RIDING_TAGS.isEmpty()) {
+            for (String tagName : CURRENT_RIDING_TAGS) {
+                entityRidingArgs.add(new Tuple<>("&" + tagName + "&", CURRENT_RIDING_TAG.getTag(tagName).toString()));
+            }
+        }
+
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
             entityTargetArgs.addAll(CraftPresence.CLIENT.generalArgs);
@@ -223,6 +268,19 @@ public class EntityUtils {
             CraftPresence.CLIENT.initArgumentData("&RIDINGENTITY&");
             CraftPresence.CLIENT.initIconData("&RIDINGENTITY&");
         }
+    }
+
+    /**
+     * Generates Entity Tag Placeholder String
+     */
+    public String generatePlaceholderString(final String name, final List<String> tags) {
+        final StringBuilder finalString = new StringBuilder();
+        if (!tags.isEmpty()) {
+            for (String tagName : tags) {
+                finalString.append("\n - &").append(tagName).append("&");
+            }
+        }
+        return ((!StringUtils.isNullOrEmpty(name) ? name : "None") + " " + (!StringUtils.isNullOrEmpty(finalString.toString()) ? finalString.toString() : "\\n - N/A"));
     }
 
     /**

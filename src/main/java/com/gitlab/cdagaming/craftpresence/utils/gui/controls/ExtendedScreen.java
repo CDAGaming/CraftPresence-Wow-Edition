@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -92,6 +93,23 @@ public class ExtendedScreen extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
         super.initGui();
         initialized = true;
+    }
+
+    /**
+     * Event to trigger upon Window Resize
+     *
+     * @param mcIn The Minecraft Instance
+     * @param w    The New Screen Width
+     * @param h    The New Screen Height
+     */
+    @Override
+    public void onResize(@Nonnull Minecraft mcIn, int w, int h) {
+        initialized = false;
+
+        extendedControls.clear();
+        extendedLists.clear();
+
+        super.onResize(mcIn, w, h);
     }
 
     /**
@@ -275,6 +293,7 @@ public class ExtendedScreen extends GuiScreen {
      */
     @Override
     public void onGuiClosed() {
+        initialized = false;
         CraftPresence.GUIS.resetIndex();
         Keyboard.enableRepeatEvents(false);
     }

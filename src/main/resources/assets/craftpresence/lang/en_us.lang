@@ -26,7 +26,7 @@ gui.config.title.selector.biome=CraftPresence - Select a Biome
 gui.config.title.selector.server=CraftPresence - Select Server IP
 gui.config.title.selector.gui=CraftPresence - Select a Gui
 gui.config.title.selector.item=CraftPresence - Select an Item
-gui.config.title.selector.entities=CraftPresence - Select an Entity
+gui.config.title.selector.entity=CraftPresence - Select an Entity
 gui.config.title.selector.icon=CraftPresence - Select an Icon
 gui.config.title.selector.view.assets.large=CraftPresence - Discord Large Assets
 gui.config.title.selector.view.assets.small=CraftPresence - Discord Small Assets
@@ -87,6 +87,7 @@ gui.config.message.emptylist=This List is Empty and Cannot be Displayed!\n\n Ple
 gui.config.hoverMessage.access=**Enable "%1$s" to use this Menu**
 gui.config.hoverMessage.defaultempty=**Default Info cannot be Empty and Must be Valid**
 gui.config.hoverMessage.valuename=Name to Identify this Value
+gui.config.message.entity.tags=Current Tag Placeholders -> %1$s
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon
@@ -183,8 +184,8 @@ gui.config.comment.advanced.formatwords=Toggles automatic capitalizing of words 
 gui.config.comment.advanced.debugmode=Toggles Developer Mode, showing debug features and enabling debug logging
 gui.config.comment.advanced.guimessages=Customize Messages to display with Guis\n (Manual Format: gui;message)\n Available Placeholders:\n - &gui& = Gui Name\n - &class& = Gui Class Name\n - &screen& = Gui Screen Instance Name
 gui.config.comment.advanced.itemmessages=Customize Messages to display with Items\n (Manual Format: item;message)\n Available Placeholders:\n - &main& = Current Main Hand Item\n - &offhand& = Current OffHand Item\n - &helmet& = Currently Equipped Helmet\n - &chest& = Currently Equipped ChestPiece\n - &legs& = Currently Equipped Leggings\n - &boots& = Currently Equipped Boots
-gui.config.comment.advanced.entitytargetmessages=Customize Messages to display when pointing at an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)
-gui.config.comment.advanced.entityridingmessages=Customize Messages to display when riding an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)
+gui.config.comment.advanced.entitytargetmessages=Customize Messages to display when pointing at an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
+gui.config.comment.advanced.entityridingmessages=Customize Messages to display when riding an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
 ## KEYBIND MESSAGES ##
 key.craftpresence.category=CraftPresence - Controls
 key.craftpresence.config_keybind=Config Gui Keybind
