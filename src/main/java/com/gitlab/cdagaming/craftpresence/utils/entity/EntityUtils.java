@@ -228,9 +228,9 @@ public class EntityUtils {
             CURRENT_ATTACKING = NEW_CURRENT_ATTACKING;
             CURRENT_RIDING = NEW_CURRENT_RIDING;
 
-            CURRENT_TARGET_TAG = CURRENT_TARGET != null ? CURRENT_TARGET.serializeNBT() : null;
-            CURRENT_ATTACKING_TAG = CURRENT_ATTACKING != null ? CURRENT_ATTACKING.serializeNBT() : null;
-            CURRENT_RIDING_TAG = CURRENT_RIDING != null ? CURRENT_RIDING.serializeNBT() : null;
+            CURRENT_TARGET_TAG = CURRENT_TARGET != null ? CURRENT_TARGET.writeToNBT(new NBTTagCompound()) : null;
+            CURRENT_ATTACKING_TAG = CURRENT_ATTACKING != null ? CURRENT_ATTACKING.writeToNBT(new NBTTagCompound()) : null;
+            CURRENT_RIDING_TAG = CURRENT_RIDING != null ? CURRENT_RIDING.writeToNBT(new NBTTagCompound()) : null;
 
             // Synchronize Tag List, if applicable
             CURRENT_TARGET_TAGS.clear();
@@ -238,15 +238,15 @@ public class EntityUtils {
             CURRENT_RIDING_TAGS.clear();
 
             if (CURRENT_TARGET_TAG != null) {
-                CURRENT_TARGET_TAGS.addAll(CURRENT_TARGET.serializeNBT().getKeySet());
+                CURRENT_TARGET_TAGS.addAll(CURRENT_TARGET_TAG.getKeySet());
             }
 
             if (CURRENT_ATTACKING_TAG != null) {
-                CURRENT_ATTACKING_TAGS.addAll(CURRENT_ATTACKING.serializeNBT().getKeySet());
+                CURRENT_ATTACKING_TAGS.addAll(CURRENT_ATTACKING_TAG.getKeySet());
             }
 
             if (CURRENT_RIDING_TAG != null) {
-                CURRENT_RIDING_TAGS.addAll(CURRENT_RIDING.serializeNBT().getKeySet());
+                CURRENT_RIDING_TAGS.addAll(CURRENT_RIDING_TAG.getKeySet());
             }
 
             CURRENT_TARGET_NAME = NEW_CURRENT_TARGET_NAME;
