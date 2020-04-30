@@ -272,11 +272,10 @@ public class ColorEditorGui extends ExtendedScreen {
             syncValues();
         }
 
-        super.keyTyped(typedChar, keyCode);
-
         if (keyCode == Keyboard.KEY_NUMPADENTER || keyCode == Keyboard.KEY_RETURN) {
             syncValues();
         }
+        super.keyTyped(typedChar, keyCode);
     }
 
     /**

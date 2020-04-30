@@ -32,7 +32,6 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonContr
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 public class GeneralSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton;
@@ -47,8 +46,6 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
     @Override
     public void initGui() {
-        Keyboard.enableRepeatEvents(true);
-
         clientID = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,

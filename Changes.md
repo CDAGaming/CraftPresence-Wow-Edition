@@ -11,11 +11,15 @@
 *   Changed `&ENTITY&` placeholder belonging to Items and Blocks to `&TILEENTITY&`
 *   Backend Upgrades and Rewrites to Gui Screens and related Utilities
 *   Localization Updates to Update Checker
+*   1.13.2 Rift Port now Temporarily Deprecated due to lack of support and Maven Downtime
 *   Minor cleanups and backend improvements
 
 ### Fixes
 
 *   Fixed missing Backend Gradle functions on ForgeGradle 3.x Ports
+*   Fixed Improper Version Label on 1.13+ Ports
+*   Fixed Focus Gui Issues again on 1.13+ Ports
+*   Fixed Rare Instances of Button Actions not functioning on 1.13+ Ports
 *   Fixed Possible Gui Rescaling Issues
 *   Fixed `&difficulty&` placeholder interpretation
 *   Fixed a NPE that occurred without a Discord Avatar
