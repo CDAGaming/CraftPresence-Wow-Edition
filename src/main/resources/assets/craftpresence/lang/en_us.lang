@@ -188,9 +188,16 @@ gui.config.comment.advanced.itemmessages=Customize Messages to display with Item
 gui.config.comment.advanced.entitytargetmessages=Customize Messages to display when pointing at an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
 gui.config.comment.advanced.entityattackingmessages=Customize Messages to display when attacking an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
 gui.config.comment.advanced.entityridingmessages=Customize Messages to display when riding an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
+gui.config.comment.accessibility.tooltipbgcolor=The Color or texture to be used when rendering CraftPresence Tooltip backgrounds
+gui.config.comment.accessibility.tooltipbordercolor=The Color or texture to be used when rendering CraftPresence Tooltip borders
+gui.config.comment.accessibility.guibgcolor=The Color or texture to be used when rendering CraftPresence Gui Backgrounds
+gui.config.comment.accessibility.languageid=The Locale or Language ID to be used for Translating this mod's Strings
+gui.config.comment.accessibility.striptranslationcolors=Allows CraftPresence to remove Color and Formatting Codes from it's translations
+gui.config.comment.accessibility.showlogginginchat=Allows CraftPresence to display it's Logging in the Chat Hud
 ## KEYBIND MESSAGES ##
 key.craftpresence.category=CraftPresence - Controls
-key.craftpresence.config_keybind=Config Gui Keybind
+key.craftpresence.config_keybind.name=Config Gui Keybind
+key.craftpresence.config_keybind.description=The KeyCode to press to access the Config Screen
 ## DEFAULT MESSAGES ##
 craftpresence.message.unsupported=This Feature is not supported in this version of Minecraft
 craftpresence.defaults.servermessages.servername=Minecraft Server
