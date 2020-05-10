@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.6.5 (6/??/2020)
+## v1.6.5 (6/26/2020)
 
 ### Changes
 
