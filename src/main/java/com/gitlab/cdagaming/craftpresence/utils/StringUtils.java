@@ -129,7 +129,7 @@ public class StringUtils {
      */
     public static double roundDouble(double value, int places) {
         if (places > 0) {
-            BigDecimal bd = new BigDecimal(Double.toString(value));
+            BigDecimal bd = BigDecimal.valueOf(value);
             bd = bd.setScale(places, RoundingMode.HALF_UP);
             return bd.doubleValue();
         } else {

@@ -25,6 +25,7 @@
 *   Fixed Possible Gui Rescaling Issues
 *   Fixed `&difficulty&` placeholder interpretation
 *   Fixed a NPE that occurred without a Discord Avatar
+*   Fixed Possible Precision Inconsistencies related to Coordinate Information
 *   Fixed a possible 403 HTTP Error in receiving Update Information
 
 ### More Information
