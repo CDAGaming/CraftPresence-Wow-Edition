@@ -7,6 +7,7 @@
 *   Source upgrades for ForgeGradle 3.x and Gradle on 1.12.2 and above
 *   Added a `Format Words` option in Advanced Settings, used to toggle automatic capitalization in RPC Strings
 *   Added `Entity Target`, `Entity Attacking` and `Entity Riding` Options in Advanced Settings to begin the Per-Entity System
+*   Additionally, added NBT Tag Support for Per-Item System
 *   Debug Mode now supports Placeholder Value previews in some circumstances
 *   Changed `&ENTITY&` placeholder belonging to Items and Blocks to `&TILEENTITY&`
 *   Backend Upgrades and Rewrites to Gui Screens and related Utilities
