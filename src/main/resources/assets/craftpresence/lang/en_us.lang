@@ -108,6 +108,7 @@ gui.config.name.servermessages.servermotd=Default Server MOTD
 gui.config.name.servermessages.servername=Default Server Name
 gui.config.name.servermessages.servermessages=Server Messages
 gui.config.name.statusmessages.mainmenumsg=Main Menu Message
+gui.config.name.statusmessages.loadingmsg=Loading Message
 gui.config.name.statusmessages.lanmsg=LAN Game Message
 gui.config.name.statusmessages.singleplayermsg=Singleplayer Game Message
 gui.config.name.statusmessages.placeholder.packmsg=ModPack Message
@@ -120,6 +121,7 @@ gui.config.name.statusmessages.placeholder.worldmsg=World Data Placeholder
 gui.config.name.statusmessages.placeholder.modsmsg=Mods Placeholder
 gui.config.name.statusmessages.special.vivecraftmsg=Vivecraft Message
 gui.config.name.advanced.splitcharacter=Split Character
+gui.config.name.advanced.refreshrate=Refresh Rate
 gui.config.name.advanced.enablecommands=Enable Commands
 gui.config.name.advanced.enablepergui=Enable Per-Gui System
 gui.config.name.advanced.enableperitem=Enable Per-Item System
@@ -164,6 +166,7 @@ gui.config.comment.servermessages.servermotd=Server MOTD to default to, in the c
 gui.config.comment.servermessages.servername=Server Display Name to default to, in the case of a null Name\n (Also Applies for Direct Connects)
 gui.config.comment.servermessages.servermessages=Customize Messages to display with Servers\n (Manual Format: server_IP;message;icon)\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
 gui.config.comment.statusmessages.mainmenumsg=Message to Display while on the Main Menu
+gui.config.comment.statusmessages.loadingmsg=Message to Display while in a Loading state\n (Meaning between RPC Initializing and the First Refresh)
 gui.config.comment.statusmessages.lanmsg=Message to Display while in a LAN Game\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
 gui.config.comment.statusmessages.singleplayermsg=Message to Display while in Singleplayer\n Available Placeholders:\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
 gui.config.comment.statusmessages.placeholder.packmsg=Message to use for the &pack& placeholder in Presence Settings\n (If a Curse, Twitch, Technic, MCUpdater, or MultiMC Pack is Detected)\n Available Placeholders:\n - &name& = The Pack's Name
@@ -176,6 +179,7 @@ gui.config.comment.statusmessages.placeholder.worldmsg=Message to use for the &w
 gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder in Presence Settings\n Available Placeholders:\n - &modcount& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs
+gui.config.comment.advanced.refreshrate=The time to take in between refreshing the Rich Presence Display and Modules, in seconds
 gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands\n (Enables Command Gui in Main Config Gui)
 gui.config.comment.advanced.enablepergui=Allows CraftPresence to change it's display based on the Gui your in\n Note the Following:\n - Requires an Option in Gui Messages\n - Minecraft's Guis must be Opened once before Configuring due to Obfuscation
 gui.config.comment.advanced.enableperitem=Allows CraftPresence to change it's display based on the Item Your Holding\n Note the Following:\n - Requires an Option in Item Messages
@@ -203,6 +207,7 @@ craftpresence.message.unsupported=This Feature is not supported in this version 
 craftpresence.defaults.servermessages.servername=Minecraft Server
 craftpresence.defaults.servermessages.servermotd=A Minecraft Server
 craftpresence.defaults.state.mainmenu=In the Main Menu
+craftpresence.defaults.state.loading=Loading...
 craftpresence.defaults.state.mcversion=Minecraft %1$s
 craftpresence.defaults.state.lan=Playing on a LAN Server
 craftpresence.defaults.state.singleplayer=Playing Singleplayer

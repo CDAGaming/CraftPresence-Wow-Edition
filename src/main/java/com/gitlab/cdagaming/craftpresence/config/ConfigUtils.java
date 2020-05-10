@@ -60,12 +60,12 @@ public class ConfigUtils {
     public String NAME_defaultServerIcon, NAME_defaultServerName,
             NAME_defaultServerMOTD, NAME_serverMessages;
     // STATUS MESSAGES
-    public String NAME_mainmenuMSG, NAME_lanMSG, NAME_singleplayerMSG, NAME_packPlaceholderMSG,
+    public String NAME_mainmenuMSG, NAME_loadingMSG, NAME_lanMSG, NAME_singleplayerMSG, NAME_packPlaceholderMSG,
             NAME_outerPlayerPlaceholderMSG, NAME_innerPlayerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG,
             NAME_playerAmountPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode,
-            NAME_splitCharacter, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
+            NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
@@ -84,12 +84,13 @@ public class ConfigUtils {
     public String defaultServerIcon, defaultServerName, defaultServerMOTD;
     public String[] serverMessages;
     // STATUS MESSAGES
-    public String mainmenuMSG, lanMSG, singleplayerMSG, packPlaceholderMSG,
+    public String mainmenuMSG, loadingMSG, lanMSG, singleplayerMSG, packPlaceholderMSG,
             outerPlayerPlaceholderMSG, innerPlayerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG,
             playerAmountPlaceholderMSG, worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
     public boolean enableCommands, enablePERGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode;
     public String splitCharacter;
+    public int refreshRate;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
     public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
@@ -152,6 +153,7 @@ public class ConfigUtils {
         serverMessages = new String[]{"default;Playing on &motd&"};
         // STATUS MESSAGES
         NAME_mainmenuMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.mainmenumsg").replaceAll(" ", "_");
+        NAME_loadingMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.loadingmsg").replaceAll(" ", "_");
         NAME_lanMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.lanmsg").replaceAll(" ", "_");
         NAME_singleplayerMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.singleplayermsg").replaceAll(" ", "_");
         NAME_packPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.packmsg").replaceAll(" ", "_");
@@ -164,6 +166,7 @@ public class ConfigUtils {
         NAME_modsPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.placeholder.modsmsg").replaceAll(" ", "_");
         NAME_vivecraftMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.statusmessages.special.vivecraftmsg").replaceAll(" ", "_");
         mainmenuMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.mainmenu");
+        loadingMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.loading");
         lanMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.lan");
         singleplayerMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.singleplayer");
         packPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.pack");
@@ -184,6 +187,7 @@ public class ConfigUtils {
         NAME_formatWords = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.formatwords").replaceAll(" ", "_");
         NAME_debugMode = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.debugmode").replaceAll(" ", "_");
         NAME_splitCharacter = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
+        NAME_refreshRate = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.refreshrate").replaceAll(" ", "_");
         NAME_guiMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.guimessages").replaceAll(" ", "_");
         NAME_itemMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.itemmessages").replaceAll(" ", "_");
         NAME_entityTargetMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entitytargetmessages").replaceAll(" ", "_");
@@ -197,6 +201,7 @@ public class ConfigUtils {
         formatWords = true;
         debugMode = false;
         splitCharacter = ";";
+        refreshRate = 2;
         guiMessages = new String[]{"default;In &gui&"};
         itemMessages = new String[]{"default;Holding &main&"};
         entityTargetMessages = new String[]{"default;Targeting &entity&"};

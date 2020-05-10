@@ -231,7 +231,10 @@ public class CraftPresence {
             }
 
             if (!CONFIG.hasChanged) {
-                if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                if (!SYSTEM.HAS_LOADED) {
+                    // Ensure Loading Presence has already passed, before any other type of presence displays
+                    CommandUtils.setLoadingPresence();
+                } else if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandUtils.setMainMenuPresence();
                 } else if (CommandUtils.isInMainMenu && player != null) {
                     CommandUtils.isInMainMenu = false;

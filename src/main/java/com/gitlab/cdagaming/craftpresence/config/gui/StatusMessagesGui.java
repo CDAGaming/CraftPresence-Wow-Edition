@@ -35,7 +35,7 @@ import org.lwjgl.input.Keyboard;
 public class StatusMessagesGui extends ExtendedScreen {
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
-    private ExtendedTextControl mainMenuMSG, lanMSG, singleplayerMSG, packMSG,
+    private ExtendedTextControl mainMenuMSG, loadingMSG, lanMSG, singleplayerMSG, packMSG,
             outerPlayerMSG, innerPlayerMSG, playerCoordsMSG, playerHealthMSG,
             playerAmountMSG, worldMSG, modsMSG, viveCraftMSG;
 
@@ -134,6 +134,15 @@ public class StatusMessagesGui extends ExtendedScreen {
                 )
         );
 
+        // Page 3 Items
+        loadingMSG = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
+                        180, 20
+                )
+        );
+
         // Page 1 setText
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
         lanMSG.setText(CraftPresence.CONFIG.lanMSG);
@@ -149,6 +158,9 @@ public class StatusMessagesGui extends ExtendedScreen {
         playerHealthMSG.setText(CraftPresence.CONFIG.playerHealthPlaceholderMSG);
         playerAmountMSG.setText(CraftPresence.CONFIG.playerAmountPlaceholderMSG);
         worldMSG.setText(CraftPresence.CONFIG.worldPlaceholderMSG);
+
+        // Page 3 setText
+        loadingMSG.setText(CraftPresence.CONFIG.loadingMSG);
 
         proceedButton = addControl(
                 new ExtendedButtonControl(
@@ -219,6 +231,13 @@ public class StatusMessagesGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.worldPlaceholderMSG = worldMSG.getText();
                             }
+
+                            // Page 3 Saving
+                            if (!loadingMSG.getText().equals(CraftPresence.CONFIG.loadingMSG)) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.loadingMSG = loadingMSG.getText();
+                            }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
                         () -> {
@@ -256,7 +275,7 @@ public class StatusMessagesGui extends ExtendedScreen {
                         20, 20,
                         ">",
                         () -> {
-                            if (pageNumber != 1) {
+                            if (pageNumber != 2) {
                                 pageNumber++;
                             }
                         }
@@ -274,6 +293,7 @@ public class StatusMessagesGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.statusmessages");
 
         final String mainMenuText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.mainmenumsg");
+        final String loadingText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.loadingmsg");
         final String lanText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.lanmsg");
         final String singlePlayerText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.singleplayermsg");
         final String packText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.packmsg");
@@ -344,8 +364,15 @@ public class StatusMessagesGui extends ExtendedScreen {
         worldMSG.setVisible(pageNumber == 1);
         worldMSG.setEnabled(worldMSG.getVisible());
 
+        if (pageNumber == 2) {
+            drawString(mc.fontRenderer, loadingText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        }
+
+        loadingMSG.setVisible(pageNumber == 2);
+        loadingMSG.setEnabled(loadingMSG.getVisible());
+
         previousPageButton.enabled = pageNumber != 0;
-        nextPageButton.enabled = pageNumber != 1;
+        nextPageButton.enabled = pageNumber != 2;
         proceedButton.enabled = !StringUtils.isNullOrEmpty(mainMenuMSG.getText())
                 && !StringUtils.isNullOrEmpty(lanMSG.getText())
                 && !StringUtils.isNullOrEmpty(singleplayerMSG.getText())
@@ -357,7 +384,8 @@ public class StatusMessagesGui extends ExtendedScreen {
                 && !StringUtils.isNullOrEmpty(playerCoordsMSG.getText())
                 && !StringUtils.isNullOrEmpty(playerHealthMSG.getText())
                 && !StringUtils.isNullOrEmpty(playerAmountMSG.getText())
-                && !StringUtils.isNullOrEmpty(worldMSG.getText());
+                && !StringUtils.isNullOrEmpty(worldMSG.getText())
+                && !StringUtils.isNullOrEmpty(loadingMSG.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -414,6 +442,13 @@ public class StatusMessagesGui extends ExtendedScreen {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.worldmsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             }
         }
+
+        if (pageNumber == 2) {
+            // Hovering over Loading Message Label
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(loadingText), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
+        }
     }
 
     @Override
@@ -422,7 +457,7 @@ public class StatusMessagesGui extends ExtendedScreen {
             pageNumber--;
         }
 
-        if (keyCode == Keyboard.KEY_DOWN && pageNumber != 1) {
+        if (keyCode == Keyboard.KEY_DOWN && pageNumber != 2) {
             pageNumber++;
         }
 

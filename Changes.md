@@ -11,6 +11,8 @@
 *   Changed `&ENTITY&` placeholder belonging to Items and Blocks to `&TILEENTITY&`
 *   Backend Upgrades and Rewrites to Gui Screens and related Utilities
 *   Localization Updates to Update Checker
+*   Returning from Popular Demand, Added Back the `Loading Message` to Status Messages
+*   Added `Refresh Rate` Option to Advanced Settings to control the rate modules and RPC is refreshed
 *   1.13.2 Rift Port now Temporarily Deprecated due to lack of support and Maven Downtime
 *   Minor cleanups and backend improvements
 

@@ -47,6 +47,11 @@ public class CommandUtils {
     public static boolean isInMainMenu = false;
 
     /**
+     * Whether you are on the Loading Stage in Minecraft
+     */
+    public static boolean isLoadingGame = false;
+
+    /**
      * Reloads and Synchronizes Data, as needed, and performs onTick Events
      *
      * @param forceUpdateRPC Whether to Force an Update to the RPC Data
@@ -92,6 +97,8 @@ public class CommandUtils {
      */
     public static void rebootRPC() {
         CraftPresence.CLIENT.shutDown();
+        CraftPresence.SYSTEM.HAS_LOADED = false;
+
         if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientID)) {
             DiscordAssetUtils.emptyData();
             CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientID;
@@ -123,6 +130,27 @@ public class CommandUtils {
     }
 
     /**
+     * Synchronizes RPC Data towards that of being in a Loading State
+     */
+    public static void setLoadingPresence() {
+        // Form Argument Lists
+        List<Tuple<String, String>> loadingArgs = Lists.newArrayList();
+
+        // Add All Generalized Arguments, if any
+        if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
+            loadingArgs.addAll(CraftPresence.CLIENT.generalArgs);
+        }
+
+        CraftPresence.CLIENT.STATUS = "ready";
+        CraftPresence.CLIENT.clearPartyData(true, false);
+
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.loadingMSG, loadingArgs), false);
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CLIENT.imageOf(CraftPresence.CONFIG.defaultIcon, "", false), true);
+
+        isLoadingGame = true;
+    }
+
+    /**
      * Synchronizes RPC Data towards that of being in the Main Menu
      */
     public static void setMainMenuPresence() {
@@ -134,8 +162,13 @@ public class CommandUtils {
             mainMenuArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        CraftPresence.CLIENT.STATUS = "ready";
-        CraftPresence.CLIENT.clearPartyData(true, false);
+        // Clear Loading Game State, if applicable
+        if (isLoadingGame) {
+            CraftPresence.CLIENT.initArgumentData("&MAINMENU&");
+            CraftPresence.CLIENT.initIconData("&MAINMENU&");
+
+            isLoadingGame = false;
+        }
 
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainmenuMSG, mainMenuArgs), false);
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CLIENT.imageOf(CraftPresence.CONFIG.defaultIcon, "", false), true);

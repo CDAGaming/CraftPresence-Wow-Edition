@@ -76,6 +76,11 @@ public class SystemUtils {
     public boolean IS_64_BIT = false;
 
     /**
+     * If Loading has been completed, classified as after callbacks resync once
+     */
+    public boolean HAS_LOADED = false;
+
+    /**
      * The Current Epoch Unix Timestamp in Milliseconds
      */
     public long CURRENT_TIMESTAMP;
@@ -142,9 +147,12 @@ public class SystemUtils {
             }
         }
 
-        // Every Two Seconds, refresh Callbacks
-        if (ELAPSED_TIME % 2 == 0) {
+        // Every <passTime> Seconds, refresh Callbacks and load state status
+        if (ELAPSED_TIME % CraftPresence.CONFIG.refreshRate == 0) {
             if (!refreshedCallbacks) {
+                if (!HAS_LOADED && (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"))) {
+                    HAS_LOADED = true;
+                }
                 CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 refreshedCallbacks = true;
             }

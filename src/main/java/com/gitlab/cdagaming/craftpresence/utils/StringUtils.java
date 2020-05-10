@@ -326,7 +326,7 @@ public class StringUtils {
      * Determine whether an inputted Object classifies as a valid Integer
      *
      * @param entry The Object to evaluate
-     * @return A Tuple with the format of isValid:parsedStringIfTrue
+     * @return A Tuple with the format of isValid:parsedIntegerIfTrue
      */
     public static Tuple<Boolean, Integer> getValidInteger(final Object entry) {
         return entry != null ? getValidInteger(entry.toString()) : new Tuple<>(false, 0);
@@ -336,7 +336,7 @@ public class StringUtils {
      * Determine whether an inputted String classifies as a valid Integer
      *
      * @param entry The String to evaluate
-     * @return A Tuple with the format of isValid:parsedStringIfTrue
+     * @return A Tuple with the format of isValid:parsedIntegerIfTrue
      */
     public static Tuple<Boolean, Integer> getValidInteger(final String entry) {
         final Tuple<Boolean, Integer> finalSet = new Tuple<>();
@@ -359,7 +359,7 @@ public class StringUtils {
      * Determine whether an inputted String classifies as a valid Long
      *
      * @param entry The String to evaluate
-     * @return A Tuple with the format of isValid:parsedStringIfTrue
+     * @return A Tuple with the format of isValid:parsedLongIfTrue
      */
     public static Tuple<Boolean, Long> getValidLong(final String entry) {
         final Tuple<Boolean, Long> finalSet = new Tuple<>();

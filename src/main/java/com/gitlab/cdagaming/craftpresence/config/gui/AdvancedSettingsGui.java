@@ -38,7 +38,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, entityTargetMessagesButton, entityAttackingMessagesButton, entityRidingMessagesButton;
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
             enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton;
-    private ExtendedTextControl splitCharacter;
+    private ExtendedTextControl splitCharacter, refreshRate;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -49,12 +49,22 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         splitCharacter = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
-                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
-                        180, 20
+                        (width / 2) - 60, CraftPresence.GUIS.getButtonY(1),
+                        45, 20
                 )
         );
         splitCharacter.setText(CraftPresence.CONFIG.splitCharacter);
         splitCharacter.setMaxStringLength(1);
+
+        refreshRate = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        (width / 2) + 103, CraftPresence.GUIS.getButtonY(1),
+                        45, 20
+                )
+        );
+        refreshRate.setText(Integer.toString(CraftPresence.CONFIG.refreshRate));
+        refreshRate.setMaxStringLength(3);
 
         final int calc1 = (width / 2) - 160;
         final int calc2 = (width / 2) + 3;
@@ -382,6 +392,11 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.queuedSplitCharacter = splitCharacter.getText();
                             }
+                            if (!refreshRate.getText().equals(Integer.toString(CraftPresence.CONFIG.refreshRate))) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.refreshRate = StringUtils.getValidInteger(refreshRate.getText()).getSecond();
+                            }
                             if (enableCommandsButton.isChecked() != CraftPresence.CONFIG.enableCommands) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.enableCommands = enableCommandsButton.isChecked();
@@ -454,12 +469,14 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.advanced");
         final String splitCharacterText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.splitcharacter");
+        final String refreshRateText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.refreshrate");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(mc.fontRenderer, splitCharacterText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(mc.fontRenderer, splitCharacterText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(mc.fontRenderer, refreshRateText, (width / 2) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*");
+        proceedButton.enabled = !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*") && StringUtils.getValidInteger(refreshRate.getText()).getFirst();
         guiMessagesButton.enabled = CraftPresence.GUIS.enabled;
         itemMessagesButton.enabled = CraftPresence.TILE_ENTITIES.enabled;
         entityTargetMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
@@ -469,8 +486,13 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Split Character Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(splitCharacterText), mc.fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(splitCharacterText), mc.fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.splitcharacter")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+        }
+
+        // Hovering over Refresh Rate Message Label
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(refreshRateText), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.refreshrate")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 }
