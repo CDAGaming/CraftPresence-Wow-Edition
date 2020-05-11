@@ -48,7 +48,7 @@ public class UpdateInfoGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.checkForUpdates"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.checkForUpdates"),
                         modUpdater::checkForUpdates
                 )
         );
@@ -57,7 +57,7 @@ public class UpdateInfoGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         10, (height - 30),
                         95, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> CraftPresence.GUIS.openScreen(parentScreen)
                 )
         );
@@ -65,7 +65,7 @@ public class UpdateInfoGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width - 105), (height - 30),
                         95, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.download"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.download"),
                         () -> {
                             try {
                                 UrlUtils.openUrl(modUpdater.downloadUrl);

@@ -15,6 +15,7 @@
 *   Returning from Popular Demand, Added Back the `Loading Message` to Status Messages
 *   Added `Refresh Rate` Option to Advanced Settings to control the rate modules and RPC is refreshed
 *   1.13.2 Rift Port now Temporarily Deprecated due to lack of support and Maven Downtime
+*   Adjusted Translations to be more concise and in-line with namespaced id requirements
 *   Minor cleanups and backend improvements
 
 ### Fixes

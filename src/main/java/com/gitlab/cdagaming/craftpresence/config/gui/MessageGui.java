@@ -47,7 +47,7 @@ public class MessageGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> CraftPresence.GUIS.openScreen(parentScreen)
                 )
         );

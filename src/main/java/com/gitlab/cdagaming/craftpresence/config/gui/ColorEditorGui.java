@@ -63,10 +63,10 @@ public class ColorEditorGui extends ExtendedScreen {
         final int calc2 = (width / 2) + 3;
 
         // Page 1 Items
-        final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.redcolorvalue");
-        final String greenTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.greencolorvalue");
-        final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.bluecolorvalue");
-        final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.alphacolorvalue");
+        final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.redcolorvalue");
+        final String greenTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.greencolorvalue");
+        final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.bluecolorvalue");
+        final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.alphacolorvalue");
 
         hexText = addControl(
                 new ExtendedTextControl(
@@ -127,7 +127,7 @@ public class ColorEditorGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         10, (height - 30),
                         80, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             syncValues();
 
@@ -203,8 +203,8 @@ public class ColorEditorGui extends ExtendedScreen {
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
-        final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.preview");
-        final String noticeTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.refresh");
+        final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.preview");
+        final String noticeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.refresh");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
@@ -230,7 +230,7 @@ public class ColorEditorGui extends ExtendedScreen {
 
         // Page 1 Items
         if (pageNumber == 0) {
-            final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.hexcode");
+            final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hexcode");
 
             drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
 
@@ -241,7 +241,7 @@ public class ColorEditorGui extends ExtendedScreen {
 
         // Page 2 Items
         if (pageNumber == 1) {
-            final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.texturepath");
+            final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texturepath");
 
             drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
 

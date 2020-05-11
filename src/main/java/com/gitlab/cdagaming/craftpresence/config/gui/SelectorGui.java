@@ -63,7 +63,7 @@ public class SelectorGui extends ExtendedScreen {
                     new ExtendedButtonControl(
                             (width - 100), (height - 30),
                             90, 20,
-                            ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                            ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                             () -> {
                                 if (allowContinuing && scrollList.currentValue != null) {
                                     if (originalValue != null) {
@@ -144,7 +144,7 @@ public class SelectorGui extends ExtendedScreen {
                         new ExtendedButtonControl(
                                 (width - 195), (height - 30),
                                 90, 20,
-                                ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.addnew"),
+                                ModUtils.TRANSLATOR.translate("gui.config.message.button.addnew"),
                                 () -> CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null, configOption))
                         )
                 );
@@ -160,7 +160,7 @@ public class SelectorGui extends ExtendedScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         preDraw();
 
-        final String searchText = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.search");
+        final String searchText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.search");
         final List<String> modifiedList = Lists.newArrayList();
 
         if (!searchBox.getText().isEmpty()) {
@@ -189,7 +189,7 @@ public class SelectorGui extends ExtendedScreen {
 
         scrollList.itemList = itemList;
 
-        proceedButton.displayString = allowContinuing && scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.continue") : ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back");
+        proceedButton.displayString = allowContinuing && scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

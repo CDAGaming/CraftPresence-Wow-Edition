@@ -71,7 +71,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.reset"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.reset"),
                         () -> ModUtils.loadCharData(true, "UTF-8")
                 )
         );
@@ -80,7 +80,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                         (width / 2) - 90,
                         resetCharsButton.y - 25,
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.sync.all"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.all"),
                         () -> {
                             // Sync ALL Values to FontRender Defaults
                             for (int currentCharIndex = 0; currentCharIndex < StringUtils.MC_CHAR_WIDTH.length - 1; currentCharIndex++) {
@@ -99,7 +99,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, syncAllButton.y - 25,
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.sync.single", charInput.getText()),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText()),
                         () -> {
                             // Sync Single Value to FontRender Defaults
                             if (lastScannedChar > 0 && lastScannedChar < StringUtils.MC_CHAR_WIDTH.length && !ModUtils.TRANSLATOR.isUnicode) {
@@ -116,7 +116,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         5, (height - 30),
                         100, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> CraftPresence.GUIS.openScreen(parentScreen)
                 )
         );
@@ -124,7 +124,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         width - 105, (height - 30),
                         100, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.save"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.save"),
                         () -> {
                             final Tuple<Boolean, Integer> charData = StringUtils.getValidInteger(charWidth.getText());
 
@@ -150,8 +150,8 @@ public class CharacterEditorGui extends ExtendedScreen {
         checkValues();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.character");
-        final String charInputTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.charinput");
-        final String charWidthTitle = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.charwidth");
+        final String charInputTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.charinput");
+        final String charWidthTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.charwidth");
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.character.notice"));
 
         drawNotice(notice, 2, 2);
@@ -187,7 +187,7 @@ public class CharacterEditorGui extends ExtendedScreen {
             drawString(mc.fontRenderer, charWidthTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 10, 0xFFFFFF);
         }
 
-        syncSingleButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.sync.single", charInput.getText());
+        syncSingleButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText());
         saveButton.enabled = syncSingleButton.enabled;
         syncSingleButton.visible = syncSingleButton.enabled;
         saveButton.visible = syncSingleButton.visible;

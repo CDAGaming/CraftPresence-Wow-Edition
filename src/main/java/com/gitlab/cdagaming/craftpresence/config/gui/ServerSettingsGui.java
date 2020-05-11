@@ -81,7 +81,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                             if (!serverMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.servermessages.servermessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -128,7 +128,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (!defaultName.getText().equals(CraftPresence.CONFIG.defaultServerName)) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -151,7 +151,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -175,7 +175,7 @@ public class ServerSettingsGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.servermessages");
         final String serverNameText = ModUtils.TRANSLATOR.translate("gui.config.name.servermessages.servername");
         final String serverMOTDText = ModUtils.TRANSLATOR.translate("gui.config.name.servermessages.servermotd");
-        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.defaultMessage.server");
+        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.server");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);

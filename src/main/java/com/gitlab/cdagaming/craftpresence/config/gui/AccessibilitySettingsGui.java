@@ -174,7 +174,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (entryData == null) {
                                 if (!languageIDText.getText().equals(CraftPresence.CONFIG.languageID)) {
@@ -252,7 +252,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
             entryData = new Tuple<>(button, button.getOptionalArgs()[0]);
 
             backupKeyString = button.displayString;
-            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.enterkey");
+            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.editor.enterkey");
         }
     }
 

@@ -64,7 +64,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                             if (!biomeMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.biomemessages.biomemessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -92,7 +92,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (!defaultMessage.getText().equals(defaultBiomeMSG)) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -105,7 +105,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -127,7 +127,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.biomemessages");
-        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.defaultMessage.biome");
+        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.biome");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);

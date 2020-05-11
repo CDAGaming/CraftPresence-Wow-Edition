@@ -79,7 +79,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (!guiMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.guimessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -112,7 +112,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (!itemMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.itemmessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -148,7 +148,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (!entityTargetMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entitytargetmessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -184,7 +184,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (!entityAttackingMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityattackingmessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -220,7 +220,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (!entityRidingMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access",
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
                                                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entityridingmessages"))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -252,7 +252,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2, CraftPresence.GUIS.getButtonY(4),
                         160, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.chareditor"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.chareditor"),
                         () -> CraftPresence.GUIS.openScreen(new CharacterEditorGui(currentScreen))
                 )
         );
@@ -387,7 +387,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (!splitCharacter.getText().equals(CraftPresence.CONFIG.splitCharacter)) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -448,7 +448,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,

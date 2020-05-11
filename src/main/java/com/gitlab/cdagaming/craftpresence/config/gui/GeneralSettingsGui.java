@@ -244,7 +244,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (!clientID.getText().equals(CraftPresence.CONFIG.clientID)) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -308,7 +308,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,

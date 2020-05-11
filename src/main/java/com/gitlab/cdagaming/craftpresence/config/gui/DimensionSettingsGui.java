@@ -65,7 +65,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                             if (!dimensionMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.access", ModUtils.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionmessages"))
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionmessages"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -111,7 +111,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (!defaultMessage.getText().equals(defaultDimensionMSG)) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -124,7 +124,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -146,7 +146,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimensionmessages");
-        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.defaultMessage.dimension");
+        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.dimension");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);

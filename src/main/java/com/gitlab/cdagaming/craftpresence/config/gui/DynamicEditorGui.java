@@ -125,7 +125,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                     new ExtendedButtonControl(
                             (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                             180, 20,
-                            ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.iconchange"),
+                            ModUtils.TRANSLATOR.translate("gui.config.message.button.iconchange"),
                             () -> {
                                 if (parentScreen instanceof DimensionSettingsGui) {
                                     final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
@@ -154,7 +154,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (!specificMessage.getText().equals(specificMSG) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG))) {
                                 if (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText())) {
@@ -228,7 +228,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -248,8 +248,8 @@ public class DynamicEditorGui extends ExtendedScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         preDraw();
 
-        final String messageText = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.message");
-        final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.editorMessage.valuename");
+        final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
+        final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.valuename");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
         drawString(mc.fontRenderer, messageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -259,7 +259,7 @@ public class DynamicEditorGui extends ExtendedScreen {
             drawString(mc.fontRenderer, removeMSG, (width / 2) - (StringUtils.getStringWidth(removeMSG) / 2), (height - 45), 0xFFFFFF);
         }
 
-        proceedButton.displayString = !specificMessage.getText().equals(specificMSG) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG)) ? ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.continue") : ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back");
+        proceedButton.displayString = !specificMessage.getText().equals(specificMSG) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG)) ? ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
 
         proceedButton.enabled = !(StringUtils.isNullOrEmpty(specificMessage.getText()) && isDefaultValue);
 
@@ -280,7 +280,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
                             ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.itemmessages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
-                                            CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
+                                            CraftPresence.TILE_ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
                     ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
@@ -306,7 +306,7 @@ public class DynamicEditorGui extends ExtendedScreen {
 
         // Hovering over Value Name Label
         if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(valueNameText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.valuename")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.hover.valuename")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 }
