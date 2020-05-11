@@ -258,8 +258,6 @@ public class DynamicEditorGui extends ExtendedScreen {
         } else {
             drawString(mc.fontRenderer, removeMSG, (width / 2) - (StringUtils.getStringWidth(removeMSG) / 2), (height - 45), 0xFFFFFF);
         }
-        newValueName.setVisible(isNewValue);
-        newValueName.setEnabled(newValueName.getVisible());
 
         proceedButton.displayString = !specificMessage.getText().equals(specificMSG) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessage.getText().equals(defaultMSG)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessage.getText()) && !specificMessage.getText().equals(specificMSG)) ? ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.continue") : ModUtils.TRANSLATOR.translate("gui.config.buttonMessage.back");
 
@@ -269,8 +267,43 @@ public class DynamicEditorGui extends ExtendedScreen {
 
         // Hovering over Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.remove")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            if (parentScreen instanceof BiomeSettingsGui) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biomemessages.biomemessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            } else if (parentScreen instanceof DimensionSettingsGui) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimensionmessages.dimensionmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            } else if (parentScreen instanceof ServerSettingsGui) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.servermessages.servermessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            } else if (parentScreen instanceof AdvancedSettingsGui) {
+                if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.guimessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.itemmessages",
+                                    ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                            CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
+                    ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages",
+                                    ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                            CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
+                    ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityAttackingMessages)) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityattackingmessages",
+                                    ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                            CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
+                    ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
+                                    ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                            CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
+                    ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                }
+            }
         }
+
         // Hovering over Value Name Label
         if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(valueNameText), mc.fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.hoverMessage.valuename")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);

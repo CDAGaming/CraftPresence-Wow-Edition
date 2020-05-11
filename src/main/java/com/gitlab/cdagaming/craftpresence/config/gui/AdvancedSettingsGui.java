@@ -124,7 +124,9 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.itemmessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.itemmessages",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                                                CraftPresence.ENTITIES.generatePlaceholderString("", CraftPresence.TILE_ENTITIES.getListFromName(""))))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -159,7 +161,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                                                 CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_TARGET_NAME, CraftPresence.ENTITIES.CURRENT_TARGET_TAGS)))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -195,7 +197,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityattackingmessages",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                                                 CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_ATTACKING_NAME, CraftPresence.ENTITIES.CURRENT_ATTACKING_TAGS)))
                                         ),
                                         getMouseX(), getMouseY(),
@@ -231,7 +233,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.message.entity.tags",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                                                 CraftPresence.ENTITIES.generatePlaceholderString(CraftPresence.ENTITIES.CURRENT_RIDING_NAME, CraftPresence.ENTITIES.CURRENT_RIDING_TAGS)))
                                         ),
                                         getMouseX(), getMouseY(),

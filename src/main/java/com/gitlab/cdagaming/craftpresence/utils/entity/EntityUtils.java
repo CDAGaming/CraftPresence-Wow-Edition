@@ -337,6 +337,18 @@ public class EntityUtils {
     }
 
     /**
+     * Retrieves a List of Tags from a Entity name, if currently equipped
+     *
+     * @param name The Entity Name
+     * @return A List of Tags from a Entity name, if currently equipped
+     */
+    public List<String> getListFromName(final String name) {
+        return name.equalsIgnoreCase(CURRENT_TARGET_NAME) ? CURRENT_TARGET_TAGS
+                : name.equalsIgnoreCase(CURRENT_ATTACKING_NAME) ? CURRENT_ATTACKING_TAGS
+                : name.equalsIgnoreCase(CURRENT_RIDING_NAME) ? CURRENT_RIDING_TAGS : Lists.newArrayList();
+    }
+
+    /**
      * Generates Entity Tag Placeholder String
      *
      * @param name The Entity Name

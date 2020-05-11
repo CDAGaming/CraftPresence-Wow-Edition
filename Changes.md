@@ -19,6 +19,7 @@
 
 ### Fixes
 
+*   Fixed Dynamic Editor Screen to properly display the placeholders when hovering over message label
 *   Fixed missing Backend Gradle functions on ForgeGradle 3.x Ports
 *   Fixed Improper Version Label on 1.13+ Ports
 *   Fixed Focus Gui Issues again on 1.13+ Ports
