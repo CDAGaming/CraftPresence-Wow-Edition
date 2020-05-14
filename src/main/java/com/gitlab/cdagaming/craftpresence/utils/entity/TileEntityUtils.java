@@ -455,6 +455,7 @@ public class TileEntityUtils {
         final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
                 null);
+        final String placeholderItemMSG = CraftPresence.CONFIG.playerItemsPlaceholderMSG;
 
         String offHandItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
@@ -534,7 +535,7 @@ public class TileEntityUtils {
             tileEntityArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String CURRENT_MESSAGE = StringUtils.sequentialReplaceAnyCase(defaultItemMSG, tileEntityArgs);
+        final String CURRENT_MESSAGE = StringUtils.sequentialReplaceAnyCase(placeholderItemMSG, tileEntityArgs);
 
         // NOTE: Only Apply if Items are not Empty, otherwise Clear Argument
         if (!allItemsEmpty) {

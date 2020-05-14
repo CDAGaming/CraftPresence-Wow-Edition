@@ -37,7 +37,7 @@ public class StatusMessagesGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
     private ExtendedTextControl mainMenuMSG, loadingMSG, lanMSG, singleplayerMSG, packMSG,
             outerPlayerMSG, innerPlayerMSG, playerCoordsMSG, playerHealthMSG,
-            playerAmountMSG, worldMSG, modsMSG, viveCraftMSG;
+            playerAmountMSG, playerItemsMSG, worldMSG, modsMSG, viveCraftMSG;
 
     StatusMessagesGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -142,6 +142,13 @@ public class StatusMessagesGui extends ExtendedScreen {
                         180, 20
                 )
         );
+        playerItemsMSG = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(2),
+                        180, 20
+                )
+        );
 
         // Page 1 setText
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
@@ -161,6 +168,7 @@ public class StatusMessagesGui extends ExtendedScreen {
 
         // Page 3 setText
         loadingMSG.setText(CraftPresence.CONFIG.loadingMSG);
+        playerItemsMSG.setText(CraftPresence.CONFIG.playerItemsPlaceholderMSG);
 
         proceedButton = addControl(
                 new ExtendedButtonControl(
@@ -238,6 +246,11 @@ public class StatusMessagesGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.loadingMSG = loadingMSG.getText();
                             }
+                            if (!playerItemsMSG.getText().equals(CraftPresence.CONFIG.playerItemsPlaceholderMSG)) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.playerItemsPlaceholderMSG = playerItemsMSG.getText();
+                            }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
                         () -> {
@@ -305,6 +318,7 @@ public class StatusMessagesGui extends ExtendedScreen {
         final String playerCoordsText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playercoordinatemsg");
         final String playerHealthText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playerhealthmsg");
         final String playerAmountText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playeramountmsg");
+        final String playerItemsText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playeritemmsg");
         final String worldDataText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.worldmsg");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
@@ -366,10 +380,14 @@ public class StatusMessagesGui extends ExtendedScreen {
 
         if (pageNumber == 2) {
             drawString(mc.fontRenderer, loadingText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(mc.fontRenderer, playerItemsText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
         }
 
         loadingMSG.setVisible(pageNumber == 2);
         loadingMSG.setEnabled(loadingMSG.getVisible());
+
+        playerItemsMSG.setVisible(pageNumber == 2);
+        playerItemsMSG.setEnabled(playerItemsMSG.getVisible());
 
         previousPageButton.enabled = pageNumber != 0;
         nextPageButton.enabled = pageNumber != 2;
@@ -385,7 +403,8 @@ public class StatusMessagesGui extends ExtendedScreen {
                 && !StringUtils.isNullOrEmpty(playerHealthMSG.getText())
                 && !StringUtils.isNullOrEmpty(playerAmountMSG.getText())
                 && !StringUtils.isNullOrEmpty(worldMSG.getText())
-                && !StringUtils.isNullOrEmpty(loadingMSG.getText());
+                && !StringUtils.isNullOrEmpty(loadingMSG.getText())
+                && !StringUtils.isNullOrEmpty(playerItemsMSG.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -447,6 +466,10 @@ public class StatusMessagesGui extends ExtendedScreen {
             // Hovering over Loading Message Label
             if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(loadingText), mc.fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.loadingmsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
+            // Hovering over Player Items Message Label
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(playerItemsText), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.playeritemmsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             }
         }
     }
