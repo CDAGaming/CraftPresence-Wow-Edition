@@ -10,6 +10,8 @@
 
 *   Fixed Issues with Item Message Placeholders not working properly (Now boomerangs to a new Placeholder in Item Messages)
 *   Fixed Mismatched Translations in 1.13+ Ports
+*   Fixed Race Case Issues with Mod Shutdown Methods
+*   Fixed an NPE in EntityUtils in 1.14+ Ports
 
 ### More Information
 

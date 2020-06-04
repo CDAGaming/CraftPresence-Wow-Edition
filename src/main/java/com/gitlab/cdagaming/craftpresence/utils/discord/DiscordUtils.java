@@ -178,7 +178,6 @@ public class DiscordUtils {
                 shutDown();
             }
         };
-        shutdownThread.setDaemon(true);
         Runtime.getRuntime().addShutdownHook(shutdownThread);
     }
 
