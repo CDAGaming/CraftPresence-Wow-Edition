@@ -48,7 +48,7 @@ public class DynamicEditorGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         if (isNewValue) {
             mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.addnew");
             if (parentScreen instanceof BiomeSettingsGui) {
@@ -241,7 +241,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

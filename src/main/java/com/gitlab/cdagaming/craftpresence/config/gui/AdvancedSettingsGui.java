@@ -45,7 +45,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         splitCharacter = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
@@ -461,7 +461,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

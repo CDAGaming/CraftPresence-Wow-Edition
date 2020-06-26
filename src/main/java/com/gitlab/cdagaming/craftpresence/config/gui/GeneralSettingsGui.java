@@ -45,7 +45,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         clientID = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
@@ -321,7 +321,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

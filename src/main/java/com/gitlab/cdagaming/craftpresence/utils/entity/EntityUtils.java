@@ -161,20 +161,21 @@ public class EntityUtils {
      */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePEREntity : enabled;
-        isInUse = enabled && CraftPresence.player != null;
         final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
 
         if (needsUpdate) {
             getEntities();
         }
 
-        if (isInUse) {
-            updateEntityData();
-            if (enabled && (CraftPresence.player == null || allEntitiesEmpty)) {
+        if (enabled) {
+            if (CraftPresence.player != null) {
+                isInUse = true;
+                updateEntityData();
+            } else if (isInUse) {
                 clearClientData();
-            } else if (!enabled) {
-                emptyData();
             }
+        } else {
+            emptyData();
         }
     }
 

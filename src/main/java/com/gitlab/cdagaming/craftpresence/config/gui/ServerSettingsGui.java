@@ -43,7 +43,7 @@ public class ServerSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         defaultServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         defaultName = addControl(
@@ -164,7 +164,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

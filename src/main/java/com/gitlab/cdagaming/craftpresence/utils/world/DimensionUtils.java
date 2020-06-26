@@ -101,7 +101,6 @@ public class DimensionUtils {
      */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
-        isInUse = enabled && CraftPresence.player != null;
         final boolean needsUpdate = enabled && (
                 DIMENSION_NAMES.isEmpty() || DIMENSION_IDS.isEmpty() || DIMENSION_TYPES.isEmpty()
         );
@@ -110,13 +109,15 @@ public class DimensionUtils {
             getDimensions();
         }
 
-        if (isInUse) {
-            updateDimensionData();
-            if (enabled && CraftPresence.player == null) {
+        if (enabled) {
+            if (CraftPresence.player != null) {
+                isInUse = true;
+                updateDimensionData();
+            } else if (isInUse) {
                 clearClientData();
-            } else if (!enabled) {
-                emptyData();
             }
+        } else {
+            emptyData();
         }
     }
 

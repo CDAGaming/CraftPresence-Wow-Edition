@@ -43,7 +43,7 @@ public class PresenceSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         // Page 1 Items
         detailsFormat = addControl(
                 new ExtendedTextControl(
@@ -164,7 +164,7 @@ public class PresenceSettingsGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

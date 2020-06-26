@@ -57,7 +57,7 @@ public class SelectorGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         if (itemList != null && !itemList.isEmpty()) {
             proceedButton = addControl(
                     new ExtendedButtonControl(
@@ -150,7 +150,7 @@ public class SelectorGui extends ExtendedScreen {
                 );
             }
 
-            super.initGui();
+            super.initializeUi();
         } else {
             CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.emptylist"))));
         }

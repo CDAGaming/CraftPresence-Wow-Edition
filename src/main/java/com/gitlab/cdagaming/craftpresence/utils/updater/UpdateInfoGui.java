@@ -43,7 +43,7 @@ public class UpdateInfoGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         checkButton = addControl(
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
@@ -77,7 +77,7 @@ public class UpdateInfoGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

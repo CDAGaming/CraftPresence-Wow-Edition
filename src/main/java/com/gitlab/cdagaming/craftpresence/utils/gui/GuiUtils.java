@@ -219,7 +219,6 @@ public class GuiUtils {
      */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI : enabled;
-        isInUse = enabled && (CraftPresence.instance.currentScreen != null || CURRENT_SCREEN != null);
         isFocused = CraftPresence.instance.currentScreen != null && CraftPresence.instance.currentScreen.isFocused();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
@@ -227,13 +226,15 @@ public class GuiUtils {
             getGUIs();
         }
 
-        if (isInUse) {
-            updateGUIData();
-            if (enabled && CraftPresence.instance.currentScreen == null) {
+        if (enabled) {
+            if (CraftPresence.instance.currentScreen != null) {
+                isInUse = true;
+                updateGUIData();
+            } else if (isInUse) {
                 clearClientData();
-            } else if (!enabled) {
-                emptyData();
             }
+        } else {
+            emptyData();
         }
 
         if (openConfigGUI) {

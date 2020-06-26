@@ -49,7 +49,7 @@ public class CharacterEditorGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         charInput = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
@@ -141,7 +141,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

@@ -45,7 +45,7 @@ public class StatusMessagesGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         // Page 1 Items
         mainMenuMSG = addControl(
                 new ExtendedTextControl(
@@ -295,7 +295,7 @@ public class StatusMessagesGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

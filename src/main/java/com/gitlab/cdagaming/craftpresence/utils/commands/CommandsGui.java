@@ -105,7 +105,7 @@ public class CommandsGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         commandInput = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
@@ -126,7 +126,7 @@ public class CommandsGui extends ExtendedScreen {
 
         executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.main");
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

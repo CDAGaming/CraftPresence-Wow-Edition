@@ -107,7 +107,7 @@ public class BiomeUtils {
             if (CraftPresence.player != null) {
                 isInUse = true;
                 updateBiomeData();
-            } else {
+            } else if (isInUse) {
                 clearClientData();
             }
         } else {

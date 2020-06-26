@@ -4,6 +4,7 @@
 
 ### Changes
 
+*   1.16/1.16.1 Officially Supported
 *   Minor Backend Updates
 
 ### Fixes
@@ -12,6 +13,8 @@
 *   Fixed Mismatched Translations in 1.13+ Ports
 *   Fixed Race Case Issues with Mod Shutdown Methods
 *   Fixed an NPE in EntityUtils in 1.14+ Ports
+*   Fixed Possible Button Duplication in Gui's
+*   Rollback a Change that caused Improper Module Clearing
 
 ### More Information
 

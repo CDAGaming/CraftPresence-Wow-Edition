@@ -42,7 +42,7 @@ public class AboutGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         // Adding Version Check Button
         addControl(
                 new ExtendedButtonControl(
@@ -80,7 +80,7 @@ public class AboutGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

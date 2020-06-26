@@ -58,7 +58,7 @@ public class ColorEditorGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         final int calc1 = (width / 2) - 183;
         final int calc2 = (width / 2) + 3;
 
@@ -194,7 +194,7 @@ public class ColorEditorGui extends ExtendedScreen {
 
         initValues();
         syncValues();
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override

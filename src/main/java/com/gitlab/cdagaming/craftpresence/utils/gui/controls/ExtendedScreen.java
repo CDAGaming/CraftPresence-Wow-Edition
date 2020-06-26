@@ -84,15 +84,30 @@ public class ExtendedScreen extends GuiScreen {
     }
 
     /**
-     * Initializes this Screen
+     * Pre-Initializes this Screen
      * <p>
-     * Responsible for Setting initial Data and creating controls
+     * Responsible for Setting preliminary data
      */
     @Override
     public void initGui() {
+        // Clear Data before Initialization
+        buttonList.clear();
+        extendedControls.clear();
+        extendedLists.clear();
+
         Keyboard.enableRepeatEvents(true);
+        initializeUi();
         super.initGui();
         initialized = true;
+    }
+
+    /**
+     * Initializes this Screen
+     * <p>
+     * Responsible for setting initial Data and creating controls
+     */
+    public void initializeUi() {
+        // N/A
     }
 
     /**
@@ -105,10 +120,6 @@ public class ExtendedScreen extends GuiScreen {
     @Override
     public void onResize(@Nonnull Minecraft mcIn, int w, int h) {
         initialized = false;
-
-        extendedControls.clear();
-        extendedLists.clear();
-
         super.onResize(mcIn, w, h);
     }
 

@@ -263,20 +263,21 @@ public class TileEntityUtils {
      */
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
-        isInUse = enabled && CraftPresence.player != null;
         final boolean needsUpdate = enabled && (TILE_ENTITY_NAMES.isEmpty() || TILE_ENTITY_CLASSES.isEmpty());
 
         if (needsUpdate) {
             getEntities();
         }
 
-        if (isInUse) {
-            updateEntityData();
-            if (enabled && (CraftPresence.player == null || allItemsEmpty)) {
+        if (enabled) {
+            if (CraftPresence.player != null) {
+                isInUse = true;
+                updateEntityData();
+            } else if (isInUse) {
                 clearClientData();
-            } else if (!enabled) {
-                emptyData();
             }
+        } else {
+            emptyData();
         }
     }
 

@@ -41,7 +41,7 @@ public class MainGui extends ExtendedScreen {
     }
 
     @Override
-    public void initGui() {
+    public void initializeUi() {
         CraftPresence.GUIS.configGUIOpened = true;
 
         final int calc1 = (width / 2) - 183;
@@ -317,7 +317,7 @@ public class MainGui extends ExtendedScreen {
                 )
         );
 
-        super.initGui();
+        super.initializeUi();
     }
 
     @Override
