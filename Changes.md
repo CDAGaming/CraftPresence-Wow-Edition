@@ -1,10 +1,11 @@
 # CraftPresence Changes
 
-## v1.6.6 (7/24/2020)
+## v1.6.6 (7/31/2020)
 
 ### Changes
 
-*   1.16/1.16.1 Officially Supported
+*   1.16.x Officially Supported
+*   Migrations to Discord IPC Data to use `discord.com` endpoints
 *   Minor Backend Updates
 
 ### Fixes
@@ -14,6 +15,7 @@
 *   Fixed Race Case Issues with Mod Shutdown Methods
 *   Fixed an NPE in EntityUtils in 1.14+ Ports
 *   Fixed Possible Button Duplication in Gui's
+*   Fixed Rounding Issues pertaining to Negative Coordinates
 *   Rollback a Change that caused Improper Module Clearing
 
 ### More Information

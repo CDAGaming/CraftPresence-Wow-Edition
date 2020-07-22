@@ -34,7 +34,7 @@ public class User {
      * Only implemented internally.
      *
      * @param name          user's name
-     * @param discriminator user's discrim
+     * @param discriminator user's discriminator
      * @param id            user's id
      * @param avatar        user's avatar hash, or {@code null} if they have no avatar
      */

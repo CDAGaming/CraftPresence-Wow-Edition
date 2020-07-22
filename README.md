@@ -1,16 +1,19 @@
 # CraftPresence
 Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the DiscordIPC API by [jagrosh](https://github.com/jagrosh)!
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/da684ebb8ce947d7ac8935b5de5dd732)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CDAGaming/CraftPresence-Mirror&amp;utm_campaign=Badge_Grade)
 [![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
+
 [![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 [![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 
 ## Port Notes
-*   CraftPresence for Minecraft 1.14.x and 1.15.x requires the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-*   CraftPresence for Minecraft 1.13.x requires the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
+*   Some versions of CraftPresence for Minecraft 1.14.x, 1.15.x, and 1.16.x require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
+*   Some versions of CraftPresence for Minecraft 1.13.x require the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
 
 ## Features
-Besides having the Ability to Change your Discord Status from "Playing Minecraft",
+In addition to having the Ability to Change your Discord Status from "Playing Minecraft",
 This Mod offers plenty of Customization Options to specify entirely how others see you play.
 From Having Your Current Biome Show Up, To which Dimension you in, as well as which server you're in,
 The Customization Possibilities are limitless, with the only real limit being how creative you customize your display.
@@ -141,8 +144,16 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 *   If requesting an icon be modified or removed from the Default Client ID, please specify a reason why
     *   Mostly just so it can be logged why it was changed for future reference
 
+### Support
+Need Assistance with one of my mods or wish to provide feedback?
+
+I can be contacted via the following methods:
+
+*   [Email](mailto:cstack2011@yahoo.com)
+*   [Discord -> ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP) 
+
 #### Licensing
-This Mod is licensed under the MIT License as well as the Apache 2.0 License
+This Mod is under the MIT License as well as the Apache 2.0 License
 
 This Project makes usage of the following dependencies internally:
 
