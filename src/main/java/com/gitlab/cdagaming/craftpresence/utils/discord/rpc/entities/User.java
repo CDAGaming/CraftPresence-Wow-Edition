@@ -115,7 +115,7 @@ public class User {
      * @return The Users {@link DefaultAvatar} avatar URL.
      */
     public String getDefaultAvatarUrl() {
-        return "https://discordapp.com/assets/" + getDefaultAvatarId() + ".png";
+        return "https://discord.com/assets/" + getDefaultAvatarId() + ".png";
     }
 
     /**

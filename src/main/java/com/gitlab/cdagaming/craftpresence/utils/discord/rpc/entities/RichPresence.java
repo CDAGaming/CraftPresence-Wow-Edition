@@ -164,7 +164,7 @@ public class RichPresence {
      * A chain builder for a {@link RichPresence} object.
      *
      * <p>An accurate description of each field and it's functions can be found
-     * <a href="https://discordapp.com/developers/docs/rich-presence/how-to#updating-presence-update-presence-payload-fields">here</a>
+     * <a href="https://discord.com/developers/docs/rich-presence/how-to#updating-presence-update-presence-payload-fields">here</a>
      */
     public static class Builder {
         private String state;
@@ -243,7 +243,7 @@ public class RichPresence {
          * Sets the key of the uploaded image for the large profile artwork, as well as
          * the text tooltip shown when a cursor hovers over it.
          *
-         * <p>These can be configured in the <a href="https://discordapp.com/developers/applications/me">applications</a>
+         * <p>These can be configured in the <a href="https://discord.com/developers/applications/me">applications</a>
          * page on the discord website.
          *
          * @param largeImageKey  A key to an image to display.
@@ -259,7 +259,7 @@ public class RichPresence {
         /**
          * Sets the key of the uploaded image for the large profile artwork.
          *
-         * <p>These can be configured in the <a href="https://discordapp.com/developers/applications/me">applications</a>
+         * <p>These can be configured in the <a href="https://discord.com/developers/applications/me">applications</a>
          * page on the discord website.
          *
          * @param largeImageKey A key to an image to display.
@@ -273,7 +273,7 @@ public class RichPresence {
          * Sets the key of the uploaded image for the small profile artwork, as well as
          * the text tooltip shown when a cursor hovers over it.
          *
-         * <p>These can be configured in the <a href="https://discordapp.com/developers/applications/me">applications</a>
+         * <p>These can be configured in the <a href="https://discord.com/developers/applications/me">applications</a>
          * page on the discord website.
          *
          * @param smallImageKey  A key to an image to display.
@@ -289,7 +289,7 @@ public class RichPresence {
         /**
          * Sets the key of the uploaded image for the small profile artwork.
          *
-         * <p>These can be configured in the <a href="https://discordapp.com/developers/applications/me">applications</a>
+         * <p>These can be configured in the <a href="https://discord.com/developers/applications/me">applications</a>
          * page on the discord website.
          *
          * @param smallImageKey A key to an image to display.

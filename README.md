@@ -155,4 +155,4 @@ This Project makes usage of the following dependencies internally:
 As with other RPC Mods, this Mod uses your in-Game Data to send Display Information to a 3rd Party
 Service (In this Case, Discord).
 
-The Terms of Service relating to Creating a Discord ID for icons can be found [here](https://discordapp.com/developers/docs/legal)
+The Terms of Service relating to Creating a Discord ID for icons can be found [here](https://discord.com/developers/docs/legal)

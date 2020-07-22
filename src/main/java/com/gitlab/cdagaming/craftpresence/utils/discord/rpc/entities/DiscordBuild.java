@@ -23,17 +23,17 @@ public enum DiscordBuild {
     /**
      * Constant for the current Discord Canary release.
      */
-    CANARY("//canary.discordapp.com/api"),
+    CANARY("//canary.discord.com/api"),
 
     /**
      * Constant for the current Discord Public Test Build or PTB release.
      */
-    PTB("//ptb.discordapp.com/api"),
+    PTB("//ptb.discord.com/api"),
 
     /**
      * Constant for the current stable Discord release.
      */
-    STABLE("//discordapp.com/api"),
+    STABLE("//discord.com/api"),
 
     /**
      * 'Wildcard' build constant used in {@link com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient#connect(DiscordBuild...)

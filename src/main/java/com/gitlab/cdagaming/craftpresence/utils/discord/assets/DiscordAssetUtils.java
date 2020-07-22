@@ -176,7 +176,7 @@ public class DiscordAssetUtils {
         ASSET_LIST = Maps.newHashMap();
 
         try {
-            final String url = "https://discordapp.com/api/oauth2/applications/" + CraftPresence.CONFIG.clientID + "/assets";
+            final String url = "https://discord.com/api/oauth2/applications/" + CraftPresence.CONFIG.clientID + "/assets";
             final DiscordAsset[] assets = UrlUtils.getJSONFromURL(url, DiscordAsset[].class);
 
             if (assets != null) {

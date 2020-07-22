@@ -3,17 +3,16 @@ buildscript {
         mavenCentral()
         jcenter()
         maven { url = "https://files.minecraftforge.net/maven" }
-        maven { url = "https://jitpack.io" }
+        maven { url = "https://gitlab.com/EMC-Framework/maven/raw/master/" }
     }
     dependencies {
-        classpath "com.github.CDAGaming:ForgeGradle:FG_3.0-SNAPSHOT"
+        classpath "net.minecraftforge.gradle:ForgeGradle:3.+"
         classpath "com.github.CDAGaming:CurseGradle:master-SNAPSHOT"
     }
 }
 
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.matthewprenger.cursegradle"
-
 
 import net.minecraftforge.gradle.common.task.SignJar
 import org.apache.tools.ant.filters.ReplaceTokens

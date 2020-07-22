@@ -35,7 +35,7 @@ import java.util.HashMap;
  * <p>
  * The ID provided should be the <b>client ID of the particular
  * application providing Rich Presence</b>, which can be found
- * <a href=https://discordapp.com/developers/applications/me>here</a>.
+ * <a href=https://discord.com/developers/applications/me>here</a>.
  * <p>
  * When initially created using {@link #IPCClient(long)} the client will
  * be inactive awaiting a call to {@link #connect(DiscordBuild...)}.<br>
@@ -66,7 +66,7 @@ public final class IPCClient implements Closeable {
      * This is initially unconnected to Discord.
      *
      * @param clientId The Rich Presence application's client ID, which can be found
-     *                 <a href=https://discordapp.com/developers/applications/me>here</a>
+     *                 <a href=https://discord.com/developers/applications/me>here</a>
      */
     public IPCClient(long clientId) {
         this.clientId = clientId;
@@ -78,7 +78,7 @@ public final class IPCClient implements Closeable {
      * This is initially unconnected to Discord.
      *
      * @param clientId  The Rich Presence application's client ID, which can be found
-     *                  <a href=https://discordapp.com/developers/applications/me>here</a>
+     *                  <a href=https://discord.com/developers/applications/me>here</a>
      * @param debugMode Whether Debug Logging should be shown for this client
      */
     public IPCClient(long clientId, boolean debugMode) {
@@ -507,7 +507,7 @@ public final class IPCClient implements Closeable {
      * Each event corresponds to a different function as a
      * component of the Rich Presence.<br>
      * A full breakdown of each is available
-     * <a href=https://discordapp.com/developers/docs/rich-presence/how-to>here</a>.
+     * <a href=https://discord.com/developers/docs/rich-presence/how-to>here</a>.
      */
     public enum Event {
         NULL(false), // used for confirmation
