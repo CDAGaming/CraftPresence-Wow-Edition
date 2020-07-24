@@ -42,9 +42,9 @@ CraftPresence currently offers the following Commands:
 *   `/cp request` - View Join Request Info
 *   `/cp view currentData` - Displays in Text Form, your Current RPC Data
 *   `/cp view assets (large | small | all)` - Displays all Asset IconKeys available to you
-*   `/cp view dimensions` - Displays all Dimension Names available for use, if Showing Current Dimension is enabled
-*   `/cp view biomes` - Displays all Biome Names available for use, if Showing Current Biome is enabled
-*   `/cp view servers` - Displays all Server Addresses available for use, if Show Game State is enabled
+*   `/cp view dimensions` - Displays all Dimension Names available for use, requires `Show Current Dimension` to be enabled
+*   `/cp view biomes` - Displays all Biome Names available for use, requires `Show Current Biome` to be enabled
+*   `/cp view servers` - Displays all Server Addresses available for use, requires `Show Game State` to be enabled
 *   `/cp view guis` - Displays all GUI Names available for use, if Per-GUI is Enabled
 *   `/cp view items` - Displays all Item Names available for use, if Per-Item is Enabled
 *   `/cp (help | ?)` - Help Command to display the Above Commands and These Explanations
@@ -133,7 +133,7 @@ Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensi
 ### Icon Requesting
 Not seeing an Icon you like or have a suggestion for an Icon to add/modify on the Default Client ID?
 
-If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues/), so long as the following requirements are met:
+If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues/), with the following requirements:
 
 *   If adding an Icon from a dimension, Specify the Mod's Link that the dimension derives from
     *   This is because specific Icon IDs must be used, which can be found by the mod or from checking your Logs/Chat after entering the dimension as CraftPresence will tell you the ID expected
