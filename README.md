@@ -24,7 +24,7 @@ If so, It'll put the Packs Name in your Display as well as Show its Icon (when n
 
 As an example, this is how the mod will convert the pack name to an iconKey:
 
-`All the Mods 3 == allthemods3`
+`All the Mods 3 -> allthemods3`
 
 (Note the above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)
 
@@ -33,7 +33,7 @@ CraftPresence currently offers the following Commands:
 
 (Commands must be prefixed by either `/craftpresence` or `/cp`)
 
-(In v1.5.0 and Above, Commands are now inputted via a new menu called "Commands" in the Config GUI)
+(In v1.5.0 and Above, Commands are usable via a new menu called "Commands" in the Config GUI)
 
 *   `/cp view` - Help Command to display Commands available to view a variety of Display Data
 *   `/cp reload` - Reloads Mod Data (In v1.4.8 and Above, this forces a Tick Event)
@@ -130,7 +130,7 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
 ### Minecraft Object Obfuscation
 Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensions, or Servers must be opened once in the session to be separately customized.
 
-### Icon Request
+### Icon Requesting
 Not seeing an Icon you like or have a suggestion for an Icon to add/modify on the Default Client ID?
 
 If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues/), so long as the following requirements are met:
@@ -139,9 +139,9 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
     *   This is because specific Icon IDs must be used, which can be found by the mod or from checking your Logs/Chat after entering the dimension as CraftPresence will tell you the ID expected
 
 *   A 512x512 or 1024x1024 Icon to be used
-    *   Icons near these sizes are also allowed, but may not give a great final quality
+    *   Icons near these sizes can be used, but may not give a great final quality
 
-*   If requesting an icon be modified or removed from the Default Client ID, please specify a reason why
+*   If requesting an icon to be modified or removed from the Default Client ID, please specify a reason why
     *   Mostly just so it can be logged why it was changed for future reference
 
 ### Support
