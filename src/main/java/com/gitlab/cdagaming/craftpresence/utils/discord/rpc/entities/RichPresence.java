@@ -104,7 +104,7 @@ public class RichPresence {
             }
         }
 
-        if (partyId != null) {
+        if (partyId != null && !partyId.isEmpty()) {
             party.addProperty("id", partyId);
 
             JsonArray partyData = new JsonArray();

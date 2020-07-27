@@ -569,24 +569,39 @@ public class StringUtils {
      * @return The formatted and evaluated String
      */
     public static String formatWord(final String original, final boolean avoid) {
+        return formatWord(original, avoid, false);
+    }
+
+    /**
+     * Converts input into a Properly Readable String
+     *
+     * @param original The original String to format
+     * @param avoid    Flag to ignore method if true
+     * @param skipSymbolReplacement Flag to Skip Symbol Replacement if true
+     * @return The formatted and evaluated String
+     */
+    public static String formatWord(final String original, final boolean avoid, final boolean skipSymbolReplacement) {
         String formattedKey = original;
         if (isNullOrEmpty(formattedKey) || avoid) {
             return formattedKey;
         } else {
-            if (formattedKey.contains("_")) {
-                formattedKey = formattedKey.replaceAll("_", " ");
-            }
-            if (formattedKey.contains("-")) {
-                formattedKey = formattedKey.replaceAll("-", " ");
-            }
             if (formattedKey.contains(" ")) {
                 formattedKey = formattedKey.replaceAll("\\s+", " ");
             }
-            if (BRACKET_PATTERN.matcher(formattedKey).find()) {
-                formattedKey = BRACKET_PATTERN.matcher(formattedKey).replaceAll("");
-            }
-            if (STRIP_COLOR_PATTERN.matcher(formattedKey).find()) {
-                formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
+
+            if (!skipSymbolReplacement) {
+                if (formattedKey.contains("_")) {
+                    formattedKey = formattedKey.replaceAll("_", " ");
+                }
+                if (formattedKey.contains("-")) {
+                    formattedKey = formattedKey.replaceAll("-", " ");
+                }
+                if (BRACKET_PATTERN.matcher(formattedKey).find()) {
+                    formattedKey = BRACKET_PATTERN.matcher(formattedKey).replaceAll("");
+                }
+                if (STRIP_COLOR_PATTERN.matcher(formattedKey).find()) {
+                    formattedKey = STRIP_COLOR_PATTERN.matcher(formattedKey).replaceAll("");
+                }
             }
 
             return removeRepeatWords(capitalizeWord(formattedKey)).trim();

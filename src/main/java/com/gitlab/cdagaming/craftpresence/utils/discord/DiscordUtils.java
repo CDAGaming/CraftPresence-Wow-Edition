@@ -427,8 +427,8 @@ public class DiscordUtils {
      */
     public RichPresence buildRichPresence() {
         // Format Presence based on Arguments available in argumentData
-        DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData), !CraftPresence.CONFIG.formatWords);
-        GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData), !CraftPresence.CONFIG.formatWords);
+        DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData), !CraftPresence.CONFIG.formatWords, true);
+        GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData), !CraftPresence.CONFIG.formatWords, true);
 
         final String baseLargeImage = StringUtils.removeMatches(StringUtils.getMatches("&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), iconData, 1);
         LARGEIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseLargeImage, iconData);
@@ -436,10 +436,10 @@ public class DiscordUtils {
         final String baseSmallImage = StringUtils.removeMatches(StringUtils.getMatches("&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), iconData, 1);
         SMALLIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseSmallImage, iconData);
 
-        LARGEIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData), !CraftPresence.CONFIG.formatWords);
-        SMALLIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData), !CraftPresence.CONFIG.formatWords);
+        LARGEIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true);
+        SMALLIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true);
 
-        RichPresence newRPCData = new RichPresence.Builder()
+        final RichPresence newRPCData = new RichPresence.Builder()
                 .setState(GAME_STATE)
                 .setDetails(DETAILS)
                 .setStartTimestamp(START_TIMESTAMP)
