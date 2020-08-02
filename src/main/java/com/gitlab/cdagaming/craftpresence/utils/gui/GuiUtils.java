@@ -31,6 +31,7 @@ import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.FontRenderer;
@@ -234,6 +235,12 @@ public class GuiUtils {
             }
         } else {
             emptyData();
+        }
+
+        // Fallback Switch for Config Gui, used for situations where the Gui is forced closed
+        // Example: This can occur during server transitions in places such as Hypixel
+        if (configGUIOpened && !(CraftPresence.instance.currentScreen instanceof ExtendedScreen)) {
+            configGUIOpened = false;
         }
 
         if (openConfigGUI) {
