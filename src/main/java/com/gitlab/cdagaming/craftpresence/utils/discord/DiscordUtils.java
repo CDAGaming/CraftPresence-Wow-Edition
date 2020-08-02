@@ -266,7 +266,7 @@ public class DiscordUtils {
      * Initialize the Specified Arguments as Empty Data
      *
      * @param isIconData Whether the Argument is an RPC Message or an Icon Placeholder
-     * @param args The Arguments to Initialize
+     * @param args       The Arguments to Initialize
      */
     public void initArgument(boolean isIconData, String... args) {
         // Initialize Specified Arguments to Empty Data

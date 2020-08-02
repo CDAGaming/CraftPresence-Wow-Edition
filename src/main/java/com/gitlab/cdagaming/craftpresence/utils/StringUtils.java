@@ -575,8 +575,8 @@ public class StringUtils {
     /**
      * Converts input into a Properly Readable String
      *
-     * @param original The original String to format
-     * @param avoid    Flag to ignore method if true
+     * @param original              The original String to format
+     * @param avoid                 Flag to ignore method if true
      * @param skipSymbolReplacement Flag to Skip Symbol Replacement if true
      * @return The formatted and evaluated String
      */
@@ -587,10 +587,10 @@ public class StringUtils {
     /**
      * Converts input into a Properly Readable String
      *
-     * @param original The original String to format
-     * @param avoid    Flag to ignore method if true
+     * @param original              The original String to format
+     * @param avoid                 Flag to ignore method if true
      * @param skipSymbolReplacement Flag to Skip Symbol Replacement if true
-     * @param caseCheckTimes Times to replace Parts of the String during Capitalization (Use -1 for Infinite)
+     * @param caseCheckTimes        Times to replace Parts of the String during Capitalization (Use -1 for Infinite)
      * @return The formatted and evaluated String
      */
     public static String formatWord(final String original, final boolean avoid, final boolean skipSymbolReplacement, final int caseCheckTimes) {
@@ -847,7 +847,7 @@ public class StringUtils {
     /**
      * Capitalizes the words within a specified string
      *
-     * @param str The String to capitalize
+     * @param str          The String to capitalize
      * @param timesToCheck The amount of times to replace within the String (Use -1 for Infinite)
      * @return The capitalized output string
      */
