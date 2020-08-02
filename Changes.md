@@ -4,6 +4,7 @@
 
 ### Changes
 
+*   Each release going forward will have a tag attached to it on the repository, going down to v1.4.0
 *   RPC Formatting will now only capitalize the first word in the parameter, giving more control to the separate placeholders
 *   Minor Backend Updates involving Dependency and Logic Updates
 
