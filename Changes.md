@@ -4,6 +4,7 @@
 
 ### Changes
 
+*   RPC Formatting will now only capitalize the first word in the parameter, giving more control to the separate placeholders
 *   Minor Backend Updates involving Dependency and Logic Updates
 
 ### Fixes

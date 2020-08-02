@@ -581,6 +581,19 @@ public class StringUtils {
      * @return The formatted and evaluated String
      */
     public static String formatWord(final String original, final boolean avoid, final boolean skipSymbolReplacement) {
+        return formatWord(original, avoid, skipSymbolReplacement, -1);
+    }
+
+    /**
+     * Converts input into a Properly Readable String
+     *
+     * @param original The original String to format
+     * @param avoid    Flag to ignore method if true
+     * @param skipSymbolReplacement Flag to Skip Symbol Replacement if true
+     * @param caseCheckTimes Times to replace Parts of the String during Capitalization (Use -1 for Infinite)
+     * @return The formatted and evaluated String
+     */
+    public static String formatWord(final String original, final boolean avoid, final boolean skipSymbolReplacement, final int caseCheckTimes) {
         String formattedKey = original;
         if (isNullOrEmpty(formattedKey) || avoid) {
             return formattedKey;
@@ -604,7 +617,7 @@ public class StringUtils {
                 }
             }
 
-            return removeRepeatWords(capitalizeWord(formattedKey)).trim();
+            return removeRepeatWords(capitalizeWord(formattedKey, caseCheckTimes)).trim();
         }
     }
 
@@ -835,29 +848,48 @@ public class StringUtils {
      * Capitalizes the words within a specified string
      *
      * @param str The String to capitalize
+     * @param timesToCheck The amount of times to replace within the String (Use -1 for Infinite)
      * @return The capitalized output string
      */
-    public static String capitalizeWord(String str) {
-        StringBuilder s = new StringBuilder();
+    public static String capitalizeWord(final String str, final int timesToCheck) {
+        final StringBuilder s = new StringBuilder();
 
         // Declare a character of space
         // To identify that the next character is the starting
         // of a new word
         char charIndex = ' ';
+        int timesLeft = timesToCheck;
         for (int index = 0; index < str.length(); index++) {
 
             // If previous character is space and current
             // character is not space then it shows that
             // current letter is the starting of the word
-            if (charIndex == ' ' && str.charAt(index) != ' ')
+            // We only replace however, whilst the times
+            // remaining is more then 0 or is -1 (Infinite)
+            if (charIndex == ' ' && str.charAt(index) != ' ' && (timesLeft > 0 || timesLeft == -1)) {
                 s.append(Character.toUpperCase(str.charAt(index)));
-            else
+                if (timesLeft > 0) {
+                    timesLeft--;
+                }
+            } else {
                 s.append(str.charAt(index));
+            }
+
             charIndex = str.charAt(index);
         }
 
         // Return the string with trimming
         return s.toString().trim();
+    }
+
+    /**
+     * Capitalizes the words within a specified string
+     *
+     * @param str The String to capitalize
+     * @return The capitalized output string
+     */
+    public static String capitalizeWord(String str) {
+        return capitalizeWord(str, -1);
     }
 
     /**
