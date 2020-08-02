@@ -239,8 +239,7 @@ public class CraftPresence {
                 } else if (CommandUtils.isInMainMenu && player != null) {
                     CommandUtils.isInMainMenu = false;
 
-                    CLIENT.initArgumentData("&MAINMENU&");
-                    CLIENT.initIconData("&MAINMENU&");
+                    CLIENT.initArgument("&MAINMENU&");
                 }
 
                 if (CLIENT.awaitingReply && SYSTEM.TIMER == 0) {

@@ -86,8 +86,7 @@ public class BiomeUtils {
         CURRENT_BIOME_ID = null;
 
         isInUse = false;
-        CraftPresence.CLIENT.initArgumentData("&BIOME&");
-        CraftPresence.CLIENT.initIconData("&BIOME&");
+        CraftPresence.CLIENT.initArgument("&BIOME&");
     }
 
     /**
@@ -162,7 +161,7 @@ public class BiomeUtils {
         final String CURRENT_BIOME_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentBiomeMSG, biomeArgs);
 
         CraftPresence.CLIENT.syncArgument("&BIOME&", CURRENT_BIOME_MESSAGE, false);
-        CraftPresence.CLIENT.initIconData("&BIOME&");
+        CraftPresence.CLIENT.initArgument(true, "&BIOME&");
     }
 
     /**

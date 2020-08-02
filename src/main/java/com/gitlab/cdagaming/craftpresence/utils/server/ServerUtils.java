@@ -188,8 +188,7 @@ public class ServerUtils {
             requestedServerData = null;
         }
 
-        CraftPresence.CLIENT.initArgumentData("&SERVER&");
-        CraftPresence.CLIENT.initIconData("&SERVER&");
+        CraftPresence.CLIENT.initArgument("&SERVER&");
     }
 
     /**
@@ -538,7 +537,7 @@ public class ServerUtils {
             currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, soloArgs), false);
-            CraftPresence.CLIENT.initIconData("&SERVER&");
+            CraftPresence.CLIENT.initArgument(true, "&SERVER&");
             queuedForUpdate = false;
         }
     }

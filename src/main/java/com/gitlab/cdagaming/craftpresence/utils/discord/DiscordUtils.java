@@ -200,8 +200,8 @@ public class DiscordUtils {
         }
 
         // Initialize and Sync any Pre-made Arguments (And Reset Related Data)
-        initArgumentData("&MAINMENU&", "&BRAND&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&TILEENTITY&", "&TARGETENTITY&", "&ATTACKINGENTITY&", "&RIDINGENTITY&");
-        initIconData("&DEFAULT&", "&MAINMENU&", "&PACK&", "&DIMENSION&", "&SERVER&");
+        initArgument(false, "&MAINMENU&", "&BRAND&", "&MCVERSION&", "&IGN&", "&MODS&", "&PACK&", "&DIMENSION&", "&BIOME&", "&SERVER&", "&GUI&", "&TILEENTITY&", "&TARGETENTITY&", "&ATTACKINGENTITY&", "&RIDINGENTITY&");
+        initArgument(true, "&DEFAULT&", "&MAINMENU&", "&PACK&", "&DIMENSION&", "&SERVER&");
 
         // Ensure Main Menu RPC Resets properly
         CommandUtils.isInMainMenu = false;
@@ -247,41 +247,54 @@ public class DiscordUtils {
         // Remove and Replace Placeholder Data, if the placeholder needs Updates
         if (!StringUtils.isNullOrEmpty(argumentName)) {
             if (isIconData) {
-                if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
-                    iconData.add(new Tuple<>(argumentName, insertString));
+                synchronized (iconData) {
+                    if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                        iconData.add(new Tuple<>(argumentName, insertString));
+                    }
                 }
             } else {
-                if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
-                    messageData.add(new Tuple<>(argumentName, insertString));
+                synchronized (messageData) {
+                    if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
+                        messageData.add(new Tuple<>(argumentName, insertString));
+                    }
                 }
             }
         }
     }
 
     /**
-     * Initialize the Specified RPC Arguments as Empty Data
+     * Initialize the Specified Arguments as Empty Data
      *
+     * @param isIconData Whether the Argument is an RPC Message or an Icon Placeholder
      * @param args The Arguments to Initialize
      */
-    public void initArgumentData(String... args) {
+    public void initArgument(boolean isIconData, String... args) {
         // Initialize Specified Arguments to Empty Data
-        for (String argumentName : args) {
-            messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
-            messageData.add(new Tuple<>(argumentName, ""));
+        if (isIconData) {
+            for (String argumentName : args) {
+                synchronized (iconData) {
+                    iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
+                    iconData.add(new Tuple<>(argumentName, ""));
+                }
+            }
+        } else {
+            for (String argumentName : args) {
+                synchronized (messageData) {
+                    messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
+                    messageData.add(new Tuple<>(argumentName, ""));
+                }
+            }
         }
     }
 
     /**
-     * Initialize the Specified Icon Arguments as Empty Data
+     * Initialize the Specified Arguments in all regards
      *
-     * @param args The Arguments to Initialize
+     * @param args The Arguments to Initialize as Empty Data for both Icons and RPC Messages
      */
-    public void initIconData(String... args) {
-        // Initialize Specified Icon Arguments to Empty Data
-        for (String iconArgumentName : args) {
-            iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(iconArgumentName));
-            iconData.add(new Tuple<>(iconArgumentName, ""));
-        }
+    public void initArgument(String... args) {
+        initArgument(false, args);
+        initArgument(true, args);
     }
 
     /**

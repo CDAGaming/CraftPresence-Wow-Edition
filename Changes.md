@@ -1,25 +1,14 @@
 # CraftPresence Changes
 
-## v1.6.6 (7/31/2020)
+## v1.6.7 (08/03/2020)
 
 ### Changes
 
-*   1.16.x Forge/Fabric Officially Supported
-*   Migrations to Discord IPC Data to use `discord.com` endpoints
-*   Adjusted Update Gui to accommodate full text width
-*   Minor Backend Updates
+*   Minor Backend Updates involving Dependency and Logic Updates
 
 ### Fixes
 
-*   Fixed Issues with Item Message Placeholders not working properly (Now boomerangs to a new Placeholder in Item Messages)
-*   Fixed Mismatched Translations in 1.13+ Ports
-*   Fixed Race Case Issues with Mod Shutdown Methods
-*   Fixed an NPE in EntityUtils in 1.14+ Ports
-*   Fixed Possible Button Duplication in Gui's
-*   Fixed Rounding Issues pertaining to Negative Coordinates
-*   Fixed Issues causing some symbols to be unintentionally replaced during formatting (May cause other issues, Report any Formatting anomaly's)
-*   Fixed Race-Case Issue causing Null Party IDs to be allowed
-*   Reverted a Change that caused Improper Module Clearing
+*   Fixed a Bug causing Concurrent Modifications and Hard Crashes
 
 ### More Information
 

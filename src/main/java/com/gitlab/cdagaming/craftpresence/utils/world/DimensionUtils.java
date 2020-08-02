@@ -92,8 +92,7 @@ public class DimensionUtils {
         CURRENT_DIMENSION_ID = null;
 
         isInUse = false;
-        CraftPresence.CLIENT.initArgumentData("&DIMENSION&");
-        CraftPresence.CLIENT.initIconData("&DIMENSION&");
+        CraftPresence.CLIENT.initArgument("&DIMENSION&");
     }
 
     /**

@@ -542,8 +542,7 @@ public class TileEntityUtils {
         if (!allItemsEmpty) {
             CraftPresence.CLIENT.syncArgument("&TILEENTITY&", CURRENT_MESSAGE, false);
         } else if (!currentlyCleared) {
-            CraftPresence.CLIENT.initArgumentData("&TILEENTITY&");
-            CraftPresence.CLIENT.initIconData("&TILEENTITY&");
+            CraftPresence.CLIENT.initArgument("&TILEENTITY&");
         }
     }
 

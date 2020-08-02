@@ -210,8 +210,7 @@ public class GuiUtils {
         CURRENT_GUI_CLASS = null;
 
         isInUse = false;
-        CraftPresence.CLIENT.initArgumentData("&GUI&");
-        CraftPresence.CLIENT.initIconData("&GUI&");
+        CraftPresence.CLIENT.initArgument("&GUI&");
     }
 
     /**
@@ -330,7 +329,7 @@ public class GuiUtils {
         final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGUIMSG, guiArgs);
 
         CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_MESSAGE, false);
-        CraftPresence.CLIENT.initIconData("&GUI&");
+        CraftPresence.CLIENT.initArgument(true, "&GUI&");
     }
 
     /**

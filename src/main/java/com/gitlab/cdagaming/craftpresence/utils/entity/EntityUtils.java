@@ -332,8 +332,7 @@ public class EntityUtils {
             CraftPresence.CLIENT.syncArgument("&ATTACKINGENTITY&", CURRENT_ATTACKING_MESSAGE, false);
             CraftPresence.CLIENT.syncArgument("&RIDINGENTITY&", CURRENT_RIDING_MESSAGE, false);
         } else if (!currentlyCleared) {
-            CraftPresence.CLIENT.initArgumentData("&TARGETENTITY&", "&ATTACKINGENTITY&", "&RIDINGENTITY&");
-            CraftPresence.CLIENT.initIconData("&TARGETENTITY&", "&ATTACKINGENTITY&", "&RIDINGENTITY&");
+            CraftPresence.CLIENT.initArgument("&TARGETENTITY&", "&ATTACKINGENTITY&", "&RIDINGENTITY&");
         }
     }
 

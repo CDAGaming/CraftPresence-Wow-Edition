@@ -164,8 +164,7 @@ public class CommandUtils {
 
         // Clear Loading Game State, if applicable
         if (isLoadingGame) {
-            CraftPresence.CLIENT.initArgumentData("&MAINMENU&");
-            CraftPresence.CLIENT.initIconData("&MAINMENU&");
+            CraftPresence.CLIENT.initArgument("&MAINMENU&");
 
             isLoadingGame = false;
         }
