@@ -5,7 +5,7 @@
 ### Changes
 
 *   Each release going forward will have a tag attached to it on the repository, going down to v1.4.0
-*   Added a Fallback Switch for the config gui for if it is forced closed ([#69](https://gitlab.com/CDAGaming/CraftPresence/-/issues/69))
+*   Added a Fallback Switch for the config gui for if it is forced closed (Reference: [#69](https://gitlab.com/CDAGaming/CraftPresence/-/issues/69))
 *   RPC Formatting will now only capitalize the first word in the parameter, giving more control to the separate placeholders
 *   Minor Backend Updates involving Dependency and Logic Updates
 
