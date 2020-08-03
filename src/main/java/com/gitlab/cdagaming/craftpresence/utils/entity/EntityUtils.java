@@ -353,7 +353,6 @@ public class EntityUtils {
      *
      * @param name The Entity Name
      * @param tags A List of the tags associated with the Entity
-     *
      * @return The Resulting Entity Tag Placeholder String
      */
     public String generatePlaceholderString(final String name, final List<String> tags) {

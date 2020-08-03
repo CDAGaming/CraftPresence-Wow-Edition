@@ -63,6 +63,8 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 
 (Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues recognizing them on v1.5.x and below)
 
+(As of v1.6.8, you can now use Minified Versions of Placeholders, trimmed down to a length of 4; `&DIM&` and `&DIMENSION&` are the same in this case)
+
 ### Presence Display Placeholders
 *   &DIMENSION& - The Dimension Message from your Dimension Settings, if enabled and in use
 *   &BIOME& - The Biome Message from your Biome Settings, if enabled and in use

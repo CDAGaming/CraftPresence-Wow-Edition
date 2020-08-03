@@ -199,18 +199,18 @@ public class StringUtils {
      * @param maxMatches      The maximum amount of matches to remove (Set to -1 to Remove All)
      * @return The original String from Match Data with the matches up to maxMatches removed
      */
-    public static String removeMatches(final Tuple<String, List<String>> matchData, List<Tuple<String, String>> parsedMatchData, final int maxMatches) {
+    public static String removeMatches(final Tuple<String, List<String>> matchData, final List<Tuple<String, String>> parsedMatchData, final int maxMatches) {
         String finalString = "";
 
         if (matchData != null) {
             finalString = matchData.getFirst();
-            List<String> matchList = matchData.getSecond();
+            final List<String> matchList = matchData.getSecond();
 
             if (!matchList.isEmpty()) {
                 int foundMatches = 0;
 
                 for (String match : matchList) {
-                    boolean isValidScan = foundMatches >= maxMatches;
+                    final boolean isValidScan = foundMatches >= maxMatches;
                     boolean alreadyRemoved = false;
 
                     if (parsedMatchData != null && !parsedMatchData.isEmpty()) {
@@ -247,10 +247,33 @@ public class StringUtils {
      * @param replaceWith     The value to replace the target with
      * @return The completed and replaced String
      */
-    public static String replaceAnyCase(String source, String targetToReplace, String replaceWith) {
+    public static String replaceAnyCase(final String source, final String targetToReplace, final String replaceWith) {
+        return replaceAnyCase(source, targetToReplace, replaceWith, true);
+    }
+
+    /**
+     * Replaces Data in a String with Case-Insensitivity
+     *
+     * @param source          The original String to replace within
+     * @param targetToReplace The value to replace on
+     * @param replaceWith     The value to replace the target with
+     * @param allowMinified   Flag for whether or not to allow Minified Placeholders (Trimmed String down to a length of 4)
+     * @return The completed and replaced String
+     */
+    public static String replaceAnyCase(final String source, final String targetToReplace, final String replaceWith, final boolean allowMinified) {
         if (!isNullOrEmpty(source)) {
-            return Pattern.compile(targetToReplace, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(source)
+            String finalString = Pattern.compile(targetToReplace, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(source)
                     .replaceAll(Matcher.quoteReplacement(replaceWith));
+
+            if (allowMinified) {
+                String minifiedTarget = minifyString(targetToReplace, 4);
+                if (!minifiedTarget.endsWith("&")) {
+                    minifiedTarget += "&";
+                }
+                finalString = Pattern.compile(minifiedTarget, Pattern.LITERAL | Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(finalString)
+                        .replaceAll(Matcher.quoteReplacement(replaceWith));
+            }
+            return finalString;
         } else {
             return "";
         }
@@ -263,16 +286,42 @@ public class StringUtils {
      * @param replaceData The replacement list to follow with the form of: targetToReplace:replaceWithValue
      * @return The completed and replaced String
      */
-    public static String sequentialReplaceAnyCase(String source, List<Tuple<String, String>> replaceData) {
+    public static String sequentialReplaceAnyCase(final String source, final List<Tuple<String, String>> replaceData) {
+        return sequentialReplaceAnyCase(source, replaceData, true);
+    }
+
+    /**
+     * Replaces Data in a sequential order, following Case-Insensitivity
+     *
+     * @param source        The original String to replace within
+     * @param replaceData   The replacement list to follow with the form of: targetToReplace:replaceWithValue
+     * @param allowMinified Flag for whether or not to allow Minified Placeholders (Trimmed String down to a length of 4)
+     * @return The completed and replaced String
+     */
+    public static String sequentialReplaceAnyCase(final String source, final List<Tuple<String, String>> replaceData, final boolean allowMinified) {
         if (!isNullOrEmpty(source)) {
             String finalResult = source;
 
             if (!replaceData.isEmpty()) {
                 for (Tuple<String, String> replacementData : replaceData) {
-                    finalResult = replaceAnyCase(finalResult, replacementData.getFirst(), replacementData.getSecond());
+                    finalResult = replaceAnyCase(finalResult, replacementData.getFirst(), replacementData.getSecond(), allowMinified);
                 }
             }
             return finalResult;
+        } else {
+            return "";
+        }
+    }
+
+    /**
+     * Reduces the Length of a String to the Specified Length
+     *
+     * @param source The String to evaluate
+     * @param length The Maximum Length to reduce the String down towards, beginning at 0
+     */
+    public static String minifyString(final String source, final int length) {
+        if (!isNullOrEmpty(source)) {
+            return length >= 0 ? source.substring(0, length) : source;
         } else {
             return "";
         }

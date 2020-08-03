@@ -1,12 +1,13 @@
 # CraftPresence Changes
 
-## v1.6.7 (08/03/2020)
+## v1.6.8 (08/04/2020)
 
 ### Changes
 
 *   Each release going forward will have a tag attached to it on the repository, going down to v1.4.0
 *   Added a Fallback Switch for the config gui for if it is forced closed (Reference: [#69](https://gitlab.com/CDAGaming/CraftPresence/-/issues/69))
 *   RPC Formatting will now only capitalize the first word in the parameter, giving more control to the separate placeholders
+*   Added a Minified Variant of all placeholders, to trimmed down to a length of 4 (`&DIM&` and `&DIMENSION&` are the same) (Reference: [#68](https://gitlab.com/CDAGaming/CraftPresence/-/issues/68))
 *   Minor Backend Updates involving Dependency and Logic Updates
 
 ### Fixes
