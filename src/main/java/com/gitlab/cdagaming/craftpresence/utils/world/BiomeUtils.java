@@ -43,10 +43,6 @@ public class BiomeUtils {
      */
     private final List<Biome> BIOME_TYPES = Lists.newArrayList();
     /**
-     * A List of the detected Biome ID's
-     */
-    private final List<Integer> BIOME_IDS = Lists.newArrayList();
-    /**
      * Whether this module is active and currently in use
      */
     public boolean isInUse = false;
@@ -64,16 +60,10 @@ public class BiomeUtils {
     private String CURRENT_BIOME_NAME;
 
     /**
-     * The ID Number for the Current Biome the Player is in
-     */
-    private Integer CURRENT_BIOME_ID;
-
-    /**
      * Clears FULL Data from this Module
      */
     private void emptyData() {
         BIOME_NAMES.clear();
-        BIOME_IDS.clear();
         BIOME_TYPES.clear();
         clearClientData();
     }
@@ -83,7 +73,6 @@ public class BiomeUtils {
      */
     public void clearClientData() {
         CURRENT_BIOME_NAME = null;
-        CURRENT_BIOME_ID = null;
 
         isInUse = false;
         CraftPresence.CLIENT.initArgument("&BIOME&");
@@ -95,7 +84,7 @@ public class BiomeUtils {
     public void onTick() {
         enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome : enabled;
         final boolean needsUpdate = enabled && (
-                BIOME_NAMES.isEmpty() || BIOME_IDS.isEmpty() || BIOME_TYPES.isEmpty()
+                BIOME_NAMES.isEmpty() || BIOME_TYPES.isEmpty()
         );
 
         if (needsUpdate) {
@@ -120,17 +109,12 @@ public class BiomeUtils {
     private void updateBiomeData() {
         final Biome newBiome = CraftPresence.player.world.getBiome(CraftPresence.player.getPosition());
         final String newBiomeName = newBiome.getBiomeName();
-        final Integer newBiomeID = Biome.getIdForBiome(newBiome);
 
-        if (!newBiomeName.equals(CURRENT_BIOME_NAME) || !newBiomeID.equals(CURRENT_BIOME_ID)) {
+        if (!newBiomeName.equals(CURRENT_BIOME_NAME)) {
             CURRENT_BIOME_NAME = newBiomeName;
-            CURRENT_BIOME_ID = newBiomeID;
 
             if (!BIOME_NAMES.contains(newBiomeName)) {
                 BIOME_NAMES.add(newBiomeName);
-            }
-            if (!BIOME_IDS.contains(newBiomeID)) {
-                BIOME_IDS.add(newBiomeID);
             }
             if (!BIOME_TYPES.contains(newBiome)) {
                 BIOME_TYPES.add(newBiome);
@@ -148,7 +132,6 @@ public class BiomeUtils {
         List<Tuple<String, String>> biomeArgs = Lists.newArrayList();
 
         biomeArgs.add(new Tuple<>("&BIOME&", CURRENT_BIOME_NAME));
-        biomeArgs.add(new Tuple<>("&ID&", CURRENT_BIOME_ID.toString()));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
@@ -209,9 +192,6 @@ public class BiomeUtils {
             if (biome != null) {
                 if (!BIOME_NAMES.contains(biome.getBiomeName())) {
                     BIOME_NAMES.add(biome.getBiomeName());
-                }
-                if (!BIOME_IDS.contains(Biome.getIdForBiome(biome))) {
-                    BIOME_IDS.add(Biome.getIdForBiome(biome));
                 }
                 if (!BIOME_TYPES.contains(biome)) {
                     BIOME_TYPES.add(biome);

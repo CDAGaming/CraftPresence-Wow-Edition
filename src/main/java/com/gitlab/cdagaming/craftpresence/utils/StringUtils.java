@@ -318,6 +318,7 @@ public class StringUtils {
      *
      * @param source The String to evaluate
      * @param length The Maximum Length to reduce the String down towards, beginning at 0
+     * @return The newly reduced/minified String
      */
     public static String minifyString(final String source, final int length) {
         if (!isNullOrEmpty(source)) {

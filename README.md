@@ -83,12 +83,12 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 
 ### Biome Placeholders
 *   &BIOME& - The Current Biome Name
-*   &ID& - The Current Biome ID
+*   &ID& - The Current Biome ID (Removed in v1.6.8)
 
 ### Dimension Placeholders
 *   &DIMENSION& - The Current Dimension Name
 *   &ICON& - The Default Dimension Icon Name
-*   &ID& - The Current Dimension ID
+*   &ID& - The Current Dimension ID (Removed in v1.6.8)
 
 ### Server/LAN Message Placeholders
 *   &IP& - The Current Server IP Address
@@ -146,13 +146,17 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 *   If requesting an icon to be modified or removed from the Default Client ID, please specify a reason why
     *   Mostly just so it can be logged why it was changed for future reference
 
+Additionally, you can also create your own Set of Icons by following [this guide](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Making-your-Own-Client-ID---Using-your-own-Images)
+
 ### Support
 Need Assistance with one of my mods or wish to provide feedback?
 
 I can be contacted via the following methods:
 
 *   [Email](mailto:cstack2011@yahoo.com)
-*   [Discord -> ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP) 
+*   [Discord -> ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP)
+
+Additionally, Documentation for this mod is available [here](https://cdagaming.gitlab.io/craftpresence-documentation/) with further guides available on [the wiki](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Home)
 
 #### Licensing
 This Mod is under the MIT License as well as the Apache 2.0 License
