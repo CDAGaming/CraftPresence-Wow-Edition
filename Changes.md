@@ -4,7 +4,7 @@
 
 ### Changes
 
-*   TBD
+*   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
 
 ### Fixes
 
@@ -24,7 +24,7 @@ The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforg
 
 Starting in v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
-Note: Due to Maven Troubles on behalf of the Rift Team, Rift Versions are no longer supported, though the Differences do still take effect for Forge
+Note: Due to Maven Troubles on behalf of the Rift Team, Rift Versions are no longer supported as of v1.6.1, though the Differences do still take effect for Forge
 
 #### 1.14.x - 1.16.x Build Info
 

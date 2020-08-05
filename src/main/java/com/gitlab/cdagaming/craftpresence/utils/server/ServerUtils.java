@@ -114,9 +114,10 @@ public class ServerUtils {
     private int serverIndex;
 
     /**
-     * Mapping storing the Current X and Z Position of the Player in a World
+     * Mapping storing the Current X, Y and Z Position of the Player in a World
+     * Format: Position (X, Z), Altitude (Y)
      */
-    private Tuple<Double, Double> currentCoordinates = new Tuple<>(0.0D, 0.0D);
+    private Tuple<Tuple<Double, Double>, Double> currentCoordinates = new Tuple<>(new Tuple<>(0.0D, 0.0D), 0.0D);
 
     /**
      * Mapping storing the Current and Maximum Health the Player currently has in a World
@@ -172,7 +173,7 @@ public class ServerUtils {
         currentServer_Name = null;
         currentServerData = null;
         currentConnection = null;
-        currentCoordinates = new Tuple<>(0.0D, 0.0D);
+        currentCoordinates = new Tuple<>(new Tuple<>(0.0D, 0.0D), 0.0D);
         currentHealth = new Tuple<>(0.0f, 0.0f);
         currentDifficulty = null;
         currentWorldName = null;
@@ -270,7 +271,7 @@ public class ServerUtils {
                 if (currentServerMSG.toLowerCase().contains("&playerinfo&")) {
                     // &coords& Argument = Current Coordinates of Player
                     if (CraftPresence.CONFIG.innerPlayerPlaceholderMSG.toLowerCase().contains("&coords&")) {
-                        final Tuple<Double, Double> newCoordinates = CraftPresence.player != null ? new Tuple<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)) : new Tuple<>(0.0D, 0.0D);
+                        final Tuple<Tuple<Double, Double>, Double> newCoordinates = CraftPresence.player != null ? new Tuple<>(new Tuple<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)), StringUtils.roundDouble(CraftPresence.player.posY, 3)) : new Tuple<>(new Tuple<>(0.0D, 0.0D), 0.0D);
                         if (!newCoordinates.equals(currentCoordinates)) {
                             currentCoordinates = newCoordinates;
                             queuedForUpdate = true;
@@ -447,8 +448,9 @@ public class ServerUtils {
 
         List<Tuple<String, String>> coordinateArgs = Lists.newArrayList(), healthArgs = Lists.newArrayList();
 
-        coordinateArgs.add(new Tuple<>("&xPosition&", currentCoordinates.getFirst().toString()));
-        coordinateArgs.add(new Tuple<>("&zPosition&", currentCoordinates.getSecond().toString()));
+        coordinateArgs.add(new Tuple<>("&xPosition&", currentCoordinates.getFirst().getFirst().toString()));
+        coordinateArgs.add(new Tuple<>("&yPosition&", currentCoordinates.getSecond().toString()));
+        coordinateArgs.add(new Tuple<>("&zPosition&", currentCoordinates.getFirst().getSecond().toString()));
 
         healthArgs.add(new Tuple<>("&CURRENT&", currentHealth.getFirst().toString()));
         healthArgs.add(new Tuple<>("&MAX&", currentHealth.getSecond().toString()));
