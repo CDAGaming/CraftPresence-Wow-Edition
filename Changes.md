@@ -1,50 +1,20 @@
 # CraftPresence Changes
 
-## v1.6.8 (08/04/2020)
+## v1.7.0 (??/??/2020)
 
 ### Changes
 
-*   Each release going forward will have a tag attached to it on the repository, going down to v1.4.0
-*   Added a Fallback Switch for the config gui for if it is forced closed (Reference: [#69](https://gitlab.com/CDAGaming/CraftPresence/-/issues/69))
-*   RPC Formatting will now only capitalize the first word in the parameter, giving more control to the separate placeholders
-*   Removed Support for `&ID&` Placeholders, to comply with some MC Version requisites
-*   Added a Minified Variant of all placeholders, to trimmed down to a length of 4 (`&DIM&` and `&DIMENSION&` are the same) (Reference: [#68](https://gitlab.com/CDAGaming/CraftPresence/-/issues/68))
-*   Minor Backend Updates involving Dependency and Logic Updates
+*   TBD
 
 ### Fixes
 
-*   Fixed a Bug causing Concurrent Modifications and Hard Crashes
+*   TBD
 
 ### More Information
 
-#### v1.6.0 Mod Rewrite Info
+#### v1.7.0 Upgrade Info
 
-In v1.6.0, CraftPresence has undergone numerous performance and under-the-hood improvements, to both acknowledge user feedback over the last several months and pursue the goal of further modularity.
-
-As Elements such as the Config System and General RPC Elements have undergone various changes, please report any bugs found to [the Issue Tracker](https://gitlab.com/CDAGaming/CraftPresence/issues)
-
-Migration Notes:
-
-*   The RPC System has changed to an internal IPC System hooking into Discord's official endpoints
-
-    *   As a result, you can remove any discord-rpc DLL files present in CraftPresence's folders as they are no longer being used
-
-*   `gameTimePlaceholder` is now combined into the `&worldinfo&` Placeholder
-
-*   Some other placeholders within Server and Status Messages have been changed or renamed, please refer to the in-game tooltips for these new names
-
-*   Entity Messages now use the Default Message as the Format, while specific Item Messages are placeholders for the formatted string
-
-    *   This means, only `&item&` (The Specific Item's Name) will work for specific Items
-    *   Otherwise, the more familiar placeholders such as `&main&` and `&offhand&` will retrieve this message when part of the default format setting
-
-*   Both `&mods&` and `&ign&` are now Generalized Placeholders and can only be called within the Presence Formatting GUI
-
-    *   `&ign&` in Server Messages should be changed to using `&playerinfo&` for in-world Player Data and `&ign&` for out-of-world Player Data
-
-*   `overwriteServerIcon` has been deprecated, instead use the Presence Formatting GUI to define the priority for icons
-
-    *   Example: `overwriteServerIcon` = Setting `smallImageKey` to `&PACK&&SERVER&` (Having `&PACK&` be before anything else)
+TBD
 
 #### 1.13.x Build Info
 
@@ -54,15 +24,19 @@ The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforg
 
 Starting in v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
+Note: Due to Maven Troubles on behalf of the Rift Team, Rift Versions are no longer supported, though the Differences do still take effect for Forge
+
 #### 1.14.x - 1.16.x Build Info
 
-The 1.14.x and 1.16.x Ports of this Mod Require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api) and contains the same differences as the 1.13.x Port
+Some 1.14.x, 1.15.x, and 1.16.x Ports of this Mod Require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api) and contains the same differences as the 1.13.x Port
 
 #### Snapshot Build Info
 
-Some Versions of this Mod are for Minecraft Snapshots, and as such, caution should be noted.
+Some Versions of this Mod are for Minecraft Snapshots or Experimental Versions, and as such, caution should be noted.
 
 Any Snapshot Build Released will be marked as BETA to match its Snapshot Status depending on Tests done before release and issues found.
+
+Snapshot Builds, depending on circumstances, may also contain changes for a future version of the mod, and will be noted as so if this is the case.
 
 #### Legacy Build Info (Minecraft Versions 1.5.2 and Below)
 
