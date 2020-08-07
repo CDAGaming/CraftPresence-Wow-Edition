@@ -116,10 +116,10 @@ public class DimensionUtils {
     private void updateDimensionData() {
         final WorldProvider newProvider = CraftPresence.player.world.provider;
         final DimensionType newDimensionType = newProvider.getDimensionType();
-        final String newDimensionName = StringUtils.formatDimensionName(newDimensionType.getName(), false, !CraftPresence.CONFIG.formatWords);
+        final String newDimensionName = StringUtils.formatIdentifier(newDimensionType.getName(), false, !CraftPresence.CONFIG.formatWords);
 
-        final String newDimension_primaryIdentifier = StringUtils.formatDimensionName(newDimensionType.getName(), true, !CraftPresence.CONFIG.formatWords);
-        final String newDimension_alternativeIdentifier = StringUtils.formatDimensionName(newProvider.getClass().getSimpleName(), true, !CraftPresence.CONFIG.formatWords);
+        final String newDimension_primaryIdentifier = StringUtils.formatIdentifier(newDimensionType.getName(), true, !CraftPresence.CONFIG.formatWords);
+        final String newDimension_alternativeIdentifier = StringUtils.formatIdentifier(newProvider.getClass().getSimpleName(), true, !CraftPresence.CONFIG.formatWords);
         final String newDimension_Identifier = !StringUtils.isNullOrEmpty(newDimension_primaryIdentifier) ? newDimension_primaryIdentifier : newDimension_alternativeIdentifier;
 
         if (!newDimensionName.equals(CURRENT_DIMENSION_NAME) || !newDimension_Identifier.equals(CURRENT_DIMENSION_IDENTIFIER)) {
@@ -212,8 +212,8 @@ public class DimensionUtils {
     public void getDimensions() {
         for (DimensionType TYPE : getDimensionTypes()) {
             if (TYPE != null) {
-                if (!DIMENSION_NAMES.contains(StringUtils.formatDimensionName(TYPE.getName(), true, !CraftPresence.CONFIG.formatWords))) {
-                    DIMENSION_NAMES.add(StringUtils.formatDimensionName(TYPE.getName(), true, !CraftPresence.CONFIG.formatWords));
+                if (!DIMENSION_NAMES.contains(StringUtils.formatIdentifier(TYPE.getName(), true, !CraftPresence.CONFIG.formatWords))) {
+                    DIMENSION_NAMES.add(StringUtils.formatIdentifier(TYPE.getName(), true, !CraftPresence.CONFIG.formatWords));
                 }
                 if (!DIMENSION_TYPES.contains(TYPE)) {
                     DIMENSION_TYPES.add(TYPE);
@@ -224,8 +224,8 @@ public class DimensionUtils {
         for (String dimensionMessage : CraftPresence.CONFIG.dimensionMessages) {
             if (!StringUtils.isNullOrEmpty(dimensionMessage)) {
                 final String[] part = dimensionMessage.split(CraftPresence.CONFIG.splitCharacter);
-                if (!StringUtils.isNullOrEmpty(part[0]) && !DIMENSION_NAMES.contains(StringUtils.formatDimensionName(part[0], true, !CraftPresence.CONFIG.formatWords))) {
-                    DIMENSION_NAMES.add(StringUtils.formatDimensionName(part[0], true, !CraftPresence.CONFIG.formatWords));
+                if (!StringUtils.isNullOrEmpty(part[0]) && !DIMENSION_NAMES.contains(StringUtils.formatIdentifier(part[0], true, !CraftPresence.CONFIG.formatWords))) {
+                    DIMENSION_NAMES.add(StringUtils.formatIdentifier(part[0], true, !CraftPresence.CONFIG.formatWords));
                 }
             }
         }

@@ -697,26 +697,30 @@ public class StringUtils {
     }
 
     /**
-     * Converts input into a properly formatted and interpretable Dimension Name
+     * Converts an Identifier into a properly formatted and interpretable Name
+     * <p>
+     * Note: Additional Logic in Place for Older MC Versions
      *
-     * @param dimName    The Dimension Name to format
+     * @param originalId    The Identifier to format
      * @param formatToId Whether to format as an Icon Key
-     * @return The formatted dimension name/icon key
+     * @return The formatted name/icon key
      */
-    public static String formatDimensionName(final String dimName, final boolean formatToId) {
-        return formatDimensionName(dimName, formatToId, false);
+    public static String formatIdentifier(final String originalId, final boolean formatToId) {
+        return formatIdentifier(originalId, formatToId, false);
     }
 
     /**
-     * Converts input into a properly formatted and interpretable Dimension Name
+     * Converts an Identifier into a properly formatted and interpretable Name
+     * <p>
+     * Note: Additional Logic in Place for Older MC Versions
      *
-     * @param dimName    The Dimension Name to format
+     * @param originalId    The Identifier to format
      * @param formatToId Whether to format as an Icon Key
-     * @param avoid      Flag to ignore formatting dimension name
-     * @return The formatted dimension name/icon key
+     * @param avoid      Flag to ignore formatting identifier, if formatToId is false
+     * @return The formatted name/icon key
      */
-    public static String formatDimensionName(final String dimName, final boolean formatToId, final boolean avoid) {
-        StringBuilder formattedKey = new StringBuilder(dimName);
+    public static String formatIdentifier(final String originalId, final boolean formatToId, final boolean avoid) {
+        StringBuilder formattedKey = new StringBuilder(originalId);
         if (isNullOrEmpty(formattedKey.toString())) {
             return formattedKey.toString();
         } else {
