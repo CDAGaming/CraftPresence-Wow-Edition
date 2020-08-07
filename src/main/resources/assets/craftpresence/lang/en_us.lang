@@ -213,6 +213,7 @@ craftpresence.defaults.state.loading=Loading...
 craftpresence.defaults.state.mcversion=Minecraft %1$s
 craftpresence.defaults.state.lan=Playing on a LAN Server
 craftpresence.defaults.state.singleplayer=Playing Singleplayer
+craftpresence.defaults.mode.hardcore=Hardcore
 craftpresence.defaults.placeholder.pack=&name&
 craftpresence.defaults.placeholder.players=&current& / &max& Players
 craftpresence.defaults.placeholder.playerinfo.out=As &name&

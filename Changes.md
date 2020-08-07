@@ -5,6 +5,7 @@
 ### Changes
 
 *   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
+*   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder
 
 ### Fixes
 

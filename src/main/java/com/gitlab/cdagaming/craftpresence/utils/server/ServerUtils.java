@@ -292,7 +292,9 @@ public class ServerUtils {
                 if (currentServerMSG.toLowerCase().contains("&worldinfo&")) {
                     // &difficulty& Argument = Current Difficulty of the World
                     if (CraftPresence.CONFIG.worldPlaceholderMSG.toLowerCase().contains("&difficulty&")) {
-                        final String newDifficulty = CraftPresence.player != null ? CraftPresence.player.world.getDifficulty().name() : "";
+                        final String newDifficulty = CraftPresence.player != null ?
+                                (CraftPresence.player.world.getWorldInfo().isHardcoreModeEnabled() ? ModUtils.TRANSLATOR.translate("craftpresence.defaults.mode.hardcore") : CraftPresence.player.world.getDifficulty().name()) :
+                                "";
                         if (!newDifficulty.equals(currentDifficulty)) {
                             currentDifficulty = newDifficulty;
                             queuedForUpdate = true;
