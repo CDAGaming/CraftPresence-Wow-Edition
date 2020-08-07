@@ -25,3 +25,5 @@ classes/
 /local.properties
 .floo
 .flooignore
+
+logs/
