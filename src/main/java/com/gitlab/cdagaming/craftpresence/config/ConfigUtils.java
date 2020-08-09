@@ -395,9 +395,9 @@ public class ConfigUtils {
                                             // If the Keycode is valid, iterate through the migration data
                                             // to see if KeyCodes need any data migrations
                                             for (Tuple<List<String>, String> migrationChunk : migrationData) {
-                                                if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase())) {
-                                                    // If so, analyze the second part of the migration data,
-                                                    // and adjust the KeyCode accordingly
+                                                if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase("None")) {
+                                                    // If so, retrieve the second part of the migration data,
+                                                    // and adjust the KeyCode accordingly with the mode it should use
                                                     int migratedKeyCode = KeyConverter.convertKey(boolData.getSecond(), KeyConverter.ConversionMode.valueOf(migrationChunk.getSecond()));
                                                     if (!skipLogging) {
                                                         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.apply", migrationChunk.getFirst().toString(), migrationChunk.getSecond(), propertyName, boolData.getSecond(), migratedKeyCode));
