@@ -25,6 +25,7 @@ package com.gitlab.cdagaming.craftpresence.config;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
@@ -40,7 +41,8 @@ import java.util.Properties;
 public class ConfigUtils {
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
-            keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"};
+            keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"},
+            globalTriggers = new String[]{"global", "last"};
     // Mappings:
     // Config Data = Tuple<propertyValue, value>
     // Config Property = Tuple<propertyFieldName, valueFieldName>
@@ -48,6 +50,8 @@ public class ConfigUtils {
     private final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
     private final String fileName;
     // Config Names
+    // GLOBAL (NON-USER-ADJUSTABLE)
+    public String NAME_lastMcVersionId;
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
             NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
@@ -71,6 +75,8 @@ public class ConfigUtils {
     // DISPLAY MESSAGES
     public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
+    // GLOBAL (NON-USER-ADJUSTABLE)
+    public String lastMcVersionId;
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
             showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
@@ -93,7 +99,8 @@ public class ConfigUtils {
     public int refreshRate;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
-    public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID, configKeyCode;
+    public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID;
+    public int configKeyCode;
     public boolean stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
     public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG, largeImageKey, smallImageKey;
@@ -111,6 +118,9 @@ public class ConfigUtils {
     }
 
     public void setupInitialValues() {
+        // GLOBAL (NON-USER-ADJUSTABLE)
+        NAME_lastMcVersionId = ModUtils.TRANSLATOR.translate(true, "gui.config.name.global.lastmcversionid").replaceAll(" ", "_");
+        lastMcVersionId = Integer.toString(ModUtils.MCProtocolID);
         // GENERAL
         NAME_detectCurseManifest = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detectcursemanifest").replaceAll(" ", "_");
         NAME_detectMultiMCManifest = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detectmultimcmanifest").replaceAll(" ", "_");
@@ -223,7 +233,7 @@ public class ConfigUtils {
         languageID = "en_US";
         stripTranslationColors = false;
         showLoggingInChat = false;
-        configKeyCode = Integer.toString(Keyboard.KEY_GRAVE);
+        configKeyCode = Keyboard.KEY_GRAVE;
         // DISPLAY MESSAGES
         NAME_gameStateMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.gamestatemsg").replaceAll(" ", "_");
         NAME_detailsMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.detailsmsg").replaceAll(" ", "_");
@@ -299,22 +309,65 @@ public class ConfigUtils {
             int currentIndex = 0;
             final List<String> propertyList = Lists.newArrayList(properties.stringPropertyNames());
 
+            // Format: ListOfMigrationTargets:MigrationId
+            final List<Tuple<List<String>, String>> migrationData = Lists.newArrayList();
+
             for (Tuple<String, String> configProperty : configPropertyMappings) {
                 Object fieldObject = null, foundProperty;
-                Class<?> expectedClass = configDataMappings.get(currentIndex).getSecond().getClass();
+                final String propertyName = configDataMappings.get(currentIndex).getFirst();
+                final Object defaultValue = configDataMappings.get(currentIndex).getSecond();
+                final Class<?> expectedClass = configDataMappings.get(currentIndex).getSecond().getClass();
 
-                if (propertyList.contains(configDataMappings.get(currentIndex).getFirst())) {
-                    propertyList.remove(configDataMappings.get(currentIndex).getFirst());
-                    foundProperty = properties.get(configDataMappings.get(currentIndex).getFirst());
+                if (propertyList.contains(propertyName)) {
+                    propertyList.remove(propertyName);
+                    foundProperty = properties.get(propertyName);
 
                     try {
                         // Case 1: Attempt to Automatically Cast to Expected Variable
-                        // *This will likely only work for strings or simplistic conversions*
+                        // Note: This will likely only work for strings or simplistic conversions
                         fieldObject = expectedClass.cast(foundProperty);
 
                         // If null or toString is null, throw Exception to reset value to Prior/Default Value
                         if (fieldObject == null || StringUtils.isNullOrEmpty(fieldObject.toString())) {
-                            throw new IllegalArgumentException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", configDataMappings.get(currentIndex).getFirst()));
+                            throw new IllegalArgumentException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", propertyName));
+                        } else {
+                            // Move through any triggers or Migration Data, if needed
+                            // Before proceeding to final parsing
+                            for (String globalTrigger : globalTriggers) {
+                                if (configProperty.getSecond().toLowerCase().contains(globalTrigger.toLowerCase())) {
+                                    // If the variable if Global, check and see if it is different from it's default value
+                                    // In some cases, additional migrations may also be needed, in which case data is added to the list
+                                    if (fieldObject != defaultValue) {
+                                        if (!skipLogging) {
+                                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.globaladjust", propertyName));
+                                        }
+
+                                        if (propertyName.equals(NAME_lastMcVersionId)) {
+                                            // Global Case 1 Notes:
+                                            // In this situation, if the current parsed protocol version
+                                            // is a newer version then 1.12.2 (340), then
+                                            // we need to convert any keycodes to an LWJGL 3 format
+                                            // Otherwise, if using a config from above 1.12.2 on it or anything lower,
+                                            // we need to convert any keycodes to an LWJGL 2 format.
+                                            // If neither is true, then we mark the migration data as None, and it will be skipped over
+                                            int currentParseValue = -1, defaultParseValue = Integer.parseInt(defaultValue.toString());
+                                            try {
+                                                currentParseValue = Integer.parseInt(fieldObject.toString());
+                                            } catch (Exception ignored) {}
+
+                                            final String migrationId = currentParseValue <= 340 && defaultParseValue > 340 ? KeyConverter.ConversionMode.Lwjgl3.name() :
+                                                    currentParseValue > 340 && defaultParseValue <= 340 ? KeyConverter.ConversionMode.Lwjgl2.name() : "None";
+
+                                            if (!skipLogging) {
+                                                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(keyCodeTriggers).toString(), migrationId));
+                                            }
+                                            migrationData.add(new Tuple<>(Arrays.asList(keyCodeTriggers), migrationId));
+                                        }
+                                        fieldObject = defaultValue;
+                                    }
+                                    break;
+                                }
+                            }
                         }
                     } catch (Exception ex) {
                         // Case 2: Manually Convert Variable based on Expected Type
@@ -331,13 +384,28 @@ public class ConfigUtils {
                                 // Pre-Verification Check to trigger if the Field Name contains KeyCode Triggers
                                 // If the Property Name contains KeyCode or KeyBinding, verify if the KeyCode is valid
                                 for (String keyTrigger : keyCodeTriggers) {
-                                    if (configProperty.getSecond().contains(keyTrigger)) {
+                                    if (configProperty.getSecond().toLowerCase().contains(keyTrigger.toLowerCase())) {
                                         if (!CraftPresence.KEYBINDINGS.isValidKeyCode(boolData.getSecond())) {
                                             // If not a valid KeyCode, Revert Value to prior Data
                                             if (!skipLogging) {
-                                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", propertyName));
                                             }
-                                            fieldObject = configDataMappings.get(currentIndex).getSecond();
+                                            fieldObject = defaultValue;
+                                        } else {
+                                            // If the Keycode is valid, iterate through the migration data
+                                            // to see if KeyCodes need any data migrations
+                                            for (Tuple<List<String>, String> migrationChunk : migrationData) {
+                                                if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase())) {
+                                                    // If so, analyze the second part of the migration data,
+                                                    // and adjust the KeyCode accordingly
+                                                    int migratedKeyCode = KeyConverter.convertKey(boolData.getSecond(), KeyConverter.ConversionMode.valueOf(migrationChunk.getSecond()));
+                                                    if (!skipLogging) {
+                                                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.apply", migrationChunk.getFirst().toString(), migrationChunk.getSecond(), propertyName, boolData.getSecond(), migratedKeyCode));
+                                                    }
+                                                    fieldObject = migratedKeyCode;
+                                                    break;
+                                                }
+                                            }
                                         }
                                         break;
                                     }
@@ -349,9 +417,9 @@ public class ConfigUtils {
                             } else {
                                 // If not a valid Integer, Revert Value to prior Data
                                 if (!skipLogging) {
-                                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                                    ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", propertyName));
                                 }
-                                fieldObject = configDataMappings.get(currentIndex).getSecond();
+                                fieldObject = defaultValue;
                             }
                         } else if (expectedClass == String[].class) {
                             // Convert to String Array (After Verifying it is a single Array)
@@ -372,9 +440,9 @@ public class ConfigUtils {
                         } else {
                             // If not a Convertible Type, Revert Value to prior Data
                             if (!skipLogging) {
-                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.emptyprop", propertyName));
                             }
-                            fieldObject = configDataMappings.get(currentIndex).getSecond();
+                            fieldObject = defaultValue;
                         }
                     } finally {
                         if (fieldObject != null) {
@@ -384,7 +452,7 @@ public class ConfigUtils {
                 } else {
                     // If a Config Variable is not present in the Properties File, queue a Config Update
                     if (!skipLogging) {
-                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", configDataMappings.get(currentIndex).getFirst()));
+                        ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.emptyprop", propertyName));
                     }
                 }
                 currentIndex++;
@@ -432,16 +500,16 @@ public class ConfigUtils {
         syncMappings();
 
         for (Tuple<String, Object> configDataSet : configDataMappings) {
-            Class<?> expectedClass = configDataSet.getSecond().getClass();
+            final Class<?> expectedClass = configDataSet.getSecond().getClass();
             String finalOutput;
 
             try {
                 if (expectedClass == String[].class) {
                     // Save as String Array, after ensuring default argument exists
+                    String[] finalArray = (String[]) configDataSet.getSecond();
 
                     // Ensure default Value for String Array is available
                     // If default value is not present, give it a dummy value
-                    String[] finalArray = (String[]) configDataSet.getSecond();
                     boolean defaultFound = !StringUtils.isNullOrEmpty(StringUtils.getConfigPart(finalArray, "default", 0, 1, splitCharacter, null));
                     if (!defaultFound) {
                         ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.defaultmissing", configDataSet.getFirst()));
@@ -489,7 +557,11 @@ public class ConfigUtils {
         try {
             outputStream = new FileOutputStream(configFile);
             configWriter = new OutputStreamWriter(outputStream, Charset.forName(encoding));
-            properties.store(configWriter, null);
+            properties.store(configWriter,
+                    ModUtils.TRANSLATOR.translate(true, "gui.config.title") + "\n" +
+                            ModUtils.TRANSLATOR.translate(true, "gui.config.comment.title", ModUtils.VERSION_ID) + "\n\n" +
+                            ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.config.notice")
+            );
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.save"));
             ex.printStackTrace();

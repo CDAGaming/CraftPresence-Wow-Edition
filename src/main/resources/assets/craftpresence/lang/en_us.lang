@@ -1,6 +1,6 @@
 #PARSE_ESCAPES
 ## CONFIG MENU - TITLE NAMES ##
-gui.config.title=CraftPresence - Configuration Gui
+gui.config.title=CraftPresence - Configuration Settings
 gui.config.title.general=General Settings
 gui.config.title.biomemessages=Customize Biome Messages
 gui.config.title.dimensionmessages=Customize Dimension Messages
@@ -37,6 +37,7 @@ gui.config.title.selector.view.servers=CraftPresence - Server Addresses
 gui.config.title.selector.view.guis=CraftPresence - Available Guis
 gui.config.title.selector.view.items=CraftPresence - Available Items
 ## CONFIG MESSAGES - TITLE COMMENTS ##
+gui.config.comment.title=Current Version -> %1$s
 gui.config.comment.title.general=General Settings for Displaying Info
 gui.config.comment.title.biomemessages=Customize Messages to display with Biomes\n (Manual Format: biome_name;message)\n Available Placeholders:\n - &biome& = Biome Name\n - &id& = Biome ID
 gui.config.comment.title.dimensionmessages=Customize Messages to display with Dimensions\n (Manual Format: dimension_name;message)\n Available Placeholders:\n - &dimension& = Dimension Name\n - &id& = Dimension ID\n - &icon& = Default Dimension Icon
@@ -89,6 +90,7 @@ gui.config.message.hover.defaultempty=**Default Info cannot be Empty and Must be
 gui.config.message.hover.valuename=Name to Identify this Value
 gui.config.message.tags=Current Tag Placeholders -> %1$s
 ## CONFIG MESSAGES - NAMES ##
+gui.config.name.global.lastmcversionid=Last MC Version ID
 gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon
 gui.config.name.general.detectcursemanifest=Detect Curse Manifest
@@ -254,7 +256,11 @@ craftpresence.logger.info.updater.receive.data=Received Update Data: %1$s
 craftpresence.logger.info.updater.receive.changelog=Received Changelog: %1$s
 craftpresence.logger.info.updater.receive.status=Received Update Status for %1$s -> %2$s (Target Version: v%3$s)
 craftpresence.logger.info.config.new=New Configuration Data for CraftPresence has been created successfully!
+craftpresence.logger.info.config.notice=Last Synchronized:
 craftpresence.logger.info.config.save=Configuration Settings have been Saved and Reloaded Successfully!
+craftpresence.logger.info.update.dynamic=Dynamically Updated Data -> %1$s in %2$s
+craftpresence.logger.info.migration.add=Adding Migration Data for data matching %1$s with Action ID %2$s due to Global Settings!
+craftpresence.logger.info.migration.apply=Applying Migration Data for data matching %1$s with Action ID %2$s -> Converting %3$s from %4$s to %5$s
 craftpresence.logger.info.manifest.init=Checking for valid Curse Manifest Data...
 craftpresence.logger.info.manifest.loaded=Found Curse Manifest Data! ( Name: "%1$s" )
 craftpresence.logger.info.instance.init=Checking for valid MultiMC Instance Data...
@@ -289,6 +295,7 @@ craftpresence.logger.error.config.invalidicon.empty=Unable to Detect any Usable 
 craftpresence.logger.error.config.invalidicon.pre=Invalid Icon "%1$s" in Property "%2$s", Selecting a Randomized Valid Icon...
 craftpresence.logger.error.config.invalidicon.post=Successfully Set Icon in Property "%1$s" to "%2$s"
 craftpresence.logger.error.config.emptyprop=Empty or Non-Convertable Property Detected ("%1$s"), setting property as default...
+craftpresence.logger.error.config.globaladjust=Global Property Adjustment Detected ("%1$s"), checking for migration data and setting property to new value...
 craftpresence.logger.error.config.invalidprop=Invalid Property Detected ("%1$s"), removing property...
 craftpresence.logger.error.config.defaultmissing=Default Value is missing for Property "%1$s", Adding to Property...
 craftpresence.logger.error.file.manifest=Unable to get Curse Manifest Data (Ignore if Not using a Twitch/CursePack)
@@ -309,4 +316,5 @@ craftpresence.logger.warning.fingerprintviolation=Invalid Certificate Detected, 
 craftpresence.logger.warning.debugmode=You are Running CraftPresence in a Debugging Environment, some features may not function properly!
 craftpresence.logger.warning.updater.homepage=Unable to locate Homepage for this Application...
 craftpresence.logger.warning.updater.incompatiblejson=Json Segment "%1$s" is of an incompatible format...
+craftpresence.logger.warning.keybind.convert.invalid=Keybind Conversion for Keycode "%1$s" has returned an unknown Result, caution is advised (Mode: %2$s)...
 craftpresence.exception.config.nullprop=Property Value for "%1$s" cannot be null

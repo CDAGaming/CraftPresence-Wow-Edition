@@ -337,6 +337,11 @@ public class MainGui extends ExtendedScreen {
         proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+
+        // Hovering over Title Label
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, StringUtils.getStringWidth(mainTitle), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title", ModUtils.VERSION_ID)), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+        }
     }
 
     @Override

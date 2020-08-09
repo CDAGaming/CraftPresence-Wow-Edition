@@ -1072,6 +1072,7 @@ public class StringUtils {
                 Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
                 lookupField.setAccessible(true);
                 lookupField.set(instance, currentData.getSecond());
+                ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.update.dynamic", currentData.toString(), classToAccess.getName()));
             } catch (Exception ignored) {
             }
         }
