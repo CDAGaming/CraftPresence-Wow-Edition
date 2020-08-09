@@ -63,7 +63,7 @@ public class UnixPipe extends Pipe {
         int readResult = is.read(d);
         ByteBuffer bb = ByteBuffer.wrap(d);
 
-        if (ipcClient.isDebugMode()) {
+        if (ipcClient.isDebugMode() && ipcClient.isVerboseLogging()) {
             ModUtils.LOG.debugInfo(String.format("Read Byte Data: %s with result %s", new String(d), readResult));
         }
 
@@ -72,7 +72,7 @@ public class UnixPipe extends Pipe {
 
         int reversedResult = is.read(d);
 
-        if (ipcClient.isDebugMode()) {
+        if (ipcClient.isDebugMode() && ipcClient.isVerboseLogging()) {
             ModUtils.LOG.debugInfo(String.format("Read Reversed Byte Data: %s with result %s", new String(d), reversedResult));
         }
 

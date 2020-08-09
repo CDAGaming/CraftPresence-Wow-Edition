@@ -152,7 +152,12 @@ public class ModUtils {
     /**
      * If this Application should be run in a Developer or Debug State
      */
-    public static boolean IS_DEV = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+    public static boolean IS_DEV = false;
+
+    /**
+     * If this Application is running in a de-obfuscated or Developer environment
+     */
+    public static boolean IS_VERBOSE = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
     /**
      * Retrieves and Initializes Character Data<p>

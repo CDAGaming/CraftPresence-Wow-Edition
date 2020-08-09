@@ -54,7 +54,7 @@ import java.util.HashMap;
  */
 public final class IPCClient implements Closeable {
     private final long clientId;
-    private final boolean debugMode;
+    private final boolean debugMode, verboseLogging;
     private final HashMap<String, Callback> callbacks = new HashMap<>();
     private volatile Pipe pipe;
     private IPCListener listener = null;
@@ -71,6 +71,7 @@ public final class IPCClient implements Closeable {
     public IPCClient(long clientId) {
         this.clientId = clientId;
         this.debugMode = false;
+        this.verboseLogging = false;
     }
 
     /**
@@ -84,6 +85,22 @@ public final class IPCClient implements Closeable {
     public IPCClient(long clientId, boolean debugMode) {
         this.clientId = clientId;
         this.debugMode = debugMode;
+        this.verboseLogging = false;
+    }
+
+    /**
+     * Constructs a new IPCClient using the provided {@code clientId}.<br>
+     * This is initially unconnected to Discord.
+     *
+     * @param clientId  The Rich Presence application's client ID, which can be found
+     *                  <a href=https://discord.com/developers/applications/me>here</a>
+     * @param debugMode Whether Debug Logging should be shown for this client
+     * @param verboseLogging Whether excess/deeper-rooted logging should be shown
+     */
+    public IPCClient(long clientId, boolean debugMode, boolean verboseLogging) {
+        this.clientId = clientId;
+        this.debugMode = debugMode;
+        this.verboseLogging = verboseLogging;
     }
 
     /**
@@ -155,6 +172,16 @@ public final class IPCClient implements Closeable {
      */
     public boolean isDebugMode() {
         return debugMode;
+    }
+
+    /**
+     * Gets whether this IPCClient will show verbose logging
+     * Default: False
+     *
+     * @return The Debug Mode Status
+     */
+    public boolean isVerboseLogging() {
+        return verboseLogging;
     }
 
     /**

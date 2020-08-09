@@ -9,6 +9,7 @@
 *   Added Comments to the Config File, showing a title and more clearly showing version and modified metadata
 *   Added a Conversion Layer for converting KeyCodes between LWJGL2 (1.12.2 and below) and LWJGL3 (1.13 and above)
 *   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
+*   Separated `IS_DEV` into two options, to allow for toggling excessive logging (Verbose Logging)
 
 ### Fixes
 
