@@ -45,24 +45,23 @@ public class KeyUtils {
      * LWJGL 2: ESC = 0x01
      * LWJGL 3: ESC = 256
      */
-    private final int keyStartLimit = 0x00;
-    private final List<Integer> invalidKeys = Lists.newArrayList(0x01, 256);
+    private final List<Integer> invalidKeys = Lists.newArrayList(1, 256);
 
     /**
      * Determine if the Source KeyCode fulfills the following conditions
      * <p>
-     * 1) Is After the {@link KeyUtils#keyStartLimit}<p>
-     * 2) Is Not Contained or Listed within {@link KeyUtils#invalidKeys}
+     * 1) Is Not Contained or Listed within {@link KeyUtils#invalidKeys}
      *
      * @param sourceKeyCode The Source KeyCode to Check
      * @return {@code true} if and only if a Valid KeyCode
      */
     public boolean isValidKeyCode(int sourceKeyCode) {
-        return sourceKeyCode > keyStartLimit && !invalidKeys.contains(sourceKeyCode);
+        return !invalidKeys.contains(sourceKeyCode);
     }
 
     /**
      * Determine the LWJGL KeyCode Name for the inputted KeyCode
+     * TODO: Add Overload to allow an Integer
      *
      * @param original A KeyCode, converted to String
      * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
@@ -99,12 +98,12 @@ public class KeyUtils {
     void onTick() {
         if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
-                if (isValidKeyCode(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && Keyboard.isKeyDown(Integer.parseInt(CraftPresence.CONFIG.configKeyCode)) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
+                if (isValidKeyCode(CraftPresence.CONFIG.configKeyCode) && Keyboard.isKeyDown(CraftPresence.CONFIG.configKeyCode) && !CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                     CraftPresence.GUIS.openConfigGUI = true;
                 }
             } catch (Exception | Error ex) {
                 ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keybind", CraftPresence.CONFIG.NAME_configKeyCode.replaceAll("_", " ")));
-                CraftPresence.CONFIG.configKeyCode = Integer.toString(Keyboard.KEY_GRAVE);
+                CraftPresence.CONFIG.configKeyCode = Keyboard.KEY_GRAVE;
                 CraftPresence.CONFIG.updateConfig();
             }
         }

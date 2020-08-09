@@ -121,4 +121,9 @@ public class Tuple<U, V> {
             return ((this.getFirst() == obj.getFirst()) && (this.getSecond() == obj.getSecond())) || (this == obj);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Tuple[key=" + this.getFirst().toString() + "; value=" + this.getSecond().toString() + "]";
+    }
 }

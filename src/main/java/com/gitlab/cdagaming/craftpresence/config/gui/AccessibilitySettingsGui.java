@@ -164,7 +164,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2 + 50, CraftPresence.GUIS.getButtonY(6),
                         90, 20,
-                        CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode),
+                        CraftPresence.KEYBINDINGS.getKeyName(Integer.toString(CraftPresence.CONFIG.configKeyCode)),
                         "configKeyCode"
                 )
         );

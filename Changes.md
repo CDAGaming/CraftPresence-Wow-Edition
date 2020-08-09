@@ -6,10 +6,15 @@
 
 *   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
 *   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder
+*   Added Comments to the Config File, showing a title and more clearly showing version and modified metadata
+*   Added a Conversion Layer for converting KeyCodes between LWJGL2 (1.12.2 and below) and LWJGL3 (1.13 and above)
+*   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
 
 ### Fixes
 
-*   TBD
+*   Fixed an Issue causing KeyCode Properties to be able to skip verification
+*   Fixed an Issue where the `Config Gui` Keybind was not properly identified
+*   Fixed an Issue causing some LWJGL 3 KeyCodes to not be recognized
 
 ### More Information
 
@@ -24,6 +29,8 @@ The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforg
 *   KeyCodes have changed from an LWJGL Upgrade! Be Sure to check and edit your KeyBinds if migrating from 1.12.2 and below.
 
 Starting in v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
+
+Starting in v1.7.0, The aforementioned KeyCode warning is now void, due to new systems introduced to convert keybindings between LWJGL versions
 
 Note: Due to Maven Troubles on behalf of the Rift Team, Rift Versions are no longer supported as of v1.6.1, though the Differences do still take effect for Forge
 

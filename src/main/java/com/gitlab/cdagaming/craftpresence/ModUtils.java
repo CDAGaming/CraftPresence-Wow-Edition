@@ -85,6 +85,11 @@ public class ModUtils {
     public static final String MCVersion = RealmsSharedConstants.VERSION_STRING;
 
     /**
+     * The Detected Minecraft Protocol Version
+     */
+    public static final int MCProtocolID = RealmsSharedConstants.NETWORK_PROTOCOL_VERSION;
+
+    /**
      * The Detected Brand Information within Minecraft
      */
     public static final String BRAND = ClientBrandRetriever.getClientModName();
