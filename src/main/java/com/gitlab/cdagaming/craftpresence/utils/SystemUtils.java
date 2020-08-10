@@ -76,7 +76,8 @@ public class SystemUtils {
     public boolean IS_64_BIT = false;
 
     /**
-     * If Loading has been completed, classified as after callbacks resync once
+     * If Loading of critical data has been completed<p>
+     * Becomes true after callbacks synchronize once if previously false
      */
     public boolean HAS_LOADED = false;
 

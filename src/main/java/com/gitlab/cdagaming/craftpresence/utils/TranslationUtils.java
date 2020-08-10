@@ -260,7 +260,7 @@ public class TranslationUtils {
      * @param parameters     Extra Formatting Arguments, if needed
      * @return The Localized Translated String
      */
-    public String translate(boolean stripColors, String translationKey, Object... parameters) {
+    public String translate(final boolean stripColors, final String translationKey, final Object... parameters) {
         boolean hasError = false;
         String translatedString = translationKey;
         try {
@@ -288,7 +288,7 @@ public class TranslationUtils {
      * @param parameters     Extra Formatting Arguments, if needed
      * @return The Localized Translated String
      */
-    public String translate(String translationKey, Object... parameters) {
+    public String translate(final String translationKey, final Object... parameters) {
         return translate(CraftPresence.CONFIG != null && CraftPresence.CONFIG.stripTranslationColors, translationKey, parameters);
     }
 
