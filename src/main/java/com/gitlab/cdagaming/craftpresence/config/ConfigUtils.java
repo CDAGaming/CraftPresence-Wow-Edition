@@ -38,6 +38,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * Properties and Configuration Data for CraftPresence
+ *
+ * @author CDAGaming
+ */
 public class ConfigUtils {
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
@@ -114,10 +119,18 @@ public class ConfigUtils {
     public Properties properties = new Properties();
     private boolean initialized = false, isConfigNew = false;
 
+    /**
+     * Initializes a New Instance with the Specified Data
+     *
+     * @param fileName The filename to write this Configuration as
+     */
     public ConfigUtils(String fileName) {
         this.fileName = fileName;
     }
 
+    /**
+     * Setup of Initial Values and Names of Config Data
+     */
     public void setupInitialValues() {
         // GLOBAL (NON-USER-ADJUSTABLE)
         NAME_lastMcVersionId = ModUtils.TRANSLATOR.translate(true, "gui.config.name.global.lastmcversionid").replaceAll(" ", "_");
@@ -253,6 +266,9 @@ public class ConfigUtils {
         initialized = true;
     }
 
+    /**
+     * Synchronizes Config Mappings to the Currently available Field Data
+     */
     private void syncMappings() {
         // Ensure Data is Cleared
         configDataMappings.clear();
@@ -276,6 +292,9 @@ public class ConfigUtils {
         }
     }
 
+    /**
+     * Initializes Config Data, in preparation for sync/read operations
+     */
     public void initialize() {
         try {
             configFile = new File(fileName);
@@ -295,6 +314,13 @@ public class ConfigUtils {
         }
     }
 
+    /**
+     * Reads available Config Data from the {@link ConfigUtils#configFile}
+     * <p>Also ensures validity for the properties detected
+     *
+     * @param skipLogging Whether or not Logging should be skipped
+     * @param encoding The Encoding for the {@link ConfigUtils#configFile}
+     */
     public void read(final boolean skipLogging, final String encoding) {
         Reader configReader = null;
         FileInputStream inputStream = null;
@@ -456,6 +482,18 @@ public class ConfigUtils {
         }
     }
 
+    /**
+     * Synchronizes and Checks for any Migration Data, in relation to the fieldObject and other Settings
+     *
+     * @param skipLogging Whether or not Logging should be skipped
+     * @param migrationData Mapping for any Existing Migration Data being tracked (Format:
+     * @param configProperty The Field Name of the Property to Check for potential changes/migrations
+     * @param fieldObject The Value of the Property to Check for potential changes/migrations
+     * @param foundProperty The original Value of the property to migrate/verify if needed
+     * @param propertyName The Name of the Property to migrate/verify if needed
+     * @param defaultValue The Default Value of the Property to Check against fieldObject
+     * @return The Checked/Verified Field Object, depending on method execution
+     */
     private Object syncMigrationData(boolean skipLogging, List<Tuple<List<String>, String>> migrationData, Tuple<String, String> configProperty, Object fieldObject, Object foundProperty, String propertyName, Object defaultValue) {
         // Move through any triggers or Migration Data, if needed
         // Before proceeding to final parsing
@@ -537,6 +575,9 @@ public class ConfigUtils {
         return fieldObject;
     }
 
+    /**
+     * Aligns and Updates the {@link ConfigUtils#properties} with the data from {@link ConfigUtils#configDataMappings}
+     */
     public void updateConfig() {
         // Track if in need of a data re-sync
         boolean needsDataSync = false;
@@ -595,6 +636,11 @@ public class ConfigUtils {
         }
     }
 
+    /**
+     * Saves the Synchronized {@link ConfigUtils#properties} with the {@link ConfigUtils#configFile}
+     *
+     * @param encoding The encoding to save the {@link ConfigUtils#configFile} as
+     */
     public void save(final String encoding) {
         Writer configWriter = null;
         FileOutputStream outputStream = null;
