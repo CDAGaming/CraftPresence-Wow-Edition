@@ -261,7 +261,7 @@ public class ConfigUtils {
         for (Field field : getClass().getDeclaredFields()) {
             if (field.getName().startsWith("NAME_")) {
                 try {
-                    Field valueField = getClass().getField(field.getName().replaceFirst("NAME_", ""));
+                    final Field valueField = getClass().getField(field.getName().replaceFirst("NAME_", ""));
 
                     field.setAccessible(true);
                     valueField.setAccessible(true);

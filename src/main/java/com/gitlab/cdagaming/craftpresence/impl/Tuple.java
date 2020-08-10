@@ -72,7 +72,7 @@ public class Tuple<U, V> {
      *
      * @param first the first element to be applied
      */
-    public void setFirst(U first) {
+    public void setFirst(final U first) {
         this.first = first;
     }
 
@@ -90,7 +90,7 @@ public class Tuple<U, V> {
      *
      * @param second the second element to be applied
      */
-    public void setSecond(V second) {
+    public void setSecond(final V second) {
         this.second = second;
     }
 
@@ -100,7 +100,7 @@ public class Tuple<U, V> {
      * @param first  the first element to be applied
      * @param second the second element to be applied
      */
-    public void put(U first, V second) {
+    public void put(final U first, final V second) {
         this.first = first;
         this.second = second;
     }
@@ -111,7 +111,7 @@ public class Tuple<U, V> {
      * @param obj The Tuple to compare against
      * @return If the Two Opposing Tuple's are equivalent
      */
-    public boolean equals(Tuple<?, ?> obj) {
+    public boolean equals(final Tuple<?, ?> obj) {
         try {
             // Case 1: Attempt ToString Conversion Checking
             return (this.getFirst().toString().equals(obj.getFirst().toString())) && (this.getSecond().toString().equals(obj.getSecond().toString()));
