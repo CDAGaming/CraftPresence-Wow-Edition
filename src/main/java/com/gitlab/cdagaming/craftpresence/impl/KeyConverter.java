@@ -276,6 +276,8 @@ public class KeyConverter {
 
     /**
      * Converts a KeyCode using the Specified Conversion Mode, if possible
+     * <p>
+     * Note: If None is Used on a Valid Value, this function can be used as verification, if any
      *
      * @param originalKey The original Key to Convert
      * @param mode The Conversion Mode to convert the keycode to
@@ -283,26 +285,28 @@ public class KeyConverter {
      */
     public static int convertKey(final int originalKey, final ConversionMode mode) {
         final int unknownKey = mode == ConversionMode.Lwjgl2 ? 0 : -1;
-        int resultKey = unknownKey;
+        int resultKey = originalKey;
 
-        if (mode == ConversionMode.Lwjgl2) {
-            resultKey = fromGlfw.getOrDefault(originalKey, unknownKey);
-        } else if (mode == ConversionMode.Lwjgl3) {
-            resultKey = toGlfw.getOrDefault(originalKey, unknownKey);
+        if (fromGlfw.containsKey(originalKey) || toGlfw.containsKey(originalKey)) {
+            if (mode == ConversionMode.Lwjgl2 || (mode == ConversionMode.None && fromGlfw.containsKey(originalKey) && toGlfw.containsValue(originalKey) && ModUtils.MCProtocolID <= 340)) {
+                resultKey = fromGlfw.getOrDefault(originalKey, unknownKey);
+            } else if (mode == ConversionMode.Lwjgl3 || (mode == ConversionMode.None && toGlfw.containsKey(originalKey) && fromGlfw.containsValue(originalKey) && ModUtils.MCProtocolID > 340)) {
+                resultKey = toGlfw.getOrDefault(originalKey, unknownKey);
+            }
         }
 
-        if (resultKey == unknownKey) {
-            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.keybind.convert.invalid", Integer.toString(resultKey), mode.name()));
+        if (resultKey == unknownKey || (resultKey == originalKey && mode != ConversionMode.None)) {
+            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.convert.invalid", Integer.toString(resultKey), mode.name()));
         }
 
         return resultKey;
     }
 
     /**
-     * A Mapping storing the possible Conversion Modes
+     * A Mapping storing the possible Conversion Modes for this module
      */
     public enum ConversionMode {
-        Lwjgl2, Lwjgl3, Unknown
+        Lwjgl2, Lwjgl3, None, Unknown
     }
 
 }

@@ -28,8 +28,8 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
 import com.google.common.collect.Lists;
-import org.lwjgl.input.Keyboard;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -42,6 +42,7 @@ public class ConfigUtils {
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
             keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"},
+            languageTriggers = new String[]{"language", "lang", "langId", "languageId"},
             globalTriggers = new String[]{"global", "last"};
     // Mappings:
     // Config Data = Tuple<propertyValue, value>
@@ -230,10 +231,10 @@ public class ConfigUtils {
         tooltipBGColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
         guiBGColor = "minecraft" + splitCharacter + (ModUtils.IS_LEGACY ? "/gui/background.png" : "textures/gui/options_background.png");
-        languageID = "en_US";
+        languageID = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         stripTranslationColors = false;
         showLoggingInChat = false;
-        configKeyCode = Keyboard.KEY_GRAVE;
+        configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;
         // DISPLAY MESSAGES
         NAME_gameStateMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.gamestatemsg").replaceAll(" ", "_");
         NAME_detailsMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.detailsmsg").replaceAll(" ", "_");
@@ -257,7 +258,7 @@ public class ConfigUtils {
         configDataMappings.clear();
         configPropertyMappings.clear();
 
-        // Add Data to Mappings
+        // Add Data to Mappings (Order-Reliant; Ensure Global Variables are first)
         for (Field field : getClass().getDeclaredFields()) {
             if (field.getName().startsWith("NAME_")) {
                 try {
@@ -330,44 +331,6 @@ public class ConfigUtils {
                         // If null or toString is null, throw Exception to reset value to Prior/Default Value
                         if (fieldObject == null || StringUtils.isNullOrEmpty(fieldObject.toString())) {
                             throw new IllegalArgumentException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", propertyName));
-                        } else {
-                            // Move through any triggers or Migration Data, if needed
-                            // Before proceeding to final parsing
-                            for (String globalTrigger : globalTriggers) {
-                                if (configProperty.getSecond().toLowerCase().contains(globalTrigger.toLowerCase())) {
-                                    // If the variable if Global, check and see if it is different from it's default value
-                                    // In some cases, additional migrations may also be needed, in which case data is added to the list
-                                    if (fieldObject != defaultValue) {
-                                        if (!skipLogging) {
-                                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.globaladjust", propertyName));
-                                        }
-
-                                        if (propertyName.equals(NAME_lastMcVersionId)) {
-                                            // Global Case 1 Notes:
-                                            // In this situation, if the current parsed protocol version
-                                            // is a newer version then 1.12.2 (340), then
-                                            // we need to convert any keycodes to an LWJGL 3 format
-                                            // Otherwise, if using a config from above 1.12.2 on it or anything lower,
-                                            // we need to convert any keycodes to an LWJGL 2 format.
-                                            // If neither is true, then we mark the migration data as None, and it will be skipped over
-                                            int currentParseValue = -1, defaultParseValue = Integer.parseInt(defaultValue.toString());
-                                            try {
-                                                currentParseValue = Integer.parseInt(fieldObject.toString());
-                                            } catch (Exception ignored) {}
-
-                                            final String migrationId = currentParseValue <= 340 && defaultParseValue > 340 ? KeyConverter.ConversionMode.Lwjgl3.name() :
-                                                    currentParseValue > 340 && defaultParseValue <= 340 ? KeyConverter.ConversionMode.Lwjgl2.name() : "None";
-
-                                            if (!skipLogging) {
-                                                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(keyCodeTriggers).toString(), migrationId));
-                                            }
-                                            migrationData.add(new Tuple<>(Arrays.asList(keyCodeTriggers), migrationId));
-                                        }
-                                        fieldObject = defaultValue;
-                                    }
-                                    break;
-                                }
-                            }
                         }
                     } catch (Exception ex) {
                         // Case 2: Manually Convert Variable based on Expected Type
@@ -381,8 +344,8 @@ public class ConfigUtils {
                             final Tuple<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty);
 
                             if (boolData.getFirst()) {
-                                // Pre-Verification Check to trigger if the Field Name contains KeyCode Triggers
-                                // If the Property Name contains KeyCode or KeyBinding, verify if the KeyCode is valid
+                                // This check will trigger if the Field Name contains KeyCode Triggers
+                                // If the Property Name contains these values, move onwards
                                 for (String keyTrigger : keyCodeTriggers) {
                                     if (configProperty.getSecond().toLowerCase().contains(keyTrigger.toLowerCase())) {
                                         if (!CraftPresence.KEYBINDINGS.isValidKeyCode(boolData.getSecond())) {
@@ -392,14 +355,14 @@ public class ConfigUtils {
                                             }
                                             fieldObject = defaultValue;
                                         } else {
-                                            // If the Keycode is valid, iterate through the migration data
-                                            // to see if KeyCodes need any data migrations
+                                            // If so, iterate through the migration data allocated earlier
+                                            // to see if the property needs any data migrations
                                             for (Tuple<List<String>, String> migrationChunk : migrationData) {
-                                                if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase("None")) {
+                                                if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase(KeyConverter.ConversionMode.Unknown.name())) {
                                                     // If so, retrieve the second part of the migration data,
-                                                    // and adjust the KeyCode accordingly with the mode it should use
-                                                    int migratedKeyCode = KeyConverter.convertKey(boolData.getSecond(), KeyConverter.ConversionMode.valueOf(migrationChunk.getSecond()));
-                                                    if (!skipLogging) {
+                                                    // and adjust the property accordingly with the mode it should use
+                                                    final int migratedKeyCode = KeyConverter.convertKey(boolData.getSecond(), KeyConverter.ConversionMode.valueOf(migrationChunk.getSecond()));
+                                                    if (!skipLogging && migratedKeyCode != boolData.getSecond()) {
                                                         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.apply", migrationChunk.getFirst().toString(), migrationChunk.getSecond(), propertyName, boolData.getSecond(), migratedKeyCode));
                                                     }
                                                     fieldObject = migratedKeyCode;
@@ -446,6 +409,7 @@ public class ConfigUtils {
                         }
                     } finally {
                         if (fieldObject != null) {
+                            fieldObject = syncMigrationData(skipLogging, migrationData, configProperty, fieldObject, foundProperty, propertyName, defaultValue);
                             StringUtils.updateField(getClass(), CraftPresence.CONFIG, new Tuple<>(configProperty.getSecond(), fieldObject));
                         }
                     }
@@ -490,6 +454,87 @@ public class ConfigUtils {
                 }
             }
         }
+    }
+
+    private Object syncMigrationData(boolean skipLogging, List<Tuple<List<String>, String>> migrationData, Tuple<String, String> configProperty, Object fieldObject, Object foundProperty, String propertyName, Object defaultValue) {
+        // Move through any triggers or Migration Data, if needed
+        // Before proceeding to final parsing
+        for (String globalTrigger : globalTriggers) {
+            if (configProperty.getSecond().toLowerCase().contains(globalTrigger.toLowerCase())) {
+                // If the variable if Global, check and see if it is different from it's default value
+                // In some cases, additional migrations may also be needed, in which case data is added to the list
+                if (!skipLogging && fieldObject != defaultValue) {
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.globaladjust", propertyName));
+                }
+
+                if (propertyName.equals(NAME_lastMcVersionId)) {
+                    int currentParseValue = -1, defaultParseValue = Integer.parseInt(defaultValue.toString());
+                    try {
+                        currentParseValue = Integer.parseInt(fieldObject.toString());
+                    } catch (Exception ignored) {
+                    }
+
+                    String keyCodeMigrationId = KeyConverter.ConversionMode.Unknown.name(), languageMigrationId = TranslationUtils.ConversionMode.Unknown.name();
+                    if (currentParseValue <= 340 && defaultParseValue > 340) {
+                        keyCodeMigrationId = KeyConverter.ConversionMode.Lwjgl3.name();
+                    } else if (currentParseValue > 340 && defaultParseValue <= 340) {
+                        keyCodeMigrationId = KeyConverter.ConversionMode.Lwjgl2.name();
+                    } else if (currentParseValue >= 0 && defaultParseValue >= 0) {
+                        keyCodeMigrationId = KeyConverter.ConversionMode.None.name();
+                    }
+
+                    if (currentParseValue < 315 && defaultParseValue >= 315) {
+                        languageMigrationId = TranslationUtils.ConversionMode.PackFormat3.name();
+                    } else if (currentParseValue >= 315 && defaultParseValue < 315) {
+                        languageMigrationId = TranslationUtils.ConversionMode.PackFormat2.name();
+                    } else if (currentParseValue >= 0 && defaultParseValue >= 0) {
+                        languageMigrationId = TranslationUtils.ConversionMode.None.name();
+                    }
+
+                    if (!skipLogging) {
+                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(keyCodeTriggers).toString(), keyCodeMigrationId, keyCodeMigrationId.equals(KeyConverter.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
+                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(languageTriggers).toString(), languageMigrationId, languageMigrationId.equals(TranslationUtils.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
+                    }
+
+                    // Global Case 1 Notes (KeyCode):
+                    // In this situation, if the currently parsed protocol version
+                    // is a newer version then 1.12.2 (340), then
+                    // we need to convert any keycodes to an LWJGL 3 format
+                    // Otherwise, if using a config from above 1.12.2 on it or anything lower,
+                    // we need to convert any keycodes to an LWJGL 2 format.
+                    // If neither is true, then we mark the migration data as None, and it will be skipped over
+                    migrationData.add(new Tuple<>(Arrays.asList(keyCodeTriggers), keyCodeMigrationId));
+                    // Normal Case 1 Notes (Language ID):
+                    // TBD
+                    migrationData.add(new Tuple<>(Arrays.asList(languageTriggers), languageMigrationId));
+                }
+                fieldObject = defaultValue;
+                break;
+            }
+        }
+
+        // This check will trigger if the Field Name contains Language Identifier Triggers
+        // If the Property Name contains these values, move onwards
+        for (String langTrigger : languageTriggers) {
+            if (configProperty.getSecond().toLowerCase().contains(langTrigger.toLowerCase())) {
+                // If so, iterate through the migration data allocated earlier
+                // to see if the property needs any data migrations
+                for (Tuple<List<String>, String> migrationChunk : migrationData) {
+                    if (migrationChunk.getFirst().contains(langTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase(TranslationUtils.ConversionMode.Unknown.name())) {
+                        // If so, retrieve the second part of the migration data,
+                        // and adjust the property accordingly with the mode it should use
+                        final String migratedLanguageId = TranslationUtils.convertId(foundProperty.toString(), TranslationUtils.ConversionMode.valueOf(migrationChunk.getSecond()));
+                        if (!skipLogging && !migratedLanguageId.equals(foundProperty.toString())) {
+                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.apply", migrationChunk.getFirst().toString(), migrationChunk.getSecond(), propertyName, foundProperty.toString(), migratedLanguageId));
+                        }
+                        fieldObject = migratedLanguageId;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        return fieldObject;
     }
 
     public void updateConfig() {

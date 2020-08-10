@@ -42,7 +42,7 @@ public class TranslationUtils {
     /**
      * The Stored Mapping of Language Request History
      * <p>
-     * Format: languageID:doesExist
+     * Format: languageId:doesExist
      */
     private final Map<String, Boolean> requestMap = Maps.newHashMap();
     /**
@@ -52,11 +52,11 @@ public class TranslationUtils {
     /**
      * The Language ID to Locate and Retrieve Translations
      */
-    private String languageID = "en_US";
+    private String languageId = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
     /**
      * The Target ID to locate the Language File
      */
-    private String modID;
+    private String modId;
     /**
      * The Charset Encoding to parse translations in
      */
@@ -70,7 +70,7 @@ public class TranslationUtils {
     /**
      * If using a .Json or .Lang Language File
      */
-    private boolean usingJSON = false;
+    private boolean usingJson = false;
 
     /**
      * Sets initial Data and Retrieves Valid Translations
@@ -82,42 +82,42 @@ public class TranslationUtils {
     /**
      * Sets initial Data and Retrieves Valid Translations
      *
-     * @param useJSON Toggles whether to use .Json or .Lang, if present
+     * @param useJson Toggles whether to use .Json or .Lang, if present
      */
-    public TranslationUtils(final boolean useJSON) {
-        this("", useJSON);
+    public TranslationUtils(final boolean useJson) {
+        this("", useJson);
     }
 
     /**
      * Sets initial Data and Retrieves Valid Translations
      *
-     * @param modID Sets the Target Mod ID to locate Language Files
+     * @param modId Sets the Target Mod ID to locate Language Files
      */
-    public TranslationUtils(final String modID) {
-        this(modID, false);
+    public TranslationUtils(final String modId) {
+        this(modId, false);
     }
 
     /**
      * Sets initial Data and Retrieves Valid Translations
      *
-     * @param modID   Sets the Target Mod ID to locate Language Files
-     * @param useJSON Toggles whether to use .Json or .Lang, if present
+     * @param modId   Sets the Target Mod ID to locate Language Files
+     * @param useJson Toggles whether to use .Json or .Lang, if present
      */
-    public TranslationUtils(final String modID, final boolean useJSON) {
-        this(modID, useJSON, "UTF-8");
+    public TranslationUtils(final String modId, final boolean useJson) {
+        this(modId, useJson, "UTF-8");
     }
 
     /**
      * Sets initial Data and Retrieves Valid Translations
      *
-     * @param modID    Sets the Target Mod ID to locate Language Files
-     * @param useJSON  Toggles whether to use .Json or .Lang, if present
+     * @param modId    Sets the Target Mod ID to locate Language Files
+     * @param useJson  Toggles whether to use .Json or .Lang, if present
      * @param encoding The Charset Encoding to parse Language Files
      */
-    public TranslationUtils(final String modID, final boolean useJSON, final String encoding) {
-        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageID);
-        setModID(modID);
-        setUsingJSON(useJSON);
+    public TranslationUtils(final String modId, final boolean useJson, final String encoding) {
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageId);
+        setModId(modId);
+        setUsingJson(useJson);
         setEncoding(encoding);
         getTranslationMap(encoding);
         checkUnicode();
@@ -129,7 +129,7 @@ public class TranslationUtils {
      * Comprises of Synchronizing Data, and Updating Translation Data as needed
      */
     void onTick() {
-        if (CraftPresence.CONFIG != null && !languageID.equals(CraftPresence.CONFIG.languageID) &&
+        if (CraftPresence.CONFIG != null && !languageId.equals(CraftPresence.CONFIG.languageID) &&
                 (!requestMap.containsKey(CraftPresence.CONFIG.languageID) || requestMap.get(CraftPresence.CONFIG.languageID))) {
             setLanguage(CraftPresence.CONFIG.languageID);
             getTranslationMap(encoding);
@@ -146,31 +146,31 @@ public class TranslationUtils {
      */
     private void checkUnicode() {
         isUnicode = false;
-        int i = 0;
+        int extendedCharCount = 0;
         int totalLength = 0;
 
         for (String currentString : translationMap.values()) {
-            int currentLength = currentString.length();
+            final int currentLength = currentString.length();
             totalLength += currentLength;
 
             for (int index = 0; index < currentLength; ++index) {
                 if (currentString.charAt(index) >= 256) {
-                    ++i;
+                    ++extendedCharCount;
                 }
             }
         }
 
-        float f = (float) i / (float) totalLength;
+        float f = (float) extendedCharCount / (float) totalLength;
         isUnicode = (double) f > 0.1D || (CraftPresence.instance.gameSettings != null && CraftPresence.instance.gameSettings.forceUnicodeFont);
     }
 
     /**
      * Toggles whether to use .Lang or .Json Language Files
      *
-     * @param usingJSON Toggles whether to use .Json or .Lang, if present
+     * @param usingJson Toggles whether to use .Json or .Lang, if present
      */
-    private void setUsingJSON(final boolean usingJSON) {
-        this.usingJSON = usingJSON;
+    private void setUsingJson(final boolean usingJson) {
+        this.usingJson = usingJson;
     }
 
     /**
@@ -180,9 +180,9 @@ public class TranslationUtils {
      */
     private void setLanguage(final String languageID) {
         if (!StringUtils.isNullOrEmpty(languageID)) {
-            this.languageID = languageID;
+            this.languageId = languageID;
         } else {
-            this.languageID = "en_US";
+            this.languageId = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         }
     }
 
@@ -202,13 +202,13 @@ public class TranslationUtils {
     /**
      * Sets the Mod ID to target when locating Language Files
      *
-     * @param modID The Mod ID to target
+     * @param modId The Mod ID to target
      */
-    private void setModID(final String modID) {
-        if (!StringUtils.isNullOrEmpty(modID)) {
-            this.modID = modID;
+    private void setModId(final String modId) {
+        if (!StringUtils.isNullOrEmpty(modId)) {
+            this.modId = modId;
         } else {
-            this.modID = null;
+            this.modId = null;
         }
     }
 
@@ -218,22 +218,19 @@ public class TranslationUtils {
     private void getTranslationMap(final String encoding) {
         translationMap = Maps.newHashMap();
 
-        InputStream in = StringUtils.getResourceAsStream(TranslationUtils.class, "/assets/"
-                + (!StringUtils.isNullOrEmpty(modID) ? modID + "/" : "") +
-                "lang/" + languageID + (usingJSON ? ".json" : ".lang"));
-        InputStream fallbackIn = StringUtils.getResourceAsStream(TranslationUtils.class, "/assets/"
-                + (!StringUtils.isNullOrEmpty(modID) ? modID + "/" : "") +
-                "lang/" + languageID.toLowerCase() + (usingJSON ? ".json" : ".lang"));
+        final InputStream in = StringUtils.getResourceAsStream(TranslationUtils.class, "/assets/"
+                + (!StringUtils.isNullOrEmpty(modId) ? modId + "/" : "") +
+                "lang/" + languageId + (usingJson ? ".json" : ".lang"));
 
-        if (in != null || fallbackIn != null) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in != null ? in : fallbackIn, Charset.forName(encoding)));
+        if (in != null) {
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName(encoding)));
             try {
                 String currentString;
                 while ((currentString = reader.readLine()) != null) {
                     currentString = currentString.trim();
-                    if (!currentString.startsWith("#") && !currentString.startsWith("[{}]") && (usingJSON ? currentString.contains(":") : currentString.contains("="))) {
-                        String[] splitTranslation = usingJSON ? currentString.split(":", 2) : currentString.split("=", 2);
-                        if (usingJSON) {
+                    if (!currentString.startsWith("#") && !currentString.startsWith("[{}]") && (usingJson ? currentString.contains(":") : currentString.contains("="))) {
+                        final String[] splitTranslation = usingJson ? currentString.split(":", 2) : currentString.split("=", 2);
+                        if (usingJson) {
                             String str1 = splitTranslation[0].substring(1, splitTranslation[0].length() - 1).replace("\\n", "\n").replace("\\", "").trim();
                             String str2 = splitTranslation[1].substring(2, splitTranslation[1].length() - 2).replace("\\n", "\n").replace("\\", "").trim();
                             translationMap.put(str1, str2);
@@ -243,20 +240,15 @@ public class TranslationUtils {
                     }
                 }
 
-                if (in != null) {
-                    in.close();
-                }
-                if (fallbackIn != null) {
-                    fallbackIn.close();
-                }
+                in.close();
             } catch (Exception ex) {
                 ModUtils.LOG.error("An Exception has Occurred while Loading Translation Mappings, Things may not work well...");
                 ex.printStackTrace();
             }
         } else {
-            ModUtils.LOG.error("Translations for " + modID + " do not exist for " + languageID);
-            requestMap.put(languageID, false);
-            setLanguage("en_US");
+            ModUtils.LOG.error("Translations for " + modId + " do not exist for " + languageId);
+            requestMap.put(languageId, false);
+            setLanguage(ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US");
         }
     }
 
@@ -298,5 +290,39 @@ public class TranslationUtils {
      */
     public String translate(String translationKey, Object... parameters) {
         return translate(CraftPresence.CONFIG != null && CraftPresence.CONFIG.stripTranslationColors, translationKey, parameters);
+    }
+
+    /**
+     * Converts a Language Identifier using the Specified Conversion Mode, if possible
+     * <p>
+     * Note: If None is Used on a Valid Value, this function can be used as verification, if any
+     *
+     * @param originalId The original Key to Convert (5 Character Limit)
+     * @param mode The Conversion Mode to convert the keycode to
+     * @return The resulting converted Language Identifier, or the mode's unknown key
+     */
+    public static String convertId(final String originalId, final ConversionMode mode) {
+        String resultId = originalId;
+
+        if (originalId.length() == 5 && originalId.contains("_")) {
+            if (mode == ConversionMode.PackFormat2 || (mode == ConversionMode.None && ModUtils.MCProtocolID < 315)) {
+                resultId = resultId.substring(0, 3).toLowerCase() + resultId.substring(3).toUpperCase();
+            } else if (mode == ConversionMode.PackFormat3 || mode == ConversionMode.None) {
+                resultId = resultId.toLowerCase();
+            }
+        }
+
+        if (resultId.equals(originalId) && mode != ConversionMode.None) {
+            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.convert.invalid", resultId, mode.name()));
+        }
+
+        return resultId.trim();
+    }
+
+    /**
+     * A Mapping storing the possible Conversion Modes for this module
+     */
+    public enum ConversionMode {
+        PackFormat2, PackFormat3, None, Unknown
     }
 }

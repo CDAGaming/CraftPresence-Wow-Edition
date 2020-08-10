@@ -102,8 +102,9 @@ public class KeyUtils {
                     CraftPresence.GUIS.openConfigGUI = true;
                 }
             } catch (Exception | Error ex) {
+                // If an Error Occurs, Reset the Key to it's default value in accordance to the protocol version
                 ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keybind", CraftPresence.CONFIG.NAME_configKeyCode.replaceAll("_", " ")));
-                CraftPresence.CONFIG.configKeyCode = Keyboard.KEY_GRAVE;
+                CraftPresence.CONFIG.configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;
                 CraftPresence.CONFIG.updateConfig();
             }
         }

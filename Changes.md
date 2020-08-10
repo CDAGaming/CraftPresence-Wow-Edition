@@ -8,6 +8,7 @@
 *   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder
 *   Added Comments to the Config File, showing a title and more clearly showing version and modified metadata
 *   Added a Conversion Layer for converting KeyCodes between LWJGL2 (1.12.2 and below) and LWJGL3 (1.13 and above)
+*   Added a Conversion Layer for converting Language IDs between Pack Format 1-2 (1.10.2 and below) and Pack Format 3 and Up (1.11 and above)
 *   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
 *   Separated `IS_DEV` into two options, to allow for toggling excessive logging (Verbose Logging)
 
