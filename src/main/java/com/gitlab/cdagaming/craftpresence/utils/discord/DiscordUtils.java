@@ -368,7 +368,7 @@ public class DiscordUtils {
                         if (allowNull) {
                             finalKey = "";
                         } else {
-                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.default", evalString));
+                            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.discord.assets.default", evalString, defaultIcon));
                             finalKey = defaultIcon;
                         }
                     }

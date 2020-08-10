@@ -17,6 +17,7 @@
 *   Fixed an Issue causing KeyCode Properties to be able to skip verification
 *   Fixed an Issue where the `Config Gui` Keybind was not properly identified
 *   Fixed an Issue causing some LWJGL 3 KeyCodes to not be recognized
+*   Fixed an Issue causing Format Exceptions on some translations
 
 ### More Information
 
