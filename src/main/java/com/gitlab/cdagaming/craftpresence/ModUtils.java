@@ -75,6 +75,11 @@ public class ModUtils {
     public static final String MODID = "craftpresence";
 
     /**
+     * The Application's Configuration Schema Version ID
+     */
+    public static final int MOD_SCHEMA_VERSION = 1;
+
+    /**
      * The Application's GUI Factory, if any
      */
     public static final String GUI_FACTORY = "com.gitlab.cdagaming.craftpresence.config.ConfigGuiDataFactory";

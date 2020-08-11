@@ -37,7 +37,7 @@ gui.config.title.selector.view.servers=CraftPresence - Server Addresses
 gui.config.title.selector.view.guis=CraftPresence - Available Guis
 gui.config.title.selector.view.items=CraftPresence - Available Items
 ## CONFIG MESSAGES - TITLE COMMENTS ##
-gui.config.comment.title=Current Version -> %1$s
+gui.config.comment.title=Current Version -> %1$s (Schema v%2$s)
 gui.config.comment.title.general=General Settings for Displaying Info
 gui.config.comment.title.biomemessages=Customize Messages to display with Biomes\n (Manual Format: biome_name;message)\n Available Placeholders:\n - &biome& = Biome Name\n - &id& = Biome ID
 gui.config.comment.title.dimensionmessages=Customize Messages to display with Dimensions\n (Manual Format: dimension_name;message)\n Available Placeholders:\n - &dimension& = Dimension Name\n - &id& = Dimension ID\n - &icon& = Default Dimension Icon
@@ -90,6 +90,7 @@ gui.config.message.hover.defaultempty=**Default Info cannot be Empty and Must be
 gui.config.message.hover.valuename=Name to Identify this Value
 gui.config.message.tags=Current Tag Placeholders -> %1$s
 ## CONFIG MESSAGES - NAMES ##
+gui.config.name.global.schemaversion=Schema Version
 gui.config.name.global.lastmcversionid=Last MC Version ID
 gui.config.name.general.clientid=Client ID
 gui.config.name.general.defaulticon=Default Icon

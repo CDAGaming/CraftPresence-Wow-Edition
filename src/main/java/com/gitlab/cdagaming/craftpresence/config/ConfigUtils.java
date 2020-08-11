@@ -48,7 +48,7 @@ public class ConfigUtils {
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
             keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"},
             languageTriggers = new String[]{"language", "lang", "langId", "languageId"},
-            globalTriggers = new String[]{"global", "last"};
+            globalTriggers = new String[]{"global", "last", "schema"};
     // Mappings:
     // Config Data = Tuple<propertyValue, value>
     // Config Property = Tuple<propertyFieldName, valueFieldName>
@@ -57,7 +57,7 @@ public class ConfigUtils {
     private final String fileName;
     // Config Names
     // GLOBAL (NON-USER-ADJUSTABLE)
-    public String NAME_lastMcVersionId;
+    public String NAME_schemaVersion, NAME_lastMcVersionId;
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
             NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
@@ -82,7 +82,7 @@ public class ConfigUtils {
     public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
     // GLOBAL (NON-USER-ADJUSTABLE)
-    public String lastMcVersionId;
+    public String schemaVersion, lastMcVersionId;
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
             showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
@@ -133,6 +133,8 @@ public class ConfigUtils {
      */
     public void setupInitialValues() {
         // GLOBAL (NON-USER-ADJUSTABLE)
+        NAME_schemaVersion = ModUtils.TRANSLATOR.translate(true, "gui.config.name.global.schemaversion").replaceAll(" ", "_");
+        schemaVersion = Integer.toString(ModUtils.MOD_SCHEMA_VERSION);
         NAME_lastMcVersionId = ModUtils.TRANSLATOR.translate(true, "gui.config.name.global.lastmcversionid").replaceAll(" ", "_");
         lastMcVersionId = Integer.toString(ModUtils.MCProtocolID);
         // GENERAL
@@ -501,7 +503,7 @@ public class ConfigUtils {
             if (configProperty.getSecond().toLowerCase().contains(globalTrigger.toLowerCase())) {
                 // If the variable if Global, check and see if it is different from it's default value
                 // In some cases, additional migrations may also be needed, in which case data is added to the list
-                if (!skipLogging && fieldObject != defaultValue) {
+                if (!skipLogging && !fieldObject.toString().equals(defaultValue.toString())) {
                     ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.globaladjust", propertyName));
                 }
 
@@ -650,7 +652,7 @@ public class ConfigUtils {
             configWriter = new OutputStreamWriter(outputStream, Charset.forName(encoding));
             properties.store(configWriter,
                     ModUtils.TRANSLATOR.translate(true, "gui.config.title") + "\n" +
-                            ModUtils.TRANSLATOR.translate(true, "gui.config.comment.title", ModUtils.VERSION_ID) + "\n\n" +
+                            ModUtils.TRANSLATOR.translate(true, "gui.config.comment.title", ModUtils.VERSION_ID, ModUtils.MOD_SCHEMA_VERSION) + "\n\n" +
                             ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.config.notice")
             );
         } catch (Exception ex) {
