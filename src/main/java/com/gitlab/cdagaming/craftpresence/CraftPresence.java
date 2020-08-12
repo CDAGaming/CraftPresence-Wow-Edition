@@ -233,8 +233,10 @@ public class CraftPresence {
                     CommandUtils.setLoadingPresence();
                 } else if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandUtils.setMainMenuPresence();
-                } else if (CommandUtils.isInMainMenu && player != null) {
-                    CommandUtils.isInMainMenu = false;
+                } else if (player != null) {
+                    if (CommandUtils.isInMainMenu) {
+                        CommandUtils.isInMainMenu = false;
+                    }
 
                     CLIENT.initArgument("&MAINMENU&");
                 }

@@ -275,7 +275,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         // If KeyCode Field to modify is not null or empty, attempt to queue change
         try {
-            StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(entryData.getSecond(), parsedKey));
+            StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(entryData.getSecond(), keyToSubmit));
             CraftPresence.CONFIG.hasChanged = true;
 
             entryData.getFirst().displayString = formattedKey;
