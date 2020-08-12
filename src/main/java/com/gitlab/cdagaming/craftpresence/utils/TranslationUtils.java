@@ -124,6 +124,33 @@ public class TranslationUtils {
     }
 
     /**
+     * Converts a Language Identifier using the Specified Conversion Mode, if possible
+     * <p>
+     * Note: If None is Used on a Valid Value, this function can be used as verification, if any
+     *
+     * @param originalId The original Key to Convert (5 Character Limit)
+     * @param mode       The Conversion Mode to convert the keycode to
+     * @return The resulting converted Language Identifier, or the mode's unknown key
+     */
+    public static String convertId(final String originalId, final ConversionMode mode) {
+        String resultId = originalId;
+
+        if (originalId.length() == 5 && originalId.contains("_")) {
+            if (mode == ConversionMode.PackFormat2 || (mode == ConversionMode.None && ModUtils.MCProtocolID < 315)) {
+                resultId = resultId.substring(0, 3).toLowerCase() + resultId.substring(3).toUpperCase();
+            } else if (mode == ConversionMode.PackFormat3 || mode == ConversionMode.None) {
+                resultId = resultId.toLowerCase();
+            }
+        }
+
+        if (resultId.equals(originalId) && mode != ConversionMode.None) {
+            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.convert.invalid", resultId, mode.name()));
+        }
+
+        return resultId.trim();
+    }
+
+    /**
      * The Event to Run on each Client Tick, if passed initialization events
      * <p>
      * Comprises of Synchronizing Data, and Updating Translation Data as needed
@@ -290,33 +317,6 @@ public class TranslationUtils {
      */
     public String translate(final String translationKey, final Object... parameters) {
         return translate(CraftPresence.CONFIG != null && CraftPresence.CONFIG.stripTranslationColors, translationKey, parameters);
-    }
-
-    /**
-     * Converts a Language Identifier using the Specified Conversion Mode, if possible
-     * <p>
-     * Note: If None is Used on a Valid Value, this function can be used as verification, if any
-     *
-     * @param originalId The original Key to Convert (5 Character Limit)
-     * @param mode The Conversion Mode to convert the keycode to
-     * @return The resulting converted Language Identifier, or the mode's unknown key
-     */
-    public static String convertId(final String originalId, final ConversionMode mode) {
-        String resultId = originalId;
-
-        if (originalId.length() == 5 && originalId.contains("_")) {
-            if (mode == ConversionMode.PackFormat2 || (mode == ConversionMode.None && ModUtils.MCProtocolID < 315)) {
-                resultId = resultId.substring(0, 3).toLowerCase() + resultId.substring(3).toUpperCase();
-            } else if (mode == ConversionMode.PackFormat3 || mode == ConversionMode.None) {
-                resultId = resultId.toLowerCase();
-            }
-        }
-
-        if (resultId.equals(originalId) && mode != ConversionMode.None) {
-            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.convert.invalid", resultId, mode.name()));
-        }
-
-        return resultId.trim();
     }
 
     /**

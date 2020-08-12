@@ -280,7 +280,7 @@ public class KeyConverter {
      * Note: If None is Used on a Valid Value, this function can be used as verification, if any
      *
      * @param originalKey The original Key to Convert
-     * @param mode The Conversion Mode to convert the keycode to
+     * @param mode        The Conversion Mode to convert the keycode to
      * @return The resulting converted KeyCode, or the mode's unknown key
      */
     public static int convertKey(final int originalKey, final ConversionMode mode) {

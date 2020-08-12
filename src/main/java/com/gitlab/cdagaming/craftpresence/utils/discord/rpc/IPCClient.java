@@ -92,9 +92,9 @@ public final class IPCClient implements Closeable {
      * Constructs a new IPCClient using the provided {@code clientId}.<br>
      * This is initially unconnected to Discord.
      *
-     * @param clientId  The Rich Presence application's client ID, which can be found
-     *                  <a href=https://discord.com/developers/applications/me>here</a>
-     * @param debugMode Whether Debug Logging should be shown for this client
+     * @param clientId       The Rich Presence application's client ID, which can be found
+     *                       <a href=https://discord.com/developers/applications/me>here</a>
+     * @param debugMode      Whether Debug Logging should be shown for this client
      * @param verboseLogging Whether excess/deeper-rooted logging should be shown
      */
     public IPCClient(long clientId, boolean debugMode, boolean verboseLogging) {

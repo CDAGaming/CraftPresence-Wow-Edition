@@ -321,7 +321,7 @@ public class ConfigUtils {
      * <p>Also ensures validity for the properties detected
      *
      * @param skipLogging Whether or not Logging should be skipped
-     * @param encoding The Encoding for the {@link ConfigUtils#configFile}
+     * @param encoding    The Encoding for the {@link ConfigUtils#configFile}
      */
     public void read(final boolean skipLogging, final String encoding) {
         Reader configReader = null;
@@ -487,13 +487,13 @@ public class ConfigUtils {
     /**
      * Synchronizes and Checks for any Migration Data, in relation to the fieldObject and other Settings
      *
-     * @param skipLogging Whether or not Logging should be skipped
-     * @param migrationData Mapping for any Existing Migration Data being tracked (Format:
+     * @param skipLogging    Whether or not Logging should be skipped
+     * @param migrationData  Mapping for any Existing Migration Data being tracked (Format:
      * @param configProperty The Field Name of the Property to Check for potential changes/migrations
-     * @param fieldObject The Value of the Property to Check for potential changes/migrations
-     * @param foundProperty The original Value of the property to migrate/verify if needed
-     * @param propertyName The Name of the Property to migrate/verify if needed
-     * @param defaultValue The Default Value of the Property to Check against fieldObject
+     * @param fieldObject    The Value of the Property to Check for potential changes/migrations
+     * @param foundProperty  The original Value of the property to migrate/verify if needed
+     * @param propertyName   The Name of the Property to migrate/verify if needed
+     * @param defaultValue   The Default Value of the Property to Check against fieldObject
      * @return The Checked/Verified Field Object, depending on method execution
      */
     private Object syncMigrationData(boolean skipLogging, List<Tuple<List<String>, String>> migrationData, Tuple<String, String> configProperty, Object fieldObject, Object foundProperty, String propertyName, Object defaultValue) {
@@ -511,7 +511,10 @@ public class ConfigUtils {
                     int currentParseValue = -1, defaultParseValue = Integer.parseInt(defaultValue.toString());
                     try {
                         currentParseValue = Integer.parseInt(fieldObject.toString());
-                    } catch (Exception ignored) {
+                    } catch (Exception | Error ex) {
+                        if (ModUtils.IS_VERBOSE) {
+                            ex.printStackTrace();
+                        }
                     }
 
                     String keyCodeMigrationId = KeyConverter.ConversionMode.Unknown.name(), languageMigrationId = TranslationUtils.ConversionMode.Unknown.name();

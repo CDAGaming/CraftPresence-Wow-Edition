@@ -24,6 +24,7 @@
 package com.gitlab.cdagaming.craftpresence.utils.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
@@ -172,10 +173,10 @@ public class BiomeUtils {
                         if (!biomeTypes.contains(biomeObj)) {
                             biomeTypes.add(biomeObj);
                         }
-                    } catch (Exception ignored) {
-                        // Ignore Any Exceptions
-                    } catch (Error ignored) {
-                        // Ignore Any Errors
+                    } catch (Exception | Error ex) {
+                        if (ModUtils.IS_VERBOSE) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }

@@ -213,10 +213,10 @@ public class FileUtils {
                                 availableClassList.add(subClassObj);
                             }
                         }
-                    } catch (Exception ignored) {
-                        // Ignore this Exception and Continue
-                    } catch (Error ignored) {
-                        // Ignore this Error and Continue
+                    } catch (Exception | Error ex) {
+                        if (ModUtils.IS_VERBOSE) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }
@@ -233,10 +233,10 @@ public class FileUtils {
                 try {
                     // Add all SuperClasses of Mod Class to a List
                     matchingClasses.addAll(getMatchedClassesAfter(searchList, Class.forName(modClassString)));
-                } catch (Exception ignored) {
-                    // Ignore this Exception and Continue
-                } catch (Error ignored) {
-                    // Ignore this Error and Continue
+                } catch (Exception | Error ex) {
+                    if (ModUtils.IS_VERBOSE) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }
@@ -303,7 +303,10 @@ public class FileUtils {
                             }
                         }
                         jarFile.close();
-                    } catch (Exception ignored) {
+                    } catch (Exception | Error ex) {
+                        if (ModUtils.IS_VERBOSE) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }

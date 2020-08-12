@@ -701,7 +701,7 @@ public class StringUtils {
      * <p>
      * Note: Additional Logic in Place for Older MC Versions
      *
-     * @param originalId    The Identifier to format
+     * @param originalId The Identifier to format
      * @param formatToId Whether to format as an Icon Key
      * @return The formatted name/icon key
      */
@@ -714,7 +714,7 @@ public class StringUtils {
      * <p>
      * Note: Additional Logic in Place for Older MC Versions
      *
-     * @param originalId    The Identifier to format
+     * @param originalId The Identifier to format
      * @param formatToId Whether to format as an Icon Key
      * @param avoid      Flag to ignore formatting identifier, if formatToId is false
      * @return The formatted name/icon key
@@ -1053,7 +1053,10 @@ public class StringUtils {
                 Field lookupField = classToAccess.getDeclaredField(fieldName);
                 lookupField.setAccessible(true);
                 return lookupField.get(instance);
-            } catch (Exception ignored) {
+            } catch (Exception | Error ex) {
+                if (ModUtils.IS_VERBOSE) {
+                    ex.printStackTrace();
+                }
             }
         }
         return null;
@@ -1075,7 +1078,10 @@ public class StringUtils {
                 if (ModUtils.IS_VERBOSE) {
                     ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.update.dynamic", currentData.toString(), classToAccess.getName()));
                 }
-            } catch (Exception ignored) {
+            } catch (Exception ex) {
+                if (ModUtils.IS_VERBOSE) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -1093,7 +1099,10 @@ public class StringUtils {
                 Method lookupMethod = classToAccess.getDeclaredMethod(methodInstance.getFirst(), methodInstance.getSecond().getSecond());
                 lookupMethod.setAccessible(true);
                 lookupMethod.invoke(instance, methodInstance.getSecond().getFirst());
-            } catch (Exception ignored) {
+            } catch (Exception | Error ex) {
+                if (ModUtils.IS_VERBOSE) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
