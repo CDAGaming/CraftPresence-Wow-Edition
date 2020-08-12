@@ -309,8 +309,8 @@ public class DiscordUtils {
 
             foundPackName = CraftPresence.CONFIG.vivecraftMessage;
             foundPackIcon = "vivecraft";
-        } else if (CurseUtils.manifest != null && !StringUtils.isNullOrEmpty(CurseUtils.manifest.name)) {
-            foundPackName = CurseUtils.manifest.name;
+        } else if (!StringUtils.isNullOrEmpty(CurseUtils.INSTANCE_NAME)) {
+            foundPackName = CurseUtils.INSTANCE_NAME;
             foundPackIcon = foundPackName;
         } else if (!StringUtils.isNullOrEmpty(MultiMCUtils.INSTANCE_NAME)) {
             foundPackName = MultiMCUtils.INSTANCE_NAME;

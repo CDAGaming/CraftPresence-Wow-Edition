@@ -27,6 +27,8 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.curse.impl.CurseInstance;
+import com.gitlab.cdagaming.craftpresence.utils.curse.impl.Manifest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,9 +40,17 @@ import java.io.FileNotFoundException;
  */
 public class CurseUtils {
     /**
+     * The Curse Instance Name
+     */
+    public static String INSTANCE_NAME;
+    /**
      * The Curse/Twitch Manifest Data, if any
      */
-    public static CurseManifest manifest;
+    private static Manifest manifest;
+    /**
+     * The Curse/Twitch Instance Data, if any
+     */
+    private static CurseInstance instance;
 
     /**
      * Attempts to retrieve and load Manifest Information, if any
@@ -49,11 +59,16 @@ public class CurseUtils {
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.init"));
 
         try {
-            manifest = FileUtils.getJSONFromFile(new File("manifest.json"), CurseManifest.class);
+            manifest = FileUtils.getJSONFromFile(new File("manifest.json"), Manifest.class);
+            instance = FileUtils.getJSONFromFile(new File("minecraftinstance"), CurseInstance.class);
 
-            if (manifest != null && !StringUtils.isNullOrEmpty(manifest.name)) {
-                CraftPresence.packFound = true;
-                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.loaded", manifest.name));
+            if (manifest != null || instance != null) {
+                INSTANCE_NAME = manifest != null ? manifest.name : instance.name;
+
+                if (!StringUtils.isNullOrEmpty(INSTANCE_NAME)) {
+                    CraftPresence.packFound = true;
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.loaded", INSTANCE_NAME));
+                }
             }
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.file.manifest"));
