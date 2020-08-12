@@ -11,6 +11,7 @@
 *   Added a Conversion Layer for converting Language IDs between Pack Format 1-2 (1.10.2 and below) and Pack Format 3 and Up (1.11 and above)
 *   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
 *   Separated `IS_DEV` into two options, to allow for toggling excessive logging (Verbose Logging)
+*   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
 
 ### Fixes
 
@@ -18,6 +19,7 @@
 *   Fixed an Issue where the `Config Gui` Keybind was not properly identified
 *   Fixed an Issue causing some LWJGL 3 KeyCodes to not be recognized
 *   Fixed an Issue causing Format Exceptions on some translations
+*   Fixed an Issue causing the Load State to be infinitely displayed, if you modified your config whilst in-game
 
 ### More Information
 

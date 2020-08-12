@@ -13,16 +13,16 @@ public class CachedScan {
     public String folderName;
     @SerializedName("fingerprint")
     @Expose
-    public Integer fingerprint;
+    public Long fingerprint;
     @SerializedName("fileDateHash")
     @Expose
-    public Integer fileDateHash;
+    public Long fileDateHash;
     @SerializedName("sectionID")
     @Expose
     public Integer sectionID;
     @SerializedName("individualFingerprints")
     @Expose
-    public List<Integer> individualFingerprints = new ArrayList<Integer>();
+    public List<Long> individualFingerprints = new ArrayList<>();
     @SerializedName("status")
     @Expose
     public Integer status;

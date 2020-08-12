@@ -58,7 +58,7 @@ public class MCUpdaterUtils {
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.file.mcupdater"));
 
-            if (ex.getClass() != FileNotFoundException.class) {
+            if (ex.getClass() != FileNotFoundException.class || ModUtils.IS_VERBOSE) {
                 ex.printStackTrace();
             }
         }

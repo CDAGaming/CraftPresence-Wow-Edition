@@ -43,14 +43,6 @@ public class CurseUtils {
      * The Curse Instance Name
      */
     public static String INSTANCE_NAME;
-    /**
-     * The Curse/Twitch Manifest Data, if any
-     */
-    private static Manifest manifest;
-    /**
-     * The Curse/Twitch Instance Data, if any
-     */
-    private static CurseInstance instance;
 
     /**
      * Attempts to retrieve and load Manifest Information, if any
@@ -58,10 +50,27 @@ public class CurseUtils {
     public static void loadManifest() {
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.init"));
 
+        Manifest manifest = null;
+        CurseInstance instance = null;
+
         try {
             manifest = FileUtils.getJSONFromFile(new File("manifest.json"), Manifest.class);
-            instance = FileUtils.getJSONFromFile(new File("minecraftinstance"), CurseInstance.class);
+        } catch (Exception ex) {
+            try {
+                ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.fallback"));
+                if (ex.getClass() != FileNotFoundException.class || ModUtils.IS_VERBOSE) {
+                    ex.printStackTrace();
+                }
 
+                instance = FileUtils.getJSONFromFile(new File("minecraftinstance.json"), CurseInstance.class);
+            } catch (Exception ex2) {
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.file.manifest"));
+
+                if (ex2.getClass() != FileNotFoundException.class || ModUtils.IS_VERBOSE) {
+                    ex2.printStackTrace();
+                }
+            }
+        } finally {
             if (manifest != null || instance != null) {
                 INSTANCE_NAME = manifest != null ? manifest.name : instance.name;
 
@@ -69,12 +78,6 @@ public class CurseUtils {
                     CraftPresence.packFound = true;
                     ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.loaded", INSTANCE_NAME));
                 }
-            }
-        } catch (Exception ex) {
-            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.file.manifest"));
-
-            if (ex.getClass() != FileNotFoundException.class) {
-                ex.printStackTrace();
             }
         }
     }
