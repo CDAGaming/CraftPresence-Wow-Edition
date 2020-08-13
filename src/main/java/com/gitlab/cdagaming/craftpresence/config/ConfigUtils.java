@@ -74,7 +74,7 @@ public class ConfigUtils {
             NAME_outerPlayerPlaceholderMSG, NAME_innerPlayerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG,
             NAME_playerAmountPlaceholderMSG, NAME_playerItemsPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode,
+    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
@@ -100,7 +100,7 @@ public class ConfigUtils {
             outerPlayerPlaceholderMSG, innerPlayerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG,
             playerAmountPlaceholderMSG, playerItemsPlaceholderMSG, worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode;
+    public boolean enableCommands, enablePERGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode, verboseMode;
     public String splitCharacter;
     public int refreshRate;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
@@ -214,6 +214,7 @@ public class ConfigUtils {
         NAME_renderTooltips = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.rendertooltips").replaceAll(" ", "_");
         NAME_formatWords = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.formatwords").replaceAll(" ", "_");
         NAME_debugMode = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.debugmode").replaceAll(" ", "_");
+        NAME_verboseMode = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.verbosemode").replaceAll(" ", "_");
         NAME_splitCharacter = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.splitcharacter").replaceAll(" ", "_");
         NAME_refreshRate = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.refreshrate").replaceAll(" ", "_");
         NAME_guiMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.guimessages").replaceAll(" ", "_");
@@ -228,6 +229,7 @@ public class ConfigUtils {
         renderTooltips = true;
         formatWords = true;
         debugMode = false;
+        verboseMode = false;
         splitCharacter = ";";
         refreshRate = 2;
         guiMessages = new String[]{"default;In &gui&"};

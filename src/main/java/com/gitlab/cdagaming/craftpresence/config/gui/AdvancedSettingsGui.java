@@ -37,7 +37,7 @@ import java.util.Arrays;
 public class AdvancedSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, entityTargetMessagesButton, entityAttackingMessagesButton, entityRidingMessagesButton;
     private CheckBoxControl enableCommandsButton, enablePerGUIButton,
-            enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton;
+            enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton, verboseModeButton;
     private ExtendedTextControl splitCharacter, refreshRate;
 
     AdvancedSettingsGui(GuiScreen parentScreen) {
@@ -373,7 +373,25 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.debugmode")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.debugmode", CraftPresence.isDevStatusOverridden)
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
+                )
+        );
+        verboseModeButton = addControl(
+                new CheckBoxControl(
+                        calc2, CraftPresence.GUIS.getButtonY(8) - 30,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.advanced.verbosemode"),
+                        CraftPresence.CONFIG.verboseMode,
+                        null,
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.verbosemode", CraftPresence.isVerboseStatusOverridden)
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -441,6 +459,10 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             if (debugModeButton.isChecked() != CraftPresence.CONFIG.debugMode) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.debugMode = debugModeButton.isChecked();
+                            }
+                            if (verboseModeButton.isChecked() != CraftPresence.CONFIG.verboseMode) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.verboseMode = verboseModeButton.isChecked();
                             }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },

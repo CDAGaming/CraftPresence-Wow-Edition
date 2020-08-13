@@ -127,6 +127,16 @@ public class CraftPresence {
     public static GuiUtils GUIS = new GuiUtils();
 
     /**
+     * Whether or not {@link ModUtils#IS_DEV} has been overridden pre-setup
+     */
+    public static boolean isDevStatusOverridden = false;
+
+    /**
+     * Whether or not {@link ModUtils#IS_VERBOSE} has been overridden pre-setup
+     */
+    public static boolean isVerboseStatusOverridden = false;
+
+    /**
      * Whether the Mod has completed it's Initialization Phase
      */
     private boolean initialized = false;
@@ -160,8 +170,19 @@ public class CraftPresence {
 
         CommandUtils.init();
 
-        // Synchronize Developer Mode
-        ModUtils.IS_DEV = CONFIG.debugMode || ModUtils.IS_VERBOSE;
+        // Synchronize Developer and Verbose Modes with Config Options, if they were not already true
+        // If it is true (IE Modified from their Default Value), set the overridden flag to remember later
+        if (!ModUtils.IS_DEV) {
+            ModUtils.IS_DEV = CONFIG.debugMode || ModUtils.IS_VERBOSE;
+        } else {
+            isDevStatusOverridden = true;
+        }
+
+        if (!ModUtils.IS_VERBOSE) {
+            ModUtils.IS_VERBOSE = CONFIG.verboseMode;
+        } else {
+            isVerboseStatusOverridden = true;
+        }
 
         try {
             CLIENT.CLIENT_ID = CONFIG.clientID;
@@ -203,8 +224,9 @@ public class CraftPresence {
             instance = Minecraft.getMinecraft();
             player = instance.player;
 
-            // Synchronize Developer Mode
-            ModUtils.IS_DEV = CONFIG.debugMode || ModUtils.IS_VERBOSE;
+            // Synchronize Developer and Verbose Modes with Config Options, if they were not overridden pre-setup
+            ModUtils.IS_DEV = !isDevStatusOverridden ? CONFIG.debugMode : ModUtils.IS_DEV;
+            ModUtils.IS_VERBOSE = !isVerboseStatusOverridden ? CONFIG.verboseMode : ModUtils.IS_VERBOSE;
 
             CommandUtils.reloadData(false);
 
