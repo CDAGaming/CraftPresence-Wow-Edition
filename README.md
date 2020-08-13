@@ -18,15 +18,22 @@ This Mod offers plenty of Customization Options to specify entirely how others s
 From Having Your Current Biome Show Up, To which Dimension you in, as well as which server you're in,
 The Customization Possibilities are limitless, with the only real limit being how creative you customize your display.
 
-### Twitch // CursePack // MultiMC // MCUpdater // Technic Support
-At this time, CraftPresence will detect whether your Launch Directory contains a valid Twitch Manifest (manifest.json), a MultiMC Instance (instance.cfg), a MCUpdater Instance (instance.json), or a Technic installedPacks File (installedPacks).
-If so, It'll put the Packs Name in your Display as well as Show its Icon (when not in a server).
+### Launcher and Pack Integration Support
+CraftPresence will detect whether your Launch Directory contains:
+*   A valid Twitch/Curse/GDLauncher Manifest (manifest.json, minecraftinstance.json)
+*   A MultiMC Instance (instance.cfg)
+*   A MCUpdater Instance (instance.json)
+*   A Technic installedPacks File (installedPacks)
+
+If using any of these launchers, It'll put the Packs Name in your Display as well as Show its Icon (when not in a server).
+
+Note: In v1.6.0 and above, it'll instead parse the Pack's name into the `&PACK&` placeholder, that you can configure for usage in the RPC
 
 As an example, this is how the mod will convert the pack name to an iconKey:
 
 Example: `All the Mods 3` would parse as `allthemods3`
 
-Note: The above format only applies to Twitch & Technic Packs ; MultiMC natively has an Icon Key Property)
+Note: MultiMC natively has an Icon Key Property that is used instead of converting from the Pack's Display Name
 
 ## Commands
 CraftPresence currently offers the following Commands:

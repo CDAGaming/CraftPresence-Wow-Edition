@@ -34,7 +34,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
- * Set of Utilities used to Parse Curse/Twitch Manifest Information
+ * Set of Utilities used to Parse Curse Manifest Information
+ * <p>Applies to: Twitch, Curse, and GDLauncher
  *
  * @author CDAGaming
  */
@@ -57,6 +58,7 @@ public class CurseUtils {
             // Attempt to Gain Curse Pack Info from the manifest.json file
             // This will typically work on released/exported/imported packs
             // But will fail with Custom/User-Created Packs
+            // Note: This additionally works in the same way for GDLauncher packs of the same nature
             manifest = FileUtils.getJSONFromFile(new File("manifest.json"), Manifest.class);
         } catch (Exception ex) {
             try {
