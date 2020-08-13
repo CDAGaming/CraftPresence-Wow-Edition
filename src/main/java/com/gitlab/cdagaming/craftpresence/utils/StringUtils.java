@@ -454,6 +454,9 @@ public class StringUtils {
             if (formattedKey.contains("\\s")) {
                 formattedKey = formattedKey.replaceAll("\\s+", "");
             }
+            if (formattedKey.contains(" ")) {
+                formattedKey = formattedKey.replaceAll(" ", "");
+            }
             if (formattedKey.contains("'")) {
                 formattedKey = formattedKey.replaceAll("'", "");
             }

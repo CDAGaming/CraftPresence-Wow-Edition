@@ -21,6 +21,7 @@
 *   Fixed an Issue causing some LWJGL 3 KeyCodes to not be recognized
 *   Fixed an Issue causing Format Exceptions on some translations
 *   Fixed an Issue causing the Load State to be infinitely displayed, if you modified your config whilst in-game
+*   Fixed an Issue that caused some Pack Icon Keys to be parsed incorrectly
 
 ### More Information
 
