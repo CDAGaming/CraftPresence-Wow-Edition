@@ -23,6 +23,7 @@
  */
 package com.gitlab.cdagaming.craftpresence.integrations.technic;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -35,11 +36,13 @@ public class TechnicPack {
      * The index IDs for the packs installed within the Launcher
      */
     @SerializedName("byIndex")
+    @Expose
     public String[] byIndex;
 
     /**
      * The currently selected Pack ID
      */
     @SerializedName("selected")
+    @Expose
     public String selected;
 }
