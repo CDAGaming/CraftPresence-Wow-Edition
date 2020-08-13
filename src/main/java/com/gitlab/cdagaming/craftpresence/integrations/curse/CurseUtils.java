@@ -40,12 +40,12 @@ import java.io.FileNotFoundException;
  */
 public class CurseUtils {
     /**
-     * The Curse Instance Name
+     * The Curse Pack Instance Name
      */
     public static String INSTANCE_NAME;
 
     /**
-     * Attempts to retrieve and load Manifest Information, if any
+     * Attempts to retrieve and load Manifest/Instance Information, if any
      */
     public static void loadManifest() {
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.init"));
@@ -54,9 +54,16 @@ public class CurseUtils {
         CurseInstance instance = null;
 
         try {
+            // Attempt to Gain Curse Pack Info from the manifest.json file
+            // This will typically work on released/exported/imported packs
+            // But will fail with Custom/User-Created Packs
             manifest = FileUtils.getJSONFromFile(new File("manifest.json"), Manifest.class);
         } catch (Exception ex) {
             try {
+                // If it fails to get the information from the manifest.json
+                // Attempt to read Pack info from the minecraftinstance.json file
+                // As Most if not all types of Curse Packs contain this file
+                // Though it is considered a fallback due to how much it's parsing
                 ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.manifest.fallback"));
                 if (ex.getClass() != FileNotFoundException.class || ModUtils.IS_VERBOSE) {
                     ex.printStackTrace();
