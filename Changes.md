@@ -12,6 +12,7 @@
 *   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
 *   Separated `IS_DEV` into two options, to allow for toggling excessive logging (Verbose Logging)
 *   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
+*   Localization and Backend Updates
 
 ### Fixes
 
