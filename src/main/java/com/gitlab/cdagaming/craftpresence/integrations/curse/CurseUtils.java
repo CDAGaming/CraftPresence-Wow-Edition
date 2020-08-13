@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.gitlab.cdagaming.craftpresence.utils.curse;
+package com.gitlab.cdagaming.craftpresence.integrations.curse;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.curse.impl.CurseInstance;
-import com.gitlab.cdagaming.craftpresence.utils.curse.impl.Manifest;
+import com.gitlab.cdagaming.craftpresence.integrations.curse.impl.CurseInstance;
+import com.gitlab.cdagaming.craftpresence.integrations.curse.impl.Manifest;
 
 import java.io.File;
 import java.io.FileNotFoundException;

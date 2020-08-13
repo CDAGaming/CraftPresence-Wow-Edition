@@ -1,9 +1,9 @@
-package com.gitlab.cdagaming.craftpresence.utils.curse.impl;
+package com.gitlab.cdagaming.craftpresence.integrations.curse.impl;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class InstalledAddon {
+public class InstalledModpack {
 
     @SerializedName("addonID")
     @Expose
@@ -13,7 +13,7 @@ public class InstalledAddon {
     public String gameInstanceID;
     @SerializedName("installedFile")
     @Expose
-    public Object installedFile;
+    public InstalledFile installedFile;
     @SerializedName("dateInstalled")
     @Expose
     public String dateInstalled;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.gitlab.cdagaming.craftpresence.utils.mcupdater;
+package com.gitlab.cdagaming.craftpresence.integrations.mcupdater;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
