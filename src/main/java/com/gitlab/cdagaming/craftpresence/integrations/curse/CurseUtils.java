@@ -25,10 +25,10 @@ package com.gitlab.cdagaming.craftpresence.integrations.curse;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
-import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.curse.impl.CurseInstance;
 import com.gitlab.cdagaming.craftpresence.integrations.curse.impl.Manifest;
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
+import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
