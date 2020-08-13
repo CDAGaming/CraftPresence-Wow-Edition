@@ -540,15 +540,20 @@ public class ConfigUtils {
                     }
 
                     // Global Case 1 Notes (KeyCode):
-                    // In this situation, if the currently parsed protocol version
+                    // In this situation, if the currently parsed protocol version differs and
                     // is a newer version then 1.12.2 (340), then
-                    // we need to convert any keycodes to an LWJGL 3 format
-                    // Otherwise, if using a config from above 1.12.2 on it or anything lower,
-                    // we need to convert any keycodes to an LWJGL 2 format.
-                    // If neither is true, then we mark the migration data as None, and it will be skipped over
+                    // we need to ensure any keycodes are in an LWJGL 3 format
+                    // Otherwise, if using a config from above 1.12.2 (340) on it or anything lower,
+                    // we need to ensure any keycodes are in an LWJGL 2 format.
+                    // If neither is true, then we mark the migration data as None, and it will be verified
                     migrationData.add(new Tuple<>(Arrays.asList(keyCodeTriggers), keyCodeMigrationId));
                     // Normal Case 1 Notes (Language ID):
-                    // TBD
+                    // In this situation, if the currently parsed protocol version differs and
+                    // is a newer version then or exactly 1.11 (315), then
+                    // we need to ensure any Language Locale's are complying with Pack Format 3 and above
+                    // Otherwise, if using a config from anything less then 1.11 (315),
+                    // we need to ensure any Language Locale's are complying with Pack Format 2 and below
+                    // If neither is true, then we mark the migration data as None, and it will be verified
                     migrationData.add(new Tuple<>(Arrays.asList(languageTriggers), languageMigrationId));
                 }
                 fieldObject = defaultValue;
