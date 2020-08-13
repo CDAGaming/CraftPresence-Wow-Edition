@@ -5,6 +5,7 @@
 ### Changes
 
 *   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
+*   Added a Fallback `&PACK&` Placeholder Message in `Status Messages` (Will only be used if no pack gets found, and is not empty)
 *   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder
 *   Added Comments to the Config File, showing a title and more clearly showing version and modified metadata
 *   Added a Conversion Layer for converting KeyCodes between LWJGL2 (1.12.2 and below) and LWJGL3 (1.13 and above)

@@ -321,6 +321,9 @@ public class DiscordUtils {
         } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
             foundPackName = TechnicUtils.PACK_NAME;
             foundPackIcon = TechnicUtils.ICON_NAME;
+        } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.fallbackPackPlaceholderMSG)) {
+            foundPackName = CraftPresence.CONFIG.fallbackPackPlaceholderMSG;
+            foundPackIcon = foundPackName;
         }
 
         syncArgument("&PACK&", StringUtils.formatWord(StringUtils.replaceAnyCase(CraftPresence.CONFIG.packPlaceholderMSG, "&NAME&", !StringUtils.isNullOrEmpty(foundPackName) ? foundPackName : ""), !CraftPresence.CONFIG.formatWords), false);

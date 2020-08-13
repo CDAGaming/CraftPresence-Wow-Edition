@@ -37,7 +37,7 @@ public class StatusMessagesGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
     private ExtendedTextControl mainMenuMSG, loadingMSG, lanMSG, singleplayerMSG, packMSG,
             outerPlayerMSG, innerPlayerMSG, playerCoordsMSG, playerHealthMSG,
-            playerAmountMSG, playerItemsMSG, worldMSG, modsMSG, viveCraftMSG;
+            playerAmountMSG, playerItemsMSG, worldMSG, modsMSG, viveCraftMSG, fallbackPackPlaceholderMSG;
 
     StatusMessagesGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -149,6 +149,13 @@ public class StatusMessagesGui extends ExtendedScreen {
                         180, 20
                 )
         );
+        fallbackPackPlaceholderMSG = addControl(
+                new ExtendedTextControl(
+                        mc.fontRenderer,
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(3),
+                        180, 20
+                )
+        );
 
         // Page 1 setText
         mainMenuMSG.setText(CraftPresence.CONFIG.mainmenuMSG);
@@ -169,6 +176,7 @@ public class StatusMessagesGui extends ExtendedScreen {
         // Page 3 setText
         loadingMSG.setText(CraftPresence.CONFIG.loadingMSG);
         playerItemsMSG.setText(CraftPresence.CONFIG.playerItemsPlaceholderMSG);
+        fallbackPackPlaceholderMSG.setText(CraftPresence.CONFIG.fallbackPackPlaceholderMSG);
 
         proceedButton = addControl(
                 new ExtendedButtonControl(
@@ -251,6 +259,11 @@ public class StatusMessagesGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.playerItemsPlaceholderMSG = playerItemsMSG.getText();
                             }
+                            if (!fallbackPackPlaceholderMSG.getText().equals(CraftPresence.CONFIG.fallbackPackPlaceholderMSG)) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.fallbackPackPlaceholderMSG = fallbackPackPlaceholderMSG.getText();
+                            }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
                         () -> {
@@ -321,6 +334,8 @@ public class StatusMessagesGui extends ExtendedScreen {
         final String playerItemsText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.playeritemmsg");
         final String worldDataText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.placeholder.worldmsg");
 
+        final String fallbackPackPlaceholderText = ModUtils.TRANSLATOR.translate("gui.config.name.statusmessages.fallback.packplaceholdermsg");
+
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
@@ -381,6 +396,7 @@ public class StatusMessagesGui extends ExtendedScreen {
         if (pageNumber == 2) {
             drawString(mc.fontRenderer, loadingText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
             drawString(mc.fontRenderer, playerItemsText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            drawString(mc.fontRenderer, fallbackPackPlaceholderText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
         }
 
         loadingMSG.setVisible(pageNumber == 2);
@@ -388,6 +404,9 @@ public class StatusMessagesGui extends ExtendedScreen {
 
         playerItemsMSG.setVisible(pageNumber == 2);
         playerItemsMSG.setEnabled(playerItemsMSG.getVisible());
+
+        fallbackPackPlaceholderMSG.setVisible(pageNumber == 2);
+        fallbackPackPlaceholderMSG.setEnabled(fallbackPackPlaceholderMSG.getVisible());
 
         previousPageButton.enabled = pageNumber != 0;
         nextPageButton.enabled = pageNumber != 2;
@@ -470,6 +489,10 @@ public class StatusMessagesGui extends ExtendedScreen {
             // Hovering over Player Items Message Label
             if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(playerItemsText), mc.fontRenderer.FONT_HEIGHT)) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.placeholder.playeritemmsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            }
+            // Hovering over Fallback Pack Placeholder Label
+            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(fallbackPackPlaceholderText), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.statusmessages.fallback.packplaceholdermsg")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             }
         }
     }

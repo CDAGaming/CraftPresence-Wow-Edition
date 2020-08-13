@@ -124,6 +124,7 @@ gui.config.name.statusmessages.placeholder.playeritemmsg=Player Items Placeholde
 gui.config.name.statusmessages.placeholder.worldmsg=World Data Placeholder
 gui.config.name.statusmessages.placeholder.modsmsg=Mods Placeholder
 gui.config.name.statusmessages.special.vivecraftmsg=Vivecraft Message
+gui.config.name.statusmessages.fallback.packplaceholdermsg=Fallback Pack Placeholder
 gui.config.name.advanced.splitcharacter=Split Character
 gui.config.name.advanced.refreshrate=Refresh Rate
 gui.config.name.advanced.enablecommands=Enable Commands
@@ -184,6 +185,7 @@ gui.config.comment.statusmessages.placeholder.playeritemmsg=Message to use for t
 gui.config.comment.statusmessages.placeholder.worldmsg=Message to use for the &worldinfo& Placeholder in Server Settings\n Available Placeholders:\n - &difficulty& = The Current World's Difficulty\n - &worldname& = The Name of the Current World\n - &worldtime& = The Current World's In-Game Time
 gui.config.comment.statusmessages.placeholder.modsmsg=Message to use for the &mods& Placeholder in Presence Settings\n Available Placeholders:\n - &modcount& = The Amount of Mods currently in your Mods Folder
 gui.config.comment.statusmessages.special.vivecraftmsg=Message to display in Rich Presence when using Vivecraft
+gui.config.comment.statusmessages.fallback.packplaceholdermsg=If not empty, this text will be used for the &pack& Placeholder if no packs are detected
 gui.config.comment.advanced.splitcharacter=The Split Character for The Arrays in CraftPresence's Messages Configs
 gui.config.comment.advanced.refreshrate=The time to take in between refreshing the Rich Presence Display and Modules, in seconds
 gui.config.comment.advanced.enablecommands=Allows CraftPresence to utilize Commands\n (Enables Command Gui in Main Config Gui)
