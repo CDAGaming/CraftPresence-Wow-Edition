@@ -4,15 +4,18 @@ buildscript {
         jcenter()
         maven { url = "https://files.minecraftforge.net/maven" }
         maven { url = "https://gitlab.com/EMC-Framework/maven/raw/master/" }
+        maven { url = "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:3.+"
         classpath "com.github.CDAGaming:CurseGradle:master-SNAPSHOT"
+        classpath "gradle.plugin.net.minecrell:licenser:0.4.1"
     }
 }
 
 apply plugin: "net.minecraftforge.gradle"
 apply plugin: "com.matthewprenger.cursegradle"
+apply plugin: "net.minecrell.licenser"
 
 import net.minecraftforge.gradle.common.task.SignJar
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -24,6 +27,13 @@ archivesBaseName = "${mod_name}-${mc_version}"
 allprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+license {
+    // Exclude JUnixSocket Files
+    exclude "**/newsclub/**"
+    exclude "**/maven/com.kohlschutter.junixsocket/**"
+    exclude "**/jni/**"
 }
 
 curseforge {
