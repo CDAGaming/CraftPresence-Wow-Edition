@@ -32,7 +32,7 @@ curseforge {
         id = "297038"
         changelog = file("Changes.md")
         changelogType = "markdown"
-        releaseType = "release"
+        releaseType = "${versionType}"
         addGameVersion "${mc_version}"
         addGameVersion "Forge"
 
@@ -127,13 +127,21 @@ task signJar(type: SignJar, dependsOn: jar) {
 }
 
 def copyDir = "$compileJava.temporaryDir/replaced"
-task tokenReplace(type: Copy) {
-    from(sourceSets.main.java.sourceDirectories)
+task processSource(type: Sync) {
+    from sourceSets.main.java
+    filter(ReplaceTokens, tokens: [
+            NAME            : mod_name,
+            MAJOR_VERSION   : majorVersion,
+            MINOR_VERSION   : minorVersion,
+            REVISION_VERSION: revisionVersion,
+            FINGERPRINT     : certfingerprint
+    ])
     into copyDir
-    filter(ReplaceTokens, tokens: [NAME: mod_name, MAJOR_VERSION: majorVersion, MINOR_VERSION: minorVersion, REVISION_VERSION: revisionVersion, FINGERPRINT: certfingerprint])
 }
-compileJava.setSource(copyDir)
-compileJava.dependsOn(tokenReplace)
+
+compileJava {
+    source = processSource.outputs
+}
 
 tasks.build.dependsOn signJar
 tasks.curseforge.dependsOn build
