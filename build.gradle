@@ -34,6 +34,10 @@ license {
     exclude "**/newsclub/**"
     exclude "**/maven/com.kohlschutter.junixsocket/**"
     exclude "**/jni/**"
+    // Exclude Non-Parsable Files
+    exclude "**/*.lang"
+    exclude "**/*.info"
+    exclude "**/*.mcmeta"
 }
 
 curseforge {
@@ -138,13 +142,20 @@ task signJar(type: SignJar, dependsOn: jar) {
 
 def copyDir = "$compileJava.temporaryDir/replaced"
 task processSource(type: Sync) {
+    // This will ensure that this task is redone when the properties change.
+    inputs.property "name", "${mod_name}"
+    inputs.property "majorVersion", "${majorVersion}"
+    inputs.property "minorVersion", "${minorVersion}"
+    inputs.property "revisionVersion", "${revisionVersion}"
+    inputs.property "fingerprint", "${certFingerprint}"
+
     from sourceSets.main.java
     filter(ReplaceTokens, tokens: [
             NAME            : mod_name,
             MAJOR_VERSION   : majorVersion,
             MINOR_VERSION   : minorVersion,
             REVISION_VERSION: revisionVersion,
-            FINGERPRINT     : certfingerprint
+            FINGERPRINT     : certFingerprint
     ])
     into copyDir
 }
