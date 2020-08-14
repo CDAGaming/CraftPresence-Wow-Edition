@@ -54,7 +54,7 @@ public class ConfigUtils {
     // Config Data = Tuple<propertyValue, value>
     // Config Property = Tuple<propertyFieldName, valueFieldName>
     private final List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
-    private final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
+    public final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
     private final String fileName;
     // Config Names
     // GLOBAL (NON-USER-ADJUSTABLE)
@@ -361,8 +361,9 @@ public class ConfigUtils {
                         // Note: This will likely only work for strings or simplistic conversions
                         fieldObject = expectedClass.cast(foundProperty);
 
-                        // If null or toString is null, throw Exception to reset value to Prior/Default Value
-                        if (fieldObject == null || StringUtils.isNullOrEmpty(fieldObject.toString())) {
+                        // If null or toString is null (And the default value of the property is not empty)
+                        // Throw an Exception to reset value to Prior/Default Value
+                        if (!StringUtils.isNullOrEmpty(defaultValue.toString()) && (fieldObject == null || StringUtils.isNullOrEmpty(fieldObject.toString()))) {
                             throw new IllegalArgumentException(ModUtils.TRANSLATOR.translate(true, "craftpresence.exception.config.nullprop", propertyName));
                         }
                     } catch (Exception ex) {

@@ -26,13 +26,17 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
+
+import java.util.List;
 
 public class MainGui extends ExtendedScreen {
     private ExtendedButtonControl biomeSet, dimensionSet, serverSet, statusSet, proceedButton, commandGUIButton;
@@ -314,7 +318,37 @@ public class MainGui extends ExtendedScreen {
                             CraftPresence.CONFIG.setupInitialValues();
                             CraftPresence.CONFIG.hasChanged = true;
                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                            syncRenderStates();
                         }
+                )
+        );
+        // Added Sync Config Button
+        addControl(
+                new ExtendedButtonControl(
+                        10, (height - 55),
+                        95, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.config"),
+                        () -> {
+                            final List<Tuple<String, Object>> currentConfigDataMappings = CraftPresence.CONFIG.configDataMappings;
+                            CraftPresence.CONFIG.read(false, "UTF-8");
+
+                            // Only Mark to Save if there have been Changes in the File
+                            if (!CraftPresence.CONFIG.configDataMappings.equals(currentConfigDataMappings)) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                syncRenderStates();
+                            }
+                        },
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.button.sync.config")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
                 )
         );
 
@@ -329,13 +363,7 @@ public class MainGui extends ExtendedScreen {
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
-        biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
-        dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;
-        serverSet.enabled = CraftPresence.CONFIG.showGameState;
-        statusSet.enabled = CraftPresence.CONFIG.showGameState;
-        commandGUIButton.enabled = CraftPresence.CONFIG.enableCommands;
-
-        proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
+        syncRenderStates();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
@@ -357,5 +385,15 @@ public class MainGui extends ExtendedScreen {
             CraftPresence.GUIS.configGUIOpened = false;
         }
         super.keyTyped(typedChar, keyCode);
+    }
+
+    private void syncRenderStates() {
+        biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
+        dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;
+        serverSet.enabled = CraftPresence.CONFIG.showGameState;
+        statusSet.enabled = CraftPresence.CONFIG.showGameState;
+        commandGUIButton.enabled = CraftPresence.CONFIG.enableCommands;
+
+        proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
     }
 }

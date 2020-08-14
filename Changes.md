@@ -13,6 +13,7 @@
 *   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
 *   Separated `IS_DEV` into two options, to allow for toggling excessive logging (Verbose Logging)
 *   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
+*   Added Support for Live Editing (Clicking the `Sync Config` button will sync any changes made to `craftpresence.properties` to the game without needing to restart minecraft)
 *   Localization and Backend Updates
 
 ### Fixes
@@ -23,6 +24,7 @@
 *   Fixed an Issue causing Format Exceptions on some translations
 *   Fixed an Issue causing the Load State to be infinitely displayed, if you modified your config whilst in-game
 *   Fixed an Issue that caused some Pack Icon Keys to be parsed incorrectly
+*   Fixed an Issue causing properties with an empty default value to become falsely interpreted to be reset if still empty
 
 ### More Information
 

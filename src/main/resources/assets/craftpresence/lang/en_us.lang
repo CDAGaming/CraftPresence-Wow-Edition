@@ -46,7 +46,7 @@ gui.config.comment.title.statusmessages=Customize Messages relating to different
 gui.config.comment.title.advanced=Customize Additional Settings of the Mod
 gui.config.comment.title.accessibility=Customize Accessibility Settings of the Mod\n Includes:\n - Language ID\n - KeyBindings\n - Additional Gui Customization Options
 gui.config.comment.presencesettings=Customize the Formatting and Locations of the Different Messages to display in the Rich Presence
-## CONFIG MENU - BUTTONS AND NAMES ##
+## CONFIG MENU - NON-CONFIG BUTTONS AND NAMES ##
 gui.config.message.button.back=Back
 gui.config.message.button.save=Save
 gui.config.message.button.continue=Continue
@@ -59,6 +59,7 @@ gui.config.message.button.iconchange=Change Icon
 gui.config.message.button.chareditor=Character Editor
 gui.config.message.button.sync.single=Sync %1$s
 gui.config.message.button.sync.all=Sync All
+gui.config.message.button.sync.config=Sync Config
 gui.config.message.button.reset=Reset To Default
 gui.config.message.default.biome=Default Biome Message
 gui.config.message.default.dimension=Default Dimension Message
@@ -89,6 +90,8 @@ gui.config.message.hover.access=**Enable "%1$s" to use this Menu**
 gui.config.message.hover.defaultempty=**Default Info cannot be Empty and Must be Valid**
 gui.config.message.hover.valuename=Name to Identify this Value
 gui.config.message.tags=Current Tag Placeholders -> %1$s
+## CONFIG MENU - NON-CONFIG BUTTONS AND NAMES ##
+gui.config.comment.button.sync.config=Synchronize any Live Changes made to in-game edits\nWarning: This will overwrite any changes made in here if unsaved!
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.global.schemaversion=Schema Version
 gui.config.name.global.lastmcversionid=Last MC Version ID
