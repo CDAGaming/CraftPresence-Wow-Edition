@@ -38,6 +38,7 @@ license {
     exclude "**/*.lang"
     exclude "**/*.info"
     exclude "**/*.mcmeta"
+    exclude "**/*.properties"
 }
 
 curseforge {

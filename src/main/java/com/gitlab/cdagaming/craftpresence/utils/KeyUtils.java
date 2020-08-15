@@ -62,7 +62,6 @@ public class KeyUtils {
 
     /**
      * Determine the LWJGL KeyCode Name for the inputted KeyCode
-     * TODO: Add Overload to allow an Integer
      *
      * @param original A KeyCode, converted to String
      * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
@@ -71,22 +70,37 @@ public class KeyUtils {
         if (!StringUtils.isNullOrEmpty(original)) {
             final Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
 
-            if (integerData.getFirst() && isValidKeyCode(integerData.getSecond())) {
-                // Input is a valid Integer and Valid KeyCode
-                final String keyName = Keyboard.getKeyName(integerData.getSecond());
-
-                // If Key Name is not Empty or Null, use that, otherwise use original
-                if (!StringUtils.isNullOrEmpty(keyName)) {
-                    return keyName;
-                } else {
-                    return original;
-                }
+            if (integerData.getFirst()) {
+                return getKeyName(integerData.getSecond());
             } else {
-                // If Not a Valid Integer or Valid KeyCode, return NONE
+                // If Not a Valid Integer, return NONE
                 return Keyboard.getKeyName(Keyboard.KEY_NONE);
             }
         } else {
             // If input is a Null Value, return NONE
+            return Keyboard.getKeyName(Keyboard.KEY_NONE);
+        }
+    }
+
+    /**
+     * Determine the LWJGL KeyCode Name for the inputted KeyCode
+     *
+     * @param original A KeyCode, in Integer Form
+     * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
+     */
+    public String getKeyName(int original) {
+        if (isValidKeyCode(original)) {
+            // Input is a valid Integer and Valid KeyCode
+            final String keyName = Keyboard.getKeyName(original);
+
+            // If Key Name is not Empty or Null, use that, otherwise use original
+            if (!StringUtils.isNullOrEmpty(keyName)) {
+                return keyName;
+            } else {
+                return Integer.toString(original);
+            }
+        } else {
+            // If Not a Valid KeyCode, return NONE
             return Keyboard.getKeyName(Keyboard.KEY_NONE);
         }
     }

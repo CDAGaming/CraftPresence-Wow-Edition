@@ -92,7 +92,7 @@ gui.config.message.hover.defaultempty=**Default Info cannot be Empty and Must be
 gui.config.message.hover.valuename=Name to Identify this Value
 gui.config.message.tags=Current Tag Placeholders -> %1$s
 ## CONFIG MENU - NON-CONFIG BUTTONS AND NAMES ##
-gui.config.comment.button.sync.config=Synchronize any Live Changes made to in-game edits\nWarning: This will overwrite any changes made in here if unsaved!
+gui.config.comment.button.sync.config=Synchronize any Live Changes made from craftpresence.properties\nWarning: This will overwrite any changes made in here if unsaved!
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.global.schemaversion=Schema Version
 gui.config.name.global.lastmcversionid=Last MC Version ID

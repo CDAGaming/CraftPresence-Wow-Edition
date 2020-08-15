@@ -45,16 +45,15 @@ import java.util.Properties;
  * @author CDAGaming
  */
 public class ConfigUtils {
+    // Config Property Mappings = Tuple<propertyFieldName, valueFieldName>
+    public final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
             keyCodeTriggers = new String[]{"keycode", "keybind", "keybinding"},
             languageTriggers = new String[]{"language", "lang", "langId", "languageId"},
             globalTriggers = new String[]{"global", "last", "schema"};
-    // Mappings:
-    // Config Data = Tuple<propertyValue, value>
-    // Config Property = Tuple<propertyFieldName, valueFieldName>
+    // Config Data Mappings = Tuple<propertyValue, value>
     private final List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
-    public final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
     private final String fileName;
     // Config Names
     // GLOBAL (NON-USER-ADJUSTABLE)

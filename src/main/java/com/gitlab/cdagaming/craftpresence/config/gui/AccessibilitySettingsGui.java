@@ -165,7 +165,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2 + 50, CraftPresence.GUIS.getButtonY(6),
                         90, 20,
-                        CraftPresence.KEYBINDINGS.getKeyName(Integer.toString(CraftPresence.CONFIG.configKeyCode)),
+                        CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode),
                         "configKeyCode"
                 )
         );
@@ -270,9 +270,8 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         if (!CraftPresence.KEYBINDINGS.isValidKeyCode(keyToSubmit)) {
             keyToSubmit = Keyboard.KEY_NONE;
         }
-
-        final String parsedKey = Integer.toString(keyToSubmit);
-        final String formattedKey = CraftPresence.KEYBINDINGS.getKeyName(parsedKey);
+        
+        final String formattedKey = CraftPresence.KEYBINDINGS.getKeyName(keyToSubmit);
 
         // If KeyCode Field to modify is not null or empty, attempt to queue change
         try {
