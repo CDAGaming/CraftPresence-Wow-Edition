@@ -22,7 +22,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 version = "${majorVersion}.${minorVersion}.${revisionVersion}"
 group = "com.gitlab.cdagaming"
-archivesBaseName = "${mod_name}-${mc_version}"
+archivesBaseName = "${mod_name}-${mc_version}${versionLabel}"
 
 allprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -46,12 +46,12 @@ curseforge {
         id = "297038"
         changelog = file("Changes.md")
         changelogType = "markdown"
-        releaseType = "${versionType}"
+        releaseType = "${versionType}".toLowerCase()
         addGameVersion "${mc_version}"
         addGameVersion "Forge"
 
         mainArtifact(jar) {
-            displayName = "${mod_name} v${version} (${mc_version})"
+            displayName = "${mod_name} v${version}${versionLabel} (${mc_version})"
         }
     }
 }
@@ -148,6 +148,7 @@ task processSource(type: Sync) {
     inputs.property "minorVersion", "${minorVersion}"
     inputs.property "revisionVersion", "${revisionVersion}"
     inputs.property "fingerprint", "${certFingerprint}"
+    inputs.property "versionType", "${versionType}"
 
     from sourceSets.main.java
     filter(ReplaceTokens, tokens: [
@@ -155,7 +156,8 @@ task processSource(type: Sync) {
             MAJOR_VERSION   : majorVersion,
             MINOR_VERSION   : minorVersion,
             REVISION_VERSION: revisionVersion,
-            FINGERPRINT     : certFingerprint
+            FINGERPRINT     : certFingerprint,
+            VERSION_TYPE    : versionType
     ])
     into copyDir
 }

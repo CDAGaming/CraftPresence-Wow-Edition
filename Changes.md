@@ -1,9 +1,10 @@
 # CraftPresence Changes
 
-## v1.7.0 (??/??/2020)
+## v1.7.0 -> Beta 1 (08/28/2020)
 
 ### Changes
 
+*   Amended Releases to now have `-%ModLoaderName%` as the suffix (Previously, Forge releases didn't have this suffix)
 *   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
 *   Added a Fallback `&PACK&` Placeholder Message in `Status Messages` (Will only be used if no pack gets found, and is not empty)
 *   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder

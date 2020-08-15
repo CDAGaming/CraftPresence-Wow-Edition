@@ -71,6 +71,11 @@ public class ModUtils {
     public static final String VERSION_ID = "v" + majorVersion + "." + minorVersion + "." + revisionVersion;
 
     /**
+     * The Application's Version Type
+     */
+    public static final String VERSION_TYPE = "@VERSION_TYPE@";
+
+    /**
      * The Application's Identifier
      */
     public static final String MODID = "craftpresence";
