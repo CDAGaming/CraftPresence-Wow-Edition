@@ -817,6 +817,9 @@ public class StringUtils {
         if (isNullOrEmpty(stringEntry)) {
             return 0;
         } else {
+            // Ensure no color codes are in the String before parsing widths
+            stringEntry = stripColors(stringEntry);
+
             int strLength = 0;
             for (char strChar : stringEntry.toCharArray()) {
                 strLength += getCharWidth(strChar, ModUtils.TRANSLATOR.isUnicode);
