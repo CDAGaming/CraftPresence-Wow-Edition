@@ -316,21 +316,34 @@ public class ExtendedScreen extends GuiScreen {
      * @param notice The List of Strings to render
      */
     public void drawNotice(final List<String> notice) {
-        drawNotice(notice, 2, 3);
+        drawNotice(notice, 2, 3, false, false);
     }
 
     /**
      * Renders a String in the Screen, in the style of a notice
      *
      * @param notice      The List of Strings to render
-     * @param widthScale  The Scale away from the center X to render at
-     * @param heightScale The Scale away from the center Y to render at
+     * @param widthScale  The Scale/Value away from the center X to render at
+     * @param heightScale The Scale/Value away from the center Y to render at
      */
     public void drawNotice(final List<String> notice, int widthScale, int heightScale) {
+        drawNotice(notice, widthScale, heightScale, false, false);
+    }
+
+    /**
+     * Renders a String in the Screen, in the style of a notice
+     *
+     * @param notice       The List of Strings to render
+     * @param widthScale   The Scale/Value away from the center X to render at
+     * @param heightScale  The Scale/Value away from the center Y to render at
+     * @param useXAsActual Whether or not to use the widthScale as the actual X value
+     * @param useYAsActual Whether or not to use the heightScale as the actual Y value
+     */
+    public void drawNotice(final List<String> notice, final int widthScale, final int heightScale, final boolean useXAsActual, final boolean useYAsActual) {
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {
                 final String string = notice.get(i);
-                drawString(mc.fontRenderer, string, (width / widthScale) - (StringUtils.getStringWidth(string) / 2), (height / heightScale) + (i * 10), 0xFFFFFF);
+                drawString(mc.fontRenderer, string, (useXAsActual ? widthScale : (width / widthScale)) - (StringUtils.getStringWidth(string) / 2), (useYAsActual ? heightScale : (height / heightScale)) + (i * 10), 0xFFFFFF);
             }
         }
     }
