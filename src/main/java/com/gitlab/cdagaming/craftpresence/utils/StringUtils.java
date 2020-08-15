@@ -810,15 +810,15 @@ public class StringUtils {
     /**
      * Returns the combined rendering width of the String entry
      *
-     * @param stringEntry The original String to evaluate
+     * @param originalString The original String to evaluate
      * @return The expected rendering width for the input
      */
-    public static int getStringWidth(String stringEntry) {
-        if (isNullOrEmpty(stringEntry)) {
+    public static int getStringWidth(final String originalString) {
+        if (isNullOrEmpty(originalString)) {
             return 0;
         } else {
             // Ensure no color codes are in the String before parsing widths
-            stringEntry = stripColors(stringEntry);
+            final String stringEntry = stripColors(originalString);
 
             int strLength = 0;
             for (char strChar : stringEntry.toCharArray()) {

@@ -501,21 +501,22 @@ public class ConfigUtils {
      * @param defaultValue   The Default Value of the Property to Check against fieldObject
      * @return The Checked/Verified Field Object, depending on method execution
      */
-    private Object syncMigrationData(boolean skipLogging, List<Tuple<List<String>, String>> migrationData, Tuple<String, String> configProperty, Object fieldObject, Object foundProperty, String propertyName, Object defaultValue) {
+    private Object syncMigrationData(final boolean skipLogging, List<Tuple<List<String>, String>> migrationData, final Tuple<String, String> configProperty, final Object fieldObject, final Object foundProperty, final String propertyName, final Object defaultValue) {
+        Object finalFieldObject = fieldObject;
         // Move through any triggers or Migration Data, if needed
         // Before proceeding to final parsing
         for (String globalTrigger : globalTriggers) {
             if (configProperty.getSecond().toLowerCase().contains(globalTrigger.toLowerCase())) {
                 // If the variable if Global, check and see if it is different from it's default value
                 // In some cases, additional migrations may also be needed, in which case data is added to the list
-                if (!skipLogging && !fieldObject.toString().equals(defaultValue.toString())) {
+                if (!skipLogging && !finalFieldObject.toString().equals(defaultValue.toString())) {
                     ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.globaladjust", propertyName));
                 }
 
                 if (propertyName.equals(NAME_lastMcVersionId)) {
                     int currentParseValue = -1, defaultParseValue = Integer.parseInt(defaultValue.toString());
                     try {
-                        currentParseValue = Integer.parseInt(fieldObject.toString());
+                        currentParseValue = Integer.parseInt(finalFieldObject.toString());
                     } catch (Exception | Error ex) {
                         if (ModUtils.IS_VERBOSE) {
                             ex.printStackTrace();
@@ -561,7 +562,7 @@ public class ConfigUtils {
                     // If neither is true, then we mark the migration data as None, and it will be verified
                     migrationData.add(new Tuple<>(Arrays.asList(languageTriggers), languageMigrationId));
                 }
-                fieldObject = defaultValue;
+                finalFieldObject = defaultValue;
                 break;
             }
         }
@@ -580,14 +581,14 @@ public class ConfigUtils {
                         if (!skipLogging && !migratedLanguageId.equals(foundProperty.toString())) {
                             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.apply", migrationChunk.getFirst().toString(), migrationChunk.getSecond(), propertyName, foundProperty.toString(), migratedLanguageId));
                         }
-                        fieldObject = migratedLanguageId;
+                        finalFieldObject = migratedLanguageId;
                         break;
                     }
                 }
                 break;
             }
         }
-        return fieldObject;
+        return finalFieldObject;
     }
 
     /**

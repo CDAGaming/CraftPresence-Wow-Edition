@@ -270,7 +270,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         if (!CraftPresence.KEYBINDINGS.isValidKeyCode(keyToSubmit)) {
             keyToSubmit = Keyboard.KEY_NONE;
         }
-        
+
         final String formattedKey = CraftPresence.KEYBINDINGS.getKeyName(keyToSubmit);
 
         // If KeyCode Field to modify is not null or empty, attempt to queue change

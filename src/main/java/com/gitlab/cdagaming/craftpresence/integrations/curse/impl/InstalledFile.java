@@ -24,10 +24,10 @@
 
 package com.gitlab.cdagaming.craftpresence.integrations.curse.impl;
 
+import com.google.common.collect.Lists;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class InstalledFile {
@@ -64,19 +64,19 @@ public class InstalledFile {
     public Integer alternateFileId;
     @SerializedName("dependencies")
     @Expose
-    public List<Object> dependencies = new ArrayList<>();
+    public List<Object> dependencies = Lists.newArrayList();
     @SerializedName("isAvailable")
     @Expose
     public Boolean isAvailable;
     @SerializedName("modules")
     @Expose
-    public List<Module> modules = new ArrayList<>();
+    public List<Module> modules = Lists.newArrayList();
     @SerializedName("packageFingerprint")
     @Expose
     public Integer packageFingerprint;
     @SerializedName("gameVersion")
     @Expose
-    public List<String> gameVersion = new ArrayList<>();
+    public List<String> gameVersion = Lists.newArrayList();
     @SerializedName("hasInstallScript")
     @Expose
     public Boolean hasInstallScript;

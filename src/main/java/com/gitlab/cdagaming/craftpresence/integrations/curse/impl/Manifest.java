@@ -24,10 +24,10 @@
 
 package com.gitlab.cdagaming.craftpresence.integrations.curse.impl;
 
+import com.google.common.collect.Lists;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Manifest {
@@ -58,7 +58,7 @@ public class Manifest {
     public Integer projectID;
     @SerializedName("files")
     @Expose
-    public List<File> files = new ArrayList<>();
+    public List<File> files = Lists.newArrayList();
     @SerializedName("overrides")
     @Expose
     public String overrides;

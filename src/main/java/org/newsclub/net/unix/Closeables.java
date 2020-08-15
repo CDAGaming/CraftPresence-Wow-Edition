@@ -22,7 +22,6 @@ import com.google.common.collect.Lists;
 import java.io.Closeable;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -97,7 +96,7 @@ public final class Closeables implements Closeable {
             return false;
         }
         if (list == null) {
-            list = new ArrayList<>();
+            list = Lists.newArrayList();
         } else {
             for (WeakReference<Closeable> ref : list) {
                 if (ref.get() == cl) {

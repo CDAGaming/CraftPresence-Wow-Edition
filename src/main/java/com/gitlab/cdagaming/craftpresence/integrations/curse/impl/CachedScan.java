@@ -24,10 +24,10 @@
 
 package com.gitlab.cdagaming.craftpresence.integrations.curse.impl;
 
+import com.google.common.collect.Lists;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CachedScan {
@@ -46,7 +46,7 @@ public class CachedScan {
     public Integer sectionID;
     @SerializedName("individualFingerprints")
     @Expose
-    public List<Long> individualFingerprints = new ArrayList<>();
+    public List<Long> individualFingerprints = Lists.newArrayList();
     @SerializedName("status")
     @Expose
     public Integer status;

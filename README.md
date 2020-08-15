@@ -41,7 +41,6 @@ CraftPresence currently offers the following Commands:
 Keep in mind the following:
 
 *   Commands must be prefixed by either `/craftpresence` or `/cp`
-
 *   In v1.5.0 and above, these commands are only usable via the Commands Gui, found within the Config Gui)
 
 ___

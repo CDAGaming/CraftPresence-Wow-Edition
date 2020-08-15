@@ -17,10 +17,15 @@
  */
 package org.newsclub.net.unix;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -36,9 +41,9 @@ class AFUNIXSocketImpl extends SocketImpl {
     private final AFUNIXOutputStream out = newOutputStream();
     private final AtomicInteger pendingAccepts = new AtomicInteger(0);
     private final List<FileDescriptor[]> receivedFileDescriptors = Collections.synchronizedList(
-            new LinkedList<>());
+            Lists.newLinkedList());
     private final Map<FileDescriptor, Integer> closeableFileDescriptors = Collections.synchronizedMap(
-            new HashMap<>());
+            Maps.newHashMap());
     private AFUNIXSocketAddress socketAddress;
     /**
      * We keep track of the server's inode to detect when another server connects to our address.
@@ -443,7 +448,7 @@ class AFUNIXSocketImpl extends SocketImpl {
         if (receivedFileDescriptors.isEmpty()) {
             return null;
         }
-        List<FileDescriptor[]> copy = new ArrayList<>(receivedFileDescriptors);
+        List<FileDescriptor[]> copy = Lists.newArrayList(receivedFileDescriptors);
         if (copy.isEmpty()) {
             return null;
         }

@@ -30,6 +30,7 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet.OpCo
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.Pipe;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.exceptions.NoDiscordClientException;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
@@ -64,7 +65,7 @@ import java.util.HashMap;
 public final class IPCClient implements Closeable {
     private final long clientId;
     private final boolean debugMode, verboseLogging;
-    private final HashMap<String, Callback> callbacks = new HashMap<>();
+    private final HashMap<String, Callback> callbacks = Maps.newHashMap();
     private volatile Pipe pipe;
     private IPCListener listener = null;
     private Thread readThread = null;

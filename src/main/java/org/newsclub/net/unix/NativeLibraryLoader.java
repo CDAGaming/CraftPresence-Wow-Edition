@@ -17,8 +17,9 @@
  */
 package org.newsclub.net.unix;
 
+import com.google.common.collect.Lists;
+
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -112,8 +113,8 @@ final class NativeLibraryLoader implements Closeable {
                 return;
             }
 
-            List<LibraryCandidate> candidates = new ArrayList<>();
-            List<Throwable> suppressedThrowables = new ArrayList<>();
+            List<LibraryCandidate> candidates = Lists.newArrayList();
+            List<Throwable> suppressedThrowables = Lists.newArrayList();
 
             try {
                 candidates.add(new StandardLibraryCandidate(getArtifactVersion(getClass(),
@@ -176,7 +177,7 @@ final class NativeLibraryLoader implements Closeable {
                                                          String libraryNameAndVersion, Class<?> providerClass) {
         String mappedName = System.mapLibraryName(libraryNameAndVersion);
 
-        List<LibraryCandidate> list = new ArrayList<>();
+        List<LibraryCandidate> list = Lists.newArrayList();
         for (String compiler : new String[]{
                 "gpp", "g++", "linker", "clang", "gcc", "cc", "CC", "icpc", "icc", "xlC", "xlC_r", "msvc",
                 "icl", "ecpc", "ecc"}) {
