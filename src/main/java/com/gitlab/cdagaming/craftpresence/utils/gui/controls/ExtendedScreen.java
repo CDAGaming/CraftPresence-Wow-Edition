@@ -343,7 +343,7 @@ public class ExtendedScreen extends GuiScreen {
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {
                 final String string = notice.get(i);
-                drawString(mc.fontRenderer, string, (useXAsActual ? widthScale : (width / widthScale)) - (StringUtils.getStringWidth(string) / 2), (useYAsActual ? heightScale : (height / heightScale)) + (i * 10), 0xFFFFFF);
+                drawString(mc.fontRenderer, string, (useXAsActual ? widthScale : (width / widthScale)) - (StringUtils.getStringWidth(string) / widthScale), (useYAsActual ? heightScale : (height / heightScale)) + (i * 10), 0xFFFFFF);
             }
         }
     }

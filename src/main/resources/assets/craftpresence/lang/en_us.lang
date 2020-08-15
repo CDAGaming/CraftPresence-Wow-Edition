@@ -82,6 +82,7 @@ gui.config.message.presence.generalArgs=General Message Formatting Arguments:\n*
 gui.config.message.presence.iconArgs=General Icon Formatting Arguments:\n* Placeholders Configuable in Status Messages and other areas\n* Only One Placeholder is allowed at one time\n* Some Placeholders are Empty unless they are assigned\n\n - &DEFAULT& = The Default Icon, specified in config\n - &MAINMENU& = The Icon used in the Main Menu\n  * Use this instead of &DEFAULT& to only show the default icon in the main menu\n - &PACK& = The Pack's Icon, if using a pack\n - &DIMENSION& = The Current Dimension Icon\n - &SERVER& = The Current Server Icon
 gui.config.message.character.notice=Notice on Syncing\n\n Syncing may not yield accurate Results on Older Minecraft Versions
 gui.config.message.credits=This Configuration Gui was made from scratch by\n Jonathing, and will continue to be maintained by\n CDAGaming. A lot of effort went into making this\n custom Gui, so show him some support! Thanks.\n\n Feel free to learn from this Gui's code on\n the CraftPresence GitLab repository.
+gui.config.message.tentative=§4§lTentative Release (%1$s), functionality may change
 gui.config.message.changelog=Changes in %1$s:\n\n%2$s
 gui.config.message.remove=**Remove Message Text to Remove this Value**
 gui.config.message.null=This Area is not Implemented just yet!\n\n Please Check Back Later...

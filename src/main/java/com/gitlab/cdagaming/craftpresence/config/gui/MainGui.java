@@ -360,8 +360,14 @@ public class MainGui extends ExtendedScreen {
         preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
+        final String releaseNotice = ModUtils.TRANSLATOR.translate("gui.config.message.tentative", StringUtils.formatWord(ModUtils.VERSION_TYPE));
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+
+        // noinspection RedundantSuppression,ConstantConditions,MismatchedStringCase
+        if (!ModUtils.VERSION_TYPE.equals("release")) {
+            drawString(mc.fontRenderer, releaseNotice, (width / 2) - 25 - (StringUtils.getStringWidth(releaseNotice) / 2), height - 80, 0xFFFFFF);
+        }
 
         syncRenderStates();
 
