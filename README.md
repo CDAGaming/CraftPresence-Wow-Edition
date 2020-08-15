@@ -72,9 +72,7 @@ In some Configuration Areas, CraftPresence provides some Placeholders to make th
 Keep in mind the following:
 
 *   In v1.6.0 and Above, You can now define where in the Rich Presence the Messages should go
-
 *   Placeholders are not Case-Sensitive, but should be entered lowercase to prevent issues with recognizing them on v1.5.x and below
-
 *   As of v1.6.8, you can now also use minified versions of placeholders, which are trimmed down to a length of 4; `&DIM&` and `&DIMENSION&` are the same in this case
 
 ___
