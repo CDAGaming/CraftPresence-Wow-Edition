@@ -22,7 +22,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 version = "${majorVersion}.${minorVersion}.${revisionVersion}"
 group = "com.gitlab.cdagaming"
-archivesBaseName = "${mod_name}-${mc_version}-${versionType}"
+archivesBaseName = "${archive_name}-${mc_version}-${versionType}"
 
 allprojects {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -52,7 +52,7 @@ curseforge {
         addGameVersion "Forge"
 
         mainArtifact(jar) {
-            displayName = "${mod_name} v${version} ${versionLabel} (${mc_version})"
+            displayName = "${archive_name} v${version} ${versionLabel} (${mc_version})"
         }
     }
 }
@@ -144,21 +144,23 @@ task signJar(type: SignJar, dependsOn: jar) {
 def copyDir = "$compileJava.temporaryDir/replaced"
 task processSource(type: Sync) {
     // This will ensure that this task is redone when the properties change.
-    inputs.property "name", "${mod_name}"
+    inputs.property "modName", "${mod_name}"
     inputs.property "majorVersion", "${majorVersion}"
     inputs.property "minorVersion", "${minorVersion}"
     inputs.property "revisionVersion", "${revisionVersion}"
     inputs.property "fingerprint", "${certFingerprint}"
     inputs.property "versionType", "${versionType}"
+    inputs.property "versionLabel", "${versionLabel}"
 
     from sourceSets.main.java
     filter(ReplaceTokens, tokens: [
-            NAME            : mod_name,
+            MOD_NAME        : mod_name,
             MAJOR_VERSION   : majorVersion,
             MINOR_VERSION   : minorVersion,
             REVISION_VERSION: revisionVersion,
             FINGERPRINT     : certFingerprint,
-            VERSION_TYPE    : versionType
+            VERSION_TYPE    : versionType,
+            VERSION_LABEL   : versionLabel
     ])
     into copyDir
 }

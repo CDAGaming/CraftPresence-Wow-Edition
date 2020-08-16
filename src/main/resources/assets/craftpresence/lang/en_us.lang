@@ -12,6 +12,7 @@ gui.config.title.presencesettings=Presence Settings
 gui.config.title.about.config=About this Configuration Gui
 gui.config.title.changes=Version Check Info (State: %1$s)
 gui.config.title.commands=Commands
+gui.config.title.about=About
 gui.config.title.message=CraftPresence - Message
 gui.config.title.biome.editspecificbiome=CraftPresence - Edit Biome (%1$s)
 gui.config.title.dimension.editspecificdimension=CraftPresence - Edit Dimension (%1$s)

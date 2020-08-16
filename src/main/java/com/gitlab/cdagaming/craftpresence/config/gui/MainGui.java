@@ -293,9 +293,9 @@ public class MainGui extends ExtendedScreen {
         // Added About Button
         addControl(
                 new ExtendedButtonControl(
-                        (width - 30), 10,
-                        20, 20,
-                        "?",
+                        (width - 105), (height - 55),
+                        95, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.title.about"),
                         () -> CraftPresence.GUIS.openScreen(new AboutGui(currentScreen))
                 )
         );
@@ -359,7 +359,7 @@ public class MainGui extends ExtendedScreen {
         preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String releaseNotice = ModUtils.TRANSLATOR.translate("gui.config.message.tentative", StringUtils.formatWord(ModUtils.VERSION_TYPE));
+        final String releaseNotice = ModUtils.TRANSLATOR.translate("gui.config.message.tentative", ModUtils.VERSION_ID + " - " + StringUtils.formatWord(ModUtils.VERSION_LABEL));
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 

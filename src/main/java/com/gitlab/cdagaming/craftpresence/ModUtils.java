@@ -48,7 +48,7 @@ public class ModUtils {
     /**
      * The Application's Name
      */
-    public static final String NAME = "@NAME@";
+    public static final String NAME = "@MOD_NAME@";
 
     /**
      * The Application's Major Revision Number (Ex: 1 in 1.0.2)
@@ -71,9 +71,14 @@ public class ModUtils {
     public static final String VERSION_ID = "v" + majorVersion + "." + minorVersion + "." + revisionVersion;
 
     /**
-     * The Application's Version Type
+     * The Application's Version Release Type
      */
     public static final String VERSION_TYPE = "@VERSION_TYPE@";
+
+    /**
+     * The Application's Version Release Type Display Name
+     */
+    public static final String VERSION_LABEL = "@VERSION_LABEL@";
 
     /**
      * The Application's Identifier

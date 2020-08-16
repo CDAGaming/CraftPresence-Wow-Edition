@@ -19,6 +19,7 @@
 
 ### Fixes
 
+*   Fixed Instances of the Mod ID not being the same across modloaders
 *   Fixed an Issue causing KeyCode Properties to be able to skip verification
 *   Fixed an Issue where the `Config Gui` Keybind was not properly identified
 *   Fixed an Issue causing some LWJGL 3 KeyCodes to not be recognized
