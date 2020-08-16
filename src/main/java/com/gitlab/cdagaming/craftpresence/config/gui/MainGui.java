@@ -365,7 +365,7 @@ public class MainGui extends ExtendedScreen {
 
         // noinspection RedundantSuppression,ConstantConditions,MismatchedStringCase
         if (!ModUtils.VERSION_TYPE.equals("release")) {
-            drawString(mc.fontRenderer, releaseNotice, (width / 2) - 25 - (StringUtils.getStringWidth(releaseNotice) / 2), height - 80, 0xFFFFFF);
+            drawString(mc.fontRenderer, releaseNotice, (width / 2) - 30 - (StringUtils.getStringWidth(releaseNotice) / 2), height - 85, 0xFFFFFF);
         }
 
         syncRenderStates();

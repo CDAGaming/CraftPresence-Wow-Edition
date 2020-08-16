@@ -32,7 +32,15 @@
 
 #### v1.7.0 Upgrade Info
 
-TBD
+v1.7.0 of CraftPresence is the next major feature update after v1.6.0.
+It is celebrating the recent milestones of over **five million downloads** as well as hitting the number one spot in Twitch Integration.
+
+This release holds numerous improvements over the Configuration System, as well as adding long-standing user requests and planned features that I've queued over time since v1.4.0s release,
+that are outlined in the changelog above.
+
+While no Config Migrations are necessary for updating to v1.7.0, this is currently a **Beta Release** and as such should be used with caution, with any issues reported as we move forward towards release.
+
+More features will be planned and added for later in the Beta Pipeline as the release schedule moves forward.
 
 #### 1.13.x Build Info
 
@@ -42,7 +50,7 @@ The Rift Edition of this Mod Requires the [Rift ModLoader](https://www.curseforg
 
 Starting in v1.5.0, The 1.13 Rift Port of CraftPresence was deprecated in favor of the 1.13.2 Rift Port
 
-Starting in v1.7.0, The aforementioned KeyCode warning is now void, due to new systems introduced to convert keybindings between LWJGL versions
+Starting in v1.7.0, The aforementioned KeyCode warning is now void, due to new systems introduced to convert keybindings between LWJGL versions, and this message will be removed in v1.7.1
 
 Note: Due to Maven Troubles on behalf of the Rift Team, Rift Versions are no longer supported as of v1.6.1, though the Differences do still take effect for Forge
 
