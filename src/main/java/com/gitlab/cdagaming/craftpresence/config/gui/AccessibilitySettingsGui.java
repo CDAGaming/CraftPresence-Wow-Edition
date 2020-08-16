@@ -163,8 +163,8 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         // KeyCode Buttons
         final ExtendedButtonControl configKeyCodeButton = addControl(
                 new ExtendedButtonControl(
-                        calc2 + 50, CraftPresence.GUIS.getButtonY(6),
-                        90, 20,
+                        calc2 + 20, CraftPresence.GUIS.getButtonY(6),
+                        120, 20,
                         CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode),
                         "configKeyCode"
                 )
