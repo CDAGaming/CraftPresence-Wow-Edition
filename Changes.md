@@ -1,6 +1,6 @@
 # CraftPresence Changes
 
-## v1.7.0 -> Beta 1 (08/28/2020)
+## v1.7.0 -> Beta 1 (08/18/2020)
 
 ### Changes
 
