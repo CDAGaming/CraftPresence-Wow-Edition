@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.google.common.collect.Lists;
 import org.lwjgl.input.Keyboard;
@@ -66,19 +67,20 @@ public class KeyUtils {
      * @param original A KeyCode, converted to String
      * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
      */
-    public String getKeyName(String original) {
+    public String getKeyName(final String original) {
+        final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
         if (!StringUtils.isNullOrEmpty(original)) {
             final Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
 
             if (integerData.getFirst()) {
                 return getKeyName(integerData.getSecond());
             } else {
-                // If Not a Valid Integer, return NONE
-                return Keyboard.getKeyName(Keyboard.KEY_NONE);
+                // If Not a Valid Integer, return the appropriate Unknown Keycode
+                return unknownKeyName;
             }
         } else {
-            // If input is a Null Value, return NONE
-            return Keyboard.getKeyName(Keyboard.KEY_NONE);
+            // If input is a Null Value, return the appropriate Unknown Keycode
+            return unknownKeyName;
         }
     }
 
@@ -88,20 +90,30 @@ public class KeyUtils {
      * @param original A KeyCode, in Integer Form
      * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
      */
-    public String getKeyName(int original) {
+    public String getKeyName(final int original) {
+        final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
         if (isValidKeyCode(original)) {
-            // Input is a valid Integer and Valid KeyCode
-            final String keyName = Keyboard.getKeyName(original);
-
-            // If Key Name is not Empty or Null, use that, otherwise use original
-            if (!StringUtils.isNullOrEmpty(keyName)) {
-                return keyName;
+            // If Input is a valid Integer and Valid KeyCode,
+            // Parse depending on Protocol
+            if (ModUtils.MCProtocolID <= 340 && KeyConverter.toGlfw.containsKey(original)) {
+                return KeyConverter.toGlfw.get(original).getSecond();
+            } else if (ModUtils.MCProtocolID > 340 && KeyConverter.fromGlfw.containsKey(original)) {
+                return KeyConverter.fromGlfw.get(original).getSecond();
             } else {
-                return Integer.toString(original);
+                // If no other Mapping Layer contains the KeyCode Name,
+                // Fallback to LWJGL Methods to retrieve the KeyCode Name
+                final String keyName = Keyboard.getKeyName(original);
+
+                // If Key Name is not Empty or Null, use that, otherwise use original
+                if (!StringUtils.isNullOrEmpty(keyName)) {
+                    return keyName;
+                } else {
+                    return Integer.toString(original);
+                }
             }
         } else {
-            // If Not a Valid KeyCode, return NONE
-            return Keyboard.getKeyName(Keyboard.KEY_NONE);
+            // If Not a Valid KeyCode, return the appropriate Unknown Keycode
+            return unknownKeyName;
         }
     }
 
