@@ -2,6 +2,8 @@
 
 ## v1.7.0 -> Beta 1 (08/18/2020)
 
+_A Detailed Changelog is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0+Beta.1)_
+
 ### Changes
 
 *   Amended Releases to now have `-%ModLoaderName%` as the suffix (Previously, Forge releases didn't have this suffix)
@@ -27,6 +29,8 @@
 *   Fixed an Issue causing the Load State to be infinitely displayed, if you modified your config whilst in-game
 *   Fixed an Issue that caused some Pack Icon Keys to be parsed incorrectly
 *   Fixed an Issue causing properties with an empty default value to become falsely interpreted to be reset if still empty
+
+___
 
 ### More Information
 
