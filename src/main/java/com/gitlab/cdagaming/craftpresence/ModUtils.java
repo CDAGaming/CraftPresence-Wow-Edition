@@ -156,11 +156,6 @@ public class ModUtils {
     public static final ModUpdaterUtils UPDATER = new ModUpdaterUtils(MODID, UPDATE_JSON, VERSION_ID);
 
     /**
-     * If this Application is running/needs Legacy Data
-     */
-    public static final boolean IS_LEGACY = false;
-
-    /**
      * Whether to forcibly block any tooltips related to this Application from rendering
      */
     public static boolean forceBlockTooltipRendering = false;

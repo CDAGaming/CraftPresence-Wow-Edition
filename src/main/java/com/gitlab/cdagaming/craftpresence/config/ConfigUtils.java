@@ -249,7 +249,7 @@ public class ConfigUtils {
         NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keybind.name").replaceAll(" ", "_");
         tooltipBGColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
-        guiBGColor = "minecraft" + splitCharacter + (ModUtils.IS_LEGACY ? "/gui/background.png" : "textures/gui/options_background.png");
+        guiBGColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
         languageID = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         stripTranslationColors = false;
         showLoggingInChat = false;
@@ -541,8 +541,8 @@ public class ConfigUtils {
                     }
 
                     if (!skipLogging) {
-                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(keyCodeTriggers).toString(), keyCodeMigrationId, keyCodeMigrationId.equals(KeyConverter.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
-                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(languageTriggers).toString(), languageMigrationId, languageMigrationId.equals(TranslationUtils.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
+                        ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(keyCodeTriggers).toString(), keyCodeMigrationId, keyCodeMigrationId.equals(KeyConverter.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
+                        ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(languageTriggers).toString(), languageMigrationId, languageMigrationId.equals(TranslationUtils.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
                     }
 
                     // Global Case 1 Notes (KeyCode):
