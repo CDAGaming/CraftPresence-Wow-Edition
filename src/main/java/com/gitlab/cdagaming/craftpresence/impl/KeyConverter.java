@@ -132,25 +132,25 @@ public class KeyConverter {
         put(103, new Tuple<>(305, "F16"));
         put(104, new Tuple<>(306, "F17"));
         put(105, new Tuple<>(307, "F18"));
-        put(112, new Tuple<>(-1, "KANA"));
+        put(112, new Tuple<>(-1, "Kana"));
         put(113, new Tuple<>(308, "F19"));
-        put(121, new Tuple<>(-1, "CONVERT"));
-        put(123, new Tuple<>(-1, "NOCONVERT"));
+        put(121, new Tuple<>(-1, "Convert"));
+        put(123, new Tuple<>(-1, "NoConvert"));
         put(125, new Tuple<>(-1, "Symbol - Yen"));
         put(141, new Tuple<>(336, "Keypad - Equals"));
         put(144, new Tuple<>(-1, "Symbol - Circumflex"));
         put(145, new Tuple<>(-1, "Symbol - At"));
         put(146, new Tuple<>(-1, "Symbol - Colon"));
         put(147, new Tuple<>(-1, "Underline"));
-        put(148, new Tuple<>(-1, "KANJI"));
-        put(149, new Tuple<>(-1, "STOP"));
+        put(148, new Tuple<>(-1, "Kanji"));
+        put(149, new Tuple<>(-1, "Stop"));
         put(150, new Tuple<>(-1, "AX"));
-        put(151, new Tuple<>(-1, "UNLABELED"));
+        put(151, new Tuple<>(-1, "Unlabeled"));
         put(156, new Tuple<>(335, "Keypad - Enter"));
         put(157, new Tuple<>(345, "Right Control"));
         put(179, new Tuple<>(-1, "Keypad - Comma"));
         put(181, new Tuple<>(331, "Keypad - Divide"));
-        put(183, new Tuple<>(-1, "SYSRQ"));
+        put(183, new Tuple<>(-1, "SysRq"));
         put(184, new Tuple<>(346, "Right Alt"));
         put(196, new Tuple<>(-1, "Function"));
         put(197, new Tuple<>(284, "Pause"));
@@ -166,9 +166,9 @@ public class KeyConverter {
         put(211, new Tuple<>(261, "Delete"));
         put(219, new Tuple<>(343, "Left Meta"));
         put(220, new Tuple<>(347, "Right Meta"));
-        put(221, new Tuple<>(-1, "APPS"));
-        put(222, new Tuple<>(-1, "POWER"));
-        put(223, new Tuple<>(-1, "SLEEP"));
+        put(221, new Tuple<>(-1, "Apps"));
+        put(222, new Tuple<>(-1, "Power"));
+        put(223, new Tuple<>(-1, "Sleep"));
     }};
 
     /**

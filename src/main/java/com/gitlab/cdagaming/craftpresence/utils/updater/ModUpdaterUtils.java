@@ -151,7 +151,7 @@ public class ModUpdaterUtils {
                             // Case 2: Find only the Minecraft Version, if present, but do not break the loop
                             targetRecommendedVersion = jsonSegment.getValue().toString().replaceAll("[a-zA-Z]", "").replace("\"", "").trim();
                         } else {
-                            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.updater.incompatiblejson", jsonSegment.getKey()));
+                            ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.updater.incompatible.json", jsonSegment.getKey()));
                         }
                     }
 
@@ -215,38 +215,38 @@ public class ModUpdaterUtils {
     /**
      * Compare a Set of Version Numbers to see if one is higher then another
      *
-     * @param str1 The First Version Number to Iterate
-     * @param str2 The Second Version Number to Iterate
+     * @param version1 The First Version Number to Iterate
+     * @param version2 The Second Version Number to Iterate
      * @return 0 if Identical; -1 if Second is Higher; 1 if First is higher
      */
-    private int compareVersions(String str1, String str2) {
-        if (str1.equals(str2)) return 0;
+    private int compareVersions(final String version1, final String version2) {
+        if (version1.equals(version2)) return 0;
 
-        final String[] vals1 = str1.split("\\.");
-        final String[] vals2 = str2.split("\\.");
+        final String[] versionSet1 = version1.split("\\.");
+        final String[] versionSet2 = version2.split("\\.");
 
         int i = 0;
 
         // Most efficient way to skip past equal version sub-parts
-        while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) i++;
+        while (i < versionSet1.length && i < versionSet2.length && versionSet1[i].equals(versionSet2[i])) i++;
 
         // If we didn't reach the end,
 
-        if (i < vals1.length && i < vals2.length)
+        if (i < versionSet1.length && i < versionSet2.length)
             // have to use integer comparison to avoid the "10"<"1" problem
-            return Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+            return Integer.valueOf(versionSet1[i]).compareTo(Integer.valueOf(versionSet2[i]));
 
-        if (i < vals1.length) { // end of str2, check if str1 is all 0's
+        if (i < versionSet1.length) { // end of version2, check if version1 is all 0's
             boolean allZeros = true;
-            for (int j = i; allZeros & (j < vals1.length); j++)
-                allZeros = (Integer.parseInt(vals1[j]) == 0);
+            for (int j = i; allZeros & (j < versionSet1.length); j++)
+                allZeros = (Integer.parseInt(versionSet1[j]) == 0);
             return allZeros ? 0 : -1;
         }
 
-        if (i < vals2.length) { // end of str1, check if str2 is all 0's
+        if (i < versionSet2.length) { // end of version1, check if version2 is all 0's
             boolean allZeros = true;
-            for (int j = i; allZeros & (j < vals2.length); j++)
-                allZeros = (Integer.parseInt(vals2[j]) == 0);
+            for (int j = i; allZeros & (j < versionSet2.length); j++)
+                allZeros = (Integer.parseInt(versionSet2[j]) == 0);
             return allZeros ? 0 : 1;
         }
 

@@ -239,7 +239,7 @@ public class GuiUtils {
         }
 
         // Fallback Switch for Config Gui, used for situations where the Gui is forced closed
-        // Example: This can occur during server transitions in places such as Hypixel
+        // Example: This can occur during server transitions where you transition to a different world
         if (configGUIOpened && !(CraftPresence.instance.currentScreen instanceof ExtendedScreen)) {
             configGUIOpened = false;
         }
@@ -439,7 +439,7 @@ public class GuiUtils {
                 ResourceLocation backGroundTexture, borderTexture;
 
                 // Perform Checks for different Color Format Fixes
-                // Fix 1 Example: ababab -> #ababab
+                // Fix 1 Example: hexCodeHere -> #hexCodeHere
                 // Fix 2 Example: 0xFFFFFF -> -1 or 100010
                 //
                 // Also Ensure (if using MC Textures) that they annotate with nameHere:textureHere

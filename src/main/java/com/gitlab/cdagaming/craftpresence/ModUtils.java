@@ -83,7 +83,7 @@ public class ModUtils {
     /**
      * The Application's Identifier
      */
-    public static final String MODID = "craftpresence";
+    public static final String MOD_ID = "craftpresence";
 
     /**
      * The Application's Configuration Schema Version ID
@@ -138,7 +138,7 @@ public class ModUtils {
     /**
      * The Application's Instance of {@link ModLogger} for Logging Information
      */
-    public static final ModLogger LOG = new ModLogger(MODID);
+    public static final ModLogger LOG = new ModLogger(MOD_ID);
 
     /**
      * The Current Thread's Class Loader, used to dynamically receive data as needed
@@ -148,12 +148,12 @@ public class ModUtils {
     /**
      * The Application's Instance of {@link TranslationUtils} for Localization and Translating Data Strings
      */
-    public static final TranslationUtils TRANSLATOR = new TranslationUtils(MODID, false);
+    public static final TranslationUtils TRANSLATOR = new TranslationUtils(MOD_ID, false);
 
     /**
      * The Application's Instance of {@link ModUpdaterUtils} for Retrieving if the Application has an update
      */
-    public static final ModUpdaterUtils UPDATER = new ModUpdaterUtils(MODID, UPDATE_JSON, VERSION_ID);
+    public static final ModUpdaterUtils UPDATER = new ModUpdaterUtils(MOD_ID, UPDATE_JSON, VERSION_ID);
 
     /**
      * Whether to forcibly block any tooltips related to this Application from rendering
@@ -179,8 +179,8 @@ public class ModUtils {
      */
     public static void loadCharData(final boolean Update, final String encoding) {
         LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.init"));
-        final String fileName = "chardata.properties", charDataPath = "/assets/" + MODID + "/" + fileName;
-        final File charDataDir = new File(MODID + File.separator + fileName);
+        final String fileName = "chardata.properties", charDataPath = "/assets/" + MOD_ID + "/" + fileName;
+        final File charDataDir = new File(MOD_ID + File.separator + fileName);
         boolean UpdateStatus = Update || !charDataDir.exists(), errored = false;
         InputStream inputData = null;
         InputStreamReader inputStream = null;
@@ -267,7 +267,7 @@ public class ModUtils {
                 outputData.close();
             }
         } catch (Exception ex) {
-            LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.dataclose"));
+            LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.data.close"));
             ex.printStackTrace();
         } finally {
             if (errored) {
@@ -293,7 +293,7 @@ public class ModUtils {
         OutputStreamWriter outputStream = null;
         BufferedReader br = null;
         BufferedWriter bw = null;
-        final File charDataDir = new File(MODID + File.separator + "chardata.properties");
+        final File charDataDir = new File(MOD_ID + File.separator + "chardata.properties");
 
         if (charDataDir.exists()) {
             try {
@@ -305,9 +305,9 @@ public class ModUtils {
                 String currentString;
                 while (!StringUtils.isNullOrEmpty((currentString = br.readLine()))) {
                     if (currentString.contains("=")) {
-                        if (currentString.toLowerCase().startsWith("charwidth")) {
+                        if (currentString.startsWith("charWidth")) {
                             textData.add("charWidth=" + Arrays.toString(StringUtils.MC_CHAR_WIDTH));
-                        } else if (currentString.toLowerCase().startsWith("glyphwidth")) {
+                        } else if (currentString.startsWith("glyphWidth")) {
                             textData.add("glyphWidth=" + Arrays.toString(StringUtils.MC_GLYPH_WIDTH));
                         }
                     }
@@ -350,7 +350,7 @@ public class ModUtils {
                         outputData.close();
                     }
                 } catch (Exception ex) {
-                    LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.dataclose"));
+                    LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.data.close"));
                     ex.printStackTrace();
                 }
             }

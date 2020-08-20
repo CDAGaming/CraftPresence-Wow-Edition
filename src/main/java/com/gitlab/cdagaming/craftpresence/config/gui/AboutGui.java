@@ -69,7 +69,7 @@ public class AboutGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 55),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.message.button.viewsource"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.view_source"),
                         () -> {
                             try {
                                 UrlUtils.openUrl(SOURCE_URL);

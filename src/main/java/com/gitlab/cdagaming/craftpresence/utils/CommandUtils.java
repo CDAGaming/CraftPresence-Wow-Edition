@@ -170,7 +170,7 @@ public class CommandUtils {
             isLoadingGame = false;
         }
 
-        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainmenuMSG, mainMenuArgs), false);
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainMenuMSG, mainMenuArgs), false);
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CLIENT.imageOf(CraftPresence.CONFIG.defaultIcon, "", false), true);
 
         isInMainMenu = true;

@@ -65,11 +65,11 @@ public class GeneralSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.defaulticon"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.default_icon"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null, true)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.defaulticon")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.default_icon")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -82,12 +82,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         detectCurseManifestButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(3),
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detectcursemanifest"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_curse_manifest"),
                         CraftPresence.CONFIG.detectCurseManifest,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detectcursemanifest")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_curse_manifest")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -100,12 +100,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         detectMultiMCManifestButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(3),
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detectmultimcmanifest"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_multimc_manifest"),
                         CraftPresence.CONFIG.detectMultiMCManifest,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detectmultimcmanifest")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_multimc_manifest")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -118,12 +118,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         detectMCUpdaterInstanceButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(4) - 10,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detectmcupdaterinstance"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_mcupdater_instance"),
                         CraftPresence.CONFIG.detectMCUpdaterInstance,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detectmcupdaterinstance")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_mcupdater_instance")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -136,12 +136,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         detectTechnicPackButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(4) - 10,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detecttechnicpack"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_technic_pack"),
                         CraftPresence.CONFIG.detectTechnicPack,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detecttechnicpack")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_technic_pack")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -154,12 +154,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         showTimeButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(5) - 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showtime"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_time"),
                         CraftPresence.CONFIG.showTime,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.showtime")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_time")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -172,12 +172,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         showBiomeButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(5) - 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showbiome"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_biome"),
                         CraftPresence.CONFIG.showCurrentBiome,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.showbiome")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_biome")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -190,12 +190,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         showDimensionButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(6) - 30,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showdimension"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_dimension"),
                         CraftPresence.CONFIG.showCurrentDimension,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.showdimension")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_dimension")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -208,12 +208,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         showStateButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(6) - 30,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"),
                         CraftPresence.CONFIG.showGameState,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.showstate")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_state")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -226,12 +226,12 @@ public class GeneralSettingsGui extends ExtendedScreen {
         enableJoinRequestButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(7) - 40,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.enablejoinrequest"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.enable_join_request"),
                         CraftPresence.CONFIG.enableJoinRequest,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.enablejoinrequest")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.enable_join_request")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -309,7 +309,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -331,7 +331,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.general");
-        final String clientIDText = ModUtils.TRANSLATOR.translate("gui.config.name.general.clientid");
+        final String clientIDText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
@@ -343,7 +343,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
         // Hovering over Client ID Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIDText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.clientid")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 }

@@ -162,7 +162,7 @@ public class DiscordAssetUtils {
             final Random randomObj = new Random();
             return ICON_LIST.get(randomObj.nextInt(ICON_LIST.size()));
         } catch (Exception ex) {
-            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalidicon.empty"));
+            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalid.icon.empty"));
             ex.printStackTrace();
             return "";
         }
@@ -227,10 +227,10 @@ public class DiscordAssetUtils {
         for (String property : CraftPresence.CONFIG.properties.stringPropertyNames()) {
             if ((property.equals(CraftPresence.CONFIG.NAME_defaultIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon) || property.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) && !contains(CraftPresence.CONFIG.properties.getProperty(property))) {
                 final String newAsset = contains(CraftPresence.CONFIG.defaultIcon) ? CraftPresence.CONFIG.defaultIcon : getRandomAsset();
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalidicon.pre", CraftPresence.CONFIG.properties.getProperty(property), property));
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalid.icon.pre", CraftPresence.CONFIG.properties.getProperty(property), property));
                 CraftPresence.CONFIG.properties.setProperty(property, newAsset);
                 needsFullUpdate = true;
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalidicon.post", property, newAsset));
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalid.icon.post", property, newAsset));
             }
         }
 

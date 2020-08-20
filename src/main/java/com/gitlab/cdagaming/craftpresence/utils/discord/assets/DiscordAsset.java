@@ -24,6 +24,7 @@
 
 package com.gitlab.cdagaming.craftpresence.utils.discord.assets;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -36,18 +37,21 @@ public class DiscordAsset {
      * The {@link AssetType} of this Asset
      */
     @SerializedName("type")
+    @Expose
     private AssetType type;
 
     /**
      * The Parsed ID for this Asset
      */
     @SerializedName("id")
+    @Expose
     private String id;
 
     /**
      * The Parsed Name for this Asset
      */
     @SerializedName("name")
+    @Expose
     private String name;
 
     /**
@@ -91,7 +95,11 @@ public class DiscordAsset {
      * A Mapping for the Parsed Asset Type for this Asset
      */
     public enum AssetType {
-        @SerializedName("1") SMALL,
-        @SerializedName("2") LARGE
+        @SerializedName("1")
+        @Expose
+        SMALL,
+        @SerializedName("2")
+        @Expose
+        LARGE
     }
 }

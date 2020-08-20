@@ -88,7 +88,7 @@ public class TileEntityUtils {
     /**
      * The Player's Current Main Hand Item's Nbt Tags, if any
      */
-    public List<String> CURRENT_MAINHAND_ITEM_TAGS = Lists.newArrayList();
+    public List<String> CURRENT_MAIN_HAND_ITEM_TAGS = Lists.newArrayList();
     /**
      * The Player's Current Off Hand Item's Nbt Tags, if any
      */
@@ -112,7 +112,7 @@ public class TileEntityUtils {
     /**
      * The Player's Current Main Hand Item, if any
      */
-    private ItemStack CURRENT_MAINHAND_ITEM;
+    private ItemStack CURRENT_MAIN_HAND_ITEM;
 
     /**
      * The Player's Current Off Hand Item, if any
@@ -142,7 +142,7 @@ public class TileEntityUtils {
     /**
      * The Player's Current Main Hand Item Name, if any
      */
-    private String CURRENT_MAINHAND_ITEM_NAME;
+    private String CURRENT_MAIN_HAND_ITEM_NAME;
 
     /**
      * The Player's Current Off Hand Item Name, if any
@@ -172,7 +172,7 @@ public class TileEntityUtils {
     /**
      * The Player's Current Main Hand Item's Tag, if any
      */
-    private NBTTagCompound CURRENT_MAINHAND_ITEM_TAG;
+    private NBTTagCompound CURRENT_MAIN_HAND_ITEM_TAG;
 
     /**
      * The Player's Current Off Hand Item's Tag, if any
@@ -226,9 +226,9 @@ public class TileEntityUtils {
      * Clears Runtime Client Data from this Module (PARTIAL Clear)
      */
     public void clearClientData() {
-        CURRENT_MAINHAND_ITEM = EMPTY_STACK;
+        CURRENT_MAIN_HAND_ITEM = EMPTY_STACK;
         CURRENT_OFFHAND_ITEM = EMPTY_STACK;
-        CURRENT_MAINHAND_ITEM_NAME = null;
+        CURRENT_MAIN_HAND_ITEM_NAME = null;
         CURRENT_OFFHAND_ITEM_NAME = null;
 
         CURRENT_HELMET = EMPTY_STACK;
@@ -240,14 +240,14 @@ public class TileEntityUtils {
         CURRENT_LEGS_NAME = null;
         CURRENT_BOOTS_NAME = null;
 
-        CURRENT_MAINHAND_ITEM_TAG = null;
+        CURRENT_MAIN_HAND_ITEM_TAG = null;
         CURRENT_OFFHAND_ITEM_TAG = null;
         CURRENT_HELMET_TAG = null;
         CURRENT_CHEST_TAG = null;
         CURRENT_LEGS_TAG = null;
         CURRENT_BOOTS_TAG = null;
 
-        CURRENT_MAINHAND_ITEM_TAGS.clear();
+        CURRENT_MAIN_HAND_ITEM_TAGS.clear();
         CURRENT_OFFHAND_ITEM_TAGS.clear();
         CURRENT_HELMET_TAGS.clear();
         CURRENT_CHEST_TAGS.clear();
@@ -336,15 +336,15 @@ public class TileEntityUtils {
      * Synchronizes Data related to this module, if needed
      */
     private void updateEntityData() {
-        final ItemStack NEW_CURRENT_MAINHAND_ITEM = CraftPresence.player.getHeldItemMainhand();
+        final ItemStack NEW_CURRENT_MAIN_HAND_ITEM = CraftPresence.player.getHeldItemMainhand();
         final ItemStack NEW_CURRENT_OFFHAND_ITEM = CraftPresence.player.getHeldItemOffhand();
         final ItemStack NEW_CURRENT_HELMET = CraftPresence.player.inventory.armorInventory.get(3);
         final ItemStack NEW_CURRENT_CHEST = CraftPresence.player.inventory.armorInventory.get(2);
         final ItemStack NEW_CURRENT_LEGS = CraftPresence.player.inventory.armorInventory.get(1);
         final ItemStack NEW_CURRENT_BOOTS = CraftPresence.player.inventory.armorInventory.get(0);
 
-        final String NEW_CURRENT_MAINHAND_ITEM_NAME = !isEmpty(NEW_CURRENT_MAINHAND_ITEM) ?
-                StringUtils.stripColors(NEW_CURRENT_MAINHAND_ITEM.getDisplayName()) : "";
+        final String NEW_CURRENT_MAIN_HAND_ITEM_NAME = !isEmpty(NEW_CURRENT_MAIN_HAND_ITEM) ?
+                StringUtils.stripColors(NEW_CURRENT_MAIN_HAND_ITEM.getDisplayName()) : "";
         final String NEW_CURRENT_OFFHAND_ITEM_NAME = !isEmpty(NEW_CURRENT_OFFHAND_ITEM) ?
                 StringUtils.stripColors(NEW_CURRENT_OFFHAND_ITEM.getDisplayName()) : "";
         final String NEW_CURRENT_HELMET_NAME = !isEmpty(NEW_CURRENT_HELMET) ?
@@ -356,9 +356,9 @@ public class TileEntityUtils {
         final String NEW_CURRENT_BOOTS_NAME = !isEmpty(NEW_CURRENT_BOOTS) ?
                 StringUtils.stripColors(NEW_CURRENT_BOOTS.getDisplayName()) : "";
 
-        final boolean hasMainHandChanged = (!isEmpty(NEW_CURRENT_MAINHAND_ITEM) &&
-                !NEW_CURRENT_MAINHAND_ITEM.equals(CURRENT_MAINHAND_ITEM) || !NEW_CURRENT_MAINHAND_ITEM_NAME.equals(CURRENT_MAINHAND_ITEM_NAME)) ||
-                (isEmpty(NEW_CURRENT_MAINHAND_ITEM) && !isEmpty(CURRENT_MAINHAND_ITEM));
+        final boolean hasMainHandChanged = (!isEmpty(NEW_CURRENT_MAIN_HAND_ITEM) &&
+                !NEW_CURRENT_MAIN_HAND_ITEM.equals(CURRENT_MAIN_HAND_ITEM) || !NEW_CURRENT_MAIN_HAND_ITEM_NAME.equals(CURRENT_MAIN_HAND_ITEM_NAME)) ||
+                (isEmpty(NEW_CURRENT_MAIN_HAND_ITEM) && !isEmpty(CURRENT_MAIN_HAND_ITEM));
         final boolean hasOffHandChanged = (!isEmpty(NEW_CURRENT_OFFHAND_ITEM) &&
                 !NEW_CURRENT_OFFHAND_ITEM.equals(CURRENT_OFFHAND_ITEM) || !NEW_CURRENT_OFFHAND_ITEM_NAME.equals(CURRENT_OFFHAND_ITEM_NAME)) ||
                 (isEmpty(NEW_CURRENT_OFFHAND_ITEM) && !isEmpty(CURRENT_OFFHAND_ITEM));
@@ -376,14 +376,14 @@ public class TileEntityUtils {
                 (isEmpty(NEW_CURRENT_BOOTS) && !isEmpty(CURRENT_BOOTS));
 
         if (hasMainHandChanged) {
-            CURRENT_MAINHAND_ITEM = NEW_CURRENT_MAINHAND_ITEM;
-            CURRENT_MAINHAND_ITEM_TAG = !isEmpty(CURRENT_MAINHAND_ITEM) ? CURRENT_MAINHAND_ITEM.writeToNBT(new NBTTagCompound()) : null;
-            final List<String> NEW_CURRENT_MAINHAND_ITEM_TAGS = CURRENT_MAINHAND_ITEM_TAG != null ? Lists.newArrayList(CURRENT_MAINHAND_ITEM_TAG.getKeySet()) : Lists.newArrayList();
+            CURRENT_MAIN_HAND_ITEM = NEW_CURRENT_MAIN_HAND_ITEM;
+            CURRENT_MAIN_HAND_ITEM_TAG = !isEmpty(CURRENT_MAIN_HAND_ITEM) ? CURRENT_MAIN_HAND_ITEM.writeToNBT(new NBTTagCompound()) : null;
+            final List<String> NEW_CURRENT_MAIN_HAND_ITEM_TAGS = CURRENT_MAIN_HAND_ITEM_TAG != null ? Lists.newArrayList(CURRENT_MAIN_HAND_ITEM_TAG.getKeySet()) : Lists.newArrayList();
 
-            if (!NEW_CURRENT_MAINHAND_ITEM_TAGS.equals(CURRENT_MAINHAND_ITEM_TAGS)) {
-                CURRENT_MAINHAND_ITEM_TAGS = NEW_CURRENT_MAINHAND_ITEM_TAGS;
+            if (!NEW_CURRENT_MAIN_HAND_ITEM_TAGS.equals(CURRENT_MAIN_HAND_ITEM_TAGS)) {
+                CURRENT_MAIN_HAND_ITEM_TAGS = NEW_CURRENT_MAIN_HAND_ITEM_TAGS;
             }
-            CURRENT_MAINHAND_ITEM_NAME = NEW_CURRENT_MAINHAND_ITEM_NAME;
+            CURRENT_MAIN_HAND_ITEM_NAME = NEW_CURRENT_MAIN_HAND_ITEM_NAME;
         }
 
         if (hasOffHandChanged) {
@@ -444,7 +444,7 @@ public class TileEntityUtils {
         if (hasMainHandChanged || hasOffHandChanged ||
                 hasHelmetChanged || hasChestChanged ||
                 hasLegsChanged || hasBootsChanged) {
-            allItemsEmpty = isEmpty(CURRENT_MAINHAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS);
+            allItemsEmpty = isEmpty(CURRENT_MAIN_HAND_ITEM) && isEmpty(CURRENT_OFFHAND_ITEM) && isEmpty(CURRENT_HELMET) && isEmpty(CURRENT_CHEST) && isEmpty(CURRENT_LEGS) && isEmpty(CURRENT_BOOTS);
             updateEntityPresence();
         }
     }
@@ -463,7 +463,7 @@ public class TileEntityUtils {
                 CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 CURRENT_OFFHAND_ITEM_NAME);
         String mainItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
-                CURRENT_MAINHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
+                CURRENT_MAIN_HAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 defaultItemMSG);
 
         String helmetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
@@ -483,9 +483,9 @@ public class TileEntityUtils {
         List<Tuple<String, String>> tileEntityArgs = Lists.newArrayList();
 
         // Extend Argument Messages, if tags available
-        if (!CURRENT_MAINHAND_ITEM_TAGS.isEmpty()) {
-            for (String tagName : CURRENT_MAINHAND_ITEM_TAGS) {
-                mainItemMSG = StringUtils.replaceAnyCase(mainItemMSG, "&" + tagName + "&", CURRENT_MAINHAND_ITEM_TAG.getTag(tagName).toString());
+        if (!CURRENT_MAIN_HAND_ITEM_TAGS.isEmpty()) {
+            for (String tagName : CURRENT_MAIN_HAND_ITEM_TAGS) {
+                mainItemMSG = StringUtils.replaceAnyCase(mainItemMSG, "&" + tagName + "&", CURRENT_MAIN_HAND_ITEM_TAG.getTag(tagName).toString());
             }
         }
 
@@ -519,8 +519,8 @@ public class TileEntityUtils {
             }
         }
 
-        tileEntityArgs.add(new Tuple<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAINHAND_ITEM_NAME) ?
-                StringUtils.replaceAnyCase(mainItemMSG, "&item&", CURRENT_MAINHAND_ITEM_NAME) : ""));
+        tileEntityArgs.add(new Tuple<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAIN_HAND_ITEM_NAME) ?
+                StringUtils.replaceAnyCase(mainItemMSG, "&item&", CURRENT_MAIN_HAND_ITEM_NAME) : ""));
         tileEntityArgs.add(new Tuple<>("&OFFHAND&", !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ?
                 StringUtils.replaceAnyCase(offHandItemMSG, "&item&", CURRENT_OFFHAND_ITEM_NAME) : ""));
         tileEntityArgs.add(new Tuple<>("&HELMET&", !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ?
@@ -554,7 +554,7 @@ public class TileEntityUtils {
      * @return A List of Tags from a TileEntity name, if currently equipped
      */
     public List<String> getListFromName(final String name) {
-        return name.equalsIgnoreCase(CURRENT_MAINHAND_ITEM_NAME) ? CURRENT_MAINHAND_ITEM_TAGS
+        return name.equalsIgnoreCase(CURRENT_MAIN_HAND_ITEM_NAME) ? CURRENT_MAIN_HAND_ITEM_TAGS
                 : name.equalsIgnoreCase(CURRENT_OFFHAND_ITEM_NAME) ? CURRENT_OFFHAND_ITEM_TAGS
                 : name.equalsIgnoreCase(CURRENT_HELMET_NAME) ? CURRENT_HELMET_TAGS
                 : name.equalsIgnoreCase(CURRENT_CHEST_NAME) ? CURRENT_CHEST_TAGS
@@ -578,7 +578,7 @@ public class TileEntityUtils {
                 if (ModUtils.IS_DEV) {
                     // If in Debug Mode, also append the Tag's value to the placeholder String
                     final String tagValue =
-                            tags.equals(CURRENT_MAINHAND_ITEM_TAGS) ? CURRENT_MAINHAND_ITEM_TAG.getTag(tagName).toString() :
+                            tags.equals(CURRENT_MAIN_HAND_ITEM_TAGS) ? CURRENT_MAIN_HAND_ITEM_TAG.getTag(tagName).toString() :
                                     tags.equals(CURRENT_OFFHAND_ITEM_TAGS) ? CURRENT_OFFHAND_ITEM_TAG.getTag(tagName).toString() :
                                             tags.equals(CURRENT_HELMET_TAGS) ? CURRENT_HELMET_TAG.getTag(tagName).toString() :
                                                     tags.equals(CURRENT_CHEST_TAGS) ? CURRENT_CHEST_TAG.getTag(tagName).toString() :

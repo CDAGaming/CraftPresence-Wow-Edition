@@ -205,21 +205,21 @@ public abstract class Pipe {
     /**
      * Finds the IPC location in the current system.
      *
-     * @param i Index to try getting the IPC at.
+     * @param index The index to try getting the IPC at.
      * @return The IPC location.
      */
-    private static String getPipeLocation(int i) {
+    private static String getPipeLocation(int index) {
         if (System.getProperty("os.name").contains("Win"))
-            return "\\\\?\\pipe\\discord-ipc-" + i;
-        String tmppath = null;
+            return "\\\\?\\pipe\\discord-ipc-" + index;
+        String tmpPath = null;
         for (String str : unixPaths) {
-            tmppath = System.getenv(str);
-            if (tmppath != null)
+            tmpPath = System.getenv(str);
+            if (tmpPath != null)
                 break;
         }
-        if (tmppath == null)
-            tmppath = "/tmp";
-        return tmppath + "/discord-ipc-" + i;
+        if (tmpPath == null)
+            tmpPath = "/tmp";
+        return tmpPath + "/discord-ipc-" + index;
     }
 
     /**

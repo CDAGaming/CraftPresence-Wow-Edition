@@ -88,19 +88,19 @@ public class DiscordUtils {
     /**
      * The Current Small Image Icon being displayed in the RPC, if any
      */
-    public String SMALLIMAGEKEY;
+    public String SMALL_IMAGE_KEY;
     /**
      * The Current Message tied to the Small Image, if any
      */
-    public String SMALLIMAGETEXT;
+    public String SMALL_IMAGE_TEXT;
     /**
      * The Current Large Image Icon being displayed in the RPC, if any
      */
-    public String LARGEIMAGEKEY;
+    public String LARGE_IMAGE_KEY;
     /**
      * The Current Message tied to the Large Image, if any
      */
-    public String LARGEIMAGETEXT;
+    public String LARGE_IMAGE_TEXT;
     /**
      * The 18-character Client ID Number, tied to the game profile data attached to the RPC
      */
@@ -211,7 +211,7 @@ public class DiscordUtils {
         modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
         playerInfoArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
 
-        generalArgs.add(new Tuple<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mcversion", ModUtils.MCVersion)));
+        generalArgs.add(new Tuple<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mc.version", ModUtils.MCVersion)));
         generalArgs.add(new Tuple<>("&BRAND&", ModUtils.BRAND));
         generalArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
         generalArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMSG, playerInfoArgs)));
@@ -448,21 +448,21 @@ public class DiscordUtils {
         GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
 
         final String baseLargeImage = StringUtils.removeMatches(StringUtils.getMatches("&([^\\s]+?)&", CraftPresence.CONFIG.largeImageKey), iconData, 1);
-        LARGEIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseLargeImage, iconData);
+        LARGE_IMAGE_KEY = StringUtils.sequentialReplaceAnyCase(baseLargeImage, iconData);
 
         final String baseSmallImage = StringUtils.removeMatches(StringUtils.getMatches("&([^\\s]+?)&", CraftPresence.CONFIG.smallImageKey), iconData, 1);
-        SMALLIMAGEKEY = StringUtils.sequentialReplaceAnyCase(baseSmallImage, iconData);
+        SMALL_IMAGE_KEY = StringUtils.sequentialReplaceAnyCase(baseSmallImage, iconData);
 
-        LARGEIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
-        SMALLIMAGETEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
+        LARGE_IMAGE_TEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
+        SMALL_IMAGE_TEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
 
         final RichPresence newRPCData = new RichPresence.Builder()
                 .setState(GAME_STATE)
                 .setDetails(DETAILS)
                 .setStartTimestamp(START_TIMESTAMP)
                 .setEndTimestamp(END_TIMESTAMP)
-                .setLargeImage(LARGEIMAGEKEY, LARGEIMAGETEXT)
-                .setSmallImage(SMALLIMAGEKEY, SMALLIMAGETEXT)
+                .setLargeImage(LARGE_IMAGE_KEY, LARGE_IMAGE_TEXT)
+                .setSmallImage(SMALL_IMAGE_KEY, SMALL_IMAGE_TEXT)
                 .setParty(PARTY_ID, PARTY_SIZE, PARTY_MAX)
                 .setMatchSecret(MATCH_SECRET)
                 .setJoinSecret(JOIN_SECRET)
@@ -473,11 +473,11 @@ public class DiscordUtils {
         GAME_STATE = StringUtils.getConvertedString(GAME_STATE, "UTF-8", false);
         DETAILS = StringUtils.getConvertedString(DETAILS, "UTF-8", false);
 
-        LARGEIMAGEKEY = StringUtils.getConvertedString(LARGEIMAGEKEY, "UTF-8", false);
-        SMALLIMAGEKEY = StringUtils.getConvertedString(SMALLIMAGEKEY, "UTF-8", false);
+        LARGE_IMAGE_KEY = StringUtils.getConvertedString(LARGE_IMAGE_KEY, "UTF-8", false);
+        SMALL_IMAGE_KEY = StringUtils.getConvertedString(SMALL_IMAGE_KEY, "UTF-8", false);
 
-        LARGEIMAGETEXT = StringUtils.getConvertedString(LARGEIMAGETEXT, "UTF-8", false);
-        SMALLIMAGETEXT = StringUtils.getConvertedString(SMALLIMAGETEXT, "UTF-8", false);
+        LARGE_IMAGE_TEXT = StringUtils.getConvertedString(LARGE_IMAGE_TEXT, "UTF-8", false);
+        SMALL_IMAGE_TEXT = StringUtils.getConvertedString(SMALL_IMAGE_TEXT, "UTF-8", false);
 
         return newRPCData;
     }

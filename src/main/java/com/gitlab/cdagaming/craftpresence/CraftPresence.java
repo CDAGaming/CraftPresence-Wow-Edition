@@ -50,7 +50,7 @@ import java.util.TimerTask;
  *
  * @author CDAGaming
  */
-@Mod(modid = ModUtils.MODID, name = ModUtils.NAME, version = ModUtils.VERSION_ID, clientSideOnly = true, guiFactory = ModUtils.GUI_FACTORY, canBeDeactivated = true, updateJSON = ModUtils.UPDATE_JSON, certificateFingerprint = ModUtils.FINGERPRINT, acceptedMinecraftVersions = "*")
+@Mod(modid = ModUtils.MOD_ID, name = ModUtils.NAME, version = ModUtils.VERSION_ID, clientSideOnly = true, guiFactory = ModUtils.GUI_FACTORY, canBeDeactivated = true, updateJSON = ModUtils.UPDATE_JSON, certificateFingerprint = ModUtils.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
     /**
      * Whether Pack Data was able to be Found and Parsed
@@ -156,17 +156,17 @@ public class CraftPresence {
      */
     private void init() {
         // If running in Developer Mode, Warn of Possible Issues and Log OS Info
-        ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.debugmode"));
+        ModUtils.LOG.debugWarn(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.warning.debug_mode"));
         ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
 
         // Check for Updates before continuing
         ModUtils.UPDATER.checkForUpdates();
 
         SYSTEM = new SystemUtils();
-        CONFIG = new ConfigUtils(ModUtils.configDir + File.separator + ModUtils.MODID + ".properties");
+        CONFIG = new ConfigUtils(ModUtils.configDir + File.separator + ModUtils.MOD_ID + ".properties");
         CONFIG.initialize();
 
-        final File CP_DIR = new File(ModUtils.MODID);
+        final File CP_DIR = new File(ModUtils.MOD_ID);
         ModUtils.loadCharData(!CP_DIR.exists() || CP_DIR.listFiles() == null, "UTF-8");
 
         CommandUtils.init();

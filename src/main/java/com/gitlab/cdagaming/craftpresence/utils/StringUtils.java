@@ -1100,10 +1100,10 @@ public class StringUtils {
      * @param instance      An Instance of the Class, if needed
      * @param methodData    The Methods and Necessary Argument Data for execution, in the form of methodName:argsAndTypesForMethod
      */
-    public static void executeMethod(Class<?> classToAccess, Object instance, List<Tuple<String, Tuple<Object[], Class<?>[]>>> methodData) {
+    public static void executeMethod(final Class<?> classToAccess, final Object instance, final List<Tuple<String, Tuple<Object[], Class<?>[]>>> methodData) {
         for (Tuple<String, Tuple<Object[], Class<?>[]>> methodInstance : methodData) {
             try {
-                Method lookupMethod = classToAccess.getDeclaredMethod(methodInstance.getFirst(), methodInstance.getSecond().getSecond());
+                final Method lookupMethod = classToAccess.getDeclaredMethod(methodInstance.getFirst(), methodInstance.getSecond().getSecond());
                 lookupMethod.setAccessible(true);
                 lookupMethod.invoke(instance, methodInstance.getSecond().getFirst());
             } catch (Exception | Error ex) {
@@ -1112,16 +1112,6 @@ public class StringUtils {
                 }
             }
         }
-    }
-
-    /**
-     * Generates a Hash Code from a Set of Objects
-     *
-     * @param values The object set to generate for
-     * @return The resulting hash code of the object set
-     */
-    public static int generateHash(Object... values) {
-        return Arrays.hashCode(values);
     }
 
     /**

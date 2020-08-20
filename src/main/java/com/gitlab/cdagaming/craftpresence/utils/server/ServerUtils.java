@@ -416,7 +416,7 @@ public class ServerUtils {
             if (CraftPresence.CONFIG.enableJoinRequest) {
                 requestedServerData = new ServerData(serverName, serverIP, false);
             } else {
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.config.disabled.enablejoinrequest"));
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.config.disabled.enable_join_request"));
             }
         } else {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.join", secret));
@@ -539,7 +539,7 @@ public class ServerUtils {
             }
 
             // NOTE: SinglePlayer-Only Presence Updates
-            currentServerMSG = CraftPresence.CONFIG.singleplayerMSG;
+            currentServerMSG = CraftPresence.CONFIG.singlePlayerMSG;
 
             CraftPresence.CLIENT.syncArgument("&SERVER&", StringUtils.sequentialReplaceAnyCase(currentServerMSG, soloArgs), false);
             CraftPresence.CLIENT.initArgument(true, "&SERVER&");

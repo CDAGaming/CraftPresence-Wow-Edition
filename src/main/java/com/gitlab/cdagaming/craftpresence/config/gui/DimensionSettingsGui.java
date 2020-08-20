@@ -60,13 +60,13 @@ public class DimensionSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionmessages"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null, true)),
                         () -> {
                             if (!dimensionMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionmessages"))
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_messages"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -77,7 +77,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.dimensionmessages.dimensionmessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -94,11 +94,11 @@ public class DimensionSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(3),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.dimensionmessages.dimensionicon"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_icon"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultDimensionIcon, null, true)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.dimensionmessages.dimensionicon")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_icon")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -125,7 +125,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -146,7 +146,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
         preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimensionmessages");
+        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimension_messages");
         final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.dimension");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
@@ -160,7 +160,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
 
         // Hovering over Default Dimension Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 140, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(defaultMessageText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimensionmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimension_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 }

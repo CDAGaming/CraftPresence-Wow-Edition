@@ -46,7 +46,7 @@ public class UrlUtils {
     /**
      * The User Agent to Identify As when Accessing other URLs
      */
-    private static final String USER_AGENT = ModUtils.MODID + "/" + ModUtils.MCVersion;
+    private static final String USER_AGENT = ModUtils.MOD_ID + "/" + ModUtils.MCVersion;
 
     /**
      * The GSON Json Builder to Use while Parsing Json

@@ -29,12 +29,13 @@ import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import net.minecraft.client.Minecraft;
 
+import javax.annotation.Nonnull;
+
 /**
  * Gui Widget for a Clickable Checkbox-Style Button
  *
  * @author CDAGaming
  */
-@SuppressWarnings("NullableProblems")
 public class CheckBoxControl extends ExtendedButtonControl {
     /**
      * The width of the inner box of this control
@@ -139,7 +140,7 @@ public class CheckBoxControl extends ExtendedButtonControl {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partial) {
         if (visible) {
             hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
             CraftPresence.GUIS.drawContinuousTexturedBox(new Tuple<>(x, y), new Tuple<>(0, 46), new Tuple<>(boxWidth, height), new Tuple<>(200, 20), new Tuple<>(2, 3), new Tuple<>(2, 2), zLevel, BUTTON_TEXTURES);
@@ -158,7 +159,7 @@ public class CheckBoxControl extends ExtendedButtonControl {
      * Equivalent of MouseListener.mousePressed(MouseEvent e).
      */
     @Override
-    public boolean mousePressed(Minecraft mc, int mouseX, int mouseY) {
+    public boolean mousePressed(@Nonnull Minecraft mc, int mouseX, int mouseY) {
         if (enabled && visible && hovered) {
             is_Checked = !is_Checked;
             return true;

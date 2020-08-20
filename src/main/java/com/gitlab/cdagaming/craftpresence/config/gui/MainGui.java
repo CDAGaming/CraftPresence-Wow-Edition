@@ -74,14 +74,14 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.biomemessages"),
+                        ModUtils.TRANSLATOR.translate("gui.config.title.biome_messages"),
                         () -> CraftPresence.GUIS.openScreen(new BiomeSettingsGui(currentScreen)),
                         () -> {
                             if (!biomeSet.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showbiome"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_biome"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -92,7 +92,7 @@ public class MainGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.biomemessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.biome_messages")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -108,14 +108,14 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc1, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.dimensionmessages"),
+                        ModUtils.TRANSLATOR.translate("gui.config.title.dimension_messages"),
                         () -> CraftPresence.GUIS.openScreen(new DimensionSettingsGui(currentScreen)),
                         () -> {
                             if (!dimensionSet.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showdimension"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_dimension"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -126,7 +126,7 @@ public class MainGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimensionmessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimension_messages")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -142,14 +142,14 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.servermessages"),
+                        ModUtils.TRANSLATOR.translate("gui.config.title.server_messages"),
                         () -> CraftPresence.GUIS.openScreen(new ServerSettingsGui(currentScreen)),
                         () -> {
                             if (!serverSet.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -160,7 +160,7 @@ public class MainGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.servermessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.server_messages")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -176,14 +176,14 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc1, CraftPresence.GUIS.getButtonY(3),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.statusmessages"),
+                        ModUtils.TRANSLATOR.translate("gui.config.title.status_messages"),
                         () -> CraftPresence.GUIS.openScreen(new StatusMessagesGui(currentScreen)),
                         () -> {
                             if (!statusSet.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.showstate"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -194,7 +194,7 @@ public class MainGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.statusmessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.status_messages")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -249,11 +249,11 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2, CraftPresence.GUIS.getButtonY(4),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.presencesettings"),
+                        ModUtils.TRANSLATOR.translate("gui.config.title.presence_settings"),
                         () -> CraftPresence.GUIS.openScreen(new PresenceSettingsGui(currentScreen)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.presencesettings")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.presence_settings")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,

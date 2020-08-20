@@ -145,7 +145,7 @@ public class SelectorGui extends ExtendedScreen {
                         new ExtendedButtonControl(
                                 (width - 195), (height - 30),
                                 90, 20,
-                                ModUtils.TRANSLATOR.translate("gui.config.message.button.addnew"),
+                                ModUtils.TRANSLATOR.translate("gui.config.message.button.add.new"),
                                 () -> CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null, configOption))
                         )
                 );
@@ -153,7 +153,7 @@ public class SelectorGui extends ExtendedScreen {
 
             super.initializeUi();
         } else {
-            CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.emptylist"))));
+            CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.empty.list"))));
         }
     }
 

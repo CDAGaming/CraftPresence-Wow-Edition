@@ -64,10 +64,10 @@ public class ColorEditorGui extends ExtendedScreen {
         final int calc2 = (width / 2) + 3;
 
         // Page 1 Items
-        final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.redcolorvalue");
-        final String greenTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.greencolorvalue");
-        final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.bluecolorvalue");
-        final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.alphacolorvalue");
+        final String redTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.color.value.red");
+        final String greenTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.color.value.green");
+        final String blueTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.color.value.blue");
+        final String alphaTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.color.value.alpha");
 
         hexText = addControl(
                 new ExtendedTextControl(
@@ -231,7 +231,7 @@ public class ColorEditorGui extends ExtendedScreen {
 
         // Page 1 Items
         if (pageNumber == 0) {
-            final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hexcode");
+            final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
 
             drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
 
@@ -242,7 +242,7 @@ public class ColorEditorGui extends ExtendedScreen {
 
         // Page 2 Items
         if (pageNumber == 1) {
-            final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texturepath");
+            final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texture_path");
 
             drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
 

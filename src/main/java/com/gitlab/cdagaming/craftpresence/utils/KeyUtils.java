@@ -65,7 +65,7 @@ public class KeyUtils {
      * Determine the LWJGL KeyCode Name for the inputted KeyCode
      *
      * @param original A KeyCode, converted to String
-     * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
+     * @return Either an LWJGL KeyCode Name or the KeyCode if none can be found
      */
     public String getKeyName(final String original) {
         final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
@@ -88,7 +88,7 @@ public class KeyUtils {
      * Determine the LWJGL KeyCode Name for the inputted KeyCode
      *
      * @param original A KeyCode, in Integer Form
-     * @return Either an LWJGL KeyCode Name (LCTRL) or the KeyCode if none can be found
+     * @return Either an LWJGL KeyCode Name or the KeyCode if none can be found
      */
     public String getKeyName(final int original) {
         final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
@@ -130,7 +130,7 @@ public class KeyUtils {
                 }
             } catch (Exception | Error ex) {
                 // If an Error Occurs, Reset the Key to it's default value in accordance to the protocol version
-                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keybind", CraftPresence.CONFIG.NAME_configKeyCode.replaceAll("_", " ")));
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keycode", CraftPresence.CONFIG.NAME_configKeyCode.replaceAll("_", " ")));
                 CraftPresence.CONFIG.configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;
                 CraftPresence.CONFIG.updateConfig();
             }

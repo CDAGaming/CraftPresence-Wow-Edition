@@ -23,14 +23,15 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 
 ### Fixes
 
-*   Fixed Instances of the Mod ID not being the same across modloaders
+*   Fixed Instances of the Mod ID not being the same across mod loaders
 *   Fixed an Issue causing KeyCode Properties to be able to skip verification
-*   Fixed an Issue where the `Config Gui` Keybind was not properly identified
+*   Fixed an Issue where the `Config Gui` KeyBind was not properly identified
 *   Fixed an Issue causing some LWJGL 3 KeyCodes to not be recognized
 *   Fixed an Issue causing Format Exceptions on some translations
 *   Fixed an Issue causing the Load State to be infinitely displayed, if you modified your config whilst in-game
 *   Fixed an Issue that caused some Pack Icon Keys to be parsed incorrectly
 *   Fixed an Issue causing properties with an empty default value to become falsely interpreted to be reset if still empty
+*   Fixed an Issue with some Translations being missing
 
 ___
 

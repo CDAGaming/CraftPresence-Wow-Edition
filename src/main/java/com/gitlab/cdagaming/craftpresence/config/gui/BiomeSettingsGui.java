@@ -59,14 +59,14 @@ public class BiomeSettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.biomemessages.biomemessages"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.biome_messages.biome_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.biome"), CraftPresence.BIOMES.BIOME_NAMES, null, null, true)),
                         () -> {
                             if (!biomeMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.biomemessages.biomemessages"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.biome_messages.biome_messages"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -77,7 +77,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.biomemessages.biomemessages")
+                                                ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -106,7 +106,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -127,7 +127,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
         preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.biomemessages");
+        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.biome_messages");
         final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.biome");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
@@ -141,7 +141,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
 
         // Hovering over Default Biome Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(defaultMessageText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.biomemessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.biome_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 }

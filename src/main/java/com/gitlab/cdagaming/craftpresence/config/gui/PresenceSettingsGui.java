@@ -173,13 +173,13 @@ public class PresenceSettingsGui extends ExtendedScreen {
         preDraw();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.presencesettings");
-        final String detailsFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.detailsmsg");
-        final String gameStateFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.gamestatemsg");
-        final String largeImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.largeimagemsg");
-        final String smallImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.smallimagemsg");
-        final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.smallimagekey");
-        final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.largeimagekey");
+        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.presence_settings");
+        final String detailsFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.details_msg");
+        final String gameStateFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.game_state_msg");
+        final String largeImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_msg");
+        final String smallImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_msg");
+        final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_key");
+        final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_key");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);

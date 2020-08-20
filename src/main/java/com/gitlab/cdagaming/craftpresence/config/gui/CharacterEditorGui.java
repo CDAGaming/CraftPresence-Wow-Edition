@@ -151,8 +151,8 @@ public class CharacterEditorGui extends ExtendedScreen {
         checkValues();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.character");
-        final String charInputTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.charinput");
-        final String charWidthTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.charwidth");
+        final String charInputTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.char.input");
+        final String charWidthTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.char.width");
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.character.notice"));
 
         drawNotice(notice, 2, 2);

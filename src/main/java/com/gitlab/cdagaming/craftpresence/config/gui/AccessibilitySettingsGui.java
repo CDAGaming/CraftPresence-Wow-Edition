@@ -65,7 +65,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltipbgcolor")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltip_bg_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -84,7 +84,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltipbordercolor")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltip_border_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -103,7 +103,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.guibgcolor")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.gui_bg_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -126,12 +126,12 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         stripTranslationColorsButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(4) + 10,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.striptranslationcolors"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.strip_translation_colors"),
                         CraftPresence.CONFIG.stripTranslationColors,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.striptranslationcolors")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.strip_translation_colors")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -144,12 +144,12 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         showLoggingInChatButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(4) + 10,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.showlogginginchat"),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.show_logging_in_chat"),
                         CraftPresence.CONFIG.showLoggingInChat,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.showlogginginchat")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.show_logging_in_chat")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -206,10 +206,10 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.accessibility");
 
-        final String languageIDTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.languageid");
+        final String languageIDTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
 
         final String keyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.category");
-        final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keybind.name");
+        final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
@@ -225,12 +225,12 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         // Hovering over Language Id Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIDTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.languageid")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
 
         // Hovering over Config Keybinding Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(6) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keybind.description")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 
@@ -253,7 +253,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
             entryData = new Tuple<>(button, button.getOptionalArgs()[0]);
 
             backupKeyString = button.displayString;
-            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.editor.enterkey");
+            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.editor.enter_key");
         }
     }
 

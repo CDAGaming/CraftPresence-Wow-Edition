@@ -51,7 +51,7 @@ public class DynamicEditorGui extends ExtendedScreen {
     @Override
     public void initializeUi() {
         if (isNewValue) {
-            mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.addnew");
+            mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.add.new");
             if (parentScreen instanceof BiomeSettingsGui) {
                 specificMSG = defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
             } else if (parentScreen instanceof DimensionSettingsGui) {
@@ -73,36 +73,36 @@ public class DynamicEditorGui extends ExtendedScreen {
             }
         } else {
             if (parentScreen instanceof BiomeSettingsGui) {
-                mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.biome.editspecificbiome", attributeName);
+                mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.biome.edit_specific_biome", attributeName);
                 defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof DimensionSettingsGui) {
-                mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimension.editspecificdimension", attributeName);
+                mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimension.edit_specific_dimension", attributeName);
                 defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof ServerSettingsGui) {
-                mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.server.editspecificserver", attributeName);
+                mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.server.edit_specific_server", attributeName);
                 defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                 specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof AdvancedSettingsGui) {
                 if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificgui", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_gui", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificitem", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_item", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificentity", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_entity", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityAttackingMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificentity", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_entity", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.editspecificentity", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_entity", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 }
@@ -126,7 +126,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                     new ExtendedButtonControl(
                             (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                             180, 20,
-                            ModUtils.TRANSLATOR.translate("gui.config.message.button.iconchange"),
+                            ModUtils.TRANSLATOR.translate("gui.config.message.button.icon.change"),
                             () -> {
                                 if (parentScreen instanceof DimensionSettingsGui) {
                                     final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
@@ -229,7 +229,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                             if (!proceedButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.defaultempty")
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -250,7 +250,7 @@ public class DynamicEditorGui extends ExtendedScreen {
         preDraw();
 
         final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
-        final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.valuename");
+        final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
         drawString(mc.fontRenderer, messageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
@@ -269,35 +269,35 @@ public class DynamicEditorGui extends ExtendedScreen {
         // Hovering over Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), mc.fontRenderer.FONT_HEIGHT)) {
             if (parentScreen instanceof BiomeSettingsGui) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biomemessages.biomemessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             } else if (parentScreen instanceof DimensionSettingsGui) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimensionmessages.dimensionmessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             } else if (parentScreen instanceof ServerSettingsGui) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.servermessages.servermessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
             } else if (parentScreen instanceof AdvancedSettingsGui) {
                 if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
-                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.guimessages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.gui_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
-                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.itemmessages",
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.item_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.TILE_ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
                     ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
-                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entitytargetmessages",
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entity_target_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
                     ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityAttackingMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
-                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityattackingmessages",
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entity_attacking_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
                     ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
-                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entityridingmessages",
+                            ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entity_riding_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
                     ), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
@@ -307,7 +307,7 @@ public class DynamicEditorGui extends ExtendedScreen {
 
         // Hovering over Value Name Label
         if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(valueNameText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.hover.valuename")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.hover.value.name")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }
 }
