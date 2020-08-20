@@ -86,23 +86,23 @@ public class DynamicEditorGui extends ExtendedScreen {
                 specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
             } else if (parentScreen instanceof AdvancedSettingsGui) {
                 if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_gui", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.edit_specific_gui", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_item", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.item.edit_specific_item", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_entity", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.entity.edit_specific_entity", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityAttackingMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_entity", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.entity.edit_specific_entity", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
-                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.edit_specific_entity", attributeName);
+                    mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.entity.edit_specific_entity", attributeName);
                     defaultMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                     specificMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG);
                 }
