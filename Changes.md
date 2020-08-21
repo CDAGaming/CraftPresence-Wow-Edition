@@ -16,7 +16,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Added a Conversion Layer for converting KeyCodes between LWJGL2 (1.12.2 and below) and LWJGL3 (1.13 and above)
 *   Added a Conversion Layer for converting Language IDs between Pack Format 1-2 (1.10.2 and below) and Pack Format 3 and Up (1.11 and above)
 *   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
-*   Separated `IS_DEV` into two options, to allow for toggling excessive logging (Verbose Logging)
+*   Separated `IS_DEV` into two options, to allow for toggling excessive logging and stacktrace outputs (Verbose Logging)
 *   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
 *   Added Support for Live Editing (Clicking the `Sync Config` button will sync any changes made to `craftpresence.properties` to the game without needing to restart minecraft)
 *   Localization and Backend Updates
@@ -32,6 +32,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Fixed an Issue that caused some Pack Icon Keys to be parsed incorrectly
 *   Fixed an Issue causing properties with an empty default value to become falsely interpreted to be reset if still empty
 *   Fixed an Issue with some Translations being missing
+*   Fixed an Issue where some Disabled Options were reporting the wrong options to be enabled
 
 ___
 

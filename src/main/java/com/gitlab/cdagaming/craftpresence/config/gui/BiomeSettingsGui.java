@@ -66,7 +66,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.biome_messages.biome_messages"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_biome"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,

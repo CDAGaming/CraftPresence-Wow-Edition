@@ -178,7 +178,7 @@ public class ModUtils {
      * @param encoding The Charset Encoding to parse character data in
      */
     public static void loadCharData(final boolean Update, final String encoding) {
-        LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.init"));
+        LOG.debugInfo(TRANSLATOR.translate("craftpresence.logger.info.chardata.init"));
         final String fileName = "chardata.properties", charDataPath = "/assets/" + MOD_ID + "/" + fileName;
         final File charDataDir = new File(MOD_ID + File.separator + fileName);
         boolean UpdateStatus = Update || !charDataDir.exists(), errored = false;
@@ -193,7 +193,7 @@ public class ModUtils {
                 errored = true;
             }
 
-            LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
+            LOG.debugInfo(TRANSLATOR.translate("craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
             inputData = StringUtils.getResourceAsStream(ModUtils.class, charDataPath);
 
             // Write Data from Local charData to Directory if Update is needed
@@ -206,7 +206,7 @@ public class ModUtils {
                         outputData.write(transferBuffer, 0, readBuffer);
                     }
 
-                    LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.download.loaded", fileName, charDataDir.getAbsolutePath(), charDataPath));
+                    LOG.debugInfo(TRANSLATOR.translate("craftpresence.logger.info.download.loaded", fileName, charDataDir.getAbsolutePath(), charDataPath));
                 } catch (Exception ex) {
                     errored = true;
                 }
@@ -267,14 +267,16 @@ public class ModUtils {
                 outputData.close();
             }
         } catch (Exception ex) {
-            LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.data.close"));
-            ex.printStackTrace();
+            LOG.debugError(TRANSLATOR.translate("craftpresence.logger.error.data.close"));
+            if (ModUtils.IS_VERBOSE) {
+                ex.printStackTrace();
+            }
         } finally {
             if (errored) {
-                LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.chardata"));
+                LOG.debugError(TRANSLATOR.translate("craftpresence.logger.error.chardata"));
                 forceBlockTooltipRendering = true;
             } else {
-                LOG.info(TRANSLATOR.translate(true, "craftpresence.logger.info.chardata.loaded"));
+                LOG.debugInfo(TRANSLATOR.translate("craftpresence.logger.info.chardata.loaded"));
                 forceBlockTooltipRendering = false;
             }
         }
@@ -350,8 +352,10 @@ public class ModUtils {
                         outputData.close();
                     }
                 } catch (Exception ex) {
-                    LOG.error(TRANSLATOR.translate(true, "craftpresence.logger.error.data.close"));
-                    ex.printStackTrace();
+                    LOG.debugError(TRANSLATOR.translate("craftpresence.logger.error.data.close"));
+                    if (ModUtils.IS_VERBOSE) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         } else {

@@ -66,7 +66,8 @@ public class DimensionSettingsGui extends ExtendedScreen {
                             if (!dimensionMessagesButton.enabled) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_messages"))
+                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_dimension"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
