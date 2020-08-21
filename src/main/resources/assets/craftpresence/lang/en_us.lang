@@ -40,14 +40,14 @@ gui.config.title.selector.view.guis=CraftPresence - Available Guis
 gui.config.title.selector.view.items=CraftPresence - Available Items
 ## CONFIG MESSAGES - TITLE COMMENTS ##
 gui.config.comment.title=Current Version -> %1$s (Schema v%2$s)
-gui.config.comment.title.general=General Settings for Displaying Info
-gui.config.comment.title.biome_messages=Customize Messages to display with Biomes\n (Manual Format: biome_name;message)\n Available Placeholders:\n - &biome& = Biome Name\n - &id& = Biome ID
-gui.config.comment.title.dimension_messages=Customize Messages to display with Dimensions\n (Manual Format: dimension_name;message)\n Available Placeholders:\n - &dimension& = Dimension Name\n - &id& = Dimension ID\n - &icon& = Default Dimension Icon
-gui.config.comment.title.server_messages=Customize Messages to display with Servers\n (Manual Format: server_IP;message;icon)\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
-gui.config.comment.title.status_messages=Customize Messages relating to different Game States
-gui.config.comment.title.advanced=Customize Additional Settings of the Mod
-gui.config.comment.title.accessibility=Customize Accessibility Settings of the Mod\n Includes:\n - Language ID\n - KeyBindings\n - Additional Gui Customization Options
-gui.config.comment.presence_settings=Customize the Formatting and Locations of the Different Messages to display in the Rich Presence
+gui.config.comment.title.general=General settings for display info
+gui.config.comment.title.biome_messages=Customize messages to display with biomes\n (Manual format: biome_name;message)\n Available placeholders:\n - &biome& = Biome name\n - &id& = Biome ID
+gui.config.comment.title.dimension_messages=Customize messages to display with dimensions\n (Manual format: dimension_name;message)\n Available placeholders:\n - &dimension& = Dimension name\n - &id& = Dimension ID\n - &icon& = Default dimension icon
+gui.config.comment.title.server_messages=Customize messages to display with servers\n (Manual format: server_IP;message;icon)\n Available placeholders:\n - &ip& = Server IP\n - &name& = Server name\n - &motd& = Server MOTD\n - &icon& = Default server icon\n - &players& = Server player counter\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
+gui.config.comment.title.status_messages=Customize messages relating to different game states
+gui.config.comment.title.advanced=Customize additional settings of the mod
+gui.config.comment.title.accessibility=Customize accessibility settings of the mod\n Includes:\n - Language ID\n - Keybinds\n - Additional Gui customization options
+gui.config.comment.presence_settings=Customize the format and location of messages in the Rich Presence.
 ## CONFIG MENU - NON-CONFIG BUTTONS AND NAMES ##
 gui.config.message.button.back=Back
 gui.config.message.button.save=Save
@@ -80,21 +80,21 @@ gui.config.message.editor.color.value.green=Green Color Value
 gui.config.message.editor.color.value.blue=Blue Color Value
 gui.config.message.editor.color.value.alpha=Alpha Color Value
 gui.config.message.editor.refresh=**Press ENTER to Refresh Values**
-gui.config.message.presence.generalArgs=General Message Formatting Arguments:\n* Placeholders Configuable in Status Messages and other areas\n* Some Placeholders are Empty unless they are assigned\n\n - &MAINMENU& = The Main Menu Message, while in the Main Menu\n - &MCVERSION& = The Minecraft Version Label\n - &BRAND& = The Minecraft Branding Label\n - &IGN& = The Non-World Player Info Message\n - &MODS& = The Message displaying your Mod Count\n - &PACK& = The Pack's Message, if using a pack\n - &DIMENSION& = The Current Dimension Message\n - &BIOME& = The Current Biome Message\n - &SERVER& = The Current Server Message\n - &GUI& = The Current Gui Message\n - &TILEENTITY& = The Current TileEntity (Block/Item/Armor) Message\n - &TARGETENTITY& = The Current Targeted Entity Message\n - &ATTACKINGENTITY& = The Current Attacking Entity Message\n - &RIDINGENTITY& = The Current Riding Entty Message
-gui.config.message.presence.iconArgs=General Icon Formatting Arguments:\n* Placeholders Configuable in Status Messages and other areas\n* Only One Placeholder is allowed at one time\n* Some Placeholders are Empty unless they are assigned\n\n - &DEFAULT& = The Default Icon, specified in config\n - &MAINMENU& = The Icon used in the Main Menu\n  * Use this instead of &DEFAULT& to only show the default icon in the main menu\n - &PACK& = The Pack's Icon, if using a pack\n - &DIMENSION& = The Current Dimension Icon\n - &SERVER& = The Current Server Icon
-gui.config.message.character.notice=Notice on Syncing\n\n Syncing may not yield accurate Results on Older Minecraft Versions
+gui.config.message.presence.generalArgs=General message formatting arguments:\n* Placeholders configurable in status messages and other areas\n* Some placeholders are empty unless they are assigned\n\n - &MAINMENU& = The main menu message, while in the main menu\n - &MCVERSION& = The Minecraft version label\n - &BRAND& = The Minecraft branding label\n - &IGN& = The non-world player info message\n - &MODS& = The message displaying your mod count\n - &PACK& = The pack's message, if using a pack\n - &DIMENSION& = The current dimension message\n - &BIOME& = The current biome message\n - &SERVER& = The current server message\n - &GUI& = The current Gui message\n - &TILEENTITY& = The current TileEntity (block/item/armor) message\n - &TARGETENTITY& = The current targeted entity message\n - &ATTACKINGENTITY& = The current attacking entity message\n - &RIDINGENTITY& = The current riding entity message
+gui.config.message.presence.iconArgs=General icon formatting arguments:\n* Placeholders configurable in status messages and other areas\n* Only one placeholder is allowed at one time\n* Some placeholders are empty unless they are assigned\n\n - &DEFAULT& = The default icon, specified in config\n - &MAINMENU& = The icon used in the main menu\n  * Use this instead of &DEFAULT& to only show the default icon in the main menu\n - &PACK& = The pack's icon, if using a pack\n - &DIMENSION& = The current dimension icon\n - &SERVER& = The current server icon
+gui.config.message.character.notice=Notice on syncing\n\n Syncing may not yield accurate results on older Minecraft versions
 gui.config.message.credits=This Configuration Gui was made from scratch by\n Jonathing, and will continue to be maintained by\n CDAGaming. A lot of effort went into making this\n custom Gui, so show him some support! Thanks.\n\n Feel free to learn from this Gui's code on\n the CraftPresence GitLab repository.
 gui.config.message.tentative=§4§lTentative Release (%1$s), functionality may change
 gui.config.message.changelog=Changes in %1$s:\n\n%2$s
-gui.config.message.remove=**Remove Message Text to Remove this Value**
-gui.config.message.null=This Area is not Implemented just yet!\n\n Please Check Back Later...
-gui.config.message.empty.list=This List is Empty and Cannot be Displayed!\n\n Please Try Again...
-gui.config.message.hover.access=**Enable "%1$s" to use this Menu**
-gui.config.message.hover.empty.default=**Default Info cannot be Empty and Must be Valid**
-gui.config.message.hover.value.name=Name to Identify this Value
-gui.config.message.tags=Current Tag Placeholders -> %1$s
+gui.config.message.remove=**Remove message text to remove this value**
+gui.config.message.null=This area is not implemented just yet!\n\n Please check back later...
+gui.config.message.empty.list=This list is empty and cannot be displayed!\n\n Please try again...
+gui.config.message.hover.access=**Enable "%1$s" to use this menu**
+gui.config.message.hover.empty.default=**Default info cannot be empty and must be valid**
+gui.config.message.hover.value.name=Name to identify this value
+gui.config.message.tags=Current tag placeholders -> %1$s
 ## CONFIG MENU - NON-CONFIG BUTTONS AND NAMES ##
-gui.config.comment.button.sync.config=Synchronize any Live Changes made from craftpresence.properties\nWarning: This will overwrite any changes made in here if unsaved!
+gui.config.comment.button.sync.config=Synchronize any live changes made from craftpresence.properties\nWarning: This will overwrite any changes made in here if unsaved!
 ## CONFIG MESSAGES - NAMES ##
 gui.config.name.global.schema_version=Schema Version
 gui.config.name.global.last_mc_version_id=Last MC Version ID
@@ -120,7 +120,7 @@ gui.config.name.status_messages.main_menu_msg=Main Menu Message
 gui.config.name.status_messages.loading_msg=Loading Message
 gui.config.name.status_messages.lan_msg=LAN Game Message
 gui.config.name.status_messages.single_player_msg=Singleplayer Game Message
-gui.config.name.status_messages.placeholder.pack_msg=ModPack Message
+gui.config.name.status_messages.placeholder.pack_msg=Modpack Message
 gui.config.name.status_messages.placeholder.player_msg.out=Player Outer Info Placeholder
 gui.config.name.status_messages.placeholder.player_msg.in=Player Inner Info Placeholder
 gui.config.name.status_messages.placeholder.player_coordinate_msg=Player Coordinate Placeholder
@@ -159,66 +159,66 @@ gui.config.name.display.game_state_msg=Game State Message Format
 gui.config.name.display.small_image_key=Small Image Key Format
 gui.config.name.display.large_image_key=Large Image Key Format
 ## CONFIG MESSAGES - COMMENTS ##
-gui.config.comment.general.client_id=Client ID Used for retrieving Assets, Icon Keys, and titles
-gui.config.comment.general.default_icon=Default Icon\n (Used in Main Menu, Dimensions and Servers)
-gui.config.comment.general.detect_curse_manifest=Enable Detection for Twitch/Curse Manifest Data?
-gui.config.comment.general.detect_multimc_manifest=Enable Detection for MultiMC Instance Data?
-gui.config.comment.general.detect_mcupdater_instance=Enable Detection for MCUpdater Instance Data?
-gui.config.comment.general.detect_technic_pack=Enable Detection for Technic Pack Data?
-gui.config.comment.general.show_time=Show Elapsed Time in Rich Presence?
-gui.config.comment.general.show_biome=Show Current Biome in Rich Presence?
-gui.config.comment.general.show_dimension=Show Current Dimension in Rich Presence?
-gui.config.comment.general.show_state=Show Specific Game Data in Rich Presence?
-gui.config.comment.general.enable_join_request=Allows Sending or Accepting Join Requests in Discord
-gui.config.comment.biome_messages.biome_messages=Customize Messages to display with Biomes\n (Manual Format: biome_name;message)\n Available Placeholders:\n - &biome& = Biome Name\n - &id& = Biome ID
-gui.config.comment.dimension_messages.dimension_icon=Dimension Icon to Default to when in an Unsupported Dimension
-gui.config.comment.dimension_messages.dimension_messages=Customize Messages to display with Dimensions\n (Manual Format: dimension_name;message)\n Available Placeholders:\n - &dimension& = Dimension Name\n - &id& = Dimension ID\n - &icon& = Default Dimension Icon
-gui.config.comment.server_messages.server_icon=Server Icon to default to when in an Unsupported Server
-gui.config.comment.server_messages.server_motd=Server MOTD to default to, in the case of a null MOTD\n (Also Applies for Direct Connects)
-gui.config.comment.server_messages.server_name=Server Display Name to default to, in the case of a null Name\n (Also Applies for Direct Connects)
-gui.config.comment.server_messages.server_messages=Customize Messages to display with Servers\n (Manual Format: server_IP;message;icon)\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
-gui.config.comment.status_messages.main_menu_msg=Message to Display while on the Main Menu
-gui.config.comment.status_messages.loading_msg=Message to Display while in a Loading state\n (Meaning between RPC Initializing and the First Refresh)
-gui.config.comment.status_messages.lan_msg=Message to Display while in a LAN Game\n Available Placeholders:\n - &ip& = Server IP\n - &name& = Server Name\n - &motd& = Server MOTD\n - &icon& = Default Server Icon\n - &players& = Server Player Counter\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
-gui.config.comment.status_messages.single_player_msg=Message to Display while in Singleplayer\n Available Placeholders:\n - &playerinfo& = Your In-World Player Info Message\n - &worldinfo& = Your In-World Game Info
-gui.config.comment.status_messages.placeholder.pack_msg=Message to use for the &pack& placeholder in Presence Settings\n (If a Curse, Twitch, Technic, MCUpdater, or MultiMC Pack is Detected)\n Available Placeholders:\n - &name& = The Pack's Name
-gui.config.comment.status_messages.placeholder.player_msg.out=Message to use for the &ign& General Placeholder in Presence Settings and the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &name& = Your Username
-gui.config.comment.status_messages.placeholder.player_msg.in=Message to use for the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &coords& = The Player's Coordinate Placeholder Message\n - &health& = The Player's Health Placeholder Message
-gui.config.comment.status_messages.placeholder.player_coordinate_msg=Message to use for the &coords& Argument for the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &xPosition& = Your Current In-Game X Position\n - &yPosition& = Your Current In-Game Y Position\n - &zPosition& = Your Current In-Game Z Position
-gui.config.comment.status_messages.placeholder.player_health_msg=Message to use for the &health& Argument for the &playerinfo& Placeholder in Server Settings\n Available Placeholders:\n - &current& = Your Current In-Game Health\n - &max& = Your Current In-Game Maximum Health
-gui.config.comment.status_messages.placeholder.player_amount_msg=Message to use for the &players& Placeholder in Server Settings\n Available Placeholders:\n - &current& = Current Player Count\n - &max& = Maximum Player Count
-gui.config.comment.status_messages.placeholder.player_item_msg=Message to use for the &tileentity& General Placeholder from Presence Settings\n Available Placeholders:\n - &main& = Current Main Hand Item\n - &offhand& = Current OffHand Item\n - &helmet& = Currently Equipped Helmet\n - &chest& = Currently Equipped ChestPiece\n - &legs& = Currently Equipped Leggings\n - &boots& = Currently Equipped Boots
-gui.config.comment.status_messages.placeholder.world_msg=Message to use for the &worldinfo& Placeholder in Server Settings\n Available Placeholders:\n - &difficulty& = The Current World's Difficulty\n - &worldname& = The Name of the Current World\n - &worldtime& = The Current World's In-Game Time
-gui.config.comment.status_messages.placeholder.mods_msg=Message to use for the &mods& Placeholder in Presence Settings\n Available Placeholders:\n - &modcount& = The Amount of Mods currently in your Mods Folder
+gui.config.comment.general.client_id=Client ID used for retrieving assets, icon keys, and titles
+gui.config.comment.general.default_icon=Default icon\n (Used in main menu, dimensions and servers)
+gui.config.comment.general.detect_curse_manifest=Enable detection for Twitch/Curse manifest data?
+gui.config.comment.general.detect_multimc_manifest=Enable detection for MultiMC instance data?
+gui.config.comment.general.detect_mcupdater_instance=Enable detection for MCUpdater instance data?
+gui.config.comment.general.detect_technic_pack=Enable detection for Technic pack data?
+gui.config.comment.general.show_time=Show elapsed time in Rich Presence?
+gui.config.comment.general.show_biome=Show current biome in Rich Presence?
+gui.config.comment.general.show_dimension=Show current dimension in Rich Presence?
+gui.config.comment.general.show_state=Show specific game data in Rich Presence?
+gui.config.comment.general.enable_join_request=Allow sending/receiving join requests in Discord?
+gui.config.comment.biome_messages.biome_messages=Customize messages to display with biomes\n (Manual format: biome_name;message)\n Available placeholders:\n - &biome& = Biome name\n - &id& = Biome ID
+gui.config.comment.dimension_messages.dimension_icon=Dimension icon to default to when in an unsupported dimension
+gui.config.comment.dimension_messages.dimension_messages=Customize messages to display with dimensions\n (Manual format: dimension_name;message)\n Available placeholders:\n - &dimension& = Dimension name\n - &id& = Dimension ID\n - &icon& = Default dimension icon
+gui.config.comment.server_messages.server_icon=Server icon to default to when in an unsupported server
+gui.config.comment.server_messages.server_motd=Server MOTD to default to, in the case of a null MOTD\n (Also applies for direct connects)
+gui.config.comment.server_messages.server_name=Server display name to default to, in the case of a null name\n (Also applies for direct connects)
+gui.config.comment.server_messages.server_messages=Customize messages to display with servers\n (Manual format: server_IP;message;icon)\n Available placeholders:\n - &ip& = Server IP\n - &name& = Server name\n - &motd& = Server MOTD\n - &icon& = Default server icon\n - &players& = Server player counter\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
+gui.config.comment.status_messages.main_menu_msg=Message to display while on the main menu
+gui.config.comment.status_messages.loading_msg=Message to display while in a loading state\n (Between RPC initializing and the first refresh)
+gui.config.comment.status_messages.lan_msg=Message to display while in a LAN game\n Available placeholders:\n - &ip& = Server IP\n - &name& = Server name\n - &motd& = Server MOTD\n - &icon& = Default server icon\n - &players& = Server player counter\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
+gui.config.comment.status_messages.single_player_msg=Message to display while in Singleplayer\n Available placeholders:\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
+gui.config.comment.status_messages.placeholder.pack_msg=Message to use for the &pack& placeholder in Presence settings\n (If a Curse, Twitch, Technic, MCUpdater, or MultiMC Pack is detected)\n Available placeholders:\n - &name& = The pack's name
+gui.config.comment.status_messages.placeholder.player_msg.out=Message to use for the &ign& general placeholder in Presence settings and the &playerinfo& placeholder in server settings\n Available placeholders:\n - &name& = Your username
+gui.config.comment.status_messages.placeholder.player_msg.in=Message to use for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &coords& = The player's coordinate placeholder message\n - &health& = The player's health placeholder message
+gui.config.comment.status_messages.placeholder.player_coordinate_msg=Message to use for the &coords& argument for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &xPosition& = Your current in-game X position\n - &yPosition& = Your current in-game Y position\n - &zPosition& = Your current in-game Z position
+gui.config.comment.status_messages.placeholder.player_health_msg=Message to use for the &health& argument for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &current& = Your current in-game health\n - &max& = Your current in-game maximum health
+gui.config.comment.status_messages.placeholder.player_amount_msg=Message to use for the &players& placeholder in server settings\n Available placeholders:\n - &current& = Current player count\n - &max& = Maximum player count
+gui.config.comment.status_messages.placeholder.player_item_msg=Message to use for the &tileentity& general placeholder from Presence settings\n Available placeholders:\n - &main& = Current main hand item\n - &offhand& = Current offhand item\n - &helmet& = Currently equipped helmet\n - &chest& = Currently equipped chestpiece\n - &legs& = Currently equipped leggings\n - &boots& = Currently equipped boots
+gui.config.comment.status_messages.placeholder.world_msg=Message to use for the &worldinfo& placeholder in server settings\n Available placeholders:\n - &difficulty& = The current world's difficulty\n - &worldname& = The name of the current world\n - &worldtime& = The current world's in-game time
+gui.config.comment.status_messages.placeholder.mods_msg=Message to use for the &mods& placeholder in Presence settings\n Available placeholders:\n - &modcount& = The amount of mods currently in your mods folder
 gui.config.comment.status_messages.special.vivecraft_msg=Message to display in Rich Presence when using Vivecraft
-gui.config.comment.status_messages.fallback.pack_placeholder_msg=If not empty, this text will be used for the &pack& Placeholder if no packs are detected
-gui.config.comment.advanced.split_character=The Split Character for The Arrays in CraftPresence's Messages Configs
-gui.config.comment.advanced.refresh_rate=The time to take in between refreshing the Rich Presence Display and Modules, in seconds
-gui.config.comment.advanced.enable_commands=Allows CraftPresence to utilize Commands\n (Enables Command Gui in Main Config Gui)
-gui.config.comment.advanced.enable_per_gui=Allows CraftPresence to change it's display based on the Gui your in\n Note the Following:\n - Requires an Option in Gui Messages\n - Minecraft's Guis must be Opened once before Configuring due to Obfuscation
-gui.config.comment.advanced.enable_per_item=Allows CraftPresence to change it's display based on the Item Your Holding\n Note the Following:\n - Requires an Option in Item Messages
-gui.config.comment.advanced.enable_per_entity=Allows CraftPresence to change it's display based on Entity Data\n Note the Following:\n - Requires an Option in a valid Entity Message List
-gui.config.comment.advanced.render_tooltips=Allow CraftPresence to render Hover Tooltips (when available)
+gui.config.comment.status_messages.fallback.pack_placeholder_msg=If not empty, this text will be used for the &pack& placeholder if no packs are detected
+gui.config.comment.advanced.split_character=The split character for the arrays in CraftPresence's messages configs
+gui.config.comment.advanced.refresh_rate=The time to take in between refreshing the Rich Presence display and modules, in seconds
+gui.config.comment.advanced.enable_commands=Allows CraftPresence to utilize commands\n (Enables Command Gui in main Config Gui)
+gui.config.comment.advanced.enable_per_gui=Allows CraftPresence to change it's display based on the Gui you're in\n Note the following:\n - Requires an option in Gui messages\n - Minecraft's Guis must be opened once before configuring due to bbfuscation
+gui.config.comment.advanced.enable_per_item=Allows CraftPresence to change it's display based on the item you're holding\n Note the following:\n - Requires an option in item messages
+gui.config.comment.advanced.enable_per_entity=Allows CraftPresence to change its display based on entity data\n Note the following:\n - Requires an option in a valid entity message list
+gui.config.comment.advanced.render_tooltips=Allow CraftPresence to render hover tooltips (when available)
 gui.config.comment.advanced.format_words=Toggles automatic capitalizing of words and general formatting with strings
-gui.config.comment.advanced.debug_mode=Toggles Developer Mode, showing debug features and enabling debug logging\n\nOverriden Status -> %1$s
+gui.config.comment.advanced.debug_mode=Toggles Developer Mode, showing debug features and enabling debug logging\n\nOverridden Status -> %1$s
 gui.config.comment.advanced.verbose_mode=Toggles Verbose Mode, showing more detailed logging as well as stack traces and deeper exception messages\n\nOverriden Status -> %1$s
-gui.config.comment.advanced.gui_messages=Customize Messages to display with Guis\n (Manual Format: gui;message)\n Available Placeholders:\n - &gui& = Gui Name\n - &class& = Gui Class Name\n - &screen& = Gui Screen Instance Name
-gui.config.comment.advanced.item_messages=Customize Messages to display with Items\n (Manual Format: item;message)\n Available Placeholders:\n - &item& = Item Name\n\n %1$s
-gui.config.comment.advanced.entity_target_messages=Customize Messages to display when pointing at an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
-gui.config.comment.advanced.entity_attacking_messages=Customize Messages to display when attacking an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
-gui.config.comment.advanced.entity_riding_messages=Customize Messages to display when riding an Entity\n (Manual Format: entity;message)\n Available Placeholders:\n - &entity& = Entity Name (Or Player UUID)\n\n %1$s
-gui.config.comment.accessibility.tooltip_bg_color=The Color or texture to be used when rendering CraftPresence Tooltip backgrounds
-gui.config.comment.accessibility.tooltip_border_color=The Color or texture to be used when rendering CraftPresence Tooltip borders
-gui.config.comment.accessibility.gui_bg_color=The Color or texture to be used when rendering CraftPresence Gui Backgrounds
-gui.config.comment.accessibility.language_id=The Locale or Language ID to be used for Translating this mod's Strings
-gui.config.comment.accessibility.strip_translation_colors=Allows CraftPresence to remove Color and Formatting Codes from it's translations
-gui.config.comment.accessibility.show_logging_in_chat=Allows CraftPresence to display it's Logging in the Chat Hud
+gui.config.comment.advanced.gui_messages=Customize messages to display with Guis\n (Manual format: gui;message)\n Available placeholders:\n - &gui& = Gui name\n - &class& = Gui class name\n - &screen& = Gui screen instance name
+gui.config.comment.advanced.item_messages=Customize messages to display with items\n (Manual format: item;message)\n Available placeholders:\n - &item& = Item name\n\n %1$s
+gui.config.comment.advanced.entity_target_messages=Customize messages to display when pointing at an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player UUID)\n\n %1$s
+gui.config.comment.advanced.entity_attacking_messages=Customize messages to display when attacking an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player UUID)\n\n %1$s
+gui.config.comment.advanced.entity_riding_messages=Customize messages to display when riding an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player UUID)\n\n %1$s
+gui.config.comment.accessibility.tooltip_bg_color=The color or texture to be used when rendering CraftPresence tooltip backgrounds
+gui.config.comment.accessibility.tooltip_border_color=The color or texture to be used when rendering CraftPresence tooltip borders
+gui.config.comment.accessibility.gui_bg_color=The color or texture to be used when rendering CraftPresence Gui backgrounds
+gui.config.comment.accessibility.language_id=The locale or language ID to be used for translating this mod's strings
+gui.config.comment.accessibility.strip_translation_colors=Allows CraftPresence to remove color and formatting codes from it's translations
+gui.config.comment.accessibility.show_logging_in_chat=Allows CraftPresence to display it's logging in the chat hud
 ## KEYBIND MESSAGES ##
 key.craftpresence.category=CraftPresence - Controls
 key.craftpresence.config_keycode.name=Config Gui Keybind
-key.craftpresence.config_keycode.description=The KeyCode to press to access the Config Screen
+key.craftpresence.config_keycode.description=The keybind to access the config screen
 ## DEFAULT MESSAGES ##
-craftpresence.message.unsupported=This Feature is not supported in this version of Minecraft
+craftpresence.message.unsupported=This feature is not supported in this version of Minecraft
 craftpresence.defaults.server_messages.server_name=Minecraft Server
 craftpresence.defaults.server_messages.server_motd=A Minecraft Server
 craftpresence.defaults.state.main_menu=In the Main Menu
@@ -242,91 +242,91 @@ craftpresence.multiplayer.status.pinging=Pinging...
 craftpresence.multiplayer.status.polling=Polling...
 craftpresence.multiplayer.status.cannot_resolve=Can't resolve hostname
 ## COMMAND MESSAGES ##
-craftpresence.command.usage.main=§lCraftPresence - Sub-Commands:\n §rSyntax: §6/<cp|craftpresence> <command>\n\n §6§lreboot §r- Reboot RPC\n §6§lshutdown §r- Shut Down RPC\n §6§lreload §r- Reloads CraftPresence Data based on Settings\n §6§lrequest §r- View Join Request Info\n §6§lview §r- View a Variety of Display Data\n §6§lhelp §r- Views this Page
-craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands:\n\n §6§lcurrentData §r- Shows your Current RPC Data, in text\n §6§lassets §r- Displays all Asset Icons available\n §6§ldimensions §r- Displays available Dimension Names\n §6§lbiomes §r- Displays available Biome Names\n §6§lservers §r- Displays available Server Addresses\n §6§lguis §r- Displays available Gui Names\n §6§litems §r- Displays available Item Names\n §6§lentities §r- Displays available Entity Names
-craftpresence.command.usage.assets=§lCraftPresence - Assets Sub-Commands:\n\n §6§llarge §r- View Discord Assets with Size LARGE\n §6§lsmall §r- View Discord Assets with Size SMALL\n §6§lall §r- View All Discord Assets
+craftpresence.command.usage.main=§lCraftPresence - Sub-Commands:\n §rSyntax: §6/<cp|craftpresence> <command>\n\n §6§lreboot §r- Reboot RPC\n §6§lshutdown §r- Shut down RPC\n §6§lreload §r- Reloads CraftPresence data based on settings\n §6§lrequest §r- View join request info\n §6§lview §r- View a variety of display data\n §6§lhelp §r- Views this page
+craftpresence.command.usage.view=§lCraftPresence - View Sub-Commands:\n\n §6§lcurrentData §r- Shows your current RPC data, in text\n §6§lassets §r- Displays all asset icons available\n §6§ldimensions §r- Displays available dimension names\n §6§lbiomes §r- Displays available biome names\n §6§lservers §r- Displays available server addresses\n §6§lguis §r- Displays available Gui names\n §6§litems §r- Displays available item names\n §6§lentities §r- Displays available entity names
+craftpresence.command.usage.assets=§lCraftPresence - Assets Sub-Commands:\n\n §6§llarge §r- View Discord assets with size LARGE\n §6§lsmall §r- View Discord assets with size SMALL\n §6§lall §r- View all Discord assets
 craftpresence.command.unrecognized=§c§lUnknown Command - use §6§l/craftpresence help
 craftpresence.command.current_data=§lCurrent RPC Data (Logged in as %1$s):§r\n §6§lDetails:§r %2$s\n §6§lGame State:§r %3$s\n §6§lStart Timestamp:§r %4$s\n §6§lClient ID:§r %5$s\n §6§lLarge Icon Key:§r %6$s\n §6§lLarge Icon Text:§r %7$s\n §6§lSmall Icon Key:§r %8$s\n §6§lSmall Icon Text:§r %9$s\n §6§lParty ID:§r %10$s\n §6§lParty Size:§r %11$s\n §6§lParty Max:§r %12$s\n §6§lJoin Secret:§r %13$s\n §6§lEnd Timestamp:§r %14$s\n §6§lMatch Secret:§r %15$s\n §6§lSpectate Secret:§r %16$s\n §6§lInstance:§r %17$s
-craftpresence.command.reload=§6§lReloading CraftPresence Data, depending on Settings!
-craftpresence.command.reload.complete=§2§lReloaded CraftPresence Data!
-craftpresence.command.request.info=§6§lRequest Info:§r\n §6§lRequester Username: %1$s\n\n §6§lUse /cp request <accept|deny> or Wait %2$s Seconds to Ignore
-craftpresence.command.request.none=§6§lYou do not have any available Join Requests!
-craftpresence.command.request.accept=§6§lJoin Request Accepted! %1$s has been sent an Invite!
-craftpresence.command.request.denied=§6§lJoin Request Denied from %1$s!
-craftpresence.command.request.ignored=§6§lJoin Request Ignored from %1$s!
-craftpresence.command.shutdown.pre=§6§lShutting Down CraftPresence...
-craftpresence.command.shutdown.post=§2§lCraftPresence has been Shutdown!\n §6§lUse /cp reboot to Reboot
+craftpresence.command.reload=§6§lReloading CraftPresence data, depending on settings!
+craftpresence.command.reload.complete=§2§lReloaded CraftPresence data!
+craftpresence.command.request.info=§6§lRequest Info:§r\n §6§lRequester Username: %1$s\n\n §6§lUse /cp request <accept|deny> or wait %2$s seconds to ignore
+craftpresence.command.request.none=§6§lYou do not have any available join requests!
+craftpresence.command.request.accept=§6§lJoin request accepted! %1$s has been sent an invite!
+craftpresence.command.request.denied=§6§lJoin request denied from %1$s!
+craftpresence.command.request.ignored=§6§lJoin request ignored from %1$s!
+craftpresence.command.shutdown.pre=§6§lShutting down CraftPresence...
+craftpresence.command.shutdown.post=§2§lCraftPresence has been shutdown!\n §6§lUse /cp reboot to reboot
 craftpresence.command.reboot.pre=§6§lRebooting CraftPresence...
-craftpresence.command.reboot.post=§2§lCraftPresence has been Rebooted!
+craftpresence.command.reboot.post=§2§lCraftPresence has been rebooted!
 ## LOGGING MESSAGES ##
 craftpresence.logger.info.os=Detected OS: %1$s (Architecture: %2$s, Is 64-Bit: %3$s)
-craftpresence.logger.info.load=Loaded Display Data with ID: %1$s (Logged in as %2$s)
-craftpresence.logger.info.shutdown=Shutting Down CraftPresence...
-craftpresence.logger.info.updater.status=Detected %1$s Version for %2$s -> %3$s
-craftpresence.logger.info.updater.receive.data=Received Update Data: %1$s
-craftpresence.logger.info.updater.receive.changelog=Received Changelog: %1$s
-craftpresence.logger.info.updater.receive.status=Received Update Status for %1$s -> %2$s (Target Version: v%3$s)
-craftpresence.logger.info.config.new=New Configuration Data for CraftPresence has been created successfully!
-craftpresence.logger.info.config.notice=Last Synchronized:
-craftpresence.logger.info.config.save=Configuration Settings have been Saved and Reloaded Successfully!
-craftpresence.logger.info.update.dynamic=Dynamically Updated Data -> %1$s in %2$s
-craftpresence.logger.info.migration.add=Adding Migration Data for data matching %1$s with Action ID %2$s (Reason: %3$s)!
-craftpresence.logger.info.migration.apply=Applying Migration Data for data matching %1$s with Action ID %2$s -> Converting %3$s from %4$s to %5$s
-craftpresence.logger.info.manifest.init=Checking for valid Curse Manifest Data...
-craftpresence.logger.info.manifest.fallback=Failed to Find primary Curse Manifest Data, attempting to use fallback resource...
-craftpresence.logger.info.manifest.loaded=Found Curse Manifest Data! (Name: "%1$s")
-craftpresence.logger.info.instance.init=Checking for valid MultiMC Instance Data...
-craftpresence.logger.info.instance.loaded=Found MultiMC Instance Data! (Name: "%1$s" - Icon: "%2$s")
-craftpresence.logger.info.mcupdater.init=Checking for valid MCUpdater Instance Data...
-craftpresence.logger.info.mcupdater.loaded=Found MCUpdater Instance Data! (Name: "%1$s")
-craftpresence.logger.info.technic.init=Checking for valid Technic Pack Data...
-craftpresence.logger.info.technic.loaded=Found Technic Pack Data! (Name: "%1$s" - Icon: "%2$s")
-craftpresence.logger.info.chardata.init=Searching for Character and Glyph Width Data...
-craftpresence.logger.info.chardata.loaded=Character and Glyph Width Data successfully Loaded!
+craftpresence.logger.info.load=Loaded display data with ID: %1$s (Logged in as %2$s)
+craftpresence.logger.info.shutdown=Shutting down CraftPresence...
+craftpresence.logger.info.updater.status=Detected %1$s version for %2$s -> %3$s
+craftpresence.logger.info.updater.receive.data=Received update data: %1$s
+craftpresence.logger.info.updater.receive.changelog=Received changelog: %1$s
+craftpresence.logger.info.updater.receive.status=Received update status for %1$s -> %2$s (Target version: v%3$s)
+craftpresence.logger.info.config.new=New configuration data for CraftPresence has been created successfully!
+craftpresence.logger.info.config.notice=Last synchronized:
+craftpresence.logger.info.config.save=Configuration settings have been saved and reloaded successfully!
+craftpresence.logger.info.update.dynamic=Dynamically updated data -> %1$s in %2$s
+craftpresence.logger.info.migration.add=Adding migration data for data matching %1$s with action ID %2$s (Reason: %3$s)!
+craftpresence.logger.info.migration.apply=Applying migration data for data matching %1$s with action ID %2$s -> Converting %3$s from %4$s to %5$s
+craftpresence.logger.info.manifest.init=Checking for valid Curse manifest data...
+craftpresence.logger.info.manifest.fallback=Failed to find primary Curse manifest data, attempting to use fallback resource...
+craftpresence.logger.info.manifest.loaded=Found Curse manifest data! (Name: "%1$s")
+craftpresence.logger.info.instance.init=Checking for valid MultiMC instance data...
+craftpresence.logger.info.instance.loaded=Found MultiMC instance data! (Name: "%1$s" - Icon: "%2$s")
+craftpresence.logger.info.mcupdater.init=Checking for valid MCUpdater instance data...
+craftpresence.logger.info.mcupdater.loaded=Found MCUpdater instance data! (Name: "%1$s")
+craftpresence.logger.info.technic.init=Checking for valid Technic pack data...
+craftpresence.logger.info.technic.loaded=Found Technic pack data! (Name: "%1$s" - Icon: "%2$s")
+craftpresence.logger.info.chardata.init=Searching for character and glyph width data...
+craftpresence.logger.info.chardata.loaded=Character and glyph width data successfully Loaded!
 craftpresence.logger.info.dll.init=Loading "%1$s" as a DLL...
-craftpresence.logger.info.dll.loaded="%1$s" has been Successfully loaded as a DLL!
+craftpresence.logger.info.dll.loaded="%1$s" has been successfully loaded as a DLL!
 craftpresence.logger.info.download.init=Downloading "%1$s" to "%2$s"... (From: "%3$s")
-craftpresence.logger.info.download.loaded="%1$s" has been Successfully Downloaded to "%2$s"! (From: "%3$s")
-craftpresence.logger.info.discord.assets.load=Checking Discord for Available Assets with ID: %1$s
-craftpresence.logger.info.discord.assets.detected=%1$s Total Assets Detected!
-craftpresence.logger.info.discord.assets.load.credits=Originally Coded by paulhobbel - https://github.com/paulhobbel
-craftpresence.logger.info.discord.assets.request=To Add Support for this Icon, Please Request for this Icon to be Added to the Default Client ID or Add the Icon under the following Name: "%1$s".
-craftpresence.logger.info.discord.assets.fallback=Fallback Icon for "%1$s" Found! Using Fallback Icon with Name "%2$s"!
-craftpresence.logger.error.system=CraftPresence was unable to retrieve System Info, Things may not work well...
-craftpresence.logger.error.rpc=CraftPresence has encountered the following RPC Error, and has been Shut Down to prevent a crash: %1$s
-craftpresence.logger.error.download=Failed to Download "%1$s" from "%2$s"\n Manually Download "%1$s" from "%2$s" to "%3$s"
-craftpresence.logger.error.chardata=Failed to Retrieve Character & Glyph Width Data, Some Rendering Functions have been disabled...
-craftpresence.logger.error.data.close=Failed to Close a Data Stream, Resource Depletion may Occur, Please Report this Issue...
-craftpresence.logger.error.dll=Failed to Load "%1$s" as a DLL, Things may not work well...
-craftpresence.logger.error.delete.file=Failed to Delete "%1$s", Things may not work well...
-craftpresence.logger.error.web=Failed to Go to Page: %1$s
-craftpresence.logger.error.keycode=A Keybind Error has occurred, Resetting "%1$s" to default to prevent a crash...
-craftpresence.logger.error.command=An Error has Occurred Executing this Command
-craftpresence.logger.error.config.save=Failed to load or save Configuration
-craftpresence.logger.error.config.invalid.icon.empty=Unable to Detect any Usable Icons! Please Submit a Mod Issue, if this is a mistake
-craftpresence.logger.error.config.invalid.icon.pre=Invalid Icon "%1$s" in Property "%2$s", Selecting a Randomized Valid Icon...
-craftpresence.logger.error.config.invalid.icon.post=Successfully Set Icon in Property "%1$s" to "%2$s"
-craftpresence.logger.error.config.prop.empty=Empty or Non-Convertable Property Detected ("%1$s"), setting property as default...
-craftpresence.logger.error.config.adjust.global=Global Property Adjustment Detected ("%1$s"), checking for migration data and setting property to new value...
-craftpresence.logger.error.config.prop.invalid=Invalid Property Detected ("%1$s"), removing property...
-craftpresence.logger.error.config.missing.default=Default Value is missing for Property "%1$s", Adding to Property...
-craftpresence.logger.error.file.manifest=Unable to get Curse Manifest Data (Ignore if Not using a Twitch/CursePack)
-craftpresence.logger.error.file.instance=Unable to get MultiMC Instance Data (Ignore if Not using a MultiMC Pack)
-craftpresence.logger.error.file.mcupdater=Unable to get MCUpdater Instance Data (Ignore if Not using a MCUpdater Pack)
-craftpresence.logger.error.file.technic=Unable to get Technic Pack Data (Ignore if Not using a Technic Pack)
-craftpresence.logger.error.technic.limitation=Due to Technic Limitations, The Pack your Currently Playing will only display an Icon properly if selected in the Technic Launcher.
-craftpresence.logger.error.load=Failed to Load Display Data
-craftpresence.logger.error.updater.changelog=Failed to Locate Changelog Data for %1$s @ %2$s
-craftpresence.logger.error.updater.failed=Failed to Check for Updates, enable Debug Mode to See Errors...
-craftpresence.logger.error.discord.join=Join Request Rejected, due to an Invalid Join Key: %1$s
-craftpresence.logger.error.discord.assets.load=Unable to get Discord Assets, Things may not work well.
-craftpresence.logger.error.discord.assets.fallback=Asset Name "%1$s" does not exist, attempting to use an alternative Icon "%2$s"...
-craftpresence.logger.error.discord.assets.default=Failed to Assign an Alternative Icon for Asset Name "%1$s", using Default/Randomized Icon "%2$s"...
-craftpresence.logger.warning.config.disabled.enablejoinrequest=Join Request Support is Disabled in Your Config. Please Enable it to accept and send Join Requests in Discord!
-craftpresence.logger.warning.config.empty.client_id=Your Client ID is Empty, things may not work well...
-craftpresence.logger.warning.fingerprintviolation=Invalid Certificate Detected, this Build will not receive Support!
-craftpresence.logger.warning.debug_mode=You are Running CraftPresence in a Debugging Environment, some features may not function properly!
-craftpresence.logger.warning.updater.homepage=Unable to locate Homepage for this Application...
-craftpresence.logger.warning.updater.incompatible.json=Json Segment "%1$s" is of an incompatible format...
-craftpresence.logger.warning.convert.invalid=Data Conversion for Object "%1$s" has returned an unknown, invalidated, or skippable Result. Caution is advised... (Mode Attempted: %2$s)...
-craftpresence.exception.config.prop.null=Property Value for "%1$s" cannot be null
+craftpresence.logger.info.download.loaded="%1$s" has been successfully downloaded to "%2$s"! (From: "%3$s")
+craftpresence.logger.info.discord.assets.load=Checking Discord for available assets with ID: %1$s
+craftpresence.logger.info.discord.assets.detected=%1$s total assets detected!
+craftpresence.logger.info.discord.assets.load.credits=Originally coded by paulhobbel - https://github.com/paulhobbel
+craftpresence.logger.info.discord.assets.request=To add support for this icon, please request for this icon to be added to the default client ID or add the icon under the following name: "%1$s".
+craftpresence.logger.info.discord.assets.fallback=Fallback icon for "%1$s" found! Using a fallback icon with the name "%2$s"!
+craftpresence.logger.error.system=CraftPresence was unable to retrieve system info, things may not work well...
+craftpresence.logger.error.rpc=CraftPresence has encountered the following RPC error, and has been shut down to prevent a crash: %1$s
+craftpresence.logger.error.download=Failed to download "%1$s" from "%2$s"\n Manually download "%1$s" from "%2$s" to "%3$s"
+craftpresence.logger.error.chardata=Failed to retrieve character & glyph width data, some rendering functions have been disabled...
+craftpresence.logger.error.data.close=Failed to close a data stream, resource depletion may occur. Please report this Issue...
+craftpresence.logger.error.dll=Failed to load "%1$s" as a DLL, things may not work well...
+craftpresence.logger.error.delete.file=Failed to delete "%1$s", things may not work well...
+craftpresence.logger.error.web=Failed to go to page: %1$s
+craftpresence.logger.error.keycode=A keybind error has occurred, resetting "%1$s" to default to prevent a crash...
+craftpresence.logger.error.command=An error has occurred executing this command
+craftpresence.logger.error.config.save=Failed to load or save configuration
+craftpresence.logger.error.config.invalid.icon.empty=Unable to detect any usable icons! Please submit a mod issue if this is a mistake
+craftpresence.logger.error.config.invalid.icon.pre=Invalid icon "%1$s" in property "%2$s", selecting a randomized valid icon...
+craftpresence.logger.error.config.invalid.icon.post=Successfully set icon in property "%1$s" to "%2$s"
+craftpresence.logger.error.config.prop.empty=Empty or non-convertable property detected ("%1$s"), setting property as default...
+craftpresence.logger.error.config.adjust.global=Global property adjustment detected ("%1$s"), checking for migration data and setting property to new value...
+craftpresence.logger.error.config.prop.invalid=Invalid property detected ("%1$s"), removing property...
+craftpresence.logger.error.config.missing.default=Default value is missing for property "%1$s", adding to property...
+craftpresence.logger.error.file.manifest=Unable to get Curse manifest data (ignore if not using a Twitch/CursePack)
+craftpresence.logger.error.file.instance=Unable to get MultiMC instance data (ignore if not using a MultiMC Pack)
+craftpresence.logger.error.file.mcupdater=Unable to get MCUpdater instance data (ignore if not using a MCUpdater Pack)
+craftpresence.logger.error.file.technic=Unable to get Technic pack data (ignore if not using a Technic Pack)
+craftpresence.logger.error.technic.limitation=Due to Technic limitations, The pack you're currently playing will only display an icon properly if selected in the Technic Launcher.
+craftpresence.logger.error.load=Failed to load display data
+craftpresence.logger.error.updater.changelog=Failed to locate changelog data for %1$s @ %2$s
+craftpresence.logger.error.updater.failed=Failed to check for updates, enable debug mode to see errors...
+craftpresence.logger.error.discord.join=Join request rejected, due to an invalid join key: %1$s
+craftpresence.logger.error.discord.assets.load=Unable to get Discord assets, things may not work well...
+craftpresence.logger.error.discord.assets.fallback=Asset name "%1$s" does not exist, attempting to use an alternative icon "%2$s"...
+craftpresence.logger.error.discord.assets.default=Failed to assign an alternative icon for asset name "%1$s", using default/randomized icon "%2$s"...
+craftpresence.logger.warning.config.disabled.enablejoinrequest=Join request support is disabled in your config. Please enable it to accept and send join requests in Discord!
+craftpresence.logger.warning.config.empty.client_id=Your client ID is empty, things may not work well...
+craftpresence.logger.warning.fingerprintviolation=Invalid certificate detected, this build will not receive support!
+craftpresence.logger.warning.debug_mode=You are running CraftPresence in a debugging environment, some features may not function properly!
+craftpresence.logger.warning.updater.homepage=Unable to locate homepage for this application...
+craftpresence.logger.warning.updater.incompatible.json=Json segment "%1$s" is of an incompatible format...
+craftpresence.logger.warning.convert.invalid=Data conversion for object "%1$s" has returned an unknown, invalidated, or skippable result. Caution is advised... (Mode Attempted: %2$s)...
+craftpresence.exception.config.prop.null=Property value for "%1$s" cannot be null
