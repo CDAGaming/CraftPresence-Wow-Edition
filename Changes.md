@@ -4,7 +4,7 @@
 
 _A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0+Beta.3)_
 
-_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0+Beta.3...release%2Fv1.7.0+Beta.2)_
+_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0+Beta.2...release%2Fv1.7.0+Beta.3)_
 
 ### Changes
 
