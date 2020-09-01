@@ -268,7 +268,7 @@ public class ModUtils {
             }
         } catch (Exception ex) {
             LOG.debugError(TRANSLATOR.translate("craftpresence.logger.error.data.close"));
-            if (ModUtils.IS_VERBOSE) {
+            if (IS_VERBOSE) {
                 ex.printStackTrace();
             }
         } finally {
@@ -353,7 +353,7 @@ public class ModUtils {
                     }
                 } catch (Exception ex) {
                     LOG.debugError(TRANSLATOR.translate("craftpresence.logger.error.data.close"));
-                    if (ModUtils.IS_VERBOSE) {
+                    if (IS_VERBOSE) {
                         ex.printStackTrace();
                     }
                 }

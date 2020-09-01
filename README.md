@@ -100,8 +100,12 @@ As these placeholders are global, they can be set in any of the RPC fields withi
 ___
 
 ### Main Menu Message Placeholders
-*   `&IGN&` - Your Minecraft Username
-*   `&MODS&` - The Number of Mods currently in your Mods Folder
+These placeholders translate to the `&MAINMENU&` Global Placeholder in `Presence Settings` menu within the Config Gui.
+
+You can configure using these Sub-Placeholders within the `Status Messages->Main Menu Message` setting.
+
+*   `&IGN&` - Your Minecraft username
+*   `&MODS&` - The number of mods currently in your mods folder
 
 ___
 

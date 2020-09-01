@@ -1,14 +1,14 @@
 # CraftPresence Changes
 
-## v1.7.0 -> Beta 3 (08/21/2020)
+## v1.7.0 -> Beta 4 (09/10/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0+Beta.3)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0+Beta.4)_
 
-_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0+Beta.2...release%2Fv1.7.0+Beta.3)_
+_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0+Beta.3...release%2Fv1.7.0+Beta.4)_
 
 ### Changes
 
-*   Amended Releases to now have `-%ModLoaderName%` as the suffix (Previously, Forge releases didn't have this suffix)
+*   Amended Releases to now always have `-%ModLoaderName%` as the suffix (Previously, Forge releases didn't have this suffix)
 *   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
 *   Added a Fallback `&PACK&` Placeholder Message in `Status Messages` (Will only be used if no pack gets found, and is not empty)
 *   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder
@@ -19,10 +19,12 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Separated `IS_DEV` into two options, to allow for toggling excessive logging and stacktrace outputs (Verbose Logging)
 *   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
 *   Added Support for Live Editing (Clicking the `Sync Config` button will sync any changes made to `craftpresence.properties` to the game without needing to restart minecraft)
+*   Changed `&GUI&` to `&SCREEN&` for clarification; removed old `&SCREEN&` placeholder
 *   Localization and Backend Updates
 
 ### Fixes
 
+*   Fixed File name Issues that corresponded with increased user-base confusion
 *   Fixed Instances of the Mod ID not being the same across mod loaders
 *   Fixed an Issue causing KeyCode Properties to be able to skip verification
 *   Fixed an Issue where the `Config Gui` KeyBind was not properly identified
