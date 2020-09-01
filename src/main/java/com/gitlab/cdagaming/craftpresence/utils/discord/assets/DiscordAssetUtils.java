@@ -82,7 +82,7 @@ public class DiscordAssetUtils {
      * @return {@code true} if the Icon Key is present and able to be used
      */
     public static boolean contains(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return ASSET_LIST.containsKey(formattedKey);
     }
 
@@ -93,7 +93,7 @@ public class DiscordAssetUtils {
      * @return The {@link DiscordAsset} data for this Icon Key
      */
     public static DiscordAsset get(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey) : null;
     }
 
@@ -104,7 +104,7 @@ public class DiscordAssetUtils {
      * @return The Parsed Icon Key from the {@link DiscordAsset} data
      */
     public static String getKey(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getName() : "";
     }
 
@@ -115,7 +115,7 @@ public class DiscordAssetUtils {
      * @return The Parsed Icon ID from the {@link DiscordAsset} data
      */
     public static String getID(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatPackIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getId() : "";
     }
 

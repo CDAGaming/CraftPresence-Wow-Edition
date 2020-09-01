@@ -212,7 +212,7 @@ public class GuiUtils {
         CURRENT_GUI_CLASS = null;
 
         isInUse = false;
-        CraftPresence.CLIENT.initArgument("&GUI&");
+        CraftPresence.CLIENT.initArgument("&SCREEN&");
     }
 
     /**
@@ -322,9 +322,8 @@ public class GuiUtils {
         // Form GUI Argument List
         List<Tuple<String, String>> guiArgs = Lists.newArrayList();
 
-        guiArgs.add(new Tuple<>("&GUI&", CURRENT_GUI_NAME));
+        guiArgs.add(new Tuple<>("&SCREEN&", CURRENT_GUI_NAME));
         guiArgs.add(new Tuple<>("&CLASS&", CURRENT_GUI_CLASS.getSimpleName()));
-        guiArgs.add(new Tuple<>("&SCREEN&", CURRENT_SCREEN.toString()));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
@@ -336,8 +335,8 @@ public class GuiUtils {
 
         final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGUIMSG, guiArgs);
 
-        CraftPresence.CLIENT.syncArgument("&GUI&", CURRENT_GUI_MESSAGE, false);
-        CraftPresence.CLIENT.initArgument(true, "&GUI&");
+        CraftPresence.CLIENT.syncArgument("&SCREEN&", CURRENT_GUI_MESSAGE, false);
+        CraftPresence.CLIENT.initArgument(true, "&SCREEN&");
     }
 
     /**

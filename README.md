@@ -67,7 +67,7 @@ Note: In v1.5.5 and Above, KeyBinds are now customized in the Accessibility Sett
 *   `Open Config Gui` - KeyBind to Open the CraftPresence ConfigGui (Default: GRAVE/TILDE Key)
 
 ## Placeholders
-In some Configuration Areas, CraftPresence provides some Placeholders to make things easier:
+In some Configuration Areas, CraftPresence provides some placeholders to make things easier:
 
 Keep in mind the following:
 
@@ -78,16 +78,16 @@ Keep in mind the following:
 ___
 
 ### Presence Display Placeholders
+These placeholders can be configured within the `Presence Settings` menu within the Config Gui
+
 *   `&DIMENSION&` - The Dimension Message from your Dimension Settings, if enabled and in use
 *   `&BIOME&` - The Biome Message from your Biome Settings, if enabled and in use
 *   `&SERVER&` - The Server/SinglePlayer Message from your Server Settings, if enabled and in use
-*   `&GUI&` - The GUI Message from your GUI Settings, if enabled and in use
+*   `&SCREEN&` - The Gui Screen Message from your Gui Settings, if enabled and in use
 *   `&TILEENTITY&` - The TileEntity (Block/Item) Message from your Advanced -> Item Messages Settings, if enabled and in use
 *   `&TARGETENTITY&` - The Targeted Entity Message from your Advanced -> Entity Target Messages Setting, if Per-Entity is enabled and in use
 *   `&ATTACKINGENTITY&` - The Attacking Entity Message from your Advanced -> Entity Attacking Messages Setting, if Per-Entity is enabled and in use
 *   `&RIDINGENTITY&` - The Riding Entity Message from your Advanced -> Entity Riding Messages Setting, if Per-Entity is enabled and in use
-
-_Note: For Image Keys, only the first placeholder and an additional suffix if any will be used_
 
 ___
 
@@ -99,14 +99,12 @@ ___
 
 ### Biome Placeholders
 *   `&BIOME&` - The Current Biome Name
-*   `&ID&` - The Current Biome ID **(Removed in v1.6.8)**
 
 ___
 
 ### Dimension Placeholders
 *   `&DIMENSION&` - The Current Dimension Name
 *   `&ICON&` - The Default Dimension Icon Name
-*   `&ID&` - The Current Dimension ID **(Removed in v1.6.8)**
 
 ___
 
@@ -130,9 +128,8 @@ ___
 ___
 
 ### Gui Placeholders
-*   `&GUI&` - The Current Gui Name (Supports `Container` and `Screen` type interfaces)
+*   `&SCREEN&` - The Current Gui Screen Name (Supports `Container` and `Screen` type interfaces)
 *   `&CLASS&` - The Current Gui Class (Ex: `net.minecraft.xxx`)
-*   `&SCREEN&` - The Current Gui Screen Instance
 
 ___
 
@@ -149,14 +146,14 @@ Beginning in v1.5.2, CraftPresence is now split into different editions, based o
 
 *   Legacy Version (Minecraft 1.2.5 and Below):
     *   Server Support is unavailable in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus Enabled)
-    *   Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with ModLoader + ModLoaderMP
+    *   Minecraft 1.1.0 and Below may not work on Forge, and may require a Modified Minecraft Jar with Risugami's ModLoader + ModLoaderMP
 
-**Support for Issues related to Vanilla Code, Forge, or ModLoader is extremely Limited**
+**Support for issues related to Vanilla code, Forge, or Risugami's ModLoader is extremely limited**
 
 ## Disclaimers & Additional Info
 
 ### Minecraft Object Obfuscation
-Due to Obfuscation in Minecraft, some of Minecraft Objects such as GUIs, Dimensions, or Servers must be opened once in the session to be separately customized.
+Due to Obfuscation in Minecraft, some of Minecraft Objects such as Screens, Dimensions, or Servers must be opened once in the session to be separately customized.
 
 ### Icon Requesting
 Not seeing an Icon you like or have a suggestion for an Icon to add/modify on the Default Client ID?
@@ -166,7 +163,7 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 *   If adding an Icon from a dimension, Specify the Mod's Link that the dimension derives from
     *   This is because specific Icon IDs must be used, which can be found by the mod or from checking your Logs/Chat after entering the dimension as CraftPresence will tell you the ID expected
 
-*   A 512x512 or 1024x1024 Icon to be used
+*   A `512x512` or `1024x1024` Icon to be used
     *   Icons near these sizes can be used, but may not give a great final quality
 
 *   If requesting an icon to be modified or removed from the Default Client ID, please specify a reason why
@@ -175,7 +172,7 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 Additionally, you can also create your own Set of Icons by following [this guide](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Making-your-Own-Client-ID---Using-your-own-Images)
 
 ### Support
-Need Assistance with one of my mods or wish to provide feedback?
+Need some assistance with one of my mods or wish to provide feedback?
 
 I can be contacted via the following methods:
 
@@ -183,12 +180,12 @@ I can be contacted via the following methods:
 *   [CurseForge](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 *   [Discord -> ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP)
 
-Additionally, Documentation for this mod is available [here](https://cdagaming.gitlab.io/craftpresence-documentation/) with further guides available on [the wiki](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Home)
+Additionally, codebase documentation for this mod is available [here](https://cdagaming.gitlab.io/craftpresence-documentation/) with further guides available on [the wiki](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Home)
 
 #### Licensing
 This Mod is under the MIT License as well as the Apache 2.0 License
 
-This Project makes usage of the following dependencies internally:
+This project makes usage of the following dependencies internally:
 
 *   [DiscordIPC API](https://github.com/jagrosh/DiscordIPC) by [jagrosh](https://github.com/jagrosh)
     *   [JUnixSocket](https://github.com/kohlschutter/junixsocket) by [kohlschutter](https://github.com/kohlschutter)

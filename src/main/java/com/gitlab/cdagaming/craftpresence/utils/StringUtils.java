@@ -432,7 +432,7 @@ public class StringUtils {
      * @param returnPort Whether to return the port or the IP without the Port
      * @return Either the IP or the port on their own, depending on conditions
      */
-    public static String formatIP(final String input, final boolean returnPort) {
+    public static String formatAddress(final String input, final boolean returnPort) {
         if (!isNullOrEmpty(input)) {
             final String[] formatted = input.split(":", 2);
             return !returnPort ? (elementExists(formatted, 0) ? formatted[0].trim() : "127.0.0.1") : (elementExists(formatted, 1) ? formatted[1].trim() : "25565");
@@ -447,7 +447,7 @@ public class StringUtils {
      * @param original The original String to evaluate
      * @return The converted and valid String, in an iconKey Format
      */
-    public static String formatPackIcon(final String original) {
+    public static String formatAsIcon(final String original) {
         String formattedKey = original;
         if (isNullOrEmpty(formattedKey)) {
             return formattedKey;
@@ -752,7 +752,7 @@ public class StringUtils {
                 return "the_end";
             } else {
                 if (formatToId) {
-                    return formatPackIcon(formattedKey.toString().replace(" ", "_"));
+                    return formatAsIcon(formattedKey.toString().replace(" ", "_"));
                 } else {
                     return formatWord(formattedKey.toString(), avoid);
                 }

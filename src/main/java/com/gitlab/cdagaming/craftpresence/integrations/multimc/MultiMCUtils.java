@@ -89,7 +89,7 @@ public class MultiMCUtils {
             INSTANCE_NAME = get("name");
 
             final String tempIconKey = get("iconKey"), defaultIconName = "default", defaultIconKey = "infinity";
-            ICON_KEY = StringUtils.formatPackIcon(!StringUtils.isNullOrEmpty(tempIconKey) && !tempIconKey.equals(defaultIconName) ? tempIconKey : defaultIconKey);
+            ICON_KEY = StringUtils.formatAsIcon(!StringUtils.isNullOrEmpty(tempIconKey) && !tempIconKey.equals(defaultIconName) ? tempIconKey : defaultIconKey);
 
             if (!StringUtils.isNullOrEmpty(INSTANCE_NAME) && !StringUtils.isNullOrEmpty(ICON_KEY)) {
                 ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.instance.loaded", INSTANCE_NAME, ICON_KEY));

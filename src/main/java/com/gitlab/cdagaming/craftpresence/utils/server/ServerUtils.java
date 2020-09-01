@@ -255,8 +255,8 @@ public class ServerUtils {
                 isOnLAN = newLANStatus;
                 queuedForUpdate = true;
 
-                if (!StringUtils.isNullOrEmpty(currentServer_IP) && !knownAddresses.contains(currentServer_IP.contains(":") ? currentServer_IP : StringUtils.formatIP(currentServer_IP, false))) {
-                    knownAddresses.add(currentServer_IP.contains(":") ? currentServer_IP : StringUtils.formatIP(currentServer_IP, false));
+                if (!StringUtils.isNullOrEmpty(currentServer_IP) && !knownAddresses.contains(currentServer_IP.contains(":") ? currentServer_IP : StringUtils.formatAddress(currentServer_IP, false))) {
+                    knownAddresses.add(currentServer_IP.contains(":") ? currentServer_IP : StringUtils.formatAddress(currentServer_IP, false));
                 }
 
                 final ServerList serverList = new ServerList(CraftPresence.instance);
@@ -478,7 +478,7 @@ public class ServerUtils {
             playerAmountArgs.add(new Tuple<>("&MAX&", Integer.toString(maxPlayers)));
 
             // Server Data Arguments
-            serverArgs.add(new Tuple<>("&IP&", StringUtils.formatIP(currentServer_IP, false)));
+            serverArgs.add(new Tuple<>("&IP&", StringUtils.formatAddress(currentServer_IP, false)));
             serverArgs.add(new Tuple<>("&NAME&", currentServer_Name));
             serverArgs.add(new Tuple<>("&MOTD&", currentServer_MOTD));
             serverArgs.add(new Tuple<>("&PLAYERS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.playerAmountPlaceholderMSG, playerAmountArgs)));
@@ -493,8 +493,8 @@ public class ServerUtils {
             if (isOnLAN) {
                 // NOTE: LAN-Only Presence Updates
                 final String alternateServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
-                final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
-                final String formattedServerIconKey = StringUtils.formatPackIcon(currentServerIcon.replace(" ", "_"));
+                final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatAddress(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+                final String formattedServerIconKey = StringUtils.formatAsIcon(currentServerIcon.replace(" ", "_"));
 
                 CURRENT_SERVER_ICON = formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon);
 
@@ -505,9 +505,9 @@ public class ServerUtils {
                 final String alternateServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
                 final String alternateServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, currentServer_Name, 0, 2, CraftPresence.CONFIG.splitCharacter, currentServer_Name);
 
-                currentServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
-                final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatIP(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
-                final String formattedServerIconKey = StringUtils.formatPackIcon(currentServerIcon.replace(" ", "_"));
+                currentServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatAddress(currentServer_IP, false), 0, 1, CraftPresence.CONFIG.splitCharacter, alternateServerMSG);
+                final String currentServerIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, StringUtils.formatAddress(currentServer_IP, false), 0, 2, CraftPresence.CONFIG.splitCharacter, alternateServerIcon);
+                final String formattedServerIconKey = StringUtils.formatAsIcon(currentServerIcon.replace(" ", "_"));
 
                 CURRENT_SERVER_ICON = formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon);
 
@@ -557,8 +557,8 @@ public class ServerUtils {
 
         for (int currentIndex = 0; currentIndex < serverIndex; currentIndex++) {
             final ServerData data = serverList.getServerData(currentIndex);
-            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatIP(data.serverIP, false))) {
-                knownAddresses.add(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatIP(data.serverIP, false));
+            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false))) {
+                knownAddresses.add(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false));
             }
         }
 

@@ -234,7 +234,7 @@ public class ConfigUtils {
         verboseMode = false;
         splitCharacter = ";";
         refreshRate = 2;
-        guiMessages = new String[]{"default;In &gui&"};
+        guiMessages = new String[]{"default;In &screen&"};
         itemMessages = new String[]{"default;Holding &item&"};
         entityTargetMessages = new String[]{"default;Targeting &entity&"};
         entityAttackingMessages = new String[]{"default;Attacking &entity&"};

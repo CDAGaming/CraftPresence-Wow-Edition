@@ -61,7 +61,7 @@ public class TechnicUtils {
             if (technicPack != null) {
                 if (CraftPresence.SYSTEM.USER_DIR.contains(technicPack.selected)) {
                     PACK_NAME = StringUtils.formatWord(technicPack.selected, !CraftPresence.CONFIG.formatWords);
-                    ICON_NAME = StringUtils.formatPackIcon(technicPack.selected);
+                    ICON_NAME = StringUtils.formatAsIcon(technicPack.selected);
                     CraftPresence.packFound = true;
 
                     ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.technic.loaded", PACK_NAME, ICON_NAME));
