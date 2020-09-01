@@ -20,6 +20,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
 *   Added Support for Live Editing (Clicking the `Sync Config` button will sync any changes made to `craftpresence.properties` to the game without needing to restart minecraft)
 *   Changed `&GUI&` to `&SCREEN&` for clarification; removed old `&SCREEN&` placeholder
+*   Removed the placeholder limits in Image Keys in `Presence Settings`
 *   Localization and Backend Updates
 
 ### Fixes
