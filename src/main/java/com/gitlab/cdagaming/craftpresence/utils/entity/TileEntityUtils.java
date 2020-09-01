@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
@@ -480,7 +480,7 @@ public class TileEntityUtils {
                 CURRENT_BOOTS_NAME);
 
         // Form Entity/Item Argument List
-        List<Tuple<String, String>> tileEntityArgs = Lists.newArrayList();
+        List<Pair<String, String>> tileEntityArgs = Lists.newArrayList();
 
         // Extend Argument Messages, if tags available
         if (!CURRENT_MAIN_HAND_ITEM_TAGS.isEmpty()) {
@@ -519,17 +519,17 @@ public class TileEntityUtils {
             }
         }
 
-        tileEntityArgs.add(new Tuple<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAIN_HAND_ITEM_NAME) ?
+        tileEntityArgs.add(new Pair<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAIN_HAND_ITEM_NAME) ?
                 StringUtils.replaceAnyCase(mainItemMSG, "&item&", CURRENT_MAIN_HAND_ITEM_NAME) : ""));
-        tileEntityArgs.add(new Tuple<>("&OFFHAND&", !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ?
+        tileEntityArgs.add(new Pair<>("&OFFHAND&", !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ?
                 StringUtils.replaceAnyCase(offHandItemMSG, "&item&", CURRENT_OFFHAND_ITEM_NAME) : ""));
-        tileEntityArgs.add(new Tuple<>("&HELMET&", !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ?
+        tileEntityArgs.add(new Pair<>("&HELMET&", !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ?
                 StringUtils.replaceAnyCase(helmetMSG, "&item&", CURRENT_HELMET_NAME) : ""));
-        tileEntityArgs.add(new Tuple<>("&CHEST&", !StringUtils.isNullOrEmpty(CURRENT_CHEST_NAME) ?
+        tileEntityArgs.add(new Pair<>("&CHEST&", !StringUtils.isNullOrEmpty(CURRENT_CHEST_NAME) ?
                 StringUtils.replaceAnyCase(chestMSG, "&item&", CURRENT_CHEST_NAME) : ""));
-        tileEntityArgs.add(new Tuple<>("&LEGS&", !StringUtils.isNullOrEmpty(CURRENT_LEGS_NAME) ?
+        tileEntityArgs.add(new Pair<>("&LEGS&", !StringUtils.isNullOrEmpty(CURRENT_LEGS_NAME) ?
                 StringUtils.replaceAnyCase(legsMSG, "&item&", CURRENT_LEGS_NAME) : ""));
-        tileEntityArgs.add(new Tuple<>("&BOOTS&", !StringUtils.isNullOrEmpty(CURRENT_BOOTS_NAME) ?
+        tileEntityArgs.add(new Pair<>("&BOOTS&", !StringUtils.isNullOrEmpty(CURRENT_BOOTS_NAME) ?
                 StringUtils.replaceAnyCase(bootsMSG, "&item&", CURRENT_BOOTS_NAME) : ""));
 
         // Add All Generalized Arguments, if any

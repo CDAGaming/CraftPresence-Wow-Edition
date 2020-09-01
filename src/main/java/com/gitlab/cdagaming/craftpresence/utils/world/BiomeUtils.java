@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
@@ -131,9 +131,9 @@ public class BiomeUtils {
      */
     public void updateBiomePresence() {
         // Form Biome Argument List
-        List<Tuple<String, String>> biomeArgs = Lists.newArrayList();
+        List<Pair<String, String>> biomeArgs = Lists.newArrayList();
 
-        biomeArgs.add(new Tuple<>("&BIOME&", CURRENT_BIOME_NAME));
+        biomeArgs.add(new Pair<>("&BIOME&", CURRENT_BIOME_NAME));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {

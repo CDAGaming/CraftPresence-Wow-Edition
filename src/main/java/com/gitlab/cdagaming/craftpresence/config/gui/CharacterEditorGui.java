@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
@@ -127,7 +127,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                         100, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.save"),
                         () -> {
-                            final Tuple<Boolean, Integer> charData = StringUtils.getValidInteger(charWidth.getText());
+                            final Pair<Boolean, Integer> charData = StringUtils.getValidInteger(charWidth.getText());
 
                             if (charData.getFirst()) {
                                 // Save Single Value if Char Data is a Valid Number

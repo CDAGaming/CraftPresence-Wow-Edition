@@ -25,7 +25,7 @@
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -164,10 +164,10 @@ public class StringUtils {
      *
      * @param regexValue The Regex Value to test against
      * @param original   The original Object to get matches from
-     * @return A Tuple with the Format of originalString:listOfMatches
+     * @return A Pair with the Format of originalString:listOfMatches
      */
-    public static Tuple<String, List<String>> getMatches(final String regexValue, final Object original) {
-        return original != null ? getMatches(regexValue, original.toString()) : new Tuple<>("", Lists.newArrayList());
+    public static Pair<String, List<String>> getMatches(final String regexValue, final Object original) {
+        return original != null ? getMatches(regexValue, original.toString()) : new Pair<>("", Lists.newArrayList());
     }
 
     /**
@@ -175,9 +175,9 @@ public class StringUtils {
      *
      * @param regexValue The Regex Value to test against
      * @param original   The original String to get matches from
-     * @return A Tuple with the Format of originalString:listOfMatches
+     * @return A Pair with the Format of originalString:listOfMatches
      */
-    public static Tuple<String, List<String>> getMatches(final String regexValue, final String original) {
+    public static Pair<String, List<String>> getMatches(final String regexValue, final String original) {
         final List<String> matches = Lists.newArrayList();
 
         if (!isNullOrEmpty(original)) {
@@ -189,7 +189,7 @@ public class StringUtils {
             }
         }
 
-        return new Tuple<>(original, matches);
+        return new Pair<>(original, matches);
     }
 
     /**
@@ -200,7 +200,7 @@ public class StringUtils {
      * @param maxMatches      The maximum amount of matches to remove (Set to -1 to Remove All)
      * @return The original String from Match Data with the matches up to maxMatches removed
      */
-    public static String removeMatches(final Tuple<String, List<String>> matchData, final List<Tuple<String, String>> parsedMatchData, final int maxMatches) {
+    public static String removeMatches(final Pair<String, List<String>> matchData, final List<Pair<String, String>> parsedMatchData, final int maxMatches) {
         String finalString = "";
 
         if (matchData != null) {
@@ -216,7 +216,7 @@ public class StringUtils {
 
                     if (parsedMatchData != null && !parsedMatchData.isEmpty()) {
                         // Scan through Parsed Argument Data if Possible
-                        for (Tuple<String, String> parsedArgument : parsedMatchData) {
+                        for (Pair<String, String> parsedArgument : parsedMatchData) {
                             // If found a matching argument to the match, and the parsed argument is null
                             // Remove the match without counting it as a found match
                             if (parsedArgument.getFirst().equalsIgnoreCase(match) && isNullOrEmpty(parsedArgument.getSecond())) {
@@ -287,7 +287,7 @@ public class StringUtils {
      * @param replaceData The replacement list to follow with the form of: targetToReplace:replaceWithValue
      * @return The completed and replaced String
      */
-    public static String sequentialReplaceAnyCase(final String source, final List<Tuple<String, String>> replaceData) {
+    public static String sequentialReplaceAnyCase(final String source, final List<Pair<String, String>> replaceData) {
         return sequentialReplaceAnyCase(source, replaceData, true);
     }
 
@@ -299,12 +299,12 @@ public class StringUtils {
      * @param allowMinified Flag for whether or not to allow Minified Placeholders (Trimmed String down to a length of 4)
      * @return The completed and replaced String
      */
-    public static String sequentialReplaceAnyCase(final String source, final List<Tuple<String, String>> replaceData, final boolean allowMinified) {
+    public static String sequentialReplaceAnyCase(final String source, final List<Pair<String, String>> replaceData, final boolean allowMinified) {
         if (!isNullOrEmpty(source)) {
             String finalResult = source;
 
             if (!replaceData.isEmpty()) {
-                for (Tuple<String, String> replacementData : replaceData) {
+                for (Pair<String, String> replacementData : replaceData) {
                     finalResult = replaceAnyCase(finalResult, replacementData.getFirst(), replacementData.getSecond(), allowMinified);
                 }
             }
@@ -373,20 +373,20 @@ public class StringUtils {
      * Determine whether an inputted Object classifies as a valid Integer
      *
      * @param entry The Object to evaluate
-     * @return A Tuple with the format of isValid:parsedIntegerIfTrue
+     * @return A Pair with the format of isValid:parsedIntegerIfTrue
      */
-    public static Tuple<Boolean, Integer> getValidInteger(final Object entry) {
-        return entry != null ? getValidInteger(entry.toString()) : new Tuple<>(false, 0);
+    public static Pair<Boolean, Integer> getValidInteger(final Object entry) {
+        return entry != null ? getValidInteger(entry.toString()) : new Pair<>(false, 0);
     }
 
     /**
      * Determine whether an inputted String classifies as a valid Integer
      *
      * @param entry The String to evaluate
-     * @return A Tuple with the format of isValid:parsedIntegerIfTrue
+     * @return A Pair with the format of isValid:parsedIntegerIfTrue
      */
-    public static Tuple<Boolean, Integer> getValidInteger(final String entry) {
-        final Tuple<Boolean, Integer> finalSet = new Tuple<>();
+    public static Pair<Boolean, Integer> getValidInteger(final String entry) {
+        final Pair<Boolean, Integer> finalSet = new Pair<>();
 
         if (!isNullOrEmpty(entry)) {
             try {
@@ -406,10 +406,10 @@ public class StringUtils {
      * Determine whether an inputted String classifies as a valid Long
      *
      * @param entry The String to evaluate
-     * @return A Tuple with the format of isValid:parsedLongIfTrue
+     * @return A Pair with the format of isValid:parsedLongIfTrue
      */
-    public static Tuple<Boolean, Long> getValidLong(final String entry) {
-        final Tuple<Boolean, Long> finalSet = new Tuple<>();
+    public static Pair<Boolean, Long> getValidLong(final String entry) {
+        final Pair<Boolean, Long> finalSet = new Pair<>();
 
         if (!isNullOrEmpty(entry)) {
             try {
@@ -1074,10 +1074,10 @@ public class StringUtils {
      *
      * @param classToAccess The class to access with the field(s)
      * @param instance      An Instance of the Class, if needed
-     * @param fieldData     A Tuple with the format of fieldName:valueToSet
+     * @param fieldData     A Pair with the format of fieldName:valueToSet
      */
-    public static void updateField(Class<?> classToAccess, Object instance, Tuple<?, ?>... fieldData) {
-        for (Tuple<?, ?> currentData : fieldData) {
+    public static void updateField(Class<?> classToAccess, Object instance, Pair<?, ?>... fieldData) {
+        for (Pair<?, ?> currentData : fieldData) {
             try {
                 Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
                 lookupField.setAccessible(true);
@@ -1100,8 +1100,8 @@ public class StringUtils {
      * @param instance      An Instance of the Class, if needed
      * @param methodData    The Methods and Necessary Argument Data for execution, in the form of methodName:argsAndTypesForMethod
      */
-    public static void executeMethod(final Class<?> classToAccess, final Object instance, final List<Tuple<String, Tuple<Object[], Class<?>[]>>> methodData) {
-        for (Tuple<String, Tuple<Object[], Class<?>[]>> methodInstance : methodData) {
+    public static void executeMethod(final Class<?> classToAccess, final Object instance, final List<Pair<String, Pair<Object[], Class<?>[]>>> methodData) {
+        for (Pair<String, Pair<Object[], Class<?>[]>> methodInstance : methodData) {
             try {
                 final Method lookupMethod = classToAccess.getDeclaredMethod(methodInstance.getFirst(), methodInstance.getSecond().getSecond());
                 lookupMethod.setAccessible(true);

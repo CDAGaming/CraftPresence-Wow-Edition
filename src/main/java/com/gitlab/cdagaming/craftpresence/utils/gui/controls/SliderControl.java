@@ -25,7 +25,7 @@
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import net.minecraft.client.Minecraft;
 
 import javax.annotation.Nonnull;
@@ -79,7 +79,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param valueStep     The rate at which each move to the slider adjusts it's value
      * @param displayString The title to display in the center of the slider
      */
-    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
+    public SliderControl(int buttonId, Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
         super(buttonId, positionData.getFirst(), positionData.getSecond(), dimensions.getFirst(), dimensions.getSecond(), "");
 
         setSliderValue(startValue);
@@ -103,7 +103,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param displayString The title to display in the center of the slider
      * @param onPushEvent   The Click Event to Occur when this control is clicked
      */
-    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent) {
+    public SliderControl(int buttonId, Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent) {
         this(buttonId, positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString);
         setOnClick(onPushEvent);
     }
@@ -122,7 +122,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param onPushEvent   The Click Event to Occur when this control is clicked
      * @param onHoverEvent  The Hover Event to Occur when this control is clicked
      */
-    public SliderControl(int buttonId, Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent, Runnable onHoverEvent) {
+    public SliderControl(int buttonId, Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent, Runnable onHoverEvent) {
         this(buttonId, positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, onPushEvent);
         setOnHover(onHoverEvent);
     }
@@ -138,7 +138,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param valueStep     The rate at which each move to the slider adjusts it's value
      * @param displayString The title to display in the center of the slider
      */
-    public SliderControl(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
+    public SliderControl(Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString) {
         this(CraftPresence.GUIS.getNextIndex(), positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString);
     }
 
@@ -154,7 +154,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param displayString The title to display in the center of the slider
      * @param onPushEvent   The Click Event to Occur when this control is clicked
      */
-    public SliderControl(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent) {
+    public SliderControl(Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent) {
         this(positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString);
         setOnClick(onPushEvent);
     }
@@ -172,7 +172,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param onPushEvent   The Click Event to Occur when this control is clicked
      * @param onHoverEvent  The Hover Event to Occur when this control is clicked
      */
-    public SliderControl(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent, Runnable onHoverEvent) {
+    public SliderControl(Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Runnable onPushEvent, Runnable onHoverEvent) {
         this(positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, onPushEvent);
         setOnHover(onHoverEvent);
     }

@@ -27,7 +27,7 @@ package com.gitlab.cdagaming.craftpresence.utils;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.google.common.collect.Lists;
 import org.lwjgl.input.Keyboard;
 
@@ -70,7 +70,7 @@ public class KeyUtils {
     public String getKeyName(final String original) {
         final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
         if (!StringUtils.isNullOrEmpty(original)) {
-            final Tuple<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
+            final Pair<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
 
             if (integerData.getFirst()) {
                 return getKeyName(integerData.getSecond());

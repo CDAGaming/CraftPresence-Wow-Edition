@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
@@ -328,7 +328,7 @@ public class MainGui extends ExtendedScreen {
                         95, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.config"),
                         () -> {
-                            final List<Tuple<String, Object>> currentConfigDataMappings = CraftPresence.CONFIG.configDataMappings;
+                            final List<Pair<String, Object>> currentConfigDataMappings = CraftPresence.CONFIG.configDataMappings;
                             CraftPresence.CONFIG.read(false, "UTF-8");
 
                             // Only Mark to Save if there have been Changes in the File

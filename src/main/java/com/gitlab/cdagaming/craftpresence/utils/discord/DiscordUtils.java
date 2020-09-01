@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.integrations.curse.CurseUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.multimc.MultiMCUtils;
@@ -52,19 +52,19 @@ public class DiscordUtils {
     /**
      * A Mapping of the Arguments available to use as RPC Message Placeholders
      */
-    private final List<Tuple<String, String>> messageData = Lists.newArrayList();
+    private final List<Pair<String, String>> messageData = Lists.newArrayList();
     /**
      * A Mapping of the Arguments available to use as Icon Key Placeholders
      */
-    private final List<Tuple<String, String>> iconData = Lists.newArrayList();
+    private final List<Pair<String, String>> iconData = Lists.newArrayList();
     /**
      * A Mapping of the Arguments attached to the &MODS& RPC Message placeholder
      */
-    private final List<Tuple<String, String>> modsArgs = Lists.newArrayList();
+    private final List<Pair<String, String>> modsArgs = Lists.newArrayList();
     /**
      * A Mapping of the Arguments attached to the &IGN& RPC Message Placeholder
      */
-    private final List<Tuple<String, String>> playerInfoArgs = Lists.newArrayList();
+    private final List<Pair<String, String>> playerInfoArgs = Lists.newArrayList();
     /**
      * The Current User, tied to the Rich Presence
      */
@@ -144,7 +144,7 @@ public class DiscordUtils {
     /**
      * A Mapping of the General RPC Arguments allowed in adjusting Presence Messages
      */
-    public List<Tuple<String, String>> generalArgs = Lists.newArrayList();
+    public List<Pair<String, String>> generalArgs = Lists.newArrayList();
     /**
      * An Instance of the {@link IPCClient}, responsible for sending and receiving RPC Events
      */
@@ -158,7 +158,7 @@ public class DiscordUtils {
      * <p>Used to prevent sending duplicate packets and cache data for repeated images in other areas
      * <p>Format: lastAttemptedKey, lastResultingKey
      */
-    private Tuple<String, String> lastRequestedImageData = new Tuple<>();
+    private Pair<String, String> lastRequestedImageData = new Pair<>();
     /**
      * An Instance containing the Current Rich Presence Data
      * <p>Also used to prevent sending duplicate packets with the same presence data, if any
@@ -208,15 +208,15 @@ public class DiscordUtils {
         CommandUtils.isInMainMenu = false;
 
         // Add Any Generalized Argument Data needed
-        modsArgs.add(new Tuple<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
-        playerInfoArgs.add(new Tuple<>("&NAME&", ModUtils.USERNAME));
+        modsArgs.add(new Pair<>("&MODCOUNT&", Integer.toString(FileUtils.getModCount())));
+        playerInfoArgs.add(new Pair<>("&NAME&", ModUtils.USERNAME));
 
-        generalArgs.add(new Tuple<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mc.version", ModUtils.MCVersion)));
-        generalArgs.add(new Tuple<>("&BRAND&", ModUtils.BRAND));
-        generalArgs.add(new Tuple<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
-        generalArgs.add(new Tuple<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMSG, playerInfoArgs)));
+        generalArgs.add(new Pair<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mc.version", ModUtils.MCVersion)));
+        generalArgs.add(new Pair<>("&BRAND&", ModUtils.BRAND));
+        generalArgs.add(new Pair<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
+        generalArgs.add(new Pair<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMSG, playerInfoArgs)));
 
-        for (Tuple<String, String> generalArgument : generalArgs) {
+        for (Pair<String, String> generalArgument : generalArgs) {
             // For each General (Can be used Anywhere) Argument
             // Ensure they sync as Formatter Arguments too
             syncArgument(generalArgument.getFirst(), generalArgument.getSecond(), false);
@@ -250,13 +250,13 @@ public class DiscordUtils {
             if (isIconData) {
                 synchronized (iconData) {
                     if (iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
-                        iconData.add(new Tuple<>(argumentName, insertString));
+                        iconData.add(new Pair<>(argumentName, insertString));
                     }
                 }
             } else {
                 synchronized (messageData) {
                     if (messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName) && !e.getSecond().equalsIgnoreCase(insertString))) {
-                        messageData.add(new Tuple<>(argumentName, insertString));
+                        messageData.add(new Pair<>(argumentName, insertString));
                     }
                 }
             }
@@ -275,14 +275,14 @@ public class DiscordUtils {
             for (String argumentName : args) {
                 synchronized (iconData) {
                     iconData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
-                    iconData.add(new Tuple<>(argumentName, ""));
+                    iconData.add(new Pair<>(argumentName, ""));
                 }
             }
         } else {
             for (String argumentName : args) {
                 synchronized (messageData) {
                     messageData.removeIf(e -> e.getFirst().equalsIgnoreCase(argumentName));
-                    messageData.add(new Tuple<>(argumentName, ""));
+                    messageData.add(new Pair<>(argumentName, ""));
                 }
             }
         }
@@ -425,7 +425,7 @@ public class DiscordUtils {
         clearPartyData(true, false);
         CURRENT_USER = null;
 
-        lastRequestedImageData = new Tuple<>();
+        lastRequestedImageData = new Pair<>();
 
         CraftPresence.DIMENSIONS.clearClientData();
         CraftPresence.TILE_ENTITIES.clearClientData();

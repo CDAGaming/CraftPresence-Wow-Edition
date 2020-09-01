@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.integrations.curse.CurseUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.multimc.MultiMCUtils;
@@ -135,7 +135,7 @@ public class CommandUtils {
      */
     public static void setLoadingPresence() {
         // Form Argument Lists
-        List<Tuple<String, String>> loadingArgs = Lists.newArrayList();
+        List<Pair<String, String>> loadingArgs = Lists.newArrayList();
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
@@ -156,7 +156,7 @@ public class CommandUtils {
      */
     public static void setMainMenuPresence() {
         // Form Argument Lists
-        List<Tuple<String, String>> mainMenuArgs = Lists.newArrayList();
+        List<Pair<String, String>> mainMenuArgs = Lists.newArrayList();
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {

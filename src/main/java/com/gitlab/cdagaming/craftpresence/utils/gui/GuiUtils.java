@@ -27,7 +27,7 @@ package com.gitlab.cdagaming.craftpresence.utils.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
@@ -320,10 +320,10 @@ public class GuiUtils {
      */
     public void updateGUIPresence() {
         // Form GUI Argument List
-        List<Tuple<String, String>> guiArgs = Lists.newArrayList();
+        List<Pair<String, String>> guiArgs = Lists.newArrayList();
 
-        guiArgs.add(new Tuple<>("&SCREEN&", CURRENT_GUI_NAME));
-        guiArgs.add(new Tuple<>("&CLASS&", CURRENT_GUI_CLASS.getSimpleName()));
+        guiArgs.add(new Pair<>("&SCREEN&", CURRENT_GUI_NAME));
+        guiArgs.add(new Pair<>("&CLASS&", CURRENT_GUI_CLASS.getSimpleName()));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
@@ -647,7 +647,7 @@ public class GuiUtils {
                 endColorObj = (!StringUtils.isNullOrEmpty(endColorCode) && endColorCode.startsWith("#")) ? StringUtils.getColorFromHex(endColorCode) : startColorObj;
             } else {
                 // Determine if Start Color Code is a Valid Number
-                Tuple<Boolean, Integer> startColorData = StringUtils.getValidInteger(startColorCode),
+                Pair<Boolean, Integer> startColorData = StringUtils.getValidInteger(startColorCode),
                         endColorData = StringUtils.getValidInteger(endColorCode);
 
                 // Check and ensure that at least one of the Color Codes are correct
@@ -706,8 +706,8 @@ public class GuiUtils {
      * @param zLevel             The Z Level position of the Object
      * @param res                The game texture to render the object as
      */
-    public void drawContinuousTexturedBox(Tuple<Integer, Integer> positionData, Tuple<Integer, Integer> uVLevels, Tuple<Integer, Integer> screenDimensions, Tuple<Integer, Integer> textureDimensions,
-                                          Tuple<Integer, Integer> verticalBorderData, Tuple<Integer, Integer> sideBorderData, double zLevel, ResourceLocation res) {
+    public void drawContinuousTexturedBox(Pair<Integer, Integer> positionData, Pair<Integer, Integer> uVLevels, Pair<Integer, Integer> screenDimensions, Pair<Integer, Integer> textureDimensions,
+                                          Pair<Integer, Integer> verticalBorderData, Pair<Integer, Integer> sideBorderData, double zLevel, ResourceLocation res) {
         if (res != null) {
             CraftPresence.instance.getTextureManager().bindTexture(res);
         }

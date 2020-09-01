@@ -27,7 +27,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -38,10 +38,10 @@ import org.lwjgl.input.Keyboard;
 
 public class AccessibilitySettingsGui extends ExtendedScreen {
 
-    // Tuple Format: buttonToModify, Config Field to Edit
+    // Pair Format: buttonToModify, Config Field to Edit
     // (Store a Backup of Prior Text just in case)
     private String backupKeyString;
-    private Tuple<ExtendedButtonControl, String> entryData = null;
+    private Pair<ExtendedButtonControl, String> entryData = null;
 
     private ExtendedTextControl languageIDText;
     private CheckBoxControl stripTranslationColorsButton, showLoggingInChatButton;
@@ -250,7 +250,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
      */
     private void setupEntryData(final ExtendedButtonControl button) {
         if (entryData == null && button.getOptionalArgs() != null) {
-            entryData = new Tuple<>(button, button.getOptionalArgs()[0]);
+            entryData = new Pair<>(button, button.getOptionalArgs()[0]);
 
             backupKeyString = button.displayString;
             button.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.editor.enter_key");
@@ -275,7 +275,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         // If KeyCode Field to modify is not null or empty, attempt to queue change
         try {
-            StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(entryData.getSecond(), keyToSubmit));
+            StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Pair<>(entryData.getSecond(), keyToSubmit));
             CraftPresence.CONFIG.hasChanged = true;
 
             entryData.getFirst().displayString = formattedKey;

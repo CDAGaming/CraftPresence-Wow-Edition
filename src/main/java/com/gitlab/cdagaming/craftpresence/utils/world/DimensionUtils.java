@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.world;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
@@ -144,9 +144,9 @@ public class DimensionUtils {
      */
     public void updateDimensionPresence() {
         // Form Dimension Argument List
-        List<Tuple<String, String>> dimensionArgs = Lists.newArrayList();
+        List<Pair<String, String>> dimensionArgs = Lists.newArrayList();
 
-        dimensionArgs.add(new Tuple<>("&DIMENSION&", CURRENT_DIMENSION_NAME));
+        dimensionArgs.add(new Pair<>("&DIMENSION&", CURRENT_DIMENSION_NAME));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {

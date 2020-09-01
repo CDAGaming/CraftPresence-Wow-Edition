@@ -25,31 +25,38 @@
 package com.gitlab.cdagaming.craftpresence.impl;
 
 /**
- * A Set of Two Objects contained within a Mapping
+ * A Set of Three Objects contained within a Mapping
  *
- * @param <U> The first element of this {@link Tuple}
- * @param <V> The second element of this {@link Tuple}
+ * @param <T> The first element of this {@link Tuple}
+ * @param <U> The second element of this {@link Tuple}
+ * @param <V> The third element of this {@link Tuple}
  */
-public class Tuple<U, V> {
+public class Tuple<T, U, V> {
 
     /**
      * The first element of this {@link Tuple}
      */
-    private U first;
+    private T first;
 
     /**
      * The second element of this {@link Tuple}
      */
-    private V second;
+    private U second;
+
+    /**
+     * The third element of this {@link Tuple}
+     */
+    private V third;
 
     /**
      * Constructs a new {@link Tuple} with the given values.
      *
      * @param first  the first element
      * @param second the second element
+     * @param third  the third element
      */
-    public Tuple(U first, V second) {
-        put(first, second);
+    public Tuple(T first, U second, V third) {
+        put(first, second, third);
     }
 
     /**
@@ -64,7 +71,7 @@ public class Tuple<U, V> {
      *
      * @return the first element of this {@link Tuple}
      */
-    public U getFirst() {
+    public T getFirst() {
         return first;
     }
 
@@ -73,16 +80,16 @@ public class Tuple<U, V> {
      *
      * @param first the first element to be applied
      */
-    public void setFirst(final U first) {
+    public void setFirst(final T first) {
         this.first = first;
     }
 
     /**
-     * Retrieves the first element of this {@link Tuple}.
+     * Retrieves the second element of this {@link Tuple}.
      *
      * @return the second element of this {@link Tuple}
      */
-    public V getSecond() {
+    public U getSecond() {
         return second;
     }
 
@@ -91,19 +98,39 @@ public class Tuple<U, V> {
      *
      * @param second the second element to be applied
      */
-    public void setSecond(final V second) {
+    public void setSecond(final U second) {
         this.second = second;
     }
 
     /**
-     * Sets the elements of this {@link Tuple} to the given values.
+     * Retrieves the third element of this {@link Tuple}.
+     *
+     * @return the third element of this {@link Tuple}
+     */
+    public V getThird() {
+        return third;
+    }
+
+    /**
+     * Sets the third element of this {@link Tuple} to the given value.
+     *
+     * @param third the third element to be applied
+     */
+    public void setThird(final V third) {
+        this.third = third;
+    }
+
+    /**
+     * Sets the elements of this {@link Pair} to the given values.
      *
      * @param first  the first element to be applied
      * @param second the second element to be applied
+     * @param third  the third element to be applied
      */
-    public void put(final U first, final V second) {
+    public void put(final T first, final U second, final V third) {
         this.first = first;
         this.second = second;
+        this.third = third;
     }
 
     /**
@@ -112,19 +139,19 @@ public class Tuple<U, V> {
      * @param obj The Tuple to compare against
      * @return If the Two Opposing Tuple's are equivalent
      */
-    public boolean equals(final Tuple<?, ?> obj) {
+    public boolean equals(final Tuple<?, ?, ?> obj) {
         try {
             // Case 1: Attempt ToString Conversion Checking
-            return (this.getFirst().toString().equals(obj.getFirst().toString())) && (this.getSecond().toString().equals(obj.getSecond().toString()));
+            return (this.getFirst().toString().equals(obj.getFirst().toString())) && (this.getSecond().toString().equals(obj.getSecond().toString())) && this.getThird().toString().equals(obj.getThird().toString());
         } catch (Exception ex) {
             // Case 2: Automated Checking
             // Note: Can Likely return false positives depending on conditions
-            return ((this.getFirst() == obj.getFirst()) && (this.getSecond() == obj.getSecond())) || (this == obj);
+            return ((this.getFirst() == obj.getFirst()) && (this.getSecond() == obj.getSecond()) && this.getThird() == obj.getThird()) || (this == obj);
         }
     }
 
     @Override
     public String toString() {
-        return "Tuple[key=" + this.getFirst().toString() + "; value=" + this.getSecond().toString() + "]";
+        return "Tuple[T=" + this.getFirst().toString() + "; U=" + this.getSecond().toString() + "; V=" + this.getThird().toString() + "]";
     }
 }

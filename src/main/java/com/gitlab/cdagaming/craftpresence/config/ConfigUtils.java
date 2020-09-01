@@ -27,7 +27,7 @@ package com.gitlab.cdagaming.craftpresence.config;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
 import com.google.common.collect.Lists;
@@ -45,15 +45,15 @@ import java.util.Properties;
  * @author CDAGaming
  */
 public class ConfigUtils {
-    // Config Property Mappings = Tuple<propertyFieldName, valueFieldName>
-    public final List<Tuple<String, Object>> configDataMappings = Lists.newArrayList();
+    // Config Property Mappings = Pair<propertyFieldName, valueFieldName>
+    public final List<Pair<String, Object>> configDataMappings = Lists.newArrayList();
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
             keyCodeTriggers = new String[]{"keycode", "keybinding"},
             languageTriggers = new String[]{"language", "lang", "langId", "languageId"},
             globalTriggers = new String[]{"global", "last", "schema"};
-    // Config Data Mappings = Tuple<propertyValue, value>
-    private final List<Tuple<String, String>> configPropertyMappings = Lists.newArrayList();
+    // Config Data Mappings = Pair<propertyValue, value>
+    private final List<Pair<String, String>> configPropertyMappings = Lists.newArrayList();
     private final String fileName;
     // Config Names
     // GLOBAL (NON-USER-ADJUSTABLE)
@@ -289,8 +289,8 @@ public class ConfigUtils {
                     field.setAccessible(true);
                     valueField.setAccessible(true);
 
-                    configDataMappings.add(new Tuple<>(field.get(this).toString(), valueField.get(this)));
-                    configPropertyMappings.add(new Tuple<>(field.getName(), valueField.getName()));
+                    configDataMappings.add(new Pair<>(field.get(this).toString(), valueField.get(this)));
+                    configPropertyMappings.add(new Pair<>(field.getName(), valueField.getName()));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -343,9 +343,9 @@ public class ConfigUtils {
             final List<String> propertyList = Lists.newArrayList(properties.stringPropertyNames());
 
             // Format: ListOfMigrationTargets:MigrationId
-            final List<Tuple<List<String>, String>> migrationData = Lists.newArrayList();
+            final List<Pair<List<String>, String>> migrationData = Lists.newArrayList();
 
-            for (Tuple<String, String> configProperty : configPropertyMappings) {
+            for (Pair<String, String> configProperty : configPropertyMappings) {
                 Object fieldObject = null, foundProperty;
                 final String propertyName = configDataMappings.get(currentIndex).getFirst();
                 final Object defaultValue = configDataMappings.get(currentIndex).getSecond();
@@ -374,7 +374,7 @@ public class ConfigUtils {
                         } else if ((expectedClass == int.class || expectedClass == Integer.class) &&
                                 StringUtils.getValidInteger(foundProperty).getFirst()) {
                             // Convert to Integer if Valid, and if not reset it
-                            final Tuple<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty);
+                            final Pair<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty);
 
                             if (boolData.getFirst()) {
                                 // This check will trigger if the Field Name contains KeyCode Triggers
@@ -390,7 +390,7 @@ public class ConfigUtils {
                                         } else {
                                             // If so, iterate through the migration data allocated earlier
                                             // to see if the property needs any data migrations
-                                            for (Tuple<List<String>, String> migrationChunk : migrationData) {
+                                            for (Pair<List<String>, String> migrationChunk : migrationData) {
                                                 if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase(KeyConverter.ConversionMode.Unknown.name())) {
                                                     // If so, retrieve the second part of the migration data,
                                                     // and adjust the property accordingly with the mode it should use
@@ -443,7 +443,7 @@ public class ConfigUtils {
                     } finally {
                         if (fieldObject != null) {
                             fieldObject = syncMigrationData(skipLogging, migrationData, configProperty, fieldObject, foundProperty, propertyName, defaultValue);
-                            StringUtils.updateField(getClass(), CraftPresence.CONFIG, new Tuple<>(configProperty.getSecond(), fieldObject));
+                            StringUtils.updateField(getClass(), CraftPresence.CONFIG, new Pair<>(configProperty.getSecond(), fieldObject));
                         }
                     }
                 } else {
@@ -501,7 +501,7 @@ public class ConfigUtils {
      * @param defaultValue   The Default Value of the Property to Check against fieldObject
      * @return The Checked/Verified Field Object, depending on method execution
      */
-    private Object syncMigrationData(final boolean skipLogging, List<Tuple<List<String>, String>> migrationData, final Tuple<String, String> configProperty, final Object fieldObject, final Object foundProperty, final String propertyName, final Object defaultValue) {
+    private Object syncMigrationData(final boolean skipLogging, List<Pair<List<String>, String>> migrationData, final Pair<String, String> configProperty, final Object fieldObject, final Object foundProperty, final String propertyName, final Object defaultValue) {
         Object finalFieldObject = fieldObject;
         // Move through any triggers or Migration Data, if needed
         // Before proceeding to final parsing
@@ -552,7 +552,7 @@ public class ConfigUtils {
                     // Otherwise, if using a config from above 1.12.2 (340) on it or anything lower,
                     // we need to ensure any keycodes are in an LWJGL 2 format.
                     // If neither is true, then we mark the migration data as None, and it will be verified
-                    migrationData.add(new Tuple<>(Arrays.asList(keyCodeTriggers), keyCodeMigrationId));
+                    migrationData.add(new Pair<>(Arrays.asList(keyCodeTriggers), keyCodeMigrationId));
                     // Normal Case 1 Notes (Language ID):
                     // In this situation, if the currently parsed protocol version differs and
                     // is a newer version then or exactly 1.11 (315), then
@@ -560,7 +560,7 @@ public class ConfigUtils {
                     // Otherwise, if using a config from anything less then 1.11 (315),
                     // we need to ensure any Language Locale's are complying with Pack Format 2 and below
                     // If neither is true, then we mark the migration data as None, and it will be verified
-                    migrationData.add(new Tuple<>(Arrays.asList(languageTriggers), languageMigrationId));
+                    migrationData.add(new Pair<>(Arrays.asList(languageTriggers), languageMigrationId));
                 }
                 finalFieldObject = defaultValue;
                 break;
@@ -573,7 +573,7 @@ public class ConfigUtils {
             if (configProperty.getSecond().toLowerCase().contains(langTrigger.toLowerCase())) {
                 // If so, iterate through the migration data allocated earlier
                 // to see if the property needs any data migrations
-                for (Tuple<List<String>, String> migrationChunk : migrationData) {
+                for (Pair<List<String>, String> migrationChunk : migrationData) {
                     if (migrationChunk.getFirst().contains(langTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase(TranslationUtils.ConversionMode.Unknown.name())) {
                         // If so, retrieve the second part of the migration data,
                         // and adjust the property accordingly with the mode it should use
@@ -601,7 +601,7 @@ public class ConfigUtils {
         // Sync Edits from Read Events that may have occurred
         syncMappings();
 
-        for (Tuple<String, Object> configDataSet : configDataMappings) {
+        for (Pair<String, Object> configDataSet : configDataMappings) {
             final Class<?> expectedClass = configDataSet.getSecond().getClass();
             String finalOutput;
 

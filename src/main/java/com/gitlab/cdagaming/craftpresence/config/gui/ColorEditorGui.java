@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
@@ -79,8 +79,8 @@ public class ColorEditorGui extends ExtendedScreen {
 
         redText = addControl(
                 new SliderControl(
-                        new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(3)),
-                        new Tuple<>(180, 20),
+                        new Pair<>(calc1, CraftPresence.GUIS.getButtonY(3)),
+                        new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         redTitle
@@ -88,8 +88,8 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         greenText = addControl(
                 new SliderControl(
-                        new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(3)),
-                        new Tuple<>(180, 20),
+                        new Pair<>(calc2, CraftPresence.GUIS.getButtonY(3)),
+                        new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         greenTitle
@@ -97,8 +97,8 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         blueText = addControl(
                 new SliderControl(
-                        new Tuple<>(calc1, CraftPresence.GUIS.getButtonY(4)),
-                        new Tuple<>(180, 20),
+                        new Pair<>(calc1, CraftPresence.GUIS.getButtonY(4)),
+                        new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         blueTitle
@@ -106,8 +106,8 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         alphaText = addControl(
                 new SliderControl(
-                        new Tuple<>(calc2, CraftPresence.GUIS.getButtonY(4)),
-                        new Tuple<>(180, 20),
+                        new Pair<>(calc2, CraftPresence.GUIS.getButtonY(4)),
+                        new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         alphaTitle

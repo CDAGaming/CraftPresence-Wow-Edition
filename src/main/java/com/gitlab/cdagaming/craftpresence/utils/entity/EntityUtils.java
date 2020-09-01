@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -291,28 +291,28 @@ public class EntityUtils {
                 defaultEntityRidingMSG);
 
         // Form Entity Argument List
-        final List<Tuple<String, String>> entityTargetArgs = Lists.newArrayList(), entityAttackingArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
+        final List<Pair<String, String>> entityTargetArgs = Lists.newArrayList(), entityAttackingArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
 
-        entityTargetArgs.add(new Tuple<>("&entity&", CURRENT_TARGET_NAME));
-        entityAttackingArgs.add(new Tuple<>("&entity&", CURRENT_ATTACKING_NAME));
-        entityRidingArgs.add(new Tuple<>("&entity&", CURRENT_RIDING_NAME));
+        entityTargetArgs.add(new Pair<>("&entity&", CURRENT_TARGET_NAME));
+        entityAttackingArgs.add(new Pair<>("&entity&", CURRENT_ATTACKING_NAME));
+        entityRidingArgs.add(new Pair<>("&entity&", CURRENT_RIDING_NAME));
 
         // Extend Arguments, if tags available
         if (!CURRENT_TARGET_TAGS.isEmpty()) {
             for (String tagName : CURRENT_TARGET_TAGS) {
-                entityTargetArgs.add(new Tuple<>("&" + tagName + "&", CURRENT_TARGET_TAG.getTag(tagName).toString()));
+                entityTargetArgs.add(new Pair<>("&" + tagName + "&", CURRENT_TARGET_TAG.getTag(tagName).toString()));
             }
         }
 
         if (!CURRENT_ATTACKING_TAGS.isEmpty()) {
             for (String tagName : CURRENT_ATTACKING_TAGS) {
-                entityAttackingArgs.add(new Tuple<>("&" + tagName + "&", CURRENT_ATTACKING_TAG.getTag(tagName).toString()));
+                entityAttackingArgs.add(new Pair<>("&" + tagName + "&", CURRENT_ATTACKING_TAG.getTag(tagName).toString()));
             }
         }
 
         if (!CURRENT_RIDING_TAGS.isEmpty()) {
             for (String tagName : CURRENT_RIDING_TAGS) {
-                entityRidingArgs.add(new Tuple<>("&" + tagName + "&", CURRENT_RIDING_TAG.getTag(tagName).toString()));
+                entityRidingArgs.add(new Pair<>("&" + tagName + "&", CURRENT_RIDING_TAG.getTag(tagName).toString()));
             }
         }
 
