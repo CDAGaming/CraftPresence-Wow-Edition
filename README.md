@@ -77,17 +77,25 @@ Keep in mind the following:
 
 ___
 
-### Presence Display Placeholders
-These placeholders can be configured within the `Presence Settings` menu within the Config Gui
+### Presence Display / Global Placeholders
+These placeholders can be added within the `Presence Settings` menu within the Config Gui.
 
-*   `&DIMENSION&` - The Dimension Message from your Dimension Settings, if enabled and in use
-*   `&BIOME&` - The Biome Message from your Biome Settings, if enabled and in use
-*   `&SERVER&` - The Server/SinglePlayer Message from your Server Settings, if enabled and in use
-*   `&SCREEN&` - The Gui Screen Message from your Gui Settings, if enabled and in use
-*   `&TILEENTITY&` - The TileEntity (Block/Item) Message from your Advanced -> Item Messages Settings, if enabled and in use
-*   `&TARGETENTITY&` - The Targeted Entity Message from your Advanced -> Entity Target Messages Setting, if Per-Entity is enabled and in use
-*   `&ATTACKINGENTITY&` - The Attacking Entity Message from your Advanced -> Entity Attacking Messages Setting, if Per-Entity is enabled and in use
-*   `&RIDINGENTITY&` - The Riding Entity Message from your Advanced -> Entity Riding Messages Setting, if Per-Entity is enabled and in use
+As these placeholders are global, they can be set in any of the RPC fields within `Presence Settings` and customized at a deeper level via their sub-placeholders.
+
+*   `&MAINMENU&` - The message to display whilst in the main menu. (See `Status Messages->Main Menu Message` for sub-placeholders)
+*   `&BRAND&` - The minecraft branding label, displayed as interpreted by minecraft.
+*   `&MCVERSION&` - The minecraft version, displayed as interpreted by minecraft.
+*   `&IGN&` - The non-world player info message. (See `Status Messages->Player Outer Info` for sub-placeholders)
+*   `&MODS&` - The message to display with your mod count. (See `Status Messages->Mods` for sub-placeholders)
+*   `&PACK&` - The message to display whilst using a valid modpack. (See `Status Messages->Modpack Message` for sub-placeholders)
+*   `&DIMENSION&` - The Dimension Message, if in use. (See `Dimension Messages` for sub-placeholders)
+*   `&BIOME&` - The Biome Message, if in use. (See `Biome Messages` for sub-placeholders)
+*   `&SERVER&` - The Server/SinglePlayer Message, if in use. (See `Server Messages` for sub-placeholders)
+*   `&SCREEN&` - The Gui Screen Message, if in use. (See `Advanced Settings->Gui Messages` for sub-placeholders)
+*   `&TILEENTITY&` - The TileEntity (Block/Item) Message, if in use. (See `Advanced Settings->Item Messages` for sub-placeholders)
+*   `&TARGETENTITY&` - The Targeted Entity Message, if in use. (See `Advanced Settings -> Entity Target Messages` for sub-placeholders)
+*   `&ATTACKINGENTITY&` - The Attacking Entity Message, if in use. (See `Advanced Settings -> Entity Atacking Messages` for sub-placeholders)
+*   `&RIDINGENTITY&` - The Riding Entity Message, if in use. (See `Advanced Settings -> Entity Riding Messages` for sub-placeholders)
 
 ___
 
