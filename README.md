@@ -101,7 +101,7 @@ As these placeholders are global, they can be set in any of the RPC fields withi
 ___
 
 ### Main Menu Message Placeholders
-These placeholders translate to the `&MAINMENU&` Global Placeholder in `Presence Settings` menu within the Config Gui.
+These placeholders translate to the `&MAINMENU&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
 You can configure using these Sub-Placeholders within the `Status Messages->Main Menu Message` setting.
 
@@ -111,7 +111,7 @@ You can configure using these Sub-Placeholders within the `Status Messages->Main
 ___
 
 ### Biome Placeholders
-These placeholders translate to the `&BIOME&` Global Placeholder in `Presence Settings` menu within the Config Gui.
+These placeholders translate to the `&BIOME&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
 You can configure these Sub-Placeholders throughout the `Biome Messages` area of the Config Gui.
 
@@ -120,7 +120,7 @@ You can configure these Sub-Placeholders throughout the `Biome Messages` area of
 ___
 
 ### Dimension Placeholders
-These placeholders translate to the `&DIMENSION&` Global Placeholder in `Presence Settings` menu within the Config Gui.
+These placeholders translate to the `&DIMENSION&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
 You can configure these Sub-Placeholders throughout the `Dimension Messages` area of the Config Gui.
 
@@ -130,6 +130,10 @@ You can configure these Sub-Placeholders throughout the `Dimension Messages` are
 ___
 
 ### Server/LAN Message Placeholders
+These placeholders translate to the `&SERVER&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders throughout the `Server Messages` area of the Config Gui.
+
 *   `&IP&` - The Current Server IP Address
 *   `&NAME&` - The Current Server Name
 *   `&MOTD&` - The Current Server MOTD (Message of The Day)
@@ -142,6 +146,10 @@ ___
 ___
 
 ### SinglePlayer Placeholders
+These placeholders translate to the `&SERVER&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders within the `Status Messages->SinglePlayer Message` setting.
+
 *   `&IGN&` - Your Minecraft Username
 *   `&TIME&` - The Current World Time
 *   `&MODS&` - The Number of Mods currently in your Mods Folder
@@ -149,18 +157,37 @@ ___
 ___
 
 ### Gui Placeholders
+These placeholders translate to the `&SCREEN&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders throughout the `Advanced Settings->Gui Messages` area of the Config Gui.
+
 *   `&SCREEN&` - The Current Gui Screen Name (Supports `Container` and `Screen` type interfaces)
 *   `&CLASS&` - The Current Gui Class (Ex: `net.minecraft.xxx`)
 
 ___
 
-### Item/Entity Placeholders
+### Item Placeholders
+These placeholders translate to the `&TILEENTITY&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders throughout the `Advanced Settings->Item Messages` area of the Config Gui.
+
 *   `&MAIN&` - The Current Item your Main Hand is Holding
-*   `&OFFHAND&` - The Current Item your Off Hand is Holding*
+*   `&OFFHAND&` - The Current Item your Off Hand is Holding
 *   `&HELMET&` - The Current Helmet Armor Piece you have Equipped
 *   `&CHEST&` - The Current Chest Armor Piece you have Equipped
 *   `&LEGS&` - The Current Leggings Armor Piece you have Equipped
 *   `&BOOTS&` - The Current Boots Armor Piece you have Equipped
+
+___
+
+## Entity Placeholders
+These placeholders translate to the `&TARGETENTITY&`, `&ATTACKINGENTITY&`, and `&RIDINGENTITY&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders throughout the `Advanced Settings->Entity [Target,Attacking,Riding] Messages` area of the Config Gui.
+
+*   `&ENTITY&` - The Entity Name
+
+Additionally, these sub placeholders support nbt data, where in this case the Entity's nbt data is parsed into sub-placeholders (Outlined in Tooltips)
 
 ## Versions of CraftPresence
 Beginning in v1.5.2, CraftPresence is now split into different editions, based on the Minecraft Version you use it in:
