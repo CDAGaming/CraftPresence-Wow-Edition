@@ -83,27 +83,27 @@ These placeholders can be added within the `Presence Settings` menu within the C
 
 As these placeholders are global, they can be set in any of the RPC fields within `Presence Settings` and customized at a deeper level via their sub-placeholders.
 
-*   `&MAINMENU&` - The message to display whilst in the main menu. (See `Status Messages->Main Menu Message` for sub-placeholders)
+*   `&MAINMENU&` - The message to display whilst in the main menu. (See `Status Messages::Main Menu Message` for sub-placeholders)
 *   `&BRAND&` - The minecraft branding label, displayed as interpreted by minecraft.
 *   `&MCVERSION&` - The minecraft version, displayed as interpreted by minecraft.
-*   `&IGN&` - The non-world player info message. (See `Status Messages->Player Outer Info` for sub-placeholders)
-*   `&MODS&` - The message to display with your mod count. (See `Status Messages->Mods` for sub-placeholders)
-*   `&PACK&` - The message to display whilst using a valid modpack. (See `Status Messages->Modpack Message` for sub-placeholders)
+*   `&IGN&` - The non-world player info message. (See `Status Messages::Player Outer Info` for sub-placeholders)
+*   `&MODS&` - The message to display with your mod count. (See `Status Messages::Mods` for sub-placeholders)
+*   `&PACK&` - The message to display whilst using a valid modpack. (See `Status Messages::Modpack Message` for sub-placeholders)
 *   `&DIMENSION&` - The Dimension Message, if in use. (See `Dimension Messages` for sub-placeholders)
 *   `&BIOME&` - The Biome Message, if in use. (See `Biome Messages` for sub-placeholders)
 *   `&SERVER&` - The Server/SinglePlayer Message, if in use. (See `Server Messages` for sub-placeholders)
-*   `&SCREEN&` - The Gui Screen Message, if in use. (See `Advanced Settings->Gui Messages` for sub-placeholders)
-*   `&TILEENTITY&` - The TileEntity (Block/Item) Message, if in use. (See `Advanced Settings->Item Messages` for sub-placeholders)
-*   `&TARGETENTITY&` - The Targeted Entity Message, if in use. (See `Advanced Settings -> Entity Target Messages` for sub-placeholders)
-*   `&ATTACKINGENTITY&` - The Attacking Entity Message, if in use. (See `Advanced Settings -> Entity Attacking Messages` for sub-placeholders)
-*   `&RIDINGENTITY&` - The Riding Entity Message, if in use. (See `Advanced Settings -> Entity Riding Messages` for sub-placeholders)
+*   `&SCREEN&` - The Gui Screen Message, if in use. (See `Advanced Settings::Gui Messages` for sub-placeholders)
+*   `&TILEENTITY&` - The TileEntity (Block/Item) Message, if in use. (See `Advanced Settings::Item Messages` for sub-placeholders)
+*   `&TARGETENTITY&` - The Targeted Entity Message, if in use. (See `Advanced Settings :: Entity Target Messages` for sub-placeholders)
+*   `&ATTACKINGENTITY&` - The Attacking Entity Message, if in use. (See `Advanced Settings :: Entity Attacking Messages` for sub-placeholders)
+*   `&RIDINGENTITY&` - The Riding Entity Message, if in use. (See `Advanced Settings :: Entity Riding Messages` for sub-placeholders)
 
 ___
 
 ### Main Menu Message Placeholders
 These placeholders translate to the `&MAINMENU&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
-You can configure using these Sub-Placeholders within the `Status Messages->Main Menu Message` setting.
+You can configure using these Sub-Placeholders within the `Status Messages::Main Menu Message` setting.
 
 *   `&IGN&` - Your Minecraft username
 *   `&MODS&` - The number of mods currently in your mods folder
@@ -148,7 +148,7 @@ ___
 ### SinglePlayer Placeholders
 These placeholders translate to the `&SERVER&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
-You can configure these Sub-Placeholders within the `Status Messages->SinglePlayer Message` setting.
+You can configure these Sub-Placeholders within the `Status Messages::SinglePlayer Message` setting.
 
 *   `&IGN&` - Your Minecraft Username
 *   `&TIME&` - The Current World Time
@@ -159,7 +159,7 @@ ___
 ### Gui Placeholders
 These placeholders translate to the `&SCREEN&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
-You can configure these Sub-Placeholders throughout the `Advanced Settings->Gui Messages` area of the Config Gui.
+You can configure these Sub-Placeholders throughout the `Advanced Settings::Gui Messages` area of the Config Gui.
 
 *   `&SCREEN&` - The Current Gui Screen Name (Supports `Container` and `Screen` type interfaces)
 *   `&CLASS&` - The Current Gui Class (Ex: `net.minecraft.xxx`)
@@ -169,7 +169,7 @@ ___
 ### Item Placeholders
 These placeholders translate to the `&TILEENTITY&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
-You can configure these Sub-Placeholders throughout the `Advanced Settings->Item Messages` area of the Config Gui.
+You can configure these Sub-Placeholders throughout the `Advanced Settings::Item Messages` area of the Config Gui.
 
 *   `&MAIN&` - The Current Item your Main Hand is Holding
 *   `&OFFHAND&` - The Current Item your Off Hand is Holding
@@ -183,7 +183,7 @@ ___
 ## Entity Placeholders
 These placeholders translate to the `&TARGETENTITY&`, `&ATTACKINGENTITY&`, and `&RIDINGENTITY&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
 
-You can configure these Sub-Placeholders throughout the `Advanced Settings->Entity [Target,Attacking,Riding] Messages` area of the Config Gui.
+You can configure these Sub-Placeholders throughout the `Advanced Settings::Entity [Target,Attacking,Riding] Messages` area of the Config Gui.
 
 *   `&ENTITY&` - The Entity Name
 
@@ -226,7 +226,7 @@ I can be contacted via the following methods:
 
 *   [Email](mailto:cstack2011@yahoo.com)
 *   [CurseForge](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
-*   [Discord -> ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP)
+*   [Discord :: ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP)
 
 Additionally, codebase documentation for this mod is available [here](https://cdagaming.gitlab.io/craftpresence-documentation/) with further guides available on [the wiki](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Home)
 
