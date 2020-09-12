@@ -27,3 +27,5 @@ classes/
 .flooignore
 
 logs/
+
+.vscode/
