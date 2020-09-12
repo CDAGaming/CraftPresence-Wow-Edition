@@ -55,9 +55,10 @@ ___
 *   `/cp view dimensions` - Displays all Dimension Names available for use, requires `Show Current Dimension` to be enabled
 *   `/cp view biomes` - Displays all Biome Names available for use, requires `Show Current Biome` to be enabled
 *   `/cp view servers` - Displays all Server Addresses available for use, requires `Show Game State` to be enabled
-*   `/cp view guis` - Displays all Gui Names available for use, if Per-Gui is Enabled
-*   `/cp view items` - Displays all Item Names available for use, if Per-Item is Enabled
-*   `/cp (help | ?)` - Help Command to display the Above Commands and These Explanations
+*   `/cp view guis` - Displays all Gui Names available for use, if Per-Gui is enabled
+*   `/cp view items` - Displays all Item Names available for use, if Per-Item is enabled
+*   `/cp view entities` - Displays all Entity Names available for use, if Per-Entity is enabled
+*   `/cp (help | ?)` - Help Command to display the above commands and these explanations
 
 ## KeyBinds
 CraftPresence currently contains the following KeyBinds:
@@ -94,7 +95,7 @@ As these placeholders are global, they can be set in any of the RPC fields withi
 *   `&SCREEN&` - The Gui Screen Message, if in use. (See `Advanced Settings->Gui Messages` for sub-placeholders)
 *   `&TILEENTITY&` - The TileEntity (Block/Item) Message, if in use. (See `Advanced Settings->Item Messages` for sub-placeholders)
 *   `&TARGETENTITY&` - The Targeted Entity Message, if in use. (See `Advanced Settings -> Entity Target Messages` for sub-placeholders)
-*   `&ATTACKINGENTITY&` - The Attacking Entity Message, if in use. (See `Advanced Settings -> Entity Atacking Messages` for sub-placeholders)
+*   `&ATTACKINGENTITY&` - The Attacking Entity Message, if in use. (See `Advanced Settings -> Entity Attacking Messages` for sub-placeholders)
 *   `&RIDINGENTITY&` - The Riding Entity Message, if in use. (See `Advanced Settings -> Entity Riding Messages` for sub-placeholders)
 
 ___
@@ -110,11 +111,19 @@ You can configure using these Sub-Placeholders within the `Status Messages->Main
 ___
 
 ### Biome Placeholders
+These placeholders translate to the `&BIOME&` Global Placeholder in `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders throughout the `Biome Messages` area of the Config Gui.
+
 *   `&BIOME&` - The Current Biome Name
 
 ___
 
 ### Dimension Placeholders
+These placeholders translate to the `&DIMENSION&` Global Placeholder in `Presence Settings` menu within the Config Gui.
+
+You can configure these Sub-Placeholders throughout the `Dimension Messages` area of the Config Gui.
+
 *   `&DIMENSION&` - The Current Dimension Name
 *   `&ICON&` - The Default Dimension Icon Name
 
