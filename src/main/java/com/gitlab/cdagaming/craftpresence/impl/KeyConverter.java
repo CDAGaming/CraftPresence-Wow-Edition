@@ -39,7 +39,13 @@ public class KeyConverter {
      * Note: Characters that are Unavailable in lwjgl3 are listed as lwjgl3's Unknown Keycode (-1)
      * Format: LWJGL2 Key;[LWJGL3 Key, Universal Key Name]
      */
-    public static final HashMap<Integer, Pair<Integer, String>> toGlfw = new HashMap<Integer, Pair<Integer, String>>() {{
+    public static final HashMap<Integer, Pair<Integer, String>> toGlfw = new HashMap<Integer, Pair<Integer, String>>() {
+        /**
+        * The serialized unique version identifier
+        */
+        private static final long serialVersionUID = 1L;
+
+        {
         put(0, new Pair<>(-1, "None"));
         put(1, new Pair<>(256, "Escape"));
         put(2, new Pair<>(49, "1"));
@@ -176,7 +182,13 @@ public class KeyConverter {
      * Note: Characters that are Unavailable in lwjgl2 are listed as lwjgl2's Unknown Keycode (0)
      * Format: LWJGL3 Key;[LWJGL2 Key, Universal Key Name]
      */
-    public static final HashMap<Integer, Pair<Integer, String>> fromGlfw = new HashMap<Integer, Pair<Integer, String>>() {{
+    public static final HashMap<Integer, Pair<Integer, String>> fromGlfw = new HashMap<Integer, Pair<Integer, String>>() {
+        /**
+        * The serialized unique version identifier
+        */
+        private static final long serialVersionUID = 1L;
+
+        {
         put(-1, new Pair<>(0, "None"));
         put(32, new Pair<>(57, "Space"));
         put(39, new Pair<>(40, "Apostrophe"));

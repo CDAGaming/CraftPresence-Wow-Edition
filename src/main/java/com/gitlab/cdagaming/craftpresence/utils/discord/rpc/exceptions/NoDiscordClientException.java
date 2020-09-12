@@ -37,6 +37,11 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordBuil
  * @author John Grosh (john.a.grosh@gmail.com)
  */
 public class NoDiscordClientException extends Exception {
+    /**
+     * The serialized unique version identifier
+     */
+    private static final long serialVersionUID = 1L;
+
     public NoDiscordClientException() {
         super("No Valid Discord Client was found for this Instance");
     }
