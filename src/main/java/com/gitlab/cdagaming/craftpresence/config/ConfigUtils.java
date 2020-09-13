@@ -603,7 +603,7 @@ public class ConfigUtils {
     /**
      * Aligns and Updates the {@link ConfigUtils#properties} with the data from {@link ConfigUtils#configDataMappings}
      * 
-     * @param shouldDataSync Whether a Config Read should be triggered again, mostly used if new properties found on an existing config
+     * @param shouldDataSync Whether a Config Read should be triggered again
      */
     public void updateConfig(final boolean shouldDataSync) {
         // Track if in need of a data re-sync
