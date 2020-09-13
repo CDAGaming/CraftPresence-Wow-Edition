@@ -271,7 +271,7 @@ public class MainGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (CraftPresence.CONFIG.hasChanged) {
-                                CraftPresence.CONFIG.updateConfig();
+                                CraftPresence.CONFIG.updateConfig(false);
                                 CraftPresence.CONFIG.read(false, "UTF-8");
                                 if (CraftPresence.CONFIG.hasClientPropertiesChanged) {
                                     CommandUtils.rebootRPC();

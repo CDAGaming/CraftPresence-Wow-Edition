@@ -313,7 +313,7 @@ public class ConfigUtils {
         } finally {
             if (initialized) {
                 if (isConfigNew) {
-                    updateConfig();
+                    updateConfig(false);
                 }
                 read(false, "UTF-8");
             }
@@ -340,6 +340,7 @@ public class ConfigUtils {
             ex.printStackTrace();
         } finally {
             int currentIndex = 0;
+            boolean shouldRefreshLater = false;
             final List<String> propertyList = Lists.newArrayList(properties.stringPropertyNames());
 
             // Format: ListOfMigrationTargets:MigrationId
@@ -450,6 +451,14 @@ public class ConfigUtils {
                     // If a Config Variable is not present in the Properties File, queue a Config Update
                     if (!skipLogging) {
                         ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.prop.empty", propertyName));
+                        for (String globalTrigger : globalTriggers) {
+                            if (propertyName.toLowerCase().contains(globalTrigger.toLowerCase())) {
+                                // If a Global Variable is empty, we'll need to re-trigger a read event after updateConfig
+                                // in order to ensure migration data and validity is performed
+                                shouldRefreshLater = true;
+                                break;
+                            }
+                        }
                     }
                 }
                 currentIndex++;
@@ -465,7 +474,7 @@ public class ConfigUtils {
             }
 
             // Execute a Config Update, to ensure validity
-            updateConfig();
+            updateConfig(shouldRefreshLater);
         }
 
         try {
@@ -593,10 +602,12 @@ public class ConfigUtils {
 
     /**
      * Aligns and Updates the {@link ConfigUtils#properties} with the data from {@link ConfigUtils#configDataMappings}
+     * 
+     * @param shouldDataSync Whether a Config Read should be triggered again, mostly used if new properties found on an existing config
      */
-    public void updateConfig() {
+    public void updateConfig(final boolean shouldDataSync) {
         // Track if in need of a data re-sync
-        boolean needsDataSync = false;
+        boolean needsDataSync = shouldDataSync;
 
         // Sync Edits from Read Events that may have occurred
         syncMappings();

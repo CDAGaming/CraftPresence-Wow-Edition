@@ -196,7 +196,7 @@ public class ModUtils {
             LOG.debugInfo(TRANSLATOR.translate("craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
             inputData = StringUtils.getResourceAsStream(ModUtils.class, charDataPath);
 
-            // Write Data from Local charData to Directory if Update is needed
+            // Write data from local charData to directory if an update is needed
             if (inputData != null) {
                 try {
                     outputData = new FileOutputStream(charDataDir);
