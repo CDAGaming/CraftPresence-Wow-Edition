@@ -1,10 +1,8 @@
 # CraftPresence Changes
 
-## v1.7.0 -> Beta 6 (09/13/2020)
+## v1.7.0 (09/15/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0+Beta.6)_
-
-_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0+Beta.5...release%2Fv1.7.0+Beta.6)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0)_
 
 ### Changes
 
