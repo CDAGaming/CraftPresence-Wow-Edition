@@ -32,6 +32,7 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonContr
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -123,12 +124,16 @@ public class SelectorGui extends ExtendedScreen {
                             }
                     )
             );
+
+            final RenderType scrollListType = configOption.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset : RenderType.None;
+
             scrollList = addList(
                     new ScrollableListControl(
                             mc,
                             width, height,
-                            32, height - 45, 18,
-                            itemList, originalValue
+                            32, height - 45, scrollListType == RenderType.DiscordAsset ? 45 : 18,
+                            itemList, originalValue,
+                            scrollListType
                     )
             );
             searchBox = addControl(

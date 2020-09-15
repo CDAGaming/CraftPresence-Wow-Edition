@@ -26,8 +26,13 @@ package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.util.ResourceLocation;
 
+import java.net.URL;
 import java.util.List;
+
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 
 /**
  * Gui Widget for a Scrollable List
@@ -44,6 +49,11 @@ public class ScrollableListControl extends GuiSlot {
      * The Items available to select within the List Gui
      */
     public List<String> itemList;
+    
+    /**
+     * The Rendering Type to render the slots in
+     */
+    public RenderType renderType;
 
     /**
      * Initialization Event for this Control, assigning defined arguments
@@ -58,9 +68,27 @@ public class ScrollableListControl extends GuiSlot {
      * @param currentValue The current value, if any, to select upon initialization of the Gui
      */
     public ScrollableListControl(Minecraft mc, int width, int height, int topIn, int bottomIn, int slotHeightIn, List<String> itemList, String currentValue) {
+        this(mc, width, height, topIn, bottomIn, slotHeightIn, itemList, currentValue, RenderType.None);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param mc           The Minecraft Instance for this Control
+     * @param width        The Width of this Control
+     * @param height       The Height of this Control
+     * @param topIn        How far from the top of the Screen the List should render at
+     * @param bottomIn     How far from the bottom of the Screen the List should render at
+     * @param slotHeightIn The height of each slot in the list
+     * @param itemList     The List of items to allocate for the slots in the Gui
+     * @param currentValue The current value, if any, to select upon initialization of the Gui
+     * @param renderType   The Rendering type for this Scroll List
+     */
+    public ScrollableListControl(Minecraft mc, int width, int height, int topIn, int bottomIn, int slotHeightIn, List<String> itemList, String currentValue, RenderType renderType) {
         super(mc, width, height, topIn, bottomIn, slotHeightIn);
         this.itemList = itemList;
         this.currentValue = currentValue;
+        this.renderType = renderType;
     }
 
     /**
@@ -118,7 +146,15 @@ public class ScrollableListControl extends GuiSlot {
      */
     @Override
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
-        mc.fontRenderer.drawStringWithShadow(getSelectedItem(slotIndex), xPos, yPos, 0xFFFFFF);
+        int xOffset = xPos;
+        if (renderType == RenderType.DiscordAsset) {
+            final URL assetUrl = DiscordAssetUtils.getAssetUrl(getSelectedItem(slotIndex));
+            final ResourceLocation texture = CraftPresence.GUIS.getTexture(getSelectedItem(slotIndex), assetUrl);
+            CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
+            // Note: 35 Added to xOffset to accommodate for Image Size
+            xOffset += 35;
+        }
+        mc.fontRenderer.drawStringWithShadow(getSelectedItem(slotIndex), xOffset, yPos + ((heightIn / 2) - (mc.fontRenderer.FONT_HEIGHT / 2)), 0xFFFFFF);
     }
 
     /**
@@ -133,5 +169,12 @@ public class ScrollableListControl extends GuiSlot {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    /**
+     * The Rendering Type for this Scroll List
+     */
+    public enum RenderType {
+        DiscordAsset, None
     }
 }

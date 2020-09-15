@@ -1,39 +1,16 @@
 # CraftPresence Changes
 
-## v1.7.0 (09/15/2020)
+## v1.7.1 -> Beta 1 (??/??/2020)
 
 _A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0)_
 
 ### Changes
 
-*   Amended Releases to now always have `-%ModLoaderName%` as the suffix (Previously, Forge releases didn't have this suffix)
-*   Added the `&yPosition&` Sub-Placeholder to the `&coords&` Placeholder
-*   Added a Fallback `&PACK&` Placeholder Message in `Status Messages` (Will only be used if no pack gets found, and is not empty)
-*   Hardcore Mode now supported in `&difficulty&` Sub-Placeholder
-*   Added Comments to the Config File, showing a title and more clearly showing version and modified metadata
-*   Added a Conversion Layer for converting KeyCodes between LWJGL2 (1.12.2 and below) and LWJGL3 (1.13 and above)
-*   Added a Conversion Layer for converting Language IDs between Pack Format 1-2 (1.10.2 and below) and Pack Format 3 and Up (1.11 and above)
-*   Hovering over the Config Gui Main Screen Title, now shows a tooltip with the current mod version
-*   Separated `IS_DEV` into two options, to allow for toggling excessive logging and stacktrace outputs (Verbose Logging)
-*   Added Support for the `minecraftinstance.json` file in Twitch/Curse Packs (IE Custom Twitch/Curse Packs now work)
-*   Added Support for Live Editing (Clicking the `Sync Config` button will sync any changes made to `craftpresence.properties` to the game without needing to restart minecraft)
-*   Changed `&GUI&` to `&SCREEN&` for clarification; removed old `&SCREEN&` placeholder
-*   Removed the placeholder limits in Image Keys in `Presence Settings`
-*   Localization, Documentation, and Backend Updates
+*   The Slot Guis have been remastered to have accurate padding, scaling, and Support for Image Previews (In the case of Discord Assets)
 
 ### Fixes
 
-*   Fixed filename issues that corresponded with increased user-base confusion
-*   Fixed instances of the Mod Id not being the same across mod loaders
-*   Fixed an issue causing KeyCode Properties to be able to skip verification due to improper identification
-*   Fixed an issue where the `Config Gui` KeyBind was not properly identified as an Integer
-*   Fixed an issue causing some LWJGL 3 KeyCodes to not be recognized
-*   Fixed an issue causing `Format Exceptions` on some translations
-*   Fixed an issue causing the `Load State` to be infinitely displayed, if you modified your config whilst in-game
-*   Fixed an issue that caused some pack icon keys to be parsed incorrectly
-*   Fixed an issue causing properties with an empty default value to become falsely interpreted to be reset if still empty
-*   Fixed an issue with some translations being missing
-*   Fixed an issue where some disabled options were reporting the wrong options to be enabled
+*   TBD
 
 ___
 

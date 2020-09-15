@@ -31,13 +31,15 @@ import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 /**
  * Utilities related to locating and Parsing available Discord Assets
- * <p>Uses the current Client ID in use to locate Discord Icons and related Assets
+ * <p>
+ * Uses the current Client ID in use to locate Discord Icons and related Assets
  *
  * @author CDAGaming
  */
@@ -71,7 +73,8 @@ public class DiscordAssetUtils {
      */
     public static List<String> ICON_LIST = Lists.newArrayList();
     /**
-     * Mapping storing the Icon Keys and Asset Data attached to the Current Client ID
+     * Mapping storing the Icon Keys and Asset Data attached to the Current Client
+     * ID
      */
     private static Map<String, DiscordAsset> ASSET_LIST = Maps.newHashMap();
 
@@ -82,18 +85,21 @@ public class DiscordAssetUtils {
      * @return {@code true} if the Icon Key is present and able to be used
      */
     public static boolean contains(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? ""
+                : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return ASSET_LIST.containsKey(formattedKey);
     }
 
     /**
-     * Retrieves the Specified {@link DiscordAsset} data from an Icon Key, if present
+     * Retrieves the Specified {@link DiscordAsset} data from an Icon Key, if
+     * present
      *
      * @param key The Specified Icon Key to gain info for
      * @return The {@link DiscordAsset} data for this Icon Key
      */
     public static DiscordAsset get(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? ""
+                : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey) : null;
     }
 
@@ -104,7 +110,8 @@ public class DiscordAssetUtils {
      * @return The Parsed Icon Key from the {@link DiscordAsset} data
      */
     public static String getKey(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? ""
+                : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getName() : "";
     }
 
@@ -115,7 +122,8 @@ public class DiscordAssetUtils {
      * @return The Parsed Icon ID from the {@link DiscordAsset} data
      */
     public static String getID(final String key) {
-        final String formattedKey = StringUtils.isNullOrEmpty(key) ? "" : StringUtils.formatAsIcon(key.replace(" ", "_"));
+        final String formattedKey = StringUtils.isNullOrEmpty(key) ? ""
+                : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getId() : "";
     }
 
@@ -165,6 +173,20 @@ public class DiscordAssetUtils {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.config.invalid.icon.empty"));
             ex.printStackTrace();
             return "";
+        }
+    }
+
+    public static URL getAssetUrl(final String iconName) {
+        String urlString = !StringUtils.isNullOrEmpty(iconName) ? "https://cdn.discordapp.com/app-assets/"
+                + CraftPresence.CONFIG.clientID + "/" + getID(iconName) + ".png" : "";
+
+        try {
+            return new URL(urlString);
+        } catch (Exception ex) {
+            if (ModUtils.IS_VERBOSE) {
+                ex.printStackTrace();
+            }
+            return null;
         }
     }
 

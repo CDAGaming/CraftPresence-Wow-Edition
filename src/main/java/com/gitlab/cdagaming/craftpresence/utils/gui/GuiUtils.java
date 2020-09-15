@@ -24,12 +24,16 @@
 
 package com.gitlab.cdagaming.craftpresence.utils.gui;
 
+import com.google.common.collect.Maps;
+
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
@@ -40,13 +44,19 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
+import java.net.URL;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 /**
  * Gui Utilities used to Parse Gui Data and handle related RPC Events, and rendering tasks
@@ -58,6 +68,11 @@ public class GuiUtils {
      * A List of the detected Gui Screen Classes
      */
     private final List<Class<?>> GUI_CLASSES = Lists.newArrayList();
+    /**
+     * Cached Images retrieved from URL Texture Retrieval
+     * <p>Format: textureName;<textureUrl, dynamicTextureData, textureData>
+     */
+    private Map<String, Tuple<URL, DynamicTexture, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
      * If the Config GUI should open
      */
@@ -257,6 +272,55 @@ public class GuiUtils {
      */
     public void openScreen(final GuiScreen targetScreen) {
         CraftPresence.instance.addScheduledTask(() -> CraftPresence.instance.displayGuiScreen(targetScreen));
+    }
+
+    /**
+     * Retrieves a Texture from an external URL, and caching it for further usage
+     * 
+     * @param textureName The texture name to Identify this as
+     * @param url The url to retrieve the texture
+     * @return The Resulting Texture Data
+     */
+    public ResourceLocation getTexture(final String textureName, final URL url) {
+        if (!cachedImages.containsKey(textureName)) {
+            ModUtils.LOG.info("Adding Data to Sync Map => " + textureName + " => " + url.toString());
+            final Thread dataThread = new Thread("Texture-Read") {
+                @Override
+                public void run() {
+                    ResourceLocation cachedTexture = new ResourceLocation("");
+    
+                    if (!cachedImages.containsKey(textureName) && url != null) {
+                        cachedImages.put(textureName, new Tuple<>(url, null, cachedTexture));
+                    }
+            
+                    DynamicTexture dynTexture = cachedImages.get(textureName).getSecond();
+                    if (dynTexture == null) {
+                        BufferedImage bufferedImage = null;
+                        try {
+                            bufferedImage = ImageIO.read(UrlUtils.getURLStream(url));
+                        } catch (Exception ex) {
+                            if (ModUtils.IS_VERBOSE) {
+                                ex.printStackTrace();
+                            }
+                        } finally {
+                            if (bufferedImage != null) {
+                                dynTexture = new DynamicTexture(bufferedImage);
+                            }
+                        }
+                    }
+            
+                    if (textureName != null && url != null && dynTexture != null) {
+                        cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
+                    } else {
+                        cachedTexture = new ResourceLocation("");
+                    }
+                    cachedImages.put(textureName, new Tuple<>(url, dynTexture, cachedTexture));
+                }
+            };
+    
+            dataThread.run();
+        }
+        return cachedImages.get(textureName).getThird();
     }
 
     /**
