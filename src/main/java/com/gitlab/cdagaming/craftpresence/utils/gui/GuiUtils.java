@@ -540,7 +540,7 @@ public class GuiUtils {
                         backGroundTexture = new ResourceLocation(backgroundColor);
                     }
 
-                    drawTextureRect(300, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
+                    drawTextureRect(zLevel, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
                 }
 
                 if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
