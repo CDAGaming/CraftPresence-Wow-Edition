@@ -1,8 +1,10 @@
 # CraftPresence Changes
 
-## v1.7.1 -> Beta 1 (??/??/2020)
+## v1.7.1 -> Beta 1 (09/16/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.6.8...release%2Fv1.7.0)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0...release%2Fv1.7.1+Beta.1)_
+
+_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0...release%2Fv1.7.1+Beta.1)_
 
 ### Changes
 
@@ -10,7 +12,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 
 ### Fixes
 
-*   Fixes Issues pertaining to Shading certain elements in the Gui
+*   Fixed issues pertaining to Shading certain elements in the Gui
 
 ___
 
