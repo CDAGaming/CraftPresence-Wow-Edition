@@ -50,30 +50,27 @@ public class ImageUtils {
      * The Blocking Queue for URL Requests
      * <p>Format: textureName;textureUrl
      */
-    private static BlockingQueue<Pair<String, URL>> urlRequests = Queues.newLinkedBlockingQueue();
+    private static final BlockingQueue<Pair<String, URL>> urlRequests = Queues.newLinkedBlockingQueue();
     /**
      * Cached Images retrieved from URL Texture Retrieval
-     * <p>Format: textureName;<textureUrl, imageData, textureData>
+     * <p>Format: textureName;[textureUrl, imageData, textureData]
      */
-    private static Map<String, Tuple<URL, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
+    private static final Map<String, Tuple<URL, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
      * The thread used for Url Image Events to take place within
      */
-    private static Thread urlQueue;
+    private static final Thread urlQueue;
 
     static {
-        urlQueue = new Thread("URL Queue") {
+        urlQueue = new Thread("Url Queue") {
             @Override
             public void run() {
-
-                Pair<String, URL> request = null;
                 try {
-                    while (true) {
-                        request = urlRequests.take();
+                    while (urlRequests.size() > 0) {
+                        final Pair<String, URL> request = urlRequests.take();
 
-                        DynamicTexture dynTexture = null;
-                        if (dynTexture == null) {
-                            BufferedImage bufferedImage = null;
+                        BufferedImage bufferedImage = cachedImages.get(request.getFirst()).getSecond();
+                        if (bufferedImage == null) {
                             try {
                                 bufferedImage = ImageIO.read(UrlUtils.getURLStream(request.getSecond()));
                                 cachedImages.get(request.getFirst()).setSecond(bufferedImage);
