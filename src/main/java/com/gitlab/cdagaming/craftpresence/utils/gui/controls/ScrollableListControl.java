@@ -24,16 +24,15 @@
 
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
+import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.util.ResourceLocation;
 
 import java.net.URL;
 import java.util.List;
-
-import com.gitlab.cdagaming.craftpresence.CraftPresence;
-import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 
 /**
  * Gui Widget for a Scrollable List
@@ -50,7 +49,7 @@ public class ScrollableListControl extends GuiSlot {
      * The Items available to select within the List Gui
      */
     public List<String> itemList;
-    
+
     /**
      * The Rendering Type to render the slots in
      */

@@ -602,7 +602,7 @@ public class ConfigUtils {
 
     /**
      * Aligns and Updates the {@link ConfigUtils#properties} with the data from {@link ConfigUtils#configDataMappings}
-     * 
+     *
      * @param shouldDataSync Whether a Config Read should be triggered again
      */
     public void updateConfig(final boolean shouldDataSync) {
