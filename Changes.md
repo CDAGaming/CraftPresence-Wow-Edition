@@ -10,7 +10,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 
 ### Fixes
 
-*   TBD
+*   Fixes Issues pertaining to Shading certain elements in the Gui
 
 ___
 

@@ -629,7 +629,7 @@ public class GuiUtils {
                     loc = new ResourceLocation(bgCode);
                 }
 
-                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, loc);
+                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, true, loc);
             }
         }
     }
@@ -659,15 +659,31 @@ public class GuiUtils {
     /**
      * Draws a Textured Rectangle, following the defined arguments
      *
-     * @param zLevel      The Z Level Position of the Object
-     * @param xPos        The Starting X Position of the Object
-     * @param yPos        The Starting Y Position of the Object
-     * @param width       The Width of the Object
-     * @param height      The Height of the Object
-     * @param tint        The Tinting Level of the Object
-     * @param texLocation The game texture to render the object as
+     * @param zLevel       The Z Level Position of the Object
+     * @param xPos         The Starting X Position of the Object
+     * @param yPos         The Starting Y Position of the Object
+     * @param width        The Width of the Object
+     * @param height       The Height of the Object
+     * @param tint         The Tinting Level of the Object
+     * @param texLocation  The game texture to render the object as
      */
     public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, ResourceLocation texLocation) {
+        drawTextureRect(zLevel, xPos, yPos, width, height, tint, false, texLocation);
+    }
+
+    /**
+     * Draws a Textured Rectangle, following the defined arguments
+     *
+     * @param zLevel       The Z Level Position of the Object
+     * @param xPos         The Starting X Position of the Object
+     * @param yPos         The Starting Y Position of the Object
+     * @param width        The Width of the Object
+     * @param height       The Height of the Object
+     * @param tint         The Tinting Level of the Object
+     * @param shouldBeDark Whether the Texture should display in a darker format
+     * @param texLocation  The game texture to render the object as
+     */
+    public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, boolean shouldBeDark, ResourceLocation texLocation) {
         if (texLocation != null) {
             CraftPresence.instance.getTextureManager().bindTexture(texLocation);
         }
@@ -678,13 +694,15 @@ public class GuiUtils {
 
         final float divider = 32.0F;
 
+        final Tuple<Integer, Integer, Integer> rgbData = new Tuple<>(shouldBeDark ? 64 : 255, shouldBeDark ? 64 : 255, shouldBeDark ? 64 : 255);
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(xPos, yPos + height, zLevel).tex(0.0D, (height / divider + tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(xPos + width, yPos + height, zLevel).tex((width / divider), (height / divider + tint)).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(xPos + width, yPos, zLevel).tex((width / divider), tint).color(64, 64, 64, 255).endVertex();
-        bufferbuilder.pos(xPos, yPos, zLevel).tex(0.0D, tint).color(64, 64, 64, 255).endVertex();
+        bufferbuilder.pos(xPos, yPos + height, zLevel).tex(0.0D, (height / divider + tint)).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
+        bufferbuilder.pos(xPos + width, yPos + height, zLevel).tex((width / divider), (height / divider + tint)).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
+        bufferbuilder.pos(xPos + width, yPos, zLevel).tex((width / divider), tint).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
+        bufferbuilder.pos(xPos, yPos, zLevel).tex(0.0D, tint).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
         tessellator.draw();
     }
 
