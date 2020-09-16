@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 
 /**
@@ -149,7 +150,7 @@ public class ScrollableListControl extends GuiSlot {
         int xOffset = xPos;
         if (renderType == RenderType.DiscordAsset) {
             final URL assetUrl = DiscordAssetUtils.getAssetUrl(getSelectedItem(slotIndex));
-            final ResourceLocation texture = CraftPresence.GUIS.getTexture(getSelectedItem(slotIndex), assetUrl);
+            final ResourceLocation texture = ImageUtils.getTextureFromURL(getSelectedItem(slotIndex), assetUrl);
             CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
             // Note: 35 Added to xOffset to accommodate for Image Size
             xOffset += 35;

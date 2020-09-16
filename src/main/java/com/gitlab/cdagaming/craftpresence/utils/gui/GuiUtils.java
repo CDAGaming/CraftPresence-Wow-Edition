@@ -275,55 +275,6 @@ public class GuiUtils {
     }
 
     /**
-     * Retrieves a Texture from an external URL, and caching it for further usage
-     * 
-     * @param textureName The texture name to Identify this as
-     * @param url The url to retrieve the texture
-     * @return The Resulting Texture Data
-     */
-    public ResourceLocation getTexture(final String textureName, final URL url) {
-        if (!cachedImages.containsKey(textureName)) {
-            ModUtils.LOG.info("Adding Data to Sync Map => " + textureName + " => " + url.toString());
-            final Thread dataThread = new Thread("Texture-Read") {
-                @Override
-                public void run() {
-                    ResourceLocation cachedTexture = new ResourceLocation("");
-    
-                    if (!cachedImages.containsKey(textureName) && url != null) {
-                        cachedImages.put(textureName, new Tuple<>(url, null, cachedTexture));
-                    }
-            
-                    DynamicTexture dynTexture = cachedImages.get(textureName).getSecond();
-                    if (dynTexture == null) {
-                        BufferedImage bufferedImage = null;
-                        try {
-                            bufferedImage = ImageIO.read(UrlUtils.getURLStream(url));
-                        } catch (Exception ex) {
-                            if (ModUtils.IS_VERBOSE) {
-                                ex.printStackTrace();
-                            }
-                        } finally {
-                            if (bufferedImage != null) {
-                                dynTexture = new DynamicTexture(bufferedImage);
-                            }
-                        }
-                    }
-            
-                    if (textureName != null && url != null && dynTexture != null) {
-                        cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
-                    } else {
-                        cachedTexture = new ResourceLocation("");
-                    }
-                    cachedImages.put(textureName, new Tuple<>(url, dynTexture, cachedTexture));
-                }
-            };
-    
-            dataThread.run();
-        }
-        return cachedImages.get(textureName).getThird();
-    }
-
-    /**
      * Synchronizes Data related to this module, if needed
      */
     private void updateGUIData() {
