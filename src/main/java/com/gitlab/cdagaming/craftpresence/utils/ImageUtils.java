@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 - 2020 CDAGaming (cstack2011@yahoo.com)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import java.awt.image.BufferedImage;
@@ -17,10 +41,26 @@ import com.google.common.collect.Queues;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 
+/**
+ * Image Utilities used to Parse External Image Data and rendering tasks
+ *
+ * @author CDAGaming, wagyourtail
+ */
 public class ImageUtils {
 
+    /**
+     * The Blocking Queue for URL Requests
+     * <p>Format: textureName;textureUrl
+     */
     private static BlockingQueue<Pair<String, URL>> urlRequests = Queues.newLinkedBlockingQueue();
+    /**
+     * Cached Images retrieved from URL Texture Retrieval
+     * <p>Format: textureName;<textureUrl, imageData, textureData>
+     */
     private static Map<String, Tuple<URL, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
+    /**
+     * The thread used for Url Image Events to take place within
+     */
     private static Thread urlQueue;
     
     /**
@@ -36,16 +76,20 @@ public class ImageUtils {
                 cachedImages.put(textureName,  new Tuple<>(url, null, null));
                 try {
                     urlRequests.put(new Pair<>(textureName, url));
-                } catch (InterruptedException e) {}
+                } catch (Exception ex) {
+                    if (ModUtils.IS_VERBOSE) {
+                        ex.printStackTrace();
+                    }
+                }
             }
             
             if (cachedImages.get(textureName).getThird() == null) {
-                BufferedImage bufferedImage = cachedImages.get(textureName).getSecond();
+                final BufferedImage bufferedImage = cachedImages.get(textureName).getSecond();
                 if (bufferedImage == null) {
                     return new ResourceLocation("");
                 } else if (textureName != null && url != null) {
-                    DynamicTexture dynTexture = new DynamicTexture(bufferedImage);
-                    ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
+                    final DynamicTexture dynTexture = new DynamicTexture(bufferedImage);
+                    final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
                     cachedImages.get(textureName).setThird(cachedTexture);
                 }
             }
@@ -76,8 +120,10 @@ public class ImageUtils {
                             }
                         }
                     }
-                    } catch (InterruptedException e) {
-                    e.printStackTrace();
+                } catch (Exception ex) {
+                    if (ModUtils.IS_VERBOSE) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         };

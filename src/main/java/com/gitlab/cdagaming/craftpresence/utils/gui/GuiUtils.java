@@ -24,8 +24,6 @@
 
 package com.gitlab.cdagaming.craftpresence.utils.gui;
 
-import com.google.common.collect.Maps;
-
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
@@ -33,7 +31,6 @@ import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
@@ -44,19 +41,13 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
-import java.net.URL;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
 
 /**
  * Gui Utilities used to Parse Gui Data and handle related RPC Events, and rendering tasks
@@ -68,11 +59,6 @@ public class GuiUtils {
      * A List of the detected Gui Screen Classes
      */
     private final List<Class<?>> GUI_CLASSES = Lists.newArrayList();
-    /**
-     * Cached Images retrieved from URL Texture Retrieval
-     * <p>Format: textureName;<textureUrl, dynamicTextureData, textureData>
-     */
-    private Map<String, Tuple<URL, DynamicTexture, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
      * If the Config GUI should open
      */
