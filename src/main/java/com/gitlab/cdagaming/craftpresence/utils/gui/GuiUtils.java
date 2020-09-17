@@ -477,7 +477,7 @@ public class GuiUtils {
                         } else {
                             backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
                         }
-    
+
                         if (backgroundColor.contains(":")) {
                             String[] splitInput = backgroundColor.split(":", 2);
                             backGroundTexture = new ResourceLocation(splitInput[0], splitInput[1]);
@@ -590,7 +590,7 @@ public class GuiUtils {
                     if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
                         bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
                     }
-    
+
                     if (bgCode.contains(":")) {
                         String[] splitInput = bgCode.split(":", 2);
                         loc = new ResourceLocation(splitInput[0], splitInput[1]);

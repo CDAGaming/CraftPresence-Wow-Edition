@@ -79,10 +79,10 @@ public class ImageUtils {
                             try {
                                 InputStream streamData = null;
                                 switch (cachedImages.get(request.getFirst()).getFirst().getFirst()) {
-                                    case File: 
+                                    case File:
                                         streamData = new FileInputStream((File) cachedImages.get(request.getFirst()).getFirst().getSecond());
                                         break;
-                                    case Url: 
+                                    case Url:
                                         streamData = UrlUtils.getURLStream((URL) cachedImages.get(request.getFirst()).getFirst().getSecond());
                                         break;
                                     default:
@@ -214,6 +214,9 @@ public class ImageUtils {
         }
     }
 
+    /**
+     * A Mapping storing the available Input Types for External Image Parsing
+     */
     public enum InputType {
         File, Url, Unknown
     }

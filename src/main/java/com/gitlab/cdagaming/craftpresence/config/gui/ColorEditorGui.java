@@ -416,7 +416,7 @@ public class ColorEditorGui extends ExtendedScreen {
                     if (mcTextureText.getText().contains(CraftPresence.CONFIG.splitCharacter)) {
                         mcTextureText.setText(mcTextureText.getText().replace(CraftPresence.CONFIG.splitCharacter, ":"));
                     }
-    
+
                     if (mcTextureText.getText().contains(":") && !mcTextureText.getText().startsWith(":")) {
                         currentNormalMCTexturePath = mcTextureText.getText();
                     } else if (mcTextureText.getText().startsWith(":")) {

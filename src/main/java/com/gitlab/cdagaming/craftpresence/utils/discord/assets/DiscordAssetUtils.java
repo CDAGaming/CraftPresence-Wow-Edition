@@ -179,13 +179,13 @@ public class DiscordAssetUtils {
      * Attempts to retrieve the Asset Url from the specified icon key, if present
      * <p>
      * Url Format: https://cdn.discordapp.com/app-assets/<clientId>/<id>.png
-     * 
+     *
      * @param key The Specified Key to gain info for
      * @return The asset url in String form (As in Url form, it'll only work if it is a valid Client Id)
      */
     public static String getAssetUrl(final String key) {
         return !StringUtils.isNullOrEmpty(key) ? "https://cdn.discordapp.com/app-assets/"
-        + CraftPresence.CONFIG.clientID + "/" + getId(key) + ".png" : "";
+                + CraftPresence.CONFIG.clientID + "/" + getId(key) + ".png" : "";
     }
 
     /**
