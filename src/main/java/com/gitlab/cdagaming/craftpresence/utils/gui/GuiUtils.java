@@ -30,6 +30,7 @@ import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
+import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -460,21 +461,29 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                     drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                 } else {
-                    if (CraftPresence.CONFIG.tooltipBGColor.contains(CraftPresence.CONFIG.splitCharacter)) {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
-                    } else if (CraftPresence.CONFIG.tooltipBGColor.contains(":") && !CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
-                    } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor.substring(1);
-                    } else {
-                        backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
-                    }
+                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor) && CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("http");
 
-                    if (backgroundColor.contains(":")) {
-                        String[] splitInput = backgroundColor.split(":", 2);
-                        backGroundTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                    if (!usingExternalTexture) {
+                        if (CraftPresence.CONFIG.tooltipBGColor.contains(CraftPresence.CONFIG.splitCharacter)) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                        } else if (CraftPresence.CONFIG.tooltipBGColor.contains(":") && !CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                        } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor.substring(1);
+                        } else {
+                            backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
+                        }
+    
+                        if (backgroundColor.contains(":")) {
+                            String[] splitInput = backgroundColor.split(":", 2);
+                            backGroundTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                        } else {
+                            backGroundTexture = new ResourceLocation(backgroundColor);
+                        }
                     } else {
-                        backGroundTexture = new ResourceLocation(backgroundColor);
+                        final String[] urlBits = CraftPresence.CONFIG.tooltipBGColor.trim().split("/");
+                        final String textureName = urlBits[urlBits.length - 1].trim();
+                        backGroundTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBGColor.trim());
                     }
 
                     drawTextureRect(zLevel, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
@@ -498,21 +507,29 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
                     drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
                 } else {
-                    if (CraftPresence.CONFIG.tooltipBorderColor.contains(CraftPresence.CONFIG.splitCharacter)) {
-                        borderColor = CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
-                    } else if (CraftPresence.CONFIG.tooltipBorderColor.contains(":") && !CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
-                        borderColor = CraftPresence.CONFIG.tooltipBorderColor;
-                    } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
-                        borderColor = CraftPresence.CONFIG.tooltipBorderColor.substring(1);
-                    } else {
-                        borderColor = "minecraft:" + CraftPresence.CONFIG.tooltipBorderColor;
-                    }
+                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBorderColor) && CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("http");
 
-                    if (borderColor.contains(":")) {
-                        String[] splitInput = borderColor.split(":", 2);
-                        borderTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                    if (!usingExternalTexture) {
+                        if (CraftPresence.CONFIG.tooltipBorderColor.contains(CraftPresence.CONFIG.splitCharacter)) {
+                            borderColor = CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                        } else if (CraftPresence.CONFIG.tooltipBorderColor.contains(":") && !CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
+                            borderColor = CraftPresence.CONFIG.tooltipBorderColor;
+                        } else if (CraftPresence.CONFIG.tooltipBorderColor.startsWith(":")) {
+                            borderColor = CraftPresence.CONFIG.tooltipBorderColor.substring(1);
+                        } else {
+                            borderColor = "minecraft:" + CraftPresence.CONFIG.tooltipBorderColor;
+                        }
+
+                        if (borderColor.contains(":")) {
+                            String[] splitInput = borderColor.split(":", 2);
+                            borderTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                        } else {
+                            borderTexture = new ResourceLocation(borderColor);
+                        }
                     } else {
-                        borderTexture = new ResourceLocation(borderColor);
+                        final String[] urlBits = CraftPresence.CONFIG.tooltipBorderColor.trim().split("/");
+                        final String textureName = urlBits[urlBits.length - 1].trim();
+                        borderTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBorderColor.trim());
                     }
 
                     drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, borderTexture); // Top Border
@@ -554,16 +571,24 @@ public class GuiUtils {
 
             if (StringUtils.isValidColorCode(bgCode)) {
                 drawGradientRect(300, 0, 0, width, height, bgCode, bgCode);
-            } else if (!StringUtils.isNullOrEmpty(bgCode)) {
-                if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
-                    bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
-                }
+            } else {
+                final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(bgCode) && bgCode.toLowerCase().startsWith("http");
 
-                if (bgCode.contains(":")) {
-                    String[] splitInput = bgCode.split(":", 2);
-                    loc = new ResourceLocation(splitInput[0], splitInput[1]);
+                if (!usingExternalTexture) {
+                    if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
+                        bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                    }
+    
+                    if (bgCode.contains(":")) {
+                        String[] splitInput = bgCode.split(":", 2);
+                        loc = new ResourceLocation(splitInput[0], splitInput[1]);
+                    } else {
+                        loc = new ResourceLocation(bgCode);
+                    }
                 } else {
-                    loc = new ResourceLocation(bgCode);
+                    final String[] urlBits = bgCode.trim().split("/");
+                    final String textureName = urlBits[urlBits.length - 1].trim();
+                    loc = ImageUtils.getTextureFromUrl(textureName, bgCode.trim());
                 }
 
                 drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, true, loc);
