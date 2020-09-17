@@ -115,12 +115,12 @@ public class DiscordAssetUtils {
     }
 
     /**
-     * Retrieves the Parsed Icon ID from the specified key, if present
+     * Retrieves the Parsed Icon Id from the specified key, if present
      *
      * @param key The Specified Key to gain info for
      * @return The Parsed Icon ID from the {@link DiscordAsset} data
      */
-    public static String getID(final String key) {
+    public static String getId(final String key) {
         final String formattedKey = StringUtils.isNullOrEmpty(key) ? ""
                 : StringUtils.formatAsIcon(key.replace(" ", "_"));
         return contains(formattedKey) ? ASSET_LIST.get(formattedKey).getId() : "";
@@ -183,7 +183,7 @@ public class DiscordAssetUtils {
      */
     public static String getAssetUrl(final String key) {
         return !StringUtils.isNullOrEmpty(key) ? "https://cdn.discordapp.com/app-assets/"
-        + CraftPresence.CONFIG.clientID + "/" + getID(key) + ".png" : "";
+        + CraftPresence.CONFIG.clientID + "/" + getId(key) + ".png" : "";
     }
 
     /**

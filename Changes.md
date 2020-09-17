@@ -9,11 +9,11 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 ### Changes
 
 *   The Slot Guis have been remastered to have accurate padding, scaling, and Support for Image Previews (In the case of Discord Assets)
-*   Added Support for External Textures throughout the Config Gui
+*   Added Support for external texture usage throughout the Config Gui
 
 ### Fixes
 
-*   Fixed issues pertaining to Shading certain elements in the Gui
+*   Fixed issues pertaining to shading certain elements in the Gui
 
 ___
 
@@ -24,10 +24,10 @@ ___
 v1.7.0 of CraftPresence is the next major feature and technical update after v1.6.0.
 It is celebrating the recent milestones of over **five million downloads** as well as hitting the number one spot in Twitch Integration.
 
-This release holds numerous improvements over the Configuration System, as well as adding long-standing user requests and planned features that I've queued over time since v1.4.0s release,
+This release holds numerous improvements over the existing configuration system, as well as adding numerous long-standing user requests and planned features that have been queued over time since v1.4.0s release,
 that are outlined in the changelog above.
 
-While no Config Migrations are necessary at this time for updating to v1.7.0, this can change as time goes on in the v1.7.x Pipeline, and will be noted here as such when and if these types of changes occur.
+While no config migrations are necessary at this time for updating to v1.7.0, this can change as time goes on in the v1.7.x Pipeline, and will be noted here as such when and if these types of changes occur.
 
 More features will additionally be planned and added for later in the v1.7.x Pipeline as further releases arrive.
 
@@ -51,7 +51,7 @@ Some 1.14.x, 1.15.x, and 1.16.x Ports of this Mod Require the [FabricMC ModLoade
 
 Some Versions of this Mod are for Minecraft Snapshots or Experimental Versions, and as such, caution should be noted.
 
-Any Snapshot Build Released will be marked as BETA to match its Snapshot Status depending on Tests done before release and issues found.
+Any Snapshot Build released will be marked as BETA to match its Snapshot Status depending on tests done before release and issues found.
 
 Snapshot Builds, depending on circumstances, may also contain changes for a future version of the mod, and will be noted as so if this is the case.
 
@@ -59,9 +59,9 @@ Snapshot Builds, depending on circumstances, may also contain changes for a futu
 
 Ports of this Mod for Minecraft Versions 1.5.2 and Lower are on very limited support.
 
-Please Keep in Mind the Following:
+Please keep in mind the following:
 
 *   There is NO Support for Server RPC Displays from MC 1.2.5 and Below, due to modding limitations.
-*   Bugs that relate with or are caused by issues in the Vanilla Codebase, are unlikely able to be fixed due to MC's limitations
+*   Bugs that relate with or are caused by issues in the Vanilla Codebase, are unlikely able to be fixed due to Minecraft's limitations
 
 See the Mod Description // README for More Info
