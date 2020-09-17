@@ -563,6 +563,7 @@ public class GuiUtils {
      * @param height The height to render the background to
      */
     public void drawBackground(final double width, final double height) {
+        double widthDivider = 32.0D, heightDivider = 32.0D;
         if (CraftPresence.instance.world != null) {
             drawGradientRect(300, 0, 0, width, height, "-1072689136", "-804253680");
         } else {
@@ -589,9 +590,12 @@ public class GuiUtils {
                     final String[] urlBits = bgCode.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
                     loc = ImageUtils.getTextureFromUrl(textureName, bgCode.trim());
+
+                    widthDivider = width;
+                    heightDivider = height;
                 }
 
-                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, true, loc);
+                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, widthDivider, heightDivider, true, loc);
             }
         }
     }
@@ -630,7 +634,7 @@ public class GuiUtils {
      * @param texLocation The game texture to render the object as
      */
     public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, ResourceLocation texLocation) {
-        drawTextureRect(zLevel, xPos, yPos, width, height, tint, false, texLocation);
+        drawTextureRect(zLevel, xPos, yPos, width, height, tint, 32.0D, 32.0D, false, texLocation);
     }
 
     /**
@@ -645,7 +649,7 @@ public class GuiUtils {
      * @param shouldBeDark Whether the Texture should display in a darker format
      * @param texLocation  The game texture to render the object as
      */
-    public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, boolean shouldBeDark, ResourceLocation texLocation) {
+    public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, double widthDivider, double heightDivider, boolean shouldBeDark, ResourceLocation texLocation) {
         if (texLocation != null) {
             CraftPresence.instance.getTextureManager().bindTexture(texLocation);
         }
@@ -654,16 +658,14 @@ public class GuiUtils {
         GL11.glDisable(GL11.GL_FOG);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-        final float divider = 32.0F;
-
         final Tuple<Integer, Integer, Integer> rgbData = new Tuple<>(shouldBeDark ? 64 : 255, shouldBeDark ? 64 : 255, shouldBeDark ? 64 : 255);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-        bufferbuilder.pos(xPos, yPos + height, zLevel).tex(0.0D, (height / divider + tint)).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
-        bufferbuilder.pos(xPos + width, yPos + height, zLevel).tex((width / divider), (height / divider + tint)).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
-        bufferbuilder.pos(xPos + width, yPos, zLevel).tex((width / divider), tint).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
+        bufferbuilder.pos(xPos, yPos + height, zLevel).tex(0.0D, (height / heightDivider + tint)).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
+        bufferbuilder.pos(xPos + width, yPos + height, zLevel).tex((width / widthDivider), (height / heightDivider + tint)).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
+        bufferbuilder.pos(xPos + width, yPos, zLevel).tex((width / widthDivider), tint).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
         bufferbuilder.pos(xPos, yPos, zLevel).tex(0.0D, tint).color(rgbData.getFirst(), rgbData.getSecond(), rgbData.getSecond(), 255).endVertex();
         tessellator.draw();
     }

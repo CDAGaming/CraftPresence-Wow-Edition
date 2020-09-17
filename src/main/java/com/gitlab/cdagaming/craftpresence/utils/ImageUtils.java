@@ -71,7 +71,7 @@ public class ImageUtils {
             @Override
             public void run() {
                 try {
-                    while (urlRequests.size() > 0) {
+                    while (!CraftPresence.closing) {
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
 
                         BufferedImage bufferedImage = cachedImages.get(request.getFirst()).getSecond();
@@ -79,12 +79,19 @@ public class ImageUtils {
                             try {
                                 InputStream streamData = null;
                                 switch (cachedImages.get(request.getFirst()).getFirst().getFirst()) {
-                                    case File: streamData = new FileInputStream((File) cachedImages.get(request.getFirst()).getFirst().getSecond());
-                                    case Url: streamData = UrlUtils.getURLStream((URL) cachedImages.get(request.getFirst()).getFirst().getSecond());
-                                    default: break;
+                                    case File: 
+                                        streamData = new FileInputStream((File) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                        break;
+                                    case Url: 
+                                        streamData = UrlUtils.getURLStream((URL) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                        break;
+                                    default:
                                 }
-                                bufferedImage = ImageIO.read(streamData);
-                                cachedImages.get(request.getFirst()).setSecond(bufferedImage);
+
+                                if (streamData != null) {
+                                    bufferedImage = ImageIO.read(streamData);
+                                    cachedImages.get(request.getFirst()).setSecond(bufferedImage);
+                                }
                             } catch (Exception ex) {
                                 if (ModUtils.IS_VERBOSE) {
                                     ex.printStackTrace();

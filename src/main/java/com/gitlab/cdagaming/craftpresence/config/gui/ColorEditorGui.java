@@ -149,15 +149,24 @@ public class ColorEditorGui extends ExtendedScreen {
                                 }
 
                                 if (pageNumber == 1) {
-                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.tooltipBGColor :
+                                                    CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.tooltipBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                        CraftPresence.CONFIG.tooltipBGColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                                currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.tooltipBorderColor :
+                                                    CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.tooltipBorderColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalMCTexturePath.equals(CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                        CraftPresence.CONFIG.tooltipBorderColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                                currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.guiBGColor :
+                                                    CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.guiBGColor = currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                        CraftPresence.CONFIG.guiBGColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                                currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
                                     }
                                 }
                             }
@@ -252,6 +261,13 @@ public class ColorEditorGui extends ExtendedScreen {
 
             if (currentMCTexture == null) {
                 currentMCTexture = new ResourceLocation("");
+            }
+
+            // Ensure the Texture is refreshed consistently
+            if (usingExternalTexture) {
+                final String[] urlBits = currentConvertedMCTexturePath.split("/");
+                final String textureName = urlBits[urlBits.length - 1].trim();
+                currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath);
             }
             CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, currentMCTexture);
         }
