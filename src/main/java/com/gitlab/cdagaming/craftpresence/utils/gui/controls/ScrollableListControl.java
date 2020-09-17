@@ -153,7 +153,7 @@ public class ScrollableListControl extends GuiSlot {
             // Note: 35 Added to xOffset to accommodate for Image Size
             xOffset += 35;
         }
-        mc.fontRenderer.drawStringWithShadow(getSelectedItem(slotIndex), xOffset, yPos + ((heightIn / 2) - (mc.fontRenderer.FONT_HEIGHT / 2)), 0xFFFFFF);
+        mc.fontRenderer.drawStringWithShadow(getSelectedItem(slotIndex), xOffset, yPos + ((heightIn / 2f) - (mc.fontRenderer.FONT_HEIGHT / 2f)), 0xFFFFFF);
     }
 
     /**

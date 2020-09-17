@@ -47,6 +47,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,6 +56,7 @@ import java.util.List;
  *
  * @author CDAGaming
  */
+@SuppressWarnings("DuplicatedCode")
 public class GuiUtils {
     /**
      * A List of the detected Gui Screen Classes
@@ -461,7 +463,8 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                     drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                 } else {
-                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor) && CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("http");
+                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor) &&
+                            (CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("http") || CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("file://"));
 
                     if (!usingExternalTexture) {
                         if (CraftPresence.CONFIG.tooltipBGColor.contains(CraftPresence.CONFIG.splitCharacter)) {
@@ -481,9 +484,10 @@ public class GuiUtils {
                             backGroundTexture = new ResourceLocation(backgroundColor);
                         }
                     } else {
-                        final String[] urlBits = CraftPresence.CONFIG.tooltipBGColor.trim().split("/");
+                        final String formattedConvertedName = CraftPresence.CONFIG.tooltipBGColor.replaceFirst("file://", "");
+                        final String[] urlBits = formattedConvertedName.trim().split("/");
                         final String textureName = urlBits[urlBits.length - 1].trim();
-                        backGroundTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBGColor.trim());
+                        backGroundTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                     }
 
                     drawTextureRect(zLevel, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
@@ -507,7 +511,8 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
                     drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
                 } else {
-                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBorderColor) && CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("http");
+                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBorderColor) &&
+                            (CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("http") || CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("file://"));
 
                     if (!usingExternalTexture) {
                         if (CraftPresence.CONFIG.tooltipBorderColor.contains(CraftPresence.CONFIG.splitCharacter)) {
@@ -527,9 +532,10 @@ public class GuiUtils {
                             borderTexture = new ResourceLocation(borderColor);
                         }
                     } else {
-                        final String[] urlBits = CraftPresence.CONFIG.tooltipBorderColor.trim().split("/");
+                        final String formattedConvertedName = CraftPresence.CONFIG.tooltipBorderColor.replaceFirst("file://", "");
+                        final String[] urlBits = formattedConvertedName.trim().split("/");
                         final String textureName = urlBits[urlBits.length - 1].trim();
-                        borderTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBorderColor.trim());
+                        borderTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                     }
 
                     drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, borderTexture); // Top Border
@@ -573,7 +579,8 @@ public class GuiUtils {
             if (StringUtils.isValidColorCode(bgCode)) {
                 drawGradientRect(300, 0, 0, width, height, bgCode, bgCode);
             } else {
-                final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(bgCode) && bgCode.toLowerCase().startsWith("http");
+                final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(bgCode) &&
+                        (bgCode.toLowerCase().startsWith("http") || bgCode.toLowerCase().startsWith("file://"));
 
                 if (!usingExternalTexture) {
                     if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
@@ -587,9 +594,10 @@ public class GuiUtils {
                         loc = new ResourceLocation(bgCode);
                     }
                 } else {
-                    final String[] urlBits = bgCode.trim().split("/");
+                    final String formattedConvertedName = bgCode.replaceFirst("file://", "");
+                    final String[] urlBits = formattedConvertedName.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
-                    loc = ImageUtils.getTextureFromUrl(textureName, bgCode.trim());
+                    loc = ImageUtils.getTextureFromUrl(textureName, bgCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
 
                     widthDivider = width;
                     heightDivider = height;

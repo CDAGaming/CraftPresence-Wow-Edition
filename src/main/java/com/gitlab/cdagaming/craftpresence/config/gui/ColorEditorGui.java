@@ -38,7 +38,9 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.io.File;
 
+@SuppressWarnings("DuplicatedCode")
 public class ColorEditorGui extends ExtendedScreen {
     private final String configValueName;
     private int pageNumber;
@@ -263,11 +265,12 @@ public class ColorEditorGui extends ExtendedScreen {
                 currentMCTexture = new ResourceLocation("");
             }
 
-            // Ensure the Texture is refreshed consistently
+            // Ensure the Texture is refreshed consistently, if an external texture
             if (usingExternalTexture) {
-                final String[] urlBits = currentConvertedMCTexturePath.split("/");
+                final String formattedConvertedName = currentConvertedMCTexturePath.replaceFirst("file://", "");
+                final String[] urlBits = formattedConvertedName.split("/");
                 final String textureName = urlBits[urlBits.length - 1].trim();
-                currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath);
+                currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
             }
             CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, currentMCTexture);
         }
@@ -399,7 +402,8 @@ public class ColorEditorGui extends ExtendedScreen {
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
             if (!StringUtils.isNullOrEmpty(mcTextureText.getText())) {
-                usingExternalTexture = !StringUtils.isNullOrEmpty(mcTextureText.getText()) && mcTextureText.getText().toLowerCase().startsWith("http");
+                usingExternalTexture = !StringUtils.isNullOrEmpty(mcTextureText.getText()) &&
+                        (mcTextureText.getText().toLowerCase().startsWith("http") || mcTextureText.getText().toLowerCase().startsWith("file://"));
 
                 // Only Perform Texture Conversion Steps if not an external Url
                 // As an external Url should be parsed as-is in most use cases
@@ -434,9 +438,10 @@ public class ColorEditorGui extends ExtendedScreen {
                         currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
                     }
                 } else {
-                    final String[] urlBits = currentConvertedMCTexturePath.split("/");
+                    final String formattedConvertedName = currentConvertedMCTexturePath.replaceFirst("file://", "");
+                    final String[] urlBits = formattedConvertedName.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
-                    currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath);
+                    currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                 }
             } else {
                 currentMCTexture = new ResourceLocation("");

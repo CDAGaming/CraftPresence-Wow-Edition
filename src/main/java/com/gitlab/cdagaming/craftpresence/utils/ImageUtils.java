@@ -167,6 +167,23 @@ public class ImageUtils {
      * Retrieves a Texture from an external Url, and caching it for further usage
      *
      * @param textureName The texture name to Identify this as
+     * @param url         The url to retrieve the texture
+     * @return The Resulting Texture Data
+     */
+    public static ResourceLocation getTextureFromUrl(final String textureName, final Object url) {
+        if (url instanceof File) {
+            return getTextureFromUrl(textureName, (File) url);
+        } else if (url instanceof URL) {
+            return getTextureFromUrl(textureName, (URL) url);
+        } else {
+            return getTextureFromUrl(textureName, url.toString());
+        }
+    }
+
+    /**
+     * Retrieves a Texture from an external Url, and caching it for further usage
+     *
+     * @param textureName The texture name to Identify this as
      * @param stream      Streaming Data containing data to read later
      * @return The Resulting Texture Data
      */
