@@ -79,8 +79,11 @@ public class ImageUtils {
                             try {
                                 InputStream streamData = null;
                                 switch (cachedImages.get(request.getFirst()).getFirst().getFirst()) {
-                                    case File:
+                                    case FileData:
                                         streamData = new FileInputStream((File) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                        break;
+                                    case FileStream:
+                                        streamData = new FileInputStream(cachedImages.get(request.getFirst()).getFirst().getSecond().toString());
                                         break;
                                     case Url:
                                         streamData = UrlUtils.getURLStream((URL) cachedImages.get(request.getFirst()).getFirst().getSecond());
@@ -154,7 +157,7 @@ public class ImageUtils {
      */
     public static ResourceLocation getTextureFromUrl(final String textureName, final File url) {
         try {
-            return getTextureFromUrl(textureName, new Pair<>(InputType.File, url));
+            return getTextureFromUrl(textureName, new Pair<>(InputType.FileData, url));
         } catch (Exception ex) {
             if (ModUtils.IS_VERBOSE) {
                 ex.printStackTrace();
@@ -176,7 +179,11 @@ public class ImageUtils {
         } else if (url instanceof URL) {
             return getTextureFromUrl(textureName, (URL) url);
         } else {
-            return getTextureFromUrl(textureName, url.toString());
+            if (url.toString().toLowerCase().startsWith("http")) {
+                return getTextureFromUrl(textureName, url.toString());
+            } else {
+                return getTextureFromUrl(textureName, new Pair<>(InputType.FileStream, url.toString()));
+            }
         }
     }
 
@@ -216,8 +223,13 @@ public class ImageUtils {
 
     /**
      * A Mapping storing the available Input Types for External Image Parsing
+     *
+     * <p>FileData: Parsing with Raw File Data (IE a File Object Type)
+     * <p>FileStream: Parsing with the String representation of a file path, to be put into a filestream
+     * <p>Url: Parsing with a direct or string representation of a Url, to be converted to an InputStream
+     * <p>Unknown: Unknown property, experience can be iffy using this
      */
     public enum InputType {
-        File, Url, Unknown
+        FileData, FileStream, Url, Unknown
     }
 }
