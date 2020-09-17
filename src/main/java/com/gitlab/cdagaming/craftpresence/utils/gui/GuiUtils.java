@@ -465,6 +465,7 @@ public class GuiUtils {
                 } else {
                     final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor) &&
                             (CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("http") || CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("file://"));
+                    double widthDivider = 32.0D, heightDivider = 32.0D;
 
                     if (!usingExternalTexture) {
                         if (CraftPresence.CONFIG.tooltipBGColor.contains(CraftPresence.CONFIG.splitCharacter)) {
@@ -488,9 +489,12 @@ public class GuiUtils {
                         final String[] urlBits = formattedConvertedName.trim().split("/");
                         final String textureName = urlBits[urlBits.length - 1].trim();
                         backGroundTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+
+                        widthDivider = tooltipTextWidth + 8;
+                        heightDivider = tooltipHeight + 8;
                     }
 
-                    drawTextureRect(zLevel, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, backGroundTexture);
+                    drawTextureRect(zLevel, tooltipX - 4, tooltipY - 4, tooltipTextWidth + 8, tooltipHeight + 8, 0, widthDivider, heightDivider, false, backGroundTexture);
                 }
 
                 if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
@@ -538,10 +542,10 @@ public class GuiUtils {
                         borderTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                     }
 
-                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, borderTexture); // Top Border
-                    drawTextureRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipTextWidth + 5, 1, 0, borderTexture); // Bottom Border
-                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, 1, tooltipHeight + 5, 0, borderTexture); // Left Border
-                    drawTextureRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3, 1, tooltipHeight + 6, 0, borderTexture); // Right Border
+                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipTextWidth + 5, 1, 0, (usingExternalTexture ? tooltipTextWidth + 5 : 32.0D), (usingExternalTexture ? 1 : 32.0D), false, borderTexture); // Top Border
+                    drawTextureRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipTextWidth + 5, 1, 0, (usingExternalTexture ? tooltipTextWidth + 5 : 32.0D), (usingExternalTexture ? 1 : 32.0D), false, borderTexture); // Bottom Border
+                    drawTextureRect(zLevel, tooltipX - 3, tooltipY - 3, 1, tooltipHeight + 5, 0, (usingExternalTexture ? 1 : 32.0D), (usingExternalTexture ? tooltipHeight + 5 : 32.0D), false, borderTexture); // Left Border
+                    drawTextureRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3, 1, tooltipHeight + 6, 0, (usingExternalTexture ? 1 : 32.0D), (usingExternalTexture ? tooltipHeight + 6 : 32.0D), false, borderTexture); // Right Border
                 }
             }
 

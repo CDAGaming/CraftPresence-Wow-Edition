@@ -266,13 +266,18 @@ public class ColorEditorGui extends ExtendedScreen {
             }
 
             // Ensure the Texture is refreshed consistently, if an external texture
+            double widthDivider = 32.0D, heightDivider = 32.0D;
+
             if (usingExternalTexture) {
                 final String formattedConvertedName = currentConvertedMCTexturePath.replaceFirst("file://", "");
                 final String[] urlBits = formattedConvertedName.split("/");
                 final String textureName = urlBits[urlBits.length - 1].trim();
                 currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+
+                widthDivider = 44;
+                heightDivider = 43;
             }
-            CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, currentMCTexture);
+            CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, widthDivider, heightDivider, false, currentMCTexture);
         }
 
         previousPageButton.enabled = pageNumber != 0;
