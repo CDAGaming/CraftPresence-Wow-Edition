@@ -399,9 +399,11 @@ public class ColorEditorGui extends ExtendedScreen {
                     } else {
                         currentNormalMCTexturePath = "minecraft:" + mcTextureText.getText();
                     }
+                } else {
+                    currentNormalMCTexturePath = mcTextureText.getText();
                 }
 
-                currentConvertedMCTexturePath = (!usingExternalTexture ? currentNormalMCTexturePath : mcTextureText.getText()).trim();
+                currentConvertedMCTexturePath = currentNormalMCTexturePath.trim();
 
                 // Only when we are not using an external texture, would we then need
                 // to convert the path to Minecraft's normal format.
