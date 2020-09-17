@@ -177,6 +177,8 @@ public class DiscordAssetUtils {
 
     /**
      * Attempts to retrieve the Asset Url from the specified icon key, if present
+     * <p>
+     * Url Format: https://cdn.discordapp.com/app-assets/<clientId>/<id>.png
      * 
      * @param key The Specified Key to gain info for
      * @return The asset url in String form (As in Url form, it'll only work if it is a valid Client Id)
@@ -188,6 +190,8 @@ public class DiscordAssetUtils {
 
     /**
      * Retrieves and Synchronizes the List of Available Discord Assets from the Client ID
+     * <p>
+     * Url Format: https://discord.com/api/oauth2/applications/<clientId>/assets
      */
     public static void loadAssets() {
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.load", CraftPresence.CONFIG.clientID));
