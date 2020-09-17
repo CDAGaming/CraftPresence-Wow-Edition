@@ -31,7 +31,6 @@ import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -176,18 +175,15 @@ public class DiscordAssetUtils {
         }
     }
 
-    public static URL getAssetUrl(final String iconName) {
-        String urlString = !StringUtils.isNullOrEmpty(iconName) ? "https://cdn.discordapp.com/app-assets/"
-                + CraftPresence.CONFIG.clientID + "/" + getID(iconName) + ".png" : "";
-
-        try {
-            return new URL(urlString);
-        } catch (Exception ex) {
-            if (ModUtils.IS_VERBOSE) {
-                ex.printStackTrace();
-            }
-            return null;
-        }
+    /**
+     * Attempts to retrieve the Asset Url from the specified icon key, if present
+     * 
+     * @param key The Specified Key to gain info for
+     * @return The asset url in String form (As in Url form, it'll only work if it is a valid Client Id)
+     */
+    public static String getAssetUrl(final String key) {
+        return !StringUtils.isNullOrEmpty(key) ? "https://cdn.discordapp.com/app-assets/"
+        + CraftPresence.CONFIG.clientID + "/" + getID(key) + ".png" : "";
     }
 
     /**

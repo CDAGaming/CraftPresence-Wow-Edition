@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
@@ -50,6 +51,7 @@ public class ColorEditorGui extends ExtendedScreen {
     // Page 2 Variables
     private String currentNormalMCTexturePath, currentConvertedMCTexturePath, startingMCTexturePath;
     private ExtendedTextControl mcTextureText;
+    private boolean usingExternalTexture = false;
     private ResourceLocation currentMCTexture;
 
     ColorEditorGui(GuiScreen parentScreen, String configValueName) {
@@ -356,7 +358,7 @@ public class ColorEditorGui extends ExtendedScreen {
                 currentNormalHexValue = hexText.getText();
                 currentConvertedHexValue = Integer.toString(localValue);
             } else {
-                boolean isRedDifferent = alphaText.getSliderValue(false) != currentRed,
+                final boolean isRedDifferent = alphaText.getSliderValue(false) != currentRed,
                         isGreenDifferent = greenText.getSliderValue(false) != currentGreen,
                         isBlueDifferent = blueText.getSliderValue(false) != currentBlue,
                         isAlphaDifferent = alphaText.getSliderValue(false) != currentAlpha;
@@ -381,24 +383,42 @@ public class ColorEditorGui extends ExtendedScreen {
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
             if (!StringUtils.isNullOrEmpty(mcTextureText.getText())) {
-                if (mcTextureText.getText().contains(CraftPresence.CONFIG.splitCharacter)) {
-                    mcTextureText.setText(mcTextureText.getText().replace(CraftPresence.CONFIG.splitCharacter, ":"));
+                usingExternalTexture = !StringUtils.isNullOrEmpty(mcTextureText.getText()) && mcTextureText.getText().toLowerCase().startsWith("http");
+
+                // Only Perform Texture Conversion Steps if not an external Url
+                // As an external Url should be parsed as-is in most use cases
+                if (!usingExternalTexture) {
+                    if (mcTextureText.getText().contains(CraftPresence.CONFIG.splitCharacter)) {
+                        mcTextureText.setText(mcTextureText.getText().replace(CraftPresence.CONFIG.splitCharacter, ":"));
+                    }
+    
+                    if (mcTextureText.getText().contains(":") && !mcTextureText.getText().startsWith(":")) {
+                        currentNormalMCTexturePath = mcTextureText.getText();
+                    } else if (mcTextureText.getText().startsWith(":")) {
+                        currentNormalMCTexturePath = mcTextureText.getText().substring(1);
+                    } else {
+                        currentNormalMCTexturePath = "minecraft:" + mcTextureText.getText();
+                    }
                 }
 
-                if (mcTextureText.getText().contains(":") && !mcTextureText.getText().startsWith(":")) {
-                    currentNormalMCTexturePath = mcTextureText.getText();
-                } else if (mcTextureText.getText().startsWith(":")) {
-                    currentNormalMCTexturePath = mcTextureText.getText().substring(1);
-                } else {
-                    currentNormalMCTexturePath = "minecraft:" + mcTextureText.getText();
-                }
-                currentConvertedMCTexturePath = currentNormalMCTexturePath;
+                currentConvertedMCTexturePath = (!usingExternalTexture ? currentNormalMCTexturePath : mcTextureText.getText()).trim();
 
-                if (currentConvertedMCTexturePath.contains(":")) {
-                    String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
-                    currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                // Only when we are not using an external texture, would we then need
+                // to convert the path to Minecraft's normal format.
+                //
+                // If we are using an external texture however, then we'd just make
+                // a texture name from the last part of the url and retrieve the external texture
+                if (!usingExternalTexture) {
+                    if (currentConvertedMCTexturePath.contains(":")) {
+                        final String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
+                        currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                    } else {
+                        currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
+                    }
                 } else {
-                    currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
+                    final String[] urlBits = currentConvertedMCTexturePath.split("/");
+                    final String textureName = urlBits[urlBits.length - 1].trim();
+                    currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath);
                 }
             } else {
                 currentMCTexture = new ResourceLocation("");

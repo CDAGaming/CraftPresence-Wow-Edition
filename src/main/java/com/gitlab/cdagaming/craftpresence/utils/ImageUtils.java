@@ -48,12 +48,14 @@ public class ImageUtils {
 
     /**
      * The Blocking Queue for URL Requests
-     * <p>Format: textureName;textureUrl
+     * <p>
+     * Format: textureName;textureUrl
      */
     private static final BlockingQueue<Pair<String, URL>> urlRequests = Queues.newLinkedBlockingQueue();
     /**
      * Cached Images retrieved from URL Texture Retrieval
-     * <p>Format: textureName;[textureUrl, imageData, textureData]
+     * <p>
+     * Format: textureName;[textureUrl, imageData, textureData]
      */
     private static final Map<String, Tuple<URL, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
@@ -92,13 +94,31 @@ public class ImageUtils {
     }
 
     /**
-     * Retrieves a Texture from an external URL, and caching it for further usage
+     * Retrieves a Texture from an external Url, and caching it for further usage
      *
      * @param textureName The texture name to Identify this as
      * @param url         The url to retrieve the texture
      * @return The Resulting Texture Data
      */
-    public static ResourceLocation getTextureFromURL(final String textureName, final URL url) {
+    public static ResourceLocation getTextureFromUrl(final String textureName, final String url) {
+        try {
+            return getTextureFromUrl(textureName, new URL(url));
+        } catch (Exception ex) {
+            if (ModUtils.IS_VERBOSE) {
+                ex.printStackTrace();
+            }
+            return new ResourceLocation("");
+        }
+    }
+
+    /**
+     * Retrieves a Texture from an external Url, and caching it for further usage
+     *
+     * @param textureName The texture name to Identify this as
+     * @param url         The url to retrieve the texture
+     * @return The Resulting Texture Data
+     */
+    public static ResourceLocation getTextureFromUrl(final String textureName, final URL url) {
         synchronized (cachedImages) {
             if (!cachedImages.containsKey(textureName)) {
                 cachedImages.put(textureName, new Tuple<>(url, null, null));
