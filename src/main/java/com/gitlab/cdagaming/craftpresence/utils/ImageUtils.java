@@ -35,6 +35,9 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -49,15 +52,15 @@ public class ImageUtils {
     /**
      * The Blocking Queue for URL Requests
      * <p>
-     * Format: textureName;textureUrl
+     * Format: textureName;textureData
      */
-    private static final BlockingQueue<Pair<String, URL>> urlRequests = Queues.newLinkedBlockingQueue();
+    private static final BlockingQueue<Pair<String, Pair<InputType, Object>>> urlRequests = Queues.newLinkedBlockingQueue();
     /**
      * Cached Images retrieved from URL Texture Retrieval
      * <p>
-     * Format: textureName;[textureUrl, imageData, textureData]
+     * Format: textureName;[[textureInputType, textureObj], imageData, textureData]
      */
-    private static final Map<String, Tuple<URL, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
+    private static final Map<String, Tuple<Pair<InputType, Object>, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
      * The thread used for Url Image Events to take place within
      */
@@ -69,12 +72,18 @@ public class ImageUtils {
             public void run() {
                 try {
                     while (urlRequests.size() > 0) {
-                        final Pair<String, URL> request = urlRequests.take();
+                        final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
 
                         BufferedImage bufferedImage = cachedImages.get(request.getFirst()).getSecond();
                         if (bufferedImage == null) {
                             try {
-                                bufferedImage = ImageIO.read(UrlUtils.getURLStream(request.getSecond()));
+                                InputStream streamData = null;
+                                switch (cachedImages.get(request.getFirst()).getFirst().getFirst()) {
+                                    case File: streamData = new FileInputStream((File) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                    case Url: streamData = UrlUtils.getURLStream((URL) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                    default: break;
+                                }
+                                bufferedImage = ImageIO.read(streamData);
                                 cachedImages.get(request.getFirst()).setSecond(bufferedImage);
                             } catch (Exception ex) {
                                 if (ModUtils.IS_VERBOSE) {
@@ -119,11 +128,47 @@ public class ImageUtils {
      * @return The Resulting Texture Data
      */
     public static ResourceLocation getTextureFromUrl(final String textureName, final URL url) {
+        try {
+            return getTextureFromUrl(textureName, new Pair<>(InputType.Url, url));
+        } catch (Exception ex) {
+            if (ModUtils.IS_VERBOSE) {
+                ex.printStackTrace();
+            }
+            return new ResourceLocation("");
+        }
+    }
+
+    /**
+     * Retrieves a Texture from an external Url, and caching it for further usage
+     *
+     * @param textureName The texture name to Identify this as
+     * @param url         The url to retrieve the texture
+     * @return The Resulting Texture Data
+     */
+    public static ResourceLocation getTextureFromUrl(final String textureName, final File url) {
+        try {
+            return getTextureFromUrl(textureName, new Pair<>(InputType.File, url));
+        } catch (Exception ex) {
+            if (ModUtils.IS_VERBOSE) {
+                ex.printStackTrace();
+            }
+            return new ResourceLocation("");
+        }
+    }
+
+    /**
+     * Retrieves a Texture from an external Url, and caching it for further usage
+     *
+     * @param textureName The texture name to Identify this as
+     * @param stream      Streaming Data containing data to read later
+     * @return The Resulting Texture Data
+     */
+    public static ResourceLocation getTextureFromUrl(final String textureName, final Pair<InputType, Object> stream) {
         synchronized (cachedImages) {
             if (!cachedImages.containsKey(textureName)) {
-                cachedImages.put(textureName, new Tuple<>(url, null, null));
+                cachedImages.put(textureName, new Tuple<>(stream, null, null));
                 try {
-                    urlRequests.put(new Pair<>(textureName, url));
+                    urlRequests.put(new Pair<>(textureName, stream));
                 } catch (Exception ex) {
                     if (ModUtils.IS_VERBOSE) {
                         ex.printStackTrace();
@@ -135,7 +180,7 @@ public class ImageUtils {
                 final BufferedImage bufferedImage = cachedImages.get(textureName).getSecond();
                 if (bufferedImage == null) {
                     return new ResourceLocation("");
-                } else if (textureName != null && url != null) {
+                } else if (textureName != null) {
                     final DynamicTexture dynTexture = new DynamicTexture(bufferedImage);
                     final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
                     cachedImages.get(textureName).setThird(cachedTexture);
@@ -143,5 +188,9 @@ public class ImageUtils {
             }
             return cachedImages.get(textureName).getThird();
         }
+    }
+
+    public enum InputType {
+        File, Url, Unknown
     }
 }
