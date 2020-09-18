@@ -1,16 +1,17 @@
 # CraftPresence Changes
 
-## v1.7.1 -> Beta 2 (09/18/2020)
+## v1.7.1 -> Beta 3 (09/18/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0...release%2Fv1.7.1+Beta.2)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.0...release%2Fv1.7.1+Beta.3)_
 
-_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.1+Beta.1...release%2Fv1.7.1+Beta.2)_
+_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.1+Beta.2...release%2Fv1.7.1+Beta.3)_
 
 ### Changes
 
 *   The Slot Gui Screens have been remastered to have accurate padding, scaling, and Support for Image Previews (In the case of Discord Assets)
 *   Added Support for external texture usage throughout the Config Gui
 *   Renamed `/cp view guis` to `/cp view screens` for better clarity
+*   Backend Improvements to improve debugging pipeline
 
 ### Fixes
 
