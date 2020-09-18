@@ -26,13 +26,14 @@ package com.gitlab.cdagaming.craftpresence.utils.updater;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import net.minecraft.client.gui.GuiScreen;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 public class UpdateInfoGui extends ExtendedScreen {
@@ -56,10 +57,10 @@ public class UpdateInfoGui extends ExtendedScreen {
                                 if (modUpdater.isInvalidVersion) {
                                     // If the Updater found our version to be an invalid one
                                     // Then replace the Version ID, Name, and Type
-                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_ID", "v" + modUpdater.targetVersion));
-                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_TYPE", modUpdater.currentState.getDisplayName()));
-                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_LABEL", modUpdater.currentState.getDisplayName()));
-                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("NAME", CraftPresence.class.getSimpleName()));
+                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_ID", "v" + modUpdater.targetVersion, ~Modifier.FINAL));
+                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_TYPE", modUpdater.currentState.getDisplayName(), ~Modifier.FINAL));
+                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_LABEL", modUpdater.currentState.getDisplayName(), ~Modifier.FINAL));
+                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("NAME", CraftPresence.class.getSimpleName(), ~Modifier.FINAL));
 
                                     modUpdater.currentVersion = modUpdater.targetVersion;
                                     modUpdater.isInvalidVersion = false;

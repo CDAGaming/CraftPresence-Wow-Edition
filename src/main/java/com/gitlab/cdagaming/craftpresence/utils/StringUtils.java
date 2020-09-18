@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -1075,17 +1076,19 @@ public class StringUtils {
      *
      * @param classToAccess The class to access with the field(s)
      * @param instance      An Instance of the Class, if needed
-     * @param fieldData     A Pair with the format of fieldName:valueToSet
+     * @param fieldData     A Pair with the format of fieldName:valueToSet:modifierData
      */
-    public static void updateField(Class<?> classToAccess, Object instance, Pair<?, ?>... fieldData) {
-        for (Pair<?, ?> currentData : fieldData) {
+    public static void updateField(Class<?> classToAccess, Object instance, Tuple<?, ?, ?>... fieldData) {
+        for (Tuple<?, ?, ?> currentData : fieldData) {
             try {
                 Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
                 lookupField.setAccessible(true);
 
-                Field modifiersField = Field.class.getDeclaredField("modifiers");
-                modifiersField.setAccessible(true);
-                modifiersField.setInt(lookupField, lookupField.getModifiers() & ~Modifier.FINAL);
+                if (currentData.getThird() != null) {
+                    Field modifiersField = Field.class.getDeclaredField("modifiers");
+                    modifiersField.setAccessible(true);
+                    modifiersField.setInt(lookupField, lookupField.getModifiers() & Integer.parseInt(currentData.getThird().toString()));
+                }
 
                 lookupField.set(instance, currentData.getSecond());
                 if (ModUtils.IS_VERBOSE) {
@@ -1098,16 +1101,6 @@ public class StringUtils {
             }
         }
     }
-
-    public static void setFinalStatic(Field field, Object newValue) throws Exception {
-        field.setAccessible(true);
-  
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-  
-        field.set(null, newValue);
-     }
 
     /**
      * Invokes the specified Method(s) in the Target Class via Reflection
