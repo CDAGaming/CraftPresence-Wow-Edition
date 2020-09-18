@@ -204,7 +204,7 @@ public class SliderControl extends ExtendedButtonControl {
                 displayString = windowTitle + ": " + denormalizedSlideValue;
             }
 
-            int hoverValue = (hovered ? 2 : 1) * 20;
+            final int hoverValue = (hovered ? 2 : 1) * 20;
             CraftPresence.GUIS.renderSlider(x + (int) (sliderValue * (float) (width - 8)), y, 0, 46 + hoverValue, 4, 20, zLevel, BUTTON_TEXTURES);
         }
     }

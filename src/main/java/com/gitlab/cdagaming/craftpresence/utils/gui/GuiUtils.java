@@ -635,6 +635,32 @@ public class GuiUtils {
     }
 
     /**
+     * Renders a Button Object from the defined arguments
+     *
+     * @param x           The Starting X Position to render the button
+     * @param y           The Starting Y Position to render the button
+     * @param width       The full width for the button to render to
+     * @param height      The full height for the button to render to
+     * @param hoverState  The hover state for the button
+     * @param zLevel      The Z level position for the button to render at
+     * @param texLocation The game texture to render the button as
+     */
+    public void renderButton(int x, int y, int width, int height, int hoverState, double zLevel, ResourceLocation texLocation) {
+        if (texLocation != null) {
+            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        }
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        final int v = 46 + hoverState * 20;
+        final int xOffset = width / 2;
+
+        drawTexturedModalRect(x, y, 0, v, xOffset, height, zLevel);
+        drawTexturedModalRect(x + xOffset, y, 200 - xOffset, v, xOffset, height, zLevel);
+    }
+
+    /**
      * Draws a Textured Rectangle, following the defined arguments
      *
      * @param zLevel      The Z Level Position of the Object

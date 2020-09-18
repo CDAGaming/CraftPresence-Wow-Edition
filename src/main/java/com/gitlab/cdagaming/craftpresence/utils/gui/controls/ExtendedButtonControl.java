@@ -25,7 +25,10 @@
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+
+import javax.annotation.Nonnull;
 
 /**
  * Extended Gui Widget for a Clickable Button
@@ -167,6 +170,29 @@ public class ExtendedButtonControl extends GuiButton {
      */
     public ExtendedButtonControl(int xPos, int yPos, String displayString) {
         this(CraftPresence.GUIS.getNextIndex(), xPos, yPos, displayString);
+    }
+
+    @Override
+    public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        if (visible) {
+            hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
+            final int hoverState = !enabled ? 0 : hovered ? 2 : 1;
+
+            CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, BUTTON_TEXTURES);
+
+            mouseDragged(mc, mouseX, mouseY);
+            final int color;
+
+            if (!enabled) {
+                color = 10526880;
+            } else if (hovered) {
+                color = 16777120;
+            } else {
+                color = 14737632;
+            }
+
+            drawCenteredString(mc.fontRenderer, displayString, x + width / 2, y + (height - 8) / 2, color);
+        }
     }
 
     /**
