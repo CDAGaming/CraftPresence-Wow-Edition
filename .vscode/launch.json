@@ -3,7 +3,7 @@
   "configurations": [
     {
       "type": "java",
-      "name": "runClient",
+      "name": "runClient (FG3 -> 1.12.2)",
       "request": "launch",
       "mainClass": "net.minecraftforge.legacydev.MainClient",
       "projectName": "CraftPresence",
@@ -28,7 +28,7 @@
     },
     {
       "type": "java",
-      "name": "runServer",
+      "name": "runServer (FG3 -> 1.12.2)",
       "request": "launch",
       "mainClass": "net.minecraftforge.legacydev.MainServer",
       "projectName": "CraftPresence",
