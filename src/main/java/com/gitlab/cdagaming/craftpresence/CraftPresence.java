@@ -25,6 +25,7 @@
 package com.gitlab.cdagaming.craftpresence;
 
 import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
 import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
@@ -50,7 +51,7 @@ import java.util.TimerTask;
  *
  * @author CDAGaming
  */
-@Mod(modid = ModUtils.MOD_ID, name = ModUtils.NAME, version = ModUtils.VERSION_ID, clientSideOnly = true, guiFactory = ModUtils.GUI_FACTORY, canBeDeactivated = true, updateJSON = ModUtils.UPDATE_JSON, certificateFingerprint = ModUtils.FINGERPRINT, acceptedMinecraftVersions = "*")
+@Mod(modid = ModUtils.MOD_ID, version = "@VERSION_ID@", clientSideOnly = true, guiFactory = ModUtils.GUI_FACTORY, canBeDeactivated = true, updateJSON = ModUtils.UPDATE_JSON, certificateFingerprint = ModUtils.FINGERPRINT, acceptedMinecraftVersions = "*")
 public class CraftPresence {
     /**
      * Whether Pack Data was able to be Found and Parsed
@@ -160,7 +161,19 @@ public class CraftPresence {
         ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.os", SYSTEM.OS_NAME, SYSTEM.OS_ARCH, SYSTEM.IS_64_BIT));
 
         // Check for Updates before continuing
-        ModUtils.UPDATER.checkForUpdates();
+        ModUtils.UPDATER.checkForUpdates(() -> {
+            if (ModUtils.UPDATER.isInvalidVersion) {
+                // If the Updater found our version to be an invalid one
+                // Then replace the Version ID, Name, and Type
+                StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_ID", "v" + ModUtils.UPDATER.targetVersion));
+                StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_TYPE", ModUtils.UPDATER.currentState.getDisplayName()));
+                StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_LABEL", ModUtils.UPDATER.currentState.getDisplayName()));
+                StringUtils.updateField(ModUtils.class, null, new Pair<>("NAME", CraftPresence.class.getSimpleName()));
+
+                ModUtils.UPDATER.currentVersion = ModUtils.UPDATER.targetVersion;
+                ModUtils.UPDATER.isInvalidVersion = false;
+            }
+        });
 
         SYSTEM = new SystemUtils();
         CONFIG = new ConfigUtils(ModUtils.configDir + File.separator + ModUtils.MOD_ID + ".properties");

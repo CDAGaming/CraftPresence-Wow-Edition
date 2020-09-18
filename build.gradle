@@ -20,7 +20,7 @@ apply plugin: "net.minecrell.licenser"
 import net.minecraftforge.gradle.common.task.SignJar
 import org.apache.tools.ant.filters.ReplaceTokens
 
-version = "${majorVersion}.${minorVersion}.${revisionVersion}"
+version = "${versionId}"
 group = "com.gitlab.cdagaming"
 archivesBaseName = "${archive_name}-${mc_version}-${versionType}"
 
@@ -145,9 +145,7 @@ def copyDir = "$compileJava.temporaryDir/replaced"
 task processSource(type: Sync) {
     // This will ensure that this task is redone when the properties change.
     inputs.property "modName", "${mod_name}"
-    inputs.property "majorVersion", "${majorVersion}"
-    inputs.property "minorVersion", "${minorVersion}"
-    inputs.property "revisionVersion", "${revisionVersion}"
+    inputs.property "versionId", "${versionId}"
     inputs.property "fingerprint", "${certFingerprint}"
     inputs.property "versionType", "${versionType}"
     inputs.property "versionLabel", "${versionLabel}"
@@ -155,9 +153,7 @@ task processSource(type: Sync) {
     from sourceSets.main.java
     filter(ReplaceTokens, tokens: [
             MOD_NAME        : mod_name,
-            MAJOR_VERSION   : majorVersion,
-            MINOR_VERSION   : minorVersion,
-            REVISION_VERSION: revisionVersion,
+            VERSION_ID      : versionId,
             FINGERPRINT     : certFingerprint,
             VERSION_TYPE    : versionType,
             VERSION_LABEL   : versionLabel

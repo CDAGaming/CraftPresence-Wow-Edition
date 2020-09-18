@@ -48,37 +48,22 @@ public class ModUtils {
     /**
      * The Application's Name
      */
-    public static final String NAME = "@MOD_NAME@";
+    public static final String NAME;
 
     /**
-     * The Application's Major Revision Number (Ex: 1 in 1.0.2)
+     * The Application's Version ID
      */
-    public static final String majorVersion = "@MAJOR_VERSION@";
-
-    /**
-     * The Application's Minor Revision Number (Ex: 0 in 1.0.2)
-     */
-    public static final String minorVersion = "@MINOR_VERSION@";
-
-    /**
-     * The Application's Revision Version Number (Ex: 2 in 1.0.2)
-     */
-    public static final String revisionVersion = "@REVISION_VERSION@";
-
-    /**
-     * The Application's Formatted Version ID
-     */
-    public static final String VERSION_ID = "v" + majorVersion + "." + minorVersion + "." + revisionVersion;
+    public static final String VERSION_ID;
 
     /**
      * The Application's Version Release Type
      */
-    public static final String VERSION_TYPE = "@VERSION_TYPE@";
+    public static final String VERSION_TYPE;
 
     /**
      * The Application's Version Release Type Display Name
      */
-    public static final String VERSION_LABEL = "@VERSION_LABEL@";
+    public static final String VERSION_LABEL;
 
     /**
      * The Application's Identifier
@@ -153,7 +138,7 @@ public class ModUtils {
     /**
      * The Application's Instance of {@link ModUpdaterUtils} for Retrieving if the Application has an update
      */
-    public static final ModUpdaterUtils UPDATER = new ModUpdaterUtils(MOD_ID, UPDATE_JSON, VERSION_ID);
+    public static final ModUpdaterUtils UPDATER;
 
     /**
      * Whether to forcibly block any tooltips related to this Application from rendering
@@ -169,6 +154,14 @@ public class ModUtils {
      * If this Application is running in a de-obfuscated or Developer environment
      */
     public static boolean IS_VERBOSE = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+
+    static {
+        NAME = "@MOD_NAME@";
+        VERSION_ID = "v@VERSION_ID@";
+        VERSION_TYPE = "@VERSION_TYPE@";
+        VERSION_LABEL = "@VERSION_LABEL@";
+        UPDATER = new ModUpdaterUtils(MOD_ID, UPDATE_JSON, VERSION_ID, MCVersion);
+    }
 
     /**
      * Retrieves and Initializes Character Data<p>

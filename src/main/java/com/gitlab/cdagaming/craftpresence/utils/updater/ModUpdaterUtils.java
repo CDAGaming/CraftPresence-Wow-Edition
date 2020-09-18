@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.updater;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
+import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonElement;
@@ -84,24 +85,52 @@ public class ModUpdaterUtils {
      * The Current Version attached to this Instance
      */
     public String currentVersion;
+    /**
+     * The Current Game Version attached to this Instance
+     */
+    public String currentGameVersion;
+    /**
+     * Whether the Current Version was considered invalid/debug variable
+     */
+    public boolean isInvalidVersion = false;
 
     /**
      * Initializes this Module from the Specified Arguments
      *
-     * @param modID          The Mod Id for this Instance
-     * @param updateUrl      The Update Url to attach to this Instance
-     * @param currentVersion The Current Version to attach to this Instance
+     * @param modID              The Mod Id for this Instance
+     * @param updateUrl          The Update Url to attach to this Instance
+     * @param currentVersion     The Current Version to attach to this Instance
+     * @param currentGameVersion The Current Game Version to attach to this Instance
      */
-    public ModUpdaterUtils(final String modID, final String updateUrl, final String currentVersion) {
+    public ModUpdaterUtils(final String modID, final String updateUrl, String currentVersion, final String currentGameVersion) {
         this.modID = modID;
         this.updateUrl = updateUrl;
+        this.currentGameVersion = currentGameVersion;
         this.currentVersion = currentVersion.replaceAll("[a-zA-Z]", "").replace("\"", "").trim();
+
+        // In Debug Runtime cases, the Version may not be dynamically replaced
+        // In this scenario, use v0.0.0, and we'll later use the target version to patch
+        // up the invalidated version id
+        if (currentVersion.contains("@")) {
+            ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.updater.data.missing", modID));
+            currentVersion = "v0.0.0";
+            isInvalidVersion = true;
+        }
     }
 
     /**
      * Checks for Updates, updating the Current Update Check State
      */
     public void checkForUpdates() {
+        checkForUpdates(null);
+    }
+
+    /**
+     * Checks for Updates, updating the Current Update Check State
+     * 
+     * @param callback The callback to run after Update Events
+     */
+    public void checkForUpdates(final Runnable callback) {
         // Reset Last Check Data before Starting
         currentState = UpdateState.PENDING;
         targetRecommendedVersion = "0.0.0";
@@ -133,7 +162,7 @@ public class ModUpdaterUtils {
                             final String mcVersion = splitPromo[0];
 
                             // Only Parse the Arguments attached to the target Minecraft Version
-                            if (mcVersion.equalsIgnoreCase(ModUtils.MCVersion)) {
+                            if (mcVersion.equalsIgnoreCase(currentGameVersion)) {
                                 final String dataTag = splitPromo[1];
 
                                 if (latestVersionTags.contains(dataTag.toLowerCase())) {
@@ -147,7 +176,7 @@ public class ModUpdaterUtils {
                                     break;
                                 }
                             }
-                        } else if (jsonSegment.getKey().equalsIgnoreCase(ModUtils.MCVersion)) {
+                        } else if (jsonSegment.getKey().equalsIgnoreCase(currentGameVersion)) {
                             // Case 2: Find only the Minecraft Version, if present, but do not break the loop
                             targetRecommendedVersion = jsonSegment.getValue().toString().replaceAll("[a-zA-Z]", "").replace("\"", "").trim();
                         } else {
@@ -155,8 +184,14 @@ public class ModUpdaterUtils {
                         }
                     }
 
-                    ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Latest", ModUtils.MCVersion, targetLatestVersion));
-                    ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Recommended", ModUtils.MCVersion, targetRecommendedVersion));
+                    ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Latest", currentGameVersion, targetLatestVersion));
+                    ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.status", "Recommended", currentGameVersion, targetRecommendedVersion));
+
+                    // If the currentVersion was previously found to be invalidated
+                    // We'll now supplement it with the targetRecommendedVersion
+                    if (isInvalidVersion) {
+                        currentVersion = targetRecommendedVersion;
+                    }
 
                     // Update Current Update State
                     final int recommendedState = compareVersions(currentVersion, targetRecommendedVersion);
@@ -179,11 +214,11 @@ public class ModUpdaterUtils {
                         }
                     }
 
-                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.receive.status", modID, currentState.name(), targetVersion));
+                    ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.updater.receive.status", modID, currentState.getDisplayName(), targetVersion));
 
                     // Retrieve Changelog Data, if present
-                    if (rootUpdateData.has(ModUtils.MCVersion)) {
-                        final JsonObject mcVersionData = rootUpdateData.get(ModUtils.MCVersion).getAsJsonObject();
+                    if (rootUpdateData.has(currentGameVersion)) {
+                        final JsonObject mcVersionData = rootUpdateData.get(currentGameVersion).getAsJsonObject();
 
                         if (mcVersionData != null) {
                             final JsonElement semanticVersionData = mcVersionData.has(targetVersion) ? mcVersionData.get(targetVersion) : null;
@@ -209,6 +244,10 @@ public class ModUpdaterUtils {
                 ex.printStackTrace();
             }
             currentState = UpdateState.FAILED;
+        } finally {
+            if (callback != null) {
+                callback.run();
+            }
         }
     }
 
@@ -264,11 +303,25 @@ public class ModUpdaterUtils {
      * <p>PENDING: The version checker has not completed at this time
      */
     public enum UpdateState {
-        FAILED,
-        UP_TO_DATE,
-        OUTDATED,
-        BETA_OUTDATED,
-        BETA,
-        PENDING
+        FAILED("Failed"),
+        UP_TO_DATE("Release"),
+        OUTDATED("Outdated"),
+        BETA_OUTDATED("Beta (Outdated)"),
+        BETA("Beta"),
+        PENDING("Pending");
+
+        String displayName;
+
+        UpdateState() {
+            displayName = StringUtils.formatWord(name());
+        }
+
+        UpdateState(final String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }

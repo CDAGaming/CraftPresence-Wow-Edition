@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.updater;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.UrlUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -50,7 +51,21 @@ public class UpdateInfoGui extends ExtendedScreen {
                         (width / 2) - 90, (height - 30),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.checkForUpdates"),
-                        modUpdater::checkForUpdates
+                        () -> {
+                            modUpdater.checkForUpdates(() -> {
+                                if (modUpdater.isInvalidVersion) {
+                                    // If the Updater found our version to be an invalid one
+                                    // Then replace the Version ID, Name, and Type
+                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_ID", "v" + modUpdater.targetVersion));
+                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_TYPE", modUpdater.currentState.getDisplayName()));
+                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("VERSION_LABEL", modUpdater.currentState.getDisplayName()));
+                                    StringUtils.updateField(ModUtils.class, null, new Pair<>("NAME", CraftPresence.class.getSimpleName()));
+
+                                    modUpdater.currentVersion = modUpdater.targetVersion;
+                                    modUpdater.isInvalidVersion = false;
+                                }
+                            });
+                        }
                 )
         );
         // Adding Back Button
@@ -91,7 +106,7 @@ public class UpdateInfoGui extends ExtendedScreen {
         checkButton.enabled = modUpdater.currentState != ModUpdaterUtils.UpdateState.PENDING;
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.changes", modUpdater.currentState.name());
+        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.changes", modUpdater.currentState.getDisplayName());
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.changelog", modUpdater.targetVersion, modUpdater.targetChangelogData));
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);

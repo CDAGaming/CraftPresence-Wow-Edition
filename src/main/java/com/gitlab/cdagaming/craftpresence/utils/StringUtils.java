@@ -35,6 +35,7 @@ import java.awt.*;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -1081,6 +1082,11 @@ public class StringUtils {
             try {
                 Field lookupField = classToAccess.getDeclaredField(currentData.getFirst().toString());
                 lookupField.setAccessible(true);
+
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(lookupField, lookupField.getModifiers() & ~Modifier.FINAL);
+
                 lookupField.set(instance, currentData.getSecond());
                 if (ModUtils.IS_VERBOSE) {
                     ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.update.dynamic", currentData.toString(), classToAccess.getName()));
@@ -1092,6 +1098,16 @@ public class StringUtils {
             }
         }
     }
+
+    public static void setFinalStatic(Field field, Object newValue) throws Exception {
+        field.setAccessible(true);
+  
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+  
+        field.set(null, newValue);
+     }
 
     /**
      * Invokes the specified Method(s) in the Target Class via Reflection
