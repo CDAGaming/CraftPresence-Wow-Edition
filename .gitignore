@@ -28,4 +28,4 @@ classes/
 
 logs/
 
-.vscode/
+.vscode/settings.json
