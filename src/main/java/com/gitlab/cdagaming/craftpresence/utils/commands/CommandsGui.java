@@ -222,7 +222,7 @@ public class CommandsGui extends ExtendedScreen {
                             } else {
                                 executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"));
                             }
-                        } else if (executionCommandArgs[1].equalsIgnoreCase("guis")) {
+                        } else if (executionCommandArgs[1].equalsIgnoreCase("screens")) {
                             if (CraftPresence.GUIS.enabled) {
                                 CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.guis"), CraftPresence.GUIS.GUI_NAMES, null, null, false));
                             } else {

@@ -224,8 +224,8 @@ public class ImageUtils {
     /**
      * A Mapping storing the available Input Types for External Image Parsing
      *
-     * <p>FileData: Parsing with Raw File Data (IE a File Object Type)
-     * <p>FileStream: Parsing with the String representation of a file path, to be put into a filestream
+     * <p>FileData: Parsing with Raw File Data (IE a File Object Type), to be put into a FileInputStream
+     * <p>FileStream: Parsing with the String representation of a file path, to be put into a FileInputStream
      * <p>Url: Parsing with a direct or string representation of a Url, to be converted to an InputStream
      * <p>Unknown: Unknown property, experience can be iffy using this
      */

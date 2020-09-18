@@ -8,8 +8,9 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 
 ### Changes
 
-*   The Slot Guis have been remastered to have accurate padding, scaling, and Support for Image Previews (In the case of Discord Assets)
+*   The Slot Gui Screens have been remastered to have accurate padding, scaling, and Support for Image Previews (In the case of Discord Assets)
 *   Added Support for external texture usage throughout the Config Gui
+*   Renamed `/cp view guis` to `/cp view screens` for better clarity
 
 ### Fixes
 

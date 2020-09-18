@@ -399,7 +399,7 @@ public class EntityUtils {
             }
         }
 
-        // If Server Data is enabled, allow UUIDs to count as entities
+        // If Server Data is enabled, allow UUID's to count as entities
         if (CraftPresence.SERVER.enabled) {
             for (NetworkPlayerInfo playerInfo : CraftPresence.SERVER.currentPlayerList) {
                 final String uuidString = playerInfo.getGameProfile().getId().toString();

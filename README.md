@@ -55,7 +55,7 @@ ___
 *   `/cp view dimensions` - Displays all Dimension Names available for use, requires `Show Current Dimension` to be enabled
 *   `/cp view biomes` - Displays all Biome Names available for use, requires `Show Current Biome` to be enabled
 *   `/cp view servers` - Displays all Server Addresses available for use, requires `Show Game State` to be enabled
-*   `/cp view guis` - Displays all Gui Names available for use, if Per-Gui is enabled
+*   `/cp view screens` - Displays all Gui Names available for use, if Per-Gui is enabled
 *   `/cp view items` - Displays all Item Names available for use, if Per-Item is enabled
 *   `/cp view entities` - Displays all Entity Names available for use, if Per-Entity is enabled
 *   `/cp (help | ?)` - Help Command to display the above commands and these explanations

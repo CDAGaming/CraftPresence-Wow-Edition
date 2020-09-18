@@ -134,10 +134,10 @@ public class Tuple<T, U, V> {
     }
 
     /**
-     * Determines if elements in two different Tuple's are equivalent
+     * Determines if elements in two different Tuple objects are equivalent
      *
      * @param obj The Tuple to compare against
-     * @return If the Two Opposing Tuple's are equivalent
+     * @return If the two Opposing Tuple objects are equivalent
      */
     public boolean equals(final Tuple<?, ?, ?> obj) {
         try {
