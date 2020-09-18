@@ -176,7 +176,7 @@ public class ExtendedButtonControl extends GuiButton {
     public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
-            final int hoverState = !enabled ? 0 : hovered ? 2 : 1;
+            final int hoverState = getHoverState(hovered);
 
             CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, BUTTON_TEXTURES);
 
