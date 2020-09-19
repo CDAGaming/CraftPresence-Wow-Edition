@@ -28,6 +28,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
@@ -60,7 +62,7 @@ public class ImageUtils {
      * <p>
      * Format: textureName;[[textureInputType, textureObj], imageData, textureData]
      */
-    private static final Map<String, Tuple<Pair<InputType, Object>, BufferedImage, ResourceLocation>> cachedImages = Maps.newHashMap();
+    private static final Map<String, Tuple<Pair<InputType, Object>, Pair<Integer, List<BufferedImage>>, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
      * The thread used for Url Image Events to take place within
      */
@@ -74,8 +76,10 @@ public class ImageUtils {
                     while (!CraftPresence.closing) {
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
 
-                        BufferedImage bufferedImage = cachedImages.get(request.getFirst()).getSecond();
-                        if (bufferedImage == null) {
+                        Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(request.getFirst()).getSecond();
+                        if (bufferData == null) {
+                            // Setup Initial Data
+                            bufferData = new Pair<>(0, Lists.newArrayList());
                             try {
                                 InputStream streamData = null;
                                 switch (cachedImages.get(request.getFirst()).getFirst().getFirst()) {
@@ -92,8 +96,8 @@ public class ImageUtils {
                                 }
 
                                 if (streamData != null) {
-                                    bufferedImage = ImageIO.read(streamData);
-                                    cachedImages.get(request.getFirst()).setSecond(bufferedImage);
+                                    bufferData.getSecond().add(ImageIO.read(streamData));
+                                    cachedImages.get(request.getFirst()).setSecond(bufferData);
                                 }
                             } catch (Exception ex) {
                                 if (ModUtils.IS_VERBOSE) {
@@ -208,12 +212,16 @@ public class ImageUtils {
             }
 
             if (cachedImages.get(textureName).getThird() == null) {
-                final BufferedImage bufferedImage = cachedImages.get(textureName).getSecond();
-                if (bufferedImage == null) {
+                final Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(textureName).getSecond();
+                if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
                     return new ResourceLocation("");
                 } else if (textureName != null) {
-                    final DynamicTexture dynTexture = new DynamicTexture(bufferedImage);
+                    final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()));
                     final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
+                    if (bufferData.getFirst() < bufferData.getSecond().size() - 1) {
+                        bufferData.setFirst(bufferData.getFirst() + 1);
+                        cachedImages.get(textureName).setSecond(bufferData);
+                    }
                     cachedImages.get(textureName).setThird(cachedTexture);
                 }
             }
