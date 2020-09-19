@@ -82,15 +82,15 @@ public class ImageUtils {
                             bufferData = new Pair<>(0, Lists.newArrayList());
                             try {
                                 InputStream streamData = null;
-                                switch (cachedImages.get(request.getFirst()).getFirst().getFirst()) {
+                                switch (request.getSecond().getFirst()) {
                                     case FileData:
-                                        streamData = new FileInputStream((File) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                        streamData = new FileInputStream((File) request.getSecond().getSecond());
                                         break;
                                     case FileStream:
-                                        streamData = new FileInputStream(cachedImages.get(request.getFirst()).getFirst().getSecond().toString());
+                                        streamData = new FileInputStream(request.getSecond().getSecond().toString());
                                         break;
                                     case Url:
-                                        streamData = UrlUtils.getURLStream((URL) cachedImages.get(request.getFirst()).getFirst().getSecond());
+                                        streamData = UrlUtils.getURLStream((URL) request.getSecond().getSecond());
                                         break;
                                     default:
                                 }
@@ -213,6 +213,8 @@ public class ImageUtils {
 
             if (cachedImages.get(textureName).getThird() == null) {
                 final Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(textureName).getSecond();
+                final boolean shouldRepeat = textureName.endsWith(".gif");
+
                 if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
                     return new ResourceLocation("");
                 } else if (textureName != null) {
@@ -220,8 +222,10 @@ public class ImageUtils {
                     final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
                     if (bufferData.getFirst() < bufferData.getSecond().size() - 1) {
                         bufferData.setFirst(bufferData.getFirst() + 1);
-                        cachedImages.get(textureName).setSecond(bufferData);
+                    } else if (shouldRepeat) {
+                        bufferData.setFirst(0);
                     }
+                    cachedImages.get(textureName).setSecond(bufferData);
                     cachedImages.get(textureName).setThird(cachedTexture);
                 }
             }
