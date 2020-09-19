@@ -63,9 +63,9 @@ public class ImageUtils {
     /**
      * Cached Images retrieved from URL Texture Retrieval
      * <p>
-     * Format: textureName;[[textureInputType, textureObj], imageData, textureData]
+     * Format: textureName;[[textureInputType, textureObj], [imageIndex, delayTime, imageData], textureData]
      */
-    private static final Map<String, Tuple<Pair<InputType, Object>, Pair<Integer, List<BufferedImage>>, ResourceLocation>> cachedImages = Maps.newHashMap();
+    private static final Map<String, Tuple<Pair<InputType, Object>, Tuple<Integer, Integer, List<BufferedImage>>, ResourceLocation>> cachedImages = Maps.newHashMap();
     /**
      * The thread used for Url Image Events to take place within
      */
@@ -80,10 +80,10 @@ public class ImageUtils {
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
                         final boolean isGif = request.getFirst().endsWith(".gif");
 
-                        Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(request.getFirst()).getSecond();
+                        Tuple<Integer, Integer, List<BufferedImage>> bufferData = cachedImages.get(request.getFirst()).getSecond();
                         if (bufferData == null) {
                             // Setup Initial Data
-                            bufferData = new Pair<>(0, Lists.newArrayList());
+                            bufferData = new Tuple<>(0, 500, Lists.newArrayList());
                             try {
                                 InputStream streamData = null;
                                 switch (request.getSecond().getFirst()) {
@@ -108,7 +108,7 @@ public class ImageUtils {
 
                                         for (int index = 0; index < reader.getNumImages(true); index++) {
                                             try {
-                                                bufferData.getSecond().add(reader.read(index));
+                                                bufferData.getThird().add(reader.read(index));
                                             } catch (Exception ex) {
                                                 if (ModUtils.IS_VERBOSE) {
                                                     ex.printStackTrace();
@@ -116,7 +116,7 @@ public class ImageUtils {
                                             }
                                         }
                                     } else {
-                                        bufferData.getSecond().add(ImageIO.read(streamData));
+                                        bufferData.getThird().add(ImageIO.read(streamData));
                                     }
                                     cachedImages.get(request.getFirst()).setSecond(bufferData);
                                 }
@@ -232,21 +232,27 @@ public class ImageUtils {
                 }
             }
 
-            final Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(textureName).getSecond();
+            final Tuple<Integer, Integer, List<BufferedImage>> bufferData = cachedImages.get(textureName).getSecond();
             final boolean shouldRepeat = textureName.endsWith(".gif");
-            final boolean doesContinue = bufferData == null ? false : bufferData.getFirst() < bufferData.getSecond().size() - 1;
+            final boolean doesContinue = bufferData == null ? false : bufferData.getFirst() < bufferData.getThird().size() - 1;
 
             if (cachedImages.get(textureName).getThird() == null || shouldRepeat || doesContinue) {
-                if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
+                if (bufferData == null || bufferData.getThird() == null || bufferData.getThird().isEmpty()) {
                     return new ResourceLocation("");
                 } else if (textureName != null) {
-                    final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()));
+                    final DynamicTexture dynTexture = new DynamicTexture(bufferData.getThird().get(bufferData.getFirst()));
                     final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getFirst().getFirst() : ""), dynTexture);
-                    if (doesContinue) {
-                        bufferData.setFirst(bufferData.getFirst() + 1);
-                    } else if (shouldRepeat) {
-                        bufferData.setFirst(0);
+                    if (bufferData.getSecond() <= 0) {
+                        if (doesContinue) {
+                            bufferData.setFirst(bufferData.getFirst() + 1);
+                        } else if (shouldRepeat) {
+                            bufferData.setFirst(0);
+                        }
+                        bufferData.setSecond(500);
+                    } else {
+                        bufferData.setSecond(bufferData.getSecond() - 5);
                     }
+                    ModUtils.LOG.info("Delay => " + bufferData.getSecond());
                     cachedImages.get(textureName).setSecond(bufferData);
                     cachedImages.get(textureName).setThird(cachedTexture);
                 }
