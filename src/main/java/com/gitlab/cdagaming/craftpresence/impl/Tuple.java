@@ -152,6 +152,6 @@ public class Tuple<T, U, V> {
 
     @Override
     public String toString() {
-        return "Tuple[T=" + this.getFirst().toString() + "; U=" + this.getSecond().toString() + "; V=" + this.getThird().toString() + "]";
+        return "Tuple[T=" + (this.getFirst() != null ? this.getFirst().toString() : "N/A") + "; U=" + (this.getSecond() != null ? this.getSecond().toString() : "N/A") + "; V=" + (this.getThird() != null ? this.getThird().toString() : "N/A") + "]";
     }
 }

@@ -125,6 +125,6 @@ public class Pair<U, V> {
 
     @Override
     public String toString() {
-        return "Pair[key=" + this.getFirst().toString() + "; value=" + this.getSecond().toString() + "]";
+        return "Pair[key=" + (this.getFirst() != null ? this.getFirst().toString() : "N/A") + "; value=" + (this.getSecond() != null ? this.getSecond().toString() : "N/A") + "]";
     }
 }
