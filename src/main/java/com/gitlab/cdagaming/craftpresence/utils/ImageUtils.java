@@ -35,6 +35,9 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,6 +78,7 @@ public class ImageUtils {
                 try {
                     while (!CraftPresence.closing) {
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
+                        final boolean isGif = request.getFirst().endsWith(".gif");
 
                         Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(request.getFirst()).getSecond();
                         if (bufferData == null) {
@@ -96,7 +100,24 @@ public class ImageUtils {
                                 }
 
                                 if (streamData != null) {
-                                    bufferData.getSecond().add(ImageIO.read(streamData));
+                                    if (isGif) {
+                                        ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();
+                                        ImageInputStream readStream = ImageIO.createImageInputStream(streamData);
+
+                                        reader.setInput(readStream);
+
+                                        for (int index = 0; index < reader.getNumImages(true); index++) {
+                                            try {
+                                                bufferData.getSecond().add(reader.read(index));
+                                            } catch (Exception ex) {
+                                                if (ModUtils.IS_VERBOSE) {
+                                                    ex.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        bufferData.getSecond().add(ImageIO.read(streamData));
+                                    }
                                     cachedImages.get(request.getFirst()).setSecond(bufferData);
                                 }
                             } catch (Exception ex) {
@@ -211,16 +232,17 @@ public class ImageUtils {
                 }
             }
 
-            if (cachedImages.get(textureName).getThird() == null) {
-                final Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(textureName).getSecond();
-                final boolean shouldRepeat = textureName.endsWith(".gif");
+            final Pair<Integer, List<BufferedImage>> bufferData = cachedImages.get(textureName).getSecond();
+            final boolean shouldRepeat = textureName.endsWith(".gif");
+            final boolean doesContinue = bufferData == null ? false : bufferData.getFirst() < bufferData.getSecond().size() - 1;
 
+            if (cachedImages.get(textureName).getThird() == null || shouldRepeat || doesContinue) {
                 if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
                     return new ResourceLocation("");
                 } else if (textureName != null) {
                     final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()));
-                    final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName, dynTexture);
-                    if (bufferData.getFirst() < bufferData.getSecond().size() - 1) {
+                    final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getFirst().getFirst() : ""), dynTexture);
+                    if (doesContinue) {
                         bufferData.setFirst(bufferData.getFirst() + 1);
                     } else if (shouldRepeat) {
                         bufferData.setFirst(0);
