@@ -31,6 +31,7 @@ public class ImageFrame {
     private final BufferedImage image;
     private final String disposal;
     private final int width, height;
+    private long renderTime = 0;
 
     public ImageFrame (BufferedImage image, int delay, String disposal, int width, int height){
         this.image = image;
@@ -66,5 +67,17 @@ public class ImageFrame {
 
     public int getHeight() {
             return height;
+    }
+    
+    public long getRenderTime() {
+        return renderTime;
+    }
+    
+    public void setRenderTime(long renderTime) {
+        this.renderTime = renderTime;
+    }
+    
+    public boolean shouldRenderNext() {
+        return System.currentTimeMillis() - renderTime > delay * 10;
     }
 }
