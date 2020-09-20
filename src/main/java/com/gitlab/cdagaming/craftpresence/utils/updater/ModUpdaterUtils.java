@@ -127,7 +127,7 @@ public class ModUpdaterUtils {
 
     /**
      * Checks for Updates, updating the Current Update Check State
-     * 
+     *
      * @param callback The callback to run after Update Events
      */
     public void checkForUpdates(final Runnable callback) {

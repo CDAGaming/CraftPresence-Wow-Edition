@@ -152,11 +152,11 @@ task processSource(type: Sync) {
 
     from sourceSets.main.java
     filter(ReplaceTokens, tokens: [
-            MOD_NAME        : mod_name,
-            VERSION_ID      : versionId,
-            FINGERPRINT     : certFingerprint,
-            VERSION_TYPE    : versionType,
-            VERSION_LABEL   : versionLabel
+            MOD_NAME     : mod_name,
+            VERSION_ID   : versionId,
+            FINGERPRINT  : certFingerprint,
+            VERSION_TYPE : versionType,
+            VERSION_LABEL: versionLabel
     ])
     into copyDir
 }
