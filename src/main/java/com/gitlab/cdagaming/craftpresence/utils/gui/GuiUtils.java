@@ -607,7 +607,7 @@ public class GuiUtils {
                     heightDivider = height;
                 }
 
-                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, widthDivider, heightDivider, true, loc);
+                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, widthDivider, heightDivider, CraftPresence.CONFIG.showBGAsDark, loc);
             }
         }
     }

@@ -55,13 +55,13 @@ public class ImageUtils {
     /**
      * The Blocking Queue for URL Requests
      * <p>
-     * Format: textureName;textureData
+     * Format: textureName;[textureInputType, textureObj]
      */
     private static final BlockingQueue<Pair<String, Pair<InputType, Object>>> urlRequests = Queues.newLinkedBlockingQueue();
     /**
      * Cached Images retrieved from URL Texture Retrieval
      * <p>
-     * Format: textureName;[[textureInputType, textureObj], imageData, textureData]
+     * Format: textureName;[[textureInputType, textureObj], [textureIndex, imageData], textureData]
      */
     private static final Map<String, Tuple<Pair<InputType, Object>, Pair<Integer, List<ImageFrame>>, List<ResourceLocation>>> cachedImages = Maps.newHashMap();
     /**

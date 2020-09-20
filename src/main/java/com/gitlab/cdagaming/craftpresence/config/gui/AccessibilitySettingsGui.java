@@ -45,7 +45,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
     private Pair<ExtendedButtonControl, String> entryData = null;
 
     private ExtendedTextControl languageIDText;
-    private CheckBoxControl stripTranslationColorsButton, showLoggingInChatButton;
+    private CheckBoxControl showBGAsDarkButton, stripTranslationColorsButton, showLoggingInChatButton;
     private ExtendedButtonControl proceedButton;
 
     AccessibilitySettingsGui(GuiScreen parentScreen) {
@@ -124,9 +124,27 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         );
         languageIDText.setText(CraftPresence.CONFIG.languageID);
 
+        showBGAsDarkButton = addControl(
+                new CheckBoxControl(
+                        calc1, CraftPresence.GUIS.getButtonY(4),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.show_bg_as_dark"),
+                        CraftPresence.CONFIG.showBGAsDark,
+                        null,
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.show_bg_as_dark")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
+                )
+        );
         stripTranslationColorsButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(4) + 10,
+                        calc2, CraftPresence.GUIS.getButtonY(4),
                         ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.strip_translation_colors"),
                         CraftPresence.CONFIG.stripTranslationColors,
                         null,
@@ -144,7 +162,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         );
         showLoggingInChatButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(4) + 10,
+                        calc1, CraftPresence.GUIS.getButtonY(5) - 10,
                         ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.show_logging_in_chat"),
                         CraftPresence.CONFIG.showLoggingInChat,
                         null,
@@ -164,7 +182,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         // KeyCode Buttons
         final ExtendedButtonControl configKeyCodeButton = addControl(
                 new ExtendedButtonControl(
-                        calc2 + 20, CraftPresence.GUIS.getButtonY(6),
+                        calc2 + 20, CraftPresence.GUIS.getButtonY(7),
                         120, 20,
                         CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode),
                         "configKeyCode"
@@ -174,14 +192,18 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         proceedButton = addControl(
                 new ExtendedButtonControl(
-                        (width / 2) - 90, (height - 30),
-                        180, 20,
+                        10, (height - 30),
+                        95, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (entryData == null) {
                                 if (!languageIDText.getText().equals(CraftPresence.CONFIG.languageID)) {
                                     CraftPresence.CONFIG.hasChanged = true;
                                     CraftPresence.CONFIG.languageID = languageIDText.getText();
+                                }
+                                if (showBGAsDarkButton.isChecked() != CraftPresence.CONFIG.showBGAsDark) {
+                                    CraftPresence.CONFIG.hasChanged = true;
+                                    CraftPresence.CONFIG.showBGAsDark = showBGAsDarkButton.isChecked();
                                 }
                                 if (stripTranslationColorsButton.isChecked() != CraftPresence.CONFIG.stripTranslationColors) {
                                     CraftPresence.CONFIG.hasChanged = true;
@@ -217,8 +239,8 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         drawString(mc.fontRenderer, languageIDTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
-        drawString(mc.fontRenderer, keyBindingTitle, (width / 2) - (StringUtils.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(5) + 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+        drawString(mc.fontRenderer, keyBindingTitle, (width / 2) - (StringUtils.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
+        drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
 
         proceedButton.enabled = !StringUtils.isNullOrEmpty(languageIDText.getText());
 
@@ -230,7 +252,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         }
 
         // Hovering over Config Keybinding Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(6) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }

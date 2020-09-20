@@ -150,6 +150,7 @@ gui.config.name.accessibility.tooltip_bg_color=Tooltip Background Color
 gui.config.name.accessibility.tooltip_border_color=Tooltip Border Color
 gui.config.name.accessibility.gui_bg_color=Gui Background Color
 gui.config.name.accessibility.language_id=Language ID
+gui.config.name.accessibility.show_bg_as_dark=Reduced Background Tint
 gui.config.name.accessibility.strip_translation_colors=Strip Translation Colors
 gui.config.name.accessibility.show_logging_in_chat=Show Logging in Chat
 gui.config.name.display.small_image_msg=Small Image Text Format
@@ -211,6 +212,7 @@ gui.config.comment.accessibility.tooltip_bg_color=The color or texture to be use
 gui.config.comment.accessibility.tooltip_border_color=The color or texture to be used when rendering CraftPresence tooltip borders
 gui.config.comment.accessibility.gui_bg_color=The color or texture to be used when rendering CraftPresence Gui backgrounds
 gui.config.comment.accessibility.language_id=The locale or language ID to be used for translating this mod's strings
+gui.config.comment.accessibility.show_bg_as_dark=Show background colors (Non RGBA) with a darker tint, like vanilla minecraft
 gui.config.comment.accessibility.strip_translation_colors=Allows CraftPresence to remove color and formatting codes from it's translations
 gui.config.comment.accessibility.show_logging_in_chat=Allows CraftPresence to display it's logging in the chat hud
 ## KEYBIND MESSAGES ##
