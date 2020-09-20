@@ -40,13 +40,47 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+/**
+ * Image Conversion Layers and Utilities used to translate other Image Types
+ * <p>Reference: https://stackoverflow.com/a/17269591
+ *
+ * @author CDAGaming
+ */
 public class ImageFrame {
+    /**
+     * The delay between image transitions
+     */
     private final int delay;
+    /**
+     * The buffered image instance being stored
+     */
     private final BufferedImage image;
+    /**
+     * The disposal method flag being used for this frame
+     */
     private final String disposal;
-    private final int width, height;
+    /**
+     * The width of the current frame
+     */
+    private final int width;
+    /**
+     * The height of the current frame
+     */
+    private final int height;
+    /**
+     * The time, in milliseconds, for the frame to render until from current
+     */
     private long renderTime = 0;
 
+    /**
+     * Initializes an Image Frame, with the specified arguments
+     *
+     * @param image    The buffered image, if any, to be stored for this frame
+     * @param delay    The delay between now and the next image transition
+     * @param disposal The disposal method flag to use for this frame
+     * @param width    The width of this image
+     * @param height   The height of this image
+     */
     public ImageFrame(BufferedImage image, int delay, String disposal, int width, int height) {
         this.image = image;
         this.delay = delay;
@@ -55,6 +89,11 @@ public class ImageFrame {
         this.height = height;
     }
 
+    /**
+     * Initializes an Image Frame, with the specified arguments
+     *
+     * @param image The buffered image, if any, to be stored for this frame
+     */
     public ImageFrame(BufferedImage image) {
         this.image = image;
         this.delay = -1;
@@ -63,6 +102,13 @@ public class ImageFrame {
         this.height = -1;
     }
 
+    /**
+     * Reads an array of Image Frames from an InputStream
+     *
+     * @param stream The stream of data to be interpreted
+     * @return The resulting array of Image Frames, if successful
+     * @throws IOException If an error occurs during operation
+     */
     public static ImageFrame[] readGif(InputStream stream) throws IOException {
         ArrayList<ImageFrame> frames = new ArrayList<>(2);
 
@@ -203,34 +249,74 @@ public class ImageFrame {
         return frames.toArray(new ImageFrame[0]);
     }
 
+    /**
+     * Retrieves the current buffered image being stored
+     *
+     * @return The current buffered image being stored
+     */
     public BufferedImage getImage() {
         return image;
     }
 
+    /**
+     * Retrieves the delay between image transitions
+     *
+     * @return The delay between image transitions
+     */
     public int getDelay() {
         return delay;
     }
 
+    /**
+     * Retrieves the disposal method flag being used for this frame
+     *
+     * @return The disposal method flag being used for this frame
+     */
     public String getDisposal() {
         return disposal;
     }
 
+    /**
+     * Retrieves the width of the current frame
+     *
+     * @return The width of the current frame
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Retrieves the height of the current frame
+     *
+     * @return The height of the current frame
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Retrieves the time, in milliseconds, for the frame to render until from current
+     *
+     * @return The time, in milliseconds, for the frame to render until from current
+     */
     public long getRenderTime() {
         return renderTime;
     }
 
+    /**
+     * Sets the time, in milliseconds, for the frame to render until from current
+     *
+     * @param renderTime The new timestamp to render until
+     */
     public void setRenderTime(long renderTime) {
         this.renderTime = renderTime;
     }
 
+    /**
+     * Determine whether or not this frame has rendered up to or past the delay
+     *
+     * @return Whether or not this frame has rendered up to or past the delay
+     */
     public boolean shouldRenderNext() {
         return System.currentTimeMillis() - renderTime > delay * 10;
     }
