@@ -80,8 +80,9 @@ public class Tuple<T, U, V> {
      *
      * @param first the first element to be applied
      */
-    public void setFirst(final T first) {
+    public T setFirst(final T first) {
         this.first = first;
+        return first;
     }
 
     /**
@@ -98,8 +99,9 @@ public class Tuple<T, U, V> {
      *
      * @param second the second element to be applied
      */
-    public void setSecond(final U second) {
+    public U setSecond(final U second) {
         this.second = second;
+        return second;
     }
 
     /**
@@ -116,8 +118,9 @@ public class Tuple<T, U, V> {
      *
      * @param third the third element to be applied
      */
-    public void setThird(final V third) {
+    public V setThird(final V third) {
         this.third = third;
+        return third;
     }
 
     /**

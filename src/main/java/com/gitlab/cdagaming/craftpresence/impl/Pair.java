@@ -73,8 +73,9 @@ public class Pair<U, V> {
      *
      * @param first the first element to be applied
      */
-    public void setFirst(final U first) {
+    public U setFirst(final U first) {
         this.first = first;
+        return first;
     }
 
     /**
@@ -91,8 +92,9 @@ public class Pair<U, V> {
      *
      * @param second the second element to be applied
      */
-    public void setSecond(final V second) {
+    public V setSecond(final V second) {
         this.second = second;
+        return second;
     }
 
     /**
