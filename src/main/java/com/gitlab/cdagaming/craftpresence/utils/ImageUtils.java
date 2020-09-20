@@ -243,48 +243,41 @@ public class ImageUtils {
             }
 
             final Pair<Integer, List<ImageFrame>> bufferData = cachedImages.get(textureName).getSecond();
-            final boolean shouldRepeat = textureName.endsWith(".gif");
-            final boolean doesContinue = bufferData == null ? false : bufferData.getFirst() < bufferData.getSecond().size() - 1;
 
-            if (cachedImages.get(textureName).getThird() == null || shouldRepeat || doesContinue) {
-                if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
-                    return new ResourceLocation("");
-                } else if (textureName != null) {
-                    List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
-                    if (bufferData.getFirst() < resources.size()) {
-                        ResourceLocation loc = resources.get(bufferData.getFirst());
-                        if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
-                            if (doesContinue) {
-                                bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
-                            } else if (shouldRepeat) {
-                                bufferData.getSecond().get(bufferData.setFirst(0)).setRenderTime(System.currentTimeMillis());
-                            }
-                        }
-                        return loc;
-                    }
-                    final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()).getImage());
-                    final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getFirst().getFirst() : ""), dynTexture);
+            if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
+                return new ResourceLocation("");
+            } else if (textureName != null) {
+                final boolean shouldRepeat = textureName.endsWith(".gif");
+                final boolean doesContinue = bufferData == null ? false : bufferData.getFirst() < bufferData.getSecond().size() - 1;
+
+                List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
+                if (bufferData.getFirst() < resources.size()) {
+                    ResourceLocation loc = resources.get(bufferData.getFirst());
                     if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
                         if (doesContinue) {
                             bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
                         } else if (shouldRepeat) {
-                            bufferData.setFirst(0);
+                            bufferData.getSecond().get(bufferData.setFirst(0)).setRenderTime(System.currentTimeMillis());
                         }
                     }
-                    resources.add(cachedTexture);
-                    return cachedTexture;
+                    return loc;
                 }
-            } else if (textureName != null) {
-                List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
-                if (0 < resources.size()) {
-                    return resources.get(0);
-                }
-                final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(0).getImage());
+                final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()).getImage());
                 final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getFirst().getFirst() : ""), dynTexture);
-                resources.add(cachedTexture);
+                if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
+                    if (doesContinue) {
+                        bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
+                    } else if (shouldRepeat) {
+                        bufferData.setFirst(0);
+                    }
+                }
+                if (!resources.contains(cachedTexture)) {
+                    resources.add(cachedTexture);
+                }
                 return cachedTexture;
+            } else {
+                return new ResourceLocation("");
             }
-            return new ResourceLocation("");
         }
     }
 
