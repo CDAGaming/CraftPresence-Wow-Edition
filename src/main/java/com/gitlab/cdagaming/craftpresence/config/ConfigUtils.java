@@ -78,7 +78,7 @@ public class ConfigUtils {
     public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_showBGAsDark, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
+    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_buttonBGColor, NAME_showBGAsDark, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
     public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
@@ -106,7 +106,7 @@ public class ConfigUtils {
     public int refreshRate;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
-    public String tooltipBGColor, tooltipBorderColor, guiBGColor, languageID;
+    public String tooltipBGColor, tooltipBorderColor, guiBGColor, buttonBGColor, languageID;
     public int configKeyCode;
     public boolean showBGAsDark, stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
@@ -244,6 +244,7 @@ public class ConfigUtils {
         NAME_tooltipBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_bg_color").replaceAll(" ", "_");
         NAME_tooltipBorderColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_border_color").replaceAll(" ", "_");
         NAME_guiBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.gui_bg_color").replaceAll(" ", "_");
+        NAME_buttonBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.button_bg_color").replaceAll(" ", "_");
         NAME_languageID = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.language_id").replaceAll(" ", "_");
         NAME_showBGAsDark = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_bg_as_dark").replaceAll(" ", "_");
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_translation_colors").replaceAll(" ", "_");
@@ -252,6 +253,7 @@ public class ConfigUtils {
         tooltipBGColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
         guiBGColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
+        buttonBGColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/gui.png" : "textures/gui/widgets.png");
         languageID = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         showBGAsDark = true;
         stripTranslationColors = false;

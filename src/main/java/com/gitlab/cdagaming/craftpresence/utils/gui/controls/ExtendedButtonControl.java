@@ -25,16 +25,21 @@
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
+import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 
 /**
  * Extended Gui Widget for a Clickable Button
  *
  * @author CDAGaming
  */
+@SuppressWarnings("DuplicatedCode")
 public class ExtendedButtonControl extends GuiButton {
     /**
      * Optional Arguments used for functions within the Mod, if any
@@ -178,7 +183,35 @@ public class ExtendedButtonControl extends GuiButton {
             hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
             final int hoverState = getHoverState(hovered);
 
-            CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, BUTTON_TEXTURES);
+            String bgCode = CraftPresence.CONFIG.buttonBGColor;
+            ResourceLocation loc;
+
+            if (StringUtils.isValidColorCode(bgCode)) {
+                CraftPresence.GUIS.drawGradientRect(zLevel, x, y, width, height, bgCode, bgCode);
+            } else {
+                final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(bgCode) &&
+                        (bgCode.toLowerCase().startsWith("http") || bgCode.toLowerCase().startsWith("file://"));
+
+                if (!usingExternalTexture) {
+                    if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
+                        bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                    }
+
+                    if (bgCode.contains(":")) {
+                        String[] splitInput = bgCode.split(":", 2);
+                        loc = new ResourceLocation(splitInput[0], splitInput[1]);
+                    } else {
+                        loc = new ResourceLocation(bgCode);
+                    }
+                } else {
+                    final String formattedConvertedName = bgCode.replaceFirst("file://", "");
+                    final String[] urlBits = formattedConvertedName.trim().split("/");
+                    final String textureName = urlBits[urlBits.length - 1].trim();
+                    loc = ImageUtils.getTextureFromUrl(textureName, bgCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+                }
+
+                CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, loc);
+            }
 
             mouseDragged(mc, mouseX, mouseY);
             final int color;

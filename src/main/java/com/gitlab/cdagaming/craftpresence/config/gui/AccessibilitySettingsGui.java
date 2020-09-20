@@ -98,13 +98,32 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         // Adding Gui Background Color Button
         addControl(
                 new ExtendedButtonControl(
-                        (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
+                        calc1, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
                         CraftPresence.CONFIG.NAME_guiBGColor.replaceAll("_", " "),
                         () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.gui_bg_color")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
+                )
+        );
+        // Adding Button Background Color Button
+        addControl(
+                new ExtendedButtonControl(
+                        calc2, CraftPresence.GUIS.getButtonY(2),
+                        180, 20,
+                        CraftPresence.CONFIG.NAME_buttonBGColor.replaceAll("_", " "),
+                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_buttonBGColor)),
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.button_bg_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,

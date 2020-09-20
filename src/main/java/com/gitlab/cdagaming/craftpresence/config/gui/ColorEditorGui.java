@@ -147,6 +147,9 @@ public class ColorEditorGui extends ExtendedScreen {
                                     } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.guiBGColor)) {
                                         CraftPresence.CONFIG.hasChanged = true;
                                         CraftPresence.CONFIG.guiBGColor = currentNormalHexValue;
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.buttonBGColor)) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.buttonBGColor = currentNormalHexValue;
                                     }
                                 }
 
@@ -168,6 +171,12 @@ public class ColorEditorGui extends ExtendedScreen {
                                                     CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
                                         CraftPresence.CONFIG.guiBGColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                                currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBGColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.buttonBGColor :
+                                                    CraftPresence.CONFIG.buttonBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                        CraftPresence.CONFIG.hasChanged = true;
+                                        CraftPresence.CONFIG.buttonBGColor = usingExternalTexture ? currentNormalMCTexturePath :
                                                 currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
                                     }
                                 }
@@ -327,6 +336,12 @@ public class ColorEditorGui extends ExtendedScreen {
                     startingHexValue = CraftPresence.CONFIG.guiBGColor;
                 } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.guiBGColor)) {
                     startingMCTexturePath = CraftPresence.CONFIG.guiBGColor;
+                }
+            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBGColor)) {
+                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.buttonBGColor)) {
+                    startingHexValue = CraftPresence.CONFIG.buttonBGColor;
+                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.buttonBGColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.buttonBGColor;
                 }
             }
 

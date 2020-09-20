@@ -7,6 +7,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 ### Changes
 
 *   Added Gif Image Support to external Image Support
+*   Added Button Background and Background Tint Options to `Accessibility Settings`
 
 ### Fixes
 
