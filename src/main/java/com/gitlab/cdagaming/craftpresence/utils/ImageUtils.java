@@ -51,7 +51,6 @@ import java.util.concurrent.BlockingQueue;
  * @author CDAGaming, wagyourtail
  */
 public class ImageUtils {
-
     /**
      * The Blocking Queue for URL Requests
      * <p>
@@ -78,12 +77,11 @@ public class ImageUtils {
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
                         final boolean isGif = request.getFirst().endsWith(".gif");
 
-                        Pair<Integer, List<ImageFrame>> bufferData = cachedImages.get(request.getFirst()).getSecond();
-                        if (bufferData == null) {
-                            // Setup Initial Data
-                            bufferData = new Pair<>(0, Lists.newArrayList());
+                        final Pair<Integer, List<ImageFrame>> bufferData = cachedImages.get(request.getFirst()).getSecond();
+                        if (bufferData != null) {
+                            // Retrieve Data from external source
                             try {
-                                InputStream streamData = null;
+                                final InputStream streamData;
                                 switch (request.getSecond().getFirst()) {
                                     case FileData:
                                         streamData = new FileInputStream((File) request.getSecond().getSecond());
@@ -95,6 +93,8 @@ public class ImageUtils {
                                         streamData = UrlUtils.getURLStream((URL) request.getSecond().getSecond());
                                         break;
                                     default:
+                                        streamData = null;
+                                        break;
                                 }
 
                                 if (streamData != null) {
@@ -218,7 +218,11 @@ public class ImageUtils {
     public static ResourceLocation getTextureFromUrl(final String textureName, final Pair<InputType, Object> stream) {
         synchronized (cachedImages) {
             if (!cachedImages.containsKey(textureName)) {
-                cachedImages.put(textureName, new Tuple<>(stream, null, null));
+                // Setup Initial data if not present
+                //
+                // Note that the ResourceLocation needs to be
+                // initially null here for compatibility reasons
+                cachedImages.put(textureName, new Tuple<>(stream, new Pair<>(0, Lists.newArrayList()), null));
                 try {
                     urlRequests.put(new Pair<>(textureName, stream));
                 } catch (Exception ex) {
@@ -236,9 +240,9 @@ public class ImageUtils {
                 final boolean shouldRepeat = textureName.endsWith(".gif");
                 final boolean doesContinue = bufferData.getFirst() < bufferData.getSecond().size() - 1;
 
-                List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
+                final List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
                 if (bufferData.getFirst() < resources.size()) {
-                    ResourceLocation loc = resources.get(bufferData.getFirst());
+                    final ResourceLocation loc = resources.get(bufferData.getFirst());
                     if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
                         if (doesContinue) {
                             bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());

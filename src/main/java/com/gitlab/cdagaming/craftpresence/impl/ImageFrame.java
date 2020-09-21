@@ -81,7 +81,7 @@ public class ImageFrame {
      * @param width    The width of this image
      * @param height   The height of this image
      */
-    public ImageFrame(BufferedImage image, int delay, String disposal, int width, int height) {
+    public ImageFrame(final BufferedImage image, final int delay, final String disposal, final int width, final int height) {
         this.image = image;
         this.delay = delay;
         this.disposal = disposal;
@@ -94,7 +94,7 @@ public class ImageFrame {
      *
      * @param image The buffered image, if any, to be stored for this frame
      */
-    public ImageFrame(BufferedImage image) {
+    public ImageFrame(final BufferedImage image) {
         this.image = image;
         this.delay = -1;
         this.disposal = null;
@@ -109,10 +109,10 @@ public class ImageFrame {
      * @return The resulting array of Image Frames, if successful
      * @throws IOException If an error occurs during operation
      */
-    public static ImageFrame[] readGif(InputStream stream) throws IOException {
-        ArrayList<ImageFrame> frames = new ArrayList<>(2);
+    public static ImageFrame[] readGif(final InputStream stream) throws IOException {
+        final ArrayList<ImageFrame> frames = new ArrayList<>(2);
 
-        ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();
+        final ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();
         reader.setInput(ImageIO.createImageInputStream(stream));
 
         int lastX = 0;
@@ -121,18 +121,18 @@ public class ImageFrame {
         int width = -1;
         int height = -1;
 
-        IIOMetadata metadata = reader.getStreamMetadata();
+        final IIOMetadata metadata = reader.getStreamMetadata();
 
         Color backgroundColor = null;
 
         if (metadata != null) {
-            IIOMetadataNode globalRoot = (IIOMetadataNode) metadata.getAsTree(metadata.getNativeMetadataFormatName());
+            final IIOMetadataNode globalRoot = (IIOMetadataNode) metadata.getAsTree(metadata.getNativeMetadataFormatName());
 
-            NodeList globalColorTable = globalRoot.getElementsByTagName("GlobalColorTable");
-            NodeList globalScreeDescriptor = globalRoot.getElementsByTagName("LogicalScreenDescriptor");
+            final NodeList globalColorTable = globalRoot.getElementsByTagName("GlobalColorTable");
+            final NodeList globalScreeDescriptor = globalRoot.getElementsByTagName("LogicalScreenDescriptor");
 
             if (globalScreeDescriptor != null && globalScreeDescriptor.getLength() > 0) {
-                IIOMetadataNode screenDescriptor = (IIOMetadataNode) globalScreeDescriptor.item(0);
+                final IIOMetadataNode screenDescriptor = (IIOMetadataNode) globalScreeDescriptor.item(0);
 
                 if (screenDescriptor != null) {
                     width = Integer.parseInt(screenDescriptor.getAttribute("logicalScreenWidth"));
@@ -141,17 +141,17 @@ public class ImageFrame {
             }
 
             if (globalColorTable != null && globalColorTable.getLength() > 0) {
-                IIOMetadataNode colorTable = (IIOMetadataNode) globalColorTable.item(0);
+                final IIOMetadataNode colorTable = (IIOMetadataNode) globalColorTable.item(0);
 
                 if (colorTable != null) {
-                    String bgIndex = colorTable.getAttribute("backgroundColorIndex");
+                    final String bgIndex = colorTable.getAttribute("backgroundColorIndex");
 
                     IIOMetadataNode colorEntry = (IIOMetadataNode) colorTable.getFirstChild();
                     while (colorEntry != null) {
                         if (colorEntry.getAttribute("index").equals(bgIndex)) {
-                            int red = Integer.parseInt(colorEntry.getAttribute("red"));
-                            int green = Integer.parseInt(colorEntry.getAttribute("green"));
-                            int blue = Integer.parseInt(colorEntry.getAttribute("blue"));
+                            final int red = Integer.parseInt(colorEntry.getAttribute("red"));
+                            final int green = Integer.parseInt(colorEntry.getAttribute("green"));
+                            final int blue = Integer.parseInt(colorEntry.getAttribute("blue"));
 
                             backgroundColor = new Color(red, green, blue);
                             break;
@@ -167,7 +167,7 @@ public class ImageFrame {
         boolean hasBackground = false;
 
         for (int frameIndex = 0; ; frameIndex++) {
-            BufferedImage image;
+            final BufferedImage image;
             try {
                 image = reader.read(frameIndex);
             } catch (IndexOutOfBoundsException io) {
@@ -179,13 +179,13 @@ public class ImageFrame {
                 height = image.getHeight();
             }
 
-            IIOMetadataNode root = (IIOMetadataNode) reader.getImageMetadata(frameIndex).getAsTree("javax_imageio_gif_image_1.0");
-            IIOMetadataNode gce = (IIOMetadataNode) root.getElementsByTagName("GraphicControlExtension").item(0);
-            NodeList children = root.getChildNodes();
+            final IIOMetadataNode root = (IIOMetadataNode) reader.getImageMetadata(frameIndex).getAsTree("javax_imageio_gif_image_1.0");
+            final IIOMetadataNode gce = (IIOMetadataNode) root.getElementsByTagName("GraphicControlExtension").item(0);
+            final NodeList children = root.getChildNodes();
 
-            int delay = Integer.parseInt(gce.getAttribute("delayTime"));
+            final int delay = Integer.parseInt(gce.getAttribute("delayTime"));
 
-            String disposal = gce.getAttribute("disposalMethod");
+            final String disposal = gce.getAttribute("disposalMethod");
 
             if (master == null) {
                 master = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -200,10 +200,10 @@ public class ImageFrame {
                 int y = 0;
 
                 for (int nodeIndex = 0; nodeIndex < children.getLength(); nodeIndex++) {
-                    Node nodeItem = children.item(nodeIndex);
+                    final Node nodeItem = children.item(nodeIndex);
 
                     if (nodeItem.getNodeName().equals("ImageDescriptor")) {
-                        NamedNodeMap map = nodeItem.getAttributes();
+                        final NamedNodeMap map = nodeItem.getAttributes();
 
                         x = Integer.parseInt(map.getNamedItem("imageLeftPosition").getNodeValue());
                         y = Integer.parseInt(map.getNamedItem("imageTopPosition").getNodeValue());
@@ -220,9 +220,9 @@ public class ImageFrame {
                     }
 
                     if (from != null) {
-                        ColorModel model = from.getColorModel();
-                        boolean alpha = from.isAlphaPremultiplied();
-                        WritableRaster raster = from.copyData(null);
+                        final ColorModel model = from.getColorModel();
+                        final boolean alpha = from.isAlphaPremultiplied();
+                        final WritableRaster raster = from.copyData(null);
                         master = new BufferedImage(model, raster, alpha, null);
                     }
                 } else if (disposal.equals("restoreToBackgroundColor") && backgroundColor != null) {
@@ -236,10 +236,10 @@ public class ImageFrame {
                 lastY = y;
             }
 
-            ColorModel model = master.getColorModel();
-            boolean alpha = master.isAlphaPremultiplied();
-            WritableRaster raster = master.copyData(null);
-            BufferedImage copy = new BufferedImage(model, raster, alpha, null);
+            final ColorModel model = master.getColorModel();
+            final boolean alpha = master.isAlphaPremultiplied();
+            final WritableRaster raster = master.copyData(null);
+            final BufferedImage copy = new BufferedImage(model, raster, alpha, null);
             frames.add(new ImageFrame(copy, delay, disposal, image.getWidth(), image.getHeight()));
 
             master.flush();
@@ -308,7 +308,7 @@ public class ImageFrame {
      *
      * @param renderTime The new timestamp to render until
      */
-    public void setRenderTime(long renderTime) {
+    public void setRenderTime(final long renderTime) {
         this.renderTime = renderTime;
     }
 
