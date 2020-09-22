@@ -20,6 +20,7 @@ The Customization Possibilities are limitless, with the only real limit being ho
 
 ### Launcher and Pack Integration Support
 CraftPresence will detect whether your Launch Directory contains:
+
 *   A valid Twitch/Curse/GDLauncher Manifest (manifest.json, minecraftinstance.json)
 *   A MultiMC Instance (instance.cfg)
 *   A MCUpdater Instance (instance.json)
