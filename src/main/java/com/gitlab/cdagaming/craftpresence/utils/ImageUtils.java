@@ -74,8 +74,9 @@ public class ImageUtils {
             public void run() {
                 try {
                     while (!CraftPresence.closing) {
+                        // Note: NativeImage limitations at time of writing limit Gif support to only run on 1.12.2 or below
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
-                        final boolean isGif = request.getFirst().endsWith(".gif");
+                        final boolean isGif = request.getFirst().endsWith(".gif") && ModUtils.MCProtocolID <= 340;
 
                         final Pair<Integer, List<ImageFrame>> bufferData = cachedImages.get(request.getFirst()).getSecond();
                         if (bufferData != null) {
@@ -237,7 +238,8 @@ public class ImageUtils {
             if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
                 return new ResourceLocation("");
             } else if (textureName != null) {
-                final boolean shouldRepeat = textureName.endsWith(".gif");
+                // Note: NativeImage limitations at time of writing limit Gif support to only run on 1.12.2 or below
+                final boolean shouldRepeat = textureName.endsWith(".gif") && ModUtils.MCProtocolID <= 340;
                 final boolean doesContinue = bufferData.getFirst() < bufferData.getSecond().size() - 1;
 
                 final List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
