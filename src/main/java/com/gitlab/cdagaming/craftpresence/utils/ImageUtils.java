@@ -253,7 +253,7 @@ public class ImageUtils {
                     return loc;
                 }
                 final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()).getImage());
-                final ResourceLocation cachedTexture = CraftPresence.instance.getRenderManager().renderEngine.getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getFirst().getFirst() : ""), dynTexture);
+                final ResourceLocation cachedTexture = CraftPresence.instance.getTextureManager().getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getFirst().getFirst() : ""), dynTexture);
                 if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
                     if (doesContinue) {
                         bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
