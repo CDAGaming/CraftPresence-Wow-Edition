@@ -95,11 +95,7 @@ public class ImageFrame {
      * @param image The buffered image, if any, to be stored for this frame
      */
     public ImageFrame(final BufferedImage image) {
-        this.image = image;
-        this.delay = -1;
-        this.disposal = null;
-        this.width = -1;
-        this.height = -1;
+        this(image, -1, null, -1, -1);
     }
 
     /**

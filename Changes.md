@@ -1,17 +1,17 @@
 # CraftPresence Changes
 
-## v1.7.2 (??/??/2020)
+## v1.7.2 (10/11/2020)
 
 _A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.1...release%2Fv1.7.2)_
 
 ### Changes
 
-*   Added Gif Image Support to external Image Support
+*   Added Gif Image Support to external Image compatibility
 *   Added Button Background and Background Tint Options to `Accessibility Settings`
 
 ### Fixes
 
-*   Fixes a NPE in Tuple/Pair toString() outputs
+*   Fixes a NPE in Tuple/Pair `toString()` outputs
 
 ___
 
