@@ -7,10 +7,12 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 ### Changes
 
 *   Added Gif Image Support to external Image compatibility
+*   Hover tooltips for some buttons have been modified if they require saving the config before access
 *   Added Button Background and Background Tint Options to `Accessibility Settings`
 
 ### Fixes
 
+*   Fixes Biome Logic in 1.16.2+ to avoid null-case scenarios
 *   Fixes a NPE in Tuple/Pair `toString()` outputs
 
 ___
