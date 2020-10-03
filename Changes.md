@@ -1,19 +1,16 @@
 # CraftPresence Changes
 
-## v1.7.2 (10/11/2020)
+## v1.7.5 (10/11/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.1...release%2Fv1.7.2)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.2...release%2Fv1.7.5)_
 
 ### Changes
 
-*   Added Gif Image Support to external Image compatibility
-*   Hover tooltips for some buttons have been modified if they require saving the config before access
-*   Added Button Background and Background Tint Options to `Accessibility Settings`
+*   Added `/cp export assets` command (Has two optional arguments for usage specification)
 
 ### Fixes
 
-*   Fixes Biome Logic in 1.16.2+ to avoid null-case scenarios
-*   Fixes a NPE in Tuple/Pair `toString()` outputs
+*   Fixes some Guis not properly displaying the Image-Preview styled scroll list
 
 ___
 
