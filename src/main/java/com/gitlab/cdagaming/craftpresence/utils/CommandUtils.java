@@ -106,7 +106,7 @@ public class CommandUtils {
         } else {
             DiscordAssetUtils.clearClientData();
         }
-        DiscordAssetUtils.loadAssets();
+        DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientID, true);
         CraftPresence.CLIENT.init();
     }
 
@@ -127,7 +127,7 @@ public class CommandUtils {
         if (CraftPresence.CONFIG.detectTechnicPack && !CraftPresence.packFound) {
             TechnicUtils.loadPack();
         }
-        DiscordAssetUtils.loadAssets();
+        DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientID, true);
     }
 
     /**

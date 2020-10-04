@@ -28,7 +28,9 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.gui.SelectorGui;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -39,6 +41,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -188,6 +191,50 @@ public class CommandsGui extends ExtendedScreen {
                             executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.none");
                         }
                     }
+                } else if (executionCommandArgs[0].equalsIgnoreCase("export")) {
+                    String clientId = CraftPresence.CONFIG.clientID;
+                    boolean doFullCopy = false;
+
+                    if (executionCommandArgs.length == 1) {
+                        executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.export", clientId, doFullCopy);
+                    } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[1])) {
+                        if (executionCommandArgs[1].equalsIgnoreCase("assets")) {
+                            if (executionCommandArgs.length != 2 && !StringUtils.isNullOrEmpty(executionCommandArgs[2])) {
+                                if (StringUtils.isValidBoolean(executionCommandArgs[2])) {
+                                    doFullCopy = Boolean.parseBoolean(executionCommandArgs[2]);
+                                } else {
+                                    clientId = executionCommandArgs[2];
+                                }
+
+                                if (executionCommandArgs.length != 3 && !StringUtils.isNullOrEmpty(executionCommandArgs[3])) {
+                                    if (StringUtils.isValidBoolean(executionCommandArgs[3])) {
+                                        doFullCopy = Boolean.parseBoolean(executionCommandArgs[3]);
+                                    } else {
+                                        clientId = executionCommandArgs[3];
+                                    }
+                                }
+                            }
+
+                            final DiscordAsset[] assetList = DiscordAssetUtils.loadAssets(clientId, false);
+
+                            if (assetList != null) {
+                                final String filePath = ModUtils.MOD_ID + File.separator + "export" + File.separator + clientId + File.separator;
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.export.pre", assetList.length, clientId, doFullCopy);
+                                for (DiscordAsset asset : assetList) {
+                                    final String assetUrl = DiscordAssetUtils.getAssetUrl(asset.getName());
+                                    if (doFullCopy) {
+                                        FileUtils.downloadFile(assetUrl, new File(filePath + asset.getName() + ".png"));
+                                    } else {
+                                        // TODO: Add String Copy for non-full copying
+                                    }
+                                }
+
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.export.post", assetList.length, clientId, doFullCopy);
+                            } else {
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.export.exception", clientId);
+                            }
+                        }
+                    }
                 } else if (executionCommandArgs[0].equalsIgnoreCase("reload")) {
                     executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.reload");
                     CommandUtils.reloadData(true);
@@ -244,7 +291,7 @@ public class CommandsGui extends ExtendedScreen {
                             executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.current_data", CraftPresence.CLIENT.CURRENT_USER.getName(), StringUtils.getConvertedString(CraftPresence.CLIENT.DETAILS, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.GAME_STATE, "UTF-8", true), CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, StringUtils.getConvertedString(CraftPresence.CLIENT.LARGE_IMAGE_KEY, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.LARGE_IMAGE_TEXT, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.SMALL_IMAGE_KEY, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.SMALL_IMAGE_TEXT, "UTF-8", true), CraftPresence.CLIENT.PARTY_ID, CraftPresence.CLIENT.PARTY_SIZE, CraftPresence.CLIENT.PARTY_MAX, CraftPresence.CLIENT.JOIN_SECRET, CraftPresence.CLIENT.END_TIMESTAMP, CraftPresence.CLIENT.MATCH_SECRET, CraftPresence.CLIENT.SPECTATE_SECRET, CraftPresence.CLIENT.INSTANCE);
                         } else if (executionCommandArgs[1].equalsIgnoreCase("assets")) {
                             if (executionCommandArgs.length == 2) {
-                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.assets");
+                                executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.view.assets");
                             } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[2])) {
                                 if (executionCommandArgs[2].equalsIgnoreCase("large")) {
                                     CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.assets.large"), DiscordAssetUtils.LARGE_ICONS, null, null, false));
@@ -297,6 +344,7 @@ public class CommandsGui extends ExtendedScreen {
      */
     private List<String> getTabCompletions(String[] args) {
         List<String> baseCompletions = Lists.newArrayList();
+        List<String> exportCompletions = Lists.newArrayList();
         List<String> assetsCompletions = Lists.newArrayList();
         List<String> viewCompletions = Lists.newArrayList();
         List<String> requestCompletions = Lists.newArrayList();
@@ -306,9 +354,12 @@ public class CommandsGui extends ExtendedScreen {
         baseCompletions.add("config");
         baseCompletions.add("reload");
         baseCompletions.add("request");
+        baseCompletions.add("export");
         baseCompletions.add("view");
         baseCompletions.add("reboot");
         baseCompletions.add("shutdown");
+
+        exportCompletions.add("assets");
 
         viewCompletions.add("currentData");
         viewCompletions.add("assets");
@@ -329,7 +380,9 @@ public class CommandsGui extends ExtendedScreen {
         if (args.length == 1) {
             return getListOfStringsMatchingLastWord(args, baseCompletions);
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("view")) {
+            if (args[0].equalsIgnoreCase("export")) {
+                return getListOfStringsMatchingLastWord(args, exportCompletions);
+            } else if (args[0].equalsIgnoreCase("view")) {
                 return getListOfStringsMatchingLastWord(args, viewCompletions);
             } else if (args[0].equalsIgnoreCase("request")) {
                 return getListOfStringsMatchingLastWord(args, requestCompletions);

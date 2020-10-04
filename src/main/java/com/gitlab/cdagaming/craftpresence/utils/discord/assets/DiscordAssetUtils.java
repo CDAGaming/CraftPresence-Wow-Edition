@@ -192,17 +192,21 @@ public class DiscordAssetUtils {
      * Retrieves and Synchronizes the List of Available Discord Assets from the Client ID
      * <p>
      * Url Format: https://discord.com/api/oauth2/applications/<clientId>/assets
+     * 
+     * @param clientId     The client id to load asset data from
+     * @param filterToMain Whether this client id is submitting it's assets as the assets to use in CraftPresence
+     * @return The list of discord asset data attached to this client id
      */
-    public static void loadAssets() {
-        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.load", CraftPresence.CONFIG.clientID));
+    public static DiscordAsset[] loadAssets(final String clientId, final boolean filterToMain) {
+        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.load", clientId));
         ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.discord.assets.load.credits"));
-        ASSET_LIST = Maps.newHashMap();
 
         try {
-            final String url = "https://discord.com/api/oauth2/applications/" + CraftPresence.CONFIG.clientID + "/assets";
+            final String url = "https://discord.com/api/oauth2/applications/" + clientId + "/assets";
             final DiscordAsset[] assets = UrlUtils.getJSONFromURL(url, DiscordAsset[].class);
 
-            if (assets != null) {
+            if (assets != null && filterToMain) {
+                ASSET_LIST = Maps.newHashMap();
                 for (DiscordAsset asset : assets) {
                     if (asset.getType().equals(DiscordAsset.AssetType.LARGE)) {
                         if (!LARGE_ICONS.contains(asset.getName())) {
@@ -231,9 +235,12 @@ public class DiscordAssetUtils {
                     }
                 }
             }
+            return assets;
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.discord.assets.load"));
             ex.printStackTrace();
+
+            return null;
         } finally {
             verifyConfigAssets();
             syncCompleted = true;

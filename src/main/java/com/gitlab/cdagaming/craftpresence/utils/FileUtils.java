@@ -33,6 +33,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Enumeration;
@@ -108,7 +109,8 @@ public class FileUtils {
                 }
             }
 
-            org.apache.commons.io.FileUtils.copyURLToFile(url, file);
+            final InputStream stream = UrlUtils.getURLStream(url);
+            org.apache.commons.io.FileUtils.copyInputStreamToFile(stream, file);
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.download.loaded", file.getName(), file.getAbsolutePath(), urlString));
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.download", file.getName(), urlString, file.getAbsolutePath()));
