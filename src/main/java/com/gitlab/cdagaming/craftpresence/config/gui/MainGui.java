@@ -38,7 +38,7 @@ import org.lwjgl.input.Keyboard;
 import java.util.List;
 
 public class MainGui extends ExtendedScreen {
-    private ExtendedButtonControl biomeSet, dimensionSet, serverSet, statusSet, proceedButton, commandGUIButton;
+    private ExtendedButtonControl biomeSet, dimensionSet, serverSet, proceedButton, commandGUIButton;
 
     public MainGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -81,7 +81,7 @@ public class MainGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_biome"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_biome_data"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -115,7 +115,7 @@ public class MainGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_dimension"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_dimension_data"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -149,7 +149,7 @@ public class MainGui extends ExtendedScreen {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"))
+                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_world_data"))
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
@@ -172,38 +172,23 @@ public class MainGui extends ExtendedScreen {
                         }
                 )
         );
-        statusSet = addControl(
+        // Added Status Settings Button
+        addControl(
                 new ExtendedButtonControl(
                         calc1, CraftPresence.GUIS.getButtonY(3),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.title.status_messages"),
                         () -> CraftPresence.GUIS.openScreen(new StatusMessagesGui(currentScreen)),
-                        () -> {
-                            if (!statusSet.enabled) {
-                                CraftPresence.GUIS.drawMultiLineString(
-                                        StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
-                                                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"))
-                                        ),
-                                        getMouseX(), getMouseY(),
-                                        width, height,
-                                        -1,
-                                        mc.fontRenderer,
-                                        true
-                                );
-                            } else {
-                                CraftPresence.GUIS.drawMultiLineString(
-                                        StringUtils.splitTextByNewLine(
-                                                ModUtils.TRANSLATOR.translate("gui.config.comment.title.status_messages")
-                                        ),
-                                        getMouseX(), getMouseY(),
-                                        width, height,
-                                        -1,
-                                        mc.fontRenderer,
-                                        true
-                                );
-                            }
-                        }
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.title.status_messages")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
                 )
         );
         // Added Advanced Settings Button
@@ -393,11 +378,10 @@ public class MainGui extends ExtendedScreen {
     }
 
     private void syncRenderStates() {
-        biomeSet.enabled = CraftPresence.CONFIG.showCurrentBiome;
-        dimensionSet.enabled = CraftPresence.CONFIG.showCurrentDimension;
-        serverSet.enabled = CraftPresence.CONFIG.showGameState;
-        statusSet.enabled = CraftPresence.CONFIG.showGameState;
-        commandGUIButton.enabled = CraftPresence.CONFIG.enableCommands;
+        biomeSet.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectBiomeData : biomeSet.enabled;
+        dimensionSet.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectDimensionData : dimensionSet.enabled;
+        serverSet.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectWorldData : serverSet.enabled;
+        commandGUIButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enableCommands : commandGUIButton.enabled;
 
         proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
     }

@@ -91,7 +91,7 @@ public class DimensionUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentDimension : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectDimensionData : enabled;
         final boolean needsUpdate = enabled && (
                 DIMENSION_NAMES.isEmpty() || DIMENSION_TYPES.isEmpty()
         );

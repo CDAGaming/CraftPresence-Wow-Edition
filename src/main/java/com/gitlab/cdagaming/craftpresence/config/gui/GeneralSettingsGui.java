@@ -38,7 +38,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton;
     private CheckBoxControl detectCurseManifestButton, detectMultiMCManifestButton,
             detectMCUpdaterInstanceButton, detectTechnicPackButton, showTimeButton,
-            showBiomeButton, showDimensionButton, showStateButton, enableJoinRequestButton;
+            detectBiomeDataButton, detectDimensionDataButton, detectWorldDataButton, enableJoinRequestButton;
     private ExtendedTextControl clientID;
 
     GeneralSettingsGui(GuiScreen parentScreen) {
@@ -169,15 +169,15 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
-        showBiomeButton = addControl(
+        detectBiomeDataButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(5) - 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_biome"),
-                        CraftPresence.CONFIG.showCurrentBiome,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_biome_data"),
+                        CraftPresence.CONFIG.detectBiomeData,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_biome")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_biome_data")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -187,15 +187,15 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
-        showDimensionButton = addControl(
+        detectDimensionDataButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(6) - 30,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_dimension"),
-                        CraftPresence.CONFIG.showCurrentDimension,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_dimension_data"),
+                        CraftPresence.CONFIG.detectDimensionData,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_dimension")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_dimension_data")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -205,15 +205,15 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
-        showStateButton = addControl(
+        detectWorldDataButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(6) - 30,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"),
-                        CraftPresence.CONFIG.showGameState,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_world_data"),
+                        CraftPresence.CONFIG.detectWorldData,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.show_state")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.detect_world_data")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -277,26 +277,20 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.showTime = showTimeButton.isChecked();
                             }
-                            if (showBiomeButton.isChecked() != CraftPresence.CONFIG.showCurrentBiome) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                if (CraftPresence.BIOMES.BIOME_NAMES.isEmpty()) {
-                                    CraftPresence.BIOMES.getBiomes();
-                                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                }
-                                CraftPresence.CONFIG.showCurrentBiome = showBiomeButton.isChecked();
-                            }
-                            if (showDimensionButton.isChecked() != CraftPresence.CONFIG.showCurrentDimension) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                if (CraftPresence.DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
-                                    CraftPresence.DIMENSIONS.getDimensions();
-                                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                }
-                                CraftPresence.CONFIG.showCurrentDimension = showDimensionButton.isChecked();
-                            }
-                            if (showStateButton.isChecked() != CraftPresence.CONFIG.showGameState) {
+                            if (detectBiomeDataButton.isChecked() != CraftPresence.CONFIG.detectBiomeData) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.showGameState = showStateButton.isChecked();
+                                CraftPresence.CONFIG.detectBiomeData = detectBiomeDataButton.isChecked();
+                            }
+                            if (detectDimensionDataButton.isChecked() != CraftPresence.CONFIG.detectDimensionData) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.detectDimensionData = detectDimensionDataButton.isChecked();
+                            }
+                            if (detectWorldDataButton.isChecked() != CraftPresence.CONFIG.detectWorldData) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.detectWorldData = detectWorldDataButton.isChecked();
                             }
                             if (enableJoinRequestButton.isChecked() != CraftPresence.CONFIG.enableJoinRequest) {
                                 CraftPresence.CONFIG.hasChanged = true;

@@ -84,7 +84,7 @@ public class BiomeUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showCurrentBiome : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectBiomeData : enabled;
         final boolean needsUpdate = enabled && (
                 BIOME_NAMES.isEmpty() || BIOME_TYPES.isEmpty()
         );

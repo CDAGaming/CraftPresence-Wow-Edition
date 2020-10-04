@@ -320,7 +320,7 @@ public class CommandsGui extends ExtendedScreen {
                             if (CraftPresence.SERVER.enabled) {
                                 CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.servers"), CraftPresence.SERVER.knownAddresses, null, null, false));
                             } else {
-                                executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.show_state"));
+                                executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_world_data"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("screens")) {
                             if (CraftPresence.GUIS.enabled) {
@@ -332,13 +332,13 @@ public class CommandsGui extends ExtendedScreen {
                             if (CraftPresence.BIOMES.enabled) {
                                 CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.biomes"), CraftPresence.BIOMES.BIOME_NAMES, null, null, false));
                             } else {
-                                executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.show_biome"));
+                                executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_biome_data"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("dimensions")) {
                             if (CraftPresence.DIMENSIONS.enabled) {
                                 CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, null, ModUtils.TRANSLATOR.translate("gui.config.title.selector.view.dimensions"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null, false));
                             } else {
-                                executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.show_dimension"));
+                                executionString = ModUtils.TRANSLATOR.translate("gui.config.message.hover.access", ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_dimension_data"));
                             }
                         } else if (executionCommandArgs[1].equalsIgnoreCase("currentData")) {
                             executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.current_data", CraftPresence.CLIENT.CURRENT_USER.getName(), StringUtils.getConvertedString(CraftPresence.CLIENT.DETAILS, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.GAME_STATE, "UTF-8", true), CraftPresence.CLIENT.START_TIMESTAMP, CraftPresence.CLIENT.CLIENT_ID, StringUtils.getConvertedString(CraftPresence.CLIENT.LARGE_IMAGE_KEY, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.LARGE_IMAGE_TEXT, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.SMALL_IMAGE_KEY, "UTF-8", true), StringUtils.getConvertedString(CraftPresence.CLIENT.SMALL_IMAGE_TEXT, "UTF-8", true), CraftPresence.CLIENT.PARTY_ID, CraftPresence.CLIENT.PARTY_SIZE, CraftPresence.CLIENT.PARTY_MAX, CraftPresence.CLIENT.JOIN_SECRET, CraftPresence.CLIENT.END_TIMESTAMP, CraftPresence.CLIENT.MATCH_SECRET, CraftPresence.CLIENT.SPECTATE_SECRET, CraftPresence.CLIENT.INSTANCE);

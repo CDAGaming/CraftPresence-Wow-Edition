@@ -198,7 +198,7 @@ public class ServerUtils {
      */
     public void onTick() {
         joinInProgress = StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame") || CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame"));
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.showGameState : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectWorldData : enabled;
         final boolean needsUpdate = enabled && knownAddresses.isEmpty();
 
         if (needsUpdate) {

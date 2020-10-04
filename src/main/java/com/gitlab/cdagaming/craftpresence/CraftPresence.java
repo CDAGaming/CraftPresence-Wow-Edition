@@ -245,10 +245,10 @@ public class CraftPresence {
 
             CommandUtils.reloadData(false);
 
-            if (CONFIG.showCurrentDimension && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
+            if (CONFIG.detectDimensionData && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
                 DIMENSIONS.getDimensions();
             }
-            if (CONFIG.showCurrentBiome && BIOMES.BIOME_NAMES.isEmpty()) {
+            if (CONFIG.detectBiomeData && BIOMES.BIOME_NAMES.isEmpty()) {
                 BIOMES.getBiomes();
             }
             if (CONFIG.enablePERGUI && GUIS.GUI_NAMES.isEmpty()) {
@@ -260,7 +260,7 @@ public class CraftPresence {
             if (CONFIG.enablePEREntity && ENTITIES.ENTITY_NAMES.isEmpty()) {
                 ENTITIES.getEntities();
             }
-            if (CONFIG.showGameState && SERVER.knownAddresses.isEmpty()) {
+            if (CONFIG.detectWorldData && SERVER.knownAddresses.isEmpty()) {
                 SERVER.getServerAddresses();
             }
 

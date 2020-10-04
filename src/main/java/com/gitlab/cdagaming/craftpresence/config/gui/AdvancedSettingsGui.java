@@ -424,26 +424,17 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             }
                             if (enablePerGUIButton.isChecked() != CraftPresence.CONFIG.enablePERGUI) {
                                 CraftPresence.CONFIG.hasChanged = true;
-                                if (CraftPresence.GUIS.GUI_NAMES.isEmpty()) {
-                                    CraftPresence.GUIS.getGUIs();
-                                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                }
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.enablePERGUI = enablePerGUIButton.isChecked();
                             }
                             if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePERItem) {
                                 CraftPresence.CONFIG.hasChanged = true;
-                                if (CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES.isEmpty()) {
-                                    CraftPresence.TILE_ENTITIES.getEntities();
-                                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                }
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
                             }
                             if (enablePerEntityButton.isChecked() != CraftPresence.CONFIG.enablePEREntity) {
                                 CraftPresence.CONFIG.hasChanged = true;
-                                if (CraftPresence.ENTITIES.ENTITY_NAMES.isEmpty()) {
-                                    CraftPresence.ENTITIES.getEntities();
-                                    CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                }
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.enablePEREntity = enablePerEntityButton.isChecked();
                             }
                             if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
@@ -502,11 +493,12 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         drawString(mc.fontRenderer, refreshRateText, (width / 2) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         proceedButton.enabled = !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*") && StringUtils.getValidInteger(refreshRate.getText()).getFirst();
-        guiMessagesButton.enabled = CraftPresence.GUIS.enabled;
-        itemMessagesButton.enabled = CraftPresence.TILE_ENTITIES.enabled;
-        entityTargetMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
-        entityAttackingMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
-        entityRidingMessagesButton.enabled = CraftPresence.ENTITIES.enabled;
+
+        guiMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.GUIS.enabled : guiMessagesButton.enabled;
+        itemMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.TILE_ENTITIES.enabled : itemMessagesButton.enabled;
+        entityTargetMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityTargetMessagesButton.enabled;
+        entityAttackingMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityAttackingMessagesButton.enabled;
+        entityRidingMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityRidingMessagesButton.enabled;
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 

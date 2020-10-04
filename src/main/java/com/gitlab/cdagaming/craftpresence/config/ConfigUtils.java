@@ -61,8 +61,8 @@ public class ConfigUtils {
     public String NAME_schemaVersion, NAME_lastMcVersionId;
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
-            NAME_showTime, NAME_showCurrentBiome, NAME_showCurrentDimension,
-            NAME_showGameState, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest;
+            NAME_showTime, NAME_detectBiomeData, NAME_detectDimensionData,
+            NAME_detectWorldData, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest;
     // BIOME MESSAGES
     public String NAME_biomeMessages;
     // DIMENSION MESSAGES
@@ -86,7 +86,7 @@ public class ConfigUtils {
     public String schemaVersion, lastMcVersionId;
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
-            showCurrentBiome, showCurrentDimension, showGameState, enableJoinRequest;
+            detectBiomeData, detectDimensionData, detectWorldData, enableJoinRequest;
     public String clientID, defaultIcon;
     // BIOME MESSAGES
     public String[] biomeMessages;
@@ -144,9 +144,9 @@ public class ConfigUtils {
         NAME_detectMCUpdaterInstance = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_mcupdater_instance").replaceAll(" ", "_");
         NAME_detectTechnicPack = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_technic_pack").replaceAll(" ", "_");
         NAME_showTime = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.show_time").replaceAll(" ", "_");
-        NAME_showCurrentBiome = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.show_biome").replaceAll(" ", "_");
-        NAME_showCurrentDimension = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.show_dimension").replaceAll(" ", "_");
-        NAME_showGameState = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.show_state").replaceAll(" ", "_");
+        NAME_detectBiomeData = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_biome_data").replaceAll(" ", "_");
+        NAME_detectDimensionData = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_dimension_data").replaceAll(" ", "_");
+        NAME_detectWorldData = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_world_data").replaceAll(" ", "_");
         NAME_clientID = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.client_id").replaceAll(" ", "_");
         NAME_defaultIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.default_icon").replaceAll(" ", "_");
         NAME_enableJoinRequest = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.enable_join_request").replaceAll(" ", "_");
@@ -155,9 +155,9 @@ public class ConfigUtils {
         detectMCUpdaterInstance = true;
         detectTechnicPack = true;
         showTime = true;
-        showCurrentBiome = false;
-        showCurrentDimension = true;
-        showGameState = true;
+        detectBiomeData = false;
+        detectDimensionData = true;
+        detectWorldData = true;
         clientID = "450485984333660181";
         defaultIcon = "grass";
         enableJoinRequest = false;

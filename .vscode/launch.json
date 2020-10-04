@@ -8,7 +8,7 @@
       "mainClass": "net.minecraftforge.legacydev.MainClient",
       "projectName": "CraftPresence",
       "cwd": "${workspaceFolder}/run",
-      "vmArgs": "-Dforge.logging.console.level\u003ddebug -Dforge.logging.markers\u003dSCAN,REGISTRIES,REGISTRYDUMP",
+      "vmArgs": "-Xms2G -Dforge.logging.console.level\u003ddebug -Dforge.logging.markers\u003dSCAN,REGISTRIES,REGISTRYDUMP",
       "console": "internalConsole",
       "args": "",
       "env": {
