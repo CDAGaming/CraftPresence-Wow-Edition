@@ -284,6 +284,8 @@ public class CommandsGui extends ExtendedScreen {
                             } else {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.export.exception", clientId);
                             }
+                        } else {
+                            executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.unrecognized");
                         }
                     }
                 } else if (executionCommandArgs[0].equalsIgnoreCase("reload")) {
