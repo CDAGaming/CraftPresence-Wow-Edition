@@ -41,7 +41,11 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -217,15 +221,62 @@ public class CommandsGui extends ExtendedScreen {
 
                             final DiscordAsset[] assetList = DiscordAssetUtils.loadAssets(clientId, false);
 
+                            OutputStream outputData = null;
+                            OutputStreamWriter outputStream = null;
+                            BufferedWriter bw = null;
+                            boolean hasError = false;
+
                             if (assetList != null) {
                                 final String filePath = ModUtils.MOD_ID + File.separator + "export" + File.separator + clientId + File.separator;
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.export.pre", assetList.length, clientId, doFullCopy);
+
+                                if (!doFullCopy) {
+                                    try {
+                                        outputData = new FileOutputStream(new File(filePath + "downloads.txt"));
+                                        outputStream = new OutputStreamWriter(outputData, "UTF-8");
+                                        bw = new BufferedWriter(outputStream);
+
+                                        bw.write("## Export Data => " + clientId);
+                                        bw.newLine();
+                                        bw.newLine();
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                        hasError = true;
+                                    }
+                                }
+
                                 for (DiscordAsset asset : assetList) {
                                     final String assetUrl = DiscordAssetUtils.getAssetUrl(asset.getName());
+                                    final String assetName = asset.getName() + ".png";
                                     if (doFullCopy) {
-                                        FileUtils.downloadFile(assetUrl, new File(filePath + asset.getName() + ".png"));
+                                        FileUtils.downloadFile(assetUrl, new File(filePath + assetName));
+                                    } else if (!hasError) {
+                                        try {
+                                            bw.write("* " + assetName + " => " + assetUrl);
+                                            bw.newLine();
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                            hasError = true;
+                                        }
                                     } else {
-                                        // TODO: Add String Copy for non-full copying
+                                        executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.export.exception", clientId);
+                                    }
+                                }
+
+                                try {
+                                    if (bw != null) {
+                                        bw.close();
+                                    }
+                                    if (outputStream != null) {
+                                        outputStream.close();
+                                    }
+                                    if (outputData != null) {
+                                        outputData.close();
+                                    }
+                                } catch (Exception ex) {
+                                    ModUtils.LOG.debugError(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.data.close"));
+                                    if (ModUtils.IS_VERBOSE) {
+                                        ex.printStackTrace();
                                     }
                                 }
 
