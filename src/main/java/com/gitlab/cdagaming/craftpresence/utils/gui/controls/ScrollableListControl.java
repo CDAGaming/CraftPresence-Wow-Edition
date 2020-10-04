@@ -147,7 +147,7 @@ public class ScrollableListControl extends GuiSlot {
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
         int xOffset = xPos;
         if (renderType == RenderType.DiscordAsset) {
-            final String assetUrl = DiscordAssetUtils.getAssetUrl(getSelectedItem(slotIndex));
+            final String assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, getSelectedItem(slotIndex), true);
             final ResourceLocation texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), assetUrl);
             CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
             // Note: 35 Added to xOffset to accommodate for Image Size

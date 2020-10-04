@@ -232,6 +232,11 @@ public class CommandsGui extends ExtendedScreen {
 
                                 if (!doFullCopy) {
                                     try {
+                                        // Create Data Directory if non-existent
+                                        final File dataDir = new File(filePath + "downloads.txt");
+                                        if (!dataDir.getParentFile().exists() && !dataDir.getParentFile().mkdirs()) {
+                                            hasError = true;
+                                        }
                                         outputData = new FileOutputStream(new File(filePath + "downloads.txt"));
                                         outputStream = new OutputStreamWriter(outputData, "UTF-8");
                                         bw = new BufferedWriter(outputStream);
@@ -246,7 +251,7 @@ public class CommandsGui extends ExtendedScreen {
                                 }
 
                                 for (DiscordAsset asset : assetList) {
-                                    final String assetUrl = DiscordAssetUtils.getAssetUrl(asset.getName());
+                                    final String assetUrl = DiscordAssetUtils.getAssetUrl(clientId, asset.getId(), false);
                                     final String assetName = asset.getName() + ".png";
                                     if (doFullCopy) {
                                         FileUtils.downloadFile(assetUrl, new File(filePath + assetName));
