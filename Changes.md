@@ -10,6 +10,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   (Breaking) Changed `Show Game State` to `Detect World Data` to be more representative
 *   (Breaking) Changed `Show Biome` and `Show Dimension` to `Detect Biome Data` and `Detect Dimension Data` to be more representative
 *   List Data will no longer update before the config is saved (Related to v1.7.2's change)
+*   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
 
 ### Fixes
 

@@ -818,13 +818,36 @@ public class StringUtils {
         if (isNullOrEmpty(originalString)) {
             return 0;
         } else {
-            // Ensure no color codes are in the String before parsing widths
-            final String stringEntry = stripColors(originalString);
-
             int strLength = 0;
-            for (char strChar : stringEntry.toCharArray()) {
-                strLength += getCharWidth(strChar, ModUtils.TRANSLATOR.isUnicode);
+            boolean flag = false;
+
+            for (int index = 0; index < originalString.length(); ++index) {
+                char strChar = originalString.charAt(index);
+                int charWidth = getCharWidth(strChar, ModUtils.TRANSLATOR.isUnicode);
+
+                if (charWidth < 0 && index < originalString.length() - 1) {
+                    ++index;
+                    strChar = originalString.charAt(index);
+
+                    if (strChar != 'l' && strChar != 'L') {
+                        if (strChar == 'r' || strChar == 'R') {
+                            flag = false;
+                        }
+                    } else {
+                        flag = true;
+                    }
+
+                    charWidth = 0;
+                }
+
+                strLength += charWidth;
+
+                if (flag && charWidth > 0)
+                {
+                    ++strLength;
+                }
             }
+
             return strLength;
         }
     }
