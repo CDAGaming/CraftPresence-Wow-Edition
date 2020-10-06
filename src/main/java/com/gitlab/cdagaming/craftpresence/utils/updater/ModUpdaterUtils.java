@@ -102,7 +102,7 @@ public class ModUpdaterUtils {
      * @param currentVersion     The Current Version to attach to this Instance
      * @param currentGameVersion The Current Game Version to attach to this Instance
      */
-    public ModUpdaterUtils(final String modID, final String updateUrl, String currentVersion, final String currentGameVersion) {
+    public ModUpdaterUtils(final String modID, final String updateUrl, final String currentVersion, final String currentGameVersion) {
         this.modID = modID;
         this.updateUrl = updateUrl;
         this.currentGameVersion = currentGameVersion;
@@ -113,7 +113,7 @@ public class ModUpdaterUtils {
         // up the invalidated version id
         if (currentVersion.contains("@")) {
             ModUtils.LOG.warn(ModUtils.TRANSLATOR.translate("craftpresence.logger.warning.updater.data.missing", modID));
-            currentVersion = "v0.0.0";
+            this.currentVersion = "v0.0.0";
             isInvalidVersion = true;
         }
     }
@@ -303,12 +303,12 @@ public class ModUpdaterUtils {
      * <p>PENDING: The version checker has not completed at this time
      */
     public enum UpdateState {
-        FAILED("Failed"),
+        FAILED,
         UP_TO_DATE("Release"),
-        OUTDATED("Outdated"),
+        OUTDATED,
         BETA_OUTDATED("Beta (Outdated)"),
-        BETA("Beta"),
-        PENDING("Pending");
+        BETA,
+        PENDING;
 
         String displayName;
 

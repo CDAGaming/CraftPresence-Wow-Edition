@@ -246,7 +246,7 @@ public class TranslationUtils {
     private void getTranslationMap(final String encoding) {
         translationMap = Maps.newHashMap();
 
-        final InputStream in = StringUtils.getResourceAsStream(TranslationUtils.class, "/assets/"
+        final InputStream in = FileUtils.getResourceAsStream(TranslationUtils.class, "/assets/"
                 + (!StringUtils.isNullOrEmpty(modId) ? modId + "/" : "") +
                 "lang/" + languageId + (usingJson ? ".json" : ".lang"));
 

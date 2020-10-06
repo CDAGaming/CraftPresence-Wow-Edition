@@ -1020,29 +1020,6 @@ public class StringUtils {
     }
 
     /**
-     * Attempts to Retrieve the Specified Resource as an InputStream
-     *
-     * @param fallbackClass Alternative Class Loader to Use to Locate the Resource
-     * @param pathToSearch  The File Path to search for
-     * @return The InputStream for the specified resource, if successful
-     */
-    public static InputStream getResourceAsStream(final Class<?> fallbackClass, final String pathToSearch) {
-        InputStream in = null;
-        boolean useFallback = false;
-
-        try {
-            in = ModUtils.CLASS_LOADER.getResourceAsStream(pathToSearch);
-        } catch (Exception ex) {
-            useFallback = true;
-        }
-
-        if (useFallback || in == null) {
-            in = fallbackClass.getResourceAsStream(pathToSearch);
-        }
-        return in;
-    }
-
-    /**
      * Determines if the Specified index exists in the List with a non-null value
      *
      * @param data  The Array of Strings to check within

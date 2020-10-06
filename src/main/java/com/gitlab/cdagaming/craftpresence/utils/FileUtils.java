@@ -209,7 +209,7 @@ public class FileUtils {
                 // Attempt to Add Classes Matching any of the Source Packages
                 if (classInfo.getName().startsWith(startString) && (!classInfo.getName().contains("FMLServerHandler") && !classInfo.getName().toLowerCase().contains("mixin"))) {
                     try {
-                        Class<?> classObj = Class.forName(classInfo.getName());
+                        final Class<?> classObj = Class.forName(classInfo.getName());
                         availableClassList.add(classObj);
                         for (Class<?> subClassObj : classObj.getClasses()) {
                             if (!availableClassList.contains(subClassObj)) {
@@ -288,20 +288,20 @@ public class FileUtils {
      * @return The list of viewable Mod Class Names
      */
     public static List<String> getModClassNames() {
-        List<String> classNames = Lists.newArrayList();
+        final List<String> classNames = Lists.newArrayList();
         final File[] mods = new File(ModUtils.modsDir).listFiles();
 
         if (mods != null) {
             for (File modFile : mods) {
                 if (getFileExtension(modFile).equals(".jar")) {
                     try {
-                        JarFile jarFile = new JarFile(modFile.getAbsolutePath());
-                        Enumeration<?> allEntries = jarFile.entries();
+                        final JarFile jarFile = new JarFile(modFile.getAbsolutePath());
+                        final Enumeration<JarEntry> allEntries = jarFile.entries();
                         while (allEntries.hasMoreElements()) {
-                            JarEntry entry = (JarEntry) allEntries.nextElement();
-                            String file = entry.getName();
+                            final JarEntry entry = allEntries.nextElement();
+                            final String file = entry.getName();
                             if (file.endsWith(".class")) {
-                                String className = file.replace('/', '.').substring(0, file.length() - 6);
+                                final String className = file.replace('/', '.').substring(0, file.length() - 6);
                                 classNames.add(className);
                             }
                         }
@@ -317,5 +317,28 @@ public class FileUtils {
         } else {
             return Lists.newArrayList();
         }
+    }
+
+    /**
+     * Attempts to Retrieve the Specified Resource as an InputStream
+     *
+     * @param fallbackClass Alternative Class Loader to Use to Locate the Resource
+     * @param pathToSearch  The File Path to search for
+     * @return The InputStream for the specified resource, if successful
+     */
+    public static InputStream getResourceAsStream(final Class<?> fallbackClass, final String pathToSearch) {
+        InputStream in = null;
+        boolean useFallback = false;
+
+        try {
+            in = ModUtils.CLASS_LOADER.getResourceAsStream(pathToSearch);
+        } catch (Exception ex) {
+            useFallback = true;
+        }
+
+        if (useFallback || in == null) {
+            in = fallbackClass.getResourceAsStream(pathToSearch);
+        }
+        return in;
     }
 }

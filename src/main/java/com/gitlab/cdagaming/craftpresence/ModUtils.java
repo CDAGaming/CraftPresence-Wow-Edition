@@ -24,6 +24,7 @@
 
 package com.gitlab.cdagaming.craftpresence;
 
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
 import com.gitlab.cdagaming.craftpresence.utils.updater.ModUpdaterUtils;
@@ -187,7 +188,7 @@ public class ModUtils {
             }
 
             LOG.debugInfo(TRANSLATOR.translate("craftpresence.logger.info.download.init", fileName, charDataDir.getAbsolutePath(), charDataPath));
-            inputData = StringUtils.getResourceAsStream(ModUtils.class, charDataPath);
+            inputData = FileUtils.getResourceAsStream(ModUtils.class, charDataPath);
 
             // Write data from local charData to directory if an update is needed
             if (inputData != null) {
