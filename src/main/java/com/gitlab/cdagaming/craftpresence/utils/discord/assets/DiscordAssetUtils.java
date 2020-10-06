@@ -194,7 +194,7 @@ public class DiscordAssetUtils {
      * Retrieves and Synchronizes the List of Available Discord Assets from the Client ID
      * <p>
      * Url Format: https://discord.com/api/oauth2/applications/[clientId]/assets
-     * 
+     *
      * @param clientId     The client id to load asset data from
      * @param filterToMain Whether this client id is submitting it's assets as the assets to use in CraftPresence
      * @return The list of discord asset data attached to this client id

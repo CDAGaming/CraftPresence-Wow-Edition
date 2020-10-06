@@ -33,7 +33,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.text.TextComponentString;
 
 import java.awt.*;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -842,8 +841,7 @@ public class StringUtils {
 
                 strLength += charWidth;
 
-                if (flag && charWidth > 0)
-                {
+                if (flag && charWidth > 0) {
                     ++strLength;
                 }
             }

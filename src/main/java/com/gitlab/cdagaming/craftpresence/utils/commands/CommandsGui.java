@@ -41,11 +41,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
