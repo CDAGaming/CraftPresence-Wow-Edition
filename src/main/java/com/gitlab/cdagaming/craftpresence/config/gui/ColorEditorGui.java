@@ -87,7 +87,11 @@ public class ColorEditorGui extends ExtendedScreen {
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
-                        redTitle
+                        redTitle,
+                        new Pair<>(
+                                this::syncValues,
+                                () -> {}
+                        )
                 )
         );
         greenText = addControl(
@@ -96,7 +100,11 @@ public class ColorEditorGui extends ExtendedScreen {
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
-                        greenTitle
+                        greenTitle,
+                        new Pair<>(
+                                this::syncValues,
+                                () -> {}
+                        )
                 )
         );
         blueText = addControl(
@@ -105,7 +113,11 @@ public class ColorEditorGui extends ExtendedScreen {
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
-                        blueTitle
+                        blueTitle,
+                        new Pair<>(
+                                this::syncValues,
+                                () -> {}
+                        )
                 )
         );
         alphaText = addControl(
@@ -114,7 +126,11 @@ public class ColorEditorGui extends ExtendedScreen {
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
-                        alphaTitle
+                        alphaTitle,
+                        new Pair<>(
+                                this::syncValues,
+                                () -> {}
+                        )
                 )
         );
 
@@ -305,10 +321,6 @@ public class ColorEditorGui extends ExtendedScreen {
         if (keyCode == Keyboard.KEY_DOWN && pageNumber != 1) {
             pageNumber++;
             initValues();
-            syncValues();
-        }
-
-        if (keyCode == Keyboard.KEY_NUMPADENTER || keyCode == Keyboard.KEY_RETURN) {
             syncValues();
         }
         super.keyTyped(typedChar, keyCode);

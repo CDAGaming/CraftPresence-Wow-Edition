@@ -9,8 +9,9 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Added `/cp export assets` command (Has two optional arguments for usage specification)
 *   (Breaking) Changed `Show Game State` to `Detect World Data` to be more representative
 *   (Breaking) Changed `Show Biome` and `Show Dimension` to `Detect Biome Data` and `Detect Dimension Data` to be more representative
-*   List Data will no longer update before the config is saved (Related to v1.7.2's change)
+*   List Data will no longer update before the config saves (Related to a v1.7.2 change)
 *   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
+*   RGBA Sliders in the Color Editor Guis will now synchronize values without needing to push the Enter Key (This only happens when you let go of the mouse, but may later apply whilst sliding)
 
 ### Fixes
 
