@@ -221,10 +221,8 @@ public class ImageFrame {
                         final WritableRaster raster = from.copyData(null);
                         master = new BufferedImage(model, raster, alpha, null);
                     }
-                } else if (disposal.equals("restoreToBackgroundColor") && backgroundColor != null) {
-                    if (!hasBackground || frameIndex > 1) {
-                        master.createGraphics().fillRect(lastX, lastY, frames.get(frameIndex - 1).getWidth(), frames.get(frameIndex - 1).getHeight());
-                    }
+                } else if (disposal.equals("restoreToBackgroundColor") && backgroundColor != null && (!hasBackground || frameIndex > 1)) {
+                    master.createGraphics().fillRect(lastX, lastY, frames.get(frameIndex - 1).getWidth(), frames.get(frameIndex - 1).getHeight());
                 }
                 master.createGraphics().drawImage(image, x, y, null);
 
