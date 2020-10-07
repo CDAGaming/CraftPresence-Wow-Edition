@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import net.minecraft.client.Minecraft;
 
 import javax.annotation.Nonnull;
@@ -66,6 +67,10 @@ public class SliderControl extends ExtendedButtonControl {
      * Whether the Slider is currently being dragged
      */
     private boolean dragging;
+    /**
+     * The event to occur when sliding occurs
+     */
+    private Runnable onSlideEvent;
 
     /**
      * Initialization Event for this Control, assigning defined arguments
@@ -119,7 +124,7 @@ public class SliderControl extends ExtendedButtonControl {
      * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
      * @param valueStep     The rate at which each move to the slider adjusts it's value
      * @param displayString The title to display in the center of the slider
-     * @param events        The events to Occur when this control is clicked
+     * @param events        The events to occur when this control is modified
      */
     public SliderControl(int buttonId, Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Pair<Runnable, Runnable> events) {
         this(buttonId, positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, events.getFirst());
@@ -168,11 +173,28 @@ public class SliderControl extends ExtendedButtonControl {
      * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
      * @param valueStep     The rate at which each move to the slider adjusts it's value
      * @param displayString The title to display in the center of the slider
-     * @param events        The events to Occur when this control is clicked
+     * @param events        The events to occur when this control is modified
      */
     public SliderControl(Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Pair<Runnable, Runnable> events) {
         this(positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, events.getFirst());
         setOnHover(events.getSecond());
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param positionData  The Starting X and Y Positions to place the control in a Gui
+     * @param dimensions    The Width and Height dimensions for the control
+     * @param startValue    The Starting Value between the minimum and maximum value to set the slider at
+     * @param minValue      The Minimum Value the Slider is allowed to be -- denormalized
+     * @param maxValue      The Maximum Value the Slider is allowed to be -- denormalized
+     * @param valueStep     The rate at which each move to the slider adjusts it's value
+     * @param displayString The title to display in the center of the slider
+     * @param events        The events to occur when this control is modified
+     */
+    public SliderControl(Pair<Integer, Integer> positionData, Pair<Integer, Integer> dimensions, float startValue, float minValue, float maxValue, float valueStep, String displayString, Tuple<Runnable, Runnable, Runnable> events) {
+        this(positionData, dimensions, startValue, minValue, maxValue, valueStep, displayString, new Pair<>(events.getFirst(), events.getSecond()));
+        setOnSlide(events.getThird());
     }
 
     /**
@@ -202,6 +224,7 @@ public class SliderControl extends ExtendedButtonControl {
                 displayString = windowTitle + ": " + denormalizedSlideValue;
             }
 
+            onSlide();
             final int hoverValue = (hovered ? 2 : 1) * 20;
             CraftPresence.GUIS.renderSlider(x + (int) (sliderValue * (float) (width - 8)), y, 0, 46 + hoverValue, 4, 20, zLevel, BUTTON_TEXTURES);
         }
@@ -322,5 +345,23 @@ public class SliderControl extends ExtendedButtonControl {
     @Override
     public void mouseReleased(int mouseX, int mouseY) {
         dragging = false;
+    }
+
+    /**
+     * Sets the Event to occur upon Sliding
+     *
+     * @param event The event to occur
+     */
+    public void setOnSlide(Runnable event) {
+        onSlideEvent = event;
+    }
+
+    /**
+     * Triggers the onSlide event to occur
+     */
+    public void onSlide() {
+        if (onSlideEvent != null) {
+            onSlideEvent.run();
+        }
     }
 }

@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -53,7 +54,7 @@ public class ColorEditorGui extends ExtendedScreen {
     // Page 2 Variables
     private String currentNormalMCTexturePath, currentConvertedMCTexturePath, startingMCTexturePath;
     private ExtendedTextControl mcTextureText;
-    private boolean usingExternalTexture = false;
+    private boolean usingExternalTexture = false, isModified = false;
     private ResourceLocation currentMCTexture;
 
     ColorEditorGui(GuiScreen parentScreen, String configValueName) {
@@ -88,9 +89,10 @@ public class ColorEditorGui extends ExtendedScreen {
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         redTitle,
-                        new Pair<>(
+                        new Tuple<>(
                                 this::syncValues,
-                                () -> {}
+                                () -> {},
+                                this::syncValues
                         )
                 )
         );
@@ -101,9 +103,10 @@ public class ColorEditorGui extends ExtendedScreen {
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         greenTitle,
-                        new Pair<>(
+                        new Tuple<>(
                                 this::syncValues,
-                                () -> {}
+                                () -> {},
+                                this::syncValues
                         )
                 )
         );
@@ -114,9 +117,10 @@ public class ColorEditorGui extends ExtendedScreen {
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         blueTitle,
-                        new Pair<>(
+                        new Tuple<>(
                                 this::syncValues,
-                                () -> {}
+                                () -> {},
+                                this::syncValues
                         )
                 )
         );
@@ -127,9 +131,10 @@ public class ColorEditorGui extends ExtendedScreen {
                         1.0f, 0.0f,
                         255.0f, 1.0f,
                         alphaTitle,
-                        new Pair<>(
+                        new Tuple<>(
                                 this::syncValues,
-                                () -> {}
+                                () -> {},
+                                this::syncValues
                         )
                 )
         );
@@ -243,12 +248,10 @@ public class ColorEditorGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
         final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.preview");
-        final String noticeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.refresh");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(mc.fontRenderer, previewTitle, width - 90, height - 25, 0xFFFFFF);
-        drawString(mc.fontRenderer, noticeTitle, (width / 2) - 90, CraftPresence.GUIS.getButtonY(1) - 5, 0xFFFFFF);
 
         // Ensure Button Activity on Page 1
         hexText.setVisible(pageNumber == 0);
@@ -307,6 +310,8 @@ public class ColorEditorGui extends ExtendedScreen {
 
         previousPageButton.enabled = pageNumber != 0;
         nextPageButton.enabled = pageNumber != 1;
+
+        proceedButton.displayString = isModified ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -409,7 +414,7 @@ public class ColorEditorGui extends ExtendedScreen {
                 currentNormalHexValue = hexText.getText();
                 currentConvertedHexValue = Integer.toString(localValue);
             } else {
-                final boolean isRedDifferent = alphaText.getSliderValue(false) != currentRed,
+                final boolean isRedDifferent = redText.getSliderValue(false) != currentRed,
                         isGreenDifferent = greenText.getSliderValue(false) != currentGreen,
                         isBlueDifferent = blueText.getSliderValue(false) != currentBlue,
                         isAlphaDifferent = alphaText.getSliderValue(false) != currentAlpha;
@@ -427,12 +432,15 @@ public class ColorEditorGui extends ExtendedScreen {
                     hexText.setText(currentNormalHexValue);
 
                     currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
+                    isModified = true;
                 }
             }
         }
 
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
+            final ResourceLocation newTexture;
+
             if (!StringUtils.isNullOrEmpty(mcTextureText.getText())) {
                 usingExternalTexture = !StringUtils.isNullOrEmpty(mcTextureText.getText()) &&
                         (mcTextureText.getText().toLowerCase().startsWith("http") || mcTextureText.getText().toLowerCase().startsWith("file://"));
@@ -465,18 +473,23 @@ public class ColorEditorGui extends ExtendedScreen {
                 if (!usingExternalTexture) {
                     if (currentConvertedMCTexturePath.contains(":")) {
                         final String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
-                        currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                        newTexture = new ResourceLocation(splitInput[0], splitInput[1]);
                     } else {
-                        currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
+                        newTexture = new ResourceLocation(currentConvertedMCTexturePath);
                     }
                 } else {
                     final String formattedConvertedName = currentConvertedMCTexturePath.replaceFirst("file://", "");
                     final String[] urlBits = formattedConvertedName.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
-                    currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+                    newTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                 }
             } else {
-                currentMCTexture = new ResourceLocation("");
+                newTexture = new ResourceLocation("");
+            }
+
+            if (!newTexture.getNamespace().equalsIgnoreCase(currentMCTexture.getNamespace()) || !newTexture.getPath().equalsIgnoreCase(currentMCTexture.getPath())) {
+                isModified = true;
+                currentMCTexture = newTexture;
             }
         }
     }
