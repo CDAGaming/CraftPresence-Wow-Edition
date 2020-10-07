@@ -86,7 +86,7 @@ public class ExtendedTextControl extends GuiTextField {
      *
      * @return The Current Width of this Control
      */
-    public int getWidth() {
+    public int getControlWidth() {
         return width;
     }
 
@@ -95,7 +95,7 @@ public class ExtendedTextControl extends GuiTextField {
      *
      * @return The Current Height of this Control
      */
-    public int getHeight() {
+    public int getControlHeight() {
         return height;
     }
 

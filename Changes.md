@@ -11,13 +11,14 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   (Breaking) Changed `Show Biome` and `Show Dimension` to `Detect Biome Data` and `Detect Dimension Data` to be more representative
 *   List Data will no longer update before the config saves (Related to a v1.7.2 change)
 *   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
-*   RGBA Sliders in the Color Editor Guis will now synchronize values without needing to push the Enter Key
+*   All Data in the Color Editor Guis will now synchronize values without needing to push the Enter Key (As such using the Enter Key for syncing has been removed)
 
 ### Fixes
 
 *   Fixes some Guis not properly displaying the Image-Preview styled scroll list
 *   Fixes HTTPS access for FileUtils#downloadFile
-*   Fixes Color Editor Gui Saving Issues when only editing the red color value
+*   Fixes Color Editor Gui saving issues when only editing the red color value
+*   Fixes improper sizing in some cases with external text controls
 
 ___
 

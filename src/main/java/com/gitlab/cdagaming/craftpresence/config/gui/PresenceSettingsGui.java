@@ -154,7 +154,7 @@ public class PresenceSettingsGui extends ExtendedScreen {
         );
         nextPageButton = addControl(
                 new ExtendedButtonControl(
-                        (backButton.x + backButton.getWidth()) + 3, (height - 30),
+                        (backButton.x + backButton.getControlWidth()) + 3, (height - 30),
                         20, 20,
                         ">",
                         () -> {

@@ -210,7 +210,7 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         previousPageButton = addControl(
                 new ExtendedButtonControl(
-                        (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30),
+                        (proceedButton.x + proceedButton.getControlWidth()) + 3, (height - 30),
                         20, 20,
                         "<",
                         () -> {
@@ -224,7 +224,7 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         nextPageButton = addControl(
                 new ExtendedButtonControl(
-                        (previousPageButton.x + previousPageButton.getWidth()) + 3, (height - 30),
+                        (previousPageButton.x + previousPageButton.getControlWidth()) + 3, (height - 30),
                         20, 20,
                         ">",
                         () -> {

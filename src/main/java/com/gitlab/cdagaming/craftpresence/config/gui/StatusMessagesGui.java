@@ -298,7 +298,7 @@ public class StatusMessagesGui extends ExtendedScreen {
         );
         nextPageButton = addControl(
                 new ExtendedButtonControl(
-                        (proceedButton.x + proceedButton.getWidth()) + 3, (height - 30),
+                        (proceedButton.x + proceedButton.getControlWidth()) + 3, (height - 30),
                         20, 20,
                         ">",
                         () -> {
