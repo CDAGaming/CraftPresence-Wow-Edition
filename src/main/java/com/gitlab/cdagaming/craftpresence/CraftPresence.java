@@ -32,6 +32,7 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.SystemUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.DiscordUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.gitlab.cdagaming.craftpresence.utils.entity.EntityUtils;
 import com.gitlab.cdagaming.craftpresence.utils.entity.TileEntityUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
@@ -282,10 +283,10 @@ public class CraftPresence {
                     StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.getName()));
                     CLIENT.ipcInstance.respondToJoinRequest(CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
                     CLIENT.awaitingReply = false;
-                    CLIENT.STATUS = "ready";
+                    CLIENT.STATUS = DiscordStatus.Ready;
                 } else if (!CLIENT.awaitingReply && CLIENT.REQUESTER_USER != null) {
                     CLIENT.REQUESTER_USER = null;
-                    CLIENT.STATUS = "ready";
+                    CLIENT.STATUS = DiscordStatus.Ready;
                 }
             }
         } else if (!closing) {

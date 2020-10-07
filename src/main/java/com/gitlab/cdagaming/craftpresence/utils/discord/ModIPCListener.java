@@ -30,6 +30,7 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCListener;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
 import com.google.gson.JsonObject;
@@ -44,8 +45,8 @@ public class ModIPCListener implements IPCListener {
     @Override
     public void onActivityJoin(IPCClient client, String secret) {
         // On Accepting and Queuing a Join Request
-        if (StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && !CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinGame"))) {
-            CraftPresence.CLIENT.STATUS = "joinGame";
+        if (CraftPresence.CLIENT.STATUS != DiscordStatus.JoinGame) {
+            CraftPresence.CLIENT.STATUS = DiscordStatus.JoinGame;
             CraftPresence.SERVER.verifyAndJoin(secret);
         }
     }
@@ -53,17 +54,17 @@ public class ModIPCListener implements IPCListener {
     @Override
     public void onActivitySpectate(IPCClient client, String secret) {
         // Spectating Game, Unimplemented for now
-        if (StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && !CraftPresence.CLIENT.STATUS.equalsIgnoreCase("spectateGame"))) {
-            CraftPresence.CLIENT.STATUS = "spectateGame";
+        if (CraftPresence.CLIENT.STATUS != DiscordStatus.SpectateGame) {
+            CraftPresence.CLIENT.STATUS = DiscordStatus.SpectateGame;
         }
     }
 
     @Override
     public void onActivityJoinRequest(IPCClient client, String secret, User user) {
         // On Receiving a New Join Request
-        if (StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (!CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") || !CraftPresence.CLIENT.REQUESTER_USER.equals(user)))) {
+        if (CraftPresence.CLIENT.STATUS != DiscordStatus.JoinRequest || !CraftPresence.CLIENT.REQUESTER_USER.equals(user)) {
             CraftPresence.SYSTEM.TIMER = 30;
-            CraftPresence.CLIENT.STATUS = "joinRequest";
+            CraftPresence.CLIENT.STATUS = DiscordStatus.JoinRequest;
             CraftPresence.CLIENT.REQUESTER_USER = user;
 
             if (!(CraftPresence.instance.currentScreen instanceof CommandsGui)) {
@@ -75,16 +76,12 @@ public class ModIPCListener implements IPCListener {
 
     @Override
     public void onClose(IPCClient client, JsonObject json) {
-        // N/A
+        closeData(null);
     }
 
     @Override
     public void onDisconnect(IPCClient client, Throwable t) {
-        if (StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && !CraftPresence.CLIENT.STATUS.equalsIgnoreCase("disconnected"))) {
-            CraftPresence.CLIENT.STATUS = "disconnected";
-            ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.rpc", t.getMessage()));
-            CraftPresence.CLIENT.shutDown();
-        }
+        closeData(t.getMessage());
     }
 
     @Override
@@ -99,10 +96,20 @@ public class ModIPCListener implements IPCListener {
 
     @Override
     public void onReady(IPCClient client) {
-        if (StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) || (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && !CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"))) {
-            CraftPresence.CLIENT.STATUS = "ready";
+        if (CraftPresence.CLIENT.STATUS != DiscordStatus.Ready) {
+            CraftPresence.CLIENT.STATUS = DiscordStatus.Ready;
             CraftPresence.CLIENT.CURRENT_USER = client.getCurrentUser();
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.load", CraftPresence.CLIENT.CLIENT_ID, CraftPresence.CLIENT.CURRENT_USER != null ? CraftPresence.CLIENT.CURRENT_USER.getName() : "null"));
+        }
+    }
+
+    private void closeData(final String disconnectMessage) {
+        if (CraftPresence.CLIENT.STATUS != DiscordStatus.Disconnected) {
+            if (!StringUtils.isNullOrEmpty(disconnectMessage)) {
+                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.rpc", disconnectMessage));
+            }
+            CraftPresence.CLIENT.STATUS = DiscordStatus.Disconnected;
+            CraftPresence.CLIENT.shutDown();
         }
     }
 }

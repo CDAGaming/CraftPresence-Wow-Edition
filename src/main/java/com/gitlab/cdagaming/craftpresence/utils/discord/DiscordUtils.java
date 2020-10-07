@@ -36,6 +36,7 @@ import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.RichPresence;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
@@ -76,7 +77,7 @@ public class DiscordUtils {
     /**
      * The current RPC Status (Ex: ready, errored, disconnected)
      */
-    public String STATUS;
+    public DiscordStatus STATUS = DiscordStatus.Disconnected;
     /**
      * The Current Message tied to the Party/Game Status Field of the RPC
      */
@@ -420,7 +421,7 @@ public class DiscordUtils {
         }
 
         // Clear User Data before final clear and shutdown
-        STATUS = "disconnected";
+        STATUS = DiscordStatus.Disconnected;
         currentPresence = null;
         clearPartyData(true, false);
         CURRENT_USER = null;

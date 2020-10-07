@@ -33,6 +33,7 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAsset;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
@@ -156,13 +157,13 @@ public class CommandsGui extends ExtendedScreen {
             } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[0])) {
                 if (executionCommandArgs[0].equalsIgnoreCase("request")) {
                     if (executionCommandArgs.length == 1) {
-                        if (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && (CraftPresence.CLIENT.STATUS.equalsIgnoreCase("joinRequest") && CraftPresence.CLIENT.REQUESTER_USER != null)) {
+                        if (CraftPresence.CLIENT.STATUS == DiscordStatus.JoinRequest && CraftPresence.CLIENT.REQUESTER_USER != null) {
                             if (CraftPresence.CONFIG.enableJoinRequest) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.info", CraftPresence.CLIENT.REQUESTER_USER.getName(), CraftPresence.SYSTEM.TIMER);
                                 CraftPresence.CLIENT.awaitingReply = true;
                             } else {
                                 CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
-                                CraftPresence.CLIENT.STATUS = "ready";
+                                CraftPresence.CLIENT.STATUS = DiscordStatus.Ready;
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.CLIENT.awaitingReply = false;
                             }
@@ -175,13 +176,13 @@ public class CommandsGui extends ExtendedScreen {
                             if (executionCommandArgs[1].equalsIgnoreCase("accept")) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.accept", CraftPresence.CLIENT.REQUESTER_USER.getName());
                                 CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.ACCEPT, null);
-                                CraftPresence.CLIENT.STATUS = "ready";
+                                CraftPresence.CLIENT.STATUS = DiscordStatus.Ready;
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.CLIENT.awaitingReply = false;
                             } else if (executionCommandArgs[1].equalsIgnoreCase("deny")) {
                                 executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.request.denied", CraftPresence.CLIENT.REQUESTER_USER.getName());
                                 CraftPresence.CLIENT.ipcInstance.respondToJoinRequest(CraftPresence.CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
-                                CraftPresence.CLIENT.STATUS = "ready";
+                                CraftPresence.CLIENT.STATUS = DiscordStatus.Ready;
                                 CraftPresence.SYSTEM.TIMER = 0;
                                 CraftPresence.CLIENT.awaitingReply = false;
                             } else {
@@ -196,7 +197,7 @@ public class CommandsGui extends ExtendedScreen {
                     boolean doFullCopy = false;
 
                     if (executionCommandArgs.length == 1) {
-                        executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.export", clientId, doFullCopy);
+                        executionString = ModUtils.TRANSLATOR.translate("craftpresence.command.usage.export", clientId, false);
                     } else if (!StringUtils.isNullOrEmpty(executionCommandArgs[1])) {
                         if (executionCommandArgs[1].equalsIgnoreCase("assets")) {
                             if (executionCommandArgs.length != 2 && !StringUtils.isNullOrEmpty(executionCommandArgs[2])) {
@@ -233,8 +234,9 @@ public class CommandsGui extends ExtendedScreen {
                                         if (!dataDir.getParentFile().exists() && !dataDir.getParentFile().mkdirs()) {
                                             hasError = true;
                                         }
+                                        // Create and write initial data, using the encoding of our current ipc instance (UTF-8 by default)
                                         outputData = new FileOutputStream(new File(filePath + "downloads.txt"));
-                                        outputStream = new OutputStreamWriter(outputData, "UTF-8");
+                                        outputStream = new OutputStreamWriter(outputData, CraftPresence.CLIENT.ipcInstance.getEncoding());
                                         bw = new BufferedWriter(outputStream);
 
                                         bw.write("## Export Data => " + clientId);

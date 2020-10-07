@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -152,7 +153,7 @@ public class SystemUtils {
         // Every <passTime> Seconds, refresh Callbacks and load state status
         if (ELAPSED_TIME % CraftPresence.CONFIG.refreshRate == 0) {
             if (!refreshedCallbacks) {
-                if (!HAS_LOADED && (!StringUtils.isNullOrEmpty(CraftPresence.CLIENT.STATUS) && CraftPresence.CLIENT.STATUS.equalsIgnoreCase("ready"))) {
+                if (!HAS_LOADED && CraftPresence.CLIENT.STATUS == DiscordStatus.Ready) {
                     HAS_LOADED = true;
                 }
                 CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());

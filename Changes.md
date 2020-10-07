@@ -16,7 +16,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 ### Fixes
 
 *   Fixes some Guis not properly displaying the Image-Preview styled scroll list
-*   Fixes HTTPS access for FileUtils#downloadFile
+*   Fixes HTTPS access for `FileUtils#downloadFile`
 *   Fixes Color Editor Gui saving issues when only editing the red color value
 *   Fixes improper sizing in some cases with external text controls
 
