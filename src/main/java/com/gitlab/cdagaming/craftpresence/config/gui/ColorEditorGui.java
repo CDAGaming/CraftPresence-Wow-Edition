@@ -77,14 +77,14 @@ public class ColorEditorGui extends ExtendedScreen {
         hexText = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
-                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15,
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
         );
 
         redText = addControl(
                 new SliderControl(
-                        new Pair<>(calc1, CraftPresence.GUIS.getButtonY(3)),
+                        new Pair<>(calc1, CraftPresence.GUIS.getButtonY(2)),
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
@@ -98,7 +98,7 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         greenText = addControl(
                 new SliderControl(
-                        new Pair<>(calc2, CraftPresence.GUIS.getButtonY(3)),
+                        new Pair<>(calc2, CraftPresence.GUIS.getButtonY(2)),
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
@@ -112,7 +112,7 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         blueText = addControl(
                 new SliderControl(
-                        new Pair<>(calc1, CraftPresence.GUIS.getButtonY(4)),
+                        new Pair<>(calc1, CraftPresence.GUIS.getButtonY(3)),
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
@@ -126,7 +126,7 @@ public class ColorEditorGui extends ExtendedScreen {
         );
         alphaText = addControl(
                 new SliderControl(
-                        new Pair<>(calc2, CraftPresence.GUIS.getButtonY(4)),
+                        new Pair<>(calc2, CraftPresence.GUIS.getButtonY(3)),
                         new Pair<>(180, 20),
                         1.0f, 0.0f,
                         255.0f, 1.0f,
@@ -143,8 +143,9 @@ public class ColorEditorGui extends ExtendedScreen {
         mcTextureText = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
-                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1) + 15,
-                        180, 20
+                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
+                        180, 20,
+                        this::syncValues
                 )
         );
         mcTextureText.setMaxStringLength(512);
@@ -274,7 +275,7 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
 
-            drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
+            drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
             proceedButton.enabled = !StringUtils.isNullOrEmpty(hexText.getText());
 
@@ -285,7 +286,7 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 1) {
             final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texture_path");
 
-            drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 20, 0xFFFFFF);
+            drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
             proceedButton.enabled = !StringUtils.isNullOrEmpty(mcTextureText.getText());
 
@@ -432,15 +433,13 @@ public class ColorEditorGui extends ExtendedScreen {
                     hexText.setText(currentNormalHexValue);
 
                     currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
-                    isModified = true;
+                    isModified = !hexText.getText().equals(startingHexValue);
                 }
             }
         }
 
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
-            final ResourceLocation newTexture;
-
             if (!StringUtils.isNullOrEmpty(mcTextureText.getText())) {
                 usingExternalTexture = !StringUtils.isNullOrEmpty(mcTextureText.getText()) &&
                         (mcTextureText.getText().toLowerCase().startsWith("http") || mcTextureText.getText().toLowerCase().startsWith("file://"));
@@ -473,24 +472,21 @@ public class ColorEditorGui extends ExtendedScreen {
                 if (!usingExternalTexture) {
                     if (currentConvertedMCTexturePath.contains(":")) {
                         final String[] splitInput = currentConvertedMCTexturePath.split(":", 2);
-                        newTexture = new ResourceLocation(splitInput[0], splitInput[1]);
+                        currentMCTexture = new ResourceLocation(splitInput[0], splitInput[1]);
                     } else {
-                        newTexture = new ResourceLocation(currentConvertedMCTexturePath);
+                        currentMCTexture = new ResourceLocation(currentConvertedMCTexturePath);
                     }
                 } else {
                     final String formattedConvertedName = currentConvertedMCTexturePath.replaceFirst("file://", "");
                     final String[] urlBits = formattedConvertedName.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
-                    newTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+                    currentMCTexture = ImageUtils.getTextureFromUrl(textureName, currentConvertedMCTexturePath.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                 }
             } else {
-                newTexture = new ResourceLocation("");
+                currentMCTexture = new ResourceLocation("");
             }
 
-            if (!newTexture.getNamespace().equalsIgnoreCase(currentMCTexture.getNamespace()) || !newTexture.getPath().equalsIgnoreCase(currentMCTexture.getPath())) {
-                isModified = true;
-                currentMCTexture = newTexture;
-            }
+            isModified = !mcTextureText.getText().equals(startingMCTexturePath);
         }
     }
 }

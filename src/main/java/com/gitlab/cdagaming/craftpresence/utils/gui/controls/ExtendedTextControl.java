@@ -35,6 +35,11 @@ import net.minecraft.client.gui.GuiTextField;
  */
 public class ExtendedTextControl extends GuiTextField {
     /**
+     * The event to occur when a key event occurs
+     */
+    private Runnable onKeyEvent;
+
+    /**
      * Initialization Event for this Control, assigning defined arguments
      *
      * @param componentId     The ID for the control to Identify as
@@ -62,6 +67,21 @@ public class ExtendedTextControl extends GuiTextField {
     }
 
     /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param fontRendererObj The Font Renderer Instance
+     * @param x               The Starting X Position for this Control
+     * @param y               The Starting Y Position for this Control
+     * @param widthIn         The Width for this Control
+     * @param heightIn        The Height for this Control
+     * @param keyEvent        The event to run when characters are typed in this control
+     */
+    public ExtendedTextControl(FontRenderer fontRendererObj, int x, int y, int widthIn, int heightIn, Runnable keyEvent) {
+        this(fontRendererObj, x, y, widthIn, heightIn);
+        setOnKeyTyped(keyEvent);
+    }
+
+    /**
      * Retrieves the Current Width of this Control
      *
      * @return The Current Width of this Control
@@ -77,5 +97,38 @@ public class ExtendedTextControl extends GuiTextField {
      */
     public int getHeight() {
         return height;
+    }
+
+    /**
+     * Sets the Event to occur upon typing keys
+     *
+     * @param event The event to occur
+     */
+    public void setOnKeyTyped(Runnable event) {
+        onKeyEvent = event;
+    }
+
+    /**
+     * Triggers the onKey event to occur
+     */
+    public void onKeyTyped() {
+        if (onKeyEvent != null) {
+            onKeyEvent.run();
+        }
+    }
+
+    /**
+     * The event to occur when a character is typed within this control
+     *
+     * @param typedChar The typed character, if any
+     * @param keyCode The keycode, if any
+     * @return Whether the event completed successfully
+     */
+    @Override
+    public boolean textboxKeyTyped(char typedChar, int keyCode) {
+        final boolean returnValue = super.textboxKeyTyped(typedChar, keyCode);
+        onKeyTyped();
+
+        return returnValue;
     }
 }
