@@ -77,10 +77,11 @@ public class ColorEditorGui extends ExtendedScreen {
         hexText = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
-                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
+                        calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
         );
+        hexText.setMaxStringLength(10);
 
         redText = addControl(
                 new SliderControl(
@@ -91,7 +92,8 @@ public class ColorEditorGui extends ExtendedScreen {
                         redTitle,
                         new Tuple<>(
                                 this::syncValues,
-                                () -> {},
+                                () -> {
+                                },
                                 this::syncValues
                         )
                 )
@@ -105,7 +107,8 @@ public class ColorEditorGui extends ExtendedScreen {
                         greenTitle,
                         new Tuple<>(
                                 this::syncValues,
-                                () -> {},
+                                () -> {
+                                },
                                 this::syncValues
                         )
                 )
@@ -119,7 +122,8 @@ public class ColorEditorGui extends ExtendedScreen {
                         blueTitle,
                         new Tuple<>(
                                 this::syncValues,
-                                () -> {},
+                                () -> {
+                                },
                                 this::syncValues
                         )
                 )
@@ -133,7 +137,8 @@ public class ColorEditorGui extends ExtendedScreen {
                         alphaTitle,
                         new Tuple<>(
                                 this::syncValues,
-                                () -> {},
+                                () -> {
+                                },
                                 this::syncValues
                         )
                 )
@@ -143,7 +148,7 @@ public class ColorEditorGui extends ExtendedScreen {
         mcTextureText = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
-                        (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
+                        calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
                         this::syncValues
                 )
@@ -246,12 +251,10 @@ public class ColorEditorGui extends ExtendedScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         preDraw();
 
-        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
+        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
         final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.preview");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(mc.fontRenderer, previewTitle, width - 90, height - 25, 0xFFFFFF);
 
         // Ensure Button Activity on Page 1
@@ -394,8 +397,11 @@ public class ColorEditorGui extends ExtendedScreen {
                 if (hexText.getText().startsWith("#") || hexText.getText().length() == 6) {
                     localValue = StringUtils.getColorFromHex(hexText.getText()).getRGB();
                 } else if (hexText.getText().startsWith("0x")) {
-                    localColor = new Color(Long.decode(hexText.getText()).intValue(), true);
-                    localValue = localColor.getRGB();
+                    try {
+                        localColor = new Color(Long.decode(hexText.getText()).intValue(), true);
+                        localValue = localColor.getRGB();
+                    } catch (Exception ignored) {
+                    }
                 } else if (StringUtils.getValidInteger(hexText.getText()).getFirst()) {
                     localValue = Integer.decode(hexText.getText());
                 }
@@ -433,9 +439,9 @@ public class ColorEditorGui extends ExtendedScreen {
                     hexText.setText(currentNormalHexValue);
 
                     currentConvertedHexValue = Long.toString(Long.decode(currentNormalHexValue).intValue());
-                    isModified = !hexText.getText().equals(startingHexValue);
                 }
             }
+            isModified = !hexText.getText().equals(startingHexValue);
         }
 
         // Page 2 - MC Texture Syncing
@@ -485,7 +491,6 @@ public class ColorEditorGui extends ExtendedScreen {
             } else {
                 currentMCTexture = new ResourceLocation("");
             }
-
             isModified = !mcTextureText.getText().equals(startingMCTexturePath);
         }
     }

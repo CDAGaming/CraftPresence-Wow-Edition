@@ -121,7 +121,7 @@ public class ExtendedTextControl extends GuiTextField {
      * The event to occur when a character is typed within this control
      *
      * @param typedChar The typed character, if any
-     * @param keyCode The keycode, if any
+     * @param keyCode   The keycode, if any
      * @return Whether the event completed successfully
      */
     @Override
