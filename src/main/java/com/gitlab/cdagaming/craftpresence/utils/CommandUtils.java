@@ -64,7 +64,7 @@ public class CommandUtils {
         CraftPresence.KEYBINDINGS.onTick();
         CraftPresence.GUIS.onTick();
 
-        if (!isInMainMenu) {
+        if (CraftPresence.SYSTEM.HAS_GAME_LOADED) {
             CraftPresence.BIOMES.onTick();
             CraftPresence.DIMENSIONS.onTick();
             CraftPresence.TILE_ENTITIES.onTick();

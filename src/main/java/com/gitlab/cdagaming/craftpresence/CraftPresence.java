@@ -246,25 +246,6 @@ public class CraftPresence {
 
             CommandUtils.reloadData(false);
 
-            if (CONFIG.detectDimensionData && DIMENSIONS.DIMENSION_NAMES.isEmpty()) {
-                DIMENSIONS.getDimensions();
-            }
-            if (CONFIG.detectBiomeData && BIOMES.BIOME_NAMES.isEmpty()) {
-                BIOMES.getBiomes();
-            }
-            if (CONFIG.enablePERGUI && GUIS.GUI_NAMES.isEmpty()) {
-                GUIS.getGUIs();
-            }
-            if (CONFIG.enablePERItem && TILE_ENTITIES.TILE_ENTITY_NAMES.isEmpty()) {
-                TILE_ENTITIES.getEntities();
-            }
-            if (CONFIG.enablePEREntity && ENTITIES.ENTITY_NAMES.isEmpty()) {
-                ENTITIES.getEntities();
-            }
-            if (CONFIG.detectWorldData && SERVER.knownAddresses.isEmpty()) {
-                SERVER.getServerAddresses();
-            }
-
             if (!CONFIG.hasChanged) {
                 if (!SYSTEM.HAS_LOADED) {
                     // Ensure Loading Presence has already passed, before any other type of presence displays

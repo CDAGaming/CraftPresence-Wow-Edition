@@ -84,6 +84,12 @@ public class SystemUtils {
     public boolean HAS_LOADED = false;
 
     /**
+     * If Loading of game data has been completed<p>
+     * Becomes true after callbacks synchronize if previously false but game is loaded
+     */
+    public boolean HAS_GAME_LOADED = false;
+
+    /**
      * The Current Epoch Unix Timestamp in Milliseconds
      */
     public long CURRENT_TIMESTAMP;
@@ -155,6 +161,9 @@ public class SystemUtils {
             if (!refreshedCallbacks) {
                 if (!HAS_LOADED && CraftPresence.CLIENT.STATUS == DiscordStatus.Ready) {
                     HAS_LOADED = true;
+                }
+                if (HAS_LOADED && !HAS_GAME_LOADED && CraftPresence.instance.currentScreen != null) {
+                    HAS_GAME_LOADED = true;
                 }
                 CraftPresence.CLIENT.updatePresence(CraftPresence.CLIENT.buildRichPresence());
                 refreshedCallbacks = true;
