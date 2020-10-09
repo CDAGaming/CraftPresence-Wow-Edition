@@ -39,6 +39,8 @@ license {
     exclude "**/*.info"
     exclude "**/*.mcmeta"
     exclude "**/*.properties"
+    // Exclude other External Sources
+    exclude "**/WinRegistry.java"
 }
 
 curseforge {

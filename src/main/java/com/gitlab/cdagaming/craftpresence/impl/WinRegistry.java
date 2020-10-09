@@ -1,3 +1,11 @@
+/*
+ * Pure Java Windows Registry access.
+ * Modified by petrucio@stackoverflow(828681) to add support for
+ * reading (and writing but not creating/deleting keys) the 32-bits
+ * registry view from a 64-bits JVM (KEY_WOW64_32KEY)
+ * and 64-bits view from a 32-bits JVM (KEY_WOW64_64KEY).
+ *****************************************************************************/
+
 package com.gitlab.cdagaming.craftpresence.impl;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,8 +20,6 @@ public class WinRegistry {
     public static final int HKEY_CURRENT_USER = 0x80000001;
     public static final int HKEY_LOCAL_MACHINE = 0x80000002;
     public static final int REG_SUCCESS = 0;
-    public static final int REG_NOTFOUND = 2;
-    public static final int REG_ACCESSDENIED = 5;
 
     private static final int KEY_ALL_ACCESS = 0xf003f;
     private static final int KEY_READ = 0x20019;
@@ -80,12 +86,12 @@ public class WinRegistry {
      * Read a value from key and value name
      *
      * @param hkey      HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
-     * @param valueName
+     * @param key       The target key
+     * @param valueName The target value name
      * @return the value
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw(s) an exception
      */
     public static String readString(int hkey, String key, String valueName)
             throws IllegalArgumentException, IllegalAccessException,
@@ -103,11 +109,11 @@ public class WinRegistry {
      * Read value(s) and value name(s) form given key
      *
      * @param hkey HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
+     * @param key  The target key
      * @return the value name(s) plus the value(s)
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw(s) an exception
      */
     public static Map<String, String> readStringValues(int hkey, String key)
             throws IllegalArgumentException, IllegalAccessException,
@@ -125,11 +131,11 @@ public class WinRegistry {
      * Read the value name(s) from a given key
      *
      * @param hkey HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
+     * @param key  The target key
      * @return the value name(s)
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw(s) an exception
      */
     public static List<String> readStringSubKeys(int hkey, String key)
             throws IllegalArgumentException, IllegalAccessException,
@@ -147,10 +153,10 @@ public class WinRegistry {
      * Create a key
      *
      * @param hkey HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @param key  The target key
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw an exception
      */
     public static void createKey(int hkey, String key)
             throws IllegalArgumentException, IllegalAccessException,
@@ -174,12 +180,12 @@ public class WinRegistry {
      * Write a value in a given key/value name
      *
      * @param hkey      HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
-     * @param valueName
-     * @param value
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @param key       The target key
+     * @param valueName The target value name
+     * @param value     The target value
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw an exception
      */
     public static void writeStringValue
     (int hkey, String key, String valueName, String value)
@@ -198,10 +204,10 @@ public class WinRegistry {
      * Delete a given key
      *
      * @param hkey HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @param key  The target key
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw an exception
      */
     public static void deleteKey(int hkey, String key)
             throws IllegalArgumentException, IllegalAccessException,
@@ -221,11 +227,11 @@ public class WinRegistry {
      * delete a value from a given key/value name
      *
      * @param hkey  HKEY_CURRENT_USER/HKEY_LOCAL_MACHINE
-     * @param key
-     * @param value
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
+     * @param key   The target key
+     * @param value The target value
+     * @throws IllegalArgumentException  if hkey is invalid
+     * @throws IllegalAccessException    if permissions insufficient
+     * @throws InvocationTargetException if underlying method(s) throw an exception
      */
     public static void deleteValue(int hkey, String key, String value)
             throws IllegalArgumentException, IllegalAccessException,
@@ -281,6 +287,7 @@ public class WinRegistry {
         return (valb != null ? new String(valb).trim() : null);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private static Map<String, String> readStringValues
             (Preferences root, int hkey, String key)
             throws IllegalArgumentException, IllegalAccessException,
@@ -306,6 +313,7 @@ public class WinRegistry {
         return results;
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private static List<String> readStringSubKeys
             (Preferences root, int hkey, String key)
             throws IllegalArgumentException, IllegalAccessException,
