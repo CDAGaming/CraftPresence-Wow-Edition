@@ -184,7 +184,7 @@ public abstract class Pipe {
             return attemptedPipe.file != null ? attemptedPipe : null;
         } else if (osName.contains("linux") || osName.contains("mac")) {
             try {
-                return new UnixPipe(ipcClient, callbacks, location);
+                return osName.contains("mac") ? new MacPipe(ipcClient, callbacks, location) : new UnixPipe(ipcClient, callbacks, location);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -250,6 +250,26 @@ public abstract class Pipe {
     }
 
     /**
+     * Receives a {@link Packet} with the given {@link Packet.OpCode} and byte data.
+     *
+     * @param op   The {@link Packet.OpCode} to receive data with.
+     * @param data The data to parse with.
+     */
+    public Packet receive(Packet.OpCode op, byte[] data) {
+        JsonObject packetData = new JsonObject();
+        packetData.addProperty("", new String(data));
+        Packet p = new Packet(op, packetData, ipcClient.getEncoding());
+
+        if (ipcClient.isDebugMode()) {
+            ModUtils.LOG.debugInfo(String.format("Received packet: %s", p.toString()));
+        }
+
+        if (listener != null)
+            listener.onPacketReceived(ipcClient, p);
+        return p;
+    }
+
+    /**
      * Blocks until reading a {@link Packet} or until the
      * read thread encounters bad data.
      *
@@ -260,6 +280,10 @@ public abstract class Pipe {
     public abstract Packet read() throws IOException, JsonParseException;
 
     public abstract void write(byte[] b) throws IOException;
+
+    public abstract void registerApp(String applicationId, String command);
+
+    public abstract void registerSteamGame(String applicationId, String steamId);
 
     public PipeStatus getStatus() {
         return status;

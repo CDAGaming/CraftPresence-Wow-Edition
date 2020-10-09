@@ -29,6 +29,7 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
 import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
@@ -521,6 +522,7 @@ public class ServerUtils {
                     CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
                     CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
                     CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
+                    CraftPresence.CLIENT.PARTY_PRIVACY = PartyPrivacy.from(1); // TODO: Make Party Privacy Configurable
                 }
             }
 

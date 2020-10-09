@@ -34,9 +34,12 @@ import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class UnixPipe extends Pipe {
@@ -50,6 +53,7 @@ public class UnixPipe extends Pipe {
     }
 
     @Override
+    @SuppressWarnings("BusyWait")
     public Packet read() throws IOException, JsonParseException {
         InputStream is = socket.getInputStream();
 
@@ -84,17 +88,7 @@ public class UnixPipe extends Pipe {
             ModUtils.LOG.debugInfo(String.format("Read Reversed Byte Data: %s with result %s", new String(d), reversedResult));
         }
 
-        JsonObject packetData = new JsonObject();
-        packetData.addProperty("", new String(d));
-        Packet p = new Packet(op, packetData, ipcClient.getEncoding());
-
-        if (ipcClient.isDebugMode()) {
-            ModUtils.LOG.debugInfo(String.format("Received packet: %s", p.toString()));
-        }
-
-        if (listener != null)
-            listener.onPacketReceived(ipcClient, p);
-        return p;
+        return receive(op, d);
     }
 
     @Override
@@ -112,5 +106,77 @@ public class UnixPipe extends Pipe {
         send(Packet.OpCode.CLOSE, new JsonObject(), null);
         status = PipeStatus.CLOSED;
         socket.close();
+    }
+
+    public boolean mkdir(String path) {
+        File file = new File(path);
+
+        return file.exists() && file.isDirectory() || file.mkdir();
+    }
+
+    @Override
+    public void registerApp(String applicationId, String command) {
+        String home = System.getenv("HOME");
+
+        if (home == null)
+            throw new RuntimeException("Unable to find user HOME directory");
+
+        if (command == null) {
+            try {
+                command = Files.readSymbolicLink(Paths.get("/proc/self/exe")).toString();
+            } catch (Exception ex) {
+                throw new RuntimeException("Unable to get current exe path from /proc/self/exe", ex);
+            }
+        }
+
+        String desktopFile =
+                "[Desktop Entry]\n" +
+                        "Name=Game " + applicationId + "\n" +
+                        "Exec=" + command + " %%u\n" +
+                        "Type=Application\n" +
+                        "NoDisplay=true\n" +
+                        "Categories=Discord;Games;\n" +
+                        "MimeType=x-scheme-handler/discord-" + applicationId + ";\n";
+
+        String desktopFileName = "/discord-" + applicationId + ".desktop";
+        String desktopFilePath = home + "/.local";
+
+        if (this.mkdir(desktopFilePath))
+            ModUtils.LOG.debugWarn("Failed to create directory '" + desktopFilePath + "', may already exist");
+
+        desktopFilePath += "/share";
+
+        if (this.mkdir(desktopFilePath))
+            ModUtils.LOG.debugWarn("Failed to create directory '" + desktopFilePath + "', may already exist");
+
+        desktopFilePath += "/applications";
+
+        if (this.mkdir(desktopFilePath))
+            ModUtils.LOG.debugWarn("Failed to create directory '" + desktopFilePath + "', may already exist");
+
+        desktopFilePath += desktopFileName;
+
+        try (FileWriter fileWriter = new FileWriter(desktopFilePath)) {
+            fileWriter.write(desktopFile);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to write desktop info into '" + desktopFilePath + "'");
+        }
+
+        String xdgMimeCommand = "xdg-mime default discord-" + applicationId + ".desktop x-scheme-handler/discord-" + applicationId;
+
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(xdgMimeCommand.split(" "));
+            processBuilder.environment();
+            int result = processBuilder.start().waitFor();
+            if (result < 0)
+                throw new Exception("xdg-mime returned " + result);
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to register mime handler", ex);
+        }
+    }
+
+    @Override
+    public void registerSteamGame(String applicationId, String steamId) {
+        this.registerApp(applicationId, "xdg-open steam://rungameid/" + steamId);
     }
 }

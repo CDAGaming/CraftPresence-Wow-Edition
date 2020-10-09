@@ -37,6 +37,7 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.RichPresence;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.User;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe.PipeStatus;
@@ -123,6 +124,11 @@ public class DiscordUtils {
      */
     public int PARTY_MAX;
     /**
+     * The Privacy Level of the Party Session
+     * <p>0 == Private; 1 == Public
+     */
+    public PartyPrivacy PARTY_PRIVACY;
+    /**
      * The Current Party Join Secret Key, if in a Party
      */
     public String JOIN_SECRET;
@@ -189,7 +195,7 @@ public class DiscordUtils {
     public synchronized void init() {
         try {
             // Create IPC Instance and Listener and Make a Connection if possible
-            ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID), ModUtils.IS_DEV, ModUtils.IS_VERBOSE);
+            ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID), ModUtils.IS_DEV, ModUtils.IS_VERBOSE, true, CLIENT_ID);
             ipcInstance.setListener(new ModIPCListener());
             ipcInstance.connect();
 
@@ -461,7 +467,7 @@ public class DiscordUtils {
                 .setEndTimestamp(END_TIMESTAMP)
                 .setLargeImage(LARGE_IMAGE_KEY, LARGE_IMAGE_TEXT)
                 .setSmallImage(SMALL_IMAGE_KEY, SMALL_IMAGE_TEXT)
-                .setParty(PARTY_ID, PARTY_SIZE, PARTY_MAX)
+                .setParty(PARTY_ID, PARTY_SIZE, PARTY_MAX, PARTY_PRIVACY.getPartyIndex())
                 .setMatchSecret(MATCH_SECRET)
                 .setJoinSecret(JOIN_SECRET)
                 .setSpectateSecret(SPECTATE_SECRET)

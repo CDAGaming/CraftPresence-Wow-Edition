@@ -74,10 +74,6 @@ public enum DiscordStatus {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
     /**
      * Gets a {@link DiscordStatus} matching the specified display name.
      * <p>
@@ -94,5 +90,9 @@ public enum DiscordStatus {
             }
         }
         return Invalid;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 }
