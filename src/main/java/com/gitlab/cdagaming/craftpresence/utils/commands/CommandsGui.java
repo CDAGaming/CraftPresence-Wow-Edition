@@ -138,11 +138,9 @@ public class CommandsGui extends ExtendedScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         preDraw();
 
-        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
-        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.commands");
+        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.commands");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
         if (!StringUtils.isNullOrEmpty(commandInput.getText()) && commandInput.getText().startsWith("/")) {
             commandArgs = commandInput.getText().replace("/", "").split(" ");
@@ -372,7 +370,7 @@ public class CommandsGui extends ExtendedScreen {
         executionCommandArgs = null;
         // COMMANDS END
 
-        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 45, width, height, -1, mc.fontRenderer, false);
+        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 35, width, height, -1, mc.fontRenderer, false);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

@@ -280,7 +280,7 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width - 105), (height - 55),
                         95, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.about"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.about"),
                         () -> CraftPresence.GUIS.openScreen(new AboutGui(currentScreen))
                 )
         );
@@ -288,7 +288,7 @@ public class MainGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         (width - 105), (height - 30),
                         95, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.title.commands"),
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.commands"),
                         () -> CraftPresence.GUIS.openScreen(new CommandsGui(currentScreen))
                 )
         );

@@ -127,7 +127,7 @@ public class DiscordUtils {
      * The Privacy Level of the Party Session
      * <p>0 == Private; 1 == Public
      */
-    public PartyPrivacy PARTY_PRIVACY;
+    public PartyPrivacy PARTY_PRIVACY = PartyPrivacy.Public;
     /**
      * The Current Party Join Secret Key, if in a Party
      */
