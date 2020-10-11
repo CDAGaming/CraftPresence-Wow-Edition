@@ -45,6 +45,7 @@ import java.util.List;
  *
  * @author CDAGaming
  */
+@SuppressWarnings("DuplicatedCode")
 public class ServerUtils {
     /**
      * Whether this module is active and currently in use
@@ -513,6 +514,11 @@ public class ServerUtils {
 
                 CURRENT_SERVER_ICON = formattedServerIconKey.replace("&icon&", CraftPresence.CONFIG.defaultServerIcon);
 
+                // If join requests are enabled, parse the appropriate data
+                // to form party information.
+                //
+                // Note: The party privacy level is appended by modulus division to prevent
+                // it being anything other then valid privacy levels
                 if (CraftPresence.CONFIG.enableJoinRequest) {
                     if (!StringUtils.isNullOrEmpty(currentServer_Name) && !currentServer_Name.equalsIgnoreCase(CraftPresence.CONFIG.defaultServerName)) {
                         CraftPresence.CLIENT.PARTY_ID = "Join Server: " + currentServer_Name;
@@ -522,7 +528,7 @@ public class ServerUtils {
                     CraftPresence.CLIENT.JOIN_SECRET = makeSecret();
                     CraftPresence.CLIENT.PARTY_SIZE = currentPlayers;
                     CraftPresence.CLIENT.PARTY_MAX = maxPlayers;
-                    CraftPresence.CLIENT.PARTY_PRIVACY = PartyPrivacy.from(1); // TODO: Make Party Privacy Configurable
+                    CraftPresence.CLIENT.PARTY_PRIVACY = PartyPrivacy.from(CraftPresence.CONFIG.partyPrivacyLevel % 2);
                 }
             }
 
