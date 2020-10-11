@@ -13,6 +13,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
 *   All Data in the Color Editor Guis will now synchronize values without needing to push the Enter Key (As such using the Enter Key for syncing has been removed)
 *   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
+*   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend-Regression) Added back support for autoRegister into IPC backend
 *   An assortment of backend optimizations and improvements
 

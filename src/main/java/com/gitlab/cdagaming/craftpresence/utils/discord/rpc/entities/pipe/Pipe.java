@@ -35,6 +35,7 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.exceptions.NoDiscord
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -209,17 +210,29 @@ public abstract class Pipe {
      * @return The IPC location.
      */
     private static String getPipeLocation(int index) {
+        String tmpPath = null, pipePath = "discord-ipc-" + index;
         if (System.getProperty("os.name").contains("Win"))
-            return "\\\\?\\pipe\\discord-ipc-" + index;
-        String tmpPath = null;
+            return "\\\\?\\pipe\\" + pipePath;
         for (String str : unixPaths) {
             tmpPath = System.getenv(str);
             if (tmpPath != null)
                 break;
         }
-        if (tmpPath == null)
+        if (tmpPath == null) {
             tmpPath = "/tmp";
-        return tmpPath + "/discord-ipc-" + index;
+        } else {
+            String snapPath = tmpPath + "/snap.discord", flatpakPath = tmpPath + "/app/com.discordapp.Discord";
+
+            File snapFile = new File(snapPath),
+            flatpakFile = new File(flatpakPath);
+
+            if (snapFile.exists() && snapFile.isDirectory()) {
+                tmpPath = snapPath;
+            } else if (flatpakFile.exists() && flatpakFile.isDirectory()) {
+                tmpPath = flatpakPath;
+            }
+        }
+        return tmpPath + "/" + pipePath;
     }
 
     /**
