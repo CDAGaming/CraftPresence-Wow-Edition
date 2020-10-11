@@ -62,35 +62,7 @@ public class MacPipe extends UnixPipe {
     }
 
     private void registerUrl(String applicationId) {
-        throw new UnsupportedOperationException("OSX URL registration is not handled yet");
-        /* TODO
-        char url[256];
-        snprintf(url, sizeof(url), "discord-%s", applicationId);
-        CFStringRef cfURL = CFStringCreateWithCString(NULL, url, kCFStringEncodingUTF8);
-
-        NSString* myBundleId = [[NSBundle mainBundle] bundleIdentifier];
-        if (!myBundleId) {
-            fprintf(stderr, "No bundle id found\n");
-            return;
-        }
-
-        NSURL* myURL = [[NSBundle mainBundle] bundleURL];
-        if (!myURL) {
-            fprintf(stderr, "No bundle url found\n");
-            return;
-        }
-
-        OSStatus status = LSSetDefaultHandlerForURLScheme(cfURL, (__bridge CFStringRef)myBundleId);
-        if (status != noErr) {
-            fprintf(stderr, "Error in LSSetDefaultHandlerForURLScheme: %d\n", (int)status);
-            return;
-        }
-
-        status = LSRegisterURL((__bridge CFURLRef)myURL, true);
-        if (status != noErr) {
-            fprintf(stderr, "Error in LSRegisterURL: %d\n", (int)status);
-        }
-         */
+        throw new UnsupportedOperationException("MacOS URL registration is not supported at this time.");
     }
 
     @Override
