@@ -167,7 +167,7 @@ public class BiomeUtils {
 
         if (biomeTypes.isEmpty()) {
             // Fallback: Use Manual Class Lookup
-            for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Biome.class, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+            for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Biome.class, true, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
                 if (classObj != null) {
                     try {
                         Biome biomeObj = (Biome) classObj.newInstance();

@@ -239,6 +239,8 @@ This project makes usage of the following dependencies internally:
 *   [DiscordIPC API](https://github.com/jagrosh/DiscordIPC) by [jagrosh](https://github.com/jagrosh)
     *   [JUnixSocket](https://github.com/kohlschutter/junixsocket) by [kohlschutter](https://github.com/kohlschutter)
 
+*   [Google's Guava Api](https://github.com/google/guava) by [Google](https://github.com/google/)
+
 *   [Java Native Access (JNA) API](https://github.com/java-native-access/jna) on v1.5.x and Below
 
 #### Discord Terms of Service

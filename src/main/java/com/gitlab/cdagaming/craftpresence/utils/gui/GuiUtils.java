@@ -300,7 +300,7 @@ public class GuiUtils {
                 GuiScreen.class, GuiContainer.class
         };
 
-        for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+        for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), true, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
             if (!GUI_NAMES.contains(classObj.getSimpleName())) {
                 GUI_NAMES.add(classObj.getSimpleName());
             }
@@ -625,8 +625,11 @@ public class GuiUtils {
      * @param texLocation The game texture to render the slider as
      */
     public void renderSlider(int x, int y, int u, int v, int width, int height, double zLevel, ResourceLocation texLocation) {
-        if (texLocation != null) {
-            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        try {
+            if (texLocation != null) {
+                CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+            }
+        } catch (Exception ignored) {
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -646,8 +649,11 @@ public class GuiUtils {
      * @param texLocation The game texture to render the button as
      */
     public void renderButton(int x, int y, int width, int height, int hoverState, double zLevel, ResourceLocation texLocation) {
-        if (texLocation != null) {
-            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        try {
+            if (texLocation != null) {
+                CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+            }
+        } catch (Exception ignored) {
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
@@ -688,8 +694,11 @@ public class GuiUtils {
      * @param texLocation  The game texture to render the object as
      */
     public void drawTextureRect(double zLevel, double xPos, double yPos, double width, double height, double tint, double widthDivider, double heightDivider, boolean shouldBeDark, ResourceLocation texLocation) {
-        if (texLocation != null) {
-            CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+        try {
+            if (texLocation != null) {
+                CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+            }
+        } catch (Exception ignored) {
         }
 
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -788,12 +797,15 @@ public class GuiUtils {
      * @param verticalBorderData The Top and Bottom Border Lengths for the Object
      * @param sideBorderData     The Left and Right Side Lengths for the Object
      * @param zLevel             The Z Level position of the Object
-     * @param res                The game texture to render the object as
+     * @param texLocation        The game texture to render the object as
      */
     public void drawContinuousTexturedBox(Pair<Integer, Integer> positionData, Pair<Integer, Integer> uVLevels, Pair<Integer, Integer> screenDimensions, Pair<Integer, Integer> textureDimensions,
-                                          Pair<Integer, Integer> verticalBorderData, Pair<Integer, Integer> sideBorderData, double zLevel, ResourceLocation res) {
-        if (res != null) {
-            CraftPresence.instance.getTextureManager().bindTexture(res);
+                                          Pair<Integer, Integer> verticalBorderData, Pair<Integer, Integer> sideBorderData, double zLevel, ResourceLocation texLocation) {
+        try {
+            if (texLocation != null) {
+                CraftPresence.instance.getTextureManager().bindTexture(texLocation);
+            }
+        } catch (Exception ignored) {
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);

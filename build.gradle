@@ -41,6 +41,7 @@ license {
     exclude "**/*.properties"
     // Exclude other External Sources
     exclude "**/WinRegistry.java"
+    exclude "**/impl/guava/**"
 }
 
 curseforge {

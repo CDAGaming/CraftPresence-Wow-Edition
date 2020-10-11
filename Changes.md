@@ -22,6 +22,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Fixes HTTPS access for `FileUtils#downloadFile`
 *   Fixes Color Editor Gui saving issues when only editing the red color value
 *   Fixes improper sizing in some cases with external text controls
+*   Fixes most if not all possible circumstances of GuiUtils causing JVM errors
 
 ___
 

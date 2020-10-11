@@ -25,8 +25,9 @@
 package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.guava.ClassPath;
 import com.google.common.collect.Lists;
-import com.google.common.reflect.ClassPath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -190,85 +191,98 @@ public class FileUtils {
      *
      * @param searchList     The Super Type Classes to look for within the source packages specified
      * @param sourcePackages The root package directories to search within
-     * @return The List of found classes from the search
+     * @return The List of found class names from the search
      */
-    @SuppressWarnings("UnstableApiUsage")
-    public static List<Class<?>> getClassNamesMatchingSuperType(final List<Class<?>> searchList, final String... sourcePackages) {
-        final List<Class<?>> matchingClasses = Lists.newArrayList(), availableClassList = Lists.newArrayList();
+    public static List<Class<?>> getClassNamesMatchingSuperType(final List<Class<?>> searchList, final boolean includeExtraClasses, final String... sourcePackages) {
+        final List<Class<?>> matchingClasses = Lists.newArrayList();
         final List<ClassPath.ClassInfo> classList = Lists.newArrayList();
+        final List<String> sourceData = Lists.newArrayList(sourcePackages);
 
-        // Attempt to Get Top Level Classes from the JVM Class Loader
+        if (includeExtraClasses) {
+            sourceData.addAll(getModClassNames());
+        }
+
+        // Attempt to get all possible classes from the JVM Class Loader
         try {
-            classList.addAll(ClassPath.from(ModUtils.CLASS_LOADER).getTopLevelClasses());
+            classList.addAll(ClassPath.from(ModUtils.CLASS_LOADER).getAllClasses());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        for (ClassPath.ClassInfo classInfo : classList) {
-            for (String startString : sourcePackages) {
-                // Attempt to Add Classes Matching any of the Source Packages
-                if (classInfo.getName().startsWith(startString) && (!classInfo.getName().contains("FMLServerHandler") && !classInfo.getName().toLowerCase().contains("mixin"))) {
-                    try {
-                        final Class<?> classObj = Class.forName(classInfo.getName());
-                        availableClassList.add(classObj);
-                        for (Class<?> subClassObj : classObj.getClasses()) {
-                            if (!availableClassList.contains(subClassObj)) {
-                                availableClassList.add(subClassObj);
-                            }
-                        }
-                    } catch (Exception | Error ex) {
-                        if (ModUtils.IS_VERBOSE) {
-                            ex.printStackTrace();
+        for (String startString : sourceData) {
+            boolean found = false;
+            Class<?> loadedInstance = null;
+
+            try {
+                for (ClassPath.ClassInfo classInfo : classList) {
+                    // Attempt to Add Classes Matching any of the Source Packages
+                    if (classInfo.getName().startsWith(startString)) {
+                        found = true;
+                        loadedInstance = classInfo.load();
+                    }
+                }
+
+                if (!found && includeExtraClasses) {
+                    final Class<?> extraClass = Class.forName(startString, false, ModUtils.CLASS_LOADER);
+                    found = true;
+                    loadedInstance = extraClass;
+                }
+            } catch (Exception | Error ex) {
+                if (ModUtils.IS_VERBOSE) {
+                    ex.printStackTrace();
+                }
+            } finally {
+                if (found && loadedInstance != null) {
+                    Pair<Boolean, List<Class<?>>> subClassData = new Pair<>(false, Lists.newArrayList());
+
+                    for (Class<?> searchClass : searchList) {
+                        subClassData = isSubclassOf(loadedInstance, searchClass, subClassData.getSecond());
+
+                        if (subClassData.getFirst()) {
+                            // If superclass data was found, add the scanned classes
+                            // as well as the original class
+                            matchingClasses.add(loadedInstance);
+                            matchingClasses.addAll(subClassData.getSecond());
+
+                            break;
+                        } else {
+                            // If no superclass data found, reset for next data
+                            subClassData = new Pair<>(false, Lists.newArrayList());
                         }
                     }
                 }
             }
         }
 
-        for (Class<?> classObj : availableClassList) {
-            // Add All SuperClasses of this Class to a List
-            matchingClasses.addAll(getMatchedClassesAfter(searchList, classObj));
-        }
-
-        // Attempt to Retrieve Mod Classes
-        for (String modClassString : getModClassNames()) {
-            if (!modClassString.toLowerCase().contains("mixin")) {
-                try {
-                    // Add all SuperClasses of Mod Class to a List
-                    matchingClasses.addAll(getMatchedClassesAfter(searchList, Class.forName(modClassString)));
-                } catch (Exception | Error ex) {
-                    if (ModUtils.IS_VERBOSE) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-        }
         return matchingClasses;
     }
 
     /**
-     * Retrieves adjusted matching classes after iterating through a Class + Extensions
+     * Retrieves sub/super class data for the specified data
      *
-     * @param searchList      The Current Search List for Class Locations to match against
-     * @param currentClassObj The Current (Original) Class Object
-     * @return Adjusted matching classes after iterating through a Class + Extensions
+     * @param clazz The original class to scan for the specified sub/super-class
+     * @param superClass The sub/super-class target to locate
+     * @param scannedClasses The class hierarchy of scanned data
+     * @return A pair with the format of isSubclassOf:scannedClasses
      */
-    private static List<Class<?>> getMatchedClassesAfter(final List<Class<?>> searchList, final Class<?> currentClassObj) {
-        Class<?> classObj = currentClassObj;
-        final List<Class<?>> superClassList = Lists.newArrayList(), matchingClasses = Lists.newArrayList();
-
-        while (classObj.getSuperclass() != null && !searchList.contains(classObj.getSuperclass())) {
-            superClassList.add(classObj.getSuperclass());
-            classObj = classObj.getSuperclass();
+    protected static Pair<Boolean, List<Class<?>>> isSubclassOf(Class<?> clazz, Class<?> superClass, List<Class<?>> scannedClasses) {
+        if (superClass.equals(Object.class)) {
+            // Every class is an Object.
+            return new Pair<>(true, scannedClasses);
         }
-
-        // If Match is Found, add original Class to final List, and add all Super Classes to returning List
-        if (classObj.getSuperclass() != null && searchList.contains(classObj.getSuperclass())) {
-            matchingClasses.add(classObj);
-            matchingClasses.addAll(superClassList);
+        if (clazz.equals(superClass)) {
+            return new Pair<>(true, scannedClasses);
+        } else {
+            clazz = clazz.getSuperclass();
+            // every class is Object, but superClass is below Object
+            if (clazz == null || clazz.equals(Object.class)) {
+                // we've reached the top of the hierarchy, but superClass couldn't be found.
+                return new Pair<>(false, scannedClasses);
+            }
+            // try the next level up the hierarchy and add this class to scanned history.
+            scannedClasses.add(clazz);
+            return isSubclassOf(clazz, superClass, scannedClasses);
         }
-
-        return matchingClasses;
     }
 
     /**
@@ -278,8 +292,8 @@ public class FileUtils {
      * @param sourcePackages The root package directories to search within
      * @return The List of found classes from the search
      */
-    public static List<Class<?>> getClassNamesMatchingSuperType(final Class<?> searchTarget, final String... sourcePackages) {
-        return getClassNamesMatchingSuperType(Lists.newArrayList(searchTarget), sourcePackages);
+    public static List<Class<?>> getClassNamesMatchingSuperType(final Class<?> searchTarget, final boolean includeExtraClasses, final String... sourcePackages) {
+        return getClassNamesMatchingSuperType(Lists.newArrayList(searchTarget), includeExtraClasses, sourcePackages);
     }
 
     /**
