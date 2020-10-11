@@ -260,12 +260,13 @@ public class FileUtils {
     /**
      * Retrieves sub/super class data for the specified data
      *
-     * @param clazz The original class to scan for the specified sub/super-class
+     * @param originalClass The original class to scan for the specified sub/super-class
      * @param superClass The sub/super-class target to locate
      * @param scannedClasses The class hierarchy of scanned data
      * @return A pair with the format of isSubclassOf:scannedClasses
      */
-    protected static Pair<Boolean, List<Class<?>>> isSubclassOf(Class<?> clazz, Class<?> superClass, List<Class<?>> scannedClasses) {
+    protected static Pair<Boolean, List<Class<?>>> isSubclassOf(final Class<?> originalClass, final Class<?> superClass, final List<Class<?>> scannedClasses) {
+        Class<?> clazz = originalClass;
         if (superClass.equals(Object.class)) {
             // Every class is an Object.
             return new Pair<>(true, scannedClasses);
