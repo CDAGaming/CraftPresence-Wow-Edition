@@ -32,6 +32,7 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import net.minecraft.client.gui.GuiScreen;
 
+@SuppressWarnings("DuplicatedCode")
 public class BiomeSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, biomeMessagesButton;
     private ExtendedTextControl defaultMessage;

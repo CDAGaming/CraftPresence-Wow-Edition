@@ -33,6 +33,7 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import net.minecraft.client.gui.GuiScreen;
 
+@SuppressWarnings("DuplicatedCode")
 public class ServerSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, serverMessagesButton;
     private ExtendedTextControl defaultMOTD, defaultName, defaultMSG;

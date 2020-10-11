@@ -28,17 +28,20 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import net.minecraft.client.gui.GuiScreen;
 
+@SuppressWarnings("DuplicatedCode")
 public class GeneralSettingsGui extends ExtendedScreen {
-    private ExtendedButtonControl proceedButton;
+    private ExtendedButtonControl proceedButton, partyPrivacyLevelButton;
     private CheckBoxControl detectCurseManifestButton, detectMultiMCManifestButton,
             detectMCUpdaterInstanceButton, detectTechnicPackButton, showTimeButton,
-            detectBiomeDataButton, detectDimensionDataButton, detectWorldDataButton, enableJoinRequestButton;
+            detectBiomeDataButton, detectDimensionDataButton, detectWorldDataButton,
+            enableJoinRequestButton;
     private ExtendedTextControl clientID;
 
     GeneralSettingsGui(GuiScreen parentScreen) {
@@ -57,13 +60,16 @@ public class GeneralSettingsGui extends ExtendedScreen {
         clientID.setText(CraftPresence.CONFIG.clientID);
         clientID.setMaxStringLength(18);
 
-        final int calc1 = (width / 2) - 145;
-        final int calc2 = (width / 2) + 18;
+        final int buttonCalc1 = (width / 2) - 183;
+        final int buttonCalc2 = (width / 2) + 3;
+
+        final int checkboxCalc1 = (width / 2) - 145;
+        final int checkboxCalc2 = (width / 2) + 18;
 
         // Adding Default Icon Button
         addControl(
                 new ExtendedButtonControl(
-                        (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
+                        buttonCalc1, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.default_icon"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null, true)),
@@ -79,9 +85,31 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
+        partyPrivacyLevelButton = addControl(
+                new ExtendedButtonControl(
+                        buttonCalc2, CraftPresence.GUIS.getButtonY(2),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(CraftPresence.CONFIG.partyPrivacyLevel).getDisplayName(),
+                        () -> {
+                            CraftPresence.CONFIG.hasChanged = true;
+                            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                            CraftPresence.CONFIG.partyPrivacyLevel = (CraftPresence.CONFIG.partyPrivacyLevel + 1) % 2;
+                        },
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.party_privacy")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
+                )
+        );
         detectCurseManifestButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(3),
+                        checkboxCalc1, CraftPresence.GUIS.getButtonY(3),
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_curse_manifest"),
                         CraftPresence.CONFIG.detectCurseManifest,
                         null,
@@ -99,7 +127,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         detectMultiMCManifestButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(3),
+                        checkboxCalc2, CraftPresence.GUIS.getButtonY(3),
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_multimc_manifest"),
                         CraftPresence.CONFIG.detectMultiMCManifest,
                         null,
@@ -117,7 +145,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         detectMCUpdaterInstanceButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(4) - 10,
+                        checkboxCalc1, CraftPresence.GUIS.getButtonY(4) - 10,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_mcupdater_instance"),
                         CraftPresence.CONFIG.detectMCUpdaterInstance,
                         null,
@@ -135,7 +163,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         detectTechnicPackButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(4) - 10,
+                        checkboxCalc2, CraftPresence.GUIS.getButtonY(4) - 10,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_technic_pack"),
                         CraftPresence.CONFIG.detectTechnicPack,
                         null,
@@ -153,7 +181,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         showTimeButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(5) - 20,
+                        checkboxCalc1, CraftPresence.GUIS.getButtonY(5) - 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.show_time"),
                         CraftPresence.CONFIG.showTime,
                         null,
@@ -171,7 +199,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         detectBiomeDataButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(5) - 20,
+                        checkboxCalc2, CraftPresence.GUIS.getButtonY(5) - 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_biome_data"),
                         CraftPresence.CONFIG.detectBiomeData,
                         null,
@@ -189,7 +217,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         detectDimensionDataButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(6) - 30,
+                        checkboxCalc1, CraftPresence.GUIS.getButtonY(6) - 30,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_dimension_data"),
                         CraftPresence.CONFIG.detectDimensionData,
                         null,
@@ -207,7 +235,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         detectWorldDataButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(6) - 30,
+                        checkboxCalc2, CraftPresence.GUIS.getButtonY(6) - 30,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.detect_world_data"),
                         CraftPresence.CONFIG.detectWorldData,
                         null,
@@ -225,7 +253,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         );
         enableJoinRequestButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(7) - 40,
+                        checkboxCalc1, CraftPresence.GUIS.getButtonY(7) - 40,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.enable_join_request"),
                         CraftPresence.CONFIG.enableJoinRequest,
                         null,
@@ -331,6 +359,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(mc.fontRenderer, clientIDText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
+        partyPrivacyLevelButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(CraftPresence.CONFIG.partyPrivacyLevel).getDisplayName();
         proceedButton.enabled = !StringUtils.isNullOrEmpty(clientID.getText()) && clientID.getText().length() == 18 && StringUtils.getValidLong(clientID.getText()).getFirst();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
