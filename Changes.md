@@ -12,6 +12,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   List Data will no longer update before the config saves (Related to a v1.7.2 change)
 *   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
 *   All Data in the Color Editor Guis will now synchronize values without needing to push the Enter Key (As such using the Enter Key for syncing has been removed)
+*   The `&health&` sub-placeholder in `&playerinfo&` will now be rounded, to the nearest whole number
 *   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend-Regression) Added back support for autoRegister into IPC backend
@@ -19,6 +20,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 
 ### Fixes
 
+*   Fixes an oversight with `StringUtils#roundDouble` not being able to round up to a full whole number
 *   Fixes some Guis not properly displaying the Image-Preview styled scroll list
 *   Fixes HTTPS access for `FileUtils#downloadFile`
 *   Fixes Color Editor Gui saving issues when only editing the red color value

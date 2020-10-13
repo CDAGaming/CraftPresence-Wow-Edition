@@ -126,7 +126,7 @@ public class ServerUtils {
     /**
      * Mapping storing the Current and Maximum Health the Player currently has in a World
      */
-    private Pair<Float, Float> currentHealth = new Pair<>(0.0f, 0.0f);
+    private Pair<Double, Double> currentHealth = new Pair<>(0.0D, 0.0D);
 
     /**
      * The Current Server Connection Data and Info
@@ -178,7 +178,7 @@ public class ServerUtils {
         currentServerData = null;
         currentConnection = null;
         currentCoordinates = new Pair<>(new Pair<>(0.0D, 0.0D), 0.0D);
-        currentHealth = new Pair<>(0.0f, 0.0f);
+        currentHealth = new Pair<>(0.0D, 0.0D);
         currentDifficulty = null;
         currentWorldName = null;
         timeString = null;
@@ -284,7 +284,7 @@ public class ServerUtils {
 
                     // &health& Argument = Current and Maximum Health of Player
                     if (CraftPresence.CONFIG.innerPlayerPlaceholderMSG.toLowerCase().contains("&health&")) {
-                        final Pair<Float, Float> newHealth = CraftPresence.player != null ? new Pair<>(CraftPresence.player.getHealth(), CraftPresence.player.getMaxHealth()) : new Pair<>(0.0f, 0.0f);
+                        final Pair<Double, Double> newHealth = CraftPresence.player != null ? new Pair<>(StringUtils.roundDouble(CraftPresence.player.getHealth(), 0), StringUtils.roundDouble(CraftPresence.player.getMaxHealth(), 0)) : new Pair<>(0.0D, 0.0D);
                         if (!newHealth.equals(currentHealth)) {
                             currentHealth = newHealth;
                             queuedForUpdate = true;

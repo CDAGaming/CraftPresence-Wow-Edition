@@ -127,10 +127,10 @@ public class StringUtils {
      * @return The rounded Double value
      */
     public static double roundDouble(double value, int places) {
-        if (places > 0) {
+        if (places >= 0) {
             return Double.parseDouble(String.format("%." + places + "f", value));
         } else {
-            // Do not Round if Places is less then or equal to 0
+            // Do not Round if Places is less then 0
             return value;
         }
     }
