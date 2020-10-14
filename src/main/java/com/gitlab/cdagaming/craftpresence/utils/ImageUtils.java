@@ -86,18 +86,22 @@ public class ImageUtils {
                             // Retrieve Data from external source
                             try {
                                 final InputStream streamData;
+                                final Object originData = request.getSecond().getSecond();
                                 switch (request.getSecond().getFirst()) {
                                     case FileData:
-                                        streamData = new FileInputStream((File) request.getSecond().getSecond());
+                                        streamData = new FileInputStream((File) originData);
                                         break;
                                     case FileStream:
-                                        streamData = new FileInputStream(request.getSecond().getSecond().toString());
+                                        streamData = new FileInputStream(originData.toString());
                                         break;
                                     case ByteStream:
-                                        streamData = new ByteArrayInputStream(Base64.getMimeDecoder().decode(request.getSecond().getSecond().toString().contains(",") ? request.getSecond().getSecond().toString().split(",")[1] : request.getSecond().getSecond().toString()));
+                                        final Pair<Boolean, String> base64Data = StringUtils.isBase64(originData.toString());
+                                        final byte[] dataSet = base64Data.getFirst() ? 
+                                            (Base64.getMimeDecoder().decode(base64Data.getSecond())) : (originData instanceof byte[] ? (byte[]) originData : originData.toString().getBytes());
+                                        streamData = new ByteArrayInputStream(dataSet);
                                         break;
                                     case Url:
-                                        streamData = UrlUtils.getURLStream((URL) request.getSecond().getSecond());
+                                        streamData = UrlUtils.getURLStream((URL) originData);
                                         break;
                                     default:
                                         streamData = null;
@@ -212,7 +216,7 @@ public class ImageUtils {
             } else {
                 return getTextureFromUrl(
                     textureName, 
-                    new Pair<>(url.toString().toLowerCase().startsWith("data:image") ? InputType.ByteStream : InputType.FileStream, url.toString())
+                    new Pair<>(StringUtils.isBase64(url.toString()).getFirst() ? InputType.ByteStream : InputType.FileStream, url.toString())
                 );
             }
         }
@@ -262,19 +266,26 @@ public class ImageUtils {
                     }
                     return loc;
                 }
-                final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()).getImage());
-                final ResourceLocation cachedTexture = CraftPresence.instance.getTextureManager().getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getSecond().getFirst() : ""), dynTexture);
-                if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
-                    if (doesContinue) {
-                        bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
-                    } else if (shouldRepeat) {
-                        bufferData.setFirst(0);
+                try {
+                    final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()).getImage());
+                    final ResourceLocation cachedTexture = CraftPresence.instance.getTextureManager().getDynamicTextureLocation(textureName + (textureName.endsWith(".gif") ? "_" + cachedImages.get(textureName).getSecond().getFirst() : ""), dynTexture);
+                    if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
+                        if (doesContinue) {
+                            bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
+                        } else if (shouldRepeat) {
+                            bufferData.setFirst(0);
+                        }
                     }
+                    if (!resources.contains(cachedTexture)) {
+                        resources.add(cachedTexture);
+                    }
+                    return cachedTexture;
+                } catch (Exception ex) {
+                    if (ModUtils.IS_VERBOSE) {
+                        ex.printStackTrace();
+                    }
+                    return new ResourceLocation("");
                 }
-                if (!resources.contains(cachedTexture)) {
-                    resources.add(cachedTexture);
-                }
-                return cachedTexture;
             } else {
                 return new ResourceLocation("");
             }
@@ -289,7 +300,7 @@ public class ImageUtils {
      */
     public static boolean isExternalImage(final String input) {
         return !StringUtils.isNullOrEmpty(input) && 
-            (input.toLowerCase().startsWith("http") || input.toLowerCase().startsWith("data:image") || input.toLowerCase().startsWith("file://"));
+            (input.toLowerCase().startsWith("http") || StringUtils.isBase64(input).getFirst() || input.toLowerCase().startsWith("file://"));
     }
 
     /**
@@ -302,8 +313,8 @@ public class ImageUtils {
      * FileStream: Parsing with the String representation of a file path, to be put
      * into a FileInputStream
      * <p>
-     * ByteStream: Parsing with the String representation of a Byte buffer, to be put
-     * into an InputStream. (Byte Buffer can be used with Base64 representation)
+     * ByteStream: Parsing with a direct or String representation of a Byte array, to be put
+     * into an ByteArrayInputStream. (Byte Buffer can be used with Base64 representation or direct byte conversion)
      * <p>
      * Url: Parsing with a direct or string representation of a Url, to be converted
      * to an InputStream

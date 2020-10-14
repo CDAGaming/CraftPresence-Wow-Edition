@@ -57,6 +57,11 @@ public class StringUtils {
     private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
 
     /**
+     * Regex Pattern for Base64 Detection
+     */
+    private static final Pattern BASE64_PATTERN = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+
+    /**
      * Regex Pattern for Brackets containing Digits
      */
     private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
@@ -472,6 +477,24 @@ public class StringUtils {
             }
             return formattedKey.toLowerCase().trim();
         }
+    }
+
+    /**
+     * Checks via Regex whether the specified String classifies as a Base64 Image
+     * 
+     * @param original The original string
+     * @return Whether the specified String classifies as a Base64 Image, and the string
+     */
+    public static Pair<Boolean, String> isBase64(final String original) {
+        String formattedKey = original;
+        final Pair<Boolean, String> finalData = new Pair<>(false, formattedKey);
+        
+        if (!isNullOrEmpty(formattedKey)) {
+            formattedKey = formattedKey.contains(",") ? formattedKey.split(",", 2)[1] : formattedKey;
+            finalData.setFirst(BASE64_PATTERN.matcher(formattedKey).find());
+            finalData.setSecond(formattedKey);
+        }
+        return finalData;
     }
 
     /**
