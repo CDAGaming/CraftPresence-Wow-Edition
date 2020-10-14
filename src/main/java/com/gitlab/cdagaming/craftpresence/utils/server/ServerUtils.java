@@ -31,6 +31,8 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
@@ -39,6 +41,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Server Utilities used to Parse Server Data and handle related RPC Events
@@ -70,7 +73,7 @@ public class ServerUtils {
     /**
      * A List of the detected Server Data from NBT
      */
-    public List<Pair<String, ServerData>> knownServerData = Lists.newArrayList();
+    public Map<String, ServerData> knownServerData = Maps.newHashMap();
 
     /**
      * The IP Address of the Current Server the Player is in
@@ -576,8 +579,8 @@ public class ServerUtils {
                 knownAddresses.add(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false));
             }
 
-            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownServerData.contains(data)) {
-                knownServerData.add(new Pair<>(data.serverIP, data));
+            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownServerData.keySet().contains(data.serverIP)) {
+                knownServerData.put(data.serverIP, data);
             }
         }
 
@@ -591,12 +594,13 @@ public class ServerUtils {
         }
     }
 
+    /**
+     * Retrieves server data for the specified address, if available
+     * 
+     * @param serverAddress The Server's identifying address
+     * @return Server data for the specified address, if available
+     */
     public ServerData getDataFromName(final String serverAddress) {
-        for (Pair<String, ServerData> data : knownServerData) {
-            if (data.getFirst().equals(serverAddress)) {
-                return data.getSecond();
-            }
-        }
-        return null;
+        return knownServerData.getOrDefault(serverAddress, null);
     }
 }
