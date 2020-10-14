@@ -488,7 +488,7 @@ public class StringUtils {
     public static Pair<Boolean, String> isBase64(final String original) {
         String formattedKey = original;
         final Pair<Boolean, String> finalData = new Pair<>(false, formattedKey);
-        
+
         if (!isNullOrEmpty(formattedKey)) {
             formattedKey = formattedKey.contains(",") ? formattedKey.split(",", 2)[1] : formattedKey;
             finalData.setFirst(BASE64_PATTERN.matcher(formattedKey).find());
