@@ -94,7 +94,7 @@ public class ImageUtils {
                                         streamData = new FileInputStream(request.getSecond().getSecond().toString());
                                         break;
                                     case ByteStream:
-                                        streamData = new ByteArrayInputStream(Base64.getMimeDecoder().decode(request.getSecond().getSecond().toString().split(",")[1]));
+                                        streamData = new ByteArrayInputStream(Base64.getMimeDecoder().decode(request.getSecond().getSecond().toString().contains(",") ? request.getSecond().getSecond().toString().split(",")[1] : request.getSecond().getSecond().toString()));
                                         break;
                                     case Url:
                                         streamData = UrlUtils.getURLStream((URL) request.getSecond().getSecond());

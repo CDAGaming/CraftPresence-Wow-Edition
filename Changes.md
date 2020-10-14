@@ -14,6 +14,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   All Data in the Color Editor Guis will now synchronize values without needing to push the Enter Key (As such using the Enter Key for syncing has been removed)
 *   The `&health&` sub-placeholder in `&playerinfo&` will now be rounded, to the nearest whole number
 *   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
+*   Added Server list icon support for the Selector Guis
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend) Base64 Image Formats now supported in `ImageUtils` and related areas
 *   (Backend-Regression) Added back support for autoRegister into IPC backend

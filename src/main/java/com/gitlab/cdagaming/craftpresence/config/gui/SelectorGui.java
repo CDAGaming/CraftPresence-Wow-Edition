@@ -125,13 +125,14 @@ public class SelectorGui extends ExtendedScreen {
                     )
             );
 
-            final RenderType scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset : RenderType.None;
+            final RenderType scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset : 
+                mainTitle.toLowerCase().contains("server") ? RenderType.ServerData : RenderType.None;
 
             scrollList = addList(
                     new ScrollableListControl(
                             mc,
                             width, height,
-                            32, height - 45, scrollListType == RenderType.DiscordAsset ? 45 : 18,
+                            32, height - 45, scrollListType != RenderType.None ? 45 : 18,
                             itemList, originalValue,
                             scrollListType
                     )

@@ -68,6 +68,11 @@ public class ServerUtils {
     public List<String> knownAddresses = Lists.newArrayList();
 
     /**
+     * A List of the detected Server Data from NBT
+     */
+    public List<Pair<String, ServerData>> knownServerData = Lists.newArrayList();
+
+    /**
      * The IP Address of the Current Server the Player is in
      */
     private String currentServer_IP;
@@ -165,6 +170,7 @@ public class ServerUtils {
     private void emptyData() {
         currentPlayerList.clear();
         knownAddresses.clear();
+        knownServerData.clear();
         clearClientData();
     }
 
@@ -569,6 +575,10 @@ public class ServerUtils {
             if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false))) {
                 knownAddresses.add(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false));
             }
+
+            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownServerData.contains(data)) {
+                knownServerData.add(new Pair<>(data.serverIP, data));
+            }
         }
 
         for (String serverMessage : CraftPresence.CONFIG.serverMessages) {
@@ -579,5 +589,14 @@ public class ServerUtils {
                 }
             }
         }
+    }
+
+    public ServerData getDataFromName(final String serverAddress) {
+        for (Pair<String, ServerData> data : knownServerData) {
+            if (data.getFirst().equals(serverAddress)) {
+                return data.getSecond();
+            }
+        }
+        return null;
     }
 }

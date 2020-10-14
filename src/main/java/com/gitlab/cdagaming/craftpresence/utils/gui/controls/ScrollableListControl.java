@@ -25,10 +25,12 @@
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
+import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -146,9 +148,21 @@ public class ScrollableListControl extends GuiSlot {
     @Override
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
         int xOffset = xPos;
-        if (renderType == RenderType.DiscordAsset) {
-            final String assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, getSelectedItem(slotIndex), true);
-            final ResourceLocation texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), assetUrl);
+        if (renderType == RenderType.DiscordAsset || (renderType == RenderType.ServerData && CraftPresence.SERVER.enabled)) {
+            ResourceLocation texture = new ResourceLocation("");
+            String assetUrl = "";
+
+            if (renderType == RenderType.ServerData) {
+                final ServerData data = CraftPresence.SERVER.getDataFromName(getSelectedItem(slotIndex));
+
+                if (data != null) {
+                    assetUrl = data.getBase64EncodedIconData();
+                    texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), new Pair<>(ImageUtils.InputType.ByteStream, assetUrl));
+                }
+            } else if (renderType == RenderType.DiscordAsset) {
+                assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, getSelectedItem(slotIndex), true);
+                texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), assetUrl);
+            }
             CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
             // Note: 35 Added to xOffset to accommodate for Image Size
             xOffset += 35;
@@ -174,6 +188,6 @@ public class ScrollableListControl extends GuiSlot {
      * The Rendering Type for this Scroll List
      */
     public enum RenderType {
-        DiscordAsset, None
+        DiscordAsset, ServerData, None
     }
 }
