@@ -15,6 +15,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   The `&health&` sub-placeholder in `&playerinfo&` will now be rounded, to the nearest whole number
 *   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
+*   (Backend) Base64 Image Formats now supported in `ImageUtils` and related areas
 *   (Backend-Regression) Added back support for autoRegister into IPC backend
 *   An assortment of backend optimizations and improvements
 

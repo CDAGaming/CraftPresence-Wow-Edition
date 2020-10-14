@@ -463,8 +463,7 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                     drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                 } else {
-                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor) &&
-                            (CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("http") || CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("file://"));
+                    final boolean usingExternalTexture = ImageUtils.isExternalImage(CraftPresence.CONFIG.tooltipBGColor);
                     double widthDivider = 32.0D, heightDivider = 32.0D;
 
                     if (!usingExternalTexture) {
@@ -515,8 +514,7 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
                     drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
                 } else {
-                    final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBorderColor) &&
-                            (CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("http") || CraftPresence.CONFIG.tooltipBorderColor.toLowerCase().startsWith("file://"));
+                    final boolean usingExternalTexture = ImageUtils.isExternalImage(CraftPresence.CONFIG.tooltipBorderColor);
 
                     if (!usingExternalTexture) {
                         if (CraftPresence.CONFIG.tooltipBorderColor.contains(CraftPresence.CONFIG.splitCharacter)) {
@@ -583,8 +581,7 @@ public class GuiUtils {
             if (StringUtils.isValidColorCode(bgCode)) {
                 drawGradientRect(300, 0, 0, width, height, bgCode, bgCode);
             } else {
-                final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(bgCode) &&
-                        (bgCode.toLowerCase().startsWith("http") || bgCode.toLowerCase().startsWith("file://"));
+                final boolean usingExternalTexture = ImageUtils.isExternalImage(bgCode);
 
                 if (!usingExternalTexture) {
                     if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {

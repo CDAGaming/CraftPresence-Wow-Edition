@@ -32,15 +32,19 @@ import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
+
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -88,6 +92,9 @@ public class ImageUtils {
                                         break;
                                     case FileStream:
                                         streamData = new FileInputStream(request.getSecond().getSecond().toString());
+                                        break;
+                                    case ByteStream:
+                                        streamData = new ByteArrayInputStream(Base64.getMimeDecoder().decode(request.getSecond().getSecond().toString().split(",")[1]));
                                         break;
                                     case Url:
                                         streamData = UrlUtils.getURLStream((URL) request.getSecond().getSecond());
@@ -203,7 +210,10 @@ public class ImageUtils {
             if (url.toString().toLowerCase().startsWith("http")) {
                 return getTextureFromUrl(textureName, url.toString());
             } else {
-                return getTextureFromUrl(textureName, new Pair<>(InputType.FileStream, url.toString()));
+                return getTextureFromUrl(
+                    textureName, 
+                    new Pair<>(url.toString().toLowerCase().startsWith("data:image") ? InputType.ByteStream : InputType.FileStream, url.toString())
+                );
             }
         }
     }
@@ -272,6 +282,17 @@ public class ImageUtils {
     }
 
     /**
+     * Returns whether or not the inputted string matches the format of an external image type
+     * 
+     * @param input The original string to parse
+     * @return whether or not the inputted string matches the format of an external image type
+     */
+    public static boolean isExternalImage(final String input) {
+        return !StringUtils.isNullOrEmpty(input) && 
+            (input.toLowerCase().startsWith("http") || input.toLowerCase().startsWith("data:image") || input.toLowerCase().startsWith("file://"));
+    }
+
+    /**
      * A Mapping storing the available Input Types for External Image Parsing
      *
      * <p>
@@ -281,12 +302,15 @@ public class ImageUtils {
      * FileStream: Parsing with the String representation of a file path, to be put
      * into a FileInputStream
      * <p>
+     * ByteStream: Parsing with the String representation of a Byte buffer, to be put
+     * into an InputStream. (Byte Buffer can be used with Base64 representation)
+     * <p>
      * Url: Parsing with a direct or string representation of a Url, to be converted
      * to an InputStream
      * <p>
      * Unknown: Unknown property, experience can be iffy using this
      */
     public enum InputType {
-        FileData, FileStream, Url, Unknown
+        FileData, FileStream, ByteStream, Url, Unknown
     }
 }

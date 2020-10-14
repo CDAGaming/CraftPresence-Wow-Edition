@@ -153,7 +153,7 @@ public class ColorEditorGui extends ExtendedScreen {
                         this::syncValues
                 )
         );
-        mcTextureText.setMaxStringLength(512);
+        mcTextureText.setMaxStringLength(32767);
 
         proceedButton = addControl(
                 new ExtendedButtonControl(
@@ -447,8 +447,7 @@ public class ColorEditorGui extends ExtendedScreen {
         // Page 2 - MC Texture Syncing
         if (pageNumber == 1) {
             if (!StringUtils.isNullOrEmpty(mcTextureText.getText())) {
-                usingExternalTexture = !StringUtils.isNullOrEmpty(mcTextureText.getText()) &&
-                        (mcTextureText.getText().toLowerCase().startsWith("http") || mcTextureText.getText().toLowerCase().startsWith("file://"));
+                usingExternalTexture = ImageUtils.isExternalImage(mcTextureText.getText());
 
                 // Only Perform Texture Conversion Steps if not an external Url
                 // As an external Url should be parsed as-is in most use cases

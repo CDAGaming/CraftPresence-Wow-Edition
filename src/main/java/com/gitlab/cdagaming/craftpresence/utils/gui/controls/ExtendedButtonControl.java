@@ -189,8 +189,7 @@ public class ExtendedButtonControl extends GuiButton {
             if (StringUtils.isValidColorCode(bgCode)) {
                 CraftPresence.GUIS.drawGradientRect(zLevel, x, y, width, height, bgCode, bgCode);
             } else {
-                final boolean usingExternalTexture = !StringUtils.isNullOrEmpty(bgCode) &&
-                        (bgCode.toLowerCase().startsWith("http") || bgCode.toLowerCase().startsWith("file://"));
+                final boolean usingExternalTexture = ImageUtils.isExternalImage(bgCode);
 
                 if (!usingExternalTexture) {
                     if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
