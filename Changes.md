@@ -28,6 +28,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Fixes Color Editor Gui saving issues when only editing the red color value
 *   Fixes improper sizing in some cases with external text controls
 *   Fixes most if not all possible circumstances of GuiUtils causing JVM errors
+*   Fixes `keyTyped` event in `ExtendedTextControl` to only occur if the super event would execute
 
 ___
 

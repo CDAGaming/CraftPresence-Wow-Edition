@@ -59,7 +59,7 @@ public class StringUtils {
     /**
      * Regex Pattern for Base64 Detection
      */
-    private static final Pattern BASE64_PATTERN = Pattern.compile("^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$");
+    private static final Pattern BASE64_PATTERN = Pattern.compile("data:(?<type>.+?);base64,(?<data>.+)");
 
     /**
      * Regex Pattern for Brackets containing Digits
@@ -483,16 +483,21 @@ public class StringUtils {
      * Checks via Regex whether the specified String classifies as a Base64 Image
      * 
      * @param original The original string
-     * @return Whether the specified String classifies as a Base64 Image, and the string
+     * @return Base64 data in the format of isBase64:imageId:formattedImageString
      */
-    public static Pair<Boolean, String> isBase64(final String original) {
-        String formattedKey = original;
-        final Pair<Boolean, String> finalData = new Pair<>(false, formattedKey);
+    public static Tuple<Boolean, String, String> isBase64(final String original) {
+        String formattedKey = original, imageIdentifier = "";
+        final Tuple<Boolean, String, String> finalData = new Tuple<>(false, imageIdentifier, formattedKey);
 
         if (!isNullOrEmpty(formattedKey)) {
-            formattedKey = formattedKey.contains(",") ? formattedKey.split(",", 2)[1] : formattedKey;
-            finalData.setFirst(BASE64_PATTERN.matcher(formattedKey).find());
-            finalData.setSecond(formattedKey);
+            if (formattedKey.contains(",")) {
+                final String[] splitData = formattedKey.split(",", 2);
+                imageIdentifier = splitData[0];
+                formattedKey = splitData[1];
+            }
+            finalData.setFirst(BASE64_PATTERN.matcher(imageIdentifier + "," + formattedKey).find());
+            finalData.setSecond(imageIdentifier);
+            finalData.setThird(formattedKey);
         }
         return finalData;
     }

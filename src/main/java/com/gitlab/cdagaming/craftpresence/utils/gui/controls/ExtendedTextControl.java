@@ -127,7 +127,9 @@ public class ExtendedTextControl extends GuiTextField {
     @Override
     public boolean textboxKeyTyped(char typedChar, int keyCode) {
         final boolean returnValue = super.textboxKeyTyped(typedChar, keyCode);
-        onKeyTyped();
+        if (returnValue) {
+            onKeyTyped();
+        }
 
         return returnValue;
     }

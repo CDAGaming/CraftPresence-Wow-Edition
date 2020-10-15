@@ -490,7 +490,7 @@ public class ColorEditorGui extends ExtendedScreen {
             } else {
                 currentMCTexture = new ResourceLocation("");
             }
-            isModified = !mcTextureText.getText().equals(startingMCTexturePath);
+            isModified = !mcTextureText.getText().equals(startingMCTexturePath.replace(CraftPresence.CONFIG.splitCharacter, ":"));
         }
     }
 }

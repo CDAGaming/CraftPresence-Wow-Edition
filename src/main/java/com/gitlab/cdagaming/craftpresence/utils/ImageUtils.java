@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -79,7 +80,7 @@ public class ImageUtils {
                 try {
                     while (!CraftPresence.closing) {
                         final Pair<String, Pair<InputType, Object>> request = urlRequests.take();
-                        final boolean isGif = request.getFirst().endsWith(".gif");
+                        boolean isGif = request.getFirst().endsWith(".gif");
 
                         final Pair<Integer, List<ImageFrame>> bufferData = cachedImages.get(request.getFirst()).getSecond();
                         if (bufferData != null) {
@@ -95,10 +96,11 @@ public class ImageUtils {
                                         streamData = new FileInputStream(originData.toString());
                                         break;
                                     case ByteStream:
-                                        final Pair<Boolean, String> base64Data = StringUtils.isBase64(originData.toString());
+                                        final Tuple<Boolean, String, String> base64Data = StringUtils.isBase64(originData.toString());
                                         final byte[] dataSet = base64Data.getFirst() ? 
-                                            (Base64.getMimeDecoder().decode(base64Data.getSecond())) : (originData instanceof byte[] ? (byte[]) originData : originData.toString().getBytes());
+                                            decodeBase64(base64Data.getThird(), "UTF-8", false, false) : (originData instanceof byte[] ? (byte[]) originData : originData.toString().getBytes());
                                         streamData = new ByteArrayInputStream(dataSet);
+                                        isGif = base64Data.getSecond().contains("gif");
                                         break;
                                     case Url:
                                         streamData = UrlUtils.getURLStream((URL) originData);
@@ -251,7 +253,7 @@ public class ImageUtils {
             if (bufferData == null || bufferData.getSecond() == null || bufferData.getSecond().isEmpty()) {
                 return new ResourceLocation("");
             } else if (textureName != null) {
-                final boolean shouldRepeat = textureName.endsWith(".gif");
+                final boolean shouldRepeat = textureName.endsWith(".gif") || stream.getSecond().toString().contains("gif");
                 final boolean doesContinue = bufferData.getFirst() < bufferData.getSecond().size() - 1;
 
                 final List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
@@ -301,6 +303,31 @@ public class ImageUtils {
     public static boolean isExternalImage(final String input) {
         return !StringUtils.isNullOrEmpty(input) && 
             (input.toLowerCase().startsWith("http") || StringUtils.isBase64(input).getFirst() || input.toLowerCase().startsWith("file://"));
+    }
+
+    /**
+     * Decodes the inputted string into valid Base64 data if possible
+     * 
+     * @param input The string to parse data
+     * @param encoding The encoding to parse data in
+     * @param useDecodingMethod Whether or not we're using the alternative decoding method
+     * @param repeatCycle Whether or not this is a repeat run with the same input, should be false except for internal usage
+     * @return Valid Base64 data, if possible to convert string data
+     */
+    public static byte[] decodeBase64(final String input, final String encoding, final boolean useDecodingMethod, final boolean repeatCycle) {
+        try {
+            return Base64.getDecoder().decode(useDecodingMethod ? URLDecoder.decode(input, encoding) : input);
+        } catch (Exception ex) {
+            if (ModUtils.IS_VERBOSE) {
+                ex.printStackTrace();
+            }
+
+            if (!repeatCycle) {
+                return decodeBase64(input, encoding, !useDecodingMethod, !repeatCycle);
+            } else {
+                return null;
+            }
+        }
     }
 
     /**
