@@ -62,6 +62,11 @@ public class StringUtils {
     private static final Pattern BASE64_PATTERN = Pattern.compile("data:(?<type>.+?);base64,(?<data>.+)");
 
     /**
+     * Regex Pattern for UUID Detection
+     */
+    private static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}");
+
+    /**
      * Regex Pattern for Brackets containing Digits
      */
     private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
@@ -500,6 +505,16 @@ public class StringUtils {
             finalData.setThird(formattedKey);
         }
         return finalData;
+    }
+
+    /**
+     * Checks via Regex whether the specified String classifies as a valid Uuid
+     * 
+     * @param input The original string
+     * @return Whether the specified String classifies as a valid Uuid
+     */
+    public static boolean isValidUuid(final String input) {
+        return UUID_PATTERN.matcher(input).find();
     }
 
     /**

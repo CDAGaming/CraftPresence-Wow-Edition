@@ -163,7 +163,9 @@ public class ScrollableListControl extends GuiSlot {
                 assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, getSelectedItem(slotIndex), true);
                 texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), assetUrl);
             }
-            CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
+            if (ImageUtils.isTextureNull(texture)) {
+                CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
+            }
             // Note: 35 Added to xOffset to accommodate for Image Size
             xOffset += 35;
         }

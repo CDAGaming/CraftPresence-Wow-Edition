@@ -12,11 +12,13 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   List Data will no longer update before the config saves (Related to a v1.7.2 change)
 *   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
 *   All Data in the Color Editor Guis will now synchronize values without needing to push the Enter Key (As such using the Enter Key for syncing has been removed)
+*   (Adjustment) Some Textures in the mod will now only display is the texture itself is not null
 *   The `&health&` sub-placeholder in `&playerinfo&` will now be rounded, to the nearest whole number
 *   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
 *   Added Server list icon support for the Selector Guis
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend) Base64 and direct byte array Image Formats now supported in `ImageUtils` and related areas
+*   (Backend) Added Uuid Detection, will be used within applicable settings that have player uuid values
 *   (Backend-Regression) Added back support for autoRegister into IPC backend
 *   An assortment of backend optimizations and improvements
 

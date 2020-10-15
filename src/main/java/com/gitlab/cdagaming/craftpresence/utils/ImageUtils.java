@@ -331,6 +331,16 @@ public class ImageUtils {
     }
 
     /**
+     * Detects whether the specified Texture lacks critical information
+     * 
+     * @param location The texture to parse
+     * @return Whether the specified Texture lacks critical information
+     */
+    public static boolean isTextureNull(final ResourceLocation location) {
+        return location == null || location.getNamespace() == null || location.getPath() == null;
+    }
+
+    /**
      * A Mapping storing the available Input Types for External Image Parsing
      *
      * <p>
