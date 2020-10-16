@@ -29,15 +29,17 @@ import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Tile Entity Utilities used to Parse TileEntity (Blocks and Items) Data and handle related RPC Events
@@ -85,6 +87,10 @@ public class TileEntityUtils {
      * A List of the detected Entity (Blocks + Items) Names
      */
     public List<String> TILE_ENTITY_NAMES = Lists.newArrayList();
+    /**
+     * aab
+     */
+    public Map<String, ResourceLocation> TILE_ENTITY_RESOURCES = Maps.newHashMap();
     /**
      * The Player's Current Main Hand Item's Nbt Tags, if any
      */
@@ -219,6 +225,7 @@ public class TileEntityUtils {
         ITEM_CLASSES.clear();
         TILE_ENTITY_NAMES.clear();
         TILE_ENTITY_CLASSES.clear();
+        TILE_ENTITY_RESOURCES.clear();
         clearClientData();
     }
 
@@ -600,62 +607,36 @@ public class TileEntityUtils {
     public void getEntities() {
         for (Block block : Block.REGISTRY) {
             if (!isEmpty(block)) {
-                NonNullList<ItemStack> subtypes = NonNullList.create();
-                for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
-                    if (tab != null) {
-                        block.getSubBlocks(tab, subtypes);
-                    }
+                if (!BLOCK_NAMES.contains(block.getLocalizedName())) {
+                    BLOCK_NAMES.add(block.getLocalizedName());
+                }
+                if (!BLOCK_CLASSES.contains(block.getClass().getName())) {
+                    BLOCK_CLASSES.add(block.getClass().getName());
                 }
 
-                if (!subtypes.isEmpty()) {
-                    for (ItemStack itemStack : subtypes) {
-                        if (!isEmpty(itemStack)) {
-                            if (!BLOCK_NAMES.contains(itemStack.getDisplayName())) {
-                                BLOCK_NAMES.add(itemStack.getDisplayName());
-                            }
-                            if (!BLOCK_CLASSES.contains(itemStack.getItem().getClass().getName())) {
-                                BLOCK_CLASSES.add(itemStack.getItem().getClass().getName());
-                            }
-                        }
-                    }
-                } else {
-                    if (!BLOCK_NAMES.contains(block.getLocalizedName())) {
-                        BLOCK_NAMES.add(block.getLocalizedName());
-                    }
-                    if (!BLOCK_CLASSES.contains(block.getClass().getName())) {
-                        BLOCK_CLASSES.add(block.getClass().getName());
-                    }
+                if (!TILE_ENTITY_RESOURCES.containsKey(block.getLocalizedName())) {
+                    final ResourceLocation initialData = Block.REGISTRY.getNameForObject(block);
+                    TILE_ENTITY_RESOURCES.put(block.getLocalizedName(), 
+                            new ResourceLocation(initialData.getNamespace(),
+                                    "textures/blocks/" + initialData.getPath() + ".png"));
                 }
             }
         }
 
         for (Item item : Item.REGISTRY) {
             if (!isEmpty(item)) {
-                NonNullList<ItemStack> subtypes = NonNullList.create();
-                for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
-                    if (tab != null) {
-                        item.getSubItems(tab, subtypes);
-                    }
+                if (!ITEM_NAMES.contains(item.getItemStackDisplayName(getDefaultInstance(item)))) {
+                    ITEM_NAMES.add(item.getItemStackDisplayName(getDefaultInstance(item)));
+                }
+                if (!ITEM_CLASSES.contains(item.getClass().getName())) {
+                    ITEM_CLASSES.add(item.getClass().getName());
                 }
 
-                if (!subtypes.isEmpty()) {
-                    for (ItemStack itemStack : subtypes) {
-                        if (!isEmpty(itemStack)) {
-                            if (!ITEM_NAMES.contains(itemStack.getDisplayName())) {
-                                ITEM_NAMES.add(itemStack.getDisplayName());
-                            }
-                            if (!ITEM_CLASSES.contains(itemStack.getItem().getClass().getName())) {
-                                ITEM_CLASSES.add(itemStack.getItem().getClass().getName());
-                            }
-                        }
-                    }
-                } else {
-                    if (!ITEM_NAMES.contains(item.getItemStackDisplayName(getDefaultInstance(item)))) {
-                        ITEM_NAMES.add(item.getItemStackDisplayName(getDefaultInstance(item)));
-                    }
-                    if (!ITEM_CLASSES.contains(item.getClass().getName())) {
-                        ITEM_CLASSES.add(item.getClass().getName());
-                    }
+                if (!TILE_ENTITY_RESOURCES.containsKey(item.getItemStackDisplayName(getDefaultInstance(item)))) {
+                    final ResourceLocation initialData = Item.REGISTRY.getNameForObject(item);
+                    TILE_ENTITY_RESOURCES.put(item.getItemStackDisplayName(getDefaultInstance(item)),
+                            new ResourceLocation(initialData.getNamespace(),
+                                    "textures/items/" + initialData.getPath() + ".png"));
                 }
             }
         }

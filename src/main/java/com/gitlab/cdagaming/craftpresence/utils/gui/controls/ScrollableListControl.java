@@ -165,16 +165,15 @@ public class ScrollableListControl extends GuiSlot {
                 assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, displayName, true);
                 texture = ImageUtils.getTextureFromUrl(displayName, assetUrl);
             } else if (renderType == RenderType.EntityData) {
-                // TODO: Getting entity face icons
                 if (StringUtils.isValidUuid(displayName)) {
                     // If the entity is classified as a Uuid, assume it is a player's and get their altFace texture
                     displayName = displayName.replaceAll("-", "");
                     texture = ImageUtils.getTextureFromUrl(displayName, "https://crafatar.com/avatars/" + displayName);
                 } else {
-                    // TODO: Other data
+                    // TODO: Support getting Non-uuid entity faces
                 }
             } else if (renderType == RenderType.ItemData) {
-                // TODO: Getting item inventory textures
+                texture = CraftPresence.TILE_ENTITIES.TILE_ENTITY_RESOURCES.getOrDefault(displayName, texture);
             }
             if (!ImageUtils.isTextureNull(texture)) {
                 CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
