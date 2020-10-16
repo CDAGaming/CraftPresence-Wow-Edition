@@ -337,7 +337,7 @@ public class ImageUtils {
      * @return Whether the specified Texture lacks critical information
      */
     public static boolean isTextureNull(final ResourceLocation location) {
-        return location == null || location.getNamespace() == null || location.getPath() == null;
+        return location == null || (StringUtils.isNullOrEmpty(location.getNamespace()) || StringUtils.isNullOrEmpty(location.getPath()));
     }
 
     /**

@@ -82,6 +82,12 @@ public class StringUtils {
     public static byte[] MC_GLYPH_WIDTH = new byte[65536];
 
     /**
+     * The unknown identifier for Base64 data
+     * <p>Used to implicitly specify a Sting is meant to be Base64
+     */
+    public static final String UNKNOWN_BASE64_ID = "data:image/unknown;base64";
+
+    /**
      * Attempts to Convert a Hexadecimal String into a Valid interpretable Java Color
      *
      * @param hexColor The inputted Hexadecimal Color String

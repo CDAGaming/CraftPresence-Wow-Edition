@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
+import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
@@ -156,14 +157,14 @@ public class ScrollableListControl extends GuiSlot {
                 final ServerData data = CraftPresence.SERVER.getDataFromName(getSelectedItem(slotIndex));
 
                 if (data != null) {
-                    assetUrl = data.getBase64EncodedIconData();
+                    assetUrl = StringUtils.UNKNOWN_BASE64_ID + "," + data.getBase64EncodedIconData();
                     texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), new Pair<>(ImageUtils.InputType.ByteStream, assetUrl));
                 }
             } else if (renderType == RenderType.DiscordAsset) {
                 assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, getSelectedItem(slotIndex), true);
                 texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), assetUrl);
             }
-            if (ImageUtils.isTextureNull(texture)) {
+            if (!ImageUtils.isTextureNull(texture)) {
                 CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
             }
             // Note: 35 Added to xOffset to accommodate for Image Size
