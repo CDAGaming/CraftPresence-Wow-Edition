@@ -149,20 +149,32 @@ public class ScrollableListControl extends GuiSlot {
     @Override
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
         int xOffset = xPos;
-        if (renderType == RenderType.DiscordAsset || (renderType == RenderType.ServerData && CraftPresence.SERVER.enabled)) {
+        String displayName = getSelectedItem(slotIndex);
+        if (renderType == RenderType.DiscordAsset || (renderType == RenderType.ServerData && CraftPresence.SERVER.enabled) || (renderType == RenderType.EntityData && CraftPresence.ENTITIES.enabled) || (renderType == RenderType.ItemData && CraftPresence.TILE_ENTITIES.enabled)) {
             ResourceLocation texture = new ResourceLocation("");
             String assetUrl = "";
 
             if (renderType == RenderType.ServerData) {
-                final ServerData data = CraftPresence.SERVER.getDataFromName(getSelectedItem(slotIndex));
+                final ServerData data = CraftPresence.SERVER.getDataFromName(displayName);
 
                 if (data != null) {
                     assetUrl = StringUtils.UNKNOWN_BASE64_ID + "," + data.getBase64EncodedIconData();
-                    texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), new Pair<>(ImageUtils.InputType.ByteStream, assetUrl));
+                    texture = ImageUtils.getTextureFromUrl(displayName, new Pair<>(ImageUtils.InputType.ByteStream, assetUrl));
                 }
             } else if (renderType == RenderType.DiscordAsset) {
-                assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, getSelectedItem(slotIndex), true);
-                texture = ImageUtils.getTextureFromUrl(getSelectedItem(slotIndex), assetUrl);
+                assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, displayName, true);
+                texture = ImageUtils.getTextureFromUrl(displayName, assetUrl);
+            } else if (renderType == RenderType.EntityData) {
+                // TODO: Getting entity face icons
+                if (StringUtils.isValidUuid(displayName)) {
+                    // If the entity is classified as a Uuid, assume it is a player's and get their altFace texture
+                    displayName = displayName.replaceAll("-", "");
+                    texture = ImageUtils.getTextureFromUrl(displayName, "https://crafatar.com/avatars/" + displayName);
+                } else {
+                    // TODO: Other data
+                }
+            } else if (renderType == RenderType.ItemData) {
+                // TODO: Getting item inventory textures
             }
             if (!ImageUtils.isTextureNull(texture)) {
                 CraftPresence.GUIS.drawTextureRect(0.0D, xOffset, yPos + 4.5, 32, 32, 0, texture);
@@ -170,7 +182,7 @@ public class ScrollableListControl extends GuiSlot {
             // Note: 35 Added to xOffset to accommodate for Image Size
             xOffset += 35;
         }
-        mc.fontRenderer.drawStringWithShadow(getSelectedItem(slotIndex), xOffset, yPos + ((heightIn / 2f) - (mc.fontRenderer.FONT_HEIGHT / 2f)), 0xFFFFFF);
+        mc.fontRenderer.drawStringWithShadow(displayName, xOffset, yPos + ((heightIn / 2f) - (mc.fontRenderer.FONT_HEIGHT / 2f)), 0xFFFFFF);
     }
 
     /**
@@ -191,6 +203,6 @@ public class ScrollableListControl extends GuiSlot {
      * The Rendering Type for this Scroll List
      */
     public enum RenderType {
-        DiscordAsset, ServerData, None
+        DiscordAsset, ServerData, EntityData, ItemData, None
     }
 }
