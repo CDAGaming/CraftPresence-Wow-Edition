@@ -223,7 +223,7 @@ public class GuiUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERGUI : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePerGUI : enabled;
         isFocused = CraftPresence.instance.currentScreen != null && CraftPresence.instance.currentScreen.isFocused();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
@@ -334,10 +334,10 @@ public class GuiUtils {
             guiArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String defaultGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String currentGUIMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGUIMSG);
+        final String defaultGuiMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+        final String currentGuiMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGuiMSG);
 
-        final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGUIMSG, guiArgs);
+        final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGuiMSG, guiArgs);
 
         CraftPresence.CLIENT.syncArgument("&SCREEN&", CURRENT_GUI_MESSAGE, false);
         CraftPresence.CLIENT.initArgument(true, "&SCREEN&");
@@ -447,13 +447,13 @@ public class GuiUtils {
                 //
                 // Also Ensure (if using MC Textures) that they annotate with nameHere:textureHere
 
-                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
-                    if (CraftPresence.CONFIG.tooltipBGColor.length() == 6) {
-                        backgroundColor = "#" + CraftPresence.CONFIG.tooltipBGColor;
-                    } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith("0x")) {
-                        backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBGColor).intValue());
+                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBackgroundColor)) {
+                    if (CraftPresence.CONFIG.tooltipBackgroundColor.length() == 6) {
+                        backgroundColor = "#" + CraftPresence.CONFIG.tooltipBackgroundColor;
+                    } else if (CraftPresence.CONFIG.tooltipBackgroundColor.startsWith("0x")) {
+                        backgroundColor = Long.toString(Long.decode(CraftPresence.CONFIG.tooltipBackgroundColor).intValue());
                     } else {
-                        backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
+                        backgroundColor = CraftPresence.CONFIG.tooltipBackgroundColor;
                     }
 
                     // Draw with Colors
@@ -463,18 +463,18 @@ public class GuiUtils {
                     drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                     drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
                 } else {
-                    final boolean usingExternalTexture = ImageUtils.isExternalImage(CraftPresence.CONFIG.tooltipBGColor);
+                    final boolean usingExternalTexture = ImageUtils.isExternalImage(CraftPresence.CONFIG.tooltipBackgroundColor);
                     double widthDivider = 32.0D, heightDivider = 32.0D;
 
                     if (!usingExternalTexture) {
-                        if (CraftPresence.CONFIG.tooltipBGColor.contains(CraftPresence.CONFIG.splitCharacter)) {
-                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
-                        } else if (CraftPresence.CONFIG.tooltipBGColor.contains(":") && !CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
-                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor;
-                        } else if (CraftPresence.CONFIG.tooltipBGColor.startsWith(":")) {
-                            backgroundColor = CraftPresence.CONFIG.tooltipBGColor.substring(1);
+                        if (CraftPresence.CONFIG.tooltipBackgroundColor.contains(CraftPresence.CONFIG.splitCharacter)) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                        } else if (CraftPresence.CONFIG.tooltipBackgroundColor.contains(":") && !CraftPresence.CONFIG.tooltipBackgroundColor.startsWith(":")) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBackgroundColor;
+                        } else if (CraftPresence.CONFIG.tooltipBackgroundColor.startsWith(":")) {
+                            backgroundColor = CraftPresence.CONFIG.tooltipBackgroundColor.substring(1);
                         } else {
-                            backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBGColor;
+                            backgroundColor = "minecraft:" + CraftPresence.CONFIG.tooltipBackgroundColor;
                         }
 
                         if (backgroundColor.contains(":")) {
@@ -484,10 +484,10 @@ public class GuiUtils {
                             backGroundTexture = new ResourceLocation(backgroundColor);
                         }
                     } else {
-                        final String formattedConvertedName = CraftPresence.CONFIG.tooltipBGColor.replaceFirst("file://", "");
+                        final String formattedConvertedName = CraftPresence.CONFIG.tooltipBackgroundColor.replaceFirst("file://", "");
                         final String[] urlBits = formattedConvertedName.trim().split("/");
                         final String textureName = urlBits[urlBits.length - 1].trim();
-                        backGroundTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBGColor.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+                        backGroundTexture = ImageUtils.getTextureFromUrl(textureName, CraftPresence.CONFIG.tooltipBackgroundColor.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
 
                         widthDivider = tooltipTextWidth + 8;
                         heightDivider = tooltipHeight + 8;
@@ -575,36 +575,36 @@ public class GuiUtils {
         if (CraftPresence.instance.world != null) {
             drawGradientRect(300, 0, 0, width, height, "-1072689136", "-804253680");
         } else {
-            String bgCode = CraftPresence.CONFIG.guiBGColor;
-            ResourceLocation loc;
+            String backgroundCode = CraftPresence.CONFIG.guiBackgroundColor;
+            ResourceLocation texLocation;
 
-            if (StringUtils.isValidColorCode(bgCode)) {
-                drawGradientRect(300, 0, 0, width, height, bgCode, bgCode);
+            if (StringUtils.isValidColorCode(backgroundCode)) {
+                drawGradientRect(300, 0, 0, width, height, backgroundCode, backgroundCode);
             } else {
-                final boolean usingExternalTexture = ImageUtils.isExternalImage(bgCode);
+                final boolean usingExternalTexture = ImageUtils.isExternalImage(backgroundCode);
 
                 if (!usingExternalTexture) {
-                    if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
-                        bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                    if (backgroundCode.contains(CraftPresence.CONFIG.splitCharacter)) {
+                        backgroundCode = backgroundCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
                     }
 
-                    if (bgCode.contains(":")) {
-                        String[] splitInput = bgCode.split(":", 2);
-                        loc = new ResourceLocation(splitInput[0], splitInput[1]);
+                    if (backgroundCode.contains(":")) {
+                        String[] splitInput = backgroundCode.split(":", 2);
+                        texLocation = new ResourceLocation(splitInput[0], splitInput[1]);
                     } else {
-                        loc = new ResourceLocation(bgCode);
+                        texLocation = new ResourceLocation(backgroundCode);
                     }
                 } else {
-                    final String formattedConvertedName = bgCode.replaceFirst("file://", "");
+                    final String formattedConvertedName = backgroundCode.replaceFirst("file://", "");
                     final String[] urlBits = formattedConvertedName.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
-                    loc = ImageUtils.getTextureFromUrl(textureName, bgCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+                    texLocation = ImageUtils.getTextureFromUrl(textureName, backgroundCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
 
                     widthDivider = width;
                     heightDivider = height;
                 }
 
-                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, widthDivider, heightDivider, CraftPresence.CONFIG.showBGAsDark, loc);
+                drawTextureRect(0.0D, 0.0D, 0.0D, width, height, 0, widthDivider, heightDivider, CraftPresence.CONFIG.showBackgroundAsDark, texLocation);
             }
         }
     }

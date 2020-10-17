@@ -45,7 +45,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
     private Pair<ExtendedButtonControl, String> entryData = null;
 
     private ExtendedTextControl languageIDText;
-    private CheckBoxControl showBGAsDarkButton, stripTranslationColorsButton, showLoggingInChatButton;
+    private CheckBoxControl showBackgroundAsDarkButton, stripTranslationColorsButton, showLoggingInChatButton;
     private ExtendedButtonControl proceedButton;
 
     AccessibilitySettingsGui(GuiScreen parentScreen) {
@@ -62,11 +62,11 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc1, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
-                        CraftPresence.CONFIG.NAME_tooltipBGColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBGColor)),
+                        CraftPresence.CONFIG.NAME_tooltipBackgroundColor.replaceAll("_", " "),
+                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBackgroundColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltip_bg_color")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltip_background_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -100,11 +100,11 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc1, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        CraftPresence.CONFIG.NAME_guiBGColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBGColor)),
+                        CraftPresence.CONFIG.NAME_guiBackgroundColor.replaceAll("_", " "),
+                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBackgroundColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.gui_bg_color")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.gui_background_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -119,11 +119,11 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 new ExtendedButtonControl(
                         calc2, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        CraftPresence.CONFIG.NAME_buttonBGColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_buttonBGColor)),
+                        CraftPresence.CONFIG.NAME_buttonBackgroundColor.replaceAll("_", " "),
+                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_buttonBackgroundColor)),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.button_bg_color")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.button_background_color")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -143,15 +143,15 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         );
         languageIDText.setText(CraftPresence.CONFIG.languageID);
 
-        showBGAsDarkButton = addControl(
+        showBackgroundAsDarkButton = addControl(
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(4),
-                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.show_bg_as_dark"),
-                        CraftPresence.CONFIG.showBGAsDark,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.show_background_as_dark"),
+                        CraftPresence.CONFIG.showBackgroundAsDark,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
-                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.show_bg_as_dark")
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.show_background_as_dark")
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
@@ -220,9 +220,9 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                     CraftPresence.CONFIG.hasChanged = true;
                                     CraftPresence.CONFIG.languageID = languageIDText.getText();
                                 }
-                                if (showBGAsDarkButton.isChecked() != CraftPresence.CONFIG.showBGAsDark) {
+                                if (showBackgroundAsDarkButton.isChecked() != CraftPresence.CONFIG.showBackgroundAsDark) {
                                     CraftPresence.CONFIG.hasChanged = true;
-                                    CraftPresence.CONFIG.showBGAsDark = showBGAsDarkButton.isChecked();
+                                    CraftPresence.CONFIG.showBackgroundAsDark = showBackgroundAsDarkButton.isChecked();
                                 }
                                 if (stripTranslationColorsButton.isChecked() != CraftPresence.CONFIG.stripTranslationColors) {
                                     CraftPresence.CONFIG.hasChanged = true;

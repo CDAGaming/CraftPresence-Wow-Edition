@@ -140,11 +140,11 @@ public class ImageFrame {
                 final IIOMetadataNode colorTable = (IIOMetadataNode) globalColorTable.item(0);
 
                 if (colorTable != null) {
-                    final String bgIndex = colorTable.getAttribute("backgroundColorIndex");
+                    final String backgroundIndex = colorTable.getAttribute("backgroundColorIndex");
 
                     IIOMetadataNode colorEntry = (IIOMetadataNode) colorTable.getFirstChild();
                     while (colorEntry != null) {
-                        if (colorEntry.getAttribute("index").equals(bgIndex)) {
+                        if (colorEntry.getAttribute("index").equals(backgroundIndex)) {
                             final int red = Integer.parseInt(colorEntry.getAttribute("red"));
                             final int green = Integer.parseInt(colorEntry.getAttribute("green"));
                             final int blue = Integer.parseInt(colorEntry.getAttribute("blue"));

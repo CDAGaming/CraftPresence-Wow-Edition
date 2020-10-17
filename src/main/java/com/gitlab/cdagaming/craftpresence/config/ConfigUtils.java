@@ -76,10 +76,10 @@ public class ConfigUtils {
             NAME_outerPlayerPlaceholderMSG, NAME_innerPlayerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG,
             NAME_playerAmountPlaceholderMSG, NAME_playerItemsPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage, NAME_fallbackPackPlaceholderMSG;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePERGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
+    public String NAME_enableCommands, NAME_enablePerGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBGColor, NAME_tooltipBorderColor, NAME_guiBGColor, NAME_buttonBGColor, NAME_showBGAsDark, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
+    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
     public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
@@ -103,14 +103,14 @@ public class ConfigUtils {
             outerPlayerPlaceholderMSG, innerPlayerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG,
             playerAmountPlaceholderMSG, playerItemsPlaceholderMSG, worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage, fallbackPackPlaceholderMSG;
     // ADVANCED
-    public boolean enableCommands, enablePERGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode, verboseMode;
+    public boolean enableCommands, enablePerGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode, verboseMode;
     public String splitCharacter;
     public int refreshRate;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
-    public String tooltipBGColor, tooltipBorderColor, guiBGColor, buttonBGColor, languageID;
+    public String tooltipBackgroundColor, tooltipBorderColor, guiBackgroundColor, buttonBackgroundColor, languageID;
     public int configKeyCode;
-    public boolean showBGAsDark, stripTranslationColors, showLoggingInChat;
+    public boolean showBackgroundAsDark, stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
     public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG, largeImageKey, smallImageKey;
     // CLASS-SPECIFIC - PUBLIC
@@ -215,7 +215,7 @@ public class ConfigUtils {
         fallbackPackPlaceholderMSG = "";
         // ADVANCED
         NAME_enableCommands = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_commands").replaceAll(" ", "_");
-        NAME_enablePERGUI = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_gui").replaceAll(" ", "_");
+        NAME_enablePerGUI = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_gui").replaceAll(" ", "_");
         NAME_enablePERItem = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_item").replaceAll(" ", "_");
         NAME_enablePEREntity = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_entity").replaceAll(" ", "_");
         NAME_renderTooltips = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.render_tooltips").replaceAll(" ", "_");
@@ -230,7 +230,7 @@ public class ConfigUtils {
         NAME_entityAttackingMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entity_attacking_messages").replaceAll(" ", "_");
         NAME_entityRidingMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entity_riding_messages").replaceAll(" ", "_");
         enableCommands = true;
-        enablePERGUI = false;
+        enablePerGUI = false;
         enablePERItem = false;
         enablePEREntity = false;
         renderTooltips = true;
@@ -245,21 +245,21 @@ public class ConfigUtils {
         entityAttackingMessages = new String[]{"default;Attacking &entity&"};
         entityRidingMessages = new String[]{"default;Riding &entity&"};
         // ACCESSIBILITY
-        NAME_tooltipBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_bg_color").replaceAll(" ", "_");
+        NAME_tooltipBackgroundColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_background_color").replaceAll(" ", "_");
         NAME_tooltipBorderColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_border_color").replaceAll(" ", "_");
-        NAME_guiBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.gui_bg_color").replaceAll(" ", "_");
-        NAME_buttonBGColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.button_bg_color").replaceAll(" ", "_");
+        NAME_guiBackgroundColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.gui_background_color").replaceAll(" ", "_");
+        NAME_buttonBackgroundColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.button_background_color").replaceAll(" ", "_");
         NAME_languageID = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.language_id").replaceAll(" ", "_");
-        NAME_showBGAsDark = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_bg_as_dark").replaceAll(" ", "_");
+        NAME_showBackgroundAsDark = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_background_as_dark").replaceAll(" ", "_");
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_translation_colors").replaceAll(" ", "_");
         NAME_showLoggingInChat = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_logging_in_chat").replaceAll(" ", "_");
         NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keycode.name").replaceAll(" ", "_");
-        tooltipBGColor = "0xF0100010";
+        tooltipBackgroundColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
-        guiBGColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
-        buttonBGColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/gui.png" : "textures/gui/widgets.png");
+        guiBackgroundColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
+        buttonBackgroundColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/gui.png" : "textures/gui/widgets.png");
         languageID = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
-        showBGAsDark = true;
+        showBackgroundAsDark = true;
         stripTranslationColors = false;
         showLoggingInChat = false;
         configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;

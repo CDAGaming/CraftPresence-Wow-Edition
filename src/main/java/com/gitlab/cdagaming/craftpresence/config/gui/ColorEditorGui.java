@@ -165,27 +165,27 @@ public class ColorEditorGui extends ExtendedScreen {
 
                             if (!StringUtils.isNullOrEmpty(configValueName)) {
                                 if (pageNumber == 0) {
-                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBGColor)) {
+                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBackgroundColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBackgroundColor)) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.tooltipBGColor = currentNormalHexValue;
+                                        CraftPresence.CONFIG.tooltipBackgroundColor = currentNormalHexValue;
                                     } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
                                         CraftPresence.CONFIG.hasChanged = true;
                                         CraftPresence.CONFIG.tooltipBorderColor = currentNormalHexValue;
-                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.guiBGColor)) {
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBackgroundColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.guiBackgroundColor)) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.guiBGColor = currentNormalHexValue;
-                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBGColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.buttonBGColor)) {
+                                        CraftPresence.CONFIG.guiBackgroundColor = currentNormalHexValue;
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBackgroundColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.buttonBackgroundColor)) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.buttonBGColor = currentNormalHexValue;
+                                        CraftPresence.CONFIG.buttonBackgroundColor = currentNormalHexValue;
                                     }
                                 }
 
                                 if (pageNumber == 1) {
-                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor) &&
-                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.tooltipBGColor :
-                                                    CraftPresence.CONFIG.tooltipBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                    if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBackgroundColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.tooltipBackgroundColor :
+                                                    CraftPresence.CONFIG.tooltipBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.tooltipBGColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                        CraftPresence.CONFIG.tooltipBackgroundColor = usingExternalTexture ? currentNormalMCTexturePath :
                                                 currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
                                     } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor) &&
                                             !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.tooltipBorderColor :
@@ -193,17 +193,17 @@ public class ColorEditorGui extends ExtendedScreen {
                                         CraftPresence.CONFIG.hasChanged = true;
                                         CraftPresence.CONFIG.tooltipBorderColor = usingExternalTexture ? currentNormalMCTexturePath :
                                                 currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor) &&
-                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.guiBGColor :
-                                                    CraftPresence.CONFIG.guiBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBackgroundColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.guiBackgroundColor :
+                                                    CraftPresence.CONFIG.guiBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.guiBGColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                        CraftPresence.CONFIG.guiBackgroundColor = usingExternalTexture ? currentNormalMCTexturePath :
                                                 currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
-                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBGColor) &&
-                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.buttonBGColor :
-                                                    CraftPresence.CONFIG.buttonBGColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
+                                    } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBackgroundColor) &&
+                                            !currentNormalMCTexturePath.equals(usingExternalTexture ? CraftPresence.CONFIG.buttonBackgroundColor :
+                                                    CraftPresence.CONFIG.buttonBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":"))) {
                                         CraftPresence.CONFIG.hasChanged = true;
-                                        CraftPresence.CONFIG.buttonBGColor = usingExternalTexture ? currentNormalMCTexturePath :
+                                        CraftPresence.CONFIG.buttonBackgroundColor = usingExternalTexture ? currentNormalMCTexturePath :
                                                 currentNormalMCTexturePath.replace(":", CraftPresence.CONFIG.splitCharacter);
                                     }
                                 }
@@ -340,29 +340,29 @@ public class ColorEditorGui extends ExtendedScreen {
      */
     private void initValues() {
         if (!StringUtils.isNullOrEmpty(configValueName)) {
-            if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBGColor)) {
-                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBGColor)) {
-                    startingHexValue = CraftPresence.CONFIG.tooltipBGColor;
-                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor)) {
-                    startingMCTexturePath = CraftPresence.CONFIG.tooltipBGColor;
+            if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBackgroundColor)) {
+                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBackgroundColor)) {
+                    startingHexValue = CraftPresence.CONFIG.tooltipBackgroundColor;
+                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBackgroundColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.tooltipBackgroundColor;
                 }
             } else if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBorderColor)) {
                 if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
                     startingHexValue = CraftPresence.CONFIG.tooltipBorderColor;
-                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBGColor)) {
+                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBackgroundColor)) {
                     startingMCTexturePath = CraftPresence.CONFIG.tooltipBorderColor;
                 }
-            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBGColor)) {
-                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.guiBGColor)) {
-                    startingHexValue = CraftPresence.CONFIG.guiBGColor;
-                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.guiBGColor)) {
-                    startingMCTexturePath = CraftPresence.CONFIG.guiBGColor;
+            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_guiBackgroundColor)) {
+                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.guiBackgroundColor)) {
+                    startingHexValue = CraftPresence.CONFIG.guiBackgroundColor;
+                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.guiBackgroundColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.guiBackgroundColor;
                 }
-            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBGColor)) {
-                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.buttonBGColor)) {
-                    startingHexValue = CraftPresence.CONFIG.buttonBGColor;
-                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.buttonBGColor)) {
-                    startingMCTexturePath = CraftPresence.CONFIG.buttonBGColor;
+            } else if (configValueName.equals(CraftPresence.CONFIG.NAME_buttonBackgroundColor)) {
+                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.buttonBackgroundColor)) {
+                    startingHexValue = CraftPresence.CONFIG.buttonBackgroundColor;
+                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.buttonBackgroundColor)) {
+                    startingMCTexturePath = CraftPresence.CONFIG.buttonBackgroundColor;
                 }
             }
 

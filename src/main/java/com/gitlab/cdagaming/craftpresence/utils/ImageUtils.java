@@ -258,7 +258,7 @@ public class ImageUtils {
 
                 final List<ResourceLocation> resources = cachedImages.get(textureName).getThird();
                 if (bufferData.getFirst() < resources.size()) {
-                    final ResourceLocation loc = resources.get(bufferData.getFirst());
+                    final ResourceLocation texLocation = resources.get(bufferData.getFirst());
                     if (bufferData.getSecond().get(bufferData.getFirst()).shouldRenderNext()) {
                         if (doesContinue) {
                             bufferData.getSecond().get(bufferData.setFirst(bufferData.getFirst() + 1)).setRenderTime(System.currentTimeMillis());
@@ -266,7 +266,7 @@ public class ImageUtils {
                             bufferData.getSecond().get(bufferData.setFirst(0)).setRenderTime(System.currentTimeMillis());
                         }
                     }
-                    return loc;
+                    return texLocation;
                 }
                 try {
                     final DynamicTexture dynTexture = new DynamicTexture(bufferData.getSecond().get(bufferData.getFirst()).getImage());

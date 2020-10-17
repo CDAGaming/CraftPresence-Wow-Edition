@@ -280,7 +280,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(5),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enable_per_gui"),
-                        CraftPresence.CONFIG.enablePERGUI,
+                        CraftPresence.CONFIG.enablePerGUI,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
@@ -422,10 +422,10 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.enableCommands = enableCommandsButton.isChecked();
                             }
-                            if (enablePerGUIButton.isChecked() != CraftPresence.CONFIG.enablePERGUI) {
+                            if (enablePerGUIButton.isChecked() != CraftPresence.CONFIG.enablePerGUI) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.enablePERGUI = enablePerGUIButton.isChecked();
+                                CraftPresence.CONFIG.enablePerGUI = enablePerGUIButton.isChecked();
                             }
                             if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePERItem) {
                                 CraftPresence.CONFIG.hasChanged = true;

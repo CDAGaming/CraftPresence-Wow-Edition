@@ -183,33 +183,33 @@ public class ExtendedButtonControl extends GuiButton {
             hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
             final int hoverState = getHoverState(hovered);
 
-            String bgCode = CraftPresence.CONFIG.buttonBGColor;
-            ResourceLocation loc;
+            String backgroundCode = CraftPresence.CONFIG.buttonBackgroundColor;
+            ResourceLocation texLocation;
 
-            if (StringUtils.isValidColorCode(bgCode)) {
-                CraftPresence.GUIS.drawGradientRect(zLevel, x, y, width, height, bgCode, bgCode);
+            if (StringUtils.isValidColorCode(backgroundCode)) {
+                CraftPresence.GUIS.drawGradientRect(zLevel, x, y, width, height, backgroundCode, backgroundCode);
             } else {
-                final boolean usingExternalTexture = ImageUtils.isExternalImage(bgCode);
+                final boolean usingExternalTexture = ImageUtils.isExternalImage(backgroundCode);
 
                 if (!usingExternalTexture) {
-                    if (bgCode.contains(CraftPresence.CONFIG.splitCharacter)) {
-                        bgCode = bgCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                    if (backgroundCode.contains(CraftPresence.CONFIG.splitCharacter)) {
+                        backgroundCode = backgroundCode.replace(CraftPresence.CONFIG.splitCharacter, ":");
                     }
 
-                    if (bgCode.contains(":")) {
-                        String[] splitInput = bgCode.split(":", 2);
-                        loc = new ResourceLocation(splitInput[0], splitInput[1]);
+                    if (backgroundCode.contains(":")) {
+                        String[] splitInput = backgroundCode.split(":", 2);
+                        texLocation = new ResourceLocation(splitInput[0], splitInput[1]);
                     } else {
-                        loc = new ResourceLocation(bgCode);
+                        texLocation = new ResourceLocation(backgroundCode);
                     }
                 } else {
-                    final String formattedConvertedName = bgCode.replaceFirst("file://", "");
+                    final String formattedConvertedName = backgroundCode.replaceFirst("file://", "");
                     final String[] urlBits = formattedConvertedName.trim().split("/");
                     final String textureName = urlBits[urlBits.length - 1].trim();
-                    loc = ImageUtils.getTextureFromUrl(textureName, bgCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
+                    texLocation = ImageUtils.getTextureFromUrl(textureName, backgroundCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                 }
 
-                CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, loc);
+                CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, texLocation);
             }
 
             mouseDragged(mc, mouseX, mouseY);
