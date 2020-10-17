@@ -421,10 +421,10 @@ public class ColorEditorGui extends ExtendedScreen {
                 currentNormalHexValue = hexText.getText();
                 currentConvertedHexValue = Integer.toString(localValue);
             } else {
-                final boolean isRedDifferent = redText.getSliderValue(false) != currentRed,
-                        isGreenDifferent = greenText.getSliderValue(false) != currentGreen,
-                        isBlueDifferent = blueText.getSliderValue(false) != currentBlue,
-                        isAlphaDifferent = alphaText.getSliderValue(false) != currentAlpha;
+                final boolean isRedDifferent = redText.isDragging() && redText.getSliderValue(false) != currentRed,
+                        isGreenDifferent = greenText.isDragging() && greenText.getSliderValue(false) != currentGreen,
+                        isBlueDifferent = blueText.isDragging() && blueText.getSliderValue(false) != currentBlue,
+                        isAlphaDifferent = alphaText.isDragging() && alphaText.getSliderValue(false) != currentAlpha;
 
                 // Determine if any Values DO need updates
                 if (isRedDifferent || isGreenDifferent || isBlueDifferent || isAlphaDifferent) {

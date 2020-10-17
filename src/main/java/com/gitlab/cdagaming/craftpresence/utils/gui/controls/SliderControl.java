@@ -364,4 +364,13 @@ public class SliderControl extends ExtendedButtonControl {
             onSlideEvent.run();
         }
     }
+
+    /**
+     * Retrieves whether the Slider is currently being manually dragged
+     * 
+     * @return whether the Slider is currently being manually dragged
+     */
+    public boolean isDragging() {
+        return dragging;
+    }
 }
