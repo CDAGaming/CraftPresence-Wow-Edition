@@ -37,7 +37,7 @@ import java.util.Arrays;
 
 public class AdvancedSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, guiMessagesButton, itemMessagesButton, entityTargetMessagesButton, entityAttackingMessagesButton, entityRidingMessagesButton;
-    private CheckBoxControl enableCommandsButton, enablePerGUIButton,
+    private CheckBoxControl enableCommandsButton, enablePerGuiButton,
             enablePerItemButton, enablePerEntityButton, renderTooltipsButton, formatWordsButton, debugModeButton, verboseModeButton;
     private ExtendedTextControl splitCharacter, refreshRate;
 
@@ -276,11 +276,11 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         )
                 )
         );
-        enablePerGUIButton = addControl(
+        enablePerGuiButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(5),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enable_per_gui"),
-                        CraftPresence.CONFIG.enablePerGUI,
+                        CraftPresence.CONFIG.enablePerGui,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
@@ -298,7 +298,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                 new CheckBoxControl(
                         calc1, CraftPresence.GUIS.getButtonY(6) - 10,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enable_per_item"),
-                        CraftPresence.CONFIG.enablePERItem,
+                        CraftPresence.CONFIG.enablePerItem,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
@@ -316,7 +316,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(6) - 10,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enable_per_entity"),
-                        CraftPresence.CONFIG.enablePEREntity,
+                        CraftPresence.CONFIG.enablePerEntity,
                         null,
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
@@ -422,20 +422,20 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.enableCommands = enableCommandsButton.isChecked();
                             }
-                            if (enablePerGUIButton.isChecked() != CraftPresence.CONFIG.enablePerGUI) {
+                            if (enablePerGuiButton.isChecked() != CraftPresence.CONFIG.enablePerGui) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.enablePerGUI = enablePerGUIButton.isChecked();
+                                CraftPresence.CONFIG.enablePerGui = enablePerGuiButton.isChecked();
                             }
-                            if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePERItem) {
+                            if (enablePerItemButton.isChecked() != CraftPresence.CONFIG.enablePerItem) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.enablePERItem = enablePerItemButton.isChecked();
+                                CraftPresence.CONFIG.enablePerItem = enablePerItemButton.isChecked();
                             }
-                            if (enablePerEntityButton.isChecked() != CraftPresence.CONFIG.enablePEREntity) {
+                            if (enablePerEntityButton.isChecked() != CraftPresence.CONFIG.enablePerEntity) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.enablePEREntity = enablePerEntityButton.isChecked();
+                                CraftPresence.CONFIG.enablePerEntity = enablePerEntityButton.isChecked();
                             }
                             if (renderTooltipsButton.isChecked() != CraftPresence.CONFIG.renderTooltips) {
                                 CraftPresence.CONFIG.hasChanged = true;

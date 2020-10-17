@@ -44,7 +44,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
     private String backupKeyString;
     private Pair<ExtendedButtonControl, String> entryData = null;
 
-    private ExtendedTextControl languageIDText;
+    private ExtendedTextControl languageIdText;
     private CheckBoxControl showBackgroundAsDarkButton, stripTranslationColorsButton, showLoggingInChatButton;
     private ExtendedButtonControl proceedButton;
 
@@ -134,14 +134,14 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                 )
         );
 
-        languageIDText = addControl(
+        languageIdText = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
                         calc2, CraftPresence.GUIS.getButtonY(3),
                         180, 20
                 )
         );
-        languageIDText.setText(CraftPresence.CONFIG.languageID);
+        languageIdText.setText(CraftPresence.CONFIG.languageId);
 
         showBackgroundAsDarkButton = addControl(
                 new CheckBoxControl(
@@ -216,9 +216,9 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (entryData == null) {
-                                if (!languageIDText.getText().equals(CraftPresence.CONFIG.languageID)) {
+                                if (!languageIdText.getText().equals(CraftPresence.CONFIG.languageId)) {
                                     CraftPresence.CONFIG.hasChanged = true;
-                                    CraftPresence.CONFIG.languageID = languageIDText.getText();
+                                    CraftPresence.CONFIG.languageId = languageIdText.getText();
                                 }
                                 if (showBackgroundAsDarkButton.isChecked() != CraftPresence.CONFIG.showBackgroundAsDark) {
                                     CraftPresence.CONFIG.hasChanged = true;
@@ -248,7 +248,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.accessibility");
 
-        final String languageIDTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
+        final String languageIdTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
 
         final String keyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.category");
         final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
@@ -256,17 +256,17 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
-        drawString(mc.fontRenderer, languageIDTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        drawString(mc.fontRenderer, languageIdTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
         drawString(mc.fontRenderer, keyBindingTitle, (width / 2) - (StringUtils.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
         drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(languageIDText.getText());
+        proceedButton.enabled = !StringUtils.isNullOrEmpty(languageIdText.getText());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Language Id Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIDTitle), mc.fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), mc.fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
 

@@ -162,7 +162,7 @@ public class ScrollableListControl extends GuiSlot {
                     texture = ImageUtils.getTextureFromUrl(displayName, new Pair<>(ImageUtils.InputType.ByteStream, assetUrl));
                 }
             } else if (renderType == RenderType.DiscordAsset) {
-                assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientID, displayName, true);
+                assetUrl = DiscordAssetUtils.getAssetUrl(CraftPresence.CONFIG.clientId, displayName, true);
                 texture = ImageUtils.getTextureFromUrl(displayName, assetUrl);
             } else if (renderType == RenderType.EntityData) {
                 if (StringUtils.isValidUuid(displayName)) {

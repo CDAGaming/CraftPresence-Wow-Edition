@@ -63,7 +63,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                         180, 20
                 )
         );
-        defaultMOTD.setText(CraftPresence.CONFIG.defaultServerMOTD);
+        defaultMOTD.setText(CraftPresence.CONFIG.defaultServerMotd);
         defaultMessage = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
@@ -137,10 +137,10 @@ public class ServerSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.defaultServerName = defaultName.getText();
                             }
-                            if (!defaultMOTD.getText().equals(CraftPresence.CONFIG.defaultServerMOTD)) {
+                            if (!defaultMOTD.getText().equals(CraftPresence.CONFIG.defaultServerMotd)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.defaultServerMOTD = defaultMOTD.getText();
+                                CraftPresence.CONFIG.defaultServerMotd = defaultMOTD.getText();
                             }
                             if (!defaultMessage.getText().equals(defaultServerMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;

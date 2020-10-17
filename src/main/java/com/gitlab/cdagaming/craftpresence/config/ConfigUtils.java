@@ -63,23 +63,23 @@ public class ConfigUtils {
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
             NAME_showTime, NAME_detectBiomeData, NAME_detectDimensionData,
-            NAME_detectWorldData, NAME_clientID, NAME_defaultIcon, NAME_enableJoinRequest, NAME_partyPrivacyLevel;
+            NAME_detectWorldData, NAME_clientId, NAME_defaultIcon, NAME_enableJoinRequest, NAME_partyPrivacyLevel;
     // BIOME MESSAGES
     public String NAME_biomeMessages;
     // DIMENSION MESSAGES
     public String NAME_defaultDimensionIcon, NAME_dimensionMessages;
     // SERVER MESSAGES
     public String NAME_defaultServerIcon, NAME_defaultServerName,
-            NAME_defaultServerMOTD, NAME_serverMessages;
+            NAME_defaultServerMotd, NAME_serverMessages;
     // STATUS MESSAGES
     public String NAME_mainMenuMessage, NAME_loadingMessage, NAME_lanMessage, NAME_singlePlayerMessage, NAME_packPlaceholderMessage,
             NAME_outerPlayerPlaceholderMessage, NAME_innerPlayerPlaceholderMessage, NAME_playerCoordinatePlaceholderMessage, NAME_playerHealthPlaceholderMessage,
             NAME_playerAmountPlaceholderMessage, NAME_playerItemsPlaceholderMessage, NAME_worldPlaceholderMessage, NAME_modsPlaceholderMessage, NAME_vivecraftMessage, NAME_fallbackPackPlaceholderMessage;
     // ADVANCED
-    public String NAME_enableCommands, NAME_enablePerGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
+    public String NAME_enableCommands, NAME_enablePerGui, NAME_enablePerItem, NAME_enablePerEntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
+    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageId, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
     public String NAME_gameStateMessage, NAME_detailsMessage, NAME_largeImageMessage, NAME_smallImageMessage, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
@@ -88,7 +88,7 @@ public class ConfigUtils {
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
             detectBiomeData, detectDimensionData, detectWorldData, enableJoinRequest;
-    public String clientID, defaultIcon;
+    public String clientId, defaultIcon;
     public int partyPrivacyLevel;
     // BIOME MESSAGES
     public String[] biomeMessages;
@@ -96,19 +96,19 @@ public class ConfigUtils {
     public String defaultDimensionIcon;
     public String[] dimensionMessages;
     // SERVER MESSAGES
-    public String defaultServerIcon, defaultServerName, defaultServerMOTD;
+    public String defaultServerIcon, defaultServerName, defaultServerMotd;
     public String[] serverMessages;
     // STATUS MESSAGES
     public String mainMenuMessage, loadingMessage, lanMessage, singlePlayerMessage, packPlaceholderMessage,
             outerPlayerPlaceholderMessage, innerPlayerPlaceholderMessage, playerCoordinatePlaceholderMessage, playerHealthPlaceholderMessage,
             playerAmountPlaceholderMessage, playerItemsPlaceholderMessage, worldPlaceholderMessage, modsPlaceholderMessage, vivecraftMessage, fallbackPackPlaceholderMessage;
     // ADVANCED
-    public boolean enableCommands, enablePerGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode, verboseMode;
+    public boolean enableCommands, enablePerGui, enablePerItem, enablePerEntity, renderTooltips, formatWords, debugMode, verboseMode;
     public String splitCharacter;
     public int refreshRate;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
-    public String tooltipBackgroundColor, tooltipBorderColor, guiBackgroundColor, buttonBackgroundColor, languageID;
+    public String tooltipBackgroundColor, tooltipBorderColor, guiBackgroundColor, buttonBackgroundColor, languageId;
     public int configKeyCode;
     public boolean showBackgroundAsDark, stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
@@ -149,7 +149,7 @@ public class ConfigUtils {
         NAME_detectBiomeData = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_biome_data").replaceAll(" ", "_");
         NAME_detectDimensionData = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_dimension_data").replaceAll(" ", "_");
         NAME_detectWorldData = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.detect_world_data").replaceAll(" ", "_");
-        NAME_clientID = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.client_id").replaceAll(" ", "_");
+        NAME_clientId = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.client_id").replaceAll(" ", "_");
         NAME_defaultIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.default_icon").replaceAll(" ", "_");
         NAME_enableJoinRequest = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.enable_join_request").replaceAll(" ", "_");
         NAME_partyPrivacyLevel = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.party_privacy").replaceAll(" ", "_");
@@ -161,7 +161,7 @@ public class ConfigUtils {
         detectBiomeData = false;
         detectDimensionData = true;
         detectWorldData = true;
-        clientID = "450485984333660181";
+        clientId = "450485984333660181";
         defaultIcon = "grass";
         enableJoinRequest = false;
         partyPrivacyLevel = PartyPrivacy.Public.getPartyIndex();
@@ -176,11 +176,11 @@ public class ConfigUtils {
         // SERVER MESSAGES
         NAME_defaultServerIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.server_messages.server_icon").replaceAll(" ", "_");
         NAME_defaultServerName = ModUtils.TRANSLATOR.translate(true, "gui.config.name.server_messages.server_name").replaceAll(" ", "_");
-        NAME_defaultServerMOTD = ModUtils.TRANSLATOR.translate(true, "gui.config.name.server_messages.server_motd").replaceAll(" ", "_");
+        NAME_defaultServerMotd = ModUtils.TRANSLATOR.translate(true, "gui.config.name.server_messages.server_motd").replaceAll(" ", "_");
         NAME_serverMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.server_messages.server_messages").replaceAll(" ", "_");
         defaultServerIcon = "default";
         defaultServerName = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.server_messages.server_name");
-        defaultServerMOTD = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.server_messages.server_motd");
+        defaultServerMotd = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.server_messages.server_motd");
         serverMessages = new String[]{"default;Playing on &motd&"};
         // STATUS MESSAGES
         NAME_mainMenuMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.main_menu_message").replaceAll(" ", "_");
@@ -215,9 +215,9 @@ public class ConfigUtils {
         fallbackPackPlaceholderMessage = "";
         // ADVANCED
         NAME_enableCommands = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_commands").replaceAll(" ", "_");
-        NAME_enablePerGUI = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_gui").replaceAll(" ", "_");
-        NAME_enablePERItem = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_item").replaceAll(" ", "_");
-        NAME_enablePEREntity = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_entity").replaceAll(" ", "_");
+        NAME_enablePerGui = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_gui").replaceAll(" ", "_");
+        NAME_enablePerItem = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_item").replaceAll(" ", "_");
+        NAME_enablePerEntity = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_entity").replaceAll(" ", "_");
         NAME_renderTooltips = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.render_tooltips").replaceAll(" ", "_");
         NAME_formatWords = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.format_words").replaceAll(" ", "_");
         NAME_debugMode = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.debug_mode").replaceAll(" ", "_");
@@ -230,9 +230,9 @@ public class ConfigUtils {
         NAME_entityAttackingMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entity_attacking_messages").replaceAll(" ", "_");
         NAME_entityRidingMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entity_riding_messages").replaceAll(" ", "_");
         enableCommands = true;
-        enablePerGUI = false;
-        enablePERItem = false;
-        enablePEREntity = false;
+        enablePerGui = false;
+        enablePerItem = false;
+        enablePerEntity = false;
         renderTooltips = true;
         formatWords = true;
         debugMode = false;
@@ -249,7 +249,7 @@ public class ConfigUtils {
         NAME_tooltipBorderColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_border_color").replaceAll(" ", "_");
         NAME_guiBackgroundColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.gui_background_color").replaceAll(" ", "_");
         NAME_buttonBackgroundColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.button_background_color").replaceAll(" ", "_");
-        NAME_languageID = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.language_id").replaceAll(" ", "_");
+        NAME_languageId = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.language_id").replaceAll(" ", "_");
         NAME_showBackgroundAsDark = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_background_as_dark").replaceAll(" ", "_");
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_translation_colors").replaceAll(" ", "_");
         NAME_showLoggingInChat = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_logging_in_chat").replaceAll(" ", "_");
@@ -258,7 +258,7 @@ public class ConfigUtils {
         tooltipBorderColor = "0x505000FF";
         guiBackgroundColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
         buttonBackgroundColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/gui.png" : "textures/gui/widgets.png");
-        languageID = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
+        languageId = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         showBackgroundAsDark = true;
         stripTranslationColors = false;
         showLoggingInChat = false;

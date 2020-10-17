@@ -191,7 +191,7 @@ public class CommandsGui extends ExtendedScreen {
                         }
                     }
                 } else if (executionCommandArgs[0].equalsIgnoreCase("export")) {
-                    String clientId = CraftPresence.CONFIG.clientID;
+                    String clientId = CraftPresence.CONFIG.clientId;
                     boolean doFullCopy = false;
 
                     if (executionCommandArgs.length == 1) {

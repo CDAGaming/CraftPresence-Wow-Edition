@@ -42,7 +42,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
             detectMCUpdaterInstanceButton, detectTechnicPackButton, showTimeButton,
             detectBiomeDataButton, detectDimensionDataButton, detectWorldDataButton,
             enableJoinRequestButton;
-    private ExtendedTextControl clientID;
+    private ExtendedTextControl clientId;
 
     GeneralSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -50,15 +50,15 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
     @Override
     public void initializeUi() {
-        clientID = addControl(
+        clientId = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
         );
-        clientID.setText(CraftPresence.CONFIG.clientID);
-        clientID.setMaxStringLength(18);
+        clientId.setText(CraftPresence.CONFIG.clientId);
+        clientId.setMaxStringLength(18);
 
         final int buttonCalc1 = (width / 2) - 183;
         final int buttonCalc2 = (width / 2) + 3;
@@ -275,10 +275,10 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
-                            if (!clientID.getText().equals(CraftPresence.CONFIG.clientID)) {
+                            if (!clientId.getText().equals(CraftPresence.CONFIG.clientId)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.clientID = clientID.getText();
+                                CraftPresence.CONFIG.clientId = clientId.getText();
                             }
                             if (detectCurseManifestButton.isChecked() != CraftPresence.CONFIG.detectCurseManifest) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -353,19 +353,19 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.general");
-        final String clientIDText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
+        final String clientIdText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(mc.fontRenderer, clientIDText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(mc.fontRenderer, clientIdText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         partyPrivacyLevelButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(CraftPresence.CONFIG.partyPrivacyLevel).getDisplayName();
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(clientID.getText()) && clientID.getText().length() == 18 && StringUtils.getValidLong(clientID.getText()).getFirst();
+        proceedButton.enabled = !StringUtils.isNullOrEmpty(clientId.getText()) && clientId.getText().length() == 18 && StringUtils.getValidLong(clientId.getText()).getFirst();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         // Hovering over Client ID Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIDText), mc.fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIdText), mc.fontRenderer.FONT_HEIGHT)) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
         }
     }

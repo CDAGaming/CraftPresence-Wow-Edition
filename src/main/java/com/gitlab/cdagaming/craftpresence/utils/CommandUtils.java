@@ -101,13 +101,13 @@ public class CommandUtils {
         CraftPresence.CLIENT.shutDown();
         CraftPresence.SYSTEM.HAS_LOADED = false;
 
-        if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientID)) {
+        if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientId)) {
             DiscordAssetUtils.emptyData();
-            CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientID;
+            CraftPresence.CLIENT.CLIENT_ID = CraftPresence.CONFIG.clientId;
         } else {
             DiscordAssetUtils.clearClientData();
         }
-        DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientID, true);
+        DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientId, true);
         CraftPresence.CLIENT.init();
     }
 
@@ -128,7 +128,7 @@ public class CommandUtils {
         if (CraftPresence.CONFIG.detectTechnicPack && !CraftPresence.packFound) {
             TechnicUtils.loadPack();
         }
-        DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientID, true);
+        DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientId, true);
     }
 
     /**

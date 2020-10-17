@@ -270,7 +270,7 @@ public class TileEntityUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePERItem : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePerItem : enabled;
         final boolean needsUpdate = enabled && (TILE_ENTITY_NAMES.isEmpty() || TILE_ENTITY_CLASSES.isEmpty());
 
         if (needsUpdate) {

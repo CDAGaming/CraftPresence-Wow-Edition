@@ -223,7 +223,7 @@ public class GuiUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePerGUI : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePerGui : enabled;
         isFocused = CraftPresence.instance.currentScreen != null && CraftPresence.instance.currentScreen.isFocused();
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 

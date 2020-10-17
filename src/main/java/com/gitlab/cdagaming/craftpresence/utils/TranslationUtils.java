@@ -116,7 +116,7 @@ public class TranslationUtils {
      * @param encoding The Charset Encoding to parse Language Files
      */
     public TranslationUtils(final String modId, final boolean useJson, final String encoding) {
-        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageID : languageId);
+        setLanguage(CraftPresence.CONFIG != null ? CraftPresence.CONFIG.languageId : languageId);
         setModId(modId);
         setUsingJson(useJson);
         setEncoding(encoding);
@@ -157,9 +157,9 @@ public class TranslationUtils {
      * Comprises of Synchronizing Data, and Updating Translation Data as needed
      */
     void onTick() {
-        if (CraftPresence.CONFIG != null && !languageId.equals(CraftPresence.CONFIG.languageID) &&
-                (!requestMap.containsKey(CraftPresence.CONFIG.languageID) || requestMap.get(CraftPresence.CONFIG.languageID))) {
-            setLanguage(CraftPresence.CONFIG.languageID);
+        if (CraftPresence.CONFIG != null && !languageId.equals(CraftPresence.CONFIG.languageId) &&
+                (!requestMap.containsKey(CraftPresence.CONFIG.languageId) || requestMap.get(CraftPresence.CONFIG.languageId))) {
+            setLanguage(CraftPresence.CONFIG.languageId);
             getTranslationMap(encoding);
             checkUnicode();
         }
@@ -204,11 +204,11 @@ public class TranslationUtils {
     /**
      * Sets the Language ID to Retrieve Translations for, if present
      *
-     * @param languageID The Language ID (Default: en_US)
+     * @param languageId The Language ID (Default: en_US)
      */
-    private void setLanguage(final String languageID) {
-        if (!StringUtils.isNullOrEmpty(languageID)) {
-            this.languageId = languageID;
+    private void setLanguage(final String languageId) {
+        if (!StringUtils.isNullOrEmpty(languageId)) {
+            this.languageId = languageId;
         } else {
             this.languageId = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         }

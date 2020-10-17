@@ -19,6 +19,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend) Base64 and direct byte array Image Formats now supported in `ImageUtils` and related areas
 *   (Backend) Added Uuid Detection, will be used within applicable settings that have player uuid values
+*   (Backend-Breaking) Multiple Config Variable changes to have better clarity in codebase -- `Default Server MOTD` changed to `Default Server Motd`
 *   (Backend-Regression) Added back support for autoRegister into IPC backend
 *   An assortment of backend optimizations and improvements
 

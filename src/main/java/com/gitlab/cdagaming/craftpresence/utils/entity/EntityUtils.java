@@ -161,7 +161,7 @@ public class EntityUtils {
      * Module Event to Occur on each tick within the Application
      */
     public void onTick() {
-        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePEREntity : enabled;
+        enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enablePerEntity : enabled;
         final boolean needsUpdate = enabled && (ENTITY_NAMES.isEmpty() || ENTITY_CLASSES.isEmpty());
 
         if (needsUpdate) {

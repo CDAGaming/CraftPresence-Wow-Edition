@@ -201,7 +201,7 @@ public class CraftPresence {
         }
 
         try {
-            CLIENT.CLIENT_ID = CONFIG.clientID;
+            CLIENT.CLIENT_ID = CONFIG.clientId;
             CLIENT.setup();
             CLIENT.init();
             CLIENT.updateTimestamp();
