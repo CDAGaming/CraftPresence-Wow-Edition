@@ -45,7 +45,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
     private Pair<ExtendedButtonControl, String> entryData = null;
 
     private ExtendedTextControl languageIdText;
-    private CheckBoxControl showBackgroundAsDarkButton, stripTranslationColorsButton, showLoggingInChatButton;
+    private CheckBoxControl showBackgroundAsDarkButton, stripTranslationColorsButton, showLoggingInChatButton, stripExtraGuiElementsButton;
     private ExtendedButtonControl proceedButton;
 
     AccessibilitySettingsGui(GuiScreen parentScreen) {
@@ -197,6 +197,24 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         )
                 )
         );
+        showLoggingInChatButton = addControl(
+                new CheckBoxControl(
+                        calc2, CraftPresence.GUIS.getButtonY(5) - 10,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.strip_extra_gui_elements"),
+                        CraftPresence.CONFIG.stripExtraGuiElements,
+                        null,
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.strip_extra_gui_elements")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                -1,
+                                mc.fontRenderer,
+                                true
+                        )
+                )
+        );
 
         // KeyCode Buttons
         final ExtendedButtonControl configKeyCodeButton = addControl(
@@ -231,6 +249,10 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 if (showLoggingInChatButton.isChecked() != CraftPresence.CONFIG.showLoggingInChat) {
                                     CraftPresence.CONFIG.hasChanged = true;
                                     CraftPresence.CONFIG.showLoggingInChat = showLoggingInChatButton.isChecked();
+                                }
+                                if (stripExtraGuiElementsButton.isChecked() != CraftPresence.CONFIG.stripExtraGuiElements) {
+                                    CraftPresence.CONFIG.hasChanged = true;
+                                    CraftPresence.CONFIG.stripExtraGuiElements = stripExtraGuiElementsButton.isChecked();
                                 }
                                 CraftPresence.GUIS.openScreen(parentScreen);
                             }

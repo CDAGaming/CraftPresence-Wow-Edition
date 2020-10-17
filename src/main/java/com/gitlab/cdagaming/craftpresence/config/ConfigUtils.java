@@ -79,7 +79,7 @@ public class ConfigUtils {
     public String NAME_enableCommands, NAME_enablePerGui, NAME_enablePerItem, NAME_enablePerEntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageId, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
+    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageId, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_stripExtraGuiElements, NAME_configKeyCode;
     // DISPLAY MESSAGES
     public String NAME_gameStateMessage, NAME_detailsMessage, NAME_largeImageMessage, NAME_smallImageMessage, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
@@ -110,7 +110,7 @@ public class ConfigUtils {
     // ACCESSIBILITY
     public String tooltipBackgroundColor, tooltipBorderColor, guiBackgroundColor, buttonBackgroundColor, languageId;
     public int configKeyCode;
-    public boolean showBackgroundAsDark, stripTranslationColors, showLoggingInChat;
+    public boolean showBackgroundAsDark, stripTranslationColors, showLoggingInChat, stripExtraGuiElements;
     // DISPLAY MESSAGES
     public String gameStateMessage, detailsMessage, largeImageMessage, smallImageMessage, largeImageKey, smallImageKey;
     // CLASS-SPECIFIC - PUBLIC
@@ -253,6 +253,7 @@ public class ConfigUtils {
         NAME_showBackgroundAsDark = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_background_as_dark").replaceAll(" ", "_");
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_translation_colors").replaceAll(" ", "_");
         NAME_showLoggingInChat = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_logging_in_chat").replaceAll(" ", "_");
+        NAME_stripExtraGuiElements = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_extra_gui_elements").replaceAll(" ", "_");
         NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keycode.name").replaceAll(" ", "_");
         tooltipBackgroundColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
@@ -262,6 +263,7 @@ public class ConfigUtils {
         showBackgroundAsDark = true;
         stripTranslationColors = false;
         showLoggingInChat = false;
+        stripExtraGuiElements = false;
         configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;
         // DISPLAY MESSAGES
         NAME_gameStateMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.game_state_message").replaceAll(" ", "_");

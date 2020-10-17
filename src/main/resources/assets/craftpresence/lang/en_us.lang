@@ -155,6 +155,7 @@ gui.config.name.accessibility.language_id=Language ID
 gui.config.name.accessibility.show_background_as_dark=Reduced Background Tint
 gui.config.name.accessibility.strip_translation_colors=Strip Translation Colors
 gui.config.name.accessibility.show_logging_in_chat=Show Logging in Chat
+gui.config.name.accessibility.strip_extra_gui_elements=Strip Extra Gui Elements
 gui.config.name.display.small_image_message=Small Image Text Format
 gui.config.name.display.large_image_message=Large Image Text Format
 gui.config.name.display.details_message=Details Message Format
@@ -219,6 +220,7 @@ gui.config.comment.accessibility.language_id=The locale or language identifier t
 gui.config.comment.accessibility.show_background_as_dark=Show background colors (Non Rgba) with a darker tint, like vanilla minecraft
 gui.config.comment.accessibility.strip_translation_colors=Allows CraftPresence to remove color and formatting codes from it's translations
 gui.config.comment.accessibility.show_logging_in_chat=Allows CraftPresence to display it's logging in the chat hud
+gui.config.comment.accessibility.strip_extra_gui_elements=Allows CraftPresence to remove excess visual improvements from the Gui\n (Can improve gui performance in some areas)
 ## KEYBIND MESSAGES ##
 key.craftpresence.category=CraftPresence - Controls
 key.craftpresence.config_keycode.name=Config Gui Keybind
