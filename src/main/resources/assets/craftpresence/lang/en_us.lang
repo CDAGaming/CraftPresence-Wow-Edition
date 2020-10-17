@@ -208,9 +208,9 @@ gui.config.comment.advanced.debug_mode=Toggles Developer Mode, showing debug fea
 gui.config.comment.advanced.verbose_mode=Toggles Verbose Mode, showing more detailed logging as well as stack traces and deeper exception messages\n\nOverriden Status -> %1$s
 gui.config.comment.advanced.gui_messages=Customize messages to display with Guis\n (Manual format: gui;message)\n Available placeholders:\n - &screen& = Gui Screen name\n - &class& = Gui class name
 gui.config.comment.advanced.item_messages=Customize messages to display with items\n (Manual format: item;message)\n Available placeholders:\n - &item& = Item name\n\n %1$s
-gui.config.comment.advanced.entity_target_messages=Customize messages to display when pointing at an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player UUID)\n\n %1$s
-gui.config.comment.advanced.entity_attacking_messages=Customize messages to display when attacking an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player UUID)\n\n %1$s
-gui.config.comment.advanced.entity_riding_messages=Customize messages to display when riding an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player UUID)\n\n %1$s
+gui.config.comment.advanced.entity_target_messages=Customize messages to display when pointing at an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player Uuid)\n\n %1$s
+gui.config.comment.advanced.entity_attacking_messages=Customize messages to display when attacking an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player Uuid)\n\n %1$s
+gui.config.comment.advanced.entity_riding_messages=Customize messages to display when riding an entity\n (Manual format: entity;message)\n Available placeholders:\n - &entity& = Entity name (or player Uuid)\n\n %1$s
 gui.config.comment.accessibility.tooltip_background_color=The color or texture to be used when rendering CraftPresence tooltip backgrounds
 gui.config.comment.accessibility.tooltip_border_color=The color or texture to be used when rendering CraftPresence tooltip borders
 gui.config.comment.accessibility.gui_background_color=The color or texture to be used when rendering CraftPresence Gui backgrounds

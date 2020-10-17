@@ -44,6 +44,8 @@ public class GeneralSettingsGui extends ExtendedScreen {
             enableJoinRequestButton;
     private ExtendedTextControl clientId;
 
+    private int currentPartyPrivacy = PartyPrivacy.Public.getPartyIndex();
+
     GeneralSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
     }
@@ -85,15 +87,14 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
+        currentPartyPrivacy = CraftPresence.CONFIG.partyPrivacyLevel;
         partyPrivacyLevelButton = addControl(
                 new ExtendedButtonControl(
                         buttonCalc2, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(CraftPresence.CONFIG.partyPrivacyLevel).getDisplayName(),
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(currentPartyPrivacy).getDisplayName(),
                         () -> {
-                            CraftPresence.CONFIG.hasChanged = true;
-                            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                            CraftPresence.CONFIG.partyPrivacyLevel = (CraftPresence.CONFIG.partyPrivacyLevel + 1) % 2;
+                            currentPartyPrivacy = (currentPartyPrivacy + 1) % 2;
                         },
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
@@ -280,6 +281,11 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.clientId = clientId.getText();
                             }
+                            if (currentPartyPrivacy != CraftPresence.CONFIG.partyPrivacyLevel) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.partyPrivacyLevel = currentPartyPrivacy;
+                            }
                             if (detectCurseManifestButton.isChecked() != CraftPresence.CONFIG.detectCurseManifest) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
@@ -359,7 +365,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
         drawString(mc.fontRenderer, clientIdText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-        partyPrivacyLevelButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(CraftPresence.CONFIG.partyPrivacyLevel).getDisplayName();
+        partyPrivacyLevelButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(currentPartyPrivacy).getDisplayName();
         proceedButton.enabled = !StringUtils.isNullOrEmpty(clientId.getText()) && clientId.getText().length() == 18 && StringUtils.getValidLong(clientId.getText()).getFirst();
 
         super.drawScreen(mouseX, mouseY, partialTicks);

@@ -191,7 +191,7 @@ public class EntityUtils {
         String NEW_CURRENT_TARGET_NAME, NEW_CURRENT_ATTACKING_NAME, NEW_CURRENT_RIDING_NAME;
 
         // Note: Unlike getEntities, this does NOT require Server Module to be enabled
-        // Users are still free to manually add UUID's as they please for this module
+        // Users are still free to manually add Uuid's as they please for this module
         if (NEW_CURRENT_TARGET instanceof EntityPlayer) {
             final EntityPlayer NEW_CURRENT_PLAYER_TARGET = (EntityPlayer) NEW_CURRENT_TARGET;
             NEW_CURRENT_TARGET_NAME = StringUtils.stripColors(NEW_CURRENT_PLAYER_TARGET.getGameProfile().getId().toString());
@@ -399,7 +399,7 @@ public class EntityUtils {
             }
         }
 
-        // If Server Data is enabled, allow UUID's to count as entities
+        // If Server Data is enabled, allow Uuid's to count as entities
         if (CraftPresence.SERVER.enabled) {
             for (NetworkPlayerInfo playerInfo : CraftPresence.SERVER.currentPlayerList) {
                 final String uuidString = playerInfo.getGameProfile().getId().toString();
