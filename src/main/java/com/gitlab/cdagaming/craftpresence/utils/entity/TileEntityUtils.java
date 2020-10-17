@@ -88,7 +88,7 @@ public class TileEntityUtils {
      */
     public List<String> TILE_ENTITY_NAMES = Lists.newArrayList();
     /**
-     * aab
+     * A List storing a mapping of Tile Entity textures, mapped as entityName:entityTexture
      */
     public Map<String, ResourceLocation> TILE_ENTITY_RESOURCES = Maps.newHashMap();
     /**
