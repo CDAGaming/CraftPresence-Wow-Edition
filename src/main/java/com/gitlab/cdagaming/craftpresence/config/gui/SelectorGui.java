@@ -125,10 +125,14 @@ public class SelectorGui extends ExtendedScreen {
                     )
             );
 
-            final RenderType scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset : 
-                mainTitle.toLowerCase().contains("server") ? RenderType.ServerData : 
-                mainTitle.toLowerCase().contains("entity") ? RenderType.EntityData : 
-                mainTitle.toLowerCase().contains("item") ? RenderType.ItemData : RenderType.None;
+            RenderType scrollListType = RenderType.None;
+
+            if (!CraftPresence.CONFIG.stripExtraGuiElements) {
+                scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset : 
+                    mainTitle.toLowerCase().contains("server") ? RenderType.ServerData : 
+                    mainTitle.toLowerCase().contains("entity") ? RenderType.EntityData : 
+                    mainTitle.toLowerCase().contains("item") ? RenderType.ItemData : RenderType.None;
+            }
 
             scrollList = addList(
                     new ScrollableListControl(
