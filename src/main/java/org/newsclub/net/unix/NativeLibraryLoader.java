@@ -97,7 +97,6 @@ final class NativeLibraryLoader implements Closeable {
         }
     }
 
-    @SuppressWarnings("resource")
     // NOPMD
     public synchronized void loadLibrary() {
         synchronized (getClass().getClassLoader()) { // NOPMD We want to lock this class' classloader.
@@ -172,7 +171,6 @@ final class NativeLibraryLoader implements Closeable {
         }
     }
 
-    @SuppressWarnings("resource")
     private List<LibraryCandidate> findLibraryCandidates(String artifactName,
                                                          String libraryNameAndVersion, Class<?> providerClass) {
         String mappedName = System.mapLibraryName(libraryNameAndVersion);

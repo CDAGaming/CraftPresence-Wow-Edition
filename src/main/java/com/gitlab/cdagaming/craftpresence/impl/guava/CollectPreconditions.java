@@ -24,7 +24,6 @@ import static com.google.common.base.Preconditions.checkState;
  * Precondition checks useful in collection implementations.
  */
 @GwtCompatible
-@SuppressWarnings("unused")
 final class CollectPreconditions {
 
     static void checkEntryNotNull(Object key, Object value) {

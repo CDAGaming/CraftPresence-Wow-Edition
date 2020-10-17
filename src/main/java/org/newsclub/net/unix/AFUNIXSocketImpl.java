@@ -182,7 +182,6 @@ class AFUNIXSocketImpl extends SocketImpl {
     }
 
     @Override
-    @SuppressWarnings("hiding")
     protected void bind(InetAddress host, int port) throws IOException {
         throw new SocketException("Cannot bind to this type of address: " + InetAddress.class);
     }
@@ -243,13 +242,11 @@ class AFUNIXSocketImpl extends SocketImpl {
     }
 
     @Override
-    @SuppressWarnings("hiding")
     protected void connect(String host, int port) throws IOException {
         throw new SocketException("Cannot bind to this type of address: " + InetAddress.class);
     }
 
     @Override
-    @SuppressWarnings("hiding")
     protected void connect(InetAddress address, int port) throws IOException {
         throw new SocketException("Cannot bind to this type of address: " + InetAddress.class);
     }
@@ -487,7 +484,7 @@ class AFUNIXSocketImpl extends SocketImpl {
 
             closeableFileDescriptors.put(fdesc, fds[i]);
 
-            @SuppressWarnings("resource") final Closeable cleanup = new Closeable() {
+            final Closeable cleanup = new Closeable() {
 
                 @Override
                 public void close() {

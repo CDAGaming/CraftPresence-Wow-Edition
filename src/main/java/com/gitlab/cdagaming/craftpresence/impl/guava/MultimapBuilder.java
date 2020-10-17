@@ -53,7 +53,7 @@ import static com.google.common.collect.Maps.newLinkedHashMapWithExpectedSize;
  * @since 16.0
  */
 @GwtCompatible
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings("unchecked")
 public abstract class MultimapBuilder<K0, V0> {
     /*
      * Leaving K and V as upper bounds rather than the actual key and value types allows type
@@ -164,7 +164,6 @@ public abstract class MultimapBuilder<K0, V0> {
             final Class<K0> keyClass) {
         checkNotNull(keyClass);
         return new MultimapBuilderWithKeys<K0>() {
-            @SuppressWarnings("unchecked")
             @Override
             <K extends K0, V> Map<K, Collection<V>> createMap() {
                 // K must actually be K0, since enums are effectively final
@@ -195,7 +194,7 @@ public abstract class MultimapBuilder<K0, V0> {
 
         public static <V> Supplier<List<V>> instance() {
             // Each call generates a fresh LinkedList, which can serve as a List<V> for any V.
-            @SuppressWarnings({"rawtypes", "unchecked"})
+            @SuppressWarnings("rawtypes")
             Supplier<List<V>> result = (Supplier) INSTANCE;
             return result;
         }
@@ -207,6 +206,11 @@ public abstract class MultimapBuilder<K0, V0> {
     }
 
     private static final class ArrayListSupplier<V> implements Supplier<List<V>>, Serializable {
+        /**
+         * The serialized version identifier for this object
+         */
+        private static final long serialVersionUID = 1L;
+
         private final int expectedValuesPerKey;
 
         ArrayListSupplier(int expectedValuesPerKey) {
@@ -220,6 +224,11 @@ public abstract class MultimapBuilder<K0, V0> {
     }
 
     private static final class HashSetSupplier<V> implements Supplier<Set<V>>, Serializable {
+        /**
+         * The serialized version identifier for this object
+         */
+        private static final long serialVersionUID = 1L;
+
         private final int expectedValuesPerKey;
 
         HashSetSupplier(int expectedValuesPerKey) {
@@ -233,6 +242,11 @@ public abstract class MultimapBuilder<K0, V0> {
     }
 
     private static final class LinkedHashSetSupplier<V> implements Supplier<Set<V>>, Serializable {
+        /**
+         * The serialized version identifier for this object
+         */
+        private static final long serialVersionUID = 1L;
+
         private final int expectedValuesPerKey;
 
         LinkedHashSetSupplier(int expectedValuesPerKey) {
@@ -246,6 +260,11 @@ public abstract class MultimapBuilder<K0, V0> {
     }
 
     private static final class TreeSetSupplier<V> implements Supplier<SortedSet<V>>, Serializable {
+        /**
+         * The serialized version identifier for this object
+         */
+        private static final long serialVersionUID = 1L;
+
         private final Comparator<? super V> comparator;
 
         TreeSetSupplier(Comparator<? super V> comparator) {
@@ -260,6 +279,11 @@ public abstract class MultimapBuilder<K0, V0> {
 
     private static final class EnumSetSupplier<V extends Enum<V>>
             implements Supplier<Set<V>>, Serializable {
+        /**
+         * The serialized version identifier for this object
+         */
+        private static final long serialVersionUID = 1L;
+
         private final Class<V> clazz;
 
         EnumSetSupplier(Class<V> clazz) {
@@ -411,7 +435,7 @@ public abstract class MultimapBuilder<K0, V0> {
                 public <K extends K0, V extends V0> SetMultimap<K, V> build() {
                     // V must actually be V0, since enums are effectively final
                     // (their subclasses are inaccessible)
-                    @SuppressWarnings({"unchecked", "rawtypes"})
+                    @SuppressWarnings("rawtypes")
                     Supplier<Set<V>> factory = (Supplier) new EnumSetSupplier<V0>(valueClass);
                     return Multimaps.newSetMultimap(MultimapBuilderWithKeys.this.createMap(), factory);
                 }
