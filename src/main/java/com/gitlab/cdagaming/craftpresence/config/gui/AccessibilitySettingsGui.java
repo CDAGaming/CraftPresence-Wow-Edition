@@ -197,7 +197,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         )
                 )
         );
-        showLoggingInChatButton = addControl(
+        stripExtraGuiElementsButton = addControl(
                 new CheckBoxControl(
                         calc2, CraftPresence.GUIS.getButtonY(5) - 10,
                         ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.strip_extra_gui_elements"),
