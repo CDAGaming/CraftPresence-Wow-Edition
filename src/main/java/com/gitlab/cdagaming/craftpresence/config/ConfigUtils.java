@@ -72,16 +72,16 @@ public class ConfigUtils {
     public String NAME_defaultServerIcon, NAME_defaultServerName,
             NAME_defaultServerMOTD, NAME_serverMessages;
     // STATUS MESSAGES
-    public String NAME_mainMenuMSG, NAME_loadingMSG, NAME_lanMSG, NAME_singlePlayerMSG, NAME_packPlaceholderMSG,
-            NAME_outerPlayerPlaceholderMSG, NAME_innerPlayerPlaceholderMSG, NAME_playerCoordinatePlaceholderMSG, NAME_playerHealthPlaceholderMSG,
-            NAME_playerAmountPlaceholderMSG, NAME_playerItemsPlaceholderMSG, NAME_worldPlaceholderMSG, NAME_modsPlaceholderMSG, NAME_vivecraftMessage, NAME_fallbackPackPlaceholderMSG;
+    public String NAME_mainMenuMessage, NAME_loadingMessage, NAME_lanMessage, NAME_singlePlayerMessage, NAME_packPlaceholderMessage,
+            NAME_outerPlayerPlaceholderMessage, NAME_innerPlayerPlaceholderMessage, NAME_playerCoordinatePlaceholderMessage, NAME_playerHealthPlaceholderMessage,
+            NAME_playerAmountPlaceholderMessage, NAME_playerItemsPlaceholderMessage, NAME_worldPlaceholderMessage, NAME_modsPlaceholderMessage, NAME_vivecraftMessage, NAME_fallbackPackPlaceholderMessage;
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePerGUI, NAME_enablePERItem, NAME_enablePEREntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageID, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_configKeyCode;
     // DISPLAY MESSAGES
-    public String NAME_gameStateMSG, NAME_detailsMSG, NAME_largeImageMSG, NAME_smallImageMSG, NAME_largeImageKey, NAME_smallImageKey;
+    public String NAME_gameStateMessage, NAME_detailsMessage, NAME_largeImageMessage, NAME_smallImageMessage, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
     // GLOBAL (NON-USER-ADJUSTABLE)
     public String schemaVersion, lastMcVersionId;
@@ -99,9 +99,9 @@ public class ConfigUtils {
     public String defaultServerIcon, defaultServerName, defaultServerMOTD;
     public String[] serverMessages;
     // STATUS MESSAGES
-    public String mainMenuMSG, loadingMSG, lanMSG, singlePlayerMSG, packPlaceholderMSG,
-            outerPlayerPlaceholderMSG, innerPlayerPlaceholderMSG, playerCoordinatePlaceholderMSG, playerHealthPlaceholderMSG,
-            playerAmountPlaceholderMSG, playerItemsPlaceholderMSG, worldPlaceholderMSG, modsPlaceholderMSG, vivecraftMessage, fallbackPackPlaceholderMSG;
+    public String mainMenuMessage, loadingMessage, lanMessage, singlePlayerMessage, packPlaceholderMessage,
+            outerPlayerPlaceholderMessage, innerPlayerPlaceholderMessage, playerCoordinatePlaceholderMessage, playerHealthPlaceholderMessage,
+            playerAmountPlaceholderMessage, playerItemsPlaceholderMessage, worldPlaceholderMessage, modsPlaceholderMessage, vivecraftMessage, fallbackPackPlaceholderMessage;
     // ADVANCED
     public boolean enableCommands, enablePerGUI, enablePERItem, enablePEREntity, renderTooltips, formatWords, debugMode, verboseMode;
     public String splitCharacter;
@@ -112,7 +112,7 @@ public class ConfigUtils {
     public int configKeyCode;
     public boolean showBackgroundAsDark, stripTranslationColors, showLoggingInChat;
     // DISPLAY MESSAGES
-    public String gameStateMSG, detailsMSG, largeImageMSG, smallImageMSG, largeImageKey, smallImageKey;
+    public String gameStateMessage, detailsMessage, largeImageMessage, smallImageMessage, largeImageKey, smallImageKey;
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
 
@@ -183,36 +183,36 @@ public class ConfigUtils {
         defaultServerMOTD = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.server_messages.server_motd");
         serverMessages = new String[]{"default;Playing on &motd&"};
         // STATUS MESSAGES
-        NAME_mainMenuMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.main_menu_msg").replaceAll(" ", "_");
-        NAME_loadingMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.loading_msg").replaceAll(" ", "_");
-        NAME_lanMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.lan_msg").replaceAll(" ", "_");
-        NAME_singlePlayerMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.single_player_msg").replaceAll(" ", "_");
-        NAME_packPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.pack_msg").replaceAll(" ", "_");
-        NAME_outerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_msg.out").replaceAll(" ", "_");
-        NAME_innerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_msg.in").replaceAll(" ", "_");
-        NAME_playerCoordinatePlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_coordinate_msg").replaceAll(" ", "_");
-        NAME_playerHealthPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_health_msg").replaceAll(" ", "_");
-        NAME_playerAmountPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_amount_msg").replaceAll(" ", "_");
-        NAME_playerItemsPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_item_msg").replaceAll(" ", "_");
-        NAME_worldPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.world_msg").replaceAll(" ", "_");
-        NAME_modsPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.mods_msg").replaceAll(" ", "_");
-        NAME_vivecraftMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.special.vivecraft_msg").replaceAll(" ", "_");
-        NAME_fallbackPackPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.fallback.pack_placeholder_msg").replaceAll(" ", "_");
-        mainMenuMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.main_menu");
-        loadingMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.loading");
-        lanMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.lan");
-        singlePlayerMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.single_player");
-        packPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.pack");
-        outerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.out");
-        innerPlayerPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.in");
-        playerCoordinatePlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.coordinate");
-        playerHealthPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.health");
-        playerAmountPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.players");
-        playerItemsPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.items");
-        worldPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.world_info");
-        modsPlaceholderMSG = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.mods");
+        NAME_mainMenuMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.main_menu_message").replaceAll(" ", "_");
+        NAME_loadingMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.loading_message").replaceAll(" ", "_");
+        NAME_lanMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.lan_message").replaceAll(" ", "_");
+        NAME_singlePlayerMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.single_player_message").replaceAll(" ", "_");
+        NAME_packPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.pack_message").replaceAll(" ", "_");
+        NAME_outerPlayerPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_message.out").replaceAll(" ", "_");
+        NAME_innerPlayerPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_message.in").replaceAll(" ", "_");
+        NAME_playerCoordinatePlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_coordinate_message").replaceAll(" ", "_");
+        NAME_playerHealthPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_health_message").replaceAll(" ", "_");
+        NAME_playerAmountPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_amount_message").replaceAll(" ", "_");
+        NAME_playerItemsPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.player_item_message").replaceAll(" ", "_");
+        NAME_worldPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.world_message").replaceAll(" ", "_");
+        NAME_modsPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.placeholder.mods_message").replaceAll(" ", "_");
+        NAME_vivecraftMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.special.vivecraft_message").replaceAll(" ", "_");
+        NAME_fallbackPackPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.fallback.pack_placeholder_message").replaceAll(" ", "_");
+        mainMenuMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.main_menu");
+        loadingMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.loading");
+        lanMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.lan");
+        singlePlayerMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.state.single_player");
+        packPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.pack");
+        outerPlayerPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.out");
+        innerPlayerPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.in");
+        playerCoordinatePlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.coordinate");
+        playerHealthPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.health");
+        playerAmountPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.players");
+        playerItemsPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.player_info.items");
+        worldPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.world_info");
+        modsPlaceholderMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.placeholder.mods");
         vivecraftMessage = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.special.vivecraft");
-        fallbackPackPlaceholderMSG = "";
+        fallbackPackPlaceholderMessage = "";
         // ADVANCED
         NAME_enableCommands = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_commands").replaceAll(" ", "_");
         NAME_enablePerGUI = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.enable_per_gui").replaceAll(" ", "_");
@@ -264,16 +264,16 @@ public class ConfigUtils {
         showLoggingInChat = false;
         configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;
         // DISPLAY MESSAGES
-        NAME_gameStateMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.game_state_msg").replaceAll(" ", "_");
-        NAME_detailsMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.details_msg").replaceAll(" ", "_");
-        NAME_largeImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.large_image_msg").replaceAll(" ", "_");
-        NAME_smallImageMSG = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.small_image_msg").replaceAll(" ", "_");
+        NAME_gameStateMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.game_state_message").replaceAll(" ", "_");
+        NAME_detailsMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.details_message").replaceAll(" ", "_");
+        NAME_largeImageMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.large_image_message").replaceAll(" ", "_");
+        NAME_smallImageMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.small_image_message").replaceAll(" ", "_");
         NAME_largeImageKey = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.large_image_key").replaceAll(" ", "_");
         NAME_smallImageKey = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.small_image_key").replaceAll(" ", "_");
-        gameStateMSG = "&SERVER& &PACK&";
-        detailsMSG = "&MAINMENU&&DIMENSION&";
-        largeImageMSG = "&MAINMENU&&DIMENSION&";
-        smallImageMSG = "&SERVER& &PACK&";
+        gameStateMessage = "&SERVER& &PACK&";
+        detailsMessage = "&MAINMENU&&DIMENSION&";
+        largeImageMessage = "&MAINMENU&&DIMENSION&";
+        smallImageMessage = "&SERVER& &PACK&";
         largeImageKey = "&MAINMENU&&DIMENSION&";
         smallImageKey = "&SERVER&&PACK&";
 

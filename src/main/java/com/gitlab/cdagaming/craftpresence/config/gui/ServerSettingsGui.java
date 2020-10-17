@@ -36,9 +36,9 @@ import net.minecraft.client.gui.GuiScreen;
 @SuppressWarnings("DuplicatedCode")
 public class ServerSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, serverMessagesButton;
-    private ExtendedTextControl defaultMOTD, defaultName, defaultMSG;
+    private ExtendedTextControl defaultMOTD, defaultName, defaultMessage;
 
-    private String defaultServerMSG;
+    private String defaultServerMessage;
 
     ServerSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -46,7 +46,7 @@ public class ServerSettingsGui extends ExtendedScreen {
 
     @Override
     public void initializeUi() {
-        defaultServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+        defaultServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         defaultName = addControl(
                 new ExtendedTextControl(
@@ -64,14 +64,14 @@ public class ServerSettingsGui extends ExtendedScreen {
                 )
         );
         defaultMOTD.setText(CraftPresence.CONFIG.defaultServerMOTD);
-        defaultMSG = addControl(
+        defaultMessage = addControl(
                 new ExtendedTextControl(
                         mc.fontRenderer,
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(3),
                         180, 20
                 )
         );
-        defaultMSG.setText(defaultServerMSG);
+        defaultMessage.setText(defaultServerMessage);
 
         serverMessagesButton = addControl(
                 new ExtendedButtonControl(
@@ -142,10 +142,10 @@ public class ServerSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.defaultServerMOTD = defaultMOTD.getText();
                             }
-                            if (!defaultMSG.getText().equals(defaultServerMSG)) {
+                            if (!defaultMessage.getText().equals(defaultServerMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMSG.getText());
+                                StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage.getText());
                             }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
@@ -185,7 +185,7 @@ public class ServerSettingsGui extends ExtendedScreen {
         drawString(mc.fontRenderer, serverMOTDText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
         drawString(mc.fontRenderer, defaultMessageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(defaultMSG.getText()) || !StringUtils.isNullOrEmpty(defaultName.getText()) || !StringUtils.isNullOrEmpty(defaultMOTD.getText());
+        proceedButton.enabled = !StringUtils.isNullOrEmpty(defaultMessage.getText()) || !StringUtils.isNullOrEmpty(defaultName.getText()) || !StringUtils.isNullOrEmpty(defaultMOTD.getText());
         serverMessagesButton.enabled = CraftPresence.SERVER.enabled;
 
         super.drawScreen(mouseX, mouseY, partialTicks);

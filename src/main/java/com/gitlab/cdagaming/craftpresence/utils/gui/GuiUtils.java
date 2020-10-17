@@ -334,10 +334,10 @@ public class GuiUtils {
             guiArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String defaultGuiMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-        final String currentGuiMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGuiMSG);
+        final String defaultGuiMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+        final String currentGuiMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, CURRENT_GUI_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultGuiMessage);
 
-        final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGuiMSG, guiArgs);
+        final String CURRENT_GUI_MESSAGE = StringUtils.sequentialReplaceAnyCase(currentGuiMessage, guiArgs);
 
         CraftPresence.CLIENT.syncArgument("&SCREEN&", CURRENT_GUI_MESSAGE, false);
         CraftPresence.CLIENT.initArgument(true, "&SCREEN&");

@@ -37,7 +37,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, dimensionMessagesButton;
     private ExtendedTextControl defaultMessage;
 
-    private String defaultDimensionMSG;
+    private String defaultDimensionMessage;
 
     DimensionSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -45,7 +45,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
 
     @Override
     public void initializeUi() {
-        defaultDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+        defaultDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
         defaultMessage = addControl(
                 new ExtendedTextControl(
@@ -54,7 +54,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         180, 20
                 )
         );
-        defaultMessage.setText(defaultDimensionMSG);
+        defaultMessage.setText(defaultDimensionMessage);
 
         dimensionMessagesButton = addControl(
                 new ExtendedButtonControl(
@@ -115,7 +115,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
-                            if (!defaultMessage.getText().equals(defaultDimensionMSG)) {
+                            if (!defaultMessage.getText().equals(defaultDimensionMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage.getText());

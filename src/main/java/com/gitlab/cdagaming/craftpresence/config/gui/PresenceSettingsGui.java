@@ -75,10 +75,10 @@ public class PresenceSettingsGui extends ExtendedScreen {
                 )
         );
 
-        detailsFormat.setText(CraftPresence.CONFIG.detailsMSG);
-        gameStateFormat.setText(CraftPresence.CONFIG.gameStateMSG);
-        largeImageFormat.setText(CraftPresence.CONFIG.largeImageMSG);
-        smallImageFormat.setText(CraftPresence.CONFIG.smallImageMSG);
+        detailsFormat.setText(CraftPresence.CONFIG.detailsMessage);
+        gameStateFormat.setText(CraftPresence.CONFIG.gameStateMessage);
+        largeImageFormat.setText(CraftPresence.CONFIG.largeImageMessage);
+        smallImageFormat.setText(CraftPresence.CONFIG.smallImageMessage);
 
         // Page 2 Items
         smallImageKeyFormat = addControl(
@@ -105,25 +105,25 @@ public class PresenceSettingsGui extends ExtendedScreen {
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
-                            if (!detailsFormat.getText().equals(CraftPresence.CONFIG.detailsMSG)) {
+                            if (!detailsFormat.getText().equals(CraftPresence.CONFIG.detailsMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.detailsMSG = detailsFormat.getText();
+                                CraftPresence.CONFIG.detailsMessage = detailsFormat.getText();
                             }
-                            if (!gameStateFormat.getText().equals(CraftPresence.CONFIG.gameStateMSG)) {
+                            if (!gameStateFormat.getText().equals(CraftPresence.CONFIG.gameStateMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.gameStateMSG = gameStateFormat.getText();
+                                CraftPresence.CONFIG.gameStateMessage = gameStateFormat.getText();
                             }
-                            if (!largeImageFormat.getText().equals(CraftPresence.CONFIG.largeImageMSG)) {
+                            if (!largeImageFormat.getText().equals(CraftPresence.CONFIG.largeImageMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.largeImageMSG = largeImageFormat.getText();
+                                CraftPresence.CONFIG.largeImageMessage = largeImageFormat.getText();
                             }
-                            if (!smallImageFormat.getText().equals(CraftPresence.CONFIG.smallImageMSG)) {
+                            if (!smallImageFormat.getText().equals(CraftPresence.CONFIG.smallImageMessage)) {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.smallImageMSG = smallImageFormat.getText();
+                                CraftPresence.CONFIG.smallImageMessage = smallImageFormat.getText();
                             }
                             if (!largeImageKeyFormat.getText().equals(CraftPresence.CONFIG.largeImageKey)) {
                                 CraftPresence.CONFIG.hasChanged = true;
@@ -174,10 +174,10 @@ public class PresenceSettingsGui extends ExtendedScreen {
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.presence_settings");
-        final String detailsFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.details_msg");
-        final String gameStateFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.game_state_msg");
-        final String largeImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_msg");
-        final String smallImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_msg");
+        final String detailsFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.details_message");
+        final String gameStateFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.game_state_message");
+        final String largeImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_message");
+        final String smallImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_message");
         final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_key");
         final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_key");
 

@@ -146,7 +146,7 @@ public class CommandUtils {
         CraftPresence.CLIENT.STATUS = DiscordStatus.Ready;
         CraftPresence.CLIENT.clearPartyData(true, false);
 
-        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.loadingMSG, loadingArgs), false);
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.loadingMessage, loadingArgs), false);
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CLIENT.imageOf(CraftPresence.CONFIG.defaultIcon, "", false), true);
 
         isLoadingGame = true;
@@ -171,7 +171,7 @@ public class CommandUtils {
             isLoadingGame = false;
         }
 
-        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainMenuMSG, mainMenuArgs), false);
+        CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.mainMenuMessage, mainMenuArgs), false);
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", CraftPresence.CLIENT.imageOf(CraftPresence.CONFIG.defaultIcon, "", false), true);
 
         isInMainMenu = true;

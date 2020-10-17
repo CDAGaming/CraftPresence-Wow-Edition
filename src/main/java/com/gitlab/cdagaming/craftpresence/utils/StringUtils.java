@@ -593,10 +593,10 @@ public class StringUtils {
      * @param searchIndex    The expected index to locate the search term at within an Array Element
      * @param resultIndex    The part of the found Array Element index to retrieve
      * @param splitCharacter The delimiter being expected to separate chunks of an Array Element
-     * @param alternativeMSG The alternative value to return if no matches found in the target Array Element Index
+     * @param alternativeMessage The alternative value to return if no matches found in the target Array Element Index
      * @return The found or Alternative value from the search within the Array
      */
-    public static String getConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String alternativeMSG) {
+    public static String getConfigPart(final String[] original, final String searchTerm, final int searchIndex, final int resultIndex, final String splitCharacter, final String alternativeMessage) {
         String formattedKey = "";
         boolean matched = false;
         for (String part : original) {
@@ -607,7 +607,7 @@ public class StringUtils {
                 break;
             }
         }
-        return !matched && !isNullOrEmpty(alternativeMSG) ? alternativeMSG : formattedKey;
+        return !matched && !isNullOrEmpty(alternativeMessage) ? alternativeMessage : formattedKey;
     }
 
     /**

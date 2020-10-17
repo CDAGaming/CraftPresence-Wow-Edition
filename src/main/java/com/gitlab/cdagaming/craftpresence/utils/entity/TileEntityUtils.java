@@ -461,28 +461,28 @@ public class TileEntityUtils {
      */
     public void updateEntityPresence() {
         // Retrieve Messages
-        final String defaultItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        final String defaultItemMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
                 null);
-        final String placeholderItemMSG = CraftPresence.CONFIG.playerItemsPlaceholderMSG;
+        final String placeholderItemMessage = CraftPresence.CONFIG.playerItemsPlaceholderMessage;
 
-        String offHandItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        String offHandItemMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_OFFHAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 CURRENT_OFFHAND_ITEM_NAME);
-        String mainItemMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        String mainItemMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_MAIN_HAND_ITEM_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                defaultItemMSG);
+                defaultItemMessage);
 
-        String helmetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        String helmetMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_HELMET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 CURRENT_HELMET_NAME);
-        String chestMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        String chestMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_CHEST_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 CURRENT_CHEST_NAME);
-        String legsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        String legsMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_LEGS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 CURRENT_LEGS_NAME);
-        String bootsMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
+        String bootsMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages,
                 CURRENT_BOOTS_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
                 CURRENT_BOOTS_NAME);
 
@@ -492,59 +492,59 @@ public class TileEntityUtils {
         // Extend Argument Messages, if tags available
         if (!CURRENT_MAIN_HAND_ITEM_TAGS.isEmpty()) {
             for (String tagName : CURRENT_MAIN_HAND_ITEM_TAGS) {
-                mainItemMSG = StringUtils.replaceAnyCase(mainItemMSG, "&" + tagName + "&", CURRENT_MAIN_HAND_ITEM_TAG.getTag(tagName).toString());
+                mainItemMessage = StringUtils.replaceAnyCase(mainItemMessage, "&" + tagName + "&", CURRENT_MAIN_HAND_ITEM_TAG.getTag(tagName).toString());
             }
         }
 
         if (!CURRENT_OFFHAND_ITEM_TAGS.isEmpty()) {
             for (String tagName : CURRENT_OFFHAND_ITEM_TAGS) {
-                offHandItemMSG = StringUtils.replaceAnyCase(offHandItemMSG, "&" + tagName + "&", CURRENT_OFFHAND_ITEM_TAG.getTag(tagName).toString());
+                offHandItemMessage = StringUtils.replaceAnyCase(offHandItemMessage, "&" + tagName + "&", CURRENT_OFFHAND_ITEM_TAG.getTag(tagName).toString());
             }
         }
 
         if (!CURRENT_HELMET_TAGS.isEmpty()) {
             for (String tagName : CURRENT_HELMET_TAGS) {
-                helmetMSG = StringUtils.replaceAnyCase(helmetMSG, "&" + tagName + "&", CURRENT_HELMET_TAG.getTag(tagName).toString());
+                helmetMessage = StringUtils.replaceAnyCase(helmetMessage, "&" + tagName + "&", CURRENT_HELMET_TAG.getTag(tagName).toString());
             }
         }
 
         if (!CURRENT_CHEST_TAGS.isEmpty()) {
             for (String tagName : CURRENT_CHEST_TAGS) {
-                chestMSG = StringUtils.replaceAnyCase(chestMSG, "&" + tagName + "&", CURRENT_CHEST_TAG.getTag(tagName).toString());
+                chestMessage = StringUtils.replaceAnyCase(chestMessage, "&" + tagName + "&", CURRENT_CHEST_TAG.getTag(tagName).toString());
             }
         }
 
         if (!CURRENT_LEGS_TAGS.isEmpty()) {
             for (String tagName : CURRENT_LEGS_TAGS) {
-                legsMSG = StringUtils.replaceAnyCase(legsMSG, "&" + tagName + "&", CURRENT_LEGS_TAG.getTag(tagName).toString());
+                legsMessage = StringUtils.replaceAnyCase(legsMessage, "&" + tagName + "&", CURRENT_LEGS_TAG.getTag(tagName).toString());
             }
         }
 
         if (!CURRENT_BOOTS_TAGS.isEmpty()) {
             for (String tagName : CURRENT_BOOTS_TAGS) {
-                bootsMSG = StringUtils.replaceAnyCase(bootsMSG, "&" + tagName + "&", CURRENT_BOOTS_TAG.getTag(tagName).toString());
+                bootsMessage = StringUtils.replaceAnyCase(bootsMessage, "&" + tagName + "&", CURRENT_BOOTS_TAG.getTag(tagName).toString());
             }
         }
 
         tileEntityArgs.add(new Pair<>("&MAIN&", !StringUtils.isNullOrEmpty(CURRENT_MAIN_HAND_ITEM_NAME) ?
-                StringUtils.replaceAnyCase(mainItemMSG, "&item&", CURRENT_MAIN_HAND_ITEM_NAME) : ""));
+                StringUtils.replaceAnyCase(mainItemMessage, "&item&", CURRENT_MAIN_HAND_ITEM_NAME) : ""));
         tileEntityArgs.add(new Pair<>("&OFFHAND&", !StringUtils.isNullOrEmpty(CURRENT_OFFHAND_ITEM_NAME) ?
-                StringUtils.replaceAnyCase(offHandItemMSG, "&item&", CURRENT_OFFHAND_ITEM_NAME) : ""));
+                StringUtils.replaceAnyCase(offHandItemMessage, "&item&", CURRENT_OFFHAND_ITEM_NAME) : ""));
         tileEntityArgs.add(new Pair<>("&HELMET&", !StringUtils.isNullOrEmpty(CURRENT_HELMET_NAME) ?
-                StringUtils.replaceAnyCase(helmetMSG, "&item&", CURRENT_HELMET_NAME) : ""));
+                StringUtils.replaceAnyCase(helmetMessage, "&item&", CURRENT_HELMET_NAME) : ""));
         tileEntityArgs.add(new Pair<>("&CHEST&", !StringUtils.isNullOrEmpty(CURRENT_CHEST_NAME) ?
-                StringUtils.replaceAnyCase(chestMSG, "&item&", CURRENT_CHEST_NAME) : ""));
+                StringUtils.replaceAnyCase(chestMessage, "&item&", CURRENT_CHEST_NAME) : ""));
         tileEntityArgs.add(new Pair<>("&LEGS&", !StringUtils.isNullOrEmpty(CURRENT_LEGS_NAME) ?
-                StringUtils.replaceAnyCase(legsMSG, "&item&", CURRENT_LEGS_NAME) : ""));
+                StringUtils.replaceAnyCase(legsMessage, "&item&", CURRENT_LEGS_NAME) : ""));
         tileEntityArgs.add(new Pair<>("&BOOTS&", !StringUtils.isNullOrEmpty(CURRENT_BOOTS_NAME) ?
-                StringUtils.replaceAnyCase(bootsMSG, "&item&", CURRENT_BOOTS_NAME) : ""));
+                StringUtils.replaceAnyCase(bootsMessage, "&item&", CURRENT_BOOTS_NAME) : ""));
 
         // Add All Generalized Arguments, if any
         if (!CraftPresence.CLIENT.generalArgs.isEmpty()) {
             tileEntityArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String CURRENT_MESSAGE = StringUtils.sequentialReplaceAnyCase(placeholderItemMSG, tileEntityArgs);
+        final String CURRENT_MESSAGE = StringUtils.sequentialReplaceAnyCase(placeholderItemMessage, tileEntityArgs);
 
         // NOTE: Only Apply if Items are not Empty, otherwise Clear Argument
         if (!allItemsEmpty) {

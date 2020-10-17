@@ -117,21 +117,21 @@ gui.config.name.server_messages.server_icon=Default Server Icon
 gui.config.name.server_messages.server_motd=Default Server MOTD
 gui.config.name.server_messages.server_name=Default Server Name
 gui.config.name.server_messages.server_messages=Server Messages
-gui.config.name.status_messages.main_menu_msg=Main Menu Message
-gui.config.name.status_messages.loading_msg=Loading Message
-gui.config.name.status_messages.lan_msg=LAN Game Message
-gui.config.name.status_messages.single_player_msg=Singleplayer Game Message
-gui.config.name.status_messages.placeholder.pack_msg=Modpack Message
-gui.config.name.status_messages.placeholder.player_msg.out=Player Outer Info Placeholder
-gui.config.name.status_messages.placeholder.player_msg.in=Player Inner Info Placeholder
-gui.config.name.status_messages.placeholder.player_coordinate_msg=Player Coordinate Placeholder
-gui.config.name.status_messages.placeholder.player_health_msg=Player Health Placeholder
-gui.config.name.status_messages.placeholder.player_amount_msg=Player List Placeholder
-gui.config.name.status_messages.placeholder.player_item_msg=Player Items Placeholder
-gui.config.name.status_messages.placeholder.world_msg=World Data Placeholder
-gui.config.name.status_messages.placeholder.mods_msg=Mods Placeholder
-gui.config.name.status_messages.special.vivecraft_msg=Vivecraft Message
-gui.config.name.status_messages.fallback.pack_placeholder_msg=Fallback Pack Placeholder
+gui.config.name.status_messages.main_menu_message=Main Menu Message
+gui.config.name.status_messages.loading_message=Loading Message
+gui.config.name.status_messages.lan_message=LAN Game Message
+gui.config.name.status_messages.single_player_message=Singleplayer Game Message
+gui.config.name.status_messages.placeholder.pack_message=Modpack Message
+gui.config.name.status_messages.placeholder.player_message.out=Player Outer Info Placeholder
+gui.config.name.status_messages.placeholder.player_message.in=Player Inner Info Placeholder
+gui.config.name.status_messages.placeholder.player_coordinate_message=Player Coordinate Placeholder
+gui.config.name.status_messages.placeholder.player_health_message=Player Health Placeholder
+gui.config.name.status_messages.placeholder.player_amount_message=Player List Placeholder
+gui.config.name.status_messages.placeholder.player_item_message=Player Items Placeholder
+gui.config.name.status_messages.placeholder.world_message=World Data Placeholder
+gui.config.name.status_messages.placeholder.mods_message=Mods Placeholder
+gui.config.name.status_messages.special.vivecraft_message=Vivecraft Message
+gui.config.name.status_messages.fallback.pack_placeholder_message=Fallback Pack Placeholder
 gui.config.name.advanced.split_character=Split Character
 gui.config.name.advanced.refresh_rate=Refresh Rate
 gui.config.name.advanced.enable_commands=Enable Commands
@@ -155,10 +155,10 @@ gui.config.name.accessibility.language_id=Language ID
 gui.config.name.accessibility.show_background_as_dark=Reduced Background Tint
 gui.config.name.accessibility.strip_translation_colors=Strip Translation Colors
 gui.config.name.accessibility.show_logging_in_chat=Show Logging in Chat
-gui.config.name.display.small_image_msg=Small Image Text Format
-gui.config.name.display.large_image_msg=Large Image Text Format
-gui.config.name.display.details_msg=Details Message Format
-gui.config.name.display.game_state_msg=Game State Message Format
+gui.config.name.display.small_image_message=Small Image Text Format
+gui.config.name.display.large_image_message=Large Image Text Format
+gui.config.name.display.details_message=Details Message Format
+gui.config.name.display.game_state_message=Game State Message Format
 gui.config.name.display.small_image_key=Small Image Key Format
 gui.config.name.display.large_image_key=Large Image Key Format
 ## CONFIG MESSAGES - COMMENTS ##
@@ -181,21 +181,21 @@ gui.config.comment.server_messages.server_icon=Server icon to default to when in
 gui.config.comment.server_messages.server_motd=Server MOTD to default to, in the case of a null MOTD\n (Also applies for direct connects)
 gui.config.comment.server_messages.server_name=Server display name to default to, in the case of a null name\n (Also applies for direct connects)
 gui.config.comment.server_messages.server_messages=Customize messages to display with servers\n (Manual format: server_IP;message;icon)\n Available placeholders:\n - &ip& = Server IP\n - &name& = Server name\n - &motd& = Server MOTD\n - &icon& = Default server icon\n - &players& = Server player counter\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
-gui.config.comment.status_messages.main_menu_msg=Message to display while on the main menu
-gui.config.comment.status_messages.loading_msg=Message to display while in a loading state\n (Between RPC initializing and the first refresh)
-gui.config.comment.status_messages.lan_msg=Message to display while in a LAN game\n Available placeholders:\n - &ip& = Server IP\n - &name& = Server name\n - &motd& = Server MOTD\n - &icon& = Default server icon\n - &players& = Server player counter\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
-gui.config.comment.status_messages.single_player_msg=Message to display while in Singleplayer\n Available placeholders:\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
-gui.config.comment.status_messages.placeholder.pack_msg=Message to use for the &pack& placeholder in Presence settings\n (If a Curse, Twitch, Technic, MCUpdater, or MultiMC Pack is detected)\n Available placeholders:\n - &name& = The pack's name
-gui.config.comment.status_messages.placeholder.player_msg.out=Message to use for the &ign& general placeholder in Presence settings and the &playerinfo& placeholder in server settings\n Available placeholders:\n - &name& = Your username
-gui.config.comment.status_messages.placeholder.player_msg.in=Message to use for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &coords& = The player's coordinate placeholder message\n - &health& = The player's health placeholder message
-gui.config.comment.status_messages.placeholder.player_coordinate_msg=Message to use for the &coords& argument for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &xPosition& = Your current in-game X position\n - &yPosition& = Your current in-game Y position\n - &zPosition& = Your current in-game Z position
-gui.config.comment.status_messages.placeholder.player_health_msg=Message to use for the &health& argument for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &current& = Your current in-game health\n - &max& = Your current in-game maximum health
-gui.config.comment.status_messages.placeholder.player_amount_msg=Message to use for the &players& placeholder in server settings\n Available placeholders:\n - &current& = Current player count\n - &max& = Maximum player count
-gui.config.comment.status_messages.placeholder.player_item_msg=Message to use for the &tileentity& general placeholder from Presence settings\n Available placeholders:\n - &main& = Current main hand item\n - &offhand& = Current offhand item\n - &helmet& = Currently equipped helmet\n - &chest& = Currently equipped chestpiece\n - &legs& = Currently equipped leggings\n - &boots& = Currently equipped boots
-gui.config.comment.status_messages.placeholder.world_msg=Message to use for the &worldinfo& placeholder in server settings\n Available placeholders:\n - &difficulty& = The current world's difficulty\n - &worldname& = The name of the current world\n - &worldtime& = The current world's in-game time
-gui.config.comment.status_messages.placeholder.mods_msg=Message to use for the &mods& placeholder in Presence settings\n Available placeholders:\n - &modcount& = The amount of mods currently in your mods folder
-gui.config.comment.status_messages.special.vivecraft_msg=Message to display in Rich Presence when using Vivecraft
-gui.config.comment.status_messages.fallback.pack_placeholder_msg=If not empty, this text will be used for the &pack& placeholder if no packs are detected
+gui.config.comment.status_messages.main_menu_message=Message to display while on the main menu
+gui.config.comment.status_messages.loading_message=Message to display while in a loading state\n (Between RPC initializing and the first refresh)
+gui.config.comment.status_messages.lan_message=Message to display while in a LAN game\n Available placeholders:\n - &ip& = Server IP\n - &name& = Server name\n - &motd& = Server MOTD\n - &icon& = Default server icon\n - &players& = Server player counter\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
+gui.config.comment.status_messages.single_player_message=Message to display while in Singleplayer\n Available placeholders:\n - &playerinfo& = Your in-world player info message\n - &worldinfo& = Your in-world game info
+gui.config.comment.status_messages.placeholder.pack_message=Message to use for the &pack& placeholder in Presence settings\n (If a Curse, Twitch, Technic, MCUpdater, or MultiMC Pack is detected)\n Available placeholders:\n - &name& = The pack's name
+gui.config.comment.status_messages.placeholder.player_message.out=Message to use for the &ign& general placeholder in Presence settings and the &playerinfo& placeholder in server settings\n Available placeholders:\n - &name& = Your username
+gui.config.comment.status_messages.placeholder.player_message.in=Message to use for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &coords& = The player's coordinate placeholder message\n - &health& = The player's health placeholder message
+gui.config.comment.status_messages.placeholder.player_coordinate_message=Message to use for the &coords& argument for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &xPosition& = Your current in-game X position\n - &yPosition& = Your current in-game Y position\n - &zPosition& = Your current in-game Z position
+gui.config.comment.status_messages.placeholder.player_health_message=Message to use for the &health& argument for the &playerinfo& placeholder in server settings\n Available placeholders:\n - &current& = Your current in-game health\n - &max& = Your current in-game maximum health
+gui.config.comment.status_messages.placeholder.player_amount_message=Message to use for the &players& placeholder in server settings\n Available placeholders:\n - &current& = Current player count\n - &max& = Maximum player count
+gui.config.comment.status_messages.placeholder.player_item_message=Message to use for the &tileentity& general placeholder from Presence settings\n Available placeholders:\n - &main& = Current main hand item\n - &offhand& = Current offhand item\n - &helmet& = Currently equipped helmet\n - &chest& = Currently equipped chestpiece\n - &legs& = Currently equipped leggings\n - &boots& = Currently equipped boots
+gui.config.comment.status_messages.placeholder.world_message=Message to use for the &worldinfo& placeholder in server settings\n Available placeholders:\n - &difficulty& = The current world's difficulty\n - &worldname& = The name of the current world\n - &worldtime& = The current world's in-game time
+gui.config.comment.status_messages.placeholder.mods_message=Message to use for the &mods& placeholder in Presence settings\n Available placeholders:\n - &modcount& = The amount of mods currently in your mods folder
+gui.config.comment.status_messages.special.vivecraft_message=Message to display in Rich Presence when using Vivecraft
+gui.config.comment.status_messages.fallback.pack_placeholder_message=If not empty, this text will be used for the &pack& placeholder if no packs are detected
 gui.config.comment.advanced.split_character=The split character for the arrays in CraftPresence's messages configs
 gui.config.comment.advanced.refresh_rate=The time to take in between refreshing the Rich Presence display and modules, in seconds
 gui.config.comment.advanced.enable_commands=Allows CraftPresence to utilize commands\n (Enables Command Gui in main Config Gui)

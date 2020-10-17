@@ -86,22 +86,22 @@ public class SelectorGui extends ExtendedScreen {
                                                 CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
                                                 CraftPresence.GUIS.openScreen(parentScreen);
                                             } else if (configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
-                                                final String defaultDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-                                                final String currentDimensionMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String defaultDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
                                                 CraftPresence.CONFIG.hasChanged = true;
-                                                if (StringUtils.isNullOrEmpty(currentDimensionMSG) || currentDimensionMSG.equals(defaultDimensionMSG)) {
-                                                    CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMSG);
+                                                if (StringUtils.isNullOrEmpty(currentDimensionMessage) || currentDimensionMessage.equals(defaultDimensionMessage)) {
+                                                    CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMessage);
                                                 }
                                                 CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
                                                 CraftPresence.GUIS.openScreen(parentScreen);
                                             } else if (configOption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
-                                                final String defaultServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-                                                final String currentServerMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String defaultServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
                                                 CraftPresence.CONFIG.hasChanged = true;
-                                                if (StringUtils.isNullOrEmpty(currentServerMSG) || currentServerMSG.equals(defaultServerMSG)) {
-                                                    CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMSG);
+                                                if (StringUtils.isNullOrEmpty(currentServerMessage) || currentServerMessage.equals(defaultServerMessage)) {
+                                                    CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMessage);
                                                 }
                                                 CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
                                                 CraftPresence.GUIS.openScreen(parentScreen);

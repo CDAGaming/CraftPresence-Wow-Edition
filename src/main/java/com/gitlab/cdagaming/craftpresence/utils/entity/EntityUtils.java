@@ -270,25 +270,25 @@ public class EntityUtils {
      */
     public void updateEntityPresence() {
         // Retrieve Messages
-        final String defaultEntityTargetMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages,
+        final String defaultEntityTargetMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages,
                 "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
                 null);
-        final String defaultEntityAttackingMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages,
+        final String defaultEntityAttackingMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages,
                 "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
                 null);
-        final String defaultEntityRidingMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages,
+        final String defaultEntityRidingMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages,
                 "default", 0, 1, CraftPresence.CONFIG.splitCharacter,
                 null);
 
-        final String targetEntityMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages,
+        final String targetEntityMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.entityTargetMessages,
                 CURRENT_TARGET_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                defaultEntityTargetMSG);
-        final String attackingEntityMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages,
+                defaultEntityTargetMessage);
+        final String attackingEntityMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.entityAttackingMessages,
                 CURRENT_ATTACKING_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                defaultEntityAttackingMSG);
-        final String ridingEntityMSG = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages,
+                defaultEntityAttackingMessage);
+        final String ridingEntityMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.entityRidingMessages,
                 CURRENT_RIDING_NAME, 0, 1, CraftPresence.CONFIG.splitCharacter,
-                defaultEntityRidingMSG);
+                defaultEntityRidingMessage);
 
         // Form Entity Argument List
         final List<Pair<String, String>> entityTargetArgs = Lists.newArrayList(), entityAttackingArgs = Lists.newArrayList(), entityRidingArgs = Lists.newArrayList();
@@ -323,9 +323,9 @@ public class EntityUtils {
             entityRidingArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        final String CURRENT_TARGET_MESSAGE = StringUtils.sequentialReplaceAnyCase(targetEntityMSG, entityTargetArgs);
-        final String CURRENT_ATTACKING_MESSAGE = StringUtils.sequentialReplaceAnyCase(attackingEntityMSG, entityAttackingArgs);
-        final String CURRENT_RIDING_MESSAGE = StringUtils.sequentialReplaceAnyCase(ridingEntityMSG, entityRidingArgs);
+        final String CURRENT_TARGET_MESSAGE = StringUtils.sequentialReplaceAnyCase(targetEntityMessage, entityTargetArgs);
+        final String CURRENT_ATTACKING_MESSAGE = StringUtils.sequentialReplaceAnyCase(attackingEntityMessage, entityAttackingArgs);
+        final String CURRENT_RIDING_MESSAGE = StringUtils.sequentialReplaceAnyCase(ridingEntityMessage, entityRidingArgs);
 
         // NOTE: Only Apply if Entities are not Empty, otherwise Clear Argument
         if (!allEntitiesEmpty) {

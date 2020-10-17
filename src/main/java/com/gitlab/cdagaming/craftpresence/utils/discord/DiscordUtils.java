@@ -220,8 +220,8 @@ public class DiscordUtils {
 
         generalArgs.add(new Pair<>("&MCVERSION&", ModUtils.TRANSLATOR.translate("craftpresence.defaults.state.mc.version", ModUtils.MCVersion)));
         generalArgs.add(new Pair<>("&BRAND&", ModUtils.BRAND));
-        generalArgs.add(new Pair<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMSG, modsArgs)));
-        generalArgs.add(new Pair<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMSG, playerInfoArgs)));
+        generalArgs.add(new Pair<>("&MODS&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.modsPlaceholderMessage, modsArgs)));
+        generalArgs.add(new Pair<>("&IGN&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.outerPlayerPlaceholderMessage, playerInfoArgs)));
 
         for (Pair<String, String> generalArgument : generalArgs) {
             // For each General (Can be used Anywhere) Argument
@@ -329,12 +329,12 @@ public class DiscordUtils {
         } else if (!StringUtils.isNullOrEmpty(TechnicUtils.PACK_NAME)) {
             foundPackName = TechnicUtils.PACK_NAME;
             foundPackIcon = TechnicUtils.ICON_NAME;
-        } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.fallbackPackPlaceholderMSG)) {
-            foundPackName = CraftPresence.CONFIG.fallbackPackPlaceholderMSG;
+        } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.fallbackPackPlaceholderMessage)) {
+            foundPackName = CraftPresence.CONFIG.fallbackPackPlaceholderMessage;
             foundPackIcon = foundPackName;
         }
 
-        syncArgument("&PACK&", StringUtils.formatWord(StringUtils.replaceAnyCase(CraftPresence.CONFIG.packPlaceholderMSG, "&NAME&", !StringUtils.isNullOrEmpty(foundPackName) ? foundPackName : ""), !CraftPresence.CONFIG.formatWords), false);
+        syncArgument("&PACK&", StringUtils.formatWord(StringUtils.replaceAnyCase(CraftPresence.CONFIG.packPlaceholderMessage, "&NAME&", !StringUtils.isNullOrEmpty(foundPackName) ? foundPackName : ""), !CraftPresence.CONFIG.formatWords), false);
         syncArgument("&PACK&", !StringUtils.isNullOrEmpty(foundPackIcon) ? StringUtils.formatAsIcon(foundPackIcon) : "", true);
     }
 
@@ -451,14 +451,14 @@ public class DiscordUtils {
      */
     public RichPresence buildRichPresence() {
         // Format Presence based on Arguments available in argumentData
-        DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
-        GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
+        DETAILS = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.detailsMessage, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
+        GAME_STATE = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.gameStateMessage, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
 
         LARGE_IMAGE_KEY = StringUtils.formatAsIcon(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageKey, iconData));
         SMALL_IMAGE_KEY = StringUtils.formatAsIcon(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageKey, iconData));
 
-        LARGE_IMAGE_TEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
-        SMALL_IMAGE_TEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMSG, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
+        LARGE_IMAGE_TEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.largeImageMessage, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
+        SMALL_IMAGE_TEXT = StringUtils.formatWord(StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.smallImageMessage, messageData), !CraftPresence.CONFIG.formatWords, true, 1);
 
         final RichPresence newRPCData = new RichPresence.Builder()
                 .setState(GAME_STATE)
