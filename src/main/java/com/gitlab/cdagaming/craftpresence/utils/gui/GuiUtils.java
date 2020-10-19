@@ -661,6 +661,8 @@ public class GuiUtils {
 
         drawTexturedModalRect(x, y, 0, v, xOffset, height, zLevel);
         drawTexturedModalRect(x + xOffset, y, 200 - xOffset, v, xOffset, height, zLevel);
+
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     /**
