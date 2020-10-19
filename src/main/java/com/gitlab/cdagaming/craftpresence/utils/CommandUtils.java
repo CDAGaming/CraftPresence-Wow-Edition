@@ -63,7 +63,7 @@ public class CommandUtils {
         CraftPresence.KEYBINDINGS.onTick();
         CraftPresence.GUIS.onTick();
 
-        if (CraftPresence.SYSTEM.HAS_GAME_LOADED) {
+        if (CraftPresence.SYSTEM.HAS_LOADED && CraftPresence.SYSTEM.HAS_GAME_LOADED) {
             CraftPresence.BIOMES.onTick();
             CraftPresence.DIMENSIONS.onTick();
             CraftPresence.TILE_ENTITIES.onTick();
@@ -106,7 +106,8 @@ public class CommandUtils {
             DiscordAssetUtils.clearClientData();
         }
         DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientId, true);
-        CraftPresence.CLIENT.init();
+        // TODO: Add CONFIG.resetTimeOnInit
+        CraftPresence.CLIENT.init(false);
     }
 
     /**

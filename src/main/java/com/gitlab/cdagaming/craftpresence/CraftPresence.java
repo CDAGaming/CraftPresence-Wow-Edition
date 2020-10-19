@@ -203,8 +203,8 @@ public class CraftPresence {
         try {
             CLIENT.CLIENT_ID = CONFIG.clientId;
             CLIENT.setup();
-            CLIENT.init();
-            CLIENT.updateTimestamp();
+            // TODO: Add CONFIG.resetTimeOnInit
+            CLIENT.init(true);
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.load"));
             ex.printStackTrace();
@@ -252,11 +252,9 @@ public class CraftPresence {
                     CommandUtils.setLoadingPresence();
                 } else if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
                     CommandUtils.setMainMenuPresence();
-                } else if (player != null) {
-                    if (CommandUtils.isInMainMenu) {
-                        CommandUtils.isInMainMenu = false;
-                    }
-
+                } else if (player != null && (CommandUtils.isLoadingGame || CommandUtils.isInMainMenu)) {
+                    CommandUtils.isInMainMenu = false;
+                    CommandUtils.isLoadingGame = false;
                     CLIENT.initArgument("&MAINMENU&");
                 }
                 

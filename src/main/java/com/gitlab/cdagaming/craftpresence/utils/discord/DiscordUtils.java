@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.utils.discord;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.integrations.curse.CurseUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.multimc.MultiMCUtils;
@@ -192,8 +193,13 @@ public class DiscordUtils {
     /**
      * Initializes and Synchronizes Initial Rich Presence Data
      */
-    public synchronized void init() {
+    public synchronized void init(final boolean updateTimestamp) {
         try {
+            // Update Start Timestamp onInit, if needed
+            if (updateTimestamp) {
+                updateTimestamp();
+            }
+
             // Create IPC Instance and Listener and Make a Connection if possible
             ipcInstance = new IPCClient(Long.parseLong(CLIENT_ID), ModUtils.IS_DEV, ModUtils.IS_VERBOSE, true, CLIENT_ID);
             ipcInstance.setListener(new ModIPCListener());
@@ -417,6 +423,24 @@ public class DiscordUtils {
     }
 
     /**
+     * Clears Presence Data from the RPC, and updates if needed
+     * 
+     * @param partyClearArgs Arguments for {@link DiscordUtils#clearPartyData(boolean, boolean)}
+     */
+    public void clearPresenceData(Tuple<Boolean, Boolean, Boolean> partyClearArgs) {
+        GAME_STATE = "";
+        DETAILS = "";
+        LARGE_IMAGE_KEY = "";
+        LARGE_IMAGE_TEXT = "";
+        SMALL_IMAGE_KEY = "";
+        SMALL_IMAGE_TEXT = "";
+
+        if (partyClearArgs.getFirst()) {
+            clearPartyData(partyClearArgs.getSecond(), partyClearArgs.getThird());
+        }
+    }
+
+    /**
      * Shutdown the RPC and close related resources, as well as Clearing any remaining Runtime Client Data
      */
     public synchronized void shutDown() {
@@ -430,9 +454,10 @@ public class DiscordUtils {
             // Clear User Data before final clear and shutdown
             STATUS = DiscordStatus.Disconnected;
             currentPresence = null;
-            clearPartyData(true, false);
+            // Empty RPC Data
+            clearPresenceData(new Tuple<>(true, true, false));
+
             CURRENT_USER = null;
-    
             lastRequestedImageData = new Pair<>();
     
             CraftPresence.DIMENSIONS.clearClientData();
