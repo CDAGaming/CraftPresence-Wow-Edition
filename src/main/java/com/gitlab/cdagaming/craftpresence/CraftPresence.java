@@ -203,7 +203,6 @@ public class CraftPresence {
         try {
             CLIENT.CLIENT_ID = CONFIG.clientId;
             CLIENT.setup();
-            // TODO: Add CONFIG.resetTimeOnInit
             CLIENT.init(true);
         } catch (Exception ex) {
             ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.load"));

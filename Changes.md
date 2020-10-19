@@ -17,6 +17,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
 *   Added Server list icon support for the Selector Guis
 *   Added `Strip Extra Gui Elements` setting to `Accessibility Settings`
+*   Added `Reset Time on Init` setting to `General Settings`
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend) Base64 and direct byte array Image Formats now supported in `ImageUtils` and related areas
 *   (Backend) Added Uuid Detection, will be used within applicable settings that have player uuid values

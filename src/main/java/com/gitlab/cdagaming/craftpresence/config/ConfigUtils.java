@@ -63,7 +63,7 @@ public class ConfigUtils {
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
             NAME_showTime, NAME_detectBiomeData, NAME_detectDimensionData,
-            NAME_detectWorldData, NAME_clientId, NAME_defaultIcon, NAME_enableJoinRequest, NAME_partyPrivacyLevel;
+            NAME_detectWorldData, NAME_clientId, NAME_defaultIcon, NAME_enableJoinRequest, NAME_partyPrivacyLevel, NAME_resetTimeOnInit;
     // BIOME MESSAGES
     public String NAME_biomeMessages;
     // DIMENSION MESSAGES
@@ -87,7 +87,7 @@ public class ConfigUtils {
     public String schemaVersion, lastMcVersionId;
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
-            detectBiomeData, detectDimensionData, detectWorldData, enableJoinRequest;
+            detectBiomeData, detectDimensionData, detectWorldData, enableJoinRequest, resetTimeOnInit;
     public String clientId, defaultIcon;
     public int partyPrivacyLevel;
     // BIOME MESSAGES
@@ -153,6 +153,7 @@ public class ConfigUtils {
         NAME_defaultIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.default_icon").replaceAll(" ", "_");
         NAME_enableJoinRequest = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.enable_join_request").replaceAll(" ", "_");
         NAME_partyPrivacyLevel = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.party_privacy").replaceAll(" ", "_");
+        NAME_resetTimeOnInit = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.reset_time_on_init").replaceAll(" ", "_");
         detectCurseManifest = true;
         detectMultiMCManifest = true;
         detectMCUpdaterInstance = true;
@@ -165,6 +166,7 @@ public class ConfigUtils {
         defaultIcon = "grass";
         enableJoinRequest = false;
         partyPrivacyLevel = PartyPrivacy.Public.getPartyIndex();
+        resetTimeOnInit = false;
         // BIOME MESSAGES
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_messages").replaceAll(" ", "_");
         biomeMessages = new String[]{"default;Playing in &biome&"};

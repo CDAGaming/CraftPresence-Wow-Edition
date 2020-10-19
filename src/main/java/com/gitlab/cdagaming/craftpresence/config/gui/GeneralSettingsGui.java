@@ -41,7 +41,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
     private CheckBoxControl detectCurseManifestButton, detectMultiMCManifestButton,
             detectMCUpdaterInstanceButton, detectTechnicPackButton, showTimeButton,
             detectBiomeDataButton, detectDimensionDataButton, detectWorldDataButton,
-            enableJoinRequestButton;
+            enableJoinRequestButton, resetTimeOnInitButton;
     private ExtendedTextControl clientId;
 
     private int currentPartyPrivacy = PartyPrivacy.Public.getPartyIndex();
@@ -270,6 +270,24 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
+        resetTimeOnInitButton = addControl(
+                new CheckBoxControl(
+                        checkboxCalc2, CraftPresence.GUIS.getButtonY(7) - 40,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.reset_time_on_init"),
+                        CraftPresence.CONFIG.resetTimeOnInit,
+                        null,
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.reset_time_on_init")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                getWrapWidth(),
+                                mc.fontRenderer,
+                                true
+                        )
+                )
+        );
         proceedButton = addControl(
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
@@ -330,6 +348,11 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.enableJoinRequest = enableJoinRequestButton.isChecked();
+                            }
+                            if (resetTimeOnInitButton.isChecked() != CraftPresence.CONFIG.resetTimeOnInit) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.resetTimeOnInit = resetTimeOnInitButton.isChecked();
                             }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },

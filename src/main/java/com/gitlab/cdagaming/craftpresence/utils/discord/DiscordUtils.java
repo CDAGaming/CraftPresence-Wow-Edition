@@ -192,6 +192,8 @@ public class DiscordUtils {
 
     /**
      * Initializes and Synchronizes Initial Rich Presence Data
+     * 
+     * @param updateTimestamp Whether or not to update the starting timestamp
      */
     public synchronized void init(final boolean updateTimestamp) {
         try {

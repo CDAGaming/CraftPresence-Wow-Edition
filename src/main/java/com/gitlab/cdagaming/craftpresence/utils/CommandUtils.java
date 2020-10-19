@@ -106,8 +106,7 @@ public class CommandUtils {
             DiscordAssetUtils.clearClientData();
         }
         DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientId, true);
-        // TODO: Add CONFIG.resetTimeOnInit
-        CraftPresence.CLIENT.init(false);
+        CraftPresence.CLIENT.init(CraftPresence.CONFIG.resetTimeOnInit);
     }
 
     /**
