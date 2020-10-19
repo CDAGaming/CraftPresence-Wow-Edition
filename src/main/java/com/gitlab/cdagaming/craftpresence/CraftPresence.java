@@ -231,49 +231,51 @@ public class CraftPresence {
     }
 
     /**
-     * The Event to Run on each Client Tick, if passed initialization events
+     * The Event to Run on each Client Tick, if passed initialization events and not closing
      * <p>
      * Comprises of Synchronizing Data, and Updating RPC Data as needed
      */
     private void clientTick() {
-        if (initialized) {
-            instance = Minecraft.getMinecraft();
-            player = instance.player;
-
-            // Synchronize Developer and Verbose Modes with Config Options, if they were not overridden pre-setup
-            ModUtils.IS_DEV = !isDevStatusOverridden ? CONFIG.debugMode : ModUtils.IS_DEV;
-            ModUtils.IS_VERBOSE = !isVerboseStatusOverridden ? CONFIG.verboseMode : ModUtils.IS_VERBOSE;
-
-            CommandUtils.reloadData(false);
-
-            if (!CONFIG.hasChanged) {
-                if (!SYSTEM.HAS_LOADED) {
-                    // Ensure Loading Presence has already passed, before any other type of presence displays
-                    CommandUtils.setLoadingPresence();
-                } else if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
-                    CommandUtils.setMainMenuPresence();
-                } else if (player != null && (CommandUtils.isLoadingGame || CommandUtils.isInMainMenu)) {
-                    CommandUtils.isInMainMenu = false;
-                    CommandUtils.isLoadingGame = false;
-                    CLIENT.initArgument("&MAINMENU&");
-                }
-                
-                if (SYSTEM.HAS_LOADED) {
-                    if (CLIENT.awaitingReply && SYSTEM.TIMER == 0) {
-                        StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.getName()));
-                        CLIENT.ipcInstance.respondToJoinRequest(CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
-                        CLIENT.awaitingReply = false;
-                        CLIENT.STATUS = DiscordStatus.Ready;
-                    } else if (!CLIENT.awaitingReply && CLIENT.REQUESTER_USER != null) {
-                        CLIENT.REQUESTER_USER = null;
-                        CLIENT.STATUS = DiscordStatus.Ready;
+        if (!closing) {
+            if (initialized) {
+                instance = Minecraft.getMinecraft();
+                player = instance.player;
+    
+                // Synchronize Developer and Verbose Modes with Config Options, if they were not overridden pre-setup
+                ModUtils.IS_DEV = !isDevStatusOverridden ? CONFIG.debugMode : ModUtils.IS_DEV;
+                ModUtils.IS_VERBOSE = !isVerboseStatusOverridden ? CONFIG.verboseMode : ModUtils.IS_VERBOSE;
+    
+                CommandUtils.reloadData(false);
+    
+                if (!CONFIG.hasChanged) {
+                    if (!SYSTEM.HAS_LOADED) {
+                        // Ensure Loading Presence has already passed, before any other type of presence displays
+                        CommandUtils.setLoadingPresence();
+                    } else if (!CommandUtils.isInMainMenu && (!DIMENSIONS.isInUse && !BIOMES.isInUse && !TILE_ENTITIES.isInUse && !ENTITIES.isInUse && !SERVER.isInUse)) {
+                        CommandUtils.setMainMenuPresence();
+                    } else if (player != null && (CommandUtils.isLoadingGame || CommandUtils.isInMainMenu)) {
+                        CommandUtils.isInMainMenu = false;
+                        CommandUtils.isLoadingGame = false;
+                        CLIENT.initArgument("&MAINMENU&");
+                    }
+                    
+                    if (SYSTEM.HAS_LOADED) {
+                        if (CLIENT.awaitingReply && SYSTEM.TIMER == 0) {
+                            StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.getName()));
+                            CLIENT.ipcInstance.respondToJoinRequest(CLIENT.REQUESTER_USER, IPCClient.ApprovalMode.DENY, null);
+                            CLIENT.awaitingReply = false;
+                            CLIENT.STATUS = DiscordStatus.Ready;
+                        } else if (!CLIENT.awaitingReply && CLIENT.REQUESTER_USER != null) {
+                            CLIENT.REQUESTER_USER = null;
+                            CLIENT.STATUS = DiscordStatus.Ready;
+                        }
                     }
                 }
+            } else {
+                init();
             }
-        } else if (!closing) {
-            init();
+    
+            scheduleTick();
         }
-
-        scheduleTick();
     }
 }
