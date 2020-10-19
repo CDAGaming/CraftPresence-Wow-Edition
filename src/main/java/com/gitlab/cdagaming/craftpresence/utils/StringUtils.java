@@ -1105,9 +1105,11 @@ public class StringUtils {
     public static Object lookupObject(Class<?> classToAccess, Object instance, String... fieldNames) {
         for (String fieldName : fieldNames) {
             try {
-                Field lookupField = classToAccess.getDeclaredField(fieldName);
-                lookupField.setAccessible(true);
-                return lookupField.get(instance);
+                if (doesClassContainField(classToAccess, fieldName)) {
+                    Field lookupField = classToAccess.getDeclaredField(fieldName);
+                    lookupField.setAccessible(true);
+                    return lookupField.get(instance);
+                }
             } catch (Exception | Error ex) {
                 if (ModUtils.IS_VERBOSE) {
                     ex.printStackTrace();
@@ -1115,6 +1117,19 @@ public class StringUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Retrieves whether the specified class contains the specified field name
+     * 
+     * @param classToAccess The class to access with the field(s)
+     * @param fieldName     The Field name to search for
+     * 
+     * @return whether the specified class contains the specified field name
+     */
+    public static boolean doesClassContainField(Class<?> classToAccess, String fieldName) {
+        return Arrays.stream(classToAccess.getDeclaredFields())
+                .anyMatch(f -> f.getName().equals(fieldName));
     }
 
     /**

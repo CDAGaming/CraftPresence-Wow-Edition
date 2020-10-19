@@ -618,7 +618,7 @@ public class TileEntityUtils {
                     final ResourceLocation initialData = Block.REGISTRY.getNameForObject(block);
                     TILE_ENTITY_RESOURCES.put(block.getLocalizedName(), 
                             new ResourceLocation(initialData.getNamespace(),
-                                    "textures/blocks/" + initialData.getPath() + ".png"));
+                                    (ModUtils.MCProtocolID > 340 ? "textures/block/" : "textures/blocks/") + initialData.getPath() + ".png"));
                 }
             }
         }
@@ -636,7 +636,7 @@ public class TileEntityUtils {
                     final ResourceLocation initialData = Item.REGISTRY.getNameForObject(item);
                     TILE_ENTITY_RESOURCES.put(item.getItemStackDisplayName(getDefaultInstance(item)),
                             new ResourceLocation(initialData.getNamespace(),
-                                    "textures/items/" + initialData.getPath() + ".png"));
+                                    (ModUtils.MCProtocolID > 340 ? "textures/item/" : "textures/items/") + initialData.getPath() + ".png"));
                 }
             }
         }
