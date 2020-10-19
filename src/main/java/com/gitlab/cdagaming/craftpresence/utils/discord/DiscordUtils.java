@@ -420,28 +420,31 @@ public class DiscordUtils {
      * Shutdown the RPC and close related resources, as well as Clearing any remaining Runtime Client Data
      */
     public synchronized void shutDown() {
-        try {
-            ipcInstance.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (CraftPresence.SYSTEM.HAS_LOADED) {
+            try {
+                ipcInstance.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+    
+            // Clear User Data before final clear and shutdown
+            STATUS = DiscordStatus.Disconnected;
+            currentPresence = null;
+            clearPartyData(true, false);
+            CURRENT_USER = null;
+    
+            lastRequestedImageData = new Pair<>();
+    
+            CraftPresence.DIMENSIONS.clearClientData();
+            CraftPresence.TILE_ENTITIES.clearClientData();
+            CraftPresence.ENTITIES.clearClientData();
+            CraftPresence.BIOMES.clearClientData();
+            CraftPresence.SERVER.clearClientData();
+            CraftPresence.GUIS.clearClientData();
+    
+            CraftPresence.SYSTEM.HAS_LOADED = false;
+            ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
         }
-
-        // Clear User Data before final clear and shutdown
-        STATUS = DiscordStatus.Disconnected;
-        currentPresence = null;
-        clearPartyData(true, false);
-        CURRENT_USER = null;
-
-        lastRequestedImageData = new Pair<>();
-
-        CraftPresence.DIMENSIONS.clearClientData();
-        CraftPresence.TILE_ENTITIES.clearClientData();
-        CraftPresence.ENTITIES.clearClientData();
-        CraftPresence.BIOMES.clearClientData();
-        CraftPresence.SERVER.clearClientData();
-        CraftPresence.GUIS.clearClientData();
-
-        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
     }
 
     /**

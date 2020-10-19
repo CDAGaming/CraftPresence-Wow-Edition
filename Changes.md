@@ -33,6 +33,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Fixes improper sizing in some cases with external text controls
 *   Fixes most if not all possible circumstances of GuiUtils causing JVM errors
 *   Fixes `keyTyped` event in `ExtendedTextControl` to only occur if the super event would execute
+*   Fixes an oversight causing `/cp shutdown` and `/cp reboot` combined usage fail
 
 ___
 

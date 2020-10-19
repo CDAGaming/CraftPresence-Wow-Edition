@@ -32,7 +32,6 @@ import com.gitlab.cdagaming.craftpresence.integrations.mcupdater.MCUpdaterUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.multimc.MultiMCUtils;
 import com.gitlab.cdagaming.craftpresence.integrations.technic.TechnicUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -99,7 +98,6 @@ public class CommandUtils {
      */
     public static void rebootRPC() {
         CraftPresence.CLIENT.shutDown();
-        CraftPresence.SYSTEM.HAS_LOADED = false;
 
         if (!CraftPresence.CLIENT.CLIENT_ID.equals(CraftPresence.CONFIG.clientId)) {
             DiscordAssetUtils.emptyData();
@@ -143,7 +141,6 @@ public class CommandUtils {
             loadingArgs.addAll(CraftPresence.CLIENT.generalArgs);
         }
 
-        CraftPresence.CLIENT.STATUS = DiscordStatus.Ready;
         CraftPresence.CLIENT.clearPartyData(true, false);
 
         CraftPresence.CLIENT.syncArgument("&MAINMENU&", StringUtils.sequentialReplaceAnyCase(CraftPresence.CONFIG.loadingMessage, loadingArgs), false);
