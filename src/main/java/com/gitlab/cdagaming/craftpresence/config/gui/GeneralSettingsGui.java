@@ -81,7 +81,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -102,7 +102,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -120,7 +120,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -138,7 +138,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -156,7 +156,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -174,7 +174,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -192,7 +192,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -210,7 +210,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -228,7 +228,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -246,7 +246,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -264,7 +264,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -341,7 +341,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -372,7 +372,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
         // Hovering over Client ID Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIdText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 }

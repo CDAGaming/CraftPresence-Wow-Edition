@@ -70,7 +70,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -89,7 +89,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -108,7 +108,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -127,7 +127,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -155,7 +155,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -173,7 +173,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -191,7 +191,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -209,7 +209,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -289,12 +289,12 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         // Hovering over Language Id Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
 
         // Hovering over Config Keybinding Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 

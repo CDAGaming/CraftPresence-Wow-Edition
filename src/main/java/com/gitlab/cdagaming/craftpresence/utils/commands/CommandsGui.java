@@ -370,7 +370,7 @@ public class CommandsGui extends ExtendedScreen {
         executionCommandArgs = null;
         // COMMANDS END
 
-        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 35, width, height, -1, mc.fontRenderer, false);
+        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 35, width, height, getWrapWidth(), mc.fontRenderer, false);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

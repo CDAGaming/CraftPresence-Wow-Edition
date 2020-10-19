@@ -71,7 +71,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -82,7 +82,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -103,7 +103,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -130,7 +130,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -161,7 +161,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
 
         // Hovering over Default Dimension Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 140, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(defaultMessageText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimension_messages")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimension_messages")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 }

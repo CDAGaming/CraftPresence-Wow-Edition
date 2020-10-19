@@ -358,6 +358,16 @@ public class ExtendedScreen extends GuiScreen {
     }
 
     /**
+     * Get the wrap width for elements to be wrapped by
+     * <p>Mostly used as a helper method for wrapping String elements
+     * 
+     * @return the wrap width for elements to be wrapped by
+     */
+    public int getWrapWidth() {
+        return -1;
+    }
+
+    /**
      * Get the Current Mouse's Y Coordinate Position
      *
      * @return The Mouse's Y Coordinate Position

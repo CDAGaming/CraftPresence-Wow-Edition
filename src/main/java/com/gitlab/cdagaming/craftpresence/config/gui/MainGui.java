@@ -64,7 +64,7 @@ public class MainGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -85,7 +85,7 @@ public class MainGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -96,7 +96,7 @@ public class MainGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -119,7 +119,7 @@ public class MainGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -130,7 +130,7 @@ public class MainGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -153,7 +153,7 @@ public class MainGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -164,7 +164,7 @@ public class MainGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -185,7 +185,7 @@ public class MainGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -204,7 +204,7 @@ public class MainGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -223,7 +223,7 @@ public class MainGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -242,7 +242,7 @@ public class MainGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -329,7 +329,7 @@ public class MainGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -359,7 +359,7 @@ public class MainGui extends ExtendedScreen {
 
         // Hovering over Title Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, StringUtils.getStringWidth(mainTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title", ModUtils.VERSION_ID, ModUtils.MOD_SCHEMA_VERSION)), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title", ModUtils.VERSION_ID, ModUtils.MOD_SCHEMA_VERSION)), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 

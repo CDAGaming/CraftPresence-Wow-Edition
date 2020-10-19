@@ -85,7 +85,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true);
                             } else {
@@ -95,7 +95,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -118,7 +118,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -131,7 +131,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -154,7 +154,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -167,7 +167,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -190,7 +190,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -203,7 +203,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -226,7 +226,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -239,7 +239,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -270,7 +270,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -288,7 +288,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -306,7 +306,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -324,7 +324,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -342,7 +342,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -360,7 +360,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -378,7 +378,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -396,7 +396,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 ),
                                 getMouseX(), getMouseY(),
                                 width, height,
-                                -1,
+                                getWrapWidth(),
                                 mc.fontRenderer,
                                 true
                         )
@@ -466,7 +466,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         ),
                                         getMouseX(), getMouseY(),
                                         width, height,
-                                        -1,
+                                        getWrapWidth(),
                                         mc.fontRenderer,
                                         true
                                 );
@@ -504,12 +504,12 @@ public class AdvancedSettingsGui extends ExtendedScreen {
 
         // Hovering over Split Character Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(splitCharacterText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.split_character")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.split_character")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
 
         // Hovering over Refresh Rate Message Label
         if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(refreshRateText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.refresh_rate")), mouseX, mouseY, width, height, -1, mc.fontRenderer, true);
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.refresh_rate")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 }

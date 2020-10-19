@@ -113,7 +113,7 @@ public class UpdateInfoGui extends ExtendedScreen {
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
-        CraftPresence.GUIS.drawMultiLineString(notice, 10, 45, width, height, -1, mc.fontRenderer, false);
+        CraftPresence.GUIS.drawMultiLineString(notice, 10, 45, width, height, getWrapWidth(), mc.fontRenderer, false);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
