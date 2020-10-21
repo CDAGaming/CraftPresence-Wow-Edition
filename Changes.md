@@ -1,10 +1,10 @@
 # CraftPresence Changes
 
-## v1.7.5 Beta 2 (10/19/2020)
+## v1.7.5 Beta 3 (10/21/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.2...release%2Fv1.7.5+Beta.2)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.2...release%2Fv1.7.5+Beta.3)_
 
-_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5+Beta.1...release%2Fv1.7.5+Beta.2)_
+_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5+Beta.2...release%2Fv1.7.5+Beta.3)_
 
 ### Changes
 
@@ -20,6 +20,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Added Server list icon support for the Selector Guis
 *   Added `Strip Extra Gui Elements` setting to `Accessibility Settings`
 *   Added `Reset Time on Init` setting to `General Settings`
+*   (QOL) The Preview box in the `Color Editor` Guis now have a border around it for better clarity
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend) Base64 and direct byte array Image Formats now supported in `ImageUtils` and related areas
 *   (Backend) Added Uuid Detection, will be used within applicable settings that have player uuid values
@@ -37,6 +38,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Fixes most if not all possible circumstances of GuiUtils causing JVM errors
 *   Fixes `keyTyped` event in `ExtendedTextControl` to only occur if the super event would execute
 *   Fixes an oversight causing `/cp shutdown` and `/cp reboot` combined usage fail
+*   Fixes a GL flag clearing Issue causing unintended Gui rendering behaviors
 
 ___
 
