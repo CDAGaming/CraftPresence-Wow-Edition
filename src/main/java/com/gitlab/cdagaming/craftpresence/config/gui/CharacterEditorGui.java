@@ -146,8 +146,7 @@ public class CharacterEditorGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
+    public void preRender() {
         checkValues();
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.character");
@@ -192,7 +191,6 @@ public class CharacterEditorGui extends ExtendedScreen {
         saveButton.enabled = syncSingleButton.enabled;
         syncSingleButton.visible = syncSingleButton.enabled;
         saveButton.visible = syncSingleButton.visible;
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     /**

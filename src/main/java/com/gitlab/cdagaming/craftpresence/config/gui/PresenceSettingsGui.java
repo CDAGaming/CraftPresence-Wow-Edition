@@ -169,9 +169,7 @@ public class PresenceSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.presence_settings");
         final String detailsFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.details_message");
@@ -216,36 +214,43 @@ public class PresenceSettingsGui extends ExtendedScreen {
 
         previousPageButton.enabled = pageNumber != 0;
         nextPageButton.enabled = pageNumber != 1;
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    @Override
+    public void postRender() {
+        final String detailsFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.details_message");
+        final String gameStateFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.game_state_message");
+        final String largeImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_message");
+        final String smallImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_message");
+        final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_key");
+        final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_key");
         if (pageNumber == 0) {
             // Hovering over Details Format Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(detailsFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(detailsFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             }
             // Hovering over Game State Format Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(gameStateFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(gameStateFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             }
             // Hovering over Large Image Format Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(largeImageFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(largeImageFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             }
             // Hovering over Small Image Format Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, StringUtils.getStringWidth(smallImageFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, StringUtils.getStringWidth(smallImageFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             }
         }
 
         if (pageNumber == 1) {
             // Hovering over Small Image Key Format Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(smallImageKeyFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.iconArgs")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(smallImageKeyFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.iconArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             }
             // Hovering over Large Image Key Format Message Label
-            if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(largeImageKeyFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.iconArgs")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(largeImageKeyFormatTitle), mc.fontRenderer.FONT_HEIGHT)) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.iconArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             }
         }
     }

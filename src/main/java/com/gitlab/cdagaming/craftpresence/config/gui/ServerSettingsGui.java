@@ -170,9 +170,7 @@ public class ServerSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.server_messages");
         final String serverNameText = ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_name");
@@ -187,20 +185,24 @@ public class ServerSettingsGui extends ExtendedScreen {
 
         proceedButton.enabled = !StringUtils.isNullOrEmpty(defaultMessage.getText()) || !StringUtils.isNullOrEmpty(defaultName.getText()) || !StringUtils.isNullOrEmpty(defaultMOTD.getText());
         serverMessagesButton.enabled = CraftPresence.SERVER.enabled;
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    @Override
+    public void postRender() {
+        final String serverNameText = ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_name");
+        final String serverMOTDText = ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_motd");
+        final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.server");
         // Hovering over Default Server Name Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(serverNameText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_name")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(serverNameText), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_name")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
         // Hovering over Default Server MOTD Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(serverMOTDText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_motd")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(serverMOTDText), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_motd")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
         // Hovering over Default Server Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(defaultMessageText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.server_messages")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(defaultMessageText), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.server_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 }

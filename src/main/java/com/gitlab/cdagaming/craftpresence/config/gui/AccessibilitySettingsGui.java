@@ -264,9 +264,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.accessibility");
 
@@ -284,17 +282,20 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
 
         proceedButton.enabled = !StringUtils.isNullOrEmpty(languageIdText.getText());
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    @Override
+    public void postRender() {
+        final String languageIdTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
+        final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
         // Hovering over Language Id Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
 
         // Hovering over Config Keybinding Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 

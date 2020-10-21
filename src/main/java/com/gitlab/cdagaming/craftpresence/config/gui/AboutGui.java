@@ -85,15 +85,11 @@ public class AboutGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.about.config");
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.credits"));
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
         drawNotice(notice);
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }

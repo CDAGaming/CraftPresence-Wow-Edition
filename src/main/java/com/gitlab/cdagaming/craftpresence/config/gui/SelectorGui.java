@@ -170,10 +170,7 @@ public class SelectorGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
-        final String searchText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.search");
+    public void preRender() {
         final List<String> modifiedList = Lists.newArrayList();
 
         if (!searchBox.getText().isEmpty()) {
@@ -203,9 +200,11 @@ public class SelectorGui extends ExtendedScreen {
         scrollList.itemList = itemList;
 
         proceedButton.displayString = allowContinuing && scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    @Override
+    public void postRender() {
+        final String searchText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.search");
         drawString(mc.fontRenderer, searchText, (30 - (StringUtils.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
     }

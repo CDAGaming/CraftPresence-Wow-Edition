@@ -135,9 +135,7 @@ public class CommandsGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.commands");
 
         drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
@@ -371,8 +369,6 @@ public class CommandsGui extends ExtendedScreen {
         // COMMANDS END
 
         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 35, width, height, getWrapWidth(), mc.fontRenderer, false);
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override

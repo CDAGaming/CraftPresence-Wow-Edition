@@ -377,9 +377,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.general");
         final String clientIdText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
@@ -390,12 +388,14 @@ public class GeneralSettingsGui extends ExtendedScreen {
 
         partyPrivacyLevelButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(currentPartyPrivacy).getDisplayName();
         proceedButton.enabled = !StringUtils.isNullOrEmpty(clientId.getText()) && clientId.getText().length() == 18 && StringUtils.getValidLong(clientId.getText()).getFirst();
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    @Override
+    public void postRender() {
+        final String clientIdText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
         // Hovering over Client ID Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIdText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIdText), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 }

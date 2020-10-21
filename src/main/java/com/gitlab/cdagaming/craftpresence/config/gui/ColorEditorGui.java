@@ -248,9 +248,7 @@ public class ColorEditorGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
         final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.preview");
 
@@ -316,7 +314,6 @@ public class ColorEditorGui extends ExtendedScreen {
         nextPageButton.enabled = pageNumber != 1;
 
         proceedButton.displayString = isModified ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override

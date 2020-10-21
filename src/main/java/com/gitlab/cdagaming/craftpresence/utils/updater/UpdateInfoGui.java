@@ -98,9 +98,7 @@ public class UpdateInfoGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         downloadButton.enabled = modUpdater.currentState == ModUpdaterUtils.UpdateState.OUTDATED ||
                 modUpdater.currentState == ModUpdaterUtils.UpdateState.BETA_OUTDATED;
 
@@ -114,7 +112,5 @@ public class UpdateInfoGui extends ExtendedScreen {
         drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
         CraftPresence.GUIS.drawMultiLineString(notice, 10, 45, width, height, getWrapWidth(), mc.fontRenderer, false);
-
-        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }

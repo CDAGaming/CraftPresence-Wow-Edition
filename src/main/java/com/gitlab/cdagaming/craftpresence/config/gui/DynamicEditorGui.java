@@ -246,9 +246,7 @@ public class DynamicEditorGui extends ExtendedScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        preDraw();
-
+    public void preRender() {
         final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
         final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
 
@@ -263,51 +261,54 @@ public class DynamicEditorGui extends ExtendedScreen {
         proceedButton.displayString = !specificMessageInput.getText().equals(specificMessage) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessageInput.getText().equals(defaultMessage)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessageInput.getText()) && !specificMessageInput.getText().equals(specificMessage)) ? ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
 
         proceedButton.enabled = !(StringUtils.isNullOrEmpty(specificMessageInput.getText()) && isDefaultValue);
+    }
 
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
+    @Override
+    public void postRender() {
+        final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
+        final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
         // Hovering over Message Label
-        if (CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), mc.fontRenderer.FONT_HEIGHT)) {
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), mc.fontRenderer.FONT_HEIGHT)) {
             if (parentScreen instanceof BiomeSettingsGui) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             } else if (parentScreen instanceof DimensionSettingsGui) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             } else if (parentScreen instanceof ServerSettingsGui) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_messages")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
             } else if (parentScreen instanceof AdvancedSettingsGui) {
                 if (configOption.equals(CraftPresence.CONFIG.NAME_guiMessages)) {
-                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.gui_messages")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.gui_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
                             ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.item_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.TILE_ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
-                    ), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                    ), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityTargetMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
                             ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entity_target_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
-                    ), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                    ), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityAttackingMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
                             ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entity_attacking_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
-                    ), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                    ), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
                 } else if (configOption.equals(CraftPresence.CONFIG.NAME_entityRidingMessages)) {
                     CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
                             ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.entity_riding_messages",
                                     ModUtils.TRANSLATOR.translate("gui.config.message.tags",
                                             CraftPresence.ENTITIES.generatePlaceholderString(attributeName, CraftPresence.ENTITIES.getListFromName(attributeName))))
-                    ), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+                    ), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
                 }
             }
         }
 
         // Hovering over Value Name Label
-        if (isNewValue && CraftPresence.GUIS.isMouseOver(mouseX, mouseY, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(valueNameText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.hover.value.name")), mouseX, mouseY, width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (isNewValue && CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(valueNameText), mc.fontRenderer.FONT_HEIGHT)) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.hover.value.name")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
         }
     }
 }

@@ -173,15 +173,31 @@ public class ExtendedScreen extends GuiScreen {
     }
 
     /**
-     * Preliminary Drawing Event
+     * Pre-Preliminary Render Event, executes before preRender
      * <p>
-     * Primarily used for rendering before other elements
+     * Primarily used for rendering critical elements before other elements
      */
-    public void preDraw() {
-        if (initialized) {
-            CraftPresence.GUIS.drawBackground(width, height);
-        }
+    public void renderCriticalData() {
+        CraftPresence.GUIS.drawBackground(width, height);
     }
+
+    /**
+     * Preliminary Render Event, executes after renderCriticalData and before postRender
+     * <p>
+     * Primarily used for rendering title data and preliminary elements
+     */
+    public void preRender() {
+        // N/A
+    };
+
+    /**
+     * Post-Render event, executes after super event and preRender
+     * <p>
+     * Primarily used for rendering hover data
+     */
+    public void postRender() {
+        // N/A
+    };
 
     /**
      * Renders this Screen, including controls and post-Hover Events
@@ -194,6 +210,9 @@ public class ExtendedScreen extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         // Ensures initialization events have run first, preventing an NPE
         if (initialized) {
+            renderCriticalData();
+            preRender();
+
             for (ScrollableListControl listControl : extendedLists) {
                 listControl.drawScreen(mouseX, mouseY, partialTicks);
             }
@@ -218,6 +237,8 @@ public class ExtendedScreen extends GuiScreen {
                     }
                 }
             }
+
+            postRender();
         }
     }
 
