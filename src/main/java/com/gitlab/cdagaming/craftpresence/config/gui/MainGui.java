@@ -65,7 +65,7 @@ public class MainGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -77,7 +77,7 @@ public class MainGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.title.biome_messages"),
                         () -> CraftPresence.GUIS.openScreen(new BiomeSettingsGui(currentScreen)),
                         () -> {
-                            if (!biomeSet.enabled) {
+                            if (!biomeSet.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -86,7 +86,7 @@ public class MainGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -97,7 +97,7 @@ public class MainGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -111,7 +111,7 @@ public class MainGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.title.dimension_messages"),
                         () -> CraftPresence.GUIS.openScreen(new DimensionSettingsGui(currentScreen)),
                         () -> {
-                            if (!dimensionSet.enabled) {
+                            if (!dimensionSet.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -120,7 +120,7 @@ public class MainGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -131,7 +131,7 @@ public class MainGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -145,7 +145,7 @@ public class MainGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.title.server_messages"),
                         () -> CraftPresence.GUIS.openScreen(new ServerSettingsGui(currentScreen)),
                         () -> {
-                            if (!serverSet.enabled) {
+                            if (!serverSet.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -154,7 +154,7 @@ public class MainGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -165,7 +165,7 @@ public class MainGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -186,7 +186,7 @@ public class MainGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -205,7 +205,7 @@ public class MainGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -224,7 +224,7 @@ public class MainGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -243,7 +243,7 @@ public class MainGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -330,7 +330,7 @@ public class MainGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -344,11 +344,11 @@ public class MainGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String releaseNotice = ModUtils.TRANSLATOR.translate("gui.config.message.tentative", ModUtils.VERSION_ID + " - " + StringUtils.formatWord(ModUtils.VERSION_LABEL));
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         // noinspection RedundantSuppression,ConstantConditions,MismatchedStringCase
         if (!ModUtils.VERSION_TYPE.equalsIgnoreCase("release")) {
-            drawString(mc.fontRenderer, releaseNotice, (width / 2) - (StringUtils.getStringWidth(releaseNotice) / 2), height - 85, 0xFFFFFF);
+            drawString(getFontRenderer(), releaseNotice, (width / 2) - (StringUtils.getStringWidth(releaseNotice) / 2), height - 85, 0xFFFFFF);
         }
 
         syncRenderStates();
@@ -359,8 +359,8 @@ public class MainGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
 
         // Hovering over Title Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, StringUtils.getStringWidth(mainTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title", ModUtils.VERSION_ID, ModUtils.MOD_SCHEMA_VERSION)), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, StringUtils.getStringWidth(mainTitle), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title", ModUtils.VERSION_ID, ModUtils.MOD_SCHEMA_VERSION)), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }
 
@@ -379,11 +379,11 @@ public class MainGui extends ExtendedScreen {
     }
 
     private void syncRenderStates() {
-        biomeSet.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectBiomeData : biomeSet.enabled;
-        dimensionSet.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectDimensionData : dimensionSet.enabled;
-        serverSet.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectWorldData : serverSet.enabled;
-        commandGUIButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enableCommands : commandGUIButton.enabled;
+        biomeSet.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectBiomeData : biomeSet.isControlEnabled());
+        dimensionSet.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectDimensionData : dimensionSet.isControlEnabled());
+        serverSet.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.detectWorldData : serverSet.isControlEnabled());
+        commandGUIButton.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.CONFIG.enableCommands : commandGUIButton.isControlEnabled());
 
-        proceedButton.displayString = CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
+        proceedButton.setControlMessage(CraftPresence.CONFIG.hasChanged ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back"));
     }
 }

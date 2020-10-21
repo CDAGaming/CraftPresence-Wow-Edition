@@ -99,18 +99,18 @@ public class UpdateInfoGui extends ExtendedScreen {
 
     @Override
     public void preRender() {
-        downloadButton.enabled = modUpdater.currentState == ModUpdaterUtils.UpdateState.OUTDATED ||
-                modUpdater.currentState == ModUpdaterUtils.UpdateState.BETA_OUTDATED;
+        downloadButton.setControlEnabled(modUpdater.currentState == ModUpdaterUtils.UpdateState.OUTDATED ||
+                modUpdater.currentState == ModUpdaterUtils.UpdateState.BETA_OUTDATED);
 
-        checkButton.enabled = modUpdater.currentState != ModUpdaterUtils.UpdateState.PENDING;
+        checkButton.setControlEnabled(modUpdater.currentState != ModUpdaterUtils.UpdateState.PENDING);
 
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.changes", modUpdater.currentState.getDisplayName());
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.changelog", modUpdater.targetVersion, modUpdater.targetChangelogData));
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
-        CraftPresence.GUIS.drawMultiLineString(notice, 10, 45, width, height, getWrapWidth(), mc.fontRenderer, false);
+        CraftPresence.GUIS.drawMultiLineString(notice, 10, 45, width, height, getWrapWidth(), getFontRenderer(), false);
     }
 }

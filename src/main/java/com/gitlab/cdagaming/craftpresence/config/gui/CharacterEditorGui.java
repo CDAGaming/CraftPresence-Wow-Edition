@@ -53,14 +53,14 @@ public class CharacterEditorGui extends ExtendedScreen {
     public void initializeUi() {
         charInput = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
         );
         charWidth = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(2),
                         180, 20
                 )
@@ -86,12 +86,12 @@ public class CharacterEditorGui extends ExtendedScreen {
                             // Sync ALL Values to FontRender Defaults
                             for (int currentCharIndex = 0; currentCharIndex < StringUtils.MC_CHAR_WIDTH.length - 1; currentCharIndex++) {
                                 final char characterObj = (char) (currentCharIndex);
-                                StringUtils.MC_CHAR_WIDTH[currentCharIndex] = mc.fontRenderer.getStringWidth(Character.toString(characterObj));
+                                StringUtils.MC_CHAR_WIDTH[currentCharIndex] = getFontRenderer().getStringWidth(Character.toString(characterObj));
                             }
 
                             for (int currentGlyphIndex = 0; currentGlyphIndex < StringUtils.MC_GLYPH_WIDTH.length - 1; currentGlyphIndex++) {
                                 final char glyphObj = (char) (currentGlyphIndex & 255);
-                                StringUtils.MC_GLYPH_WIDTH[currentGlyphIndex] = (byte) mc.fontRenderer.getStringWidth(Character.toString(glyphObj));
+                                StringUtils.MC_GLYPH_WIDTH[currentGlyphIndex] = (byte) getFontRenderer().getStringWidth(Character.toString(glyphObj));
                             }
                         }
                 )
@@ -104,9 +104,9 @@ public class CharacterEditorGui extends ExtendedScreen {
                         () -> {
                             // Sync Single Value to FontRender Defaults
                             if (lastScannedChar > 0 && lastScannedChar < StringUtils.MC_CHAR_WIDTH.length && !ModUtils.TRANSLATOR.isUnicode) {
-                                StringUtils.MC_CHAR_WIDTH[lastScannedChar] = mc.fontRenderer.getStringWidth(Character.toString(lastScannedChar));
+                                StringUtils.MC_CHAR_WIDTH[lastScannedChar] = getFontRenderer().getStringWidth(Character.toString(lastScannedChar));
                             } else if (StringUtils.MC_GLYPH_WIDTH[lastScannedChar] != 0) {
-                                StringUtils.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) mc.fontRenderer.getStringWidth(Character.toString(lastScannedChar));
+                                StringUtils.MC_GLYPH_WIDTH[lastScannedChar & 255] = (byte) getFontRenderer().getStringWidth(Character.toString(lastScannedChar));
                             }
                         }
                 )
@@ -156,15 +156,15 @@ public class CharacterEditorGui extends ExtendedScreen {
 
         drawNotice(notice, 2, 2);
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        drawString(mc.fontRenderer, charInputTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(getFontRenderer(), charInputTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         if (StringUtils.isNullOrEmpty(charInput.getText())) {
             charWidth.setText("");
             charWidth.setVisible(false);
             charWidth.setEnabled(charWidth.getVisible());
 
-            syncSingleButton.enabled = false;
+            syncSingleButton.setControlEnabled(false);
         }
 
         if (!charInput.getText().equals(lastScannedString)) {
@@ -176,7 +176,7 @@ public class CharacterEditorGui extends ExtendedScreen {
                 charWidth.setVisible(true);
                 charWidth.setEnabled(charWidth.getVisible());
 
-                syncSingleButton.enabled = true;
+                syncSingleButton.setControlEnabled(true);
             } else {
                 lastScannedChar = Character.UNASSIGNED;
             }
@@ -184,13 +184,13 @@ public class CharacterEditorGui extends ExtendedScreen {
 
         if (charWidth.getVisible()) {
             // Only Draw string for Character Width when it's enabled
-            drawString(mc.fontRenderer, charWidthTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 10, 0xFFFFFF);
+            drawString(getFontRenderer(), charWidthTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 10, 0xFFFFFF);
         }
 
-        syncSingleButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText());
-        saveButton.enabled = syncSingleButton.enabled;
-        syncSingleButton.visible = syncSingleButton.enabled;
-        saveButton.visible = syncSingleButton.visible;
+        syncSingleButton.setControlMessage(ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText()));
+        saveButton.setControlEnabled(syncSingleButton.isControlEnabled());
+        syncSingleButton.setControlVisible(syncSingleButton.isControlEnabled());
+        saveButton.setControlVisible(syncSingleButton.isControlVisible());
     }
 
     /**

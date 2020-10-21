@@ -49,7 +49,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
     public void initializeUi() {
         splitCharacter = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         (width / 2) - 60, CraftPresence.GUIS.getButtonY(1),
                         45, 20
                 )
@@ -59,7 +59,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
 
         refreshRate = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         (width / 2) + 103, CraftPresence.GUIS.getButtonY(1),
                         45, 20
                 )
@@ -77,7 +77,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.gui_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true)),
                         () -> {
-                            if (!guiMessagesButton.enabled) {
+                            if (!guiMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -86,7 +86,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true);
                             } else {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -96,7 +96,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -110,7 +110,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.item_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, null, null, true)),
                         () -> {
-                            if (!itemMessagesButton.enabled) {
+                            if (!itemMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -119,7 +119,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -132,7 +132,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -146,7 +146,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_target_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityTargetMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
                         () -> {
-                            if (!entityTargetMessagesButton.enabled) {
+                            if (!entityTargetMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -155,7 +155,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -168,7 +168,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -182,7 +182,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_attacking_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityAttackingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
                         () -> {
-                            if (!entityAttackingMessagesButton.enabled) {
+                            if (!entityAttackingMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -191,7 +191,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -204,7 +204,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -218,7 +218,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_riding_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityRidingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
                         () -> {
-                            if (!entityRidingMessagesButton.enabled) {
+                            if (!entityRidingMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -227,7 +227,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -240,7 +240,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -271,7 +271,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -289,7 +289,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -307,7 +307,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -325,7 +325,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -343,7 +343,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -361,7 +361,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -379,7 +379,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -397,7 +397,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -459,7 +459,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
                         () -> {
-                            if (!proceedButton.enabled) {
+                            if (!proceedButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
@@ -467,7 +467,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -485,18 +485,22 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         final String splitCharacterText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.split_character");
         final String refreshRateText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.refresh_rate");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(mc.fontRenderer, splitCharacterText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        drawString(mc.fontRenderer, refreshRateText, (width / 2) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(getFontRenderer(), splitCharacterText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), refreshRateText, (width / 2) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && !splitCharacter.getText().matches(".*[0-9].*") && StringUtils.getValidInteger(refreshRate.getText()).getFirst();
+        proceedButton.setControlEnabled(
+                !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 && 
+                    !splitCharacter.getText().matches(".*[a-z].*") && !splitCharacter.getText().matches(".*[A-Z].*") && 
+                        !splitCharacter.getText().matches(".*[0-9].*") && StringUtils.getValidInteger(refreshRate.getText()).getFirst()
+        );
 
-        guiMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.GUIS.enabled : guiMessagesButton.enabled;
-        itemMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.TILE_ENTITIES.enabled : itemMessagesButton.enabled;
-        entityTargetMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityTargetMessagesButton.enabled;
-        entityAttackingMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityAttackingMessagesButton.enabled;
-        entityRidingMessagesButton.enabled = !CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityRidingMessagesButton.enabled;
+        guiMessagesButton.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.GUIS.enabled : guiMessagesButton.isControlEnabled());
+        itemMessagesButton.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.TILE_ENTITIES.enabled : itemMessagesButton.isControlEnabled());
+        entityTargetMessagesButton.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityTargetMessagesButton.isControlEnabled());
+        entityAttackingMessagesButton.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityAttackingMessagesButton.isControlEnabled());
+        entityRidingMessagesButton.setControlEnabled(!CraftPresence.CONFIG.hasChanged ? CraftPresence.ENTITIES.enabled : entityRidingMessagesButton.isControlEnabled());
     }
 
     @Override
@@ -504,13 +508,13 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         final String splitCharacterText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.split_character");
         final String refreshRateText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.refresh_rate");
         // Hovering over Split Character Message Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(splitCharacterText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.split_character")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(splitCharacterText), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.split_character")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
 
         // Hovering over Refresh Rate Message Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(refreshRateText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.refresh_rate")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(refreshRateText), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.refresh_rate")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }
 }

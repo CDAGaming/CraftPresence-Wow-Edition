@@ -221,7 +221,7 @@ public class SliderControl extends ExtendedButtonControl {
                 sliderValue = clamp(sliderValue, 0.0F, 1.0F);
                 denormalizedSlideValue = denormalizeValue(sliderValue);
 
-                displayString = windowTitle + ": " + denormalizedSlideValue;
+                setControlMessage(windowTitle + ": " + denormalizedSlideValue);
             }
 
             onSlide();
@@ -241,7 +241,7 @@ public class SliderControl extends ExtendedButtonControl {
             sliderValue = clamp(sliderValue, 0.0F, 1.0F);
             denormalizedSlideValue = denormalizeValue(sliderValue);
 
-            displayString = windowTitle + ": " + denormalizedSlideValue;
+            setControlMessage(windowTitle + ": " + denormalizedSlideValue);
             dragging = true;
             return true;
         } else {
@@ -263,7 +263,7 @@ public class SliderControl extends ExtendedButtonControl {
             sliderValue = normalizeValue(newValue);
             denormalizedSlideValue = newValue;
         }
-        displayString = windowTitle + ": " + denormalizedSlideValue;
+        setControlMessage(windowTitle + ": " + denormalizedSlideValue);
     }
 
     /**

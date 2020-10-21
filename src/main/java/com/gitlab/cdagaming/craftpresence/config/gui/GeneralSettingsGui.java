@@ -54,7 +54,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
     public void initializeUi() {
         clientId = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
@@ -82,7 +82,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -103,7 +103,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -121,7 +121,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -139,7 +139,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -157,7 +157,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -175,7 +175,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -193,7 +193,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -211,7 +211,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -229,7 +229,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -247,7 +247,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -265,7 +265,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -283,7 +283,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -357,7 +357,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
                         () -> {
-                            if (!proceedButton.enabled) {
+                            if (!proceedButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
@@ -365,7 +365,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -382,20 +382,20 @@ public class GeneralSettingsGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.general");
         final String clientIdText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(mc.fontRenderer, clientIdText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(getFontRenderer(), clientIdText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-        partyPrivacyLevelButton.displayString = ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(currentPartyPrivacy).getDisplayName();
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(clientId.getText()) && clientId.getText().length() == 18 && StringUtils.getValidLong(clientId.getText()).getFirst();
+        partyPrivacyLevelButton.setControlMessage(ModUtils.TRANSLATOR.translate("gui.config.name.general.party_privacy") + " => " + PartyPrivacy.from(currentPartyPrivacy).getDisplayName());
+        proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(clientId.getText()) && clientId.getText().length() == 18 && StringUtils.getValidLong(clientId.getText()).getFirst());
     }
 
     @Override
     public void postRender() {
         final String clientIdText = ModUtils.TRANSLATOR.translate("gui.config.name.general.client_id");
         // Hovering over Client ID Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIdText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(clientIdText), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.general.client_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }
 }

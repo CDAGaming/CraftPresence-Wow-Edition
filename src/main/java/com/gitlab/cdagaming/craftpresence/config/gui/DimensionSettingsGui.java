@@ -49,7 +49,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
 
         defaultMessage = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
@@ -63,7 +63,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_messages"),
                         () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null, true)),
                         () -> {
-                            if (!dimensionMessagesButton.enabled) {
+                            if (!dimensionMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.access",
@@ -72,7 +72,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             } else {
@@ -83,7 +83,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -104,7 +104,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -123,7 +123,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },
                         () -> {
-                            if (!proceedButton.enabled) {
+                            if (!proceedButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
                                         StringUtils.splitTextByNewLine(
                                                 ModUtils.TRANSLATOR.translate("gui.config.message.hover.empty.default")
@@ -131,7 +131,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                         getMouseX(), getMouseY(),
                                         width, height,
                                         getWrapWidth(),
-                                        mc.fontRenderer,
+                                        getFontRenderer(),
                                         true
                                 );
                             }
@@ -148,20 +148,20 @@ public class DimensionSettingsGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimension_messages");
         final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.dimension");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        drawString(mc.fontRenderer, defaultMessageText, (width / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(getFontRenderer(), defaultMessageText, (width / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(defaultMessage.getText());
-        dimensionMessagesButton.enabled = CraftPresence.DIMENSIONS.enabled;
+        proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(defaultMessage.getText()));
+        dimensionMessagesButton.setControlEnabled(CraftPresence.DIMENSIONS.enabled);
     }
 
     @Override
     public void postRender() {
         final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.dimension");
         // Hovering over Default Dimension Message Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 140, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(defaultMessageText), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimension_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 140, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(defaultMessageText), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.title.dimension_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }
 }

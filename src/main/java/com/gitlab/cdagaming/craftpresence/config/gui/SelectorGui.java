@@ -145,7 +145,7 @@ public class SelectorGui extends ExtendedScreen {
             );
             searchBox = addControl(
                     new ExtendedTextControl(
-                            mc.fontRenderer,
+                            getFontRenderer(),
                             60, (height - 30),
                             120, 20
                     )
@@ -199,13 +199,17 @@ public class SelectorGui extends ExtendedScreen {
 
         scrollList.itemList = itemList;
 
-        proceedButton.displayString = allowContinuing && scrollList.currentValue != null && ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
+        proceedButton.setControlMessage(
+            allowContinuing && scrollList.currentValue != null && 
+                ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? 
+                    ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back")
+        );
     }
 
     @Override
     public void postRender() {
         final String searchText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.search");
-        drawString(mc.fontRenderer, searchText, (30 - (StringUtils.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        drawString(getFontRenderer(), searchText, (30 - (StringUtils.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
     }
 }

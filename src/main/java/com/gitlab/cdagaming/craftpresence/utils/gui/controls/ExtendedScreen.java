@@ -28,6 +28,7 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -364,7 +365,7 @@ public class ExtendedScreen extends GuiScreen {
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {
                 final String string = notice.get(i);
-                drawString(mc.fontRenderer, string, (useXAsActual ? widthScale : (width / widthScale)) - (StringUtils.getStringWidth(string) / widthScale), (useYAsActual ? heightScale : (height / heightScale)) + (i * 10), 0xFFFFFF);
+                drawString(getFontRenderer(), string, (useXAsActual ? widthScale : (width / widthScale)) - (StringUtils.getStringWidth(string) / widthScale), (useYAsActual ? heightScale : (height / heightScale)) + (i * 10), 0xFFFFFF);
             }
         }
     }
@@ -395,5 +396,41 @@ public class ExtendedScreen extends GuiScreen {
      */
     public int getMouseY() {
         return lastMouseY;
+    }
+
+    /**
+     * Get the Current Font Renderer for this Screen
+     * 
+     * @return The Current Font Renderer for this Screen
+     */
+    public FontRenderer getFontRenderer() {
+        return mc.fontRenderer;
+    }
+
+    /**
+     * Gets the Default/Global Font Renderer
+     * 
+     * @return The Default/Global Font Renderer
+     */
+    public static FontRenderer getDefaultFontRenderer() {
+        return CraftPresence.instance.fontRenderer;
+    }
+
+    /**
+     * Get the Current Font Height for this Screen
+     * 
+     * @return The Current Font Height for this Screen
+     */
+    public int getFontHeight() {
+        return getFontRenderer().FONT_HEIGHT;
+    }
+
+    /**
+     * Get the Default/Global Font Height for this Screen
+     * 
+     * @return The Default/Global Font Height for this Screen
+     */
+    public static int getDefaultFontHeight() {
+        return getDefaultFontRenderer().FONT_HEIGHT;
     }
 }

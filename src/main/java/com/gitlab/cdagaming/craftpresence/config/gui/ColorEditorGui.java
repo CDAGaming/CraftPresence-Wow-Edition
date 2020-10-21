@@ -76,7 +76,7 @@ public class ColorEditorGui extends ExtendedScreen {
 
         hexText = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20
                 )
@@ -147,7 +147,7 @@ public class ColorEditorGui extends ExtendedScreen {
         // Page 2 Items
         mcTextureText = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
                         this::syncValues
@@ -252,21 +252,21 @@ public class ColorEditorGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
         final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.preview");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, previewTitle, width - 90, height - 25, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), previewTitle, width - 90, height - 25, 0xFFFFFF);
 
         // Ensure Button Activity on Page 1
         hexText.setVisible(pageNumber == 0);
         hexText.setEnabled(hexText.getVisible());
 
-        redText.enabled = pageNumber == 0;
-        redText.visible = redText.enabled;
-        greenText.enabled = pageNumber == 0;
-        greenText.visible = greenText.enabled;
-        blueText.enabled = pageNumber == 0;
-        blueText.visible = blueText.enabled;
-        alphaText.enabled = pageNumber == 0;
-        alphaText.visible = alphaText.enabled;
+        redText.setControlEnabled(pageNumber == 0);
+        redText.setControlVisible(redText.isControlEnabled());
+        greenText.setControlEnabled(pageNumber == 0);
+        greenText.setControlVisible(greenText.isControlEnabled());
+        blueText.setControlEnabled(pageNumber == 0);
+        blueText.setControlVisible(blueText.isControlEnabled());
+        alphaText.setControlEnabled(pageNumber == 0);
+        alphaText.setControlVisible(alphaText.isControlEnabled());
 
         // Ensure Button Activity on Page 2
         mcTextureText.setVisible(pageNumber == 1);
@@ -276,9 +276,9 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
 
-            drawString(mc.fontRenderer, hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(getFontRenderer(), hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-            proceedButton.enabled = !StringUtils.isNullOrEmpty(hexText.getText());
+            proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(hexText.getText()));
 
             CraftPresence.GUIS.drawGradientRect(300, width - 45, height - 45, width - 1, height - 2, currentConvertedHexValue, currentConvertedHexValue);
         }
@@ -287,9 +287,9 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 1) {
             final String mcTextureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texture_path");
 
-            drawString(mc.fontRenderer, mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            drawString(getFontRenderer(), mcTextureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
-            proceedButton.enabled = !StringUtils.isNullOrEmpty(mcTextureText.getText());
+            proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(mcTextureText.getText()));
 
             if (currentMCTexture == null) {
                 currentMCTexture = new ResourceLocation("");
@@ -310,10 +310,10 @@ public class ColorEditorGui extends ExtendedScreen {
             CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, widthDivider, heightDivider, false, currentMCTexture);
         }
 
-        previousPageButton.enabled = pageNumber != 0;
-        nextPageButton.enabled = pageNumber != 1;
+        previousPageButton.setControlEnabled(pageNumber != 0);
+        nextPageButton.setControlEnabled(pageNumber != 1);
 
-        proceedButton.displayString = isModified ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back");
+        proceedButton.setControlMessage(isModified ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back"));
     }
 
     @Override

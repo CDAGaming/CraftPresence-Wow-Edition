@@ -71,7 +71,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -90,7 +90,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -109,7 +109,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -128,7 +128,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -136,7 +136,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         languageIdText = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         calc2, CraftPresence.GUIS.getButtonY(3),
                         180, 20
                 )
@@ -156,7 +156,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -174,7 +174,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -192,7 +192,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -210,7 +210,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                                 getMouseX(), getMouseY(),
                                 width, height,
                                 getWrapWidth(),
-                                mc.fontRenderer,
+                                getFontRenderer(),
                                 true
                         )
                 )
@@ -273,15 +273,15 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         final String keyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.category");
         final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
-        drawString(mc.fontRenderer, languageIdTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), languageIdTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
-        drawString(mc.fontRenderer, keyBindingTitle, (width / 2) - (StringUtils.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
-        drawString(mc.fontRenderer, configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
+        drawString(getFontRenderer(), keyBindingTitle, (width / 2) - (StringUtils.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
+        drawString(getFontRenderer(), configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
 
-        proceedButton.enabled = !StringUtils.isNullOrEmpty(languageIdText.getText());
+        proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(languageIdText.getText()));
     }
 
     @Override
@@ -289,13 +289,13 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         final String languageIdTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
         final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
         // Hovering over Language Id Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
 
         // Hovering over Config Keybinding Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), mc.fontRenderer.FONT_HEIGHT)) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), getMouseX(), getMouseY(), width, height, getWrapWidth(), mc.fontRenderer, true);
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), getFontHeight())) {
+            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }
 
@@ -317,8 +317,8 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         if (entryData == null && button.getOptionalArgs() != null) {
             entryData = new Pair<>(button, button.getOptionalArgs()[0]);
 
-            backupKeyString = button.displayString;
-            button.displayString = ModUtils.TRANSLATOR.translate("gui.config.message.editor.enter_key");
+            backupKeyString = button.getControlMessage();
+            button.setControlMessage(ModUtils.TRANSLATOR.translate("gui.config.message.editor.enter_key"));
         }
     }
 
@@ -343,9 +343,9 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
             StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(entryData.getSecond(), keyToSubmit, null));
             CraftPresence.CONFIG.hasChanged = true;
 
-            entryData.getFirst().displayString = formattedKey;
+            entryData.getFirst().setControlMessage(formattedKey);
         } catch (Exception | Error ex) {
-            entryData.getFirst().displayString = backupKeyString;
+            entryData.getFirst().setControlMessage(backupKeyString);
             ex.printStackTrace();
         }
 

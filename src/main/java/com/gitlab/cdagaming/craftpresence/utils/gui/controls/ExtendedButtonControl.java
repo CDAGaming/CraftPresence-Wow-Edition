@@ -223,7 +223,7 @@ public class ExtendedButtonControl extends GuiButton {
                 color = 14737632;
             }
 
-            drawCenteredString(mc.fontRenderer, displayString, x + width / 2, y + (height - 8) / 2, color);
+            drawCenteredString(mc.fontRenderer, getControlMessage(), x + width / 2, y + (height - 8) / 2, color);
         }
     }
 
@@ -288,5 +288,59 @@ public class ExtendedButtonControl extends GuiButton {
         if (onHoverEvent != null) {
             onHoverEvent.run();
         }
+    }
+
+    /**
+     * Gets the control's current display message
+     * 
+     * @return The control's current display message
+     */
+    public String getControlMessage() {
+        return this.displayString;
+    }
+
+    /**
+     * Sets the control's display message to the specified value
+     * 
+     * @param newMessage The new display message for this control
+     */
+    public void setControlMessage(final String newMessage) {
+        this.displayString = newMessage;
+    }
+
+    /**
+     * Gets whether the control is currently active or enabled
+     * 
+     * @return Whether the control is currently active or enabled
+     */
+    public boolean isControlEnabled() {
+        return this.enabled;
+    }
+
+    /**
+     * Sets the control's current enabled state
+     * 
+     * @param isEnabled The new enable state for this control
+     */
+    public void setControlEnabled(final boolean isEnabled) {
+        this.enabled = isEnabled;
+    }
+
+    /**
+     * Gets whether the control is currently visible
+     * 
+     * @return Whether the control is currently visible
+     */
+    public boolean isControlVisible() {
+        return this.visible;
+    }
+
+    /**
+     * Sets the control's current visibility state
+     * 
+     * @param isVisible The new visibility state for this control
+     */
+    public void setControlVisible(final boolean isVisible) {
+        this.visible = isVisible;
     }
 }

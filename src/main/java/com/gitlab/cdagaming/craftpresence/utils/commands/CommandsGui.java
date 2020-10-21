@@ -113,7 +113,7 @@ public class CommandsGui extends ExtendedScreen {
     public void initializeUi() {
         commandInput = addControl(
                 new ExtendedTextControl(
-                        mc.fontRenderer,
+                        getFontRenderer(),
                         115, (height - 30),
                         (width - 120), 20
                 )
@@ -138,7 +138,7 @@ public class CommandsGui extends ExtendedScreen {
     public void preRender() {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.commands");
 
-        drawString(mc.fontRenderer, mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
 
         if (!StringUtils.isNullOrEmpty(commandInput.getText()) && commandInput.getText().startsWith("/")) {
             commandArgs = commandInput.getText().replace("/", "").split(" ");
@@ -368,7 +368,7 @@ public class CommandsGui extends ExtendedScreen {
         executionCommandArgs = null;
         // COMMANDS END
 
-        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 35, width, height, getWrapWidth(), mc.fontRenderer, false);
+        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(executionString), 25, 35, width, height, getWrapWidth(), getFontRenderer(), false);
     }
 
     @Override
