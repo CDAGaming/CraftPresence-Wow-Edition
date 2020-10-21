@@ -170,8 +170,6 @@ public class ScrollableListControl extends GuiSlot {
                     // If the entity is classified as a Uuid, assume it is a player's and get their altFace texture
                     displayName = displayName.replaceAll("-", "");
                     texture = ImageUtils.getTextureFromUrl(displayName, "https://crafatar.com/avatars/" + displayName);
-                } else {
-                    // TODO: Support getting Non-uuid entity faces
                 }
             } else if (renderType == RenderType.ItemData) {
                 texture = CraftPresence.TILE_ENTITIES.TILE_ENTITY_RESOURCES.getOrDefault(displayName, texture);
