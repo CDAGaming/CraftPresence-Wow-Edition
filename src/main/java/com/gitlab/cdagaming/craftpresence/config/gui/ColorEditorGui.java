@@ -272,6 +272,15 @@ public class ColorEditorGui extends ExtendedScreen {
         mcTextureText.setVisible(pageNumber == 1);
         mcTextureText.setEnabled(mcTextureText.getVisible());
 
+        // Setup Data for Drawing
+        double tooltipX = width - 45;
+        double tooltipY = height - 45;
+        double tooltipHeight = 40;
+        double tooltipTextWidth = 40;
+
+        String borderColor = "#000000";
+        String borderColorEnd = "#000000";
+
         // Page 1 Items
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
@@ -280,7 +289,8 @@ public class ColorEditorGui extends ExtendedScreen {
 
             proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(hexText.getText()));
 
-            CraftPresence.GUIS.drawGradientRect(300, width - 45, height - 45, width - 1, height - 2, currentConvertedHexValue, currentConvertedHexValue);
+            // Draw Preview Box
+            CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY - 3, width - 2, height - 2, currentConvertedHexValue, currentConvertedHexValue);
         }
 
         // Page 2 Items
@@ -307,8 +317,16 @@ public class ColorEditorGui extends ExtendedScreen {
                 widthDivider = 44;
                 heightDivider = 43;
             }
-            CraftPresence.GUIS.drawTextureRect(0.0D, width - 45, height - 45, 44, 43, 0, widthDivider, heightDivider, false, currentMCTexture);
+
+            // Draw Preview Box
+            CraftPresence.GUIS.drawTextureRect(0.0D, width - 47, height - 47, 44, 44, 0, widthDivider, heightDivider, false, currentMCTexture);
         }
+
+        // Draw Border around Preview Box
+        CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
+        CraftPresence.GUIS.drawGradientRect(300, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColor, borderColorEnd);
+        CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
+        CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
 
         previousPageButton.setControlEnabled(pageNumber != 0);
         nextPageButton.setControlEnabled(pageNumber != 1);
