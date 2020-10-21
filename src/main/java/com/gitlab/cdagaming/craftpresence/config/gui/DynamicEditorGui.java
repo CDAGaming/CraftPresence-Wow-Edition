@@ -250,12 +250,12 @@ public class DynamicEditorGui extends ExtendedScreen {
         final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
         final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
 
-        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        drawString(getFontRenderer(), messageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        renderString(messageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         if (isNewValue) {
-            drawString(getFontRenderer(), valueNameText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(valueNameText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
         } else {
-            drawString(getFontRenderer(), removeMessage, (width / 2) - (StringUtils.getStringWidth(removeMessage) / 2), (height - 45), 0xFFFFFF);
+            renderString(removeMessage, (width / 2) - (StringUtils.getStringWidth(removeMessage) / 2), (height - 45), 0xFFFFFF);
         }
 
         proceedButton.setControlMessage(

@@ -179,14 +179,14 @@ public class PresenceSettingsGui extends ExtendedScreen {
         final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_key");
         final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_key");
 
-        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        drawString(getFontRenderer(), subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
 
         if (pageNumber == 0) {
-            drawString(getFontRenderer(), detailsFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            drawString(getFontRenderer(), gameStateFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            drawString(getFontRenderer(), largeImageFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            drawString(getFontRenderer(), smallImageFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            renderString(detailsFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(gameStateFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(largeImageFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(smallImageFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
         }
 
         detailsFormat.setVisible(pageNumber == 0);
@@ -202,8 +202,8 @@ public class PresenceSettingsGui extends ExtendedScreen {
         smallImageFormat.setEnabled(smallImageFormat.getVisible());
 
         if (pageNumber == 1) {
-            drawString(getFontRenderer(), smallImageKeyFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            drawString(getFontRenderer(), largeImageKeyFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(smallImageKeyFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(largeImageKeyFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
         }
 
         smallImageKeyFormat.setVisible(pageNumber == 1);

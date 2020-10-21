@@ -352,11 +352,11 @@ public class GuiUtils {
      * @param screenWidth    The maximum width to allow rendering to (Text will wrap if output is greater)
      * @param screenHeight   The maximum height to allow rendering to (Text will wrap if output is greater)
      * @param maxTextWidth   The maximum width the output can be before wrapping
-     * @param font           The font renderer to use to render the String
+     * @param fontRenderer   The font renderer to use to render the String
      * @param withBackground Whether a background should display around and under the String, like a tooltip
      */
-    public void drawMultiLineString(final List<String> textToInput, int posX, int posY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer font, boolean withBackground) {
-        if (CraftPresence.CONFIG.renderTooltips && !ModUtils.forceBlockTooltipRendering && !textToInput.isEmpty() && font != null) {
+    public void drawMultiLineString(final List<String> textToInput, int posX, int posY, int screenWidth, int screenHeight, int maxTextWidth, FontRenderer fontRenderer, boolean withBackground) {
+        if (CraftPresence.CONFIG.renderTooltips && !ModUtils.forceBlockTooltipRendering && !textToInput.isEmpty() && fontRenderer != null) {
             List<String> textLines = textToInput;
             int tooltipTextWidth = 0;
 
@@ -549,7 +549,7 @@ public class GuiUtils {
 
             for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
                 String line = textLines.get(lineNumber);
-                font.drawStringWithShadow(line, tooltipX, tooltipY, -1);
+                fontRenderer.drawStringWithShadow(line, tooltipX, tooltipY, -1);
 
                 if (lineNumber + 1 == titleLinesCount) {
                     tooltipY += 2;

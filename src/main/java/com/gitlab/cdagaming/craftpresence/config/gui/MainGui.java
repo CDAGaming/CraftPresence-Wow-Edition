@@ -344,11 +344,11 @@ public class MainGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
         final String releaseNotice = ModUtils.TRANSLATOR.translate("gui.config.message.tentative", ModUtils.VERSION_ID + " - " + StringUtils.formatWord(ModUtils.VERSION_LABEL));
 
-        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
 
         // noinspection RedundantSuppression,ConstantConditions,MismatchedStringCase
         if (!ModUtils.VERSION_TYPE.equalsIgnoreCase("release")) {
-            drawString(getFontRenderer(), releaseNotice, (width / 2) - (StringUtils.getStringWidth(releaseNotice) / 2), height - 85, 0xFFFFFF);
+            renderString(releaseNotice, (width / 2) - (StringUtils.getStringWidth(releaseNotice) / 2), height - 85, 0xFFFFFF);
         }
 
         syncRenderStates();

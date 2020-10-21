@@ -154,10 +154,10 @@ public class CharacterEditorGui extends ExtendedScreen {
         final String charWidthTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.char.width");
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.character.notice"));
 
-        drawNotice(notice, 2, 2);
+        renderNotice(notice, 2, 2);
 
-        drawString(getFontRenderer(), mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        drawString(getFontRenderer(), charInputTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        renderString(charInputTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         if (StringUtils.isNullOrEmpty(charInput.getText())) {
             charWidth.setText("");
@@ -184,7 +184,7 @@ public class CharacterEditorGui extends ExtendedScreen {
 
         if (charWidth.getVisible()) {
             // Only Draw string for Character Width when it's enabled
-            drawString(getFontRenderer(), charWidthTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 10, 0xFFFFFF);
+            renderString(charWidthTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(2) + 10, 0xFFFFFF);
         }
 
         syncSingleButton.setControlMessage(ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText()));
