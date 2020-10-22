@@ -65,7 +65,7 @@ public class ConfigUtils {
             NAME_showTime, NAME_detectBiomeData, NAME_detectDimensionData,
             NAME_detectWorldData, NAME_clientId, NAME_defaultIcon, NAME_enableJoinRequest, NAME_partyPrivacyLevel, NAME_resetTimeOnInit;
     // BIOME MESSAGES
-    public String NAME_biomeMessages;
+    public String NAME_defaultBiomeIcon, NAME_biomeMessages;
     // DIMENSION MESSAGES
     public String NAME_defaultDimensionIcon, NAME_dimensionMessages;
     // SERVER MESSAGES
@@ -91,6 +91,7 @@ public class ConfigUtils {
     public String clientId, defaultIcon;
     public int partyPrivacyLevel;
     // BIOME MESSAGES
+    public String defaultBiomeIcon;
     public String[] biomeMessages;
     // DIMENSION MESSAGES
     public String defaultDimensionIcon;
@@ -168,7 +169,9 @@ public class ConfigUtils {
         partyPrivacyLevel = PartyPrivacy.Public.getPartyIndex();
         resetTimeOnInit = false;
         // BIOME MESSAGES
+        NAME_defaultBiomeIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_icon".replaceAll(" ", "_"));
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_messages").replaceAll(" ", "_");
+        defaultBiomeIcon = "unknown";
         biomeMessages = new String[]{"default;Playing in &biome&"};
         // DIMENSION MESSAGES
         NAME_defaultDimensionIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimension_messages.dimension_icon").replaceAll(" ", "_");

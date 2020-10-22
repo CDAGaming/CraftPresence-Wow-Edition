@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
@@ -88,6 +89,25 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                 );
                             }
                         }
+                )
+        );
+        // Adding Default Icon Button
+        addControl(
+                new ExtendedButtonControl(
+                        (width / 2) - 90, CraftPresence.GUIS.getButtonY(3),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.biome_messages.biome_icon"),
+                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultBiomeIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultBiomeIcon, null, true)),
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_icon")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                getWrapWidth(),
+                                getFontRenderer(),
+                                true
+                        )
                 )
         );
         proceedButton = addControl(

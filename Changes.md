@@ -1,10 +1,10 @@
 # CraftPresence Changes
 
-## v1.7.5 Beta 3 (10/21/2020)
+## v1.7.5 Beta 4 (10/23/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.2...release%2Fv1.7.5+Beta.3)_
+_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.2...release%2Fv1.7.5+Beta.4)_
 
-_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5+Beta.2...release%2Fv1.7.5+Beta.3)_
+_A Detailed Changelog from the last Beta is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5+Beta.3...release%2Fv1.7.5+Beta.4)_
 
 ### Changes
 
@@ -20,6 +20,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Added Server list icon support for the Selector Guis
 *   Added `Strip Extra Gui Elements` setting to `Accessibility Settings`
 *   Added `Reset Time on Init` setting to `General Settings`
+*   Added Icon Support for Biomes (You'll need to supply your own icons for them, not enough room in default client id for all of them)
 *   (QOL) The Preview box in the `Color Editor` Guis now have a border around it for better clarity
 *   (Backend) Added support for Flatpak and Snap distributions of Discord
 *   (Backend) Base64 and direct byte array Image Formats now supported in `ImageUtils` and related areas

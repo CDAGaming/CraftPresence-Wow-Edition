@@ -52,6 +52,7 @@ public class DynamicEditorGui extends ExtendedScreen {
     public void initializeUi() {
         if (isNewValue) {
             mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.add.new");
+            // TODO: Replace with an initialization event to reduce redundancy
             if (parentScreen instanceof BiomeSettingsGui) {
                 specificMessage = defaultMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
             } else if (parentScreen instanceof DimensionSettingsGui) {
@@ -120,7 +121,7 @@ public class DynamicEditorGui extends ExtendedScreen {
         );
         specificMessageInput.setText(specificMessage);
 
-        if ((parentScreen instanceof DimensionSettingsGui || parentScreen instanceof ServerSettingsGui) && !isNewValue) {
+        if ((parentScreen instanceof BiomeSettingsGui || parentScreen instanceof DimensionSettingsGui || parentScreen instanceof ServerSettingsGui) && !isNewValue) {
             // Adding Specific Icon Button
             addControl(
                     new ExtendedButtonControl(
@@ -136,6 +137,10 @@ public class DynamicEditorGui extends ExtendedScreen {
                                     final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon);
                                     final String specificIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultIcon);
                                     CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_serverMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, specificIcon, attributeName, true));
+                                } else if (parentScreen instanceof BiomeSettingsGui) {
+                                    final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultBiomeIcon);
+                                    final String specificIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultIcon);
+                                    CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, specificIcon, attributeName, true));
                                 }
                             }
                     )
@@ -157,6 +162,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
+                            // TODO: Create proceed event to reduce redundancy
                             if (!specificMessageInput.getText().equals(specificMessage) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessageInput.getText().equals(defaultMessage)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessageInput.getText()) && !specificMessageInput.getText().equals(specificMessage))) {
                                 if (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText())) {
                                     attributeName = newValueName.getText();
