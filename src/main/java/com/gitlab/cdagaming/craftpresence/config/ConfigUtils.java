@@ -172,7 +172,7 @@ public class ConfigUtils {
         NAME_defaultBiomeIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_icon".replaceAll(" ", "_"));
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_messages").replaceAll(" ", "_");
         defaultBiomeIcon = "unknown";
-        biomeMessages = new String[]{"default;Playing in &biome&"};
+        biomeMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Playing in &biome&"};
         // DIMENSION MESSAGES
         NAME_defaultDimensionIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimension_messages.dimension_icon").replaceAll(" ", "_");
         NAME_dimensionMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.dimension_messages.dimension_messages").replaceAll(" ", "_");
@@ -186,7 +186,7 @@ public class ConfigUtils {
         defaultServerIcon = "default";
         defaultServerName = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.server_messages.server_name");
         defaultServerMotd = ModUtils.TRANSLATOR.translate(true, "craftpresence.defaults.server_messages.server_motd");
-        serverMessages = new String[]{"default;Playing on &motd&"};
+        serverMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Playing on &motd&"};
         // STATUS MESSAGES
         NAME_mainMenuMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.main_menu_message").replaceAll(" ", "_");
         NAME_loadingMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.status_messages.loading_message").replaceAll(" ", "_");
@@ -244,11 +244,11 @@ public class ConfigUtils {
         verboseMode = false;
         splitCharacter = ";";
         refreshRate = 2;
-        guiMessages = new String[]{"default;In &screen&"};
-        itemMessages = new String[]{"default;Holding &item&"};
-        entityTargetMessages = new String[]{"default;Targeting &entity&"};
-        entityAttackingMessages = new String[]{"default;Attacking &entity&"};
-        entityRidingMessages = new String[]{"default;Riding &entity&"};
+        guiMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In &screen&"};
+        itemMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Holding &item&"};
+        entityTargetMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Targeting &entity&"};
+        entityAttackingMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Attacking &entity&"};
+        entityRidingMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Riding &entity&"};
         // ACCESSIBILITY
         NAME_tooltipBackgroundColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_background_color").replaceAll(" ", "_");
         NAME_tooltipBorderColor = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.tooltip_border_color").replaceAll(" ", "_");
@@ -262,8 +262,8 @@ public class ConfigUtils {
         NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keycode.name").replaceAll(" ", "_");
         tooltipBackgroundColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
-        guiBackgroundColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
-        buttonBackgroundColor = "minecraft" + splitCharacter + (ModUtils.MCProtocolID < 61 ? "/gui/gui.png" : "textures/gui/widgets.png");
+        guiBackgroundColor = "minecraft" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + (ModUtils.MCProtocolID < 61 ? "/gui/background.png" : "textures/gui/options_background.png");
+        buttonBackgroundColor = "minecraft" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + (ModUtils.MCProtocolID < 61 ? "/gui/gui.png" : "textures/gui/widgets.png");
         languageId = ModUtils.MCProtocolID >= 315 ? "en_us" : "en_US";
         showBackgroundAsDark = true;
         stripTranslationColors = false;
