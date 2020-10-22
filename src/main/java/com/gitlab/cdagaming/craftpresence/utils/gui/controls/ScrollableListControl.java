@@ -150,7 +150,7 @@ public class ScrollableListControl extends GuiSlot {
     protected void drawSlot(int slotIndex, int xPos, int yPos, int heightIn, int mouseXIn, int mouseYIn, float partialTicks) {
         int xOffset = xPos;
         String displayName = getSelectedItem(slotIndex);
-        if (!CraftPresence.CONFIG.stripExtraGuiElements && 
+        if (!CraftPresence.CONFIG.stripExtraGuiElements &&
                 (renderType == RenderType.DiscordAsset || (renderType == RenderType.ServerData && CraftPresence.SERVER.enabled) || (renderType == RenderType.EntityData && CraftPresence.ENTITIES.enabled) || (renderType == RenderType.ItemData && CraftPresence.TILE_ENTITIES.enabled))) {
             ResourceLocation texture = new ResourceLocation("");
             String assetUrl = "";

@@ -30,7 +30,6 @@ import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -616,7 +615,7 @@ public class TileEntityUtils {
 
                 if (!TILE_ENTITY_RESOURCES.containsKey(block.getLocalizedName())) {
                     final ResourceLocation initialData = Block.REGISTRY.getNameForObject(block);
-                    TILE_ENTITY_RESOURCES.put(block.getLocalizedName(), 
+                    TILE_ENTITY_RESOURCES.put(block.getLocalizedName(),
                             new ResourceLocation(initialData.getNamespace(),
                                     (ModUtils.MCProtocolID > 340 ? "textures/block/" : "textures/blocks/") + initialData.getPath() + ".png"));
                 }

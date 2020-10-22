@@ -32,7 +32,6 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStat
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.GuiConnecting;
 import net.minecraft.client.multiplayer.ServerData;
@@ -596,7 +595,7 @@ public class ServerUtils {
 
     /**
      * Retrieves server data for the specified address, if available
-     * 
+     *
      * @param serverAddress The Server's identifying address
      * @return Server data for the specified address, if available
      */

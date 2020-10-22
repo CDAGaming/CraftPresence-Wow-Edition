@@ -128,10 +128,10 @@ public class SelectorGui extends ExtendedScreen {
             RenderType scrollListType = RenderType.None;
 
             if (!CraftPresence.CONFIG.stripExtraGuiElements) {
-                scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset : 
-                    mainTitle.toLowerCase().contains("server") ? RenderType.ServerData : 
-                    mainTitle.toLowerCase().contains("entity") ? RenderType.EntityData : 
-                    mainTitle.toLowerCase().contains("item") ? RenderType.ItemData : RenderType.None;
+                scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset :
+                        mainTitle.toLowerCase().contains("server") ? RenderType.ServerData :
+                                mainTitle.toLowerCase().contains("entity") ? RenderType.EntityData :
+                                        mainTitle.toLowerCase().contains("item") ? RenderType.ItemData : RenderType.None;
             }
 
             scrollList = addList(
@@ -200,9 +200,9 @@ public class SelectorGui extends ExtendedScreen {
         scrollList.itemList = itemList;
 
         proceedButton.setControlMessage(
-            allowContinuing && scrollList.currentValue != null && 
-                ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ? 
-                    ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back")
+                allowContinuing && scrollList.currentValue != null &&
+                        ((originalValue != null && !scrollList.currentValue.equals(originalValue)) || (StringUtils.isNullOrEmpty(originalValue))) ?
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.continue") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back")
         );
     }
 

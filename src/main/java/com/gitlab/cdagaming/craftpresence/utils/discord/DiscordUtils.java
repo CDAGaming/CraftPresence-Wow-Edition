@@ -192,7 +192,7 @@ public class DiscordUtils {
 
     /**
      * Initializes and Synchronizes Initial Rich Presence Data
-     * 
+     *
      * @param updateTimestamp Whether or not to update the starting timestamp
      */
     public synchronized void init(final boolean updateTimestamp) {
@@ -426,7 +426,7 @@ public class DiscordUtils {
 
     /**
      * Clears Presence Data from the RPC, and updates if needed
-     * 
+     *
      * @param partyClearArgs Arguments for {@link DiscordUtils#clearPartyData(boolean, boolean)}
      */
     public void clearPresenceData(Tuple<Boolean, Boolean, Boolean> partyClearArgs) {
@@ -452,7 +452,7 @@ public class DiscordUtils {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-    
+
             // Clear User Data before final clear and shutdown
             STATUS = DiscordStatus.Disconnected;
             currentPresence = null;
@@ -461,14 +461,14 @@ public class DiscordUtils {
 
             CURRENT_USER = null;
             lastRequestedImageData = new Pair<>();
-    
+
             CraftPresence.DIMENSIONS.clearClientData();
             CraftPresence.TILE_ENTITIES.clearClientData();
             CraftPresence.ENTITIES.clearClientData();
             CraftPresence.BIOMES.clearClientData();
             CraftPresence.SERVER.clearClientData();
             CraftPresence.GUIS.clearClientData();
-    
+
             CraftPresence.SYSTEM.HAS_LOADED = false;
             ModUtils.LOG.info(ModUtils.TRANSLATOR.translate("craftpresence.logger.info.shutdown"));
         }

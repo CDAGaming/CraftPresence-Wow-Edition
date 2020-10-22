@@ -47,45 +47,38 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
     /**
-     * The Character to be interpreted as the start to a Formatting Character
-     */
-    private static final char COLOR_CHAR = '\u00A7';
-
-    /**
-     * Regex Pattern for Color and Formatting Codes
-     */
-    private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
-
-    /**
-     * Regex Pattern for Base64 Detection
-     */
-    private static final Pattern BASE64_PATTERN = Pattern.compile("data:(?<type>.+?);base64,(?<data>.+)");
-
-    /**
-     * Regex Pattern for Uuid Detection
-     */
-    private static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}");
-
-    /**
-     * Regex Pattern for Brackets containing Digits
-     */
-    private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
-
-    /**
-     * The Stored Character Render Widths to interpret when rendering tooltips
-     */
-    public static int[] MC_CHAR_WIDTH = new int[256];
-
-    /**
-     * The Stored Unicode Character Glyph Render Widths to interpret when rendering tooltips
-     */
-    public static byte[] MC_GLYPH_WIDTH = new byte[65536];
-
-    /**
      * The unknown identifier for Base64 data
      * <p>Used to implicitly specify a Sting is meant to be Base64
      */
     public static final String UNKNOWN_BASE64_ID = "data:image/unknown;base64";
+    /**
+     * The Character to be interpreted as the start to a Formatting Character
+     */
+    private static final char COLOR_CHAR = '\u00A7';
+    /**
+     * Regex Pattern for Color and Formatting Codes
+     */
+    private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
+    /**
+     * Regex Pattern for Base64 Detection
+     */
+    private static final Pattern BASE64_PATTERN = Pattern.compile("data:(?<type>.+?);base64,(?<data>.+)");
+    /**
+     * Regex Pattern for Uuid Detection
+     */
+    private static final Pattern UUID_PATTERN = Pattern.compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[34][0-9a-fA-F]{3}-[89ab][0-9a-fA-F]{3}-[0-9a-fA-F]{12}");
+    /**
+     * Regex Pattern for Brackets containing Digits
+     */
+    private static final Pattern BRACKET_PATTERN = Pattern.compile("\\([^0-9]*\\d+[^0-9]*\\)");
+    /**
+     * The Stored Character Render Widths to interpret when rendering tooltips
+     */
+    public static int[] MC_CHAR_WIDTH = new int[256];
+    /**
+     * The Stored Unicode Character Glyph Render Widths to interpret when rendering tooltips
+     */
+    public static byte[] MC_GLYPH_WIDTH = new byte[65536];
 
     /**
      * Attempts to Convert a Hexadecimal String into a Valid interpretable Java Color
@@ -492,7 +485,7 @@ public class StringUtils {
 
     /**
      * Checks via Regex whether the specified String classifies as a Base64 Image
-     * 
+     *
      * @param original The original string
      * @return Base64 data in the format of isBase64:imageId:formattedImageString
      */
@@ -515,7 +508,7 @@ public class StringUtils {
 
     /**
      * Checks via Regex whether the specified String classifies as a valid Uuid
-     * 
+     *
      * @param input The original string
      * @return Whether the specified String classifies as a valid Uuid
      */
@@ -588,11 +581,11 @@ public class StringUtils {
      * Retrieves a config entry from an Array, following the specified Search Terms
      * <p><b>Internal Use Only</b>
      *
-     * @param original       The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
-     * @param searchTerm     The search term to locate
-     * @param searchIndex    The expected index to locate the search term at within an Array Element
-     * @param resultIndex    The part of the found Array Element index to retrieve
-     * @param splitCharacter The delimiter being expected to separate chunks of an Array Element
+     * @param original           The original Array to interpret formatted as: firstArg[splitChar]secondArg[splitChar]thirdArgOptional
+     * @param searchTerm         The search term to locate
+     * @param searchIndex        The expected index to locate the search term at within an Array Element
+     * @param resultIndex        The part of the found Array Element index to retrieve
+     * @param splitCharacter     The delimiter being expected to separate chunks of an Array Element
      * @param alternativeMessage The alternative value to return if no matches found in the target Array Element Index
      * @return The found or Alternative value from the search within the Array
      */
@@ -1121,10 +1114,9 @@ public class StringUtils {
 
     /**
      * Retrieves whether the specified class contains the specified field name
-     * 
+     *
      * @param classToAccess The class to access with the field(s)
      * @param fieldName     The Field name to search for
-     * 
      * @return whether the specified class contains the specified field name
      */
     public static boolean doesClassContainField(Class<?> classToAccess, String fieldName) {

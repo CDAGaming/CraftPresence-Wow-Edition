@@ -224,7 +224,7 @@ public abstract class Pipe {
             String snapPath = tmpPath + "/snap.discord", flatpakPath = tmpPath + "/app/com.discordapp.Discord";
 
             File snapFile = new File(snapPath),
-            flatpakFile = new File(flatpakPath);
+                    flatpakFile = new File(flatpakPath);
 
             if (snapFile.exists() && snapFile.isDirectory()) {
                 tmpPath = snapPath;

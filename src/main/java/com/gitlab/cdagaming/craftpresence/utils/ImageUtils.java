@@ -32,12 +32,10 @@ import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Queues;
-
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -97,8 +95,8 @@ public class ImageUtils {
                                         break;
                                     case ByteStream:
                                         final Tuple<Boolean, String, String> base64Data = StringUtils.isBase64(originData.toString());
-                                        final byte[] dataSet = base64Data.getFirst() ? 
-                                            decodeBase64(base64Data.getThird(), "UTF-8", false, false) : (originData instanceof byte[] ? (byte[]) originData : originData.toString().getBytes());
+                                        final byte[] dataSet = base64Data.getFirst() ?
+                                                decodeBase64(base64Data.getThird(), "UTF-8", false, false) : (originData instanceof byte[] ? (byte[]) originData : originData.toString().getBytes());
                                         streamData = new ByteArrayInputStream(dataSet);
                                         isGif = base64Data.getSecond().contains("gif");
                                         break;
@@ -217,8 +215,8 @@ public class ImageUtils {
                 return getTextureFromUrl(textureName, url.toString());
             } else {
                 return getTextureFromUrl(
-                    textureName, 
-                    new Pair<>(StringUtils.isBase64(url.toString()).getFirst() ? InputType.ByteStream : InputType.FileStream, url.toString())
+                        textureName,
+                        new Pair<>(StringUtils.isBase64(url.toString()).getFirst() ? InputType.ByteStream : InputType.FileStream, url.toString())
                 );
             }
         }
@@ -296,22 +294,22 @@ public class ImageUtils {
 
     /**
      * Returns whether or not the inputted string matches the format of an external image type
-     * 
+     *
      * @param input The original string to parse
      * @return whether or not the inputted string matches the format of an external image type
      */
     public static boolean isExternalImage(final String input) {
-        return !StringUtils.isNullOrEmpty(input) && 
-            (input.toLowerCase().startsWith("http") || StringUtils.isBase64(input).getFirst() || input.toLowerCase().startsWith("file://"));
+        return !StringUtils.isNullOrEmpty(input) &&
+                (input.toLowerCase().startsWith("http") || StringUtils.isBase64(input).getFirst() || input.toLowerCase().startsWith("file://"));
     }
 
     /**
      * Decodes the inputted string into valid Base64 data if possible
-     * 
-     * @param input The string to parse data
-     * @param encoding The encoding to parse data in
+     *
+     * @param input             The string to parse data
+     * @param encoding          The encoding to parse data in
      * @param useDecodingMethod Whether or not we're using the alternative decoding method
-     * @param repeatCycle Whether or not this is a repeat run with the same input, should be false except for internal usage
+     * @param repeatCycle       Whether or not this is a repeat run with the same input, should be false except for internal usage
      * @return Valid Base64 data, if possible to convert string data
      */
     public static byte[] decodeBase64(final String input, final String encoding, final boolean useDecodingMethod, final boolean repeatCycle) {
@@ -332,7 +330,7 @@ public class ImageUtils {
 
     /**
      * Detects whether the specified Texture lacks critical information
-     * 
+     *
      * @param location The texture to parse
      * @return Whether the specified Texture lacks critical information
      */

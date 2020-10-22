@@ -260,8 +260,8 @@ public class FileUtils {
     /**
      * Retrieves sub/super class data for the specified data
      *
-     * @param originalClass The original class to scan for the specified sub/super-class
-     * @param superClass The sub/super-class target to locate
+     * @param originalClass  The original class to scan for the specified sub/super-class
+     * @param superClass     The sub/super-class target to locate
      * @param scannedClasses The class hierarchy of scanned data
      * @return A pair with the format of isSubclassOf:scannedClasses
      */

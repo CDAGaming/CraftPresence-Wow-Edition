@@ -292,7 +292,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     /**
      * Gets the control's current display message
-     * 
+     *
      * @return The control's current display message
      */
     public String getControlMessage() {
@@ -301,7 +301,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     /**
      * Sets the control's display message to the specified value
-     * 
+     *
      * @param newMessage The new display message for this control
      */
     public void setControlMessage(final String newMessage) {
@@ -310,7 +310,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     /**
      * Gets whether the control is currently active or enabled
-     * 
+     *
      * @return Whether the control is currently active or enabled
      */
     public boolean isControlEnabled() {
@@ -319,7 +319,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     /**
      * Sets the control's current enabled state
-     * 
+     *
      * @param isEnabled The new enable state for this control
      */
     public void setControlEnabled(final boolean isEnabled) {
@@ -328,7 +328,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     /**
      * Gets whether the control is currently visible
-     * 
+     *
      * @return Whether the control is currently visible
      */
     public boolean isControlVisible() {
@@ -337,7 +337,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     /**
      * Sets the control's current visibility state
-     * 
+     *
      * @param isVisible The new visibility state for this control
      */
     public void setControlVisible(final boolean isVisible) {

@@ -86,6 +86,24 @@ public class ExtendedScreen extends GuiScreen {
     }
 
     /**
+     * Gets the Default/Global Font Renderer
+     *
+     * @return The Default/Global Font Renderer
+     */
+    public static FontRenderer getDefaultFontRenderer() {
+        return CraftPresence.instance.fontRenderer;
+    }
+
+    /**
+     * Get the Default/Global Font Height for this Screen
+     *
+     * @return The Default/Global Font Height for this Screen
+     */
+    public static int getDefaultFontHeight() {
+        return getDefaultFontRenderer().FONT_HEIGHT;
+    }
+
+    /**
      * Pre-Initializes this Screen
      * <p>
      * Responsible for Setting preliminary data
@@ -189,7 +207,7 @@ public class ExtendedScreen extends GuiScreen {
      */
     public void preRender() {
         // N/A
-    };
+    }
 
     /**
      * Post-Render event, executes after super event and preRender
@@ -198,7 +216,7 @@ public class ExtendedScreen extends GuiScreen {
      */
     public void postRender() {
         // N/A
-    };
+    }
 
     /**
      * Renders this Screen, including controls and post-Hover Events
@@ -372,14 +390,13 @@ public class ExtendedScreen extends GuiScreen {
 
     /**
      * Renders a String in the Screen, in the style of normal text
-     * 
+     *
      * @param text  The text to render to the screen
      * @param xPos  The X position to render the text at
      * @param yPos  The Y position to render the text at
      * @param color The color to render the text in
      */
-    public void renderString(String text, float xPos, float yPos, int color)
-    {
+    public void renderString(String text, float xPos, float yPos, int color) {
         getFontRenderer().drawStringWithShadow(text, xPos, yPos, color);
     }
 
@@ -395,7 +412,7 @@ public class ExtendedScreen extends GuiScreen {
     /**
      * Get the wrap width for elements to be wrapped by
      * <p>Mostly used as a helper method for wrapping String elements
-     * 
+     *
      * @return the wrap width for elements to be wrapped by
      */
     public int getWrapWidth() {
@@ -413,7 +430,7 @@ public class ExtendedScreen extends GuiScreen {
 
     /**
      * Get the Current Font Renderer for this Screen
-     * 
+     *
      * @return The Current Font Renderer for this Screen
      */
     public FontRenderer getFontRenderer() {
@@ -421,29 +438,11 @@ public class ExtendedScreen extends GuiScreen {
     }
 
     /**
-     * Gets the Default/Global Font Renderer
-     * 
-     * @return The Default/Global Font Renderer
-     */
-    public static FontRenderer getDefaultFontRenderer() {
-        return CraftPresence.instance.fontRenderer;
-    }
-
-    /**
      * Get the Current Font Height for this Screen
-     * 
+     *
      * @return The Current Font Height for this Screen
      */
     public int getFontHeight() {
         return getFontRenderer().FONT_HEIGHT;
-    }
-
-    /**
-     * Get the Default/Global Font Height for this Screen
-     * 
-     * @return The Default/Global Font Height for this Screen
-     */
-    public static int getDefaultFontHeight() {
-        return getDefaultFontRenderer().FONT_HEIGHT;
     }
 }

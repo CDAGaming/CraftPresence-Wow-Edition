@@ -239,13 +239,13 @@ public class CraftPresence {
             if (initialized) {
                 instance = Minecraft.getMinecraft();
                 player = instance.player;
-    
+
                 // Synchronize Developer and Verbose Modes with Config Options, if they were not overridden pre-setup
                 ModUtils.IS_DEV = !isDevStatusOverridden ? CONFIG.debugMode : ModUtils.IS_DEV;
                 ModUtils.IS_VERBOSE = !isVerboseStatusOverridden ? CONFIG.verboseMode : ModUtils.IS_VERBOSE;
-    
+
                 CommandUtils.reloadData(false);
-    
+
                 if (!CONFIG.hasChanged) {
                     if (!SYSTEM.HAS_LOADED) {
                         // Ensure Loading Presence has already passed, before any other type of presence displays
@@ -257,7 +257,7 @@ public class CraftPresence {
                         CommandUtils.isLoadingGame = false;
                         CLIENT.initArgument("&MAINMENU&");
                     }
-                    
+
                     if (SYSTEM.HAS_LOADED) {
                         if (CLIENT.awaitingReply && SYSTEM.TIMER == 0) {
                             StringUtils.sendMessageToPlayer(player, ModUtils.TRANSLATOR.translate("craftpresence.command.request.ignored", CLIENT.REQUESTER_USER.getName()));
@@ -273,7 +273,7 @@ public class CraftPresence {
             } else {
                 init();
             }
-    
+
             scheduleTick();
         }
     }
