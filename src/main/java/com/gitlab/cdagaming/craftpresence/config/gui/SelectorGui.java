@@ -47,10 +47,10 @@ public class SelectorGui extends ExtendedScreen {
     private ExtendedTextControl searchBox;
     private String searchTerm;
     private List<String> itemList;
-    private final TupleConsumer<String, String, String> proceedCallback;
+    private final TupleConsumer<String, String, String> onUpdatedCallback;
     private final RenderType renderType;
 
-    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, TupleConsumer<String, String, String> proceedCallback) {
+    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, TupleConsumer<String, String, String> onUpdatedCallback) {
         super(parentScreen);
         itemList = originalList = list;
         originalValue = currentValue;
@@ -60,7 +60,7 @@ public class SelectorGui extends ExtendedScreen {
         this.allowContinuing = allowContinuing;
         this.allowDynamicEditing = allowDynamicEditing;
         this.renderType = renderType;
-        this.proceedCallback = proceedCallback;
+        this.onUpdatedCallback = onUpdatedCallback;
     }
 
     public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType) {
@@ -83,8 +83,9 @@ public class SelectorGui extends ExtendedScreen {
                                 if (allowContinuing && scrollList.currentValue != null) {
                                     if (originalValue != null) {
                                         if (!scrollList.currentValue.equals(originalValue)) {
-                                            if (proceedCallback != null) {
-                                                proceedCallback.accept(configOption, attributeName, scrollList.currentValue);
+                                            if (onUpdatedCallback != null) {
+                                                onUpdatedCallback.accept(configOption, attributeName, scrollList.currentValue);
+                                                CraftPresence.GUIS.openScreen(parentScreen);
                                             } else {
                                                 CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
                                             }

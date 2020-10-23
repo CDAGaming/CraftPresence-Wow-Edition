@@ -149,7 +149,6 @@ public class DynamicEditorGui extends ExtendedScreen {
                                                     CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMessage);
                                                 }
                                                 CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
                                             }
                                         )
                                     );
@@ -171,7 +170,6 @@ public class DynamicEditorGui extends ExtendedScreen {
                                                     CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMessage);
                                                 }
                                                 CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
                                             }
                                         )
                                     );
@@ -193,7 +191,6 @@ public class DynamicEditorGui extends ExtendedScreen {
                                                     CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMessage);
                                                 }
                                                 CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
                                             }
                                         )
                                     );

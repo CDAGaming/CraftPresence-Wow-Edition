@@ -126,7 +126,6 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                             CraftPresence.CONFIG.hasChanged = true;
                                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                             CraftPresence.CONFIG.defaultDimensionIcon = currentValue;
-                                            CraftPresence.GUIS.openScreen(currentScreen);
                                         }
                                 )
                         ),

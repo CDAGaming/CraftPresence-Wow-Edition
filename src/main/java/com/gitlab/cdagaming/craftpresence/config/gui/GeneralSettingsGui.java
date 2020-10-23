@@ -86,7 +86,6 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                                 CraftPresence.CONFIG.hasChanged = true;
                                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                                 CraftPresence.CONFIG.defaultIcon = currentValue;
-                                                CraftPresence.GUIS.openScreen(parentScreen);
                                         }
                                 )
                         ),

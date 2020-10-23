@@ -79,7 +79,6 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                         CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMessage);
                                     }
                                     CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
-                                    CraftPresence.GUIS.openScreen(parentScreen);
                                 }
                             )
                         ),
@@ -127,7 +126,6 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                     CraftPresence.CONFIG.hasChanged = true;
                                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                     CraftPresence.CONFIG.defaultBiomeIcon = currentValue;
-                                    CraftPresence.GUIS.openScreen(currentScreen);
                                 }
                             )
                         ),

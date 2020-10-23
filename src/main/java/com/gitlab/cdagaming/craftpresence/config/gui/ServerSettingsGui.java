@@ -95,7 +95,6 @@ public class ServerSettingsGui extends ExtendedScreen {
                                                     CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMessage);
                                                 }
                                                 CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
                                         }
                                 )
                         ),
@@ -143,7 +142,6 @@ public class ServerSettingsGui extends ExtendedScreen {
                                             CraftPresence.CONFIG.hasChanged = true;
                                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                             CraftPresence.CONFIG.defaultServerIcon = currentValue;
-                                            CraftPresence.GUIS.openScreen(currentScreen);
                                         }
                                 )
                         ),
