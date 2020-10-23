@@ -77,7 +77,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.gui_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_guiMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, 
                                         null, null, 
                                         true, true
@@ -117,7 +117,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.item_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_itemMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, 
                                         null, null, 
                                         true, true
@@ -160,7 +160,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_target_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_entityTargetMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
                                         null, null, 
                                         true, true
@@ -203,7 +203,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_attacking_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_entityAttackingMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
                                         null, null, 
                                         true, true
@@ -246,7 +246,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_riding_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_entityRidingMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
                                         null, null, 
                                         true, true

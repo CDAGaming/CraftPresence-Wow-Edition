@@ -82,11 +82,11 @@ public class ServerSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_serverMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.server"), CraftPresence.SERVER.knownAddresses, 
                                         null, null, 
                                         true, true, RenderType.ServerData,
-                                        (configOption, attributeName, currentValue) -> {
+                                        (attributeName, currentValue) -> {
                                                 final String defaultServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                                                 final String currentServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
@@ -134,11 +134,11 @@ public class ServerSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_icon"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_defaultServerIcon, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
                                         CraftPresence.CONFIG.defaultServerIcon, null, 
                                         true, false, RenderType.DiscordAsset,
-                                        (configName, attributeName, currentValue) -> {
+                                        (attributeName, currentValue) -> {
                                             CraftPresence.CONFIG.hasChanged = true;
                                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                             CraftPresence.CONFIG.defaultServerIcon = currentValue;

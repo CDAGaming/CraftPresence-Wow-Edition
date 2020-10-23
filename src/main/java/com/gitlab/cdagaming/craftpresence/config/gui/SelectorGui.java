@@ -26,7 +26,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.TupleConsumer;
+import com.gitlab.cdagaming.craftpresence.impl.PairConsumer;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
@@ -39,7 +39,7 @@ import net.minecraft.client.gui.GuiScreen;
 import java.util.List;
 
 public class SelectorGui extends ExtendedScreen {
-    private final String mainTitle, configOption, attributeName, originalValue;
+    private final String mainTitle, attributeName, originalValue;
     private final List<String> originalList;
     private final boolean allowContinuing, allowDynamicEditing;
     private ExtendedButtonControl proceedButton;
@@ -47,28 +47,27 @@ public class SelectorGui extends ExtendedScreen {
     private ExtendedTextControl searchBox;
     private String searchTerm;
     private List<String> itemList;
-    private final TupleConsumer<String, String, String> onUpdatedCallback;
+    private final PairConsumer<String, String> onUpdatedCallback;
     private final RenderType renderType;
 
-    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, TupleConsumer<String, String, String> onUpdatedCallback) {
+    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, PairConsumer<String, String> onUpdatedCallback) {
         super(parentScreen);
         itemList = originalList = list;
         originalValue = currentValue;
         this.mainTitle = mainTitle;
         this.attributeName = attributeName;
-        this.configOption = configOption;
         this.allowContinuing = allowContinuing;
         this.allowDynamicEditing = allowDynamicEditing;
         this.renderType = renderType;
         this.onUpdatedCallback = onUpdatedCallback;
     }
 
-    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType) {
-        this(parentScreen, configOption, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, renderType, null);
+    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType) {
+        this(parentScreen, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, renderType, null);
     }
 
-    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing) {
-        this(parentScreen, configOption, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, RenderType.None);
+    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing) {
+        this(parentScreen, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, RenderType.None);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class SelectorGui extends ExtendedScreen {
                                     if (originalValue != null) {
                                         if (!scrollList.currentValue.equals(originalValue)) {
                                             if (onUpdatedCallback != null) {
-                                                onUpdatedCallback.accept(configOption, attributeName, scrollList.currentValue);
+                                                onUpdatedCallback.accept(attributeName, scrollList.currentValue);
                                                 CraftPresence.GUIS.openScreen(parentScreen);
                                             } else {
                                                 CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
@@ -94,7 +93,8 @@ public class SelectorGui extends ExtendedScreen {
                                         }
                                     } else {
                                         if (allowDynamicEditing) {
-                                            CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, scrollList.currentValue, configOption));
+                                            // TODO: Add onAdjustDynamicEntry runnable
+                                            //CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, scrollList.currentValue));
                                         } else {
                                             CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
                                         }
@@ -125,14 +125,15 @@ public class SelectorGui extends ExtendedScreen {
 
             if (allowDynamicEditing) {
                 // Adding Add New Button
-                addControl(
+                // TODO: Add onAddDynamicEntry runnable
+                /*addControl(
                         new ExtendedButtonControl(
                                 (width - 195), (height - 30),
                                 90, 20,
                                 ModUtils.TRANSLATOR.translate("gui.config.message.button.add.new"),
-                                () -> CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null, configOption))
+                                () -> CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null))
                         )
-                );
+                );*/
             }
 
             super.initializeUi();

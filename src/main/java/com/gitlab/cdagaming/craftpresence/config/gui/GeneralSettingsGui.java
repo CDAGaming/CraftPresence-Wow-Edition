@@ -78,11 +78,11 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.default_icon"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
                                         CraftPresence.CONFIG.defaultIcon, null, 
                                         true, false, RenderType.DiscordAsset,
-                                        (configOption, attributeName, currentValue) -> {
+                                        (attributeName, currentValue) -> {
                                                 CraftPresence.CONFIG.hasChanged = true;
                                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                                 CraftPresence.CONFIG.defaultIcon = currentValue;

@@ -66,11 +66,11 @@ public class BiomeSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.biome_messages.biome_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                             new SelectorGui(
-                                currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, 
+                                currentScreen, 
                                 ModUtils.TRANSLATOR.translate("gui.config.title.selector.biome"), CraftPresence.BIOMES.BIOME_NAMES, 
                                 null, null, 
                                 true, true, RenderType.None,
-                                (configOption, attributeName, currentValue) -> {
+                                (attributeName, currentValue) -> {
                                     final String defaultBiomeMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                                     final String currentBiomeMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
@@ -118,11 +118,11 @@ public class BiomeSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.biome_messages.biome_icon"),
                         () -> CraftPresence.GUIS.openScreen(
                             new SelectorGui(
-                                currentScreen, CraftPresence.CONFIG.NAME_defaultBiomeIcon, 
+                                currentScreen, 
                                 ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
                                 CraftPresence.CONFIG.defaultBiomeIcon, null, 
                                 true, false, RenderType.DiscordAsset,
-                                (configName, attributeName, currentValue) -> {
+                                (attributeName, currentValue) -> {
                                     CraftPresence.CONFIG.hasChanged = true;
                                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                     CraftPresence.CONFIG.defaultBiomeIcon = currentValue;

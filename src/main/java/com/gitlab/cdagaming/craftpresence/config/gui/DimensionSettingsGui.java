@@ -65,11 +65,11 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_messages"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, 
                                         null, null, 
                                         true, true, RenderType.None,
-                                        (configOption, attributeName, currentValue) -> {
+                                        (attributeName, currentValue) -> {
                                                 final String defaultDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
                                                 final String currentDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
 
@@ -118,11 +118,11 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_icon"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, 
+                                        currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
                                         CraftPresence.CONFIG.defaultDimensionIcon, null, 
                                         true, false, RenderType.DiscordAsset,
-                                        (configName, attributeName, currentValue) -> {
+                                        (attributeName, currentValue) -> {
                                             CraftPresence.CONFIG.hasChanged = true;
                                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                             CraftPresence.CONFIG.defaultDimensionIcon = currentValue;
