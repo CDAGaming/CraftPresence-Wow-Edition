@@ -126,7 +126,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                     CraftPresence.CONFIG.hasChanged = true;
                                     CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                     CraftPresence.CONFIG.defaultBiomeIcon = currentValue;
-                                }
+                                }, null, null
                             )
                         ),
                         () -> CraftPresence.GUIS.drawMultiLineString(

@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.DataConsumer;
 import com.gitlab.cdagaming.craftpresence.impl.PairConsumer;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -49,8 +50,10 @@ public class SelectorGui extends ExtendedScreen {
     private List<String> itemList;
     private final PairConsumer<String, String> onUpdatedCallback;
     private final RenderType renderType;
+    private final PairConsumer<String, GuiScreen> onAdjustDynamicEntry;
+    private final DataConsumer<GuiScreen> onAddDynamicEntry;
 
-    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, PairConsumer<String, String> onUpdatedCallback) {
+    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, PairConsumer<String, String> onUpdatedCallback, PairConsumer<String, GuiScreen> onAdjustDynamicEntry, DataConsumer<GuiScreen> onAddDynamicEntry) {
         super(parentScreen);
         itemList = originalList = list;
         originalValue = currentValue;
@@ -60,14 +63,16 @@ public class SelectorGui extends ExtendedScreen {
         this.allowDynamicEditing = allowDynamicEditing;
         this.renderType = renderType;
         this.onUpdatedCallback = onUpdatedCallback;
+        this.onAdjustDynamicEntry = onAdjustDynamicEntry;
+        this.onAddDynamicEntry = onAddDynamicEntry;
     }
 
-    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType) {
-        this(parentScreen, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, renderType, null);
+    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, PairConsumer<String, GuiScreen> onAdjustDynamicEntry, DataConsumer<GuiScreen> onAddDynamicEntry) {
+        this(parentScreen, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, renderType, null, onAdjustDynamicEntry, onAddDynamicEntry);
     }
 
-    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing) {
-        this(parentScreen, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, RenderType.None);
+    public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, PairConsumer<String, GuiScreen> onAdjustDynamicEntry, DataConsumer<GuiScreen> onAddDynamicEntry) {
+        this(parentScreen, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, RenderType.None, onAdjustDynamicEntry, onAddDynamicEntry);
     }
 
     @Override
@@ -92,9 +97,8 @@ public class SelectorGui extends ExtendedScreen {
                                             CraftPresence.GUIS.openScreen(parentScreen);
                                         }
                                     } else {
-                                        if (allowDynamicEditing) {
-                                            // TODO: Add onAdjustDynamicEntry runnable
-                                            //CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, scrollList.currentValue));
+                                        if (allowDynamicEditing && onAdjustDynamicEntry != null) {
+                                            onAdjustDynamicEntry.accept(scrollList.currentValue, parentScreen);
                                         } else {
                                             CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
                                         }
@@ -123,17 +127,16 @@ public class SelectorGui extends ExtendedScreen {
                     )
             );
 
-            if (allowDynamicEditing) {
+            if (allowDynamicEditing && onAddDynamicEntry != null) {
                 // Adding Add New Button
-                // TODO: Add onAddDynamicEntry runnable
-                /*addControl(
+                addControl(
                         new ExtendedButtonControl(
                                 (width - 195), (height - 30),
                                 90, 20,
                                 ModUtils.TRANSLATOR.translate("gui.config.message.button.add.new"),
-                                () -> CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, null))
+                                () -> onAddDynamicEntry.accept(parentScreen)
                         )
-                );*/
+                );
             }
 
             super.initializeUi();

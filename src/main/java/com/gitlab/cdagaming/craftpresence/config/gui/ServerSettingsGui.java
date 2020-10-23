@@ -142,7 +142,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                                             CraftPresence.CONFIG.hasChanged = true;
                                             CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                             CraftPresence.CONFIG.defaultServerIcon = currentValue;
-                                        }
+                                        }, null, null
                                 )
                         ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
