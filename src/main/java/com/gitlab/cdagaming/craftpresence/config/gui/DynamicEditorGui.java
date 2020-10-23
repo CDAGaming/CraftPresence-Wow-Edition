@@ -52,9 +52,9 @@ public class DynamicEditorGui extends ExtendedScreen {
 
     @Override
     public void initializeUi() {
+        // TODO: Add onNewCallback and onAdjustCallback
         if (isNewValue) {
             mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.add.new");
-            // TODO: Replace with an initialization event to reduce redundancy
             if (parentScreen instanceof BiomeSettingsGui) {
                 specificMessage = defaultMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
             } else if (parentScreen instanceof DimensionSettingsGui) {
@@ -125,6 +125,7 @@ public class DynamicEditorGui extends ExtendedScreen {
 
         if ((parentScreen instanceof BiomeSettingsGui || parentScreen instanceof DimensionSettingsGui || parentScreen instanceof ServerSettingsGui) && !isNewValue) {
             // Adding Specific Icon Button
+            // TODO: Add allowSpecificData flag and onSpecificCallback
             addControl(
                     new ExtendedButtonControl(
                             (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
@@ -215,7 +216,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
-                            // TODO: Create proceed event to reduce redundancy
+                            // TODO: Create onProceed callback with attributeName
                             if (!specificMessageInput.getText().equals(specificMessage) || (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText()) && !specificMessageInput.getText().equals(defaultMessage)) || (isDefaultValue && !StringUtils.isNullOrEmpty(specificMessageInput.getText()) && !specificMessageInput.getText().equals(specificMessage))) {
                                 if (isNewValue && !StringUtils.isNullOrEmpty(newValueName.getText())) {
                                     attributeName = newValueName.getText();
@@ -332,6 +333,7 @@ public class DynamicEditorGui extends ExtendedScreen {
         final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
         final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
         // Hovering over Message Label
+        // TODO: Make an onHoverCallback with screen instance
         if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), getFontHeight())) {
             if (parentScreen instanceof BiomeSettingsGui) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
