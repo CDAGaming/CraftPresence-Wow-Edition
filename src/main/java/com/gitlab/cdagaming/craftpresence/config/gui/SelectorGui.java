@@ -26,8 +26,8 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.TupleConsumer;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
@@ -41,14 +41,16 @@ import java.util.List;
 public class SelectorGui extends ExtendedScreen {
     private final String mainTitle, configOption, attributeName, originalValue;
     private final List<String> originalList;
-    private final boolean allowContinuing;
+    private final boolean allowContinuing, allowDynamicEditing;
     private ExtendedButtonControl proceedButton;
     private ScrollableListControl scrollList;
     private ExtendedTextControl searchBox;
     private String searchTerm;
     private List<String> itemList;
+    private final TupleConsumer<String, String, String> proceedCallback;
+    private final RenderType renderType;
 
-    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing) {
+    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, TupleConsumer<String, String, String> proceedCallback) {
         super(parentScreen);
         itemList = originalList = list;
         originalValue = currentValue;
@@ -56,6 +58,17 @@ public class SelectorGui extends ExtendedScreen {
         this.attributeName = attributeName;
         this.configOption = configOption;
         this.allowContinuing = allowContinuing;
+        this.allowDynamicEditing = allowDynamicEditing;
+        this.renderType = renderType;
+        this.proceedCallback = proceedCallback;
+    }
+
+    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType) {
+        this(parentScreen, configOption, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, renderType, null);
+    }
+
+    public SelectorGui(GuiScreen parentScreen, String configOption, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing) {
+        this(parentScreen, configOption, mainTitle, list, currentValue, attributeName, allowContinuing, allowDynamicEditing, RenderType.None);
     }
 
     @Override
@@ -69,57 +82,9 @@ public class SelectorGui extends ExtendedScreen {
                             () -> {
                                 if (allowContinuing && scrollList.currentValue != null) {
                                     if (originalValue != null) {
-                                        // TODO: Make an onProceed event to resolve redundant code
                                         if (!scrollList.currentValue.equals(originalValue)) {
-                                            if (configOption.equals(CraftPresence.CONFIG.NAME_defaultIcon)) {
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                                CraftPresence.CONFIG.defaultIcon = scrollList.currentValue;
-                                                CraftPresence.GUIS.openScreen(parentScreen);
-                                            } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultServerIcon)) {
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                                CraftPresence.CONFIG.defaultServerIcon = scrollList.currentValue;
-                                                CraftPresence.GUIS.openScreen(parentScreen);
-                                            } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultDimensionIcon)) {
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                                CraftPresence.CONFIG.defaultDimensionIcon = scrollList.currentValue;
-                                                CraftPresence.GUIS.openScreen(parentScreen);
-                                            } else if (configOption.equals(CraftPresence.CONFIG.NAME_defaultBiomeIcon)) {
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                                CraftPresence.CONFIG.defaultBiomeIcon = scrollList.currentValue;
-                                            } else if (configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages)) {
-                                                final String defaultDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-                                                final String currentDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                if (StringUtils.isNullOrEmpty(currentDimensionMessage) || currentDimensionMessage.equals(defaultDimensionMessage)) {
-                                                    CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMessage);
-                                                }
-                                                CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
-                                            } else if (configOption.equals(CraftPresence.CONFIG.NAME_biomeMessages)) {
-                                                final String defaultBiomeMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-                                                final String currentBiomeMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                if (StringUtils.isNullOrEmpty(currentBiomeMessage) || currentBiomeMessage.equals(defaultBiomeMessage)) {
-                                                    CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMessage);
-                                                }
-                                                CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
-                                            } else if (configOption.equals(CraftPresence.CONFIG.NAME_serverMessages)) {
-                                                final String defaultServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-                                                final String currentServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
-
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                if (StringUtils.isNullOrEmpty(currentServerMessage) || currentServerMessage.equals(defaultServerMessage)) {
-                                                    CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMessage);
-                                                }
-                                                CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, scrollList.currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                            if (proceedCallback != null) {
+                                                proceedCallback.accept(configOption, attributeName, scrollList.currentValue);
                                             } else {
                                                 CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
                                             }
@@ -127,7 +92,7 @@ public class SelectorGui extends ExtendedScreen {
                                             CraftPresence.GUIS.openScreen(parentScreen);
                                         }
                                     } else {
-                                        if (configOption.equals(CraftPresence.CONFIG.NAME_biomeMessages) || configOption.equals(CraftPresence.CONFIG.NAME_dimensionMessages) || configOption.equals(CraftPresence.CONFIG.NAME_serverMessages) || configOption.equals(CraftPresence.CONFIG.NAME_guiMessages) || configOption.equals(CraftPresence.CONFIG.NAME_itemMessages)) {
+                                        if (allowDynamicEditing) {
                                             CraftPresence.GUIS.openScreen(new DynamicEditorGui(parentScreen, scrollList.currentValue, configOption));
                                         } else {
                                             CraftPresence.GUIS.openScreen(new MessageGui(parentScreen, StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.null"))));
@@ -140,22 +105,13 @@ public class SelectorGui extends ExtendedScreen {
                     )
             );
 
-            RenderType scrollListType = RenderType.None;
-
-            if (!CraftPresence.CONFIG.stripExtraGuiElements) {
-                scrollListType = mainTitle.toLowerCase().endsWith("icon") ? RenderType.DiscordAsset :
-                        mainTitle.toLowerCase().contains("server") ? RenderType.ServerData :
-                                mainTitle.toLowerCase().contains("entity") ? RenderType.EntityData :
-                                        mainTitle.toLowerCase().contains("item") ? RenderType.ItemData : RenderType.None;
-            }
-
             scrollList = addList(
                     new ScrollableListControl(
                             mc,
                             width, height,
-                            32, height - 45, scrollListType != RenderType.None ? 45 : 18,
+                            32, height - 45, renderType != RenderType.None ? 45 : 18,
                             itemList, originalValue,
-                            scrollListType
+                            renderType
                     )
             );
             searchBox = addControl(
@@ -166,7 +122,7 @@ public class SelectorGui extends ExtendedScreen {
                     )
             );
 
-            if (allowContinuing && !originalList.equals(DiscordAssetUtils.ICON_LIST)) {
+            if (allowDynamicEditing) {
                 // Adding Add New Button
                 addControl(
                         new ExtendedButtonControl(

@@ -75,7 +75,14 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         calc1, CraftPresence.GUIS.getButtonY(2),
                         160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.gui_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_guiMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_guiMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, 
+                                        null, null, 
+                                        true, true
+                                )
+                        ),
                         () -> {
                             if (!guiMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -108,7 +115,14 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         calc2, CraftPresence.GUIS.getButtonY(2),
                         160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.item_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_itemMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_itemMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, 
+                                        null, null, 
+                                        true, true
+                                )
+                        ),
                         () -> {
                             if (!itemMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -144,7 +158,14 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         calc1, CraftPresence.GUIS.getButtonY(3),
                         160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_target_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityTargetMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_entityTargetMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
+                                        null, null, 
+                                        true, true
+                                )
+                        ),
                         () -> {
                             if (!entityTargetMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -180,7 +201,14 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         calc2, CraftPresence.GUIS.getButtonY(3),
                         160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_attacking_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityAttackingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_entityAttackingMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
+                                        null, null, 
+                                        true, true
+                                )
+                        ),
                         () -> {
                             if (!entityAttackingMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -216,7 +244,14 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                         calc1, CraftPresence.GUIS.getButtonY(4),
                         160, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.entity_riding_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_entityRidingMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_entityRidingMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
+                                        null, null, 
+                                        true, true
+                                )
+                        ),
                         () -> {
                             if (!entityRidingMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(

@@ -33,6 +33,8 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
+
 import net.minecraft.client.gui.GuiScreen;
 
 @SuppressWarnings("DuplicatedCode")
@@ -74,7 +76,20 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         buttonCalc1, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.default_icon"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultIcon, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_defaultIcon, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
+                                        CraftPresence.CONFIG.defaultIcon, null, 
+                                        true, false, RenderType.DiscordAsset,
+                                        (configOption, attributeName, currentValue) -> {
+                                                CraftPresence.CONFIG.hasChanged = true;
+                                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                                CraftPresence.CONFIG.defaultIcon = currentValue;
+                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.general.default_icon")

@@ -31,6 +31,8 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
+
 import net.minecraft.client.gui.GuiScreen;
 
 public class DynamicEditorGui extends ExtendedScreen {
@@ -132,15 +134,69 @@ public class DynamicEditorGui extends ExtendedScreen {
                                 if (parentScreen instanceof DimensionSettingsGui) {
                                     final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultDimensionIcon);
                                     final String specificIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultIcon);
-                                    CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, specificIcon, attributeName, true));
+                                    CraftPresence.GUIS.openScreen(
+                                        new SelectorGui(
+                                            currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, 
+                                            ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
+                                            specificIcon, attributeName, 
+                                            true, false, RenderType.DiscordAsset,
+                                            (configName, attributeName, currentValue) -> {
+                                                final String defaultDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+
+                                                CraftPresence.CONFIG.hasChanged = true;
+                                                if (StringUtils.isNullOrEmpty(currentDimensionMessage) || currentDimensionMessage.equals(defaultDimensionMessage)) {
+                                                    CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMessage);
+                                                }
+                                                CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
+                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                            }
+                                        )
+                                    );
                                 } else if (parentScreen instanceof ServerSettingsGui) {
                                     final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultServerIcon);
                                     final String specificIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultIcon);
-                                    CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_serverMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, specificIcon, attributeName, true));
+                                    CraftPresence.GUIS.openScreen(
+                                        new SelectorGui(
+                                            currentScreen, CraftPresence.CONFIG.NAME_serverMessages, 
+                                            ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
+                                            specificIcon, attributeName, 
+                                            true, false, RenderType.DiscordAsset,
+                                            (configName, attributeName, currentValue) -> {
+                                                final String defaultServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+
+                                                CraftPresence.CONFIG.hasChanged = true;
+                                                if (StringUtils.isNullOrEmpty(currentServerMessage) || currentServerMessage.equals(defaultServerMessage)) {
+                                                    CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMessage);
+                                                }
+                                                CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
+                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                            }
+                                        )
+                                    );
                                 } else if (parentScreen instanceof BiomeSettingsGui) {
                                     final String defaultIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 2, CraftPresence.CONFIG.splitCharacter, CraftPresence.CONFIG.defaultBiomeIcon);
                                     final String specificIcon = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, defaultIcon);
-                                    CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, specificIcon, attributeName, true));
+                                    CraftPresence.GUIS.openScreen(
+                                        new SelectorGui(
+                                            currentScreen, CraftPresence.CONFIG.NAME_biomeMessages, 
+                                            ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
+                                            specificIcon, attributeName, 
+                                            true, false, RenderType.DiscordAsset,
+                                            (configName, attributeName, currentValue) -> {
+                                                final String defaultBiomeMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentBiomeMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+
+                                                CraftPresence.CONFIG.hasChanged = true;
+                                                if (StringUtils.isNullOrEmpty(currentBiomeMessage) || currentBiomeMessage.equals(defaultBiomeMessage)) {
+                                                    CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultBiomeMessage);
+                                                }
+                                                CraftPresence.CONFIG.biomeMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.biomeMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
+                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                            }
+                                        )
+                                    );
                                 }
                             }
                     )

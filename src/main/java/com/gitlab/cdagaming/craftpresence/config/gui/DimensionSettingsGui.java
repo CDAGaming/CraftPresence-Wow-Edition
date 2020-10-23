@@ -31,6 +31,8 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
+
 import net.minecraft.client.gui.GuiScreen;
 
 public class DimensionSettingsGui extends ExtendedScreen {
@@ -61,7 +63,25 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_dimensionMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.dimension"), CraftPresence.DIMENSIONS.DIMENSION_NAMES, 
+                                        null, null, 
+                                        true, true, RenderType.None,
+                                        (configOption, attributeName, currentValue) -> {
+                                                final String defaultDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentDimensionMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+
+                                                CraftPresence.CONFIG.hasChanged = true;
+                                                if (StringUtils.isNullOrEmpty(currentDimensionMessage) || currentDimensionMessage.equals(defaultDimensionMessage)) {
+                                                    CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultDimensionMessage);
+                                                }
+                                                CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
+                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                        }
+                                )
+                        ),
                         () -> {
                             if (!dimensionMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -96,7 +116,20 @@ public class DimensionSettingsGui extends ExtendedScreen {
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(3),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.dimension_messages.dimension_icon"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultDimensionIcon, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_defaultDimensionIcon, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
+                                        CraftPresence.CONFIG.defaultDimensionIcon, null, 
+                                        true, false, RenderType.DiscordAsset,
+                                        (configName, attributeName, currentValue) -> {
+                                            CraftPresence.CONFIG.hasChanged = true;
+                                            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                            CraftPresence.CONFIG.defaultDimensionIcon = currentValue;
+                                            CraftPresence.GUIS.openScreen(currentScreen);
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_icon")

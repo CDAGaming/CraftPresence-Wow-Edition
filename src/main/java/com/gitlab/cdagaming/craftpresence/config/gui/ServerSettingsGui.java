@@ -31,6 +31,8 @@ import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
+
 import net.minecraft.client.gui.GuiScreen;
 
 @SuppressWarnings("DuplicatedCode")
@@ -78,7 +80,25 @@ public class ServerSettingsGui extends ExtendedScreen {
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(4),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_messages"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_serverMessages, ModUtils.TRANSLATOR.translate("gui.config.title.selector.server"), CraftPresence.SERVER.knownAddresses, null, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_serverMessages, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.server"), CraftPresence.SERVER.knownAddresses, 
+                                        null, null, 
+                                        true, true, RenderType.ServerData,
+                                        (configOption, attributeName, currentValue) -> {
+                                                final String defaultServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                final String currentServerMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+
+                                                CraftPresence.CONFIG.hasChanged = true;
+                                                if (StringUtils.isNullOrEmpty(currentServerMessage) || currentServerMessage.equals(defaultServerMessage)) {
+                                                    CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultServerMessage);
+                                                }
+                                                CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
+                                                CraftPresence.GUIS.openScreen(parentScreen);
+                                        }
+                                )
+                        ),
                         () -> {
                             if (!serverMessagesButton.isControlEnabled()) {
                                 CraftPresence.GUIS.drawMultiLineString(
@@ -113,7 +133,20 @@ public class ServerSettingsGui extends ExtendedScreen {
                         (width / 2) - 90, CraftPresence.GUIS.getButtonY(5),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.name.server_messages.server_icon"),
-                        () -> CraftPresence.GUIS.openScreen(new SelectorGui(currentScreen, CraftPresence.CONFIG.NAME_defaultServerIcon, ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, CraftPresence.CONFIG.defaultServerIcon, null, true)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new SelectorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_defaultServerIcon, 
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
+                                        CraftPresence.CONFIG.defaultServerIcon, null, 
+                                        true, false, RenderType.DiscordAsset,
+                                        (configName, attributeName, currentValue) -> {
+                                            CraftPresence.CONFIG.hasChanged = true;
+                                            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                            CraftPresence.CONFIG.defaultServerIcon = currentValue;
+                                            CraftPresence.GUIS.openScreen(currentScreen);
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_icon")
