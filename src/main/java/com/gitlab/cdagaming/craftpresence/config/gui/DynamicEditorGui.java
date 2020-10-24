@@ -39,12 +39,14 @@ public class DynamicEditorGui extends ExtendedScreen {
     private final boolean isNewValue, isDefaultValue;
     private ExtendedButtonControl proceedButton;
     private ExtendedTextControl specificMessageInput, newValueName;
-    private String attributeName, specificMessage, defaultMessage, mainTitle, removeMessage;
+    private String attributeName, removeMessage;
     private final PairConsumer<String, String> onAdjustEntry, onRemoveEntry;
-    private final PairConsumer<String, ExtendedScreen> onSpecificCallback, onAdjustInit, onNewInit;
+    private final PairConsumer<String, DynamicEditorGui> onAdjustInit, onNewInit, onSpecificCallback;
     private final DataConsumer<ExtendedScreen> onHoverCallback;
 
-    DynamicEditorGui(GuiScreen parentScreen, String attributeName, PairConsumer<String, ExtendedScreen> onNewInit, PairConsumer<String, ExtendedScreen> onAdjustInit, PairConsumer<String, String> onAdjustEntry, PairConsumer<String, String> onRemoveEntry, PairConsumer<String, ExtendedScreen> onSpecificCallback, DataConsumer<ExtendedScreen> onHoverCallback) {
+    public String specificMessage, defaultMessage, mainTitle;
+
+    DynamicEditorGui(GuiScreen parentScreen, String attributeName, PairConsumer<String, DynamicEditorGui> onNewInit, PairConsumer<String, DynamicEditorGui> onAdjustInit, PairConsumer<String, String> onAdjustEntry, PairConsumer<String, String> onRemoveEntry, PairConsumer<String, DynamicEditorGui> onSpecificCallback, DataConsumer<ExtendedScreen> onHoverCallback) {
         super(parentScreen);
         this.attributeName = attributeName;
         isNewValue = StringUtils.isNullOrEmpty(attributeName);
