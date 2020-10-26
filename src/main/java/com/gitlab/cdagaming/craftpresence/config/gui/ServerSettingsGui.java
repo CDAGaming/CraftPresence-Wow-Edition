@@ -93,7 +93,6 @@ public class ServerSettingsGui extends ExtendedScreen {
                                                     CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage);
                                                 }
                                                 CraftPresence.CONFIG.serverMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.serverMessages, attributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, currentValue);
-                                                CraftPresence.GUIS.openScreen(parentScreen);
                                         },
                                         (currentValue, parentScreen) -> {
                                                 // Event to occur when Setting Dynamic/Specific Data
