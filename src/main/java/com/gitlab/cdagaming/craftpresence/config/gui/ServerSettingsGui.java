@@ -140,7 +140,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                                                                                 )
                                                                         );
                                                                 },
-                                                                (screenInstance) -> {
+                                                                (attributeName, screenInstance) -> {
                                                                         // Event to occur when Hovering over Message Label
                                                                         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
@@ -166,7 +166,7 @@ public class ServerSettingsGui extends ExtendedScreen {
                                                                         CraftPresence.SERVER.knownAddresses.remove(attributeName);
                                                                         CraftPresence.SERVER.getServerAddresses();
                                                                 }, null,
-                                                                (screenInstance) -> {
+                                                                (attributeName, screenInstance) -> {
                                                                         // Event to occur when Hovering over Message Label
                                                                         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.server_messages.server_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }

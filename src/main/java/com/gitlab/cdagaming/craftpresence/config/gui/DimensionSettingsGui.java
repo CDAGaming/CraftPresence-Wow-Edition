@@ -124,7 +124,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                                                                 )
                                                                         );
                                                                 },
-                                                                (screenInstance) -> {
+                                                                (attributeName, screenInstance) -> {
                                                                         // Event to occur when Hovering over Message Label
                                                                         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
@@ -150,7 +150,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                                                         CraftPresence.DIMENSIONS.DIMENSION_NAMES.remove(attributeName);
                                                                         CraftPresence.DIMENSIONS.getDimensions();
                                                                 }, null,
-                                                                (screenInstance) -> {
+                                                                (attributeName, screenInstance) -> {
                                                                         // Event to occur when Hovering over Message Label
                                                                         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }

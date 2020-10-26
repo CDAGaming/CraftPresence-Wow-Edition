@@ -26,7 +26,6 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.DataConsumer;
 import com.gitlab.cdagaming.craftpresence.impl.PairConsumer;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
@@ -41,12 +40,11 @@ public class DynamicEditorGui extends ExtendedScreen {
     private ExtendedTextControl specificMessageInput, newValueName;
     private String attributeName, removeMessage;
     private final PairConsumer<String, String> onAdjustEntry, onRemoveEntry;
-    private final PairConsumer<String, DynamicEditorGui> onAdjustInit, onNewInit, onSpecificCallback;
-    private final DataConsumer<ExtendedScreen> onHoverCallback;
+    private final PairConsumer<String, DynamicEditorGui> onAdjustInit, onNewInit, onSpecificCallback, onHoverCallback;
 
     public String specificMessage, defaultMessage, mainTitle;
 
-    DynamicEditorGui(GuiScreen parentScreen, String attributeName, PairConsumer<String, DynamicEditorGui> onNewInit, PairConsumer<String, DynamicEditorGui> onAdjustInit, PairConsumer<String, String> onAdjustEntry, PairConsumer<String, String> onRemoveEntry, PairConsumer<String, DynamicEditorGui> onSpecificCallback, DataConsumer<ExtendedScreen> onHoverCallback) {
+    DynamicEditorGui(GuiScreen parentScreen, String attributeName, PairConsumer<String, DynamicEditorGui> onNewInit, PairConsumer<String, DynamicEditorGui> onAdjustInit, PairConsumer<String, String> onAdjustEntry, PairConsumer<String, String> onRemoveEntry, PairConsumer<String, DynamicEditorGui> onSpecificCallback, PairConsumer<String, DynamicEditorGui> onHoverCallback) {
         super(parentScreen);
         this.attributeName = attributeName;
         isNewValue = StringUtils.isNullOrEmpty(attributeName);
@@ -181,7 +179,7 @@ public class DynamicEditorGui extends ExtendedScreen {
         // Hovering over Message Label
         if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), getFontHeight())) {
             if (onHoverCallback != null) {
-                onHoverCallback.accept(this);
+                onHoverCallback.accept(attributeName, this);
             }
         }
 

@@ -31,6 +31,8 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
+
 import net.minecraft.client.gui.GuiScreen;
 
 import java.util.Arrays;
@@ -80,7 +82,63 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.gui"), CraftPresence.GUIS.GUI_NAMES, 
                                         null, null, 
-                                        true, true
+                                        true, true, RenderType.None,
+                                        null,
+                                        (currentValue, parentScreen) -> {
+                                                // Event to occur when Setting Dynamic/Specific Data
+                                                CraftPresence.GUIS.openScreen(
+                                                        new DynamicEditorGui(
+                                                                parentScreen, currentValue, null,
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when initializing existing data
+                                                                        screenInstance.mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.gui.edit_specific_gui", attributeName);
+                                                                        screenInstance.defaultMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                                        screenInstance.specificMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, screenInstance.defaultMessage);
+                                                                },
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when adjusting set data
+                                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                                        CraftPresence.CONFIG.guiMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, inputText);
+                                                                },
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when removing set data
+                                                                        CraftPresence.CONFIG.guiMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.guiMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                                                                        CraftPresence.GUIS.GUI_NAMES.remove(attributeName);
+                                                                        CraftPresence.GUIS.getGUIs();
+                                                                }, null,
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when Hovering over Message Label
+                                                                        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.gui_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
+                                                                }
+                                                        )
+                                                );
+                                        },
+                                        (parentScreen) -> {
+                                                CraftPresence.GUIS.openScreen(
+                                                        new DynamicEditorGui(
+                                                                parentScreen, null, 
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when initializing new data
+                                                                        screenInstance.specificMessage = screenInstance.defaultMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.guiMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                                }, null,
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when adjusting set data
+                                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                                        CraftPresence.CONFIG.guiMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.guiMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, inputText);
+                                                                },
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when removing set data
+                                                                        CraftPresence.CONFIG.guiMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.guiMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                                                                        CraftPresence.GUIS.GUI_NAMES.remove(attributeName);
+                                                                        CraftPresence.GUIS.getGUIs();
+                                                                }, null,
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when Hovering over Message Label
+                                                                        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.gui_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
+                                                                }
+                                                        )
+                                                );
+                                        }
                                 )
                         ),
                         () -> {
@@ -120,7 +178,71 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.item"), CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES, 
                                         null, null, 
-                                        true, true
+                                        true, true, RenderType.ItemData,
+                                        null,
+                                        (currentValue, parentScreen) -> {
+                                                // Event to occur when Setting Dynamic/Specific Data
+                                                CraftPresence.GUIS.openScreen(
+                                                        new DynamicEditorGui(
+                                                                parentScreen, currentValue, null,
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when initializing existing data
+                                                                        screenInstance.mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.item.edit_specific_item", attributeName);
+                                                                        screenInstance.defaultMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                                        screenInstance.specificMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, screenInstance.defaultMessage);
+                                                                },
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when adjusting set data
+                                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                                        CraftPresence.CONFIG.itemMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, inputText);
+                                                                },
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when removing set data
+                                                                        CraftPresence.CONFIG.itemMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.itemMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                                                                        CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES.remove(attributeName);
+                                                                        CraftPresence.TILE_ENTITIES.getEntities();
+                                                                }, null,
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when Hovering over Message Label
+                                                                        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
+                                                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.item_messages",
+                                                                                        ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                                                                                CraftPresence.TILE_ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
+                                                                        ), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
+                                                                }
+                                                        )
+                                                );
+                                        },
+                                        (parentScreen) -> {
+                                                CraftPresence.GUIS.openScreen(
+                                                        new DynamicEditorGui(
+                                                                parentScreen, null, 
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when initializing new data
+                                                                        screenInstance.specificMessage = screenInstance.defaultMessage = StringUtils.getConfigPart(CraftPresence.CONFIG.itemMessages, "default", 0, 1, CraftPresence.CONFIG.splitCharacter, null);
+                                                                }, null,
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when adjusting set data
+                                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                                        CraftPresence.CONFIG.itemMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.itemMessages, attributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, inputText);
+                                                                },
+                                                                (attributeName, inputText) -> {
+                                                                        // Event to occur when removing set data
+                                                                        CraftPresence.CONFIG.itemMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.itemMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
+                                                                        CraftPresence.TILE_ENTITIES.TILE_ENTITY_NAMES.remove(attributeName);
+                                                                        CraftPresence.TILE_ENTITIES.getEntities();
+                                                                }, null,
+                                                                (attributeName, screenInstance) -> {
+                                                                        // Event to occur when Hovering over Message Label
+                                                                        CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(
+                                                                                ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.item_messages",
+                                                                                        ModUtils.TRANSLATOR.translate("gui.config.message.tags",
+                                                                                                CraftPresence.TILE_ENTITIES.generatePlaceholderString(attributeName, CraftPresence.TILE_ENTITIES.getListFromName(attributeName))))
+                                                                        ), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
+                                                                }
+                                                        )
+                                                );
+                                        }
                                 )
                         ),
                         () -> {
@@ -163,7 +285,8 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
                                         null, null, 
-                                        true, true
+                                        true, true, RenderType.EntityData,
+                                        null
                                 )
                         ),
                         () -> {
@@ -206,7 +329,8 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
                                         null, null, 
-                                        true, true
+                                        true, true, RenderType.EntityData,
+                                        null
                                 )
                         ),
                         () -> {
@@ -249,7 +373,8 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                         currentScreen, 
                                         ModUtils.TRANSLATOR.translate("gui.config.title.selector.entity"), CraftPresence.ENTITIES.ENTITY_NAMES, 
                                         null, null, 
-                                        true, true
+                                        true, true, RenderType.EntityData,
+                                        null
                                 )
                         ),
                         () -> {

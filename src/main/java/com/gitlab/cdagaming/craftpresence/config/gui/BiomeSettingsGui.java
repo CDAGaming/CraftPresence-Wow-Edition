@@ -124,7 +124,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                                                         )
                                                                 );
                                                         },
-                                                        (screenInstance) -> {
+                                                        (attributeName, screenInstance) -> {
                                                                 // Event to occur when Hovering over Message Label
                                                                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                         }
@@ -150,7 +150,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                                                 CraftPresence.BIOMES.BIOME_NAMES.remove(attributeName);
                                                                 CraftPresence.BIOMES.getBiomes();
                                                         }, null,
-                                                        (screenInstance) -> {
+                                                        (attributeName, screenInstance) -> {
                                                                 // Event to occur when Hovering over Message Label
                                                                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                         }
