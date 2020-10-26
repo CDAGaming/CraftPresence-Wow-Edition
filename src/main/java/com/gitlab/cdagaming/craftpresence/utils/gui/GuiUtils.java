@@ -228,7 +228,7 @@ public class GuiUtils {
         final boolean needsUpdate = enabled && (GUI_NAMES.isEmpty() || GUI_CLASSES.isEmpty());
 
         if (needsUpdate) {
-            getGUIs();
+            getScreens();
         }
 
         if (enabled) {
@@ -295,7 +295,7 @@ public class GuiUtils {
     /**
      * Retrieves and Synchronizes detected Gui Screen Classes
      */
-    public void getGUIs() {
+    public void getScreens() {
         final Class<?>[] searchClasses = new Class[]{
                 GuiScreen.class, GuiContainer.class
         };

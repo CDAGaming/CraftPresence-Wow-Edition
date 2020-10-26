@@ -104,7 +104,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         // Event to occur when removing set data
                                                                         CraftPresence.CONFIG.guiMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.guiMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
                                                                         CraftPresence.GUIS.GUI_NAMES.remove(attributeName);
-                                                                        CraftPresence.GUIS.getGUIs();
+                                                                        CraftPresence.GUIS.getScreens();
                                                                 }, null,
                                                                 (attributeName, screenInstance) -> {
                                                                         // Event to occur when Hovering over Message Label
@@ -130,7 +130,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         // Event to occur when removing set data
                                                                         CraftPresence.CONFIG.guiMessages = StringUtils.removeFromArray(CraftPresence.CONFIG.guiMessages, attributeName, 0, CraftPresence.CONFIG.splitCharacter);
                                                                         CraftPresence.GUIS.GUI_NAMES.remove(attributeName);
-                                                                        CraftPresence.GUIS.getGUIs();
+                                                                        CraftPresence.GUIS.getScreens();
                                                                 }, null,
                                                                 (attributeName, screenInstance) -> {
                                                                         // Event to occur when Hovering over Message Label
