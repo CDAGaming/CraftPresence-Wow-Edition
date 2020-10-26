@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.gitlab.cdagaming.craftpresence.config.gui;
+package com.gitlab.cdagaming.craftpresence.utils.gui.impl;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
@@ -36,7 +36,7 @@ import java.util.List;
 public class MessageGui extends ExtendedScreen {
     private final List<String> messageData;
 
-    MessageGui(GuiScreen parentScreen, List<String> messageData) {
+    public MessageGui(GuiScreen parentScreen, List<String> messageData) {
         super(parentScreen);
         this.messageData = messageData;
     }

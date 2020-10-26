@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.gitlab.cdagaming.craftpresence.config.gui;
+package com.gitlab.cdagaming.craftpresence.utils.gui.impl;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
@@ -44,7 +44,7 @@ public class DynamicEditorGui extends ExtendedScreen {
 
     public String specificMessage, defaultMessage, mainTitle;
 
-    DynamicEditorGui(GuiScreen parentScreen, String attributeName, PairConsumer<String, DynamicEditorGui> onNewInit, PairConsumer<String, DynamicEditorGui> onAdjustInit, PairConsumer<String, String> onAdjustEntry, PairConsumer<String, String> onRemoveEntry, PairConsumer<String, DynamicEditorGui> onSpecificCallback, PairConsumer<String, DynamicEditorGui> onHoverCallback) {
+    public DynamicEditorGui(GuiScreen parentScreen, String attributeName, PairConsumer<String, DynamicEditorGui> onNewInit, PairConsumer<String, DynamicEditorGui> onAdjustInit, PairConsumer<String, String> onAdjustEntry, PairConsumer<String, String> onRemoveEntry, PairConsumer<String, DynamicEditorGui> onSpecificCallback, PairConsumer<String, DynamicEditorGui> onHoverCallback) {
         super(parentScreen);
         this.attributeName = attributeName;
         isNewValue = StringUtils.isNullOrEmpty(attributeName);
