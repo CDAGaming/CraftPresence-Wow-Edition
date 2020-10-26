@@ -574,8 +574,8 @@ public class ServerUtils {
 
         for (int currentIndex = 0; currentIndex < serverIndex; currentIndex++) {
             final ServerData data = serverList.getServerData(currentIndex);
-            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false))) {
-                knownAddresses.add(data.serverIP.contains(":") ? data.serverIP : StringUtils.formatAddress(data.serverIP, false));
+            if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownAddresses.contains(data.serverIP.contains(":") ? StringUtils.formatAddress(data.serverIP, false) : data.serverIP)) {
+                knownAddresses.add(data.serverIP.contains(":") ? StringUtils.formatAddress(data.serverIP, false) : data.serverIP);
             }
 
             if (!StringUtils.isNullOrEmpty(data.serverIP) && !knownServerData.keySet().contains(data.serverIP)) {

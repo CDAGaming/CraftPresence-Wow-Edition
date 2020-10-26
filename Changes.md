@@ -40,6 +40,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 *   Fixes `keyTyped` event in `ExtendedTextControl` to only occur if the super event would execute
 *   Fixes an oversight causing `/cp shutdown` and `/cp reboot` combined usage fail
 *   Fixes a GL flag clearing Issue causing unintended Gui rendering behaviors
+*   Fixes a regression causing Servers with Port Numbers to not properly be detected for overrides
 
 ___
 
