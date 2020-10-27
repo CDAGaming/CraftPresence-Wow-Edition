@@ -163,6 +163,7 @@ public class ColorEditorGui extends ExtendedScreen {
                         () -> {
                             syncValues();
 
+                            // TODO: Remove configValueName variable; Add onAdjustEntry callback with pageNumber and the currentValue
                             if (!StringUtils.isNullOrEmpty(configValueName)) {
                                 if (pageNumber == 0) {
                                     if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBackgroundColor) && !currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBackgroundColor)) {
@@ -354,6 +355,7 @@ public class ColorEditorGui extends ExtendedScreen {
      * Initialize Texture and Color Values for Initial Preview and Page
      */
     private void initValues() {
+        // TODO: Remove configValueName variable; Add onInit callback with screen instance
         if (!StringUtils.isNullOrEmpty(configValueName)) {
             if (configValueName.equals(CraftPresence.CONFIG.NAME_tooltipBackgroundColor)) {
                 if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBackgroundColor)) {

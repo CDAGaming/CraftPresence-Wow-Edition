@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.gitlab.cdagaming.craftpresence.config.gui;
+package com.gitlab.cdagaming.craftpresence.utils.gui.impl;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
@@ -45,7 +45,7 @@ public class CharacterEditorGui extends ExtendedScreen {
     private int[] originalCharArray = StringUtils.MC_CHAR_WIDTH.clone();
     private byte[] originalGlyphArray = StringUtils.MC_GLYPH_WIDTH.clone();
 
-    CharacterEditorGui(GuiScreen parentScreen) {
+    public CharacterEditorGui(GuiScreen parentScreen) {
         super(parentScreen);
     }
 
