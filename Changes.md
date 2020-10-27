@@ -33,6 +33,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Fixes some Guis not properly displaying the Image-Preview styled scroll list
 *   Fixes HTTPS access for `FileUtils#downloadFile`
 *   Fixes Color Editor Gui saving issues when only editing the red color value
+*   Fixes Color Editor Gui having false positive `hasChanged` states
 *   Fixes improper sizing in some cases with external text controls
 *   Fixes most if not all possible circumstances of GuiUtils causing JVM errors
 *   Fixes `keyTyped` event in `ExtendedTextControl` to only occur if the super event would execute
