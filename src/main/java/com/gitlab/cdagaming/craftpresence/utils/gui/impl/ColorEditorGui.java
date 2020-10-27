@@ -64,7 +64,7 @@ public class ColorEditorGui extends ExtendedScreen {
     public String currentNormalHexValue, startingHexValue, currentNormalTexturePath, startingTexturePath;
     public boolean usingExternalTexture = false;
 
-    ColorEditorGui(GuiScreen parentScreen, String configValueName, PairConsumer<Integer, ColorEditorGui> onAdjustEntry, DataConsumer<ColorEditorGui> onInit) {
+    public ColorEditorGui(GuiScreen parentScreen, String configValueName, PairConsumer<Integer, ColorEditorGui> onAdjustEntry, DataConsumer<ColorEditorGui> onInit) {
         super(parentScreen);
         this.configValueName = configValueName;
         this.pageNumber = 0;
