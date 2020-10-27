@@ -34,6 +34,8 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.CheckBoxControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.impl.ColorEditorGui;
+
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
@@ -63,7 +65,30 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         calc1, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
                         CraftPresence.CONFIG.NAME_tooltipBackgroundColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBackgroundColor)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new ColorEditorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_tooltipBackgroundColor,
+                                        (pageNumber, screenInstance) -> {
+                                                if (pageNumber == 0 && !screenInstance.currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBackgroundColor)) {
+                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                        CraftPresence.CONFIG.tooltipBackgroundColor = screenInstance.currentNormalHexValue;
+                                                } else if (pageNumber == 1) {
+                                                        final String adjustValue = screenInstance.usingExternalTexture ? CraftPresence.CONFIG.tooltipBackgroundColor : CraftPresence.CONFIG.tooltipBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                                                        if (!screenInstance.currentNormalTexturePath.equals(adjustValue)) {
+                                                                CraftPresence.CONFIG.hasChanged = true;
+                                                                CraftPresence.CONFIG.tooltipBackgroundColor = adjustValue;
+                                                        }
+                                                }
+                                        },
+                                        (screenInstance) -> {
+                                                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBackgroundColor)) {
+                                                        screenInstance.startingHexValue = CraftPresence.CONFIG.tooltipBackgroundColor;
+                                                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBackgroundColor)) {
+                                                        screenInstance.startingTexturePath = CraftPresence.CONFIG.tooltipBackgroundColor;
+                                                }
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltip_background_color")
@@ -82,7 +107,30 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
                         CraftPresence.CONFIG.NAME_tooltipBorderColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new ColorEditorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_tooltipBorderColor,
+                                        (pageNumber, screenInstance) -> {
+                                                if (pageNumber == 0 && !screenInstance.currentNormalHexValue.equals(CraftPresence.CONFIG.tooltipBorderColor)) {
+                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                        CraftPresence.CONFIG.tooltipBorderColor = screenInstance.currentNormalHexValue;
+                                                } else if (pageNumber == 1) {
+                                                        final String adjustValue = screenInstance.usingExternalTexture ? CraftPresence.CONFIG.tooltipBorderColor : CraftPresence.CONFIG.tooltipBorderColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                                                        if (!screenInstance.currentNormalTexturePath.equals(adjustValue)) {
+                                                                CraftPresence.CONFIG.hasChanged = true;
+                                                                CraftPresence.CONFIG.tooltipBorderColor = adjustValue;
+                                                        }
+                                                }
+                                        },
+                                        (screenInstance) -> {
+                                                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.tooltipBorderColor)) {
+                                                        screenInstance.startingHexValue = CraftPresence.CONFIG.tooltipBorderColor;
+                                                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.tooltipBorderColor)) {
+                                                        screenInstance.startingTexturePath = CraftPresence.CONFIG.tooltipBorderColor;
+                                                }
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.tooltip_border_color")
@@ -101,7 +149,30 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         calc1, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
                         CraftPresence.CONFIG.NAME_guiBackgroundColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_guiBackgroundColor)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new ColorEditorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_guiBackgroundColor,
+                                        (pageNumber, screenInstance) -> {
+                                                if (pageNumber == 0 && !screenInstance.currentNormalHexValue.equals(CraftPresence.CONFIG.guiBackgroundColor)) {
+                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                        CraftPresence.CONFIG.guiBackgroundColor = screenInstance.currentNormalHexValue;
+                                                } else if (pageNumber == 1) {
+                                                        final String adjustValue = screenInstance.usingExternalTexture ? CraftPresence.CONFIG.guiBackgroundColor : CraftPresence.CONFIG.guiBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                                                        if (!screenInstance.currentNormalTexturePath.equals(adjustValue)) {
+                                                                CraftPresence.CONFIG.hasChanged = true;
+                                                                CraftPresence.CONFIG.guiBackgroundColor = adjustValue;
+                                                        }
+                                                }
+                                        },
+                                        (screenInstance) -> {
+                                                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.guiBackgroundColor)) {
+                                                        screenInstance.startingHexValue = CraftPresence.CONFIG.guiBackgroundColor;
+                                                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.guiBackgroundColor)) {
+                                                        screenInstance.startingTexturePath = CraftPresence.CONFIG.guiBackgroundColor;
+                                                }
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.gui_background_color")
@@ -120,7 +191,30 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         calc2, CraftPresence.GUIS.getButtonY(2),
                         180, 20,
                         CraftPresence.CONFIG.NAME_buttonBackgroundColor.replaceAll("_", " "),
-                        () -> CraftPresence.GUIS.openScreen(new ColorEditorGui(currentScreen, CraftPresence.CONFIG.NAME_buttonBackgroundColor)),
+                        () -> CraftPresence.GUIS.openScreen(
+                                new ColorEditorGui(
+                                        currentScreen, CraftPresence.CONFIG.NAME_buttonBackgroundColor,
+                                        (pageNumber, screenInstance) -> {
+                                                if (pageNumber == 0 && !screenInstance.currentNormalHexValue.equals(CraftPresence.CONFIG.buttonBackgroundColor)) {
+                                                        CraftPresence.CONFIG.hasChanged = true;
+                                                        CraftPresence.CONFIG.buttonBackgroundColor = screenInstance.currentNormalHexValue;
+                                                } else if (pageNumber == 1) {
+                                                        final String adjustValue = screenInstance.usingExternalTexture ? CraftPresence.CONFIG.buttonBackgroundColor : CraftPresence.CONFIG.buttonBackgroundColor.replace(CraftPresence.CONFIG.splitCharacter, ":");
+                                                        if (!screenInstance.currentNormalTexturePath.equals(adjustValue)) {
+                                                                CraftPresence.CONFIG.hasChanged = true;
+                                                                CraftPresence.CONFIG.buttonBackgroundColor = adjustValue;
+                                                        }
+                                                }
+                                        },
+                                        (screenInstance) -> {
+                                                if (StringUtils.isValidColorCode(CraftPresence.CONFIG.buttonBackgroundColor)) {
+                                                        screenInstance.startingHexValue = CraftPresence.CONFIG.buttonBackgroundColor;
+                                                } else if (!StringUtils.isNullOrEmpty(CraftPresence.CONFIG.buttonBackgroundColor)) {
+                                                        screenInstance.startingTexturePath = CraftPresence.CONFIG.buttonBackgroundColor;
+                                                }
+                                        }
+                                )
+                        ),
                         () -> CraftPresence.GUIS.drawMultiLineString(
                                 StringUtils.splitTextByNewLine(
                                         ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.button_background_color")
