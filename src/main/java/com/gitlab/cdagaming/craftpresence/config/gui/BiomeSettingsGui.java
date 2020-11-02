@@ -133,7 +133,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                                 )
                                         );
                                 },
-                                (parentScreen) -> {
+                                (parentScreen) ->
                                         CraftPresence.GUIS.openScreen(
                                                 new DynamicEditorGui(
                                                         parentScreen, null, 
@@ -157,8 +157,7 @@ public class BiomeSettingsGui extends ExtendedScreen {
                                                                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.biome_messages.biome_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                         }
                                                 )
-                                        );
-                                }
+                                        )
                             )
                         ),
                         () -> {
@@ -259,9 +258,9 @@ public class BiomeSettingsGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.biome_messages");
         final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.biome");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        renderString(defaultMessageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
+        renderString(defaultMessageText, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(defaultMessage.getText()));
         biomeMessagesButton.setControlEnabled(CraftPresence.BIOMES.enabled);

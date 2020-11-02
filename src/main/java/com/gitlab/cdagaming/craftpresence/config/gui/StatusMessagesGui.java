@@ -33,6 +33,7 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
+@SuppressWarnings("DuplicatedCode")
 public class StatusMessagesGui extends ExtendedScreen {
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
@@ -335,16 +336,16 @@ public class StatusMessagesGui extends ExtendedScreen {
 
         final String fallbackPackPlaceholderText = ModUtils.TRANSLATOR.translate("gui.config.name.status_messages.fallback.pack_placeholder_message");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
         if (pageNumber == 0) {
-            renderString(mainMenuText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(lanText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(singlePlayerText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            renderString(packText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
-            renderString(modsText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
-            renderString(viveCraftText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+            renderString(mainMenuText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(lanText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(singlePlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(packText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            renderString(modsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
+            renderString(viveCraftText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
         }
 
         mainMenuMessage.setVisible(pageNumber == 0);
@@ -366,12 +367,12 @@ public class StatusMessagesGui extends ExtendedScreen {
         viveCraftMessage.setEnabled(viveCraftMessage.getVisible());
 
         if (pageNumber == 1) {
-            renderString(outerPlayerText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(innerPlayerText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(playerCoordsText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            renderString(playerHealthText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
-            renderString(playerAmountText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
-            renderString(worldDataText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+            renderString(outerPlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(innerPlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(playerCoordsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(playerHealthText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            renderString(playerAmountText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
+            renderString(worldDataText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
         }
 
         outerPlayerMessage.setVisible(pageNumber == 1);
@@ -393,9 +394,9 @@ public class StatusMessagesGui extends ExtendedScreen {
         worldMessage.setEnabled(worldMessage.getVisible());
 
         if (pageNumber == 2) {
-            renderString(loadingText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(playerItemsText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(fallbackPackPlaceholderText, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(loadingText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(playerItemsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(fallbackPackPlaceholderText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
         }
 
         loadingMessage.setVisible(pageNumber == 2);

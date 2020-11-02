@@ -89,9 +89,7 @@ public class DynamicEditorGui extends ExtendedScreen {
                             (width / 2) - 90, CraftPresence.GUIS.getButtonY(2),
                             180, 20,
                             ModUtils.TRANSLATOR.translate("gui.config.message.button.icon.change"),
-                            () -> {
-                                onSpecificCallback.accept(attributeName, this);
-                            }
+                            () -> onSpecificCallback.accept(attributeName, this)
                     )
             );
         }
@@ -154,12 +152,12 @@ public class DynamicEditorGui extends ExtendedScreen {
         final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
         final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
-        renderString(messageText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, 0xFFFFFF);
+        renderString(messageText, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
         if (isNewValue) {
-            renderString(valueNameText, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(valueNameText, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
         } else {
-            renderString(removeMessage, (width / 2) - (StringUtils.getStringWidth(removeMessage) / 2), (height - 45), 0xFFFFFF);
+            renderString(removeMessage, (width / 2f) - (StringUtils.getStringWidth(removeMessage) / 2f), (height - 45), 0xFFFFFF);
         }
 
         proceedButton.setControlMessage(
@@ -176,11 +174,10 @@ public class DynamicEditorGui extends ExtendedScreen {
     public void postRender() {
         final String messageText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.message");
         final String valueNameText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.value.name");
+        final boolean isHovering = CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), getFontHeight());
         // Hovering over Message Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(messageText), getFontHeight())) {
-            if (onHoverCallback != null) {
-                onHoverCallback.accept(attributeName, this);
-            }
+        if (isHovering && onHoverCallback != null) {
+            onHoverCallback.accept(attributeName, this);
         }
 
         // Hovering over Value Name Label

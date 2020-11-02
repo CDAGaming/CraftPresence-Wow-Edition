@@ -217,7 +217,7 @@ public class ColorEditorGui extends ExtendedScreen {
         final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title.editor.color", configValueName.replaceAll("_", " "));
         final String previewTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.preview");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(previewTitle, width - 90, height - 29.5f, 0xFFFFFF);
 
         // Ensure Button Activity on Page 1
@@ -250,7 +250,7 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
 
-            renderString(hexCodeTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(hexCodeTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
             proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(hexText.getText()));
 
@@ -262,7 +262,7 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 1) {
             final String textureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texture_path");
 
-            renderString(textureTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(textureTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
             proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(textureText.getText()));
 

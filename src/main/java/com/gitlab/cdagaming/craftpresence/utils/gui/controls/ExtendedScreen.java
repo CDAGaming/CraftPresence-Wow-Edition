@@ -366,7 +366,7 @@ public class ExtendedScreen extends GuiScreen {
      * @param widthScale  The Scale/Value away from the center X to render at
      * @param heightScale The Scale/Value away from the center Y to render at
      */
-    public void renderNotice(final List<String> notice, int widthScale, int heightScale) {
+    public void renderNotice(final List<String> notice, float widthScale, float heightScale) {
         renderNotice(notice, widthScale, heightScale, false, false);
     }
 
@@ -379,7 +379,7 @@ public class ExtendedScreen extends GuiScreen {
      * @param useXAsActual Whether or not to use the widthScale as the actual X value
      * @param useYAsActual Whether or not to use the heightScale as the actual Y value
      */
-    public void renderNotice(final List<String> notice, final int widthScale, final int heightScale, final boolean useXAsActual, final boolean useYAsActual) {
+    public void renderNotice(final List<String> notice, final float widthScale, final float heightScale, final boolean useXAsActual, final boolean useYAsActual) {
         if (notice != null && !notice.isEmpty()) {
             for (int i = 0; i < notice.size(); i++) {
                 final String string = notice.get(i);

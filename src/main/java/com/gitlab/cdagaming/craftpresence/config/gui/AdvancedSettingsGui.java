@@ -116,7 +116,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                         )
                                                 );
                                         },
-                                        (parentScreen) -> {
+                                        (parentScreen) ->
                                                 CraftPresence.GUIS.openScreen(
                                                         new DynamicEditorGui(
                                                                 parentScreen, null, 
@@ -140,8 +140,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.gui_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
                                                         )
-                                                );
-                                        }
+                                                )
                                 )
                         ),
                         () -> {
@@ -216,7 +215,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                         )
                                                 );
                                         },
-                                        (parentScreen) -> {
+                                        (parentScreen) ->
                                                 CraftPresence.GUIS.openScreen(
                                                         new DynamicEditorGui(
                                                                 parentScreen, null, 
@@ -244,8 +243,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         ), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
                                                         )
-                                                );
-                                        }
+                                                )
                                 )
                         ),
                         () -> {
@@ -323,7 +321,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                         )
                                                 );
                                         },
-                                        (parentScreen) -> {
+                                        (parentScreen) ->
                                                 CraftPresence.GUIS.openScreen(
                                                         new DynamicEditorGui(
                                                                 parentScreen, null, 
@@ -351,8 +349,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         ), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
                                                         )
-                                                );
-                                        }
+                                                )
                                 )
                         ),
                         () -> {
@@ -430,7 +427,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                         )
                                                 );
                                         },
-                                        (parentScreen) -> {
+                                        (parentScreen) ->
                                                 CraftPresence.GUIS.openScreen(
                                                         new DynamicEditorGui(
                                                                 parentScreen, null, 
@@ -458,8 +455,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         ), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
                                                         )
-                                                );
-                                        }
+                                                )
                                 )
                         ),
                         () -> {
@@ -537,7 +533,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                         )
                                                 );
                                         },
-                                        (parentScreen) -> {
+                                        (parentScreen) ->
                                                 CraftPresence.GUIS.openScreen(
                                                         new DynamicEditorGui(
                                                                 parentScreen, null, 
@@ -565,8 +561,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
                                                                         ), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
                                                         )
-                                                );
-                                        }
+                                                )
                                 )
                         ),
                         () -> {
@@ -837,10 +832,10 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         final String splitCharacterText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.split_character");
         final String refreshRateText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.refresh_rate");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        renderString(splitCharacterText, (width / 2) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        renderString(refreshRateText, (width / 2) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
+        renderString(splitCharacterText, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(refreshRateText, (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         proceedButton.setControlEnabled(
                 !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 &&

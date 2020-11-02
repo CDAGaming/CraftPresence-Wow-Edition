@@ -33,6 +33,7 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
+@SuppressWarnings("DuplicatedCode")
 public class PresenceSettingsGui extends ExtendedScreen {
     private int pageNumber;
     private ExtendedTextControl detailsFormat, gameStateFormat, largeImageFormat, smallImageFormat,
@@ -179,14 +180,14 @@ public class PresenceSettingsGui extends ExtendedScreen {
         final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_key");
         final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_key");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
         if (pageNumber == 0) {
-            renderString(detailsFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(gameStateFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(largeImageFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            renderString(smallImageFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
+            renderString(detailsFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(gameStateFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(largeImageFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(smallImageFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
         }
 
         detailsFormat.setVisible(pageNumber == 0);
@@ -202,8 +203,8 @@ public class PresenceSettingsGui extends ExtendedScreen {
         smallImageFormat.setEnabled(smallImageFormat.getVisible());
 
         if (pageNumber == 1) {
-            renderString(smallImageKeyFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(largeImageKeyFormatTitle, (width / 2) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
+            renderString(smallImageKeyFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(largeImageKeyFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
         }
 
         smallImageKeyFormat.setVisible(pageNumber == 1);

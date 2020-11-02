@@ -37,6 +37,7 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.impl.SelectorGui;
 
 import net.minecraft.client.gui.GuiScreen;
 
+@SuppressWarnings("DuplicatedCode")
 public class DimensionSettingsGui extends ExtendedScreen {
     private ExtendedButtonControl proceedButton, dimensionMessagesButton;
     private ExtendedTextControl defaultMessage;
@@ -119,7 +120,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
 
                                                                                                 CraftPresence.CONFIG.hasChanged = true;
                                                                                                 if (StringUtils.isNullOrEmpty(currentMessage) || currentMessage.equals(defaultMessage)) {
-                                                                                                CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, innerAttributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage);
+                                                                                                    CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, innerAttributeName, 0, 1, CraftPresence.CONFIG.splitCharacter, defaultMessage);
                                                                                                 }
                                                                                                 CraftPresence.CONFIG.dimensionMessages = StringUtils.setConfigPart(CraftPresence.CONFIG.dimensionMessages, innerAttributeName, 0, 2, CraftPresence.CONFIG.splitCharacter, innerCurrentValue);
                                                                                         }, null, null
@@ -133,7 +134,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                                         )
                                                 );
                                         },
-                                        (parentScreen) -> {
+                                        (parentScreen) ->
                                                 CraftPresence.GUIS.openScreen(
                                                         new DynamicEditorGui(
                                                                 parentScreen, null, 
@@ -157,8 +158,7 @@ public class DimensionSettingsGui extends ExtendedScreen {
                                                                         CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.dimension_messages.dimension_messages")), screenInstance.getMouseX(), screenInstance.getMouseY(), screenInstance.width, screenInstance.height, screenInstance.getWrapWidth(), screenInstance.getFontRenderer(), true);
                                                                 }
                                                         )
-                                                );
-                                        }
+                                                )
                                 )
                         ),
                         () -> {
@@ -259,9 +259,9 @@ public class DimensionSettingsGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.dimension_messages");
         final String defaultMessageText = ModUtils.TRANSLATOR.translate("gui.config.message.default.dimension");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
-        renderString(defaultMessageText, (width / 2) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
+        renderString(defaultMessageText, (width / 2f) - 140, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
 
         proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(defaultMessage.getText()));
         dimensionMessagesButton.setControlEnabled(CraftPresence.DIMENSIONS.enabled);

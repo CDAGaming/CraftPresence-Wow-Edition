@@ -185,7 +185,7 @@ public class SelectorGui extends ExtendedScreen {
     @Override
     public void postRender() {
         final String searchText = ModUtils.TRANSLATOR.translate("gui.config.message.editor.search");
-        renderString(searchText, (30 - (StringUtils.getStringWidth(searchText) / 2)), (height - 25), 0xFFFFFF);
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 15, 0xFFFFFF);
+        renderString(searchText, (30 - (StringUtils.getStringWidth(searchText) / 2f)), (height - 25), 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, 0xFFFFFF);
     }
 }

@@ -52,7 +52,7 @@ public class UpdateInfoGui extends ExtendedScreen {
                         (width / 2) - 90, (height - 30),
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.checkForUpdates"),
-                        () -> {
+                        () ->
                             modUpdater.checkForUpdates(() -> {
                                 if (modUpdater.isInvalidVersion) {
                                     // If the Updater found our version to be an invalid one
@@ -65,8 +65,7 @@ public class UpdateInfoGui extends ExtendedScreen {
                                     modUpdater.currentVersion = modUpdater.targetVersion;
                                     modUpdater.isInvalidVersion = false;
                                 }
-                            });
-                        }
+                            })
                 )
         );
         // Adding Back Button
@@ -108,8 +107,8 @@ public class UpdateInfoGui extends ExtendedScreen {
         final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.title.changes", modUpdater.currentState.getDisplayName());
         final List<String> notice = StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.changelog", modUpdater.targetVersion, modUpdater.targetChangelogData));
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
         CraftPresence.GUIS.drawMultiLineString(notice, 10, 45, width, height, getWrapWidth(), getFontRenderer(), false);
     }

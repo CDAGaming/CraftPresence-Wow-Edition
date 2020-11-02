@@ -367,13 +367,13 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         final String keyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.category");
         final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
 
-        renderString(mainTitle, (width / 2) - (StringUtils.getStringWidth(mainTitle) / 2), 10, 0xFFFFFF);
-        renderString(subTitle, (width / 2) - (StringUtils.getStringWidth(subTitle) / 2), 20, 0xFFFFFF);
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
-        renderString(languageIdTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        renderString(languageIdTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
 
-        renderString(keyBindingTitle, (width / 2) - (StringUtils.getStringWidth(keyBindingTitle) / 2), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
-        renderString(configKeyBindingTitle, (width / 2) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
+        renderString(keyBindingTitle, (width / 2f) - (StringUtils.getStringWidth(keyBindingTitle) / 2f), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
+        renderString(configKeyBindingTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
 
         proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(languageIdText.getText()));
     }
