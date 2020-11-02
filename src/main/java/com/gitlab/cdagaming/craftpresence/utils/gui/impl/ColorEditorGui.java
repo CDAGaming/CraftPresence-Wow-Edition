@@ -46,6 +46,12 @@ import java.io.File;
 @SuppressWarnings("DuplicatedCode")
 public class ColorEditorGui extends ExtendedScreen {
     private final String configValueName;
+    // Event Data
+    private final PairConsumer<Integer, ColorEditorGui> onAdjustEntry;
+    private final DataConsumer<ColorEditorGui> onInit;
+    public String currentNormalHexValue, startingHexValue, currentNormalTexturePath, startingTexturePath;
+    public boolean usingExternalTexture = false;
+    // Global Data
     private int pageNumber;
     private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
     // Page 1 Variables
@@ -58,11 +64,6 @@ public class ColorEditorGui extends ExtendedScreen {
     private ExtendedTextControl textureText;
     private boolean isModified = false;
     private ResourceLocation currentTexture;
-    // Event Data
-    private final PairConsumer<Integer, ColorEditorGui> onAdjustEntry;
-    private final DataConsumer<ColorEditorGui> onInit;
-    public String currentNormalHexValue, startingHexValue, currentNormalTexturePath, startingTexturePath;
-    public boolean usingExternalTexture = false;
 
     public ColorEditorGui(GuiScreen parentScreen, String configValueName, PairConsumer<Integer, ColorEditorGui> onAdjustEntry, DataConsumer<ColorEditorGui> onInit) {
         super(parentScreen);

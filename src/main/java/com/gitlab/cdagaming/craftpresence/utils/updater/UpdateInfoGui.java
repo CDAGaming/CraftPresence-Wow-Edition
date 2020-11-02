@@ -53,19 +53,19 @@ public class UpdateInfoGui extends ExtendedScreen {
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.checkForUpdates"),
                         () ->
-                            modUpdater.checkForUpdates(() -> {
-                                if (modUpdater.isInvalidVersion) {
-                                    // If the Updater found our version to be an invalid one
-                                    // Then replace the Version ID, Name, and Type
-                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_ID", "v" + modUpdater.targetVersion, ~Modifier.FINAL));
-                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_TYPE", modUpdater.currentState.getDisplayName(), ~Modifier.FINAL));
-                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_LABEL", modUpdater.currentState.getDisplayName(), ~Modifier.FINAL));
-                                    StringUtils.updateField(ModUtils.class, null, new Tuple<>("NAME", CraftPresence.class.getSimpleName(), ~Modifier.FINAL));
+                                modUpdater.checkForUpdates(() -> {
+                                    if (modUpdater.isInvalidVersion) {
+                                        // If the Updater found our version to be an invalid one
+                                        // Then replace the Version ID, Name, and Type
+                                        StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_ID", "v" + modUpdater.targetVersion, ~Modifier.FINAL));
+                                        StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_TYPE", modUpdater.currentState.getDisplayName(), ~Modifier.FINAL));
+                                        StringUtils.updateField(ModUtils.class, null, new Tuple<>("VERSION_LABEL", modUpdater.currentState.getDisplayName(), ~Modifier.FINAL));
+                                        StringUtils.updateField(ModUtils.class, null, new Tuple<>("NAME", CraftPresence.class.getSimpleName(), ~Modifier.FINAL));
 
-                                    modUpdater.currentVersion = modUpdater.targetVersion;
-                                    modUpdater.isInvalidVersion = false;
-                                }
-                            })
+                                        modUpdater.currentVersion = modUpdater.targetVersion;
+                                        modUpdater.isInvalidVersion = false;
+                                    }
+                                })
                 )
         );
         // Adding Back Button

@@ -35,7 +35,6 @@ import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ScrollableListControl.RenderType;
 import com.gitlab.cdagaming.craftpresence.utils.gui.impl.SelectorGui;
-
 import net.minecraft.client.gui.GuiScreen;
 
 @SuppressWarnings("DuplicatedCode")
@@ -79,14 +78,14 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.name.general.default_icon"),
                         () -> CraftPresence.GUIS.openScreen(
                                 new SelectorGui(
-                                        currentScreen, 
-                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST, 
-                                        CraftPresence.CONFIG.defaultIcon, null, 
+                                        currentScreen,
+                                        ModUtils.TRANSLATOR.translate("gui.config.title.selector.icon"), DiscordAssetUtils.ICON_LIST,
+                                        CraftPresence.CONFIG.defaultIcon, null,
                                         true, false, RenderType.DiscordAsset,
                                         (attributeName, currentValue) -> {
-                                                CraftPresence.CONFIG.hasChanged = true;
-                                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                                CraftPresence.CONFIG.defaultIcon = currentValue;
+                                            CraftPresence.CONFIG.hasChanged = true;
+                                            CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                            CraftPresence.CONFIG.defaultIcon = currentValue;
                                         }, null, null
                                 )
                         ),

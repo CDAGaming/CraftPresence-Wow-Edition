@@ -43,15 +43,15 @@ public class SelectorGui extends ExtendedScreen {
     private final String mainTitle, attributeName, originalValue;
     private final List<String> originalList;
     private final boolean allowContinuing, allowDynamicEditing;
+    private final PairConsumer<String, String> onUpdatedCallback;
+    private final RenderType renderType;
+    private final PairConsumer<String, GuiScreen> onAdjustDynamicEntry;
+    private final DataConsumer<GuiScreen> onAddDynamicEntry;
     private ExtendedButtonControl proceedButton;
     private ScrollableListControl scrollList;
     private ExtendedTextControl searchBox;
     private String searchTerm;
     private List<String> itemList;
-    private final PairConsumer<String, String> onUpdatedCallback;
-    private final RenderType renderType;
-    private final PairConsumer<String, GuiScreen> onAdjustDynamicEntry;
-    private final DataConsumer<GuiScreen> onAddDynamicEntry;
 
     public SelectorGui(GuiScreen parentScreen, String mainTitle, List<String> list, String currentValue, String attributeName, boolean allowContinuing, boolean allowDynamicEditing, RenderType renderType, PairConsumer<String, String> onUpdatedCallback, PairConsumer<String, GuiScreen> onAdjustDynamicEntry, DataConsumer<GuiScreen> onAddDynamicEntry) {
         super(parentScreen);
