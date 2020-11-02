@@ -137,7 +137,9 @@ public class StringUtils {
      */
     public static double roundDouble(double value, int places) {
         if (places >= 0) {
-            return Double.parseDouble(String.format("%." + places + "f", value));
+            double mod = 1;
+            for (int i = 0; i < places; i++) mod /= 10;
+            return value + mod * .5 - ((value + mod * .5) % mod);
         } else {
             // Do not Round if Places is less then 0
             return value;

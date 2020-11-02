@@ -40,6 +40,7 @@ _A Detailed Changelog from the last Release is available [here](https://gitlab.c
 *   Fixes an oversight causing `/cp shutdown` and `/cp reboot` combined usage fail
 *   Fixes a GL flag clearing Issue causing unintended Gui rendering behaviors
 *   Fixes a regression causing Servers with Port Numbers to not properly be detected for overrides
+*   Fixes rare instances of `NumberFormatException` errors with `StringUtils#roundDouble`
 
 ___
 
