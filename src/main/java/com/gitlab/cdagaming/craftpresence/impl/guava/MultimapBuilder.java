@@ -16,7 +16,6 @@
 
 package com.gitlab.cdagaming.craftpresence.impl.guava;
 
-import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Supplier;
 import com.google.common.collect.*;
 
@@ -25,7 +24,6 @@ import java.util.*;
 
 import static com.gitlab.cdagaming.craftpresence.impl.guava.CollectPreconditions.checkNonnegative;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Maps.newLinkedHashMapWithExpectedSize;
 
 /**
  * A builder for a multimap implementation that allows customization of the backing map and value
@@ -52,7 +50,6 @@ import static com.google.common.collect.Maps.newLinkedHashMapWithExpectedSize;
  * @author Louis Wasserman
  * @since 16.0
  */
-@GwtCompatible
 @SuppressWarnings("unchecked")
 public abstract class MultimapBuilder<K0, V0> {
     /*
@@ -114,7 +111,7 @@ public abstract class MultimapBuilder<K0, V0> {
         return new MultimapBuilderWithKeys<Object>() {
             @Override
             <K, V> Map<K, Collection<V>> createMap() {
-                return newLinkedHashMapWithExpectedSize(expectedKeys);
+                return new LinkedHashMap<>(expectedKeys);
             }
         };
     }

@@ -16,14 +16,11 @@
 
 package com.gitlab.cdagaming.craftpresence.impl.guava;
 
-import com.google.common.annotations.GwtCompatible;
-
 import static com.google.common.base.Preconditions.checkState;
 
 /**
  * Precondition checks useful in collection implementations.
  */
-@GwtCompatible
 final class CollectPreconditions {
 
     static void checkEntryNotNull(Object key, Object value) {

@@ -97,7 +97,7 @@ public class ImageUtils {
                                         final Tuple<Boolean, String, String> base64Data = StringUtils.isBase64(originData.toString());
                                         final byte[] dataSet = base64Data.getFirst() ?
                                                 decodeBase64(base64Data.getThird(), "UTF-8", false, false) : (originData instanceof byte[] ? (byte[]) originData : originData.toString().getBytes());
-                                        streamData = new ByteArrayInputStream(dataSet);
+                                        streamData = dataSet != null ? new ByteArrayInputStream(dataSet) : null;
                                         isGif = base64Data.getSecond().contains("gif");
                                         break;
                                     case Url:
@@ -321,7 +321,7 @@ public class ImageUtils {
             }
 
             if (!repeatCycle) {
-                return decodeBase64(input, encoding, !useDecodingMethod, !repeatCycle);
+                return decodeBase64(input, encoding, !useDecodingMethod, true);
             } else {
                 return null;
             }

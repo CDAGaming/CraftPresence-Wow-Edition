@@ -14,7 +14,6 @@
 
 package com.gitlab.cdagaming.craftpresence.impl.guava;
 
-import com.google.common.annotations.GwtIncompatible;
 import com.google.common.base.Charsets;
 import com.google.common.io.ByteSource;
 import com.google.common.io.CharSource;
@@ -39,7 +38,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Colin Decker
  * @since 1.0
  */
-@GwtIncompatible
 public final class Resources {
     private Resources() {
     }
