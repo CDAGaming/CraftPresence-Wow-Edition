@@ -26,6 +26,7 @@ package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -83,24 +84,6 @@ public class ExtendedScreen extends GuiScreen {
         mc = CraftPresence.instance;
         currentScreen = this;
         this.parentScreen = parentScreen;
-    }
-
-    /**
-     * Gets the Default/Global Font Renderer
-     *
-     * @return The Default/Global Font Renderer
-     */
-    public static FontRenderer getDefaultFontRenderer() {
-        return CraftPresence.instance.fontRenderer;
-    }
-
-    /**
-     * Get the Default/Global Font Height for this Screen
-     *
-     * @return The Default/Global Font Height for this Screen
-     */
-    public static int getDefaultFontHeight() {
-        return getDefaultFontRenderer().FONT_HEIGHT;
     }
 
     /**
@@ -434,7 +417,7 @@ public class ExtendedScreen extends GuiScreen {
      * @return The Current Font Renderer for this Screen
      */
     public FontRenderer getFontRenderer() {
-        return mc.fontRenderer;
+        return mc.fontRenderer != null ? mc.fontRenderer : GuiUtils.getDefaultFontRenderer();
     }
 
     /**

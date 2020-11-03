@@ -154,7 +154,7 @@ public class GuiUtils {
      * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
      */
     public boolean isMouseOver(final double mouseX, final double mouseY, final ExtendedButtonControl button) {
-        return isMouseOver(mouseX, mouseY, button.x, button.y, button.getControlWidth() - 1, button.getControlHeight() - 1);
+        return isMouseOver(mouseX, mouseY, button.getControlPosX(), button.getControlPosY(), button.getControlWidth() - 1, button.getControlHeight() - 1);
     }
 
     /**
@@ -166,7 +166,7 @@ public class GuiUtils {
      * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
      */
     public boolean isMouseOver(final double mouseX, final double mouseY, final ExtendedTextControl textControl) {
-        return isMouseOver(mouseX, mouseY, textControl.x, textControl.y, textControl.getControlWidth() - 1, textControl.getControlHeight() - 1);
+        return isMouseOver(mouseX, mouseY, textControl.getControlPosX(), textControl.getControlPosY(), textControl.getControlWidth() - 1, textControl.getControlHeight() - 1);
     }
 
     /**
@@ -178,7 +178,7 @@ public class GuiUtils {
      * @return {@code true} if the Mouse Position is within the bounds of the object, and thus is over it
      */
     public boolean isMouseOver(final double mouseX, final double mouseY, final CheckBoxControl checkBox) {
-        return isMouseOver(mouseX, mouseY, checkBox.x, checkBox.y, checkBox.boxWidth - 1, checkBox.getControlHeight() - 1);
+        return isMouseOver(mouseX, mouseY, checkBox.getControlPosX(), checkBox.getControlPosY(), checkBox.boxWidth - 1, checkBox.getControlHeight() - 1);
     }
 
     /**
@@ -875,5 +875,23 @@ public class GuiUtils {
      */
     public int getButtonY(int order) {
         return (40 + (25 * (order - 1)));
+    }
+
+    /**
+     * Gets the Default/Global Font Renderer
+     *
+     * @return The Default/Global Font Renderer
+     */
+    public static FontRenderer getDefaultFontRenderer() {
+        return CraftPresence.instance.fontRenderer;
+    }
+
+    /**
+     * Get the Default/Global Font Height for this Screen
+     *
+     * @return The Default/Global Font Height for this Screen
+     */
+    public static int getDefaultFontHeight() {
+        return getDefaultFontRenderer().FONT_HEIGHT;
     }
 }

@@ -100,6 +100,24 @@ public class ExtendedTextControl extends GuiTextField {
     }
 
     /**
+     * Retrieves the Current X Position of this Control
+     *
+     * @return the Current X Position of this Control
+     */
+    public int getControlPosX() {
+        return x;
+    }
+
+    /**
+     * Retrieves the Current Y Position of this Control
+     *
+     * @return the Current Y Position of this Control
+     */
+    public int getControlPosY() {
+        return y;
+    }
+
+    /**
      * Sets the Event to occur upon typing keys
      *
      * @param event The event to occur

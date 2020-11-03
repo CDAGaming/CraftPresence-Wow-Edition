@@ -27,7 +27,9 @@ package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
+import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 
@@ -53,6 +55,10 @@ public class ExtendedButtonControl extends GuiButton {
      * Event to Deploy when this Control is Hovered Over, if any
      */
     private Runnable onHoverEvent = null;
+    /**
+     * The current running Font Render Instance for this control
+     */
+    private FontRenderer currentFontRender = null;
 
     /**
      * Initialization Event for this Control, assigning defined arguments
@@ -179,6 +185,7 @@ public class ExtendedButtonControl extends GuiButton {
 
     @Override
     public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+        setCurrentFontRender(mc.fontRenderer);
         if (visible) {
             hovered = CraftPresence.GUIS.isMouseOver(mouseX, mouseY, this);
             final int hoverState = getHoverState(hovered);
@@ -223,7 +230,7 @@ public class ExtendedButtonControl extends GuiButton {
                 color = 14737632;
             }
 
-            drawCenteredString(mc.fontRenderer, getControlMessage(), x + width / 2, y + (height - 8) / 2, color);
+            drawCenteredString(getFontRenderer(), getControlMessage(), x + width / 2, y + (height - 8) / 2, color);
         }
     }
 
@@ -243,6 +250,51 @@ public class ExtendedButtonControl extends GuiButton {
      */
     public int getControlHeight() {
         return height;
+    }
+
+    /**
+     * Retrieves the Current X Position of this Control
+     *
+     * @return the Current X Position of this Control
+     */
+    public int getControlPosX() {
+        return x;
+    }
+
+    /**
+     * Retrieves the Current Y Position of this Control
+     *
+     * @return the Current Y Position of this Control
+     */
+    public int getControlPosY() {
+        return y;
+    }
+
+    /**
+     * Get the Current Font Renderer for this Control
+     *
+     * @return The Current Font Renderer for this Control
+     */
+    public FontRenderer getFontRenderer() {
+        return currentFontRender != null ? currentFontRender : GuiUtils.getDefaultFontRenderer();
+    }
+
+    /**
+     * Set the Current Font Renderer for this Control
+     *
+     * @param currentFontRender The new current font renderer
+     */
+    public void setCurrentFontRender(final FontRenderer currentFontRender) {
+        this.currentFontRender = currentFontRender;
+    }
+
+    /**
+     * Get the Current Font Height for this Control
+     *
+     * @return The Current Font Height for this Control
+     */
+    public int getFontHeight() {
+        return getFontRenderer().FONT_HEIGHT;
     }
 
     /**

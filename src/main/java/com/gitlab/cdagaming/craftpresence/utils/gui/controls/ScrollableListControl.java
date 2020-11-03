@@ -29,7 +29,9 @@ import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.assets.DiscordAssetUtils;
+import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.util.ResourceLocation;
@@ -153,7 +155,7 @@ public class ScrollableListControl extends GuiSlot {
         if (!CraftPresence.CONFIG.stripExtraGuiElements &&
                 (renderType == RenderType.DiscordAsset || (renderType == RenderType.ServerData && CraftPresence.SERVER.enabled) || (renderType == RenderType.EntityData && CraftPresence.ENTITIES.enabled) || (renderType == RenderType.ItemData && CraftPresence.TILE_ENTITIES.enabled))) {
             ResourceLocation texture = new ResourceLocation("");
-            String assetUrl = "";
+            String assetUrl;
 
             if (renderType == RenderType.ServerData) {
                 final ServerData data = CraftPresence.SERVER.getDataFromName(displayName);
@@ -180,7 +182,7 @@ public class ScrollableListControl extends GuiSlot {
             // Note: 35 Added to xOffset to accommodate for Image Size
             xOffset += 35;
         }
-        mc.fontRenderer.drawStringWithShadow(displayName, xOffset, yPos + ((heightIn / 2f) - (mc.fontRenderer.FONT_HEIGHT / 2f)), 0xFFFFFF);
+        getFontRenderer().drawStringWithShadow(displayName, xOffset, yPos + ((heightIn / 2f) - (getFontRenderer().FONT_HEIGHT / 2f)), 0xFFFFFF);
     }
 
     /**
@@ -195,6 +197,24 @@ public class ScrollableListControl extends GuiSlot {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    /**
+     * Get the Current Font Renderer for this Control
+     *
+     * @return The Current Font Renderer for this Control
+     */
+    public FontRenderer getFontRenderer() {
+        return mc.fontRenderer != null ? mc.fontRenderer : GuiUtils.getDefaultFontRenderer();
+    }
+
+    /**
+     * Get the Current Font Height for this Control
+     *
+     * @return The Current Font Height for this Control
+     */
+    public int getFontHeight() {
+        return getFontRenderer().FONT_HEIGHT;
     }
 
     /**

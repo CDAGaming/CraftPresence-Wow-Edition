@@ -79,7 +79,7 @@ public class CharacterEditorGui extends ExtendedScreen {
         final ExtendedButtonControl syncAllButton = addControl(
                 new ExtendedButtonControl(
                         (width / 2) - 90,
-                        resetCharsButton.y - 25,
+                        resetCharsButton.getControlPosY() - 25,
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.all"),
                         () -> {
@@ -98,7 +98,7 @@ public class CharacterEditorGui extends ExtendedScreen {
         );
         syncSingleButton = addControl(
                 new ExtendedButtonControl(
-                        (width / 2) - 90, syncAllButton.y - 25,
+                        (width / 2) - 90, syncAllButton.getControlPosY() - 25,
                         180, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText()),
                         () -> {
