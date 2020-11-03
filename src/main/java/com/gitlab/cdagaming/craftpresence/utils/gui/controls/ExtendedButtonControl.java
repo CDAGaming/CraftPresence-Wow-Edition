@@ -194,7 +194,7 @@ public class ExtendedButtonControl extends GuiButton {
             ResourceLocation texLocation;
 
             if (StringUtils.isValidColorCode(backgroundCode)) {
-                CraftPresence.GUIS.drawGradientRect(zLevel, x, y, width, height, backgroundCode, backgroundCode);
+                CraftPresence.GUIS.drawGradientRect(zLevel, getControlPosX(), getControlPosY(), getControlWidth(), getControlHeight(), backgroundCode, backgroundCode);
             } else {
                 final boolean usingExternalTexture = ImageUtils.isExternalImage(backgroundCode);
 
@@ -216,7 +216,7 @@ public class ExtendedButtonControl extends GuiButton {
                     texLocation = ImageUtils.getTextureFromUrl(textureName, backgroundCode.toLowerCase().startsWith("file://") ? new File(formattedConvertedName) : formattedConvertedName);
                 }
 
-                CraftPresence.GUIS.renderButton(x, y, width, height, hoverState, zLevel, texLocation);
+                CraftPresence.GUIS.renderButton(getControlPosX(), getControlPosY(), getControlWidth(), getControlHeight(), hoverState, zLevel, texLocation);
             }
 
             mouseDragged(mc, mouseX, mouseY);
@@ -230,7 +230,7 @@ public class ExtendedButtonControl extends GuiButton {
                 color = 14737632;
             }
 
-            drawCenteredString(getFontRenderer(), getControlMessage(), x + width / 2, y + (height - 8) / 2, color);
+            drawCenteredString(getFontRenderer(), getControlMessage(), getControlPosX() + getControlWidth() / 2, getControlPosY() + (getControlHeight() - 8) / 2, color);
         }
     }
 
