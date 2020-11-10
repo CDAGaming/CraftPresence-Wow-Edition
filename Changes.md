@@ -1,46 +1,16 @@
 # CraftPresence Changes
 
-## v1.7.5 (11/13/2020)
+## v1.7.6 (11/27/2020)
 
-_A Detailed Changelog from the last Release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.2...release%2Fv1.7.5)_
+_A Detailed Changelog from the last release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5...release%2Fv1.7.6)_
 
 ### Changes
 
-*   Added `/cp export assets` command (Has two optional arguments for usage specification)
-*   (Breaking) Changed `Show Game State` to `Detect World Data` to be more representative
-*   (Breaking) Changed `Show Biome` and `Show Dimension` to `Detect Biome Data` and `Detect Dimension Data` to be more representative
-*   List Data will no longer update before the config saves (Related to a v1.7.2 change)
-*   `StringUtils#getStringWidth` now properly supports bold characters (Also fixes the release notice position)
-*   All Data in the Color Editor Guis will now synchronize values without needing to push the Enter Key (As such using the Enter Key for syncing has been removed)
-*   (Adjustment) Some Textures in the mod will now only display is the texture itself is not null
-*   The `&health&` sub-placeholder in `&playerinfo&` will now be rounded, to the nearest whole number
-*   Added Support for Party Privacy Levels in RPC (See [this commit](https://github.com/discord/discord-rpc/pull/306/))
-*   Added Server list icon support for the Selector Guis
-*   Added `Strip Extra Gui Elements` setting to `Accessibility Settings`
-*   Added `Reset Time on Init` setting to `General Settings`
-*   Added Icon Support for Biomes (You'll need to supply your own icons for them, not enough room in default client id for all of them)
-*   (QOL) The Preview box in the `Color Editor` Guis now have a border around it for better clarity
-*   (Backend) Added support for Flatpak and Snap distributions of Discord
-*   (Backend) Base64 and direct byte array Image Formats now supported in `ImageUtils` and related areas
-*   (Backend) Added Uuid Detection, will be used within applicable settings that have player uuid values
-*   (Backend-Breaking) Multiple Config Variable changes to have better clarity in codebase -- `Default Server MOTD` changed to `Default Server Motd`
-*   (Backend-Regression) Added back support for autoRegister into IPC backend
-*   An assortment of backend optimizations and improvements
+*   TBD
 
 ### Fixes
 
-*   Fixes an oversight with `StringUtils#roundDouble` not being able to round up to a full whole number
-*   Fixes some Guis not properly displaying the Image-Preview styled scroll list
-*   Fixes HTTPS access for `FileUtils#downloadFile`
-*   Fixes Color Editor Gui saving issues when only editing the red color value
-*   Fixes Color Editor Gui having false positive `hasChanged` states
-*   Fixes improper sizing in some cases with external text controls
-*   Fixes most if not all possible circumstances of GuiUtils causing JVM errors
-*   Fixes `keyTyped` event in `ExtendedTextControl` to only occur if the super event would execute
-*   Fixes an oversight causing `/cp shutdown` and `/cp reboot` combined usage fail
-*   Fixes a GL flag clearing Issue causing unintended Gui rendering behaviors
-*   Fixes a regression causing Servers with Port Numbers to not properly be detected for overrides
-*   Fixes rare instances of `NumberFormatException` errors with `StringUtils#roundDouble`
+*   KeyUtils#onTick will now occur on the Minecraft Render Thread (should solve JVM Issues and Issues with some keys)
 
 ___
 
