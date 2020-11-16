@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.utils.server;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.DiscordStatus;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
@@ -126,9 +127,9 @@ public class ServerUtils {
 
     /**
      * Mapping storing the Current X, Y and Z Position of the Player in a World
-     * Format: Position (X, Z), Altitude (Y)
+     * Format: Position (X, Y, Z)
      */
-    private Pair<Pair<Double, Double>, Double> currentCoordinates = new Pair<>(new Pair<>(0.0D, 0.0D), 0.0D);
+    private Tuple<Double, Double, Double> currentCoordinates = new Tuple<>(0.0D, 0.0D, 0.0D);
 
     /**
      * Mapping storing the Current and Maximum Health the Player currently has in a World
@@ -185,7 +186,7 @@ public class ServerUtils {
         currentServer_Name = null;
         currentServerData = null;
         currentConnection = null;
-        currentCoordinates = new Pair<>(new Pair<>(0.0D, 0.0D), 0.0D);
+        currentCoordinates = new Tuple<>(0.0D, 0.0D, 0.0D);
         currentHealth = new Pair<>(0.0D, 0.0D);
         currentDifficulty = null;
         currentWorldName = null;
@@ -283,7 +284,10 @@ public class ServerUtils {
                 if (currentServerMessage.toLowerCase().contains("&playerinfo&")) {
                     // &coords& Argument = Current Coordinates of Player
                     if (CraftPresence.CONFIG.innerPlayerPlaceholderMessage.toLowerCase().contains("&coords&")) {
-                        final Pair<Pair<Double, Double>, Double> newCoordinates = CraftPresence.player != null ? new Pair<>(new Pair<>(StringUtils.roundDouble(CraftPresence.player.posX, 3), StringUtils.roundDouble(CraftPresence.player.posZ, 3)), StringUtils.roundDouble(CraftPresence.player.posY, 3)) : new Pair<>(new Pair<>(0.0D, 0.0D), 0.0D);
+                        final double newX = StringUtils.roundDouble(CraftPresence.player != null ? CraftPresence.player.posX : 0.0D, CraftPresence.CONFIG.roundSize);
+                        final double newY = StringUtils.roundDouble(CraftPresence.player != null ? CraftPresence.player.posY : 0.0D, CraftPresence.CONFIG.roundSize);
+                        final double newZ = StringUtils.roundDouble(CraftPresence.player != null ? CraftPresence.player.posZ : 0.0D, CraftPresence.CONFIG.roundSize);
+                        final Tuple<Double, Double, Double> newCoordinates = new Tuple<>(newX, newY, newZ);
                         if (!newCoordinates.equals(currentCoordinates)) {
                             currentCoordinates = newCoordinates;
                             queuedForUpdate = true;
@@ -462,9 +466,9 @@ public class ServerUtils {
 
         List<Pair<String, String>> coordinateArgs = Lists.newArrayList(), healthArgs = Lists.newArrayList();
 
-        coordinateArgs.add(new Pair<>("&xPosition&", currentCoordinates.getFirst().getFirst().toString()));
+        coordinateArgs.add(new Pair<>("&xPosition&", currentCoordinates.getFirst().toString()));
         coordinateArgs.add(new Pair<>("&yPosition&", currentCoordinates.getSecond().toString()));
-        coordinateArgs.add(new Pair<>("&zPosition&", currentCoordinates.getFirst().getSecond().toString()));
+        coordinateArgs.add(new Pair<>("&zPosition&", currentCoordinates.getThird().toString()));
 
         healthArgs.add(new Pair<>("&CURRENT&", currentHealth.getFirst().toString()));
         healthArgs.add(new Pair<>("&MAX&", currentHealth.getSecond().toString()));

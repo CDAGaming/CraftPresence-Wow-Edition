@@ -77,7 +77,7 @@ public class ConfigUtils {
             NAME_playerAmountPlaceholderMessage, NAME_playerItemsPlaceholderMessage, NAME_worldPlaceholderMessage, NAME_modsPlaceholderMessage, NAME_vivecraftMessage, NAME_fallbackPackPlaceholderMessage;
     // ADVANCED
     public String NAME_enableCommands, NAME_enablePerGui, NAME_enablePerItem, NAME_enablePerEntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
-            NAME_splitCharacter, NAME_refreshRate, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
+            NAME_splitCharacter, NAME_refreshRate, NAME_roundSize, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
     public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageId, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_stripExtraGuiElements, NAME_configKeyCode;
     // DISPLAY MESSAGES
@@ -106,7 +106,7 @@ public class ConfigUtils {
     // ADVANCED
     public boolean enableCommands, enablePerGui, enablePerItem, enablePerEntity, renderTooltips, formatWords, debugMode, verboseMode;
     public String splitCharacter;
-    public int refreshRate;
+    public int refreshRate, roundSize;
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
     public String tooltipBackgroundColor, tooltipBorderColor, guiBackgroundColor, buttonBackgroundColor, languageId;
@@ -229,6 +229,7 @@ public class ConfigUtils {
         NAME_verboseMode = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.verbose_mode").replaceAll(" ", "_");
         NAME_splitCharacter = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.split_character").replaceAll(" ", "_");
         NAME_refreshRate = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.refresh_rate").replaceAll(" ", "_");
+        NAME_roundSize = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.round_size").replaceAll(" ", "_");
         NAME_guiMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.gui_messages").replaceAll(" ", "_");
         NAME_itemMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.item_messages").replaceAll(" ", "_");
         NAME_entityTargetMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.advanced.entity_target_messages").replaceAll(" ", "_");
@@ -244,6 +245,7 @@ public class ConfigUtils {
         verboseMode = false;
         splitCharacter = ";";
         refreshRate = 2;
+        roundSize = 3;
         guiMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "In &screen&"};
         itemMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Holding &item&"};
         entityTargetMessages = new String[]{"default" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + "Targeting &entity&"};

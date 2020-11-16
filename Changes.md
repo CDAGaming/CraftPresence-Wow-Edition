@@ -6,11 +6,12 @@ _A Detailed Changelog from the last release is available [here](https://gitlab.c
 
 ### Changes
 
-*   TBD
+*   Added `Rounding Size` as an advanced option (Not shown in the Config Gui, and only used for the coords placeholder)
 
 ### Fixes
 
 *   KeyUtils#onTick will now occur on the Minecraft Render Thread (should solve JVM Issues and Issues with some keys)
+*   (Backend) Removed unneeded boxing in coordinate placeholder
 
 ___
 
