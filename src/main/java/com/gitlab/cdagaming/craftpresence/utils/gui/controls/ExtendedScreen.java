@@ -25,6 +25,7 @@
 package com.gitlab.cdagaming.craftpresence.utils.gui.controls;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
+import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.GuiUtils;
 import com.google.common.collect.Lists;
@@ -62,9 +63,17 @@ public class ExtendedScreen extends GuiScreen {
      */
     private final List<ScrollableListControl> extendedLists = Lists.newArrayList();
     /**
-     * Variable Needed to ensure all buttons are initialized before rendering to prevent an NPE
+     * Variable needed to ensure all buttons are initialized before rendering to prevent an NPE
      */
     private boolean initialized = false;
+    /**
+     * Whether to enable debug mode screen data, specified from screen developers
+     */
+    private boolean debugMode = false;
+    /**
+     * Whether to enable verbose mode screen data, specified from screen developers
+     */
+    private boolean verboseMode = false;
 
     /**
      * The Last Ticked Mouse X Coordinate
@@ -84,6 +93,28 @@ public class ExtendedScreen extends GuiScreen {
         mc = CraftPresence.instance;
         currentScreen = this;
         this.parentScreen = parentScreen;
+        setDebugMode(ModUtils.IS_DEV);
+        setVerboseMode(ModUtils.IS_VERBOSE);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param parentScreen The Parent Screen for this Instance
+     */
+    public ExtendedScreen(GuiScreen parentScreen, boolean debugMode) {
+        this(parentScreen);
+        setDebugMode(debugMode);
+    }
+
+    /**
+     * Initialization Event for this Control, assigning defined arguments
+     *
+     * @param parentScreen The Parent Screen for this Instance
+     */
+    public ExtendedScreen(GuiScreen parentScreen, boolean debugMode, boolean verboseMode) {
+        this(parentScreen, debugMode);
+        setVerboseMode(verboseMode);
     }
 
     /**
@@ -427,5 +458,41 @@ public class ExtendedScreen extends GuiScreen {
      */
     public int getFontHeight() {
         return getFontRenderer().FONT_HEIGHT;
+    }
+
+    /**
+     * Gets whether to display any Debug display data for this screen
+     * 
+     * @return Whether to display any Debug display data for this screen
+     */
+    public boolean isDebugMode() {
+        return debugMode;
+    }
+
+    /**
+     * Sets whether to display any Debug display data for this screen
+     * 
+     * @param isDebugMode Whether to display any Debug display data for this screen
+     */
+    public void setDebugMode(boolean isDebugMode) {
+        this.debugMode = isDebugMode;
+    }
+
+    /**
+     * Gets whether to display any Verbose display data for this screen
+     * 
+     * @return Whether to display any Verbose display data for this screen
+     */
+    public boolean isVerboseMode() {
+        return verboseMode;
+    }
+
+    /**
+     * Sets whether to display any Verbose display data for this screen
+     * 
+     * @param isVerboseMode Whether to display any Verbose display data for this screen
+     */
+    public void setVerboseMode(boolean isVerboseMode) {
+        this.verboseMode = isVerboseMode;
     }
 }

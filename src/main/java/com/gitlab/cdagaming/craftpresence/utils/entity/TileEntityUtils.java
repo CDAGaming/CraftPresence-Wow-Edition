@@ -572,17 +572,18 @@ public class TileEntityUtils {
      * Generates TileEntity Tag Placeholder String
      *
      * @param name The TileEntity Name
+     * @param addExtraData Whether to add additional data to the string
      * @param tags A List of the tags associated with the TileEntity
      * @return The Resulting TileEntity Tag Placeholder String
      */
-    public String generatePlaceholderString(final String name, final List<String> tags) {
+    public String generatePlaceholderString(final String name, final boolean addExtraData, final List<String> tags) {
         final StringBuilder finalString = new StringBuilder();
         if (!tags.isEmpty()) {
             for (String tagName : tags) {
                 finalString.append("\n - &").append(tagName).append("&");
 
-                if (ModUtils.IS_DEV) {
-                    // If in Debug Mode, also append the Tag's value to the placeholder String
+                if (addExtraData) {
+                    // If specified, also append the Tag's value to the placeholder String
                     final String tagValue =
                             tags.equals(CURRENT_MAIN_HAND_ITEM_TAGS) ? CURRENT_MAIN_HAND_ITEM_TAG.getTag(tagName).toString() :
                                     tags.equals(CURRENT_OFFHAND_ITEM_TAGS) ? CURRENT_OFFHAND_ITEM_TAG.getTag(tagName).toString() :

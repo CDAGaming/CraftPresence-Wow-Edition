@@ -1,12 +1,15 @@
 # CraftPresence Changes
 
-## v1.7.6 (11/27/2020)
+## v1.7.6 Beta 1 (12/19/2020)
 
-_A Detailed Changelog from the last release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5...release%2Fv1.7.6)_
+_A Detailed Changelog from the last release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5...release%2Fv1.7.6+Beta.1)_
 
 ### Changes
 
 *   Added `Rounding Size` as an advanced option (Not shown in the Config Gui, and only used for the coords placeholder)
+*   (Backend) `Debug Mode` and `Verbose Mode` data is now screen-independent
+*   (Backend) `generatePlaceholderString` for Entities and Tile Entities now have a separate parameter to display extra data, removing the debug mode requirement
+*   Added Verbose output to several render lists
 
 ### Fixes
 
