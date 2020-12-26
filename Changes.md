@@ -18,6 +18,7 @@ _A Detailed Changelog from the last Beta is available [here](https://gitlab.com/
 
 *   KeyUtils#onTick will now occur on the Minecraft Render Thread (should solve JVM Issues and Issues with some keys)
 *   (Backend) Removed unneeded boxing in coordinate placeholder
+*   (Backend) Re-Added `ModUtils#IS_LEGACY` to patch texture issues on versions before `13w41a`
 
 ___
 

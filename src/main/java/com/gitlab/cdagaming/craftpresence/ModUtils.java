@@ -152,6 +152,12 @@ public class ModUtils {
     public static boolean IS_DEV = false;
 
     /**
+     * If this Application is in Legacy Mode
+     * <p>This variable becomes true only on versions before 13w41a (When the protocol number was reset)
+     */
+    public final static boolean IS_LEGACY = false;
+
+    /**
      * If this Application is running in a de-obfuscated or Developer environment
      */
     public static boolean IS_VERBOSE = (Launch.blackboard != null && !Launch.blackboard.isEmpty() && Launch.blackboard.containsKey("fml.deobfuscatedEnvironment")) && (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
