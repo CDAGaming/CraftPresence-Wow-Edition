@@ -25,7 +25,6 @@
 package com.gitlab.cdagaming.craftpresence.utils.entity;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
-import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.google.common.collect.Lists;
@@ -353,9 +352,9 @@ public class EntityUtils {
     /**
      * Generates Entity Tag Placeholder String
      *
-     * @param name The Entity Name
+     * @param name         The Entity Name
      * @param addExtraData Whether to add additional data to the string
-     * @param tags A List of the tags associated with the Entity
+     * @param tags         A List of the tags associated with the Entity
      * @return The Resulting Entity Tag Placeholder String
      */
     public String generatePlaceholderString(final String name, final boolean addExtraData, final List<String> tags) {

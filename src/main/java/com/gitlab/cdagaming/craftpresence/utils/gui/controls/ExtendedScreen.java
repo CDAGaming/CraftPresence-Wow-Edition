@@ -462,7 +462,7 @@ public class ExtendedScreen extends GuiScreen {
 
     /**
      * Gets whether to display any Debug display data for this screen
-     * 
+     *
      * @return Whether to display any Debug display data for this screen
      */
     public boolean isDebugMode() {
@@ -471,7 +471,7 @@ public class ExtendedScreen extends GuiScreen {
 
     /**
      * Sets whether to display any Debug display data for this screen
-     * 
+     *
      * @param isDebugMode Whether to display any Debug display data for this screen
      */
     public void setDebugMode(boolean isDebugMode) {
@@ -480,7 +480,7 @@ public class ExtendedScreen extends GuiScreen {
 
     /**
      * Gets whether to display any Verbose display data for this screen
-     * 
+     *
      * @return Whether to display any Verbose display data for this screen
      */
     public boolean isVerboseMode() {
@@ -489,7 +489,7 @@ public class ExtendedScreen extends GuiScreen {
 
     /**
      * Sets whether to display any Verbose display data for this screen
-     * 
+     *
      * @param isVerboseMode Whether to display any Verbose display data for this screen
      */
     public void setVerboseMode(boolean isVerboseMode) {

@@ -571,9 +571,9 @@ public class TileEntityUtils {
     /**
      * Generates TileEntity Tag Placeholder String
      *
-     * @param name The TileEntity Name
+     * @param name         The TileEntity Name
      * @param addExtraData Whether to add additional data to the string
-     * @param tags A List of the tags associated with the TileEntity
+     * @param tags         A List of the tags associated with the TileEntity
      * @return The Resulting TileEntity Tag Placeholder String
      */
     public String generatePlaceholderString(final String name, final boolean addExtraData, final List<String> tags) {

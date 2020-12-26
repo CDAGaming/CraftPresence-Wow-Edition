@@ -105,6 +105,24 @@ public class GuiUtils {
     private GuiScreen CURRENT_SCREEN;
 
     /**
+     * Gets the Default/Global Font Renderer
+     *
+     * @return The Default/Global Font Renderer
+     */
+    public static FontRenderer getDefaultFontRenderer() {
+        return CraftPresence.instance.fontRenderer;
+    }
+
+    /**
+     * Get the Default/Global Font Height for this Screen
+     *
+     * @return The Default/Global Font Height for this Screen
+     */
+    public static int getDefaultFontHeight() {
+        return getDefaultFontRenderer().FONT_HEIGHT;
+    }
+
+    /**
      * Draws a Textured Rectangle (Modal Version), following the defined arguments
      *
      * @param x      The Starting X Position of the Object
@@ -875,23 +893,5 @@ public class GuiUtils {
      */
     public int getButtonY(int order) {
         return (40 + (25 * (order - 1)));
-    }
-
-    /**
-     * Gets the Default/Global Font Renderer
-     *
-     * @return The Default/Global Font Renderer
-     */
-    public static FontRenderer getDefaultFontRenderer() {
-        return CraftPresence.instance.fontRenderer;
-    }
-
-    /**
-     * Get the Default/Global Font Height for this Screen
-     *
-     * @return The Default/Global Font Height for this Screen
-     */
-    public static int getDefaultFontHeight() {
-        return getDefaultFontRenderer().FONT_HEIGHT;
     }
 }
