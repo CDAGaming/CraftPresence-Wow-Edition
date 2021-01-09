@@ -189,8 +189,9 @@ public class FileUtils {
     /**
      * Retrieve a List of Classes that extend or implement anything in the search list
      *
-     * @param searchList     The Super Type Classes to look for within the source packages specified
-     * @param sourcePackages The root package directories to search within
+     * @param searchList          The Super Type Classes to look for within the source packages specified
+     * @param includeExtraClasses Whether or not to include any extra sub classes
+     * @param sourcePackages      The root package directories to search within
      * @return The List of found class names from the search
      */
     public static List<Class<?>> getClassNamesMatchingSuperType(final List<Class<?>> searchList, final boolean includeExtraClasses, final String... sourcePackages) {

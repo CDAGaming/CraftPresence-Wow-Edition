@@ -318,7 +318,7 @@ public class GuiUtils {
                 GuiScreen.class, GuiContainer.class
         };
 
-        for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), true, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
+        for (Class<?> classObj : FileUtils.getClassNamesMatchingSuperType(Arrays.asList(searchClasses), CraftPresence.CONFIG.includeExtraGuiClasses, "net.minecraft", "com.gitlab.cdagaming.craftpresence")) {
             if (!GUI_NAMES.contains(classObj.getSimpleName())) {
                 GUI_NAMES.add(classObj.getSimpleName());
             }
