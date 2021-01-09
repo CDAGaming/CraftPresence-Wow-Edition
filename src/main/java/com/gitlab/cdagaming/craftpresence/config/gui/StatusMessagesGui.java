@@ -340,12 +340,12 @@ public class StatusMessagesGui extends ExtendedScreen {
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
         if (pageNumber == 0) {
-            renderString(mainMenuText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(lanText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(singlePlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            renderString(packText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
-            renderString(modsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
-            renderString(viveCraftText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+            renderString(mainMenuText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
+            renderString(lanText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF);
+            renderString(singlePlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF);
+            renderString(packText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4, 5), 0xFFFFFF);
+            renderString(modsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5, 5), 0xFFFFFF);
+            renderString(viveCraftText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6, 5), 0xFFFFFF);
         }
 
         mainMenuMessage.setVisible(pageNumber == 0);
@@ -367,12 +367,12 @@ public class StatusMessagesGui extends ExtendedScreen {
         viveCraftMessage.setEnabled(viveCraftMessage.getVisible());
 
         if (pageNumber == 1) {
-            renderString(outerPlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(innerPlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(playerCoordsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
-            renderString(playerHealthText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, 0xFFFFFF);
-            renderString(playerAmountText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5) + 5, 0xFFFFFF);
-            renderString(worldDataText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6) + 5, 0xFFFFFF);
+            renderString(outerPlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
+            renderString(innerPlayerText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF);
+            renderString(playerCoordsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF);
+            renderString(playerHealthText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4, 5), 0xFFFFFF);
+            renderString(playerAmountText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5, 5), 0xFFFFFF);
+            renderString(worldDataText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6, 5), 0xFFFFFF);
         }
 
         outerPlayerMessage.setVisible(pageNumber == 1);
@@ -394,9 +394,9 @@ public class StatusMessagesGui extends ExtendedScreen {
         worldMessage.setEnabled(worldMessage.getVisible());
 
         if (pageNumber == 2) {
-            renderString(loadingText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-            renderString(playerItemsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, 0xFFFFFF);
-            renderString(fallbackPackPlaceholderText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+            renderString(loadingText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
+            renderString(playerItemsText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF);
+            renderString(fallbackPackPlaceholderText, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF);
         }
 
         loadingMessage.setVisible(pageNumber == 2);
@@ -447,69 +447,69 @@ public class StatusMessagesGui extends ExtendedScreen {
         final String fallbackPackPlaceholderText = ModUtils.TRANSLATOR.translate("gui.config.name.status_messages.fallback.pack_placeholder_message");
         if (pageNumber == 0) {
             // Hovering over Main Menu Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(mainMenuText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(mainMenuText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.main_menu_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over LAN Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(lanText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), StringUtils.getStringWidth(lanText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.lan_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Single Player Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(singlePlayerText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), StringUtils.getStringWidth(singlePlayerText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.single_player_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Pack Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, StringUtils.getStringWidth(packText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4, 5), StringUtils.getStringWidth(packText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.pack_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Mods Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5) + 5, StringUtils.getStringWidth(modsText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5, 5), StringUtils.getStringWidth(modsText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.mods_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Vivecraft Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6) + 5, StringUtils.getStringWidth(viveCraftText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6, 5), StringUtils.getStringWidth(viveCraftText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.special.vivecraft_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
         }
 
         if (pageNumber == 1) {
             // Hovering over Outer Player Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(outerPlayerText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(outerPlayerText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.player_message.out")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Inner Player Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(innerPlayerText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), StringUtils.getStringWidth(innerPlayerText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.player_message.in")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Player Coords Message
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(playerCoordsText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), StringUtils.getStringWidth(playerCoordsText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.player_coordinate_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Player Health Message
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4) + 5, StringUtils.getStringWidth(playerHealthText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4, 5), StringUtils.getStringWidth(playerHealthText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.player_health_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Player Amount Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5) + 5, StringUtils.getStringWidth(playerAmountText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(5, 5), StringUtils.getStringWidth(playerAmountText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.player_amount_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over World Data Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6) + 5, StringUtils.getStringWidth(worldDataText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(6, 5), StringUtils.getStringWidth(worldDataText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.world_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
         }
 
         if (pageNumber == 2) {
             // Hovering over Loading Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(loadingText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(loadingText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.loading_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Player Items Message Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2) + 5, StringUtils.getStringWidth(playerItemsText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), StringUtils.getStringWidth(playerItemsText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.placeholder.player_item_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
             // Hovering over Fallback Pack Placeholder Label
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(fallbackPackPlaceholderText), getFontHeight())) {
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), StringUtils.getStringWidth(fallbackPackPlaceholderText), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.status_messages.fallback.pack_placeholder_message")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
         }

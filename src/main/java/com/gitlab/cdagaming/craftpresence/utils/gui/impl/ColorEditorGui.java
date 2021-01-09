@@ -251,7 +251,7 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 0) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
 
-            renderString(hexCodeTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(hexCodeTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
 
             proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(hexText.getText()));
 
@@ -263,7 +263,7 @@ public class ColorEditorGui extends ExtendedScreen {
         if (pageNumber == 1) {
             final String textureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texture_path");
 
-            renderString(textureTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+            renderString(textureTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
 
             proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(textureText.getText()));
 

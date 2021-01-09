@@ -642,7 +642,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         );
         enablePerItemButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(6) - 10,
+                        calc1, CraftPresence.GUIS.getButtonY(6, -10),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enable_per_item"),
                         CraftPresence.CONFIG.enablePerItem,
                         null,
@@ -660,7 +660,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         );
         enablePerEntityButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(6) - 10,
+                        calc2, CraftPresence.GUIS.getButtonY(6, -10),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.enable_per_entity"),
                         CraftPresence.CONFIG.enablePerEntity,
                         null,
@@ -678,7 +678,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         );
         renderTooltipsButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(7) - 20,
+                        calc1, CraftPresence.GUIS.getButtonY(7, -20),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.render_tooltips"),
                         CraftPresence.CONFIG.renderTooltips,
                         null,
@@ -696,7 +696,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         );
         formatWordsButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(7) - 20,
+                        calc2, CraftPresence.GUIS.getButtonY(7, -20),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.format_words"),
                         CraftPresence.CONFIG.formatWords,
                         null,
@@ -714,7 +714,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         );
         debugModeButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(8) - 30,
+                        calc1, CraftPresence.GUIS.getButtonY(8, -30),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.debug_mode"),
                         CraftPresence.CONFIG.debugMode,
                         null,
@@ -732,7 +732,7 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         );
         verboseModeButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(8) - 30,
+                        calc2, CraftPresence.GUIS.getButtonY(8, -30),
                         ModUtils.TRANSLATOR.translate("gui.config.name.advanced.verbose_mode"),
                         CraftPresence.CONFIG.verboseMode,
                         null,
@@ -833,8 +833,8 @@ public class AdvancedSettingsGui extends ExtendedScreen {
 
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
-        renderString(splitCharacterText, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
-        renderString(refreshRateText, (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(splitCharacterText, (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
+        renderString(refreshRateText, (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
 
         proceedButton.setControlEnabled(
                 !StringUtils.isNullOrEmpty(splitCharacter.getText()) && splitCharacter.getText().length() == 1 &&
@@ -854,12 +854,12 @@ public class AdvancedSettingsGui extends ExtendedScreen {
         final String splitCharacterText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.split_character");
         final String refreshRateText = ModUtils.TRANSLATOR.translate("gui.config.name.advanced.refresh_rate");
         // Hovering over Split Character Message Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(splitCharacterText), getFontHeight())) {
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 145, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(splitCharacterText), getFontHeight())) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.split_character")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
 
         // Hovering over Refresh Rate Message Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1) + 5, StringUtils.getStringWidth(refreshRateText), getFontHeight())) {
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) + 18, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(refreshRateText), getFontHeight())) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.advanced.refresh_rate")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }

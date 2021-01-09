@@ -891,7 +891,30 @@ public class GuiUtils {
      * @param order Current Order of buttons above it, or 1 if none
      * @return The Calculated Y Value to place the Button at
      */
-    public int getButtonY(int order) {
+    public int getButtonY(final int order) {
         return (40 + (25 * (order - 1)));
+    }
+
+    /**
+     * Calculate the Y Value for Buttons in a Standard-Sized Gui, with an offset
+     *
+     * @param order         Current Order of buttons above it, or 1 if none
+     * @param offset        The offset to append the original y value by
+     * @param appendByOrder Whether or not to append the offset by the current order index
+     * @return The Calculated Y Value to place the Button at, accounting for the offset
+     */
+    public int getButtonY(final int order, final int offset, final boolean appendByOrder) {
+        return getButtonY(order) + (offset * (appendByOrder ? order : 1));
+    }
+
+    /**
+     * Calculate the Y Value for Buttons in a Standard-Sized Gui, with an offset
+     *
+     * @param order  Current Order of buttons above it, or 1 if none
+     * @param offset The offset to append the original y value by
+     * @return The Calculated Y Value to place the Button at, accounting for the offset
+     */
+    public int getButtonY(final int order, final int offset) {
+        return getButtonY(order, offset, false);
     }
 }

@@ -157,7 +157,7 @@ public class CharacterEditorGui extends ExtendedScreen {
         renderNotice(notice, 2, 2);
 
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, 0xFFFFFF);
-        renderString(charInputTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1) + 5, 0xFFFFFF);
+        renderString(charInputTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
 
         if (StringUtils.isNullOrEmpty(charInput.getText())) {
             charWidth.setText("");
@@ -184,7 +184,7 @@ public class CharacterEditorGui extends ExtendedScreen {
 
         if (charWidth.getVisible()) {
             // Only Draw string for Character Width when it's enabled
-            renderString(charWidthTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(2) + 10, 0xFFFFFF);
+            renderString(charWidthTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(2, 10), 0xFFFFFF);
         }
 
         syncSingleButton.setControlMessage(ModUtils.TRANSLATOR.translate("gui.config.message.button.sync.single", charInput.getText()));

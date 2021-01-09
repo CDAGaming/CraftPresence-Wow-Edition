@@ -274,7 +274,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         );
         showLoggingInChatButton = addControl(
                 new CheckBoxControl(
-                        calc1, CraftPresence.GUIS.getButtonY(5) - 10,
+                        calc1, CraftPresence.GUIS.getButtonY(5, -10),
                         ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.show_logging_in_chat"),
                         CraftPresence.CONFIG.showLoggingInChat,
                         null,
@@ -292,7 +292,7 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         );
         stripExtraGuiElementsButton = addControl(
                 new CheckBoxControl(
-                        calc2, CraftPresence.GUIS.getButtonY(5) - 10,
+                        calc2, CraftPresence.GUIS.getButtonY(5, -10),
                         ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.strip_extra_gui_elements"),
                         CraftPresence.CONFIG.stripExtraGuiElements,
                         null,
@@ -369,10 +369,10 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
-        renderString(languageIdTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, 0xFFFFFF);
+        renderString(languageIdTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF);
 
-        renderString(keyBindingTitle, (width / 2f) - (StringUtils.getStringWidth(keyBindingTitle) / 2f), CraftPresence.GUIS.getButtonY(6) + 10, 0xFFFFFF);
-        renderString(configKeyBindingTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, 0xFFFFFF);
+        renderString(keyBindingTitle, (width / 2f) - (StringUtils.getStringWidth(keyBindingTitle) / 2f), CraftPresence.GUIS.getButtonY(6, 10), 0xFFFFFF);
+        renderString(configKeyBindingTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7, 5), 0xFFFFFF);
 
         proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(languageIdText.getText()));
     }
@@ -382,12 +382,12 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
         final String languageIdTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
         final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
         // Hovering over Language Id Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3) + 5, StringUtils.getStringWidth(languageIdTitle), getFontHeight())) {
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3, 5), StringUtils.getStringWidth(languageIdTitle), getFontHeight())) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
 
         // Hovering over Config Keybinding Label
-        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7) + 5, StringUtils.getStringWidth(configKeyBindingTitle), getFontHeight())) {
+        if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7, 5), StringUtils.getStringWidth(configKeyBindingTitle), getFontHeight())) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
     }
