@@ -140,23 +140,19 @@ public class ModUtils {
      * The Application's Instance of {@link ModUpdaterUtils} for Retrieving if the Application has an update
      */
     public static final ModUpdaterUtils UPDATER;
-
-    /**
-     * Whether to forcibly block any tooltips related to this Application from rendering
-     */
-    public static boolean forceBlockTooltipRendering = false;
-
-    /**
-     * If this Application should be run in a Developer or Debug State
-     */
-    public static boolean IS_DEV = false;
-
     /**
      * If this Application is in Legacy Mode
      * <p>This variable becomes true only on versions before 13w41a (When the protocol number was reset)
      */
     public final static boolean IS_LEGACY = false;
-
+    /**
+     * Whether to forcibly block any tooltips related to this Application from rendering
+     */
+    public static boolean forceBlockTooltipRendering = false;
+    /**
+     * If this Application should be run in a Developer or Debug State
+     */
+    public static boolean IS_DEV = false;
     /**
      * If this Application is running in a de-obfuscated or Developer environment
      */
