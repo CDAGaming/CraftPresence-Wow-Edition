@@ -202,6 +202,7 @@ public class CraftPresence {
 
         try {
             CLIENT.CLIENT_ID = CONFIG.clientId;
+            CLIENT.AUTO_REGISTER = CONFIG.autoRegister;
             CLIENT.setup();
             CLIENT.init(true);
         } catch (Exception ex) {

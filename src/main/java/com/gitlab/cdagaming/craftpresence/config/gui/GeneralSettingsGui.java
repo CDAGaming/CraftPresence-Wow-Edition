@@ -43,7 +43,7 @@ public class GeneralSettingsGui extends ExtendedScreen {
     private CheckBoxControl detectCurseManifestButton, detectMultiMCManifestButton,
             detectMCUpdaterInstanceButton, detectTechnicPackButton, showTimeButton,
             detectBiomeDataButton, detectDimensionDataButton, detectWorldDataButton,
-            enableJoinRequestButton, resetTimeOnInitButton;
+            enableJoinRequestButton, resetTimeOnInitButton, autoRegisterButton;
     private ExtendedTextControl clientId;
 
     private int currentPartyPrivacy = PartyPrivacy.Public.getPartyIndex();
@@ -300,6 +300,24 @@ public class GeneralSettingsGui extends ExtendedScreen {
                         )
                 )
         );
+        autoRegisterButton = addControl(
+                new CheckBoxControl(
+                        checkboxCalc1, CraftPresence.GUIS.getButtonY(8) - 50,
+                        ModUtils.TRANSLATOR.translate("gui.config.name.general.auto_register"),
+                        CraftPresence.CONFIG.autoRegister,
+                        null,
+                        () -> CraftPresence.GUIS.drawMultiLineString(
+                                StringUtils.splitTextByNewLine(
+                                        ModUtils.TRANSLATOR.translate("gui.config.comment.general.auto_register")
+                                ),
+                                getMouseX(), getMouseY(),
+                                width, height,
+                                getWrapWidth(),
+                                getFontRenderer(),
+                                true
+                        )
+                )
+        );
         proceedButton = addControl(
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),
@@ -365,6 +383,11 @@ public class GeneralSettingsGui extends ExtendedScreen {
                                 CraftPresence.CONFIG.hasChanged = true;
                                 CraftPresence.CONFIG.hasClientPropertiesChanged = true;
                                 CraftPresence.CONFIG.resetTimeOnInit = resetTimeOnInitButton.isChecked();
+                            }
+                            if (autoRegisterButton.isChecked() != CraftPresence.CONFIG.autoRegister) {
+                                CraftPresence.CONFIG.hasChanged = true;
+                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                                CraftPresence.CONFIG.autoRegister = autoRegisterButton.isChecked();
                             }
                             CraftPresence.GUIS.openScreen(parentScreen);
                         },

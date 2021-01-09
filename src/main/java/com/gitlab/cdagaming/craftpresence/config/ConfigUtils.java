@@ -63,7 +63,8 @@ public class ConfigUtils {
     // GENERAL
     public String NAME_detectCurseManifest, NAME_detectMultiMCManifest, NAME_detectMCUpdaterInstance, NAME_detectTechnicPack,
             NAME_showTime, NAME_detectBiomeData, NAME_detectDimensionData,
-            NAME_detectWorldData, NAME_clientId, NAME_defaultIcon, NAME_enableJoinRequest, NAME_partyPrivacyLevel, NAME_resetTimeOnInit;
+            NAME_detectWorldData, NAME_clientId, NAME_defaultIcon, NAME_enableJoinRequest,
+            NAME_partyPrivacyLevel, NAME_resetTimeOnInit, NAME_autoRegister;
     // BIOME MESSAGES
     public String NAME_defaultBiomeIcon, NAME_biomeMessages;
     // DIMENSION MESSAGES
@@ -87,7 +88,7 @@ public class ConfigUtils {
     public String schemaVersion, lastMcVersionId;
     // GENERAL
     public boolean detectCurseManifest, detectMultiMCManifest, detectMCUpdaterInstance, detectTechnicPack, showTime,
-            detectBiomeData, detectDimensionData, detectWorldData, enableJoinRequest, resetTimeOnInit;
+            detectBiomeData, detectDimensionData, detectWorldData, enableJoinRequest, resetTimeOnInit, autoRegister;
     public String clientId, defaultIcon;
     public int partyPrivacyLevel;
     // BIOME MESSAGES
@@ -155,6 +156,7 @@ public class ConfigUtils {
         NAME_enableJoinRequest = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.enable_join_request").replaceAll(" ", "_");
         NAME_partyPrivacyLevel = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.party_privacy").replaceAll(" ", "_");
         NAME_resetTimeOnInit = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.reset_time_on_init").replaceAll(" ", "_");
+        NAME_autoRegister = ModUtils.TRANSLATOR.translate(true, "gui.config.name.general.auto_register").replaceAll(" ", "_");
         detectCurseManifest = true;
         detectMultiMCManifest = true;
         detectMCUpdaterInstance = true;
@@ -168,6 +170,7 @@ public class ConfigUtils {
         enableJoinRequest = false;
         partyPrivacyLevel = PartyPrivacy.Public.getPartyIndex();
         resetTimeOnInit = false;
+        autoRegister = false;
         // BIOME MESSAGES
         NAME_defaultBiomeIcon = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_icon".replaceAll(" ", "_"));
         NAME_biomeMessages = ModUtils.TRANSLATOR.translate(true, "gui.config.name.biome_messages.biome_messages").replaceAll(" ", "_");

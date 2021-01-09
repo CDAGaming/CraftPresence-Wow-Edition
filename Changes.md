@@ -7,6 +7,7 @@ _A Detailed Changelog from the last release is available [here](https://gitlab.c
 ### Changes
 
 *   Added `Rounding Size` as an advanced option (Not shown in the Config Gui, and only used for the coords placeholder)
+*   Added Auto Register configurability, noted as a General Option
 *   (Backend) `Debug Mode` and `Verbose Mode` data is now screen-independent
 *   (Backend) `generatePlaceholderString` for Entities and Tile Entities now have a separate parameter to display extra data, removing the debug mode requirement
 *   (Backend) Adjusted Run Command registration in Windows; hopefully prevents higher JVM incompatibilities
