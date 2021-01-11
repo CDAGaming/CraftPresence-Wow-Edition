@@ -25,13 +25,12 @@
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.impl.WinRegistry;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Packet;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.sun.jna.platform.win32.Advapi32Util;
-import com.sun.jna.platform.win32.WinReg;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -117,15 +116,15 @@ public class WindowsPipe extends Pipe {
         String commandKeyName = keyName + "\\DefaultIcon";
 
         try {
-            Advapi32Util.registryCreateKey(WinReg.HKEY_CURRENT_USER, keyName);
-            Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, keyName, "", protocolDescription);
-            Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, keyName, "URL Protocol", "\0");
+            WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, keyName);
+            WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, keyName, "", protocolDescription);
+            WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, keyName, "URL Protocol", "\0");
 
-            Advapi32Util.registryCreateKey(WinReg.HKEY_CURRENT_USER, iconKeyName);
-            Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, iconKeyName, "", javaExePath);
+            WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, iconKeyName);
+            WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, iconKeyName, "", javaExePath);
 
-            Advapi32Util.registryCreateKey(WinReg.HKEY_CURRENT_USER, commandKeyName);
-            Advapi32Util.registrySetStringValue(WinReg.HKEY_CURRENT_USER, commandKeyName, "", openCommand);
+            WinRegistry.createKey(WinRegistry.HKEY_CURRENT_USER, commandKeyName);
+            WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, commandKeyName, "", openCommand);
         } catch (Exception ex) {
             throw new RuntimeException("Unable to modify Discord registry keys", ex);
         }
@@ -134,7 +133,7 @@ public class WindowsPipe extends Pipe {
     @Override
     public void registerSteamGame(String applicationId, String steamId) {
         try {
-            String steamPath = Advapi32Util.registryGetStringValue(WinReg.HKEY_CURRENT_USER, "Software\\\\Valve\\\\Steam", "SteamExe");
+            String steamPath = WinRegistry.readString(WinRegistry.HKEY_CURRENT_USER, "Software\\\\Valve\\\\Steam", "SteamExe");
             if (steamPath == null)
                 throw new RuntimeException("Steam exe path not found");
 
