@@ -105,30 +105,16 @@ public class Packet {
         return data;
     }
 
-    /**
-     * Gets the Parsed {@link JsonObject} value as a part of this {@link Packet}.
-     *
-     * @return The JSONObject value of this Packet.
-     */
-    public JsonObject getParsedJson() {
-        try {
-            final JsonParser jsonParser = new JsonParser();
-            return jsonParser.parse(data.getAsJsonPrimitive("").getAsString()).getAsJsonObject();
-        } catch (Exception ex) {
-            return data;
-        }
-    }
-
     @Override
     public String toString() {
-        return "Pkt:" + getOp() + getParsedJson().toString();
+        return "Pkt:" + getOp() + getJson().toString();
     }
 
     public String toDecodedString() {
         try {
-            return "Pkt:" + getOp() + new String(getParsedJson().toString().getBytes(encoding));
+            return "Pkt:" + getOp() + new String(getJson().toString().getBytes(encoding));
         } catch (UnsupportedEncodingException e) {
-            return "Pkt:" + getOp() + getParsedJson().toString();
+            return "Pkt:" + getOp() + getJson().toString();
         }
     }
 

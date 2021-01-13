@@ -9,7 +9,7 @@ Completely customize the way others see you play Minecraft via Discord's Rich Pr
 [![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 
 ## Port Notes
-*   Some versions of CraftPresence for Minecraft 1.14.x, 1.15.x, and 1.16.x require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
+*   Some versions of CraftPresence for Minecraft 1.14.x - 1.17.x require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
 *   Some versions of CraftPresence for Minecraft 1.13.x require the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
 
 ## Features
@@ -21,7 +21,7 @@ The customization possibilities are limitless, with the only real limit being ho
 ### Launcher and Pack Integration Support
 CraftPresence will detect whether your Launch Directory contains:
 
-*   A valid Twitch/Curse/GDLauncher Manifest (manifest.json, minecraftinstance.json)
+*   A valid Twitch/Overwolf/Curse/GDLauncher Manifest (manifest.json, minecraftinstance.json)
 *   A MultiMC Instance (instance.cfg)
 *   A MCUpdater Instance (instance.json)
 *   A Technic installedPacks File (installedPacks)
@@ -212,8 +212,8 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 *   If adding an Icon from a dimension, specify the Mod's link that the dimension derives from
     *   This is because specific Icon IDs must be used, which can be found by the mod or from checking your Logs/Chat after entering the dimension as CraftPresence will tell you the ID expected
 
-*   A `512x512` or `1024x1024` Icon to be used
-    *   Icons near these sizes can be used, but may not give a great final quality
+*   An Icon of size between `512x512` and `1024x1024` to be used (Either minimum or recommended size for best quality)
+    *   Icons between these sizes can be used, but may not give a great final quality
 
 *   If requesting an icon to be modified or removed from the Default Client ID, please specify a reason why
     *   Mostly just so it can be logged why it was changed for future reference
@@ -244,8 +244,7 @@ This project makes usage of the following dependencies internally:
 *   [Java Native Access (JNA) API](https://github.com/java-native-access/jna) on v1.5.x and Below
 
 #### Discord Terms of Service
-As with other RPC Mods, this Mod uses your in-Game data to send display information to a 3rd party
-service (In this Case, Discord).
+As with other RPC Mods, this Mod uses your in-game data to send display information to a 3rd party service (In this Case, Discord).
 
 The terms of service relating to Creating a Discord ID for icons can be found [here](https://discord.com/developers/docs/legal)
 

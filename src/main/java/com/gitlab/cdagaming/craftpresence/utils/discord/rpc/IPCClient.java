@@ -330,8 +330,10 @@ public final class IPCClient implements Closeable {
             ModUtils.LOG.debugInfo("Client is now connected and ready!");
         }
 
-        if (listener != null)
+        if (listener != null) {
             listener.onReady(this);
+            pipe.setListener(listener);
+        }
         startReading();
     }
 
@@ -571,7 +573,7 @@ public final class IPCClient implements Closeable {
             try {
                 Packet p;
                 while ((p = pipe.read()).getOp() != OpCode.CLOSE) {
-                    JsonObject json = p.getParsedJson();
+                    JsonObject json = p.getJson();
 
                     if (json != null) {
                         Event event = Event.of(json.has("evt") && !json.get("evt").isJsonNull() ? json.getAsJsonPrimitive("evt").getAsString() : null);
@@ -621,11 +623,11 @@ public final class IPCClient implements Closeable {
                                 JsonObject data = json.getAsJsonObject("data");
                                 switch (Event.of(json.getAsJsonPrimitive("evt").getAsString())) {
                                     case ACTIVITY_JOIN:
-                                        listener.onActivityJoin(localInstance, data.getAsJsonObject("secret").getAsString());
+                                        listener.onActivityJoin(localInstance, data.getAsJsonPrimitive("secret").getAsString());
                                         break;
 
                                     case ACTIVITY_SPECTATE:
-                                        listener.onActivitySpectate(localInstance, data.getAsJsonObject("secret").getAsString());
+                                        listener.onActivitySpectate(localInstance, data.getAsJsonPrimitive("secret").getAsString());
                                         break;
 
                                     case ACTIVITY_JOIN_REQUEST:
@@ -649,7 +651,7 @@ public final class IPCClient implements Closeable {
                 }
                 pipe.setStatus(PipeStatus.DISCONNECTED);
                 if (listener != null)
-                    listener.onClose(localInstance, p.getParsedJson());
+                    listener.onClose(localInstance, p.getJson());
             } catch (IOException | JsonParseException ex) {
                 ModUtils.LOG.error(String.format("Reading thread encountered an Exception: %s", ex));
 

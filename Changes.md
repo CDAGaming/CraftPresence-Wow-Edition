@@ -1,24 +1,17 @@
 # CraftPresence Changes
 
-## v1.7.6 (01/10/2021)
+## v1.7.8 (01/??/2021)
 
-_A Detailed Changelog from the last release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.5...release%2Fv1.7.6)_
+_A Detailed Changelog from the last release is available [here](https://gitlab.com/CDAGaming/CraftPresence/-/compare/release%2Fv1.7.6...release%2Fv1.7.8)_
 
 ### Changes
 
-*   Added `Rounding Size` as an advanced option (Not shown in the Config Gui, and only used for the coords placeholder)
-*   Added Auto Register configurability, noted as a General Option, supplements the Run Command Registration changes
-*   Added `Include Extra Gui Classes` as an Advanced Option (Not shown in the Config Gui, used for Per-Gui System Scanning and preventing compatibility issues)
-*   (Backend) `Debug Mode` and `Verbose Mode` data is now screen-independent
-*   (Backend) `generatePlaceholderString` for Entities and Tile Entities now have a separate parameter to display extra data, removing the debug mode requirement
-*   (Backend) Adjusted Run Command registration in Windows; hopefully prevents higher JVM incompatibilities
-*   Added Verbose output to several render lists
+*   (Backend) Added IPC adjustments from [this fork](https://github.com/Hexmory/DiscordIPC) (Thanks for the optimizations!)
 
 ### Fixes
 
-*   KeyUtils#onTick will now occur on the Minecraft Render Thread (should solve JVM Issues and Issues with some keys)
-*   (Backend) Removed unneeded boxing in coordinate placeholder
-*   (Backend) Re-Added `ModUtils#IS_LEGACY` to patch texture issues on versions before `13w41a`
+*   `Strip Extra Gui Elements` is now on by default for MC 1.6.4 and below due to incompatibilities with the list previews
+*   Fixes visible and hovered states on several gui controls to now report correctly in MC 1.6.4 and below (Silent Fix from v1.7.6 Experimental Release)
 
 ___
 

@@ -25,6 +25,7 @@
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.pipe;
 
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCClient;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.IPCListener;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.Callback;
@@ -84,7 +85,7 @@ public abstract class Pipe {
 
                     Packet p = pipe.read(); // this is a valid client at this point
 
-                    final JsonObject parsedData = p.getParsedJson();
+                    final JsonObject parsedData = p.getJson();
                     final JsonObject data = parsedData.getAsJsonObject("data");
                     final JsonObject userData = data.getAsJsonObject("user");
 
@@ -269,8 +270,7 @@ public abstract class Pipe {
      * @param data The data to parse with.
      */
     public Packet receive(Packet.OpCode op, byte[] data) {
-        JsonObject packetData = new JsonObject();
-        packetData.addProperty("", new String(data));
+        JsonObject packetData = FileUtils.parseJson(new String(data));
         Packet p = new Packet(op, packetData, ipcClient.getEncoding());
 
         if (ipcClient.isDebugMode()) {
