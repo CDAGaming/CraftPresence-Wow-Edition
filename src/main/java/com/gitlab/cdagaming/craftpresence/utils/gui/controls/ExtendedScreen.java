@@ -282,10 +282,12 @@ public class ExtendedScreen extends GuiScreen {
      */
     @Override
     public void handleMouseInput() throws IOException {
-        for (ScrollableListControl listControl : extendedLists) {
-            listControl.handleMouseInput();
+        if (initialized) {
+            for (ScrollableListControl listControl : extendedLists) {
+                listControl.handleMouseInput();
+            }
+            super.handleMouseInput();
         }
-        super.handleMouseInput();
     }
 
     /**
@@ -310,14 +312,16 @@ public class ExtendedScreen extends GuiScreen {
      */
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_ESCAPE) {
-            CraftPresence.GUIS.openScreen(parentScreen);
-        }
+        if (initialized) {
+            if (keyCode == Keyboard.KEY_ESCAPE) {
+                CraftPresence.GUIS.openScreen(parentScreen);
+            }
 
-        for (Gui extendedControl : extendedControls) {
-            if (extendedControl instanceof ExtendedTextControl) {
-                final ExtendedTextControl textField = (ExtendedTextControl) extendedControl;
-                textField.textboxKeyTyped(typedChar, keyCode);
+            for (Gui extendedControl : extendedControls) {
+                if (extendedControl instanceof ExtendedTextControl) {
+                    final ExtendedTextControl textField = (ExtendedTextControl) extendedControl;
+                    textField.textboxKeyTyped(typedChar, keyCode);
+                }
             }
         }
     }
@@ -332,13 +336,15 @@ public class ExtendedScreen extends GuiScreen {
      */
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        for (Gui extendedControl : extendedControls) {
-            if (extendedControl instanceof ExtendedTextControl) {
-                final ExtendedTextControl textField = (ExtendedTextControl) extendedControl;
-                textField.mouseClicked(mouseX, mouseY, mouseButton);
+        if (initialized) {
+            for (Gui extendedControl : extendedControls) {
+                if (extendedControl instanceof ExtendedTextControl) {
+                    final ExtendedTextControl textField = (ExtendedTextControl) extendedControl;
+                    textField.mouseClicked(mouseX, mouseY, mouseButton);
+                }
             }
+            super.mouseClicked(mouseX, mouseY, mouseButton);
         }
-        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     /**
@@ -346,10 +352,12 @@ public class ExtendedScreen extends GuiScreen {
      */
     @Override
     public void updateScreen() {
-        for (Gui extendedControl : extendedControls) {
-            if (extendedControl instanceof ExtendedTextControl) {
-                final ExtendedTextControl textField = (ExtendedTextControl) extendedControl;
-                textField.updateCursorCounter();
+        if (initialized) {
+            for (Gui extendedControl : extendedControls) {
+                if (extendedControl instanceof ExtendedTextControl) {
+                    final ExtendedTextControl textField = (ExtendedTextControl) extendedControl;
+                    textField.updateCursorCounter();
+                }
             }
         }
     }
