@@ -12,6 +12,7 @@ _A Detailed Changelog from the last release is available [here](https://gitlab.c
 
 *   `Strip Extra Gui Elements` is now on by default for MC 1.6.4 and below due to incompatibilities with the list previews
 *   Fixes visible and hovered states on several gui controls to now report correctly in MC 1.6.4 and below (Silent Fix from v1.7.6 Experimental Release)
+*   Fixed `Strip Extra Gui Elements` only having partial functionality in the lists (Offsets are now properly tuned)
 
 ___
 
