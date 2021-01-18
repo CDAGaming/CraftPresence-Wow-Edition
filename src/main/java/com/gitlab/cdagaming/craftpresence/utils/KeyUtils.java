@@ -26,13 +26,19 @@ package com.gitlab.cdagaming.craftpresence.utils;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
+import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
 import com.gitlab.cdagaming.craftpresence.impl.DataConsumer;
+import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
+import com.gitlab.cdagaming.craftpresence.impl.Tuple;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import net.minecraft.client.gui.GuiControls;
 import net.minecraft.client.settings.KeyBinding;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.input.Keyboard;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,12 +47,32 @@ import java.util.Map;
  * @author CDAGaming
  */
 public class KeyUtils {
-    private final Map<KeyBinding, Pair<Runnable, DataConsumer<Throwable>>> KEY_MAPPING = Maps.newHashMap();
+    /**
+     * Allowed KeyCode Start Limit and Individual Filters
+     * After ESC and Including any KeyCodes under 0x00
+     * <p>
+     * Notes:
+     * LWJGL 2: ESC = 0x01
+     * LWJGL 3: ESC = 256
+     */
+    private final List<Integer> invalidKeys = Lists.newArrayList(1, 256);
 
+    /**
+     * Key Mappings for Vanilla MC KeyBind Schema
+     * <p>
+     * Format: rawKeyField:[keyBindInstance:runEvent:errorCallback]
+     */
+    private final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> KEY_MAPPING = Maps.newHashMap();
+
+    /**
+     * Registers KeyBindings to MC's KeyCode systems
+     * <p>Note: It's mandatory for KeyBindings to be registered here, or they will not be recognized on either end
+     */
     void register() {
         KEY_MAPPING.put(
-                new KeyBinding("key.craftpresence.config_keycode.name", Keyboard.KEY_GRAVE, "key.craftpresence.category"),
-                new Pair<>(
+                "configKeyCode",
+                new Tuple<>(
+                        new KeyBinding("key.craftpresence.config_keycode.name", CraftPresence.CONFIG.configKeyCode, "key.craftpresence.category"),
                         () -> {
                             if (!CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
                                 CraftPresence.GUIS.openConfigGUI = true;
@@ -55,8 +81,76 @@ public class KeyUtils {
                 )
         );
 
-        for (KeyBinding keyBind : KEY_MAPPING.keySet()) {
-            CraftPresence.instance.gameSettings.keyBindings = ArrayUtils.add(CraftPresence.instance.gameSettings.keyBindings, keyBind);
+        for (String keyName : KEY_MAPPING.keySet()) {
+            CraftPresence.instance.gameSettings.keyBindings = ArrayUtils.add(CraftPresence.instance.gameSettings.keyBindings, KEY_MAPPING.get(keyName).getFirst());
+        }
+    }
+
+    /**
+     * Determine if the Source KeyCode fulfills the following conditions
+     * <p>
+     * 1) Is Not Contained or Listed within {@link KeyUtils#invalidKeys}
+     *
+     * @param sourceKeyCode The Source KeyCode to Check
+     * @return {@code true} if and only if a Valid KeyCode
+     */
+    public boolean isValidKeyCode(int sourceKeyCode) {
+        return !invalidKeys.contains(sourceKeyCode);
+    }
+
+    /**
+     * Determine the LWJGL KeyCode Name for the inputted KeyCode
+     *
+     * @param original A KeyCode, converted to String
+     * @return Either an LWJGL KeyCode Name or the KeyCode if none can be found
+     */
+    public String getKeyName(final String original) {
+        final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
+        if (!StringUtils.isNullOrEmpty(original)) {
+            final Pair<Boolean, Integer> integerData = StringUtils.getValidInteger(original);
+
+            if (integerData.getFirst()) {
+                return getKeyName(integerData.getSecond());
+            } else {
+                // If Not a Valid Integer, return the appropriate Unknown Keycode
+                return unknownKeyName;
+            }
+        } else {
+            // If input is a Null Value, return the appropriate Unknown Keycode
+            return unknownKeyName;
+        }
+    }
+
+    /**
+     * Determine the LWJGL KeyCode Name for the inputted KeyCode
+     *
+     * @param original A KeyCode, in Integer Form
+     * @return Either an LWJGL KeyCode Name or the KeyCode if none can be found
+     */
+    public String getKeyName(final int original) {
+        final String unknownKeyName = (ModUtils.MCProtocolID <= 340 ? KeyConverter.fromGlfw.get(-1) : KeyConverter.toGlfw.get(0)).getSecond();
+        if (isValidKeyCode(original)) {
+            // If Input is a valid Integer and Valid KeyCode,
+            // Parse depending on Protocol
+            if (ModUtils.MCProtocolID <= 340 && KeyConverter.toGlfw.containsKey(original)) {
+                return KeyConverter.toGlfw.get(original).getSecond();
+            } else if (ModUtils.MCProtocolID > 340 && KeyConverter.fromGlfw.containsKey(original)) {
+                return KeyConverter.fromGlfw.get(original).getSecond();
+            } else {
+                // If no other Mapping Layer contains the KeyCode Name,
+                // Fallback to LWJGL Methods to retrieve the KeyCode Name
+                final String keyName = Keyboard.getKeyName(original);
+
+                // If Key Name is not Empty or Null, use that, otherwise use original
+                if (!StringUtils.isNullOrEmpty(keyName)) {
+                    return keyName;
+                } else {
+                    return Integer.toString(original);
+                }
+            }
+        } else {
+            // If Not a Valid KeyCode, return the appropriate Unknown Keycode
+            return unknownKeyName;
         }
     }
 
@@ -66,19 +160,29 @@ public class KeyUtils {
      * Implemented @ {@link CommandUtils#reloadData}
      */
     void onTick() {
-        if (CraftPresence.instance != null) {
+        if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
-                for (KeyBinding keyBind : KEY_MAPPING.keySet()) {
-                    if (keyBind.isPressed()) {
-                        final Pair<Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPING.get(keyBind);
+                for (String keyName : KEY_MAPPING.keySet()) {
+                    final KeyBinding keyBind = KEY_MAPPING.get(keyName).getFirst();
+                    if (keyBind.isKeyDown() || (Keyboard.isKeyDown(keyBind.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls))) {
+                        final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPING.get(keyName);
                         try {
-                            keyData.getFirst().run();
+                            keyData.getSecond().run();
                         } catch (Exception | Error ex) {
-                            if (keyData.getSecond() != null) {
-                                keyData.getSecond().accept(ex);
+                            if (keyData.getThird() != null) {
+                                keyData.getThird().accept(ex);
                             } else {
                                 ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keycode", keyBind.getDisplayName()));
+                                syncKeyData(keyName, ImportMode.Specific, keyBind.getKeyCodeDefault());
                             }
+                        }
+                    } else if (!CraftPresence.CONFIG.hasChanged) {
+                        // Key Update Events
+                        if (CraftPresence.CONFIG.keySyncQueue.containsKey(keyName)) {
+                            syncKeyData(keyName, ImportMode.Config, CraftPresence.CONFIG.keySyncQueue.get(keyName));
+                            CraftPresence.CONFIG.keySyncQueue.remove(keyName);
+                        } else if (keyBind.getKeyCode() != StringUtils.getValidInteger(StringUtils.lookupObject(ConfigUtils.class, CraftPresence.CONFIG, keyName)).getSecond()) {
+                            syncKeyData(keyName, ImportMode.Vanilla, keyBind.getKeyCode());
                         }
                     }
                 }
@@ -88,5 +192,43 @@ public class KeyUtils {
                 }
             }
         }
+    }
+
+    /**
+     * Synchronizes KeyBind data from the Import Mode to the opposing mode
+     *
+     * @param keyName The raw name of the KeyBind, often the field name
+     * @param mode    The origin import mode, depicting where the new keycode is coming from
+     * @param keyCode The new keycode to synchronize
+     */
+    private void syncKeyData(final String keyName, final ImportMode mode, final int keyCode) {
+        final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPING.getOrDefault(keyName, null);
+        if (mode == ImportMode.Config) {
+            keyData.getFirst().setKeyCode(keyCode);
+        } else if (mode == ImportMode.Vanilla) {
+            StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(keyName, keyCode, null));
+            CraftPresence.CONFIG.updateConfig(false);
+        } else if (mode == ImportMode.Specific) {
+            syncKeyData(keyData.getFirst().getDisplayName(), ImportMode.Config, keyCode);
+            syncKeyData(keyName, ImportMode.Vanilla, keyCode);
+        } else {
+            if (ModUtils.IS_VERBOSE) {
+                ModUtils.LOG.debugError("Unsupported function"); // TODO: Localization
+            }
+        }
+    }
+
+    /**
+     * Enum Mapping dictating where KeyBind Data is deriving from
+     * <p>
+     * Format:
+     * - Config: Signals Client to use the Config Value to Sync to the Controls Menu
+     *  * The keyName in syncKeyData in this case should be the namespaced value
+     * - Vanilla: Signals Client to use the Controls menu to Sync to the Config Value
+     *  * The keyName in syncKeyData in this case should be the field name from ConfigUtils
+     * - Specific: Signals Client to force both the controls menu and config value to a specific value
+     */
+    public enum ImportMode {
+        Config, Vanilla, Specific
     }
 }
