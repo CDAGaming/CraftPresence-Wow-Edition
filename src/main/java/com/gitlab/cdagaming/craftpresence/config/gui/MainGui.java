@@ -28,17 +28,20 @@ import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.utils.CommandUtils;
+import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
+import com.gitlab.cdagaming.craftpresence.utils.gui.impl.MessageGui;
+import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
 public class MainGui extends ExtendedScreen {
-    private ExtendedButtonControl biomeSet, dimensionSet, serverSet, proceedButton, commandGUIButton;
+    private ExtendedButtonControl biomeSet, dimensionSet, serverSet, proceedButton, controlsButton, commandGUIButton;
 
     public MainGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -248,7 +251,15 @@ public class MainGui extends ExtendedScreen {
                         )
                 )
         );
-
+        // Adding Controls Button
+        addControl(
+                new ExtendedButtonControl(
+                        (width / 2) - 90, (height - 55),
+                        180, 20,
+                        ModUtils.TRANSLATOR.translate("gui.config.message.button.controls"),
+                        () -> CraftPresence.GUIS.openScreen(new ControlsGui(currentScreen, KeyUtils.FilterMode.Category, "key.craftpresence.category"))
+                )
+        );
         proceedButton = addControl(
                 new ExtendedButtonControl(
                         (width / 2) - 90, (height - 30),

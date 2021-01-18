@@ -62,14 +62,14 @@ public class KeyUtils {
      * <p>
      * Format: rawKeyField:[keyBindInstance:runEvent:errorCallback]
      */
-    private final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> KEY_MAPPING = Maps.newHashMap();
+    private final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> KEY_MAPPINGS = Maps.newHashMap();
 
     /**
      * Registers KeyBindings to MC's KeyCode systems
      * <p>Note: It's mandatory for KeyBindings to be registered here, or they will not be recognized on either end
      */
     void register() {
-        KEY_MAPPING.put(
+        KEY_MAPPINGS.put(
                 "configKeyCode",
                 new Tuple<>(
                         new KeyBinding("key.craftpresence.config_keycode.name", CraftPresence.CONFIG.configKeyCode, "key.craftpresence.category"),
@@ -81,8 +81,8 @@ public class KeyUtils {
                 )
         );
 
-        for (String keyName : KEY_MAPPING.keySet()) {
-            CraftPresence.instance.gameSettings.keyBindings = ArrayUtils.add(CraftPresence.instance.gameSettings.keyBindings, KEY_MAPPING.get(keyName).getFirst());
+        for (String keyName : KEY_MAPPINGS.keySet()) {
+            CraftPresence.instance.gameSettings.keyBindings = ArrayUtils.add(CraftPresence.instance.gameSettings.keyBindings, KEY_MAPPINGS.get(keyName).getFirst());
         }
     }
 
@@ -162,10 +162,10 @@ public class KeyUtils {
     void onTick() {
         if (Keyboard.isCreated() && CraftPresence.CONFIG != null) {
             try {
-                for (String keyName : KEY_MAPPING.keySet()) {
-                    final KeyBinding keyBind = KEY_MAPPING.get(keyName).getFirst();
+                for (String keyName : KEY_MAPPINGS.keySet()) {
+                    final KeyBinding keyBind = KEY_MAPPINGS.get(keyName).getFirst();
                     if (keyBind.isKeyDown() || (Keyboard.isKeyDown(keyBind.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls))) {
-                        final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPING.get(keyName);
+                        final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPINGS.get(keyName);
                         try {
                             keyData.getSecond().run();
                         } catch (Exception | Error ex) {
@@ -202,7 +202,7 @@ public class KeyUtils {
      * @param keyCode The new keycode to synchronize
      */
     private void syncKeyData(final String keyName, final ImportMode mode, final int keyCode) {
-        final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPING.getOrDefault(keyName, null);
+        final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPINGS.getOrDefault(keyName, null);
         if (mode == ImportMode.Config) {
             keyData.getFirst().setKeyCode(keyCode);
         } else if (mode == ImportMode.Vanilla) {
@@ -219,6 +219,44 @@ public class KeyUtils {
     }
 
     /**
+     * Filter Key Mappings based on the specified filter mode and filter data
+     *
+     * @param mode       The filter mode to interpret data by
+     * @param filterData The filter data to attach to the filter mode
+     * @return The filtered key mappings
+     */
+    public Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> getKeyMappings(final FilterMode mode, final List<String> filterData) {
+        final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> filteredMappings = Maps.newHashMap();
+
+        for (String keyName : KEY_MAPPINGS.keySet()) {
+            if (mode == FilterMode.None ||
+                    mode == FilterMode.Category ||
+                    mode == FilterMode.Id ||
+                    (mode == FilterMode.Name && filterData.contains(keyName))
+            ) {
+                final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPINGS.get(keyName);
+                if (mode == FilterMode.None ||
+                        (mode == FilterMode.Category && filterData.contains(keyData.getFirst().getKeyCategory())) ||
+                        (mode == FilterMode.Id && filterData.contains(keyData.getFirst().getDisplayName())) ||
+                        mode == FilterMode.Name
+                ) {
+                    filteredMappings.put(keyName, keyData);
+                }
+            }
+        }
+        return filteredMappings;
+    }
+
+    /**
+     * Filter Key Mappings based on the specified filter mode and filter data
+     *
+     * @return The filtered key mappings
+     */
+    public Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> getKeyMappings() {
+        return getKeyMappings(FilterMode.None, Lists.newArrayList());
+    }
+
+    /**
      * Enum Mapping dictating where KeyBind Data is deriving from
      * <p>
      * Format:
@@ -230,5 +268,9 @@ public class KeyUtils {
      */
     public enum ImportMode {
         Config, Vanilla, Specific
+    }
+
+    public enum FilterMode {
+        Category, Name, Id, None
     }
 }
