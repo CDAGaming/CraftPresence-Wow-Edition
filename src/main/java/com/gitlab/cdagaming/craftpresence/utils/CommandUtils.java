@@ -127,6 +127,8 @@ public class CommandUtils {
             TechnicUtils.loadPack();
         }
         DiscordAssetUtils.loadAssets(CraftPresence.CONFIG.clientId, true);
+
+        CraftPresence.KEYBINDINGS.register();
     }
 
     /**

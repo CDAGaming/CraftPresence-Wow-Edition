@@ -33,12 +33,14 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.TranslationUtils;
 import com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities.PartyPrivacy;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -117,6 +119,7 @@ public class ConfigUtils {
     public String gameStateMessage, detailsMessage, largeImageMessage, smallImageMessage, largeImageKey, smallImageKey;
     // CLASS-SPECIFIC - PUBLIC
     public boolean hasChanged = false, hasClientPropertiesChanged = false;
+    public Map<String, Integer> keySyncQueue = Maps.newHashMap();
 
     // CLASS-SPECIFIC - PRIVATE
     public String queuedSplitCharacter;

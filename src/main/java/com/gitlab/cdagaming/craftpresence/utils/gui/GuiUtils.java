@@ -26,7 +26,6 @@ package com.gitlab.cdagaming.craftpresence.utils.gui;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.FileUtils;
@@ -62,10 +61,6 @@ public class GuiUtils {
      * A List of the detected Gui Screen Classes
      */
     private final List<Class<?>> GUI_CLASSES = Lists.newArrayList();
-    /**
-     * If the Config GUI should open
-     */
-    public boolean openConfigGUI = false;
     /**
      * If the Config GUI is currently open
      */
@@ -264,11 +259,6 @@ public class GuiUtils {
         // Example: This can occur during server transitions where you transition to a different world
         if (configGUIOpened && !(CraftPresence.instance.currentScreen instanceof ExtendedScreen)) {
             configGUIOpened = false;
-        }
-
-        if (openConfigGUI) {
-            openScreen(new MainGui(CraftPresence.instance.currentScreen));
-            openConfigGUI = false;
         }
     }
 

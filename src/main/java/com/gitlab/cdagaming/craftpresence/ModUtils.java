@@ -74,7 +74,7 @@ public class ModUtils {
     /**
      * The Application's Configuration Schema Version ID
      */
-    public static final int MOD_SCHEMA_VERSION = 1;
+    public static final int MOD_SCHEMA_VERSION = 2;
 
     /**
      * The Application's GUI Factory, if any
