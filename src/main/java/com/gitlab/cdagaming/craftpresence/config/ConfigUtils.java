@@ -26,7 +26,6 @@ package com.gitlab.cdagaming.craftpresence.config;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
-import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
@@ -51,7 +50,6 @@ public class ConfigUtils {
     public final List<Pair<String, Object>> configDataMappings = Lists.newArrayList();
     // CONSTANTS
     private final String[] blackListedCharacters = new String[]{",", "[", "]"},
-            keyCodeTriggers = new String[]{"keycode", "keybinding"},
             languageTriggers = new String[]{"language", "lang", "langId", "languageId"},
             globalTriggers = new String[]{"global", "last", "schema"};
     // Config Data Mappings = Pair<propertyValue, value>
@@ -80,7 +78,7 @@ public class ConfigUtils {
     public String NAME_enableCommands, NAME_enablePerGui, NAME_enablePerItem, NAME_enablePerEntity, NAME_renderTooltips, NAME_formatWords, NAME_debugMode, NAME_verboseMode,
             NAME_splitCharacter, NAME_refreshRate, NAME_roundSize, NAME_includeExtraGuiClasses, NAME_guiMessages, NAME_itemMessages, NAME_entityTargetMessages, NAME_entityAttackingMessages, NAME_entityRidingMessages;
     // ACCESSIBILITY
-    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageId, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_stripExtraGuiElements, NAME_configKeyCode;
+    public String NAME_tooltipBackgroundColor, NAME_tooltipBorderColor, NAME_guiBackgroundColor, NAME_buttonBackgroundColor, NAME_showBackgroundAsDark, NAME_languageId, NAME_stripTranslationColors, NAME_showLoggingInChat, NAME_stripExtraGuiElements;
     // DISPLAY MESSAGES
     public String NAME_gameStateMessage, NAME_detailsMessage, NAME_largeImageMessage, NAME_smallImageMessage, NAME_largeImageKey, NAME_smallImageKey;
     // Config Variables
@@ -111,7 +109,6 @@ public class ConfigUtils {
     public String[] guiMessages, itemMessages, entityTargetMessages, entityAttackingMessages, entityRidingMessages;
     // ACCESSIBILITY
     public String tooltipBackgroundColor, tooltipBorderColor, guiBackgroundColor, buttonBackgroundColor, languageId;
-    public int configKeyCode;
     public boolean showBackgroundAsDark, stripTranslationColors, showLoggingInChat, stripExtraGuiElements;
     // DISPLAY MESSAGES
     public String gameStateMessage, detailsMessage, largeImageMessage, smallImageMessage, largeImageKey, smallImageKey;
@@ -266,7 +263,6 @@ public class ConfigUtils {
         NAME_stripTranslationColors = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_translation_colors").replaceAll(" ", "_");
         NAME_showLoggingInChat = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.show_logging_in_chat").replaceAll(" ", "_");
         NAME_stripExtraGuiElements = ModUtils.TRANSLATOR.translate(true, "gui.config.name.accessibility.strip_extra_gui_elements").replaceAll(" ", "_");
-        NAME_configKeyCode = ModUtils.TRANSLATOR.translate(true, "key.craftpresence.config_keycode.name").replaceAll(" ", "_");
         tooltipBackgroundColor = "0xF0100010";
         tooltipBorderColor = "0x505000FF";
         guiBackgroundColor = "minecraft" + (!StringUtils.isNullOrEmpty(splitCharacter) ? splitCharacter : ";") + (ModUtils.MCProtocolID <= 61 && ModUtils.IS_LEGACY ? "/gui/background.png" : "textures/gui/options_background.png");
@@ -276,7 +272,6 @@ public class ConfigUtils {
         stripTranslationColors = false;
         showLoggingInChat = false;
         stripExtraGuiElements = ModUtils.IS_LEGACY;
-        configKeyCode = ModUtils.MCProtocolID > 340 ? 96 : 41;
         // DISPLAY MESSAGES
         NAME_gameStateMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.game_state_message").replaceAll(" ", "_");
         NAME_detailsMessage = ModUtils.TRANSLATOR.translate(true, "gui.config.name.display.details_message").replaceAll(" ", "_");
@@ -401,36 +396,6 @@ public class ConfigUtils {
                             final Pair<Boolean, Integer> boolData = StringUtils.getValidInteger(foundProperty);
 
                             if (boolData.getFirst()) {
-                                // This check will trigger if the Field Name contains KeyCode Triggers
-                                // If the Property Name contains these values, move onwards
-                                for (String keyTrigger : keyCodeTriggers) {
-                                    if (configProperty.getSecond().toLowerCase().contains(keyTrigger.toLowerCase())) {
-                                        if (!CraftPresence.KEYBINDINGS.isValidKeyCode(boolData.getSecond())) {
-                                            // If not a valid KeyCode, Revert Value to prior Data
-                                            if (!skipLogging) {
-                                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.error.config.prop.empty", propertyName));
-                                            }
-                                            fieldObject = defaultValue;
-                                        } else {
-                                            // If so, iterate through the migration data allocated earlier
-                                            // to see if the property needs any data migrations
-                                            for (Pair<List<String>, String> migrationChunk : migrationData) {
-                                                if (migrationChunk.getFirst().contains(keyTrigger.toLowerCase()) && !migrationChunk.getSecond().equalsIgnoreCase(KeyConverter.ConversionMode.Unknown.name())) {
-                                                    // If so, retrieve the second part of the migration data,
-                                                    // and adjust the property accordingly with the mode it should use
-                                                    final int migratedKeyCode = KeyConverter.convertKey(boolData.getSecond(), KeyConverter.ConversionMode.valueOf(migrationChunk.getSecond()));
-                                                    if (!skipLogging && migratedKeyCode != boolData.getSecond()) {
-                                                        ModUtils.LOG.info(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.apply", migrationChunk.getFirst().toString(), migrationChunk.getSecond(), propertyName, boolData.getSecond(), migratedKeyCode));
-                                                    }
-                                                    fieldObject = migratedKeyCode;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-
                                 if (fieldObject == null) {
                                     fieldObject = boolData.getSecond();
                                 }
@@ -555,14 +520,7 @@ public class ConfigUtils {
                         }
                     }
 
-                    String keyCodeMigrationId = KeyConverter.ConversionMode.Unknown.name(), languageMigrationId = TranslationUtils.ConversionMode.Unknown.name();
-                    if (currentParseValue <= 340 && defaultParseValue > 340) {
-                        keyCodeMigrationId = KeyConverter.ConversionMode.Lwjgl3.name();
-                    } else if (currentParseValue > 340 && defaultParseValue <= 340) {
-                        keyCodeMigrationId = KeyConverter.ConversionMode.Lwjgl2.name();
-                    } else if (currentParseValue >= 0 && defaultParseValue >= 0) {
-                        keyCodeMigrationId = KeyConverter.ConversionMode.None.name();
-                    }
+                    String languageMigrationId = TranslationUtils.ConversionMode.Unknown.name();
 
                     if (currentParseValue < 315 && defaultParseValue >= 315) {
                         languageMigrationId = TranslationUtils.ConversionMode.PackFormat3.name();
@@ -573,18 +531,9 @@ public class ConfigUtils {
                     }
 
                     if (!skipLogging) {
-                        ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(keyCodeTriggers).toString(), keyCodeMigrationId, keyCodeMigrationId.equals(KeyConverter.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
                         ModUtils.LOG.debugInfo(ModUtils.TRANSLATOR.translate(true, "craftpresence.logger.info.migration.add", Arrays.asList(languageTriggers).toString(), languageMigrationId, languageMigrationId.equals(TranslationUtils.ConversionMode.None.name()) ? "Verification" : "Setting Change"));
                     }
 
-                    // Global Case 1 Notes (KeyCode):
-                    // In this situation, if the currently parsed protocol version differs and
-                    // is a newer version then 1.12.2 (340), then
-                    // we need to ensure any keycode assignments are in an LWJGL 3 format
-                    // Otherwise, if using a config from above 1.12.2 (340) on it or anything lower,
-                    // we need to ensure any keycode assignments are in an LWJGL 2 format.
-                    // If neither is true, then we mark the migration data as None, and it will be verified
-                    migrationData.add(new Pair<>(Arrays.asList(keyCodeTriggers), keyCodeMigrationId));
                     // Normal Case 1 Notes (Language ID):
                     // In this situation, if the currently parsed protocol version differs and
                     // is a newer version then or exactly 1.11 (315), then
