@@ -27,6 +27,7 @@ package com.gitlab.cdagaming.craftpresence.utils;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.config.ConfigUtils;
+import com.gitlab.cdagaming.craftpresence.config.gui.MainGui;
 import com.gitlab.cdagaming.craftpresence.impl.DataConsumer;
 import com.gitlab.cdagaming.craftpresence.impl.KeyConverter;
 import com.gitlab.cdagaming.craftpresence.impl.Pair;
@@ -74,8 +75,8 @@ public class KeyUtils {
                 new Tuple<>(
                         new KeyBinding("key.craftpresence.config_keycode.name", CraftPresence.CONFIG.configKeyCode, "key.craftpresence.category"),
                         () -> {
-                            if (!CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.openConfigGUI && !CraftPresence.GUIS.configGUIOpened) {
-                                CraftPresence.GUIS.openConfigGUI = true;
+                            if (!CraftPresence.GUIS.isFocused && !CraftPresence.GUIS.configGUIOpened) {
+                                CraftPresence.GUIS.openScreen(new MainGui(CraftPresence.instance.currentScreen));
                             }
                         }, null
                 )
@@ -164,7 +165,7 @@ public class KeyUtils {
             try {
                 for (String keyName : KEY_MAPPINGS.keySet()) {
                     final KeyBinding keyBind = KEY_MAPPINGS.get(keyName).getFirst();
-                    if (keyBind.isKeyDown() || (Keyboard.isKeyDown(keyBind.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls))) {
+                    if (Keyboard.isKeyDown(keyBind.getKeyCode()) && !(CraftPresence.instance.currentScreen instanceof GuiControls)) {
                         final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPINGS.get(keyName);
                         try {
                             keyData.getSecond().run();
