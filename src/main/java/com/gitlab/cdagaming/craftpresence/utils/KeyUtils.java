@@ -172,7 +172,7 @@ public class KeyUtils {
                             if (keyData.getThird() != null) {
                                 keyData.getThird().accept(ex);
                             } else {
-                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keycode", keyBind.getDisplayName()));
+                                ModUtils.LOG.error(ModUtils.TRANSLATOR.translate("craftpresence.logger.error.keycode", keyBind.getKeyDescription()));
                                 syncKeyData(keyName, ImportMode.Specific, keyBind.getKeyCodeDefault());
                             }
                         }
@@ -209,7 +209,7 @@ public class KeyUtils {
             StringUtils.updateField(ConfigUtils.class, CraftPresence.CONFIG, new Tuple<>(keyName, keyCode, null));
             CraftPresence.CONFIG.updateConfig(false);
         } else if (mode == ImportMode.Specific) {
-            syncKeyData(keyData.getFirst().getDisplayName(), ImportMode.Config, keyCode);
+            syncKeyData(keyData.getFirst().getKeyDescription(), ImportMode.Config, keyCode);
             syncKeyData(keyName, ImportMode.Vanilla, keyCode);
         } else {
             if (ModUtils.IS_VERBOSE) {
@@ -237,7 +237,7 @@ public class KeyUtils {
                 final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = KEY_MAPPINGS.get(keyName);
                 if (mode == FilterMode.None ||
                         (mode == FilterMode.Category && filterData.contains(keyData.getFirst().getKeyCategory())) ||
-                        (mode == FilterMode.Id && filterData.contains(keyData.getFirst().getDisplayName())) ||
+                        (mode == FilterMode.Id && filterData.contains(keyData.getFirst().getKeyDescription())) ||
                         mode == FilterMode.Name
                 ) {
                     filteredMappings.put(keyName, keyData);

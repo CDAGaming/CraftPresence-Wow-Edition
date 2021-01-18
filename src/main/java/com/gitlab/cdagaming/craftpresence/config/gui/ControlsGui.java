@@ -34,11 +34,14 @@ import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 // TODO - See below list
@@ -52,12 +55,20 @@ public class ControlsGui extends ExtendedScreen {
     private Pair<ExtendedButtonControl, String> entryData = null;
     private String[] filterData = new String[]{};
     private KeyUtils.FilterMode filterMode;
+    // Format: See KeyUtils#KEY_MAPPINGS
     private Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> keyMappings;
+    // Format: categoryName:keyNames
+    private Map<String, List<String>> categorizedNames = Maps.newHashMap();
+
+    // TODO: Refactor all fields below into paginated screen
+    private int nextCategoryRow = 1;
 
     ControlsGui(GuiScreen parentScreen) {
         super(parentScreen);
         this.filterMode = KeyUtils.FilterMode.None;
         this.keyMappings = CraftPresence.KEYBINDINGS.getKeyMappings();
+
+        sortMappings();
     }
 
     ControlsGui(GuiScreen parentScreen, KeyUtils.FilterMode filterMode, String... filterData) {
@@ -65,6 +76,8 @@ public class ControlsGui extends ExtendedScreen {
         this.filterData = filterData;
         this.filterMode = filterMode;
         this.keyMappings = CraftPresence.KEYBINDINGS.getKeyMappings(filterMode, Arrays.asList(filterData));
+
+        sortMappings();
     }
 
     @Override
@@ -84,8 +97,25 @@ public class ControlsGui extends ExtendedScreen {
 
     @Override
     public void preRender() {
-        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.message.button.controls");
-        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 15, 0xFFFFFF);
+        final String mainTitle = ModUtils.TRANSLATOR.translate("gui.config.title");
+        final String subTitle = ModUtils.TRANSLATOR.translate("gui.config.message.button.controls");
+        renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
+        renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
+
+        // TODO: Refactor for Paginated Support
+        // (Reallocate to initializeUi first
+        for (String categoryName : categorizedNames.keySet()) {
+            renderString(ModUtils.TRANSLATOR.translate(categoryName), (width / 2f) - (StringUtils.getStringWidth(categoryName) / 2f), CraftPresence.GUIS.getButtonY(nextCategoryRow, 5), 0xFFFFFF);
+
+            final List<String> keyNames = categorizedNames.get(categoryName);
+            int nextRow = nextCategoryRow + 1;
+            //nextCategoryRow += keyNames.size();
+
+            for (String keyName : keyNames) {
+                renderString(ModUtils.TRANSLATOR.translate(keyMappings.get(keyName).getFirst().getKeyDescription()), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(nextRow, 5), 0xFFFFFF);
+                nextRow++;
+            }
+        }
     }
 
     @Override
@@ -94,6 +124,20 @@ public class ControlsGui extends ExtendedScreen {
             setKeyData(keyCode);
         } else {
             super.keyTyped(typedChar, keyCode);
+        }
+    }
+
+    /**
+     * Sort Key Mappings via their categories, used for placement into gui
+     */
+    private void sortMappings() {
+        for (String keyName : keyMappings.keySet()) {
+            final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = keyMappings.get(keyName);
+            if (!categorizedNames.containsKey(keyData.getFirst().getKeyCategory())) {
+                categorizedNames.put(keyData.getFirst().getKeyCategory(), Lists.newArrayList(keyName));
+            } else if (!categorizedNames.get(keyData.getFirst().getKeyCategory()).contains(keyName)) {
+                categorizedNames.get(keyData.getFirst().getKeyCategory()).add(keyName);
+            }
         }
     }
 
