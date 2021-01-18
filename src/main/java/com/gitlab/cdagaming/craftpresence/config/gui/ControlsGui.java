@@ -46,26 +46,22 @@ import java.util.Map;
 
 // TODO - See below list
 // - Add Paginated Support when PaginatedScreen becomes available
-// - Filter the keyMappings based on Categories to display properly
 public class ControlsGui extends ExtendedScreen {
 
     // Pair Format: buttonToModify, Config Field to Edit
     // (Store a Backup of Prior Text just in case)
     private String backupKeyString;
     private Pair<ExtendedButtonControl, String> entryData = null;
-    private String[] filterData = new String[]{};
-    private KeyUtils.FilterMode filterMode;
     // Format: See KeyUtils#KEY_MAPPINGS
-    private Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> keyMappings;
+    private final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> keyMappings;
     // Format: categoryName:keyNames
-    private Map<String, List<String>> categorizedNames = Maps.newHashMap();
-
-    // TODO: Refactor all fields below into paginated screen
-    private int nextCategoryRow = 1;
+    private final Map<String, List<String>> categorizedNames = Maps.newHashMap();
+    // Format: elementText:[xPos:yPos:color]
+    private final Map<String, Tuple<Float, Float, Integer>> preRenderQueue = Maps.newHashMap(), postRenderQueue = Maps.newHashMap();
+    private final List<ExtendedButtonControl> controlQueue = Lists.newArrayList();
 
     ControlsGui(GuiScreen parentScreen) {
         super(parentScreen);
-        this.filterMode = KeyUtils.FilterMode.None;
         this.keyMappings = CraftPresence.KEYBINDINGS.getKeyMappings();
 
         sortMappings();
@@ -73,8 +69,6 @@ public class ControlsGui extends ExtendedScreen {
 
     ControlsGui(GuiScreen parentScreen, KeyUtils.FilterMode filterMode, String... filterData) {
         super(parentScreen);
-        this.filterData = filterData;
-        this.filterMode = filterMode;
         this.keyMappings = CraftPresence.KEYBINDINGS.getKeyMappings(filterMode, Arrays.asList(filterData));
 
         sortMappings();
@@ -82,6 +76,8 @@ public class ControlsGui extends ExtendedScreen {
 
     @Override
     public void initializeUi() {
+        setupScreenData();
+
         // Adding Back Button
         addControl(
                 new ExtendedButtonControl(
@@ -91,6 +87,9 @@ public class ControlsGui extends ExtendedScreen {
                         () -> CraftPresence.GUIS.openScreen(parentScreen)
                 )
         );
+        for (ExtendedButtonControl button : controlQueue) {
+            addControl(button);
+        }
 
         super.initializeUi();
     }
@@ -102,18 +101,18 @@ public class ControlsGui extends ExtendedScreen {
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
-        // TODO: Refactor for Paginated Support
-        // (Reallocate to initializeUi first
-        for (String categoryName : categorizedNames.keySet()) {
-            renderString(ModUtils.TRANSLATOR.translate(categoryName), (width / 2f) - (StringUtils.getStringWidth(categoryName) / 2f), CraftPresence.GUIS.getButtonY(nextCategoryRow, 5), 0xFFFFFF);
+        for (String elementText : preRenderQueue.keySet()) {
+            final Tuple<Float, Float, Integer> elementData = preRenderQueue.get(elementText);
+            renderString(ModUtils.TRANSLATOR.translate(elementText), elementData.getFirst(), elementData.getSecond(), elementData.getThird());
+        }
+    }
 
-            final List<String> keyNames = categorizedNames.get(categoryName);
-            int nextRow = nextCategoryRow + 1;
-            //nextCategoryRow += keyNames.size();
-
-            for (String keyName : keyNames) {
-                renderString(ModUtils.TRANSLATOR.translate(keyMappings.get(keyName).getFirst().getKeyDescription()), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(nextRow, 5), 0xFFFFFF);
-                nextRow++;
+    @Override
+    public void postRender() {
+        for (String elementText : postRenderQueue.keySet()) {
+            final Tuple<Float, Float, Integer> elementData = postRenderQueue.get(elementText);
+            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), elementData.getFirst(), elementData.getSecond(), StringUtils.getStringWidth(ModUtils.TRANSLATOR.translate(elementText)), getFontHeight())) {
+                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate(elementText.replace(".name", ".description"))), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
         }
     }
@@ -137,6 +136,41 @@ public class ControlsGui extends ExtendedScreen {
                 categorizedNames.put(keyData.getFirst().getKeyCategory(), Lists.newArrayList(keyName));
             } else if (!categorizedNames.get(keyData.getFirst().getKeyCategory()).contains(keyName)) {
                 categorizedNames.get(keyData.getFirst().getKeyCategory()).add(keyName);
+            }
+        }
+    }
+
+    /**
+     * Setup Rendering Queues for different parts of the Screen
+     */
+    private void setupScreenData() {
+        // Clear any Prior Data before hand'
+        preRenderQueue.clear();
+        postRenderQueue.clear();
+        controlQueue.clear();
+
+        int currentCategoryRow = 1, nextRow = currentCategoryRow, renderPosition = (width / 2) + 3;
+        for (String categoryName : categorizedNames.keySet()) {
+            preRenderQueue.put(categoryName, new Tuple<>((width / 2f) - (StringUtils.getStringWidth(categoryName) / 2f), (float) CraftPresence.GUIS.getButtonY(currentCategoryRow, 5), 0xFFFFFF));
+
+            final List<String> keyNames = categorizedNames.get(categoryName);
+            currentCategoryRow += keyNames.size();
+            nextRow++;
+
+            for (String keyName : keyNames) {
+                final Tuple<Float, Float, Integer> positionData = new Tuple<>((width / 2f) - 130, (float) CraftPresence.GUIS.getButtonY(nextRow, 5), 0xFFFFFF);
+                final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = keyMappings.get(keyName);
+                preRenderQueue.put(keyData.getFirst().getKeyDescription(), positionData);
+                postRenderQueue.put(keyData.getFirst().getKeyDescription(), positionData);
+                final ExtendedButtonControl keyCodeButton = new ExtendedButtonControl(
+                        renderPosition + 20, CraftPresence.GUIS.getButtonY(nextRow),
+                        120, 20,
+                        CraftPresence.KEYBINDINGS.getKeyName(keyData.getFirst().getKeyCode()),
+                        keyName
+                );
+                keyCodeButton.setOnClick(() -> setupEntryData(keyCodeButton));
+                controlQueue.add(keyCodeButton);
+                nextRow++;
             }
         }
     }

@@ -299,18 +299,6 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
                         )
                 )
         );
-
-        // KeyCode Buttons - TODO: Reallocate
-        /*final ExtendedButtonControl configKeyCodeButton = addControl(
-                new ExtendedButtonControl(
-                        calc2 + 20, CraftPresence.GUIS.getButtonY(7),
-                        120, 20,
-                        CraftPresence.KEYBINDINGS.getKeyName(CraftPresence.CONFIG.configKeyCode),
-                        "configKeyCode"
-                )
-        );
-        configKeyCodeButton.setOnClick(() -> setupEntryData(configKeyCodeButton));*/
-
         proceedButton = addControl(
                 new ExtendedButtonControl(
                         10, (height - 30),
@@ -352,16 +340,10 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
 
         final String languageIdTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
 
-        //final String keyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.category");
-        //final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
-
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
         renderString(languageIdTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF);
-
-        //renderString(keyBindingTitle, (width / 2f) - (StringUtils.getStringWidth(keyBindingTitle) / 2f), CraftPresence.GUIS.getButtonY(6, 10), 0xFFFFFF);
-        //renderString(configKeyBindingTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7, 5), 0xFFFFFF);
 
         proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(languageIdText.getText()));
     }
@@ -369,16 +351,11 @@ public class AccessibilitySettingsGui extends ExtendedScreen {
     @Override
     public void postRender() {
         final String languageIdTitle = ModUtils.TRANSLATOR.translate("gui.config.name.accessibility.language_id");
-        //final String configKeyBindingTitle = ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.name");
+
         // Hovering over Language Id Label
         if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(3, 5), StringUtils.getStringWidth(languageIdTitle), getFontHeight())) {
             CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.comment.accessibility.language_id")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
         }
-
-        // Hovering over Config Keybinding Label
-        /*if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 130, CraftPresence.GUIS.getButtonY(7, 5), StringUtils.getStringWidth(configKeyBindingTitle), getFontHeight())) {
-            CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("key.craftpresence.config_keycode.description")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
-        }*/
     }
 
     @Override

@@ -33,15 +33,13 @@ import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.commands.CommandsGui;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedScreen;
-import com.gitlab.cdagaming.craftpresence.utils.gui.impl.MessageGui;
-import com.google.common.collect.Lists;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
 
 public class MainGui extends ExtendedScreen {
-    private ExtendedButtonControl biomeSet, dimensionSet, serverSet, proceedButton, controlsButton, commandGUIButton;
+    private ExtendedButtonControl biomeSet, dimensionSet, serverSet, proceedButton, commandGUIButton;
 
     public MainGui(GuiScreen parentScreen) {
         super(parentScreen);
