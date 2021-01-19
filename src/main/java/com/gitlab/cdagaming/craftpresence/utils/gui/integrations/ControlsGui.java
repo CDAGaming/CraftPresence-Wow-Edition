@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package com.gitlab.cdagaming.craftpresence.config.gui;
+package com.gitlab.cdagaming.craftpresence.utils.gui.integrations;
 
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
@@ -60,14 +60,14 @@ public class ControlsGui extends ExtendedScreen {
     private String backupKeyString;
     private Pair<ExtendedButtonControl, String> entryData = null;
 
-    ControlsGui(GuiScreen parentScreen) {
+    public ControlsGui(GuiScreen parentScreen) {
         super(parentScreen);
         this.keyMappings = CraftPresence.KEYBINDINGS.getKeyMappings();
 
         sortMappings();
     }
 
-    ControlsGui(GuiScreen parentScreen, KeyUtils.FilterMode filterMode, String... filterData) {
+    public ControlsGui(GuiScreen parentScreen, KeyUtils.FilterMode filterMode, String... filterData) {
         super(parentScreen);
         this.keyMappings = CraftPresence.KEYBINDINGS.getKeyMappings(filterMode, Arrays.asList(filterData));
 
