@@ -60,11 +60,11 @@ public class ExtendedScreen extends GuiScreen {
     /**
      * Similar to buttonList, a list of compatible controls in this Screen
      */
-    private final List<Gui> extendedControls = Lists.newArrayList();
+    protected final List<Gui> extendedControls = Lists.newArrayList();
     /**
      * Similar to buttonList, a list of compatible ScrollLists in this Screen
      */
-    private final List<ScrollableListControl> extendedLists = Lists.newArrayList();
+    protected final List<ScrollableListControl> extendedLists = Lists.newArrayList();
     /**
      * Variable needed to ensure all buttons are initialized before rendering to prevent an NPE
      */
@@ -250,7 +250,9 @@ public class ExtendedScreen extends GuiScreen {
             preRender();
 
             for (ScrollableListControl listControl : extendedLists) {
-                listControl.drawScreen(mouseX, mouseY, partialTicks);
+                if (listControl.getEnabled()) {
+                    listControl.drawScreen(mouseX, mouseY, partialTicks);
+                }
             }
 
             for (Gui extendedControl : extendedControls) {

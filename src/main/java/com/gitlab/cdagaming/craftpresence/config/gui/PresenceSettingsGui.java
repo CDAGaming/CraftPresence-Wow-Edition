@@ -27,18 +27,14 @@ package com.gitlab.cdagaming.craftpresence.config.gui;
 import com.gitlab.cdagaming.craftpresence.CraftPresence;
 import com.gitlab.cdagaming.craftpresence.ModUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
-import com.gitlab.cdagaming.craftpresence.utils.gui.integrations.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.integrations.PaginatedScreen;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("DuplicatedCode")
-public class PresenceSettingsGui extends ExtendedScreen {
-    private int pageNumber;
+public class PresenceSettingsGui extends PaginatedScreen {
     private ExtendedTextControl detailsFormat, gameStateFormat, largeImageFormat, smallImageFormat,
             smallImageKeyFormat, largeImageKeyFormat;
-    private ExtendedButtonControl nextPageButton, previousPageButton;
 
     PresenceSettingsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -52,28 +48,28 @@ public class PresenceSettingsGui extends ExtendedScreen {
                         getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
-                )
+                ), startPage
         );
         gameStateFormat = addControl(
                 new ExtendedTextControl(
                         getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(2),
                         180, 20
-                )
+                ), startPage
         );
         largeImageFormat = addControl(
                 new ExtendedTextControl(
                         getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(3),
                         180, 20
-                )
+                ), startPage
         );
         smallImageFormat = addControl(
                 new ExtendedTextControl(
                         getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(4),
                         180, 20
-                )
+                ), startPage
         );
 
         detailsFormat.setText(CraftPresence.CONFIG.detailsMessage);
@@ -87,86 +83,56 @@ public class PresenceSettingsGui extends ExtendedScreen {
                         getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(1),
                         180, 20
-                )
+                ), startPage + 1
         );
         largeImageKeyFormat = addControl(
                 new ExtendedTextControl(
                         getFontRenderer(),
                         (width / 2) + 3, CraftPresence.GUIS.getButtonY(2),
                         180, 20
-                )
+                ), startPage + 1
         );
 
         smallImageKeyFormat.setText(CraftPresence.CONFIG.smallImageKey);
         largeImageKeyFormat.setText(CraftPresence.CONFIG.largeImageKey);
 
-        final ExtendedButtonControl backButton = addControl(
-                new ExtendedButtonControl(
-                        (width / 2) - 90, (height - 30),
-                        180, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
-                        () -> {
-                            if (!detailsFormat.getText().equals(CraftPresence.CONFIG.detailsMessage)) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.detailsMessage = detailsFormat.getText();
-                            }
-                            if (!gameStateFormat.getText().equals(CraftPresence.CONFIG.gameStateMessage)) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.gameStateMessage = gameStateFormat.getText();
-                            }
-                            if (!largeImageFormat.getText().equals(CraftPresence.CONFIG.largeImageMessage)) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.largeImageMessage = largeImageFormat.getText();
-                            }
-                            if (!smallImageFormat.getText().equals(CraftPresence.CONFIG.smallImageMessage)) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.smallImageMessage = smallImageFormat.getText();
-                            }
-                            if (!largeImageKeyFormat.getText().equals(CraftPresence.CONFIG.largeImageKey)) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.largeImageKey = largeImageKeyFormat.getText();
-                            }
-                            if (!smallImageKeyFormat.getText().equals(CraftPresence.CONFIG.smallImageKey)) {
-                                CraftPresence.CONFIG.hasChanged = true;
-                                CraftPresence.CONFIG.hasClientPropertiesChanged = true;
-                                CraftPresence.CONFIG.smallImageKey = smallImageKeyFormat.getText();
-                            }
-                            CraftPresence.GUIS.openScreen(parentScreen);
-                        }
-                )
-        );
-
-        previousPageButton = addControl(
-                new ExtendedButtonControl(
-                        backButton.getControlPosX() - 23, (height - 30),
-                        20, 20,
-                        "<",
-                        () -> {
-                            if (pageNumber != 0) {
-                                pageNumber--;
-                            }
-                        }
-                )
-        );
-        nextPageButton = addControl(
-                new ExtendedButtonControl(
-                        (backButton.getControlPosX() + backButton.getControlWidth()) + 3, (height - 30),
-                        20, 20,
-                        ">",
-                        () -> {
-                            if (pageNumber != 1) {
-                                pageNumber++;
-                            }
-                        }
-                )
-        );
-
         super.initializeUi();
+
+        backButton.setOnClick(
+                () -> {
+                    if (!detailsFormat.getText().equals(CraftPresence.CONFIG.detailsMessage)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        CraftPresence.CONFIG.detailsMessage = detailsFormat.getText();
+                    }
+                    if (!gameStateFormat.getText().equals(CraftPresence.CONFIG.gameStateMessage)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        CraftPresence.CONFIG.gameStateMessage = gameStateFormat.getText();
+                    }
+                    if (!largeImageFormat.getText().equals(CraftPresence.CONFIG.largeImageMessage)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        CraftPresence.CONFIG.largeImageMessage = largeImageFormat.getText();
+                    }
+                    if (!smallImageFormat.getText().equals(CraftPresence.CONFIG.smallImageMessage)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        CraftPresence.CONFIG.smallImageMessage = smallImageFormat.getText();
+                    }
+                    if (!largeImageKeyFormat.getText().equals(CraftPresence.CONFIG.largeImageKey)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        CraftPresence.CONFIG.largeImageKey = largeImageKeyFormat.getText();
+                    }
+                    if (!smallImageKeyFormat.getText().equals(CraftPresence.CONFIG.smallImageKey)) {
+                        CraftPresence.CONFIG.hasChanged = true;
+                        CraftPresence.CONFIG.hasClientPropertiesChanged = true;
+                        CraftPresence.CONFIG.smallImageKey = smallImageKeyFormat.getText();
+                    }
+                    CraftPresence.GUIS.openScreen(parentScreen);
+                }
+        );
     }
 
     @Override
@@ -183,38 +149,15 @@ public class PresenceSettingsGui extends ExtendedScreen {
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
-        if (pageNumber == 0) {
-            renderString(detailsFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
-            renderString(gameStateFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF);
-            renderString(largeImageFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF);
-            renderString(smallImageFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4, 5), 0xFFFFFF);
-        }
+        renderString(detailsFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF, startPage);
+        renderString(gameStateFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF, startPage);
+        renderString(largeImageFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(3, 5), 0xFFFFFF, startPage);
+        renderString(smallImageFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(4, 5), 0xFFFFFF, startPage);
 
-        detailsFormat.setVisible(pageNumber == 0);
-        detailsFormat.setEnabled(detailsFormat.getVisible());
+        renderString(smallImageKeyFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF, startPage + 1);
+        renderString(largeImageKeyFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF, startPage + 1);
 
-        gameStateFormat.setVisible(pageNumber == 0);
-        gameStateFormat.setEnabled(gameStateFormat.getVisible());
-
-        largeImageFormat.setVisible(pageNumber == 0);
-        largeImageFormat.setEnabled(largeImageFormat.getVisible());
-
-        smallImageFormat.setVisible(pageNumber == 0);
-        smallImageFormat.setEnabled(smallImageFormat.getVisible());
-
-        if (pageNumber == 1) {
-            renderString(smallImageKeyFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
-            renderString(largeImageKeyFormatTitle, (width / 2f) - 160, CraftPresence.GUIS.getButtonY(2, 5), 0xFFFFFF);
-        }
-
-        smallImageKeyFormat.setVisible(pageNumber == 1);
-        smallImageKeyFormat.setEnabled(smallImageKeyFormat.getVisible());
-
-        largeImageKeyFormat.setVisible(pageNumber == 1);
-        largeImageKeyFormat.setEnabled(largeImageKeyFormat.getVisible());
-
-        previousPageButton.setControlEnabled(pageNumber != 0);
-        nextPageButton.setControlEnabled(pageNumber != 1);
+        super.preRender();
     }
 
     @Override
@@ -225,7 +168,7 @@ public class PresenceSettingsGui extends ExtendedScreen {
         final String smallImageFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_message");
         final String smallImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.small_image_key");
         final String largeImageKeyFormatTitle = ModUtils.TRANSLATOR.translate("gui.config.name.display.large_image_key");
-        if (pageNumber == 0) {
+        if (currentPage == startPage) {
             // Hovering over Details Format Message Label
             if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(detailsFormatTitle), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.generalArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
@@ -244,7 +187,7 @@ public class PresenceSettingsGui extends ExtendedScreen {
             }
         }
 
-        if (pageNumber == 1) {
+        if (currentPage == (startPage + 1)) {
             // Hovering over Small Image Key Format Message Label
             if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), (width / 2f) - 160, CraftPresence.GUIS.getButtonY(1, 5), StringUtils.getStringWidth(smallImageKeyFormatTitle), getFontHeight())) {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.iconArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
@@ -254,18 +197,5 @@ public class PresenceSettingsGui extends ExtendedScreen {
                 CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate("gui.config.message.presence.iconArgs")), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
             }
         }
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_UP && pageNumber != 0) {
-            pageNumber--;
-        }
-
-        if (keyCode == Keyboard.KEY_DOWN && pageNumber != 1) {
-            pageNumber++;
-        }
-
-        super.keyTyped(typedChar, keyCode);
     }
 }
