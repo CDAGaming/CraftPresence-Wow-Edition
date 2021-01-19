@@ -86,7 +86,7 @@ public class ControlsGui extends ExtendedScreen {
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
                         () -> {
                             if (entryData == null) {
-                                CraftPresence.GUIS.openScreen(parentScreen)
+                                CraftPresence.GUIS.openScreen(parentScreen);
                             }
                         }
                 )
