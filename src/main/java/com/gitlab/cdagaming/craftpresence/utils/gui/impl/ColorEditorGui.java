@@ -32,28 +32,23 @@ import com.gitlab.cdagaming.craftpresence.impl.PairConsumer;
 import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.ImageUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
-import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
-import com.gitlab.cdagaming.craftpresence.utils.gui.integrations.ExtendedScreen;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedTextControl;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.SliderControl;
+import com.gitlab.cdagaming.craftpresence.utils.gui.integrations.PaginatedScreen;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.File;
 
 @SuppressWarnings("DuplicatedCode")
-public class ColorEditorGui extends ExtendedScreen {
+public class ColorEditorGui extends PaginatedScreen {
     private final String configValueName;
     // Event Data
     private final PairConsumer<Integer, ColorEditorGui> onAdjustEntry;
     private final DataConsumer<ColorEditorGui> onInit;
     public String currentNormalHexValue, startingHexValue, currentNormalTexturePath, startingTexturePath;
     public boolean usingExternalTexture = false;
-    // Global Data
-    private int pageNumber;
-    private ExtendedButtonControl proceedButton, nextPageButton, previousPageButton;
     // Page 1 Variables
     private String currentConvertedHexValue;
     private int currentRed, currentGreen, currentBlue, currentAlpha;
@@ -68,7 +63,6 @@ public class ColorEditorGui extends ExtendedScreen {
     public ColorEditorGui(GuiScreen parentScreen, String configValueName, PairConsumer<Integer, ColorEditorGui> onAdjustEntry, DataConsumer<ColorEditorGui> onInit) {
         super(parentScreen);
         this.configValueName = configValueName;
-        this.pageNumber = 0;
         this.onAdjustEntry = onAdjustEntry;
         this.onInit = onInit;
     }
@@ -89,7 +83,7 @@ public class ColorEditorGui extends ExtendedScreen {
                         getFontRenderer(),
                         calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20
-                )
+                ), startPage
         );
         hexText.setMaxStringLength(10);
 
@@ -106,7 +100,7 @@ public class ColorEditorGui extends ExtendedScreen {
                                 },
                                 this::syncValues
                         )
-                )
+                ), startPage
         );
         greenText = addControl(
                 new SliderControl(
@@ -121,7 +115,7 @@ public class ColorEditorGui extends ExtendedScreen {
                                 },
                                 this::syncValues
                         )
-                )
+                ), startPage
         );
         blueText = addControl(
                 new SliderControl(
@@ -136,7 +130,7 @@ public class ColorEditorGui extends ExtendedScreen {
                                 },
                                 this::syncValues
                         )
-                )
+                ), startPage
         );
         alphaText = addControl(
                 new SliderControl(
@@ -151,7 +145,7 @@ public class ColorEditorGui extends ExtendedScreen {
                                 },
                                 this::syncValues
                         )
-                )
+                ), startPage
         );
 
         // Page 2 Items
@@ -161,56 +155,29 @@ public class ColorEditorGui extends ExtendedScreen {
                         calc2, CraftPresence.GUIS.getButtonY(1),
                         180, 20,
                         this::syncValues
-                )
+                ), startPage + 1
         );
         textureText.setMaxStringLength(32767);
-
-        proceedButton = addControl(
-                new ExtendedButtonControl(
-                        10, (height - 30),
-                        80, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
-                        () -> {
-                            syncValues();
-                            if (isModified && onAdjustEntry != null) {
-                                onAdjustEntry.accept(pageNumber, this);
-                            }
-                            CraftPresence.GUIS.openScreen(parentScreen);
-                        }
-                )
-        );
-        previousPageButton = addControl(
-                new ExtendedButtonControl(
-                        (proceedButton.getControlPosX() + proceedButton.getControlWidth()) + 3, (height - 30),
-                        20, 20,
-                        "<",
-                        () -> {
-                            if (pageNumber != 0) {
-                                pageNumber--;
-                                initValues();
-                                syncValues();
-                            }
-                        }
-                )
-        );
-        nextPageButton = addControl(
-                new ExtendedButtonControl(
-                        (previousPageButton.getControlPosX() + previousPageButton.getControlWidth()) + 3, (height - 30),
-                        20, 20,
-                        ">",
-                        () -> {
-                            if (pageNumber != 1) {
-                                pageNumber++;
-                                initValues();
-                                syncValues();
-                            }
-                        }
-                )
-        );
 
         initValues();
         syncValues();
         super.initializeUi();
+
+        backButton.setOnClick(
+                () -> {
+                    syncValues();
+                    if (isModified && onAdjustEntry != null) {
+                        onAdjustEntry.accept(currentPage, this);
+                    }
+                    CraftPresence.GUIS.openScreen(parentScreen);
+                }
+        );
+        setOnPageChange(
+                () -> {
+                    initValues();
+                    syncValues();
+                }
+        );
     }
 
     @Override
@@ -221,23 +188,6 @@ public class ColorEditorGui extends ExtendedScreen {
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(previewTitle, width - 90, height - 29.5f, 0xFFFFFF);
 
-        // Ensure Button Activity on Page 1
-        hexText.setVisible(pageNumber == 0);
-        hexText.setEnabled(hexText.getVisible());
-
-        redText.setControlEnabled(pageNumber == 0);
-        redText.setControlVisible(redText.isControlEnabled());
-        greenText.setControlEnabled(pageNumber == 0);
-        greenText.setControlVisible(greenText.isControlEnabled());
-        blueText.setControlEnabled(pageNumber == 0);
-        blueText.setControlVisible(blueText.isControlEnabled());
-        alphaText.setControlEnabled(pageNumber == 0);
-        alphaText.setControlVisible(alphaText.isControlEnabled());
-
-        // Ensure Button Activity on Page 2
-        textureText.setVisible(pageNumber == 1);
-        textureText.setEnabled(textureText.getVisible());
-
         // Setup Data for Drawing
         double tooltipX = width - 45;
         double tooltipY = height - 45;
@@ -247,25 +197,25 @@ public class ColorEditorGui extends ExtendedScreen {
         String borderColor = "#000000";
         String borderColorEnd = "#000000";
 
+        super.preRender();
+
         // Page 1 Items
-        if (pageNumber == 0) {
+        if (currentPage == startPage) {
             final String hexCodeTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.hex_code");
 
             renderString(hexCodeTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
-
-            proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(hexText.getText()));
+            backButton.setControlEnabled(!StringUtils.isNullOrEmpty(hexText.getText()));
 
             // Draw Preview Box
             CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY - 3, width - 2, height - 2, currentConvertedHexValue, currentConvertedHexValue);
         }
 
         // Page 2 Items
-        if (pageNumber == 1) {
+        if (currentPage == startPage + 1) {
             final String textureTitle = ModUtils.TRANSLATOR.translate("gui.config.message.editor.texture_path");
 
             renderString(textureTitle, (width / 2f) - 130, CraftPresence.GUIS.getButtonY(1, 5), 0xFFFFFF);
-
-            proceedButton.setControlEnabled(!StringUtils.isNullOrEmpty(textureText.getText()));
+            backButton.setControlEnabled(!StringUtils.isNullOrEmpty(textureText.getText()));
 
             if (currentTexture == null) {
                 currentTexture = new ResourceLocation("");
@@ -294,26 +244,7 @@ public class ColorEditorGui extends ExtendedScreen {
         CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColor, borderColor);
         CraftPresence.GUIS.drawGradientRect(300, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
 
-        previousPageButton.setControlEnabled(pageNumber != 0);
-        nextPageButton.setControlEnabled(pageNumber != 1);
-
-        proceedButton.setControlMessage(isModified ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back"));
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_UP && pageNumber != 0) {
-            pageNumber--;
-            initValues();
-            syncValues();
-        }
-
-        if (keyCode == Keyboard.KEY_DOWN && pageNumber != 1) {
-            pageNumber++;
-            initValues();
-            syncValues();
-        }
-        super.keyTyped(typedChar, keyCode);
+        backButton.setControlMessage(isModified ? ModUtils.TRANSLATOR.translate("gui.config.message.button.save") : ModUtils.TRANSLATOR.translate("gui.config.message.button.back"));
     }
 
     /**
@@ -329,14 +260,14 @@ public class ColorEditorGui extends ExtendedScreen {
                 currentConvertedHexValue = null;
                 currentConvertedTexturePath = null;
                 currentTexture = new ResourceLocation("");
-                pageNumber = 0;
+                currentPage = startPage;
             } else if (StringUtils.isNullOrEmpty(textureText.getText()) && !StringUtils.isNullOrEmpty(startingTexturePath)) {
                 textureText.setText(startingTexturePath);
                 currentNormalHexValue = null;
                 currentConvertedHexValue = null;
                 currentConvertedTexturePath = null;
                 currentTexture = new ResourceLocation("");
-                pageNumber = 1;
+                currentPage = startPage + 1;
             }
         }
     }
@@ -346,7 +277,7 @@ public class ColorEditorGui extends ExtendedScreen {
      */
     private void syncValues() {
         // Page 1 - RGBA / Hex Syncing
-        if (pageNumber == 0) {
+        if (currentPage == startPage) {
             Integer localValue = null;
             Color localColor;
 
@@ -402,7 +333,7 @@ public class ColorEditorGui extends ExtendedScreen {
         }
 
         // Page 2 - Texture Syncing
-        if (pageNumber == 1) {
+        if (currentPage == startPage + 1) {
             if (!StringUtils.isNullOrEmpty(textureText.getText())) {
                 usingExternalTexture = ImageUtils.isExternalImage(textureText.getText());
 
@@ -447,7 +378,7 @@ public class ColorEditorGui extends ExtendedScreen {
             } else {
                 currentTexture = new ResourceLocation("");
             }
-            isModified = !textureText.getText().equals(startingTexturePath.replace(CraftPresence.CONFIG.splitCharacter, ":"));
+            isModified = !StringUtils.isNullOrEmpty(startingTexturePath) && !textureText.getText().equals(startingTexturePath.replace(CraftPresence.CONFIG.splitCharacter, ":"));
         }
     }
 }

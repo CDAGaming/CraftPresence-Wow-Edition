@@ -44,6 +44,7 @@ public class PaginatedScreen extends ExtendedScreen {
     private final Map<Integer, List<ScrollableListControl>> paginatedLists = Maps.newHashMap();
     protected int startPage = 1, currentPage = startPage, maxPages = startPage;
     protected ExtendedButtonControl nextPageButton, previousPageButton, backButton;
+    private Runnable onPageChange;
 
     public PaginatedScreen(GuiScreen parentScreen) {
         super(parentScreen);
@@ -80,6 +81,9 @@ public class PaginatedScreen extends ExtendedScreen {
                         () -> {
                             if (currentPage > startPage) {
                                 currentPage--;
+                                if (onPageChange != null) {
+                                    onPageChange.run();
+                                }
                             }
                         }
                 )
@@ -92,6 +96,9 @@ public class PaginatedScreen extends ExtendedScreen {
                         () -> {
                             if (currentPage < maxPages) {
                                 currentPage++;
+                                if (onPageChange != null) {
+                                    onPageChange.run();
+                                }
                             }
                         }
                 )
@@ -194,5 +201,14 @@ public class PaginatedScreen extends ExtendedScreen {
         if (renderTarget == currentPage) {
             getFontRenderer().drawStringWithShadow(text, xPos, yPos, color);
         }
+    }
+
+    /**
+     * Set the Event to trigger upon page change
+     *
+     * @param onPageChange The new event to be triggered
+     */
+    public void setOnPageChange(Runnable onPageChange) {
+        this.onPageChange = onPageChange;
     }
 }
