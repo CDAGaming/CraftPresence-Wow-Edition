@@ -7,7 +7,7 @@ _A Detailed Changelog from the last release is available [here](https://gitlab.c
 ### Changes
 
 *   All KeyBindings are now re-recognized into MC's control menu, with the ability to synchronize and update on both ends, on applicable versions
-*   The Controls Menu in the Config Gui has now been expanded into it's own gui, on account of KeyUtils expanded abilities
+*   The Controls Menu in the Config Gui has now been expanded into its own gui, on account of KeyUtils' expanded abilities
 *   (Backend) Added IPC adjustments from [this fork](https://github.com/Hexmory/DiscordIPC) (Thanks for the optimizations!)
 
 ### Fixes
