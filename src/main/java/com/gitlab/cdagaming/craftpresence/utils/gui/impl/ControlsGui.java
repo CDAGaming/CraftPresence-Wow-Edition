@@ -33,7 +33,7 @@ import com.gitlab.cdagaming.craftpresence.impl.Tuple;
 import com.gitlab.cdagaming.craftpresence.utils.KeyUtils;
 import com.gitlab.cdagaming.craftpresence.utils.StringUtils;
 import com.gitlab.cdagaming.craftpresence.utils.gui.controls.ExtendedButtonControl;
-import com.gitlab.cdagaming.craftpresence.utils.gui.integrations.ExtendedScreen;
+import com.gitlab.cdagaming.craftpresence.utils.gui.integrations.PaginatedScreen;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.client.gui.GuiScreen;
@@ -44,21 +44,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-// TODO - See below list
-// - Add Paginated Support when PaginatedScreen becomes available
-public class ControlsGui extends ExtendedScreen {
+public class ControlsGui extends PaginatedScreen {
 
     // Format: See KeyUtils#KEY_MAPPINGS
     private final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> keyMappings;
     // Format: categoryName:keyNames
     private final Map<String, List<String>> categorizedNames = Maps.newHashMap();
-    // Format: elementText:[xPos:yPos:color]
-    private final Map<String, Tuple<Float, Float, Integer>> preRenderQueue = Maps.newHashMap(), postRenderQueue = Maps.newHashMap();
-    private final List<ExtendedButtonControl> controlQueue = Lists.newArrayList();
+    // Format: pageNumber:[elementText:[xPos:yPos]:color]
+    private final Map<Integer, List<Tuple<String, Pair<Float, Float>, Integer>>> preRenderQueue = Maps.newHashMap(), postRenderQueue = Maps.newHashMap();
     // Pair Format: buttonToModify, Config Field to Edit
     // (Store a Backup of Prior Text just in case)
     private String backupKeyString;
     private Pair<ExtendedButtonControl, String> entryData = null;
+    private final int maxElementsPerPage = 7, startRow = 1;
+    private int currentAllocatedRow = startRow, currentAllocatedPage = startPage;
 
     public ControlsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -78,24 +77,15 @@ public class ControlsGui extends ExtendedScreen {
     public void initializeUi() {
         setupScreenData();
 
-        // Adding Back Button
-        addControl(
-                new ExtendedButtonControl(
-                        10, (height - 30),
-                        95, 20,
-                        ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
-                        () -> {
-                            if (entryData == null) {
-                                CraftPresence.GUIS.openScreen(parentScreen);
-                            }
-                        }
-                )
-        );
-        for (ExtendedButtonControl button : controlQueue) {
-            addControl(button);
-        }
-
         super.initializeUi();
+
+        backButton.setOnClick(
+                () -> {
+                    if (entryData == null) {
+                        CraftPresence.GUIS.openScreen(parentScreen);
+                    }
+                }
+        );
     }
 
     @Override
@@ -105,18 +95,24 @@ public class ControlsGui extends ExtendedScreen {
         renderString(mainTitle, (width / 2f) - (StringUtils.getStringWidth(mainTitle) / 2f), 10, 0xFFFFFF);
         renderString(subTitle, (width / 2f) - (StringUtils.getStringWidth(subTitle) / 2f), 20, 0xFFFFFF);
 
-        for (String elementText : preRenderQueue.keySet()) {
-            final Tuple<Float, Float, Integer> elementData = preRenderQueue.get(elementText);
-            renderString(ModUtils.TRANSLATOR.translate(elementText), elementData.getFirst(), elementData.getSecond(), elementData.getThird());
+        super.preRender();
+
+        for (Integer pageNumber : preRenderQueue.keySet()) {
+            final List<Tuple<String, Pair<Float, Float>, Integer>> elementList = preRenderQueue.get(pageNumber);
+            for (Tuple<String, Pair<Float, Float>, Integer> elementData : elementList) {
+                renderString(ModUtils.TRANSLATOR.translate(elementData.getFirst()), elementData.getSecond().getFirst(), elementData.getSecond().getSecond(), elementData.getThird(), pageNumber);
+            }
         }
     }
 
     @Override
     public void postRender() {
-        for (String elementText : postRenderQueue.keySet()) {
-            final Tuple<Float, Float, Integer> elementData = postRenderQueue.get(elementText);
-            if (CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), elementData.getFirst(), elementData.getSecond(), StringUtils.getStringWidth(ModUtils.TRANSLATOR.translate(elementText)), getFontHeight())) {
-                CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate(elementText.replace(".name", ".description"))), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
+        for (Integer pageNumber : postRenderQueue.keySet()) {
+            final List<Tuple<String, Pair<Float, Float>, Integer>> elementList = postRenderQueue.get(pageNumber);
+            for (Tuple<String, Pair<Float, Float>, Integer> elementData : elementList) {
+                if (currentPage == pageNumber && CraftPresence.GUIS.isMouseOver(getMouseX(), getMouseY(), elementData.getSecond().getFirst(), elementData.getSecond().getSecond(), StringUtils.getStringWidth(ModUtils.TRANSLATOR.translate(elementData.getFirst())), getFontHeight())) {
+                    CraftPresence.GUIS.drawMultiLineString(StringUtils.splitTextByNewLine(ModUtils.TRANSLATOR.translate(elementData.getFirst().replace(".name", ".description"))), getMouseX(), getMouseY(), width, height, getWrapWidth(), getFontRenderer(), true);
+                }
             }
         }
     }
@@ -151,31 +147,57 @@ public class ControlsGui extends ExtendedScreen {
         // Clear any Prior Data before hand'
         preRenderQueue.clear();
         postRenderQueue.clear();
-        controlQueue.clear();
 
-        int currentCategoryRow = 1, nextRow = currentCategoryRow, renderPosition = (width / 2) + 3;
+        final int renderPosition = (width / 2) + 3;
         for (String categoryName : categorizedNames.keySet()) {
-            preRenderQueue.put(categoryName, new Tuple<>((width / 2f) - (StringUtils.getStringWidth(categoryName) / 2f), (float) CraftPresence.GUIS.getButtonY(currentCategoryRow, 5), 0xFFFFFF));
+            syncPageData();
+            final Tuple<String, Pair<Float, Float>, Integer> categoryData = new Tuple<>(categoryName, new Pair<>((width / 2f) - (StringUtils.getStringWidth(categoryName) / 2f), (float) CraftPresence.GUIS.getButtonY(currentAllocatedRow, 5)), 0xFFFFFF);
+            if (!preRenderQueue.containsKey(currentAllocatedPage)) {
+                preRenderQueue.put(currentAllocatedPage, Lists.newArrayList(categoryData));
+            } else {
+                preRenderQueue.get(currentAllocatedPage).add(categoryData);
+            }
 
             final List<String> keyNames = categorizedNames.get(categoryName);
-            currentCategoryRow += keyNames.size();
-            nextRow++;
+            currentAllocatedRow++;
 
             for (String keyName : keyNames) {
-                final Tuple<Float, Float, Integer> positionData = new Tuple<>((width / 2f) - 130, (float) CraftPresence.GUIS.getButtonY(nextRow, 5), 0xFFFFFF);
                 final Tuple<KeyBinding, Runnable, DataConsumer<Throwable>> keyData = keyMappings.get(keyName);
-                preRenderQueue.put(keyData.getFirst().getKeyDescription(), positionData);
-                postRenderQueue.put(keyData.getFirst().getKeyDescription(), positionData);
+                final Tuple<String, Pair<Float, Float>, Integer> positionData = new Tuple<>(keyData.getFirst().getKeyDescription(), new Pair<>((width / 2f) - 130, (float) CraftPresence.GUIS.getButtonY(currentAllocatedRow, 5)), 0xFFFFFF);
+                if (!preRenderQueue.containsKey(currentAllocatedPage)) {
+                    preRenderQueue.put(currentAllocatedPage, Lists.newArrayList(positionData));
+                } else {
+                    preRenderQueue.get(currentAllocatedPage).add(positionData);
+                }
+
+                if (!postRenderQueue.containsKey(currentAllocatedPage)) {
+                    postRenderQueue.put(currentAllocatedPage, Lists.newArrayList(positionData));
+                } else {
+                    postRenderQueue.get(currentAllocatedPage).add(positionData);
+                }
+
                 final ExtendedButtonControl keyCodeButton = new ExtendedButtonControl(
-                        renderPosition + 20, CraftPresence.GUIS.getButtonY(nextRow),
+                        renderPosition + 20, CraftPresence.GUIS.getButtonY(currentAllocatedRow),
                         120, 20,
                         CraftPresence.KEYBINDINGS.getKeyName(keyData.getFirst().getKeyCode()),
                         keyName
                 );
                 keyCodeButton.setOnClick(() -> setupEntryData(keyCodeButton));
-                controlQueue.add(keyCodeButton);
-                nextRow++;
+
+                addControl(keyCodeButton, currentAllocatedPage);
+                currentAllocatedRow++;
+                syncPageData();
             }
+        }
+    }
+
+    /**
+     * Synchronize Page Data based on placed elements
+     */
+    private void syncPageData() {
+        if (currentAllocatedRow >= maxElementsPerPage) {
+            currentAllocatedPage++;
+            currentAllocatedRow = startRow;
         }
     }
 
