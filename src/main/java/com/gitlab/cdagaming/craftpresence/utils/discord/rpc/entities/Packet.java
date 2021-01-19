@@ -25,7 +25,6 @@
 package com.gitlab.cdagaming.craftpresence.utils.discord.rpc.entities;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

@@ -48,10 +48,6 @@ import java.util.Map;
 // - Add Paginated Support when PaginatedScreen becomes available
 public class ControlsGui extends ExtendedScreen {
 
-    // Pair Format: buttonToModify, Config Field to Edit
-    // (Store a Backup of Prior Text just in case)
-    private String backupKeyString;
-    private Pair<ExtendedButtonControl, String> entryData = null;
     // Format: See KeyUtils#KEY_MAPPINGS
     private final Map<String, Tuple<KeyBinding, Runnable, DataConsumer<Throwable>>> keyMappings;
     // Format: categoryName:keyNames
@@ -59,6 +55,10 @@ public class ControlsGui extends ExtendedScreen {
     // Format: elementText:[xPos:yPos:color]
     private final Map<String, Tuple<Float, Float, Integer>> preRenderQueue = Maps.newHashMap(), postRenderQueue = Maps.newHashMap();
     private final List<ExtendedButtonControl> controlQueue = Lists.newArrayList();
+    // Pair Format: buttonToModify, Config Field to Edit
+    // (Store a Backup of Prior Text just in case)
+    private String backupKeyString;
+    private Pair<ExtendedButtonControl, String> entryData = null;
 
     ControlsGui(GuiScreen parentScreen) {
         super(parentScreen);
@@ -84,7 +84,11 @@ public class ControlsGui extends ExtendedScreen {
                         10, (height - 30),
                         95, 20,
                         ModUtils.TRANSLATOR.translate("gui.config.message.button.back"),
-                        () -> CraftPresence.GUIS.openScreen(parentScreen)
+                        () -> {
+                            if (entryData == null) {
+                                CraftPresence.GUIS.openScreen(parentScreen)
+                            }
+                        }
                 )
         );
         for (ExtendedButtonControl button : controlQueue) {

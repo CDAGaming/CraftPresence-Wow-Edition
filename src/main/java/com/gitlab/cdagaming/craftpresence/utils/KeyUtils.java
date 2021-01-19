@@ -262,9 +262,9 @@ public class KeyUtils {
      * <p>
      * Format:
      * - Config: Signals Client to use the Config Value to Sync to the Controls Menu
-     *  * The keyName in syncKeyData in this case should be the namespaced value
+     * * The keyName in syncKeyData in this case should be the namespaced value
      * - Vanilla: Signals Client to use the Controls menu to Sync to the Config Value
-     *  * The keyName in syncKeyData in this case should be the field name from ConfigUtils
+     * * The keyName in syncKeyData in this case should be the field name from ConfigUtils
      * - Specific: Signals Client to force both the controls menu and config value to a specific value
      */
     public enum ImportMode {
