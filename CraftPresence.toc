@@ -1,0 +1,14 @@
+## Interface: 90002
+## Title: CraftPresence
+## Notes: Completely customize the way others see you play in Discord!
+## Author: CDAGaming
+## Version: 1.0.0
+## SavedVariables: CraftPresenceDB
+## OptionalDeps: Ace3
+## X-Embeds: Ace3
+
+embeds.xml
+
+enUS.lua
+
+CraftPresence.lua
