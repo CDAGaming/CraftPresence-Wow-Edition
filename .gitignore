@@ -28,4 +28,6 @@ classes/
 
 logs/
 
-.vscode/settings.json
+CraftPresence/.vscode/
+
+script/__pycache__/

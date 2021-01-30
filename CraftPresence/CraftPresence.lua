@@ -104,7 +104,7 @@ function CraftPresence:PaintSomething(text)
 	end
 
 	-- clean all
-	CleanFrames()
+	self:CleanFrames()
 
 	local squares_painted = 0
 
@@ -114,11 +114,11 @@ function CraftPresence:PaintSomething(text)
 		if #trio > 1 then g = string.byte(trio:sub(2,2)) end
 		if #trio > 2 then b = string.byte(trio:sub(3,3)) end
 		squares_painted = squares_painted + 1
-		PaintFrame(frames[squares_painted], r, g, b)
+		self:PaintFrame(frames[squares_painted], r, g, b)
 	end
 
 	-- and then paint the last one black
-	PaintFrame(frames[squares_painted], 0, 0, 0, 1)
+	self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
 end
 
 function CraftPresence:EncodeZoneType()
@@ -160,16 +160,16 @@ end
 
 function CraftPresence:CleanFrames()
 	for i=1, frame_count do
-		PaintFrame(frames[i], 0, 0, 0, 0)
+		self:PaintFrame(frames[i], 0, 0, 0, 0)
 	end
 end
 
 function CraftPresence:PaintMessageWait()
-	local encoded = EncodeZoneType()
+	local encoded = self:EncodeZoneType()
 	if(last_encoded ~= encoded and encoded ~= nil) then
 		last_encoded = encoded
-		PaintSomething(encoded)
-		C_Timer.After(10, CleanFrames)
+		self:PaintSomething(encoded)
+		C_Timer.After(10, function() self:CleanFrames() end)
 	end
 end
 
@@ -185,15 +185,18 @@ end
 function CraftPresence:OnEnable()
 	-- Called when the addon is enabled
 	self:Print("Discord Rich Presence Loaded")
-	self:RegisterEvent("PLAYER_LOGIN", "OnUpdate")
-	self:RegisterEvent("ZONE_CHANGED", "OnUpdate")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "OnUpdate")
-	self:RegisterEvent("ZONE_CHANGED_INDOORS", "OnUpdate")
-	self:RegisterEvent("PLAYER_UNGHOST", "OnUpdate")
+	self:RegisterEvent("PLAYER_LOGIN", "DispatchUpdate")
+	self:RegisterEvent("ZONE_CHANGED", "DispatchUpdate")
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "DispatchUpdate")
+	self:RegisterEvent("ZONE_CHANGED_INDOORS", "DispatchUpdate")
+	self:RegisterEvent("PLAYER_UNGHOST", "DispatchUpdate")
+
+	self:CreateFrames()
+	self:PaintMessageWait()
 end
 
-function CraftPresence:OnUpdate()
-	PaintMessageWait()
+function CraftPresence:DispatchUpdate()
+	self:PaintMessageWait()
 end
 
 function CraftPresence:OnDisable()
@@ -201,7 +204,6 @@ function CraftPresence:OnDisable()
 end
 
 function CraftPresence:ChatCommand(input)
-	self:Print("Input: " . input)
     if not input or input:trim() == "" then
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     else
