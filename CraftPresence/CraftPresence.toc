@@ -1,8 +1,10 @@
 ## Interface: 90002
+
 ## Title: CraftPresence
-## Notes: Completely customize the way others see you play in Discord!
 ## Author: CDAGaming
-## Version: 1.0.0
+## Credits: Attka
+## Version: v1.0.0
+## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
 ## OptionalDeps: Ace3
 ## X-Embeds: Ace3
