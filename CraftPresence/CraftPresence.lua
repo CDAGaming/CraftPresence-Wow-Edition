@@ -164,6 +164,10 @@ function CraftPresence:CleanFrames()
 	end
 end
 
+function CraftPresence:TestFrames()
+	local encoded = self:EncodeZoneType()
+	if encoded ~= nil then self:PaintSomething(encoded) end
+
 function CraftPresence:PaintMessageWait()
 	local encoded = self:EncodeZoneType()
 	if(last_encoded ~= encoded and encoded ~= nil) then
@@ -206,8 +210,16 @@ end
 function CraftPresence:ChatCommand(input)
     if not input or input:trim() == "" then
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-    else
-        LibStub("AceConfigCmd-3.0"):HandleCommand("cp", "CraftPresence", input)
+	else
+		if input == "test" then
+			self:TestFrames()
+		elseif input == "clean" then
+			self:CleanFrames()
+		else if input == "update" then
+			self:PaintMessageWait()
+		else
+			LibStub("AceConfigCmd-3.0"):HandleCommand("cp", "CraftPresence", input)
+		end
     end
 end
 
