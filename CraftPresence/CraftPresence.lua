@@ -23,19 +23,19 @@ local options = {
             get = "GetZoneMessage",
             set = "SetZoneMessage",
         },
-        showInChat = {
+        showLoggingInChat = {
             type = "toggle",
-            name = L["TITLE_SHOW_IN_CHAT"],
-            desc = L["COMMENT_SHOW_IN_CHAT"],
-            get = "IsShowInChat",
-            set = "ToggleShowInChat",
+            name = L["TITLE_SHOW_LOGGING_IN_CHAT"],
+            desc = L["COMMENT_SHOW_LOGGING_IN_CHAT"],
+            get = "IsShowLoggingInChat",
+            set = "ToggleShowLoggingInChat",
         },
-        showOnScreen = {
+        debugMode = {
             type = "toggle",
-            name = L["TITLE_SHOW_ON_SCREEN"],
-            desc = L["COMMENT_SHOW_ON_SCREEN"],
-            get = "IsShowOnScreen",
-            set = "ToggleShowOnScreen"
+            name = L["TITLE_DEBUG_MODE"],
+            desc = L["COMMENT_DEBUG_MODE"],
+            get = "IsDebugMode",
+            set = "ToggleDebugMode"
         },
     },
 }
@@ -44,8 +44,8 @@ local defaults = {
     profile = {
 		homeMessage = L["DEFAULT_HOME_MESSAGE"],
 		zoneMessage = L["DEFAULT_ZONE_MESSAGE"],
-        showInChat = false,
-        showOnScreen = false,
+        showLoggingInChat = true,
+        debugMode = true,
     },
 }
 
@@ -246,18 +246,18 @@ function CraftPresence:SetZoneMessage(info, newValue)
     self.db.profile.zoneMessage = newValue
 end
 
-function CraftPresence:IsShowInChat(info)
-    return self.db.profile.showInChat
+function CraftPresence:IsShowLoggingInChat(info)
+    return self.db.profile.showLoggingInChat
 end
 
-function CraftPresence:ToggleShowInChat(info, value)
-    self.db.profile.showInChat = value
+function CraftPresence:ToggleShowLoggingInChat(info, value)
+    self.db.profile.showLoggingInChat = value
 end
 
-function CraftPresence:IsShowOnScreen(info)
-    return self.db.profile.showOnScreen
+function CraftPresence:IsDebugMode(info)
+    return self.db.profile.debugMode
 end
 
-function CraftPresence:ToggleShowOnScreen(info, value)
-    self.db.profile.showOnScreen = value
+function CraftPresence:ToggleDebugMode(info, value)
+    self.db.profile.debugMode = value
 end
