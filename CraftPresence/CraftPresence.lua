@@ -57,7 +57,9 @@ local last_encoded = ""
 function CraftPresence:CreateFrames()
 	local size = 12
 	frame_count = math.floor(GetScreenWidth() / size)
-	-- self:Print("Max bytes that can be stored: " .. (frame_count * 3) - 1)
+	if self:IsDebugMode() and self:IsShowLoggingInChat() then
+		self:Print("Debug => Max bytes that can be stored: " .. (frame_count * 3) - 1)
+	end
 
 	for i=1, frame_count do
 		frames[i] = CreateFrame("Frame", nil, UIParent)
@@ -99,7 +101,9 @@ end
 function CraftPresence:PaintSomething(text)
 	local max_bytes = (frame_count - 1) * 3
 	if text:len() >= max_bytes then
-		-- self:Print("You're painting too many bytes (" .. #text .. " vs " .. max_bytes .. ")")
+		if self:IsDebugMode() and self:IsShowLoggingInChat() then
+			self:Print("Error => You're painting too many bytes (" .. #text .. " vs " .. max_bytes .. ")")
+		end
 		return
 	end
 
@@ -125,8 +129,7 @@ function CraftPresence:EncodeZoneType()
 	local name, instanceType, difficultyID, difficultyName, maxPlayers,
 		dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
 	local firstLine = nil
-	local secondLineFirst = nil
-	local secondLineSecond = nil
+	local secondLine = nil
 	local playerName = UnitName("player")
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
