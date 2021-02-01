@@ -10,7 +10,7 @@ local options = {
 		homeMessage = {
             type = "input",
             name = L["Home Message"],
-            desc = L["The message text to be displayed when you get home"],
+            desc = L["The message to be displayed when you get home."],
             usage = L["<Your message here>"],
             get = "GetHomeMessage",
             set = "SetHomeMessage",
@@ -18,7 +18,7 @@ local options = {
 		zoneMessage = {
             type = "input",
             name = L["Zone Message"],
-            desc = L["The message text to be displayed when you enter a new zone"],
+            desc = L["The message to be displayed when you enter a new zone."],
             usage = L["<Your message here>"],
             get = "GetZoneMessage",
             set = "SetZoneMessage",
@@ -169,9 +169,11 @@ function CraftPresence:TestFrames()
 	if encoded ~= nil then self:PaintSomething(encoded) end
 end
 
-function CraftPresence:PaintMessageWait()
+function CraftPresence:PaintMessageWait(force)
+	local proceed = force ~= nil and force == true;
 	local encoded = self:EncodeZoneType()
-	if(last_encoded ~= encoded and encoded ~= nil) then
+	local changed = last_encoded ~= encoded or proceed
+	if(changed and encoded ~= nil) then
 		last_encoded = encoded
 		self:PaintSomething(encoded)
 		C_Timer.After(10, function() self:CleanFrames() end)
@@ -212,12 +214,12 @@ function CraftPresence:ChatCommand(input)
     if not input or input:trim() == "" then
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
 	else
-		if input == " test " then
+		if input == "test" then
 			self:TestFrames()
-		elseif input == " clean " then
+		elseif input == "clean" or input == "clear" then
 			self:CleanFrames()
-		elseif input == " update " then
-			self:PaintMessageWait()
+		elseif input:trim() == "update" then
+			self:PaintMessageWait(true)
 		else
 			LibStub("AceConfigCmd-3.0"):HandleCommand("cp", "CraftPresence", input)
 		end
