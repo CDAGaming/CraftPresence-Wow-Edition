@@ -1,6 +1,6 @@
 {
-  "debug": true,
-  "my_width": 12,
+  "debug": false,
+  "my_width": 11.968,
   "discord_client_id": "805124430774272000",
   "wow_icon": "wow_icon"
 }

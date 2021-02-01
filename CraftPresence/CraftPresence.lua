@@ -9,31 +9,31 @@ local options = {
     args = {
 		homeMessage = {
             type = "input",
-            name = L["Home Message"],
-            desc = L["The message to be displayed when you get home."],
-            usage = L["<Your message here>"],
+            name = L["TITLE_HOME_MESSAGE"],
+            desc = L["COMMENT_HOME_MESSAGE"],
+            usage = L["USAGE_HOME_MESSAGE"],
             get = "GetHomeMessage",
             set = "SetHomeMessage",
 		},
 		zoneMessage = {
             type = "input",
-            name = L["Zone Message"],
-            desc = L["The message to be displayed when you enter a new zone."],
-            usage = L["<Your message here>"],
+            name = L["TITLE_ZONE_MESSAGE"],
+            desc = L["COMMENT_ZONE_MESSAGE"],
+            usage = L["USAGE_ZONE_MESSAGE"],
             get = "GetZoneMessage",
             set = "SetZoneMessage",
         },
         showInChat = {
             type = "toggle",
-            name = L["Show in Chat"],
-            desc = L["Toggles the display of the message in the chat window."],
+            name = L["TITLE_SHOW_IN_CHAT"],
+            desc = L["COMMENT_SHOW_IN_CHAT"],
             get = "IsShowInChat",
             set = "ToggleShowInChat",
         },
         showOnScreen = {
             type = "toggle",
-            name = L["Show on Screen"],
-            desc = L["Toggles the display of the message on the screen."],
+            name = L["TITLE_SHOW_ON_SCREEN"],
+            desc = L["COMMENT_SHOW_ON_SCREEN"],
             get = "IsShowOnScreen",
             set = "ToggleShowOnScreen"
         },
@@ -42,8 +42,8 @@ local options = {
 
 local defaults = {
     profile = {
-		homeMessage = L["Welcome Home!"],
-		zoneMessage = L["Entering new zone!"],
+		homeMessage = L["DEFAULT_HOME_MESSAGE"],
+		zoneMessage = L["DEFAULT_ZONE_MESSAGE"],
         showInChat = false,
         showOnScreen = false,
     },
@@ -136,10 +136,10 @@ function CraftPresence:EncodeZoneType()
 	local sub_name = GetSubZoneText()
 	if instanceType == 'party' then
 		firstLine = zone_name
-		secondLine = string.format('In %s Dungeon', difficultyName)
+		secondLine = string.format("In %s Dungeon", difficultyName)
 	elseif instanceType == 'raid' then
 		firstLine = zone_name
-		secondLine = string.format('In %s Raid', difficultyName)
+		secondLine = string.format("In %s Raid", difficultyName)
 	elseif instanceType == 'pvp' then
 		firstLine = zone_name
 		secondLine = "In Battleground"
@@ -185,6 +185,7 @@ function CraftPresence:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("CraftPresenceDB", defaults, true)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("CraftPresence", options)
 	self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("CraftPresence", "CraftPresence")
+	-- Command Registration
 	self:RegisterChatCommand("craftpresence", "ChatCommand")
 	self:RegisterChatCommand("cp", "ChatCommand")
 end
@@ -225,8 +226,9 @@ function CraftPresence:ChatCommand(input)
 		end
     end
 end
-
+-- ====================================================
 -- Getters and Setters (Config Data)
+-- =====================================================
 
 function CraftPresence:GetHomeMessage(info)
     return self.db.profile.homeMessage
