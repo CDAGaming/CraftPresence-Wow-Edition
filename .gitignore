@@ -29,5 +29,6 @@ classes/
 logs/
 
 CraftPresence/.vscode/
+.vscode/
 
 script/__pycache__/
