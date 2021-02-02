@@ -4,8 +4,6 @@ import json
 import os
 
 from PIL import Image, ImageGrab
-import win32api
-import win32con
 import win32gui
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -15,7 +13,7 @@ config = json.load(f)
 
 # these are internal use variables, don't touch them
 decoded = ''
-wow_hwnd = None
+process_hwnd = None
 rpc_obj = None
 last_first_line = None
 last_second_line = None
@@ -23,10 +21,10 @@ last_third_line = None
 last_fourth_line = None
 
 def callback(hwnd, extra):
-    global wow_hwnd
-    if (win32gui.GetWindowText(hwnd) == 'World of Warcraft' and
+    global process_hwnd
+    if (win32gui.GetWindowText(hwnd) == config["process_name"] and
             win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
-        wow_hwnd = hwnd
+        process_hwnd = hwnd
 
 
 def read_squares(hwnd):
@@ -62,7 +60,7 @@ def read_squares(hwnd):
     except:
         if not config["debug"]:
             return
-    parts = decoded.replace('$WorldOfWarcraftDRP$', '').split('|')
+    parts = decoded.replace('$RPCEvent$', '').split('|')
 
     if config["debug"]:
         im.show()
@@ -70,8 +68,8 @@ def read_squares(hwnd):
 
     # sanity check
     if (len(parts) != 4 or
-            not decoded.endswith('$WorldOfWarcraftDRP$') or
-            not decoded.startswith('$WorldOfWarcraftDRP$')):
+            not decoded.endswith('$RPCEvent$') or
+            not decoded.startswith('$RPCEvent$')):
         return
 
     first_line, second_line, third_line, fourth_line = parts
@@ -80,20 +78,20 @@ def read_squares(hwnd):
 
 
 while True:
-    wow_hwnd = None
+    process_hwnd = None
     win32gui.EnumWindows(callback, None)
 
     if config["debug"]:
         # if in DEBUG mode, squares are read, the image with the dot matrix is
         # shown and then the script quits.
-        if wow_hwnd:
+        if process_hwnd:
             print('DEBUG: reading squares. Is everything alright?')
-            read_squares(wow_hwnd)
+            read_squares(process_hwnd)
         else:
-            print("Launching in DEBUG mode but I couldn't find WoW.")
+            print("Launching in DEBUG mode but I couldn't find target process.")
         break
-    elif win32gui.GetForegroundWindow() == wow_hwnd:
-        lines = read_squares(wow_hwnd)
+    elif win32gui.GetForegroundWindow() == process_hwnd:
+        lines = read_squares(process_hwnd)
 
         if not lines:
             time.sleep(1)
@@ -132,7 +130,7 @@ while True:
                 'details': third_line,
                 'state': first_line + ' - ' + second_line,
                 'assets': {
-                    'large_image': config["wow_icon"],
+                    'large_image': config["large_icon"],
                     'large_text': fourth_line
                 },
                 'timestamps': dungeonTimer
@@ -145,8 +143,8 @@ while True:
                     'I will try to connect again in 5 sec.' % str(exc))
                 last_first_line, last_second_line, last_third_line, last_fourth_line = None, None, None, None
                 rpc_obj = None
-    elif not wow_hwnd and rpc_obj:
-        print('WoW no longer exists, disconnecting')
+    elif not process_hwnd and rpc_obj:
+        print('Target process is no longer active, disconnecting')
         rpc_obj.close()
         rpc_obj = None
         # clear these so it gets reread and resubmitted upon reconnection

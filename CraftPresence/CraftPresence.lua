@@ -7,21 +7,29 @@ local options = {
     handler = CraftPresence,
     type = 'group',
     args = {
-		homeMessage = {
+		clientId = {
             type = "input",
-            name = L["TITLE_HOME_MESSAGE"],
-            desc = L["COMMENT_HOME_MESSAGE"],
-            usage = L["USAGE_HOME_MESSAGE"],
-            get = "GetHomeMessage",
-            set = "SetHomeMessage",
+            name = L["TITLE_CLIENT_ID"],
+            desc = L["COMMENT_CLIENT_ID"],
+            usage = L["USAGE_CLIENT_ID"],
+            get = "GetClientId",
+            set = "SetClientId",
 		},
-		zoneMessage = {
+		gameStateMessage = {
             type = "input",
-            name = L["TITLE_ZONE_MESSAGE"],
-            desc = L["COMMENT_ZONE_MESSAGE"],
-            usage = L["USAGE_ZONE_MESSAGE"],
-            get = "GetZoneMessage",
-            set = "SetZoneMessage",
+            name = L["TITLE_GAME_STATE_MESSAGE"],
+            desc = L["COMMENT_GAME_STATE_MESSAGE"],
+            usage = L["USAGE_GAME_STATE_MESSAGE"],
+            get = "GetGameStateMessage",
+            set = "SetGameStateMessage",
+        },
+		detailsMessage = {
+            type = "input",
+            name = L["TITLE_DETAILS_MESSAGE"],
+            desc = L["COMMENT_DETAILS_MESSAGE"],
+            usage = L["USAGE_DETAILS_MESSAGE"],
+            get = "GetDetailsMessage",
+            set = "SetDetailsMessage",
         },
         showLoggingInChat = {
             type = "toggle",
@@ -42,12 +50,26 @@ local options = {
 
 local defaults = {
     profile = {
-		homeMessage = L["DEFAULT_HOME_MESSAGE"],
-		zoneMessage = L["DEFAULT_ZONE_MESSAGE"],
+		clientId = L["DEFAULT_CLIENT_ID"],
+		gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
+		detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
         showLoggingInChat = true,
         debugMode = true,
     },
 }
+
+-- ==================
+-- Utilities
+-- ==================
+
+function CraftPresence:ContainsDigit(str)
+	return string.find(str, "%d") and true or false
+end
+
+
+-- ==================
+-- RPC Data
+-- ==================
 
 local frame_count = 0
 local frames = {}
@@ -90,7 +112,8 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
 	g = g / 255
 	b = b / 255
 
-    -- set alpha to 1 if this pixel is black and force is 0 or null
+	-- set alpha to 1 if this pixel is black and force is 0 or null
+	local a = 0
 	if r == 0 and g == 0 and b == 0 and (force == 0 or force == nil) then a = 0 else a = 1 end
 
     -- and now paint it
@@ -111,6 +134,9 @@ function CraftPresence:PaintSomething(text)
 	self:CleanFrames()
 
 	local squares_painted = 0
+	local r = 0
+	local g = 0
+	local b = 0
 
 	for trio in text:gmatch".?.?.?" do
 		r = 0; g = 0; b = 0
@@ -162,7 +188,7 @@ function CraftPresence:EncodeZoneType()
 	local playerInfo = playerName .. " - " .. playerClass
 	local realmInfo = playerRegion .. " - " .. playerRealm
 	if firstLine == "" or firstLine == nil or secondLine == "" or secondLine == nil then return nil end
-	return "$WorldOfWarcraftDRP$" .. firstLine .. "|" .. secondLine .. "|" .. playerInfo .. "|" .. realmInfo .. "$WorldOfWarcraftDRP$"
+	return "$RPCEvent$" .. firstLine .. "|" .. secondLine .. "|" .. playerInfo .. "|" .. realmInfo .. "$RPCEvent$"
 end
 
 function CraftPresence:CleanFrames()
@@ -237,20 +263,32 @@ end
 -- Getters and Setters (Config Data)
 -- =====================================================
 
-function CraftPresence:GetHomeMessage(info)
-    return self.db.profile.homeMessage
+function CraftPresence:GetClientId(info)
+    return self.db.profile.clientId
 end
 
-function CraftPresence:SetHomeMessage(info, newValue)
-    self.db.profile.homeMessage = newValue
+function CraftPresence:SetClientId(info, newValue)
+	if newValue ~= nil and self:ContainsDigit(newValue) and string.len(newValue) == 16 then
+		self.db.profile.clientId = newValue
+	else
+		self:Print(L["ERROR_CLIENT_ID"])
+	end
 end
 
-function CraftPresence:GetZoneMessage(info)
-    return self.db.profile.zoneMessage
+function CraftPresence:GetGameStateMessage(info)
+    return self.db.profile.gameStateMessage
 end
 
-function CraftPresence:SetZoneMessage(info, newValue)
-    self.db.profile.zoneMessage = newValue
+function CraftPresence:SetGameStateMessage(info, newValue)
+    self.db.profile.gameStateMessage = newValue
+end
+
+function CraftPresence:GetDetailsMessage(info)
+    return self.db.profile.detailsMessage
+end
+
+function CraftPresence:SetDetailsMessage(info, newValue)
+    self.db.profile.detailsMessage = newValue
 end
 
 function CraftPresence:IsShowLoggingInChat(info)
