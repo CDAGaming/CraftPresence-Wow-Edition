@@ -130,13 +130,16 @@ function CraftPresence:EncodeZoneType()
 		dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
 	local firstLine = nil
 	local secondLine = nil
+
 	local playerName = UnitName("player")
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
 	local zone_name = GetRealZoneText()
+
 	if(zone_name == nil) then zone_name = "Not available" end
 	local sub_name = GetSubZoneText()
+
 	if instanceType == 'party' then
 		firstLine = zone_name
 		secondLine = string.format("In %s Dungeon", difficultyName)
@@ -155,6 +158,7 @@ function CraftPresence:EncodeZoneType()
 			secondLine = zone_name
 		end
 	end
+
 	local playerInfo = playerName .. " - " .. playerClass
 	local realmInfo = playerRegion .. " - " .. playerRealm
 	if firstLine == "" or firstLine == nil or secondLine == "" or secondLine == nil then return nil end
