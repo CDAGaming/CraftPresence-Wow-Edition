@@ -157,6 +157,9 @@ function CraftPresence:EncodeZoneType()
 	local firstLine = nil
 	local secondLine = nil
 
+	local startTime = nil
+	local endTime = nil
+
 	local playerName = UnitName("player")
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
@@ -169,12 +172,15 @@ function CraftPresence:EncodeZoneType()
 	if instanceType == 'party' then
 		firstLine = zone_name
 		secondLine = string.format("In %s Dungeon", difficultyName)
+		startTime = "generated"
 	elseif instanceType == 'raid' then
 		firstLine = zone_name
 		secondLine = string.format("In %s Raid", difficultyName)
+		startTime = "generated"
 	elseif instanceType == 'pvp' then
 		firstLine = zone_name
 		secondLine = "In Battleground"
+		startTime = "generated"
 	else
 		if UnitIsDeadOrGhost("player") and not UnitIsDead("player") then
 			firstLine = sub_name
@@ -188,7 +194,18 @@ function CraftPresence:EncodeZoneType()
 	local playerInfo = playerName .. " - " .. playerClass
 	local realmInfo = playerRegion .. " - " .. playerRealm
 	if firstLine == "" or firstLine == nil or secondLine == "" or secondLine == nil then return nil end
-	return "$RPCEvent$" .. firstLine .. "|" .. secondLine .. "|" .. playerInfo .. "|" .. realmInfo .. "$RPCEvent$"
+	local lineInfo = firstLine .. " - " .. secondLine
+	return self:EncodeData(self:GetClientId(), "wow_icon", realmInfo, nil, nil, playerInfo, lineInfo, startTime, endTime)
+end
+
+function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
+	if clientId ~= nil then clientId = L["DEFAULT_CLIENT_ID"] end
+	local nullKey = "None"
+	local endKey = "$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$"
+	if self:IsDebugMode() and self:IsShowLoggingInChat() then
+		self:Print("[Debug] Sending activity => " .. endKey)
+	end
+	return endKey
 end
 
 function CraftPresence:CleanFrames()

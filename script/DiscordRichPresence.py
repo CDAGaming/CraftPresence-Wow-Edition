@@ -19,6 +19,11 @@ last_first_line = None
 last_second_line = None
 last_third_line = None
 last_fourth_line = None
+last_fifth_line = None
+last_sixth_line = None
+last_seventh_line = None
+last_eigth_line = None
+last_ninth_line = None
 
 def callback(hwnd, extra):
     global process_hwnd
@@ -67,14 +72,14 @@ def read_squares(hwnd):
         return
 
     # sanity check
-    if (len(parts) != 4 or
+    if (len(parts) != 9 or
             not decoded.endswith('$RPCEvent$') or
             not decoded.startswith('$RPCEvent$')):
         return
 
-    first_line, second_line, third_line, fourth_line = parts
+    first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eigth_line, ninth_line = parts
 
-    return first_line, second_line, third_line, fourth_line
+    return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eigth_line, ninth_line
 
 
 while True:
@@ -97,21 +102,32 @@ while True:
             time.sleep(1)
             continue
 
-        first_line, second_line, third_line, fourth_line = lines
+        first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eigth_line, ninth_line = lines
+        hasIdChanged = first_line != last_first_line
 
-        if first_line != last_first_line or second_line != last_second_line:
+        if hasIdChanged or second_line != last_second_line or third_line != last_third_line or fourth_line != last_fourth_line or fifth_line != last_fifth_line or sixth_line != last_sixth_line or seventh_line != last_seventh_line or eigth_line != last_eigth_line or ninth_line != last_ninth_line:
             # there has been an update, so send it to discord
             last_first_line = first_line
             last_second_line = second_line
             last_third_line = third_line
             last_fourth_line = fourth_line
+            last_fifth_line = fifth_line
+            last_sixth_line = sixth_line
+            last_seventh_line = seventh_line
+            last_eigth_line = eigth_line
+            last_ninth_line = ninth_line
 
-            if not rpc_obj:
-                print('Not connected to Discord, connecting...')
+            if not rpc_obj or hasIdChanged:
+                if rpc_obj:
+                    print('The client id has been changed, reconnecting with new id...')
+                    rpc_obj.close()
+                else:
+                    print('Not connected to Discord, connecting...')
+
                 while True:
                     try:
                         rpc_obj = (rpc.DiscordIpcClient
-                                .for_platform(config["discord_client_id"]))
+                                .for_platform(first_line))
                     except Exception as exc:
                         print("I couldn't connect to Discord (%s). It's "
                             'probably not running. I will try again in 5 '
@@ -122,31 +138,50 @@ while True:
                         break
                 print('Connected to Discord.')
 
-            print('Setting new activity: %s - %s - %s - %s' % (first_line, second_line, third_line, fourth_line))
-            dungeonTimer = {}
-            if("Dungeon" in second_line or "Raid" in second_line or "Battleground" in second_line):
-                dungeonTimer = { 'start': round(time.time()) }
-            activity = {
-                'details': third_line,
-                'state': first_line + ' - ' + second_line,
-                'assets': {
-                    'large_image': config["large_icon"],
-                    'large_text': fourth_line
-                },
-                'timestamps': dungeonTimer
-            }
+            timerData = {}
+            assetsData = {}
+            activity = {}
+            # Asset Data Sync
+            if not("None" in second_line):
+                assetsData["large_image"] = second_line
+                if not("None" in third_line):
+                    assetsData["large_text"] = third_line
+            if not("None" in fourth_line):
+                assetsData["small_image"] = fourth_line
+                if not("None" in fifth_line):
+                    assetsData["small_text"] = fifth_line
+            # Timer Data Setup
+            if("generated" in eigth_line):
+                eigth_line = str(round(time.time()))
+            if("generated" in ninth_line):
+                ninth_line = str(round(time.time()))
+            # Timer Data Sync
+            if not("None" in eigth_line):
+                timerData["start"] = eigth_line
+                if not("None" in ninth_line):
+                    timerData["end"] = ninth_line
+            # Activity Data Sync
+            if not("None" in sixth_line):
+                activity["details"] = sixth_line
+            if not("None" in seventh_line):
+                activity["state"] = seventh_line
+
+            activity["assets"] = assetsData
+            activity["timestamps"] = timerData
+            #print('Setting new activity {\n\tClient Id: %s,\n\tLargeImageKey: %s,\n\tLargeImageText: %s,\n\tSmallImageKey: %s,\n\tSmallImageText: %s,\n\tDetails: %s,\n\tGameState: %s,\n\tStartTime: %s,\n\tEndTime: %s\n}' % (first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eigth_line, ninth_line))
+            print("Setting new activity: %s" % activity)
 
             try:
                 rpc_obj.set_activity(activity)
             except Exception as exc:
                 print('Looks like the connection to Discord was broken (%s). '
                     'I will try to connect again in 5 sec.' % str(exc))
-                last_first_line, last_second_line, last_third_line, last_fourth_line = None, None, None, None
+                last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eigth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
                 rpc_obj = None
     elif not process_hwnd and rpc_obj:
         print('Target process is no longer active, disconnecting')
         rpc_obj.close()
         rpc_obj = None
         # clear these so it gets reread and resubmitted upon reconnection
-        last_first_line, last_second_line, last_third_line, last_fourth_line = None, None, None, None
+        last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eigth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
     time.sleep(5)
