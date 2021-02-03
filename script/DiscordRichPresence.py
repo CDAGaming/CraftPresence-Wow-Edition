@@ -142,13 +142,13 @@ while True:
             assetsData = {}
             activity = {}
             # Asset Data Sync
-            if not("None" in second_line):
+            if not("Skip" in second_line):
                 assetsData["large_image"] = second_line
-                if not("None" in third_line):
+                if not("Skip" in third_line):
                     assetsData["large_text"] = third_line
-            if not("None" in fourth_line):
+            if not("Skip" in fourth_line):
                 assetsData["small_image"] = fourth_line
-                if not("None" in fifth_line):
+                if not("Skip" in fifth_line):
                     assetsData["small_text"] = fifth_line
             # Timer Data Setup
             if("generated" in eigth_line):
@@ -156,14 +156,14 @@ while True:
             if("generated" in ninth_line):
                 ninth_line = str(round(time.time()))
             # Timer Data Sync
-            if not("None" in eigth_line):
+            if not("Skip" in eigth_line):
                 timerData["start"] = eigth_line
-                if not("None" in ninth_line):
+                if not("Skip" in ninth_line):
                     timerData["end"] = ninth_line
             # Activity Data Sync
-            if not("None" in sixth_line):
+            if not("Skip" in sixth_line):
                 activity["details"] = sixth_line
-            if not("None" in seventh_line):
+            if not("Skip" in seventh_line):
                 activity["state"] = seventh_line
 
             activity["assets"] = assetsData

@@ -200,7 +200,7 @@ end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
 	if clientId ~= nil then clientId = L["DEFAULT_CLIENT_ID"] end
-	local nullKey = "None"
+	local nullKey = "Skip"
 	local endKey = "$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$"
 	if self:IsDebugMode() and self:IsShowLoggingInChat() then
 		self:Print("[Debug] Sending activity => " .. endKey)
