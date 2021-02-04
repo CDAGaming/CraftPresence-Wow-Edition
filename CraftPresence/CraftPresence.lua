@@ -30,7 +30,55 @@ local options = {
             usage = L["USAGE_DETAILS_MESSAGE"],
             get = "GetDetailsMessage",
             set = "SetDetailsMessage",
-        },
+		},
+		largeImageMessage = {
+            type = "input",
+            name = L["TITLE_LARGE_IMAGE_MESSAGE"],
+            desc = L["COMMENT_LARGE_IMAGE_MESSAGE"],
+            usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
+            get = "GetLargeImageMessage",
+            set = "SetLargeImageMessage",
+		},
+		dungeonPlaceholderMessage = {
+			type = "input",
+			name = L["TITLE_DUNGEON_MESSAGE"],
+			desc = L["COMMENT_DUNGEON_MESSAGE"],
+			usage = L["USAGE_DUNGEON_MESSAGE"],
+			get = "GetDungeonPlaceholderMessage",
+			set = "SetDungeonPlaceholderMessage",
+		},
+		raidPlaceholderMessage = {
+			type = "input",
+			name = L["TITLE_RAID_MESSAGE"],
+			desc = L["COMMENT_RAID_MESSAGE"],
+			usage = L["USAGE_RAID_MESSAGE"],
+			get = "GetRaidPlaceholderMessage",
+			set = "SetRaidPlaceholderMessage",
+		},
+		battlegroundPlaceholderMessage = {
+			type = "input",
+			name = L["TITLE_BATTLEGROUND_MESSAGE"],
+			desc = L["COMMENT_BATTLEGROUND_MESSAGE"],
+			usage = L["USAGE_BATTLEGROUND_MESSAGE"],
+			get = "GetBattlegroundPlaceholderMessage",
+			set = "SetBattlegroundPlaceholderMessage",
+		},
+		defaultPlaceholderMessage = {
+			type = "input",
+			name = L["TITLE_FALLBACK_MESSAGE"],
+			desc = L["COMMENT_FALLBACK_MESSAGE"],
+			usage = L["USAGE_FALLBACK_MESSAGE"],
+			get = "GetDefaultPlaceholderMessage",
+			set = "SetDefaultPlaceholderMessage",
+		},
+		deadStateInnerMessage = {
+			type = "input",
+			name = L["TITLE_DEAD_MESSAGE"],
+			desc = L["COMMENT_DEAD_MESSAGE"],
+			usage = L["USAGE_DEAD_MESSAGE"],
+			get = "GetDeadInnerMessage",
+			set = "SetDeadInnerMessage",
+		},
         showLoggingInChat = {
             type = "toggle",
             name = L["TITLE_SHOW_LOGGING_IN_CHAT"],
@@ -53,6 +101,12 @@ local defaults = {
 		clientId = L["DEFAULT_CLIENT_ID"],
 		gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
 		detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
+		largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
+		dungeonPlaceholderMessage = L["DEFAULT_DUNGEON_MESSAGE"],
+		raidPlaceholderMessage = L["DEFAULT_RAID_MESSAGE"],
+		battlegroundPlaceholderMessage = L["DEFAULT_BATTLEGROUND_MESSAGE"],
+		defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
+		deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
         showLoggingInChat = true,
         debugMode = true,
     },
@@ -75,6 +129,7 @@ local frame_count = 0
 local frames = {}
 local realmData = {"US", "KR", "EU", "TW", "CH"}
 local last_encoded = ""
+local nullKey = "Skip"
 
 function CraftPresence:CreateFrames()
 	local size = 12
@@ -151,56 +206,105 @@ function CraftPresence:PaintSomething(text)
 	self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
 end
 
-function CraftPresence:EncodeZoneType()
+function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local name, instanceType, difficultyID, difficultyName, maxPlayers,
 		dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
-	local firstLine = nil
-	local secondLine = nil
-
-	local startTime = nil
-	local endTime = nil
-
 	local playerName = UnitName("player")
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
 	local zone_name = GetRealZoneText()
-
+	-- Zone Data
 	if(zone_name == nil) then zone_name = "Not available" end
 	local sub_name = GetSubZoneText()
+	-- Calculate Inner Placeholders
+	local inner_placeholders = {
+		["@player_info@"] = (playerName .. " - " .. playerClass),
+		["@realm_info@"] = (playerRegion .. " - " .. playerRealm),
+		["@zone_name@"] = zone_name,
+		["@sub_zone_name@"] = sub_name,
+		["@dead_state@"] = self:GetDeadInnerMessage(),
+		["@difficulty_name@"] = difficultyName,
+		["@instance_type@"] = instanceType
+	}
+	-- Calculate limiting RPC conditions
+	local global_conditions = {
+		["#dungeon#"] = (inner_placeholders["@instance_type@"] == "party"),
+		["#raid#"] = (inner_placeholders["@instance_type@"] == "raid"),
+		["#battleground#"] = (inner_placeholders["@instance_type@"] == "pvp")
+	}
+	local inner_conditions = {
+		["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player"))
+	}
+	local time_conditions = {
+		["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"])
+	}
+	global_conditions["#default#"] = (not time_conditions["start"])
 
-	if instanceType == 'party' then
-		firstLine = zone_name
-		secondLine = string.format("In %s Dungeon", difficultyName)
-		startTime = "generated"
-	elseif instanceType == 'raid' then
-		firstLine = zone_name
-		secondLine = string.format("In %s Raid", difficultyName)
-		startTime = "generated"
-	elseif instanceType == 'pvp' then
-		firstLine = zone_name
-		secondLine = "In Battleground"
-		startTime = "generated"
-	else
-		if UnitIsDeadOrGhost("player") and not UnitIsDead("player") then
-			firstLine = sub_name
-			secondLine = "Corpse Running"
+	local outputTable = {}
+
+	for inKey,inValue in pairs(global_placeholders) do
+		local output = inValue:trim()
+		
+		if(global_conditions[inKey] == nil or global_conditions[inKey]) then
+			for key,value in pairs(inner_placeholders) do
+				if(inner_conditions[key] == nil or inner_conditions[key]) then
+					output = output:gsub(key, value)
+				else
+					output = output:gsub(key, "")
+				end
+			end
+			outputTable[inKey] = output:trim()
 		else
-			firstLine = sub_name
-			secondLine = zone_name
+			outputTable[inKey] = ""
 		end
 	end
+	return outputTable, inner_placeholders, time_conditions
+end
 
-	local playerInfo = playerName .. " - " .. playerClass
-	local realmInfo = playerRegion .. " - " .. playerRealm
-	if firstLine == "" or firstLine == nil or secondLine == "" or secondLine == nil then return nil end
-	local lineInfo = firstLine .. " - " .. secondLine
-	return self:EncodeData(self:GetClientId(), "wow_icon", realmInfo, nil, nil, playerInfo, lineInfo, startTime, endTime)
+function CraftPresence:EncodeConfigData()
+	-- Placeholder data and syncing
+	local global_placeholders = {
+		["#dungeon#"] = self:GetDungeonPlaceholderMessage(),
+		["#raid#"] = self:GetRaidPlaceholderMessage(),
+		["#battleground#"] = self:GetBattlegroundPlaceholderMessage(),
+		["#default#"] = self:GetDefaultPlaceholderMessage()
+	}
+	local inner_placeholders = {}
+	local time_conditions = {}
+	global_placeholders, inner_placeholders, time_conditions = self:ParsePlaceholderData(global_placeholders)
+	-- RPC Data syncing
+	local queued_details = self:GetDetailsMessage()
+	local queued_state = self:GetGameStateMessage()
+	local queued_large_image_text = self:GetLargeImageMessage()
+	local queued_time_start = nullKey
+	local queued_time_end = nullKey
+	for key,value in pairs(global_placeholders) do
+		self:Print("Data: ", key, "=", value)
+		queued_details = queued_details:gsub(key, value)
+		queued_state = queued_state:gsub(key, value)
+		queued_large_image_text = queued_large_image_text:gsub(key, value)
+	end
+	for innerKey,innerValue in pairs(inner_placeholders) do
+		self:Print("Inner Data: ", innerKey, "=", innerValue)
+		queued_details = queued_details:gsub(innerKey, innerValue)
+		queued_state = queued_state:gsub(innerKey, innerValue)
+		queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
+	end
+	for timeKey,timeValue in pairs(time_conditions) do
+		if timeValue then
+			if timeKey == "start" then
+				queued_time_start = "generated"
+			elseif timeKey == "end" then
+				queued_time_end = "generated"
+			end
+		end
+	end
+	return self:EncodeData(self:GetClientId(), "wow_icon", queued_large_image_text, nil, nil, queued_details, queued_state, queued_time_start, queued_time_end)
 end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
 	if clientId ~= nil then clientId = L["DEFAULT_CLIENT_ID"] end
-	local nullKey = "Skip"
 	local endKey = "$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$"
 	if self:IsDebugMode() and self:IsShowLoggingInChat() then
 		self:Print("[Debug] Sending activity => " .. endKey)
@@ -215,13 +319,13 @@ function CraftPresence:CleanFrames()
 end
 
 function CraftPresence:TestFrames()
-	local encoded = self:EncodeZoneType()
+	local encoded = self:EncodeConfigData()
 	if encoded ~= nil then self:PaintSomething(encoded) end
 end
 
 function CraftPresence:PaintMessageWait(force)
 	local proceed = force ~= nil and force == true;
-	local encoded = self:EncodeZoneType()
+	local encoded = self:EncodeConfigData()
 	local changed = last_encoded ~= encoded or proceed
 	if(changed and encoded ~= nil) then
 		last_encoded = encoded
@@ -308,6 +412,61 @@ function CraftPresence:SetDetailsMessage(info, newValue)
     self.db.profile.detailsMessage = newValue
 end
 
+function CraftPresence:GetLargeImageMessage(info)
+    return self.db.profile.largeImageMessage
+end
+
+function CraftPresence:SetLargeImageMessage(info, newValue)
+    self.db.profile.largeImageMessage = newValue
+end
+
+-- ================================
+-- Placeholder Settings
+-- ================================
+
+function CraftPresence:GetDungeonPlaceholderMessage(info)
+    return self.db.profile.dungeonPlaceholderMessage
+end
+
+function CraftPresence:SetDungeonPlaceholderMessage(info, newValue)
+    self.db.profile.dungeonPlaceholderMessage = newValue
+end
+
+function CraftPresence:GetRaidPlaceholderMessage(info)
+    return self.db.profile.raidPlaceholderMessage
+end
+
+function CraftPresence:SetRaidPlaceholderMessage(info, newValue)
+    self.db.profile.raidPlaceholderMessage = newValue
+end
+
+function CraftPresence:GetBattlegroundPlaceholderMessage(info)
+    return self.db.profile.battlegroundPlaceholderMessage
+end
+
+function CraftPresence:SetBattlegroundPlaceholderMessage(info, newValue)
+    self.db.profile.battlegroundPlaceholderMessage = newValue
+end
+
+function CraftPresence:GetDefaultPlaceholderMessage(info)
+    return self.db.profile.defaultPlaceholderMessage
+end
+
+function CraftPresence:SetDefaultPlaceholderMessage(info, newValue)
+    self.db.profile.defaultPlaceholderMessage = newValue
+end
+
+function CraftPresence:GetDeadInnerMessage(info)
+    return self.db.profile.deadStateInnerMessage
+end
+
+function CraftPresence:SetDeadInnerMessage(info, newValue)
+    self.db.profile.deadStateInnerMessage = newValue
+end
+
+-- ================================
+-- Core Settings
+-- ================================
 function CraftPresence:IsShowLoggingInChat(info)
     return self.db.profile.showLoggingInChat
 end
