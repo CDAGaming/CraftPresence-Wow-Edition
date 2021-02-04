@@ -92,6 +92,13 @@ local options = {
             desc = L["COMMENT_DEBUG_MODE"],
             get = "IsDebugMode",
             set = "ToggleDebugMode"
+		},
+		verboseMode = {
+            type = "toggle",
+            name = L["TITLE_VERBOSE_MODE"],
+            desc = L["COMMENT_VERBOSE_MODE"],
+            get = "IsVerboseMode",
+            set = "ToggleVerboseMode"
         },
     },
 }
@@ -108,7 +115,8 @@ local defaults = {
 		defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
 		deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
         showLoggingInChat = true,
-        debugMode = true,
+		debugMode = true,
+		verboseMode = true,
     },
 }
 
@@ -280,13 +288,17 @@ function CraftPresence:EncodeConfigData()
 	local queued_time_start = nullKey
 	local queued_time_end = nullKey
 	for key,value in pairs(global_placeholders) do
-		self:Print("Data: ", key, "=", value)
+		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
+			self:Print("Global Data: ", key, "=", value)
+		end
 		queued_details = queued_details:gsub(key, value)
 		queued_state = queued_state:gsub(key, value)
 		queued_large_image_text = queued_large_image_text:gsub(key, value)
 	end
 	for innerKey,innerValue in pairs(inner_placeholders) do
-		self:Print("Inner Data: ", innerKey, "=", innerValue)
+		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
+			self:Print("Inner Data: ", innerKey, "=", innerValue)
+		end
 		queued_details = queued_details:gsub(innerKey, innerValue)
 		queued_state = queued_state:gsub(innerKey, innerValue)
 		queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
@@ -481,4 +493,12 @@ end
 
 function CraftPresence:ToggleDebugMode(info, value)
     self.db.profile.debugMode = value
+end
+
+function CraftPresence:IsVerboseMode(info)
+    return self.db.profile.verboseMode
+end
+
+function CraftPresence:ToggleVerboseMode(info, value)
+    self.db.profile.verboseMode = value
 end

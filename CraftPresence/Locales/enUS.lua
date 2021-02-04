@@ -51,3 +51,6 @@ L["COMMENT_SHOW_LOGGING_IN_CHAT"] = "Toggles the display of logging within chat.
 
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
+
+L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
+L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
