@@ -289,7 +289,7 @@ function CraftPresence:EncodeConfigData()
 	local queued_time_end = nullKey
 	for key,value in pairs(global_placeholders) do
 		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
-			self:Print("Global Data: ", key, "=", value)
+			self:Print("Global Data:", key, "=", value)
 		end
 		queued_details = queued_details:gsub(key, value)
 		queued_state = queued_state:gsub(key, value)
@@ -297,7 +297,7 @@ function CraftPresence:EncodeConfigData()
 	end
 	for innerKey,innerValue in pairs(inner_placeholders) do
 		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
-			self:Print("Inner Data: ", innerKey, "=", innerValue)
+			self:Print("Inner Data:", innerKey, "=", innerValue)
 		end
 		queued_details = queued_details:gsub(innerKey, innerValue)
 		queued_state = queued_state:gsub(innerKey, innerValue)
