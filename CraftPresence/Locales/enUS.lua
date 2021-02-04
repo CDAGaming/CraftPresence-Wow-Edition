@@ -16,6 +16,11 @@ L["COMMENT_DETAILS_MESSAGE"] = "The message(s) to be displayed in the Details ar
 L["USAGE_DETAILS_MESSAGE"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders>"
 L["DEFAULT_DETAILS_MESSAGE"] = "@player_info@"
 
+L["TITLE_LARGE_IMAGE_KEY"] = "Large Image Key"
+L["COMMENT_LARGE_IMAGE_KEY"] = "The image key to be displayed as the Large Image of the RPC."
+L["USAGE_LARGE_IMAGE_KEY"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders (TODO)>"
+L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
+
 L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
 L["COMMENT_LARGE_IMAGE_MESSAGE"] = "The message(s) to be displayed when hovering over the Large Image area of the RPC."
 L["USAGE_LARGE_IMAGE_MESSAGE"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders>"
@@ -54,3 +59,5 @@ L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive l
 
 L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
+
+L["ZONE_NAME_ERROR"] = "Not available"

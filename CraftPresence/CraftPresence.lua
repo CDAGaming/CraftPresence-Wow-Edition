@@ -31,6 +31,14 @@ local options = {
             get = "GetDetailsMessage",
             set = "SetDetailsMessage",
 		},
+		largeImageKey = {
+            type = "input",
+            name = L["TITLE_LARGE_IMAGE_KEY"],
+            desc = L["COMMENT_LARGE_IMAGE_KEY"],
+            usage = L["USAGE_LARGE_IMAGE_KEY"],
+            get = "GetLargeImageKey",
+            set = "SetLargeImageKey",
+		},
 		largeImageMessage = {
             type = "input",
             name = L["TITLE_LARGE_IMAGE_MESSAGE"],
@@ -223,7 +231,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerClass = UnitClass("player")
 	local zone_name = GetRealZoneText()
 	-- Zone Data
-	if(zone_name == nil) then zone_name = "Not available" end
+	if(zone_name == nil) then zone_name = L["ZONE_NAME_ERROR"] end
 	local sub_name = GetSubZoneText()
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
@@ -233,7 +241,15 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@sub_zone_name@"] = sub_name,
 		["@dead_state@"] = self:GetDeadInnerMessage(),
 		["@difficulty_name@"] = difficultyName,
-		["@instance_type@"] = instanceType
+		["@instance_type@"] = instanceType,
+		["@localized_name@"] = name,
+		["@instance_difficulty@"] = tostring(difficultyID),
+		["@max_players@"] = tostring(maxPlayers),
+		["@dynamic_difficulty@"] = tostring(dynamicDifficulty),
+		["@is_dynamic@"] = tostring(isDynamic),
+		["@instance_id@"] = tostring(instanceID),
+		["@instance_group_size@"] = tostring(instanceGroupSize),
+		["@lfg_dungeon_id@"] = tostring(LfgDungeonID)
 	}
 	-- Calculate limiting RPC conditions
 	local global_conditions = {
@@ -247,13 +263,14 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local time_conditions = {
 		["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"])
 	}
+	-- Extra Conditionals
 	global_conditions["#default#"] = (not time_conditions["start"])
 
 	local outputTable = {}
 
 	for inKey,inValue in pairs(global_placeholders) do
 		local output = inValue:trim()
-		
+
 		if(global_conditions[inKey] == nil or global_conditions[inKey]) then
 			for key,value in pairs(inner_placeholders) do
 				if(inner_conditions[key] == nil or inner_conditions[key]) then
@@ -289,7 +306,7 @@ function CraftPresence:EncodeConfigData()
 	local queued_time_end = nullKey
 	for key,value in pairs(global_placeholders) do
 		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
-			self:Print("Global Data:", key, "=", value)
+			self:Print("[Verbose] Global Data:", key, "=", value)
 		end
 		queued_details = queued_details:gsub(key, value)
 		queued_state = queued_state:gsub(key, value)
@@ -297,7 +314,7 @@ function CraftPresence:EncodeConfigData()
 	end
 	for innerKey,innerValue in pairs(inner_placeholders) do
 		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
-			self:Print("Inner Data:", innerKey, "=", innerValue)
+			self:Print("[Verbose] Inner Data:", innerKey, "=", innerValue)
 		end
 		queued_details = queued_details:gsub(innerKey, innerValue)
 		queued_state = queued_state:gsub(innerKey, innerValue)
@@ -312,7 +329,7 @@ function CraftPresence:EncodeConfigData()
 			end
 		end
 	end
-	return self:EncodeData(self:GetClientId(), "wow_icon", queued_large_image_text, nil, nil, queued_details, queued_state, queued_time_start, queued_time_end)
+	return self:EncodeData(self:GetClientId(), self:GetLargeImageKey(), queued_large_image_text, nil, nil, queued_details, queued_state, queued_time_start, queued_time_end)
 end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
@@ -358,7 +375,7 @@ end
 
 function CraftPresence:OnEnable()
 	-- Called when the addon is enabled
-	self:Print("Discord Rich Presence Loaded")
+	self:Print("Discord Rich Presence Loaded. Use /cp or /craftpresence to access config.")
 	self:RegisterEvent("PLAYER_LOGIN", "DispatchUpdate")
 	self:RegisterEvent("ZONE_CHANGED", "DispatchUpdate")
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "DispatchUpdate")
@@ -394,7 +411,7 @@ function CraftPresence:ChatCommand(input)
 end
 -- ====================================================
 -- Getters and Setters (Config Data)
--- =====================================================
+-- ====================================================
 
 function CraftPresence:GetClientId(info)
     return self.db.profile.clientId
@@ -422,6 +439,14 @@ end
 
 function CraftPresence:SetDetailsMessage(info, newValue)
     self.db.profile.detailsMessage = newValue
+end
+
+function CraftPresence:GetLargeImageKey(info)
+    return self.db.profile.largeImageKey
+end
+
+function CraftPresence:SetLargeImageKey(info, newValue)
+    self.db.profile.largeImageKey = newValue
 end
 
 function CraftPresence:GetLargeImageMessage(info)
