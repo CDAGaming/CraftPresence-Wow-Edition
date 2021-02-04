@@ -47,6 +47,22 @@ local options = {
             get = "GetLargeImageMessage",
             set = "SetLargeImageMessage",
 		},
+		smallImageKey = {
+            type = "input",
+            name = L["TITLE_SMALL_IMAGE_KEY"],
+            desc = L["COMMENT_SMALL_IMAGE_KEY"],
+            usage = L["USAGE_SMALL_IMAGE_KEY"],
+            get = "GetSmallImageKey",
+            set = "SetSmallImageKey",
+		},
+		smallImageMessage = {
+            type = "input",
+            name = L["TITLE_SMALL_IMAGE_MESSAGE"],
+            desc = L["COMMENT_SMALL_IMAGE_MESSAGE"],
+            usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
+            get = "GetSmallImageMessage",
+            set = "SetSmallImageMessage",
+		},
 		dungeonPlaceholderMessage = {
 			type = "input",
 			name = L["TITLE_DUNGEON_MESSAGE"],
@@ -116,7 +132,10 @@ local defaults = {
 		clientId = L["DEFAULT_CLIENT_ID"],
 		gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
 		detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
+		largeImageKey = L["DEFAULT_LARGE_IMAGE_KEY"],
 		largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
+		smallImageKey = "",
+		smallImageMessage = "",
 		dungeonPlaceholderMessage = L["DEFAULT_DUNGEON_MESSAGE"],
 		raidPlaceholderMessage = L["DEFAULT_RAID_MESSAGE"],
 		battlegroundPlaceholderMessage = L["DEFAULT_BATTLEGROUND_MESSAGE"],
@@ -302,6 +321,7 @@ function CraftPresence:EncodeConfigData()
 	local queued_details = self:GetDetailsMessage()
 	local queued_state = self:GetGameStateMessage()
 	local queued_large_image_text = self:GetLargeImageMessage()
+	local queued_small_image_text = self:GetSmallImageMessage()
 	local queued_time_start = nullKey
 	local queued_time_end = nullKey
 	for key,value in pairs(global_placeholders) do
@@ -311,6 +331,7 @@ function CraftPresence:EncodeConfigData()
 		queued_details = queued_details:gsub(key, value)
 		queued_state = queued_state:gsub(key, value)
 		queued_large_image_text = queued_large_image_text:gsub(key, value)
+		queued_small_image_text = queued_small_image_text:gsub(key, value)
 	end
 	for innerKey,innerValue in pairs(inner_placeholders) do
 		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
@@ -319,6 +340,7 @@ function CraftPresence:EncodeConfigData()
 		queued_details = queued_details:gsub(innerKey, innerValue)
 		queued_state = queued_state:gsub(innerKey, innerValue)
 		queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
+		queued_small_image_text = queued_small_image_text:gsub(innerKey, innerValue)
 	end
 	for timeKey,timeValue in pairs(time_conditions) do
 		if timeValue then
@@ -329,11 +351,17 @@ function CraftPresence:EncodeConfigData()
 			end
 		end
 	end
-	return self:EncodeData(self:GetClientId(), self:GetLargeImageKey(), queued_large_image_text, nil, nil, queued_details, queued_state, queued_time_start, queued_time_end)
+	return self:EncodeData(self:GetClientId(), self:GetLargeImageKey(), queued_large_image_text, self:GetSmallImageKey(), queued_small_image_text, queued_details, queued_state, queued_time_start, queued_time_end)
 end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
 	if clientId ~= nil then clientId = L["DEFAULT_CLIENT_ID"] end
+	if largeImageKey == "" then largeImageKey = nil end
+	if largeImageText == "" then largeImageText = nil end
+	if smallImageKey == "" then smallImageKey = nil end
+	if smallImageText == "" then smallImageText = nil end
+	if details == "" then details = nil end
+	if gameState == "" then gameState = nil end
 	local endKey = "$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$"
 	if self:IsDebugMode() and self:IsShowLoggingInChat() then
 		self:Print("[Debug] Sending activity => " .. endKey)
@@ -455,6 +483,22 @@ end
 
 function CraftPresence:SetLargeImageMessage(info, newValue)
     self.db.profile.largeImageMessage = newValue
+end
+
+function CraftPresence:GetSmallImageKey(info)
+    return self.db.profile.smallImageKey
+end
+
+function CraftPresence:SetSmallImageKey(info, newValue)
+    self.db.profile.smallImageKey = newValue
+end
+
+function CraftPresence:GetSmallImageMessage(info)
+    return self.db.profile.smallImageMessage
+end
+
+function CraftPresence:SetSmallImageMessage(info, newValue)
+    self.db.profile.smallImageMessage = newValue
 end
 
 -- ================================
