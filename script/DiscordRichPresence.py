@@ -152,13 +152,13 @@ while True:
                     assetsData["small_text"] = fifth_line
             # Timer Data Setup
             if("generated" in eigth_line):
-                eigth_line = str(round(time.time()))
+                eigth_line = round(time.time())
             if("generated" in ninth_line):
-                ninth_line = str(round(time.time()))
+                ninth_line = round(time.time())
             # Timer Data Sync
-            if not("Skip" in eigth_line):
+            if not("Skip" in str(eigth_line)):
                 timerData["start"] = eigth_line
-                if not("Skip" in ninth_line):
+                if not("Skip" in str(ninth_line)):
                     timerData["end"] = ninth_line
             # Activity Data Sync
             if not("Skip" in sixth_line):
