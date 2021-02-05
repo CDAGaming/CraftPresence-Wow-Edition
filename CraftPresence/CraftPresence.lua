@@ -362,11 +362,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
 	if smallImageText == "" then smallImageText = nil end
 	if details == "" then details = nil end
 	if gameState == "" then gameState = nil end
-	local endKey = "$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$"
-	if self:IsDebugMode() and self:IsShowLoggingInChat() then
-		self:Print("[Debug] Sending activity => " .. endKey)
-	end
-	return endKey
+	return ("$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$")
 end
 
 function CraftPresence:CleanFrames()
@@ -386,6 +382,9 @@ function CraftPresence:PaintMessageWait(force)
 	local changed = last_encoded ~= encoded or proceed
 	if(changed and encoded ~= nil) then
 		last_encoded = encoded
+		if self:IsDebugMode() and self:IsShowLoggingInChat() then
+			self:Print("[Debug] Sending activity => " .. encoded)
+		end
 		self:PaintSomething(encoded)
 		C_Timer.After(10, function() self:CleanFrames() end)
 	end
