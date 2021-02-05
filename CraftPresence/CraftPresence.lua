@@ -87,6 +87,14 @@ local options = {
 			get = "GetBattlegroundPlaceholderMessage",
 			set = "SetBattlegroundPlaceholderMessage",
 		},
+		arenaPlaceholderMessage = {
+			type = "input",
+			name = L["TITLE_ARENA_MESSAGE"],
+			desc = L["COMMENT_ARENA_MESSAGE"],
+			usage = L["USAGE_ARENA_MESSAGE"],
+			get = "GetArenaPlaceholderMessage",
+			set = "SetArenaPlaceholderMessage",
+		},
 		defaultPlaceholderMessage = {
 			type = "input",
 			name = L["TITLE_FALLBACK_MESSAGE"],
@@ -139,6 +147,7 @@ local defaults = {
 		dungeonPlaceholderMessage = L["DEFAULT_DUNGEON_MESSAGE"],
 		raidPlaceholderMessage = L["DEFAULT_RAID_MESSAGE"],
 		battlegroundPlaceholderMessage = L["DEFAULT_BATTLEGROUND_MESSAGE"],
+		arenaPlaceholderMessage = L["DEFAULT_ARENA_MESSAGE"],
 		defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
 		deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
         showLoggingInChat = true,
@@ -255,7 +264,12 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
 		["@player_info@"] = (playerName .. " - " .. playerClass),
+		["@player_name@"] = playerName,
+		["@player_class@"] = playerClass,
 		["@realm_info@"] = (playerRegion .. " - " .. playerRealm),
+		["@player_region@"] = playerRegion,
+		["@player_realm@"] = playerRealm,
+		["@zone_info@"] = (sub_name .. " - " .. zone_name),
 		["@zone_name@"] = zone_name,
 		["@sub_zone_name@"] = sub_name,
 		["@dead_state@"] = self:GetDeadInnerMessage(),
@@ -274,13 +288,14 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local global_conditions = {
 		["#dungeon#"] = (inner_placeholders["@instance_type@"] == "party"),
 		["#raid#"] = (inner_placeholders["@instance_type@"] == "raid"),
-		["#battleground#"] = (inner_placeholders["@instance_type@"] == "pvp")
+		["#battleground#"] = (inner_placeholders["@instance_type@"] == "pvp"),
+		["#arena#"] = (inner_placeholders["@instance_type@"] == "arena")
 	}
 	local inner_conditions = {
 		["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player"))
 	}
 	local time_conditions = {
-		["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"])
+		["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"] or global_conditions["#arena#"])
 	}
 	-- Extra Conditionals
 	global_conditions["#default#"] = (not time_conditions["start"])
@@ -312,6 +327,7 @@ function CraftPresence:EncodeConfigData()
 		["#dungeon#"] = self:GetDungeonPlaceholderMessage(),
 		["#raid#"] = self:GetRaidPlaceholderMessage(),
 		["#battleground#"] = self:GetBattlegroundPlaceholderMessage(),
+		["#arena#"] = self:GetArenaPlaceholderMessage(),
 		["#default#"] = self:GetDefaultPlaceholderMessage()
 	}
 	local inner_placeholders = {}
@@ -526,6 +542,14 @@ end
 
 function CraftPresence:SetBattlegroundPlaceholderMessage(info, newValue)
     self.db.profile.battlegroundPlaceholderMessage = newValue
+end
+
+function CraftPresence:GetArenaPlaceholderMessage(info)
+    return self.db.profile.arenaPlaceholderMessage
+end
+
+function CraftPresence:SetArenaPlaceholderMessage(info, newValue)
+    self.db.profile.arenaPlaceholderMessage = newValue
 end
 
 function CraftPresence:GetDefaultPlaceholderMessage(info)
