@@ -505,7 +505,7 @@ function CraftPresence:GetClientId(info)
 end
 
 function CraftPresence:SetClientId(info, newValue)
-	if newValue ~= nil and self:ContainsDigit(newValue) and string.len(newValue) == 16 then
+	if newValue ~= nil and self:ContainsDigit(newValue) and string.len(newValue) == 18 then
 		self.db.profile.clientId = newValue
 	else
 		self:Print(L["ERROR_CLIENT_ID"])
