@@ -417,7 +417,7 @@ function CraftPresence:PaintMessageWait(force)
 	if(changed and encoded ~= nil) then
 		last_encoded = encoded
 		if self:IsDebugMode() and self:IsShowLoggingInChat() then
-			self:Print("[Debug] Sending activity => " .. encoded)
+			self:Print("[Debug] Sending activity => " .. encoded:gsub("|", "||"))
 		end
 		self:PaintSomething(encoded)
 		C_Timer.After(10, function() self:CleanFrames() end)
