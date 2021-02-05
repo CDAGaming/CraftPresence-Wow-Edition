@@ -415,7 +415,7 @@ function CraftPresence:EncodeConfigData()
 end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
-	if clientId ~= nil then clientId = L["DEFAULT_CLIENT_ID"] end
+	if(clientId == nil or clientId == "") then clientId = L["DEFAULT_CLIENT_ID"] end
 	if largeImageKey == "" then largeImageKey = nil end
 	if largeImageText == "" then largeImageText = nil end
 	if smallImageKey == "" then smallImageKey = nil end
