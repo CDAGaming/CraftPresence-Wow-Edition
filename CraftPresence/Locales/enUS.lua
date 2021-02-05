@@ -18,7 +18,7 @@ L["DEFAULT_DETAILS_MESSAGE"] = "@player_info@"
 
 L["TITLE_LARGE_IMAGE_KEY"] = "Large Image Key"
 L["COMMENT_LARGE_IMAGE_KEY"] = "The image key to be displayed as the Large Image of the RPC."
-L["USAGE_LARGE_IMAGE_KEY"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders (TODO)>"
+L["USAGE_LARGE_IMAGE_KEY"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders>"
 L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
 
 L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
@@ -28,11 +28,13 @@ L["DEFAULT_LARGE_IMAGE_MESSAGE"] = "@realm_info@"
 
 L["TITLE_SMALL_IMAGE_KEY"] = "Small Image Key"
 L["COMMENT_SMALL_IMAGE_KEY"] = "The image key to be displayed as the Small Image of the RPC."
-L["USAGE_SMALL_IMAGE_KEY"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders (TODO)>"
+L["USAGE_SMALL_IMAGE_KEY"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders>"
+L["DEFAULT_SMALL_IMAGE_KEY"] = "@player_alliance@"
 
 L["TITLE_SMALL_IMAGE_MESSAGE"] = "Small Image Message"
 L["COMMENT_SMALL_IMAGE_MESSAGE"] = "The message(s) to be displayed when hovering over the Small Image area of the RPC."
 L["USAGE_SMALL_IMAGE_MESSAGE"] = "<Your message here, using #eventType# format with @xxx@ being inner placeholders>"
+L["DEFAULT_SMALL_IMAGE_MESSAGE"] = "@player_alliance@"
 
 L["TITLE_DUNGEON_MESSAGE"] = "Dungeon Placeholder Message"
 L["COMMENT_DUNGEON_MESSAGE"] = "The message(s) to be interpreted as the #dungeon# placeholder."

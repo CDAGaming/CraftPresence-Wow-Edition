@@ -142,8 +142,8 @@ local defaults = {
 		detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
 		largeImageKey = L["DEFAULT_LARGE_IMAGE_KEY"],
 		largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
-		smallImageKey = "",
-		smallImageMessage = "",
+		smallImageKey = L["DEFAULT_SMALL_IMAGE_KEY"],
+		smallImageMessage = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
 		dungeonPlaceholderMessage = L["DEFAULT_DUNGEON_MESSAGE"],
 		raidPlaceholderMessage = L["DEFAULT_RAID_MESSAGE"],
 		battlegroundPlaceholderMessage = L["DEFAULT_BATTLEGROUND_MESSAGE"],
@@ -261,16 +261,36 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
+	-- Covenant Setup (If porting to clasic, only use faction data)
+	local playerAlliance = "None"
+	local playerCovenant = "None"
+	local playerCovenantId = C_Covenants.GetActiveCovenantID()
+	local playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
+	local englishFaction, localizedFaction = UnitFactionGroup("player")
+	if playerCovenantId == 0 or not(string.find(name, "Shadowlands")) then
+		playerAlliance = localizedFaction
+	else
+		playerCovenant = playerCovenantData.name
+		playerAlliance = playerCovenant
+	end
 	-- Zone Data
 	local zone_name = GetRealZoneText()
 	if(zone_name == nil or zone_name == "") then zone_name = L["ZONE_NAME_UNKNOWN"] end
 	local sub_name = GetSubZoneText()
 	if(sub_name == nil or sub_name == "") then sub_name = L["ZONE_NAME_UNKNOWN"] end
+	-- Single Variable Data
+	local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
 		["@player_info@"] = (playerName .. " - " .. playerClass),
 		["@player_name@"] = playerName,
 		["@player_class@"] = playerClass,
+		["@player_alliance@"] = playerAlliance,
+		["@player_covenant@"] = playerCovenant,
+		["@player_faction@"] = localizedFaction,
+		["@item_level@"] = string.format("%.2f", avgItemLevel),
+		["@item_level_equipped@"] = string.format("%.2f", avgItemLevelEquipped),
+		["@item_level_pvp@"] = string.format("%.2f", avgItemLevelPvp),
 		["@realm_info@"] = (playerRegion .. " - " .. playerRealm),
 		["@player_region@"] = playerRegion,
 		["@player_realm@"] = playerRealm,
@@ -354,7 +374,9 @@ function CraftPresence:EncodeConfigData()
 	-- RPC Data syncing
 	local queued_details = self:GetDetailsMessage()
 	local queued_state = self:GetGameStateMessage()
+	local queued_large_image_key = self:GetLargeImageKey()
 	local queued_large_image_text = self:GetLargeImageMessage()
+	local queued_small_image_key = self:GetSmallImageKey()
 	local queued_small_image_text = self:GetSmallImageMessage()
 	local queued_time_start = nullKey
 	local queued_time_end = nullKey
@@ -364,7 +386,9 @@ function CraftPresence:EncodeConfigData()
 		end
 		queued_details = queued_details:gsub(key, value)
 		queued_state = queued_state:gsub(key, value)
+		queued_large_image_key = queued_large_image_key:gsub(key, value)
 		queued_large_image_text = queued_large_image_text:gsub(key, value)
+		queued_small_image_key = queued_small_image_key:gsub(key, value)
 		queued_small_image_text = queued_small_image_text:gsub(key, value)
 	end
 	for innerKey,innerValue in pairs(inner_placeholders) do
@@ -373,7 +397,9 @@ function CraftPresence:EncodeConfigData()
 		end
 		queued_details = queued_details:gsub(innerKey, innerValue)
 		queued_state = queued_state:gsub(innerKey, innerValue)
+		queued_large_image_key = queued_large_image_key:gsub(innerKey, innerValue)
 		queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
+		queued_small_image_key = queued_small_image_key:gsub(innerKey, innerValue)
 		queued_small_image_text = queued_small_image_text:gsub(innerKey, innerValue)
 	end
 	for timeKey,timeValue in pairs(time_conditions) do
@@ -385,7 +411,7 @@ function CraftPresence:EncodeConfigData()
 			end
 		end
 	end
-	return self:EncodeData(self:GetClientId(), self:GetLargeImageKey(), queued_large_image_text, self:GetSmallImageKey(), queued_small_image_text, queued_details, queued_state, queued_time_start, queued_time_end)
+	return self:EncodeData(self:GetClientId(), string.lower(queued_large_image_key:gsub("%s+", "_")), queued_large_image_text, string.lower(queued_small_image_key:gsub("%s+", "_")), queued_small_image_text, queued_details, queued_state, queued_time_start, queued_time_end)
 end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)

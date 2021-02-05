@@ -2,7 +2,7 @@
 
 ## Title: CraftPresence
 ## Author: CDAGaming
-## Version: v0.0.3
+## Version: v0.0.4
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
 ## OptionalDeps: Ace3
