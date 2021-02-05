@@ -257,10 +257,11 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
-	local zone_name = GetRealZoneText()
 	-- Zone Data
-	if(zone_name == nil) then zone_name = L["ZONE_NAME_ERROR"] end
+	local zone_name = GetRealZoneText()
+	if(zone_name == nil) then zone_name = L["ZONE_NAME_UNKNOWN"] end
 	local sub_name = GetSubZoneText()
+	if(sub_name == nil) then sub_name = L["ZONE_NAME_UNKNOWN"] end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
 		["@player_info@"] = (playerName .. " - " .. playerClass),
