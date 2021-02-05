@@ -49,10 +49,10 @@ L["COMMENT_BATTLEGROUND_MESSAGE"] = "The message(s) to be interpreted as the #ba
 L["USAGE_BATTLEGROUND_MESSAGE"] = "<Your message here>"
 L["DEFAULT_BATTLEGROUND_MESSAGE"] = "@zone_name@ - In Battleground"
 
-L["TITLE_BATTLEGROUND_MESSAGE"] = "Arena Placeholder Message"
-L["COMMENT_BATTLEGROUND_MESSAGE"] = "The message(s) to be interpreted as the #arena# placeholder."
-L["USAGE_BATTLEGROUND_MESSAGE"] = "<Your message here>"
-L["DEFAULT_BATTLEGROUND_MESSAGE"] = "@zone_name@ - In Arena"
+L["TITLE_ARENA_MESSAGE"] = "Arena Placeholder Message"
+L["COMMENT_ARENA_MESSAGE"] = "The message(s) to be interpreted as the #arena# placeholder."
+L["USAGE_ARENA_MESSAGE"] = "<Your message here>"
+L["DEFAULT_ARENA_MESSAGE"] = "@zone_name@ - In Arena"
 
 L["TITLE_FALLBACK_MESSAGE"] = "Default Placeholder Message"
 L["COMMENT_FALLBACK_MESSAGE"] = "The message(s) to be interpreted as the #default# placeholder (TODO: Can be annotated with :optional where used if you wish it to show standalone)."
@@ -73,4 +73,4 @@ L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive l
 L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
 
-L["ZONE_NAME_ERROR"] = "Not available"
+L["ZONE_NAME_UNKNOWN"] = "Unknown"

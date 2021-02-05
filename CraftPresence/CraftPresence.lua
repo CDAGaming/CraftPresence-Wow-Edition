@@ -164,6 +164,10 @@ function CraftPresence:ContainsDigit(str)
 	return string.find(str, "%d") and true or false
 end
 
+function CraftPresence:StartsWith(String,Start)
+	return string.sub(String,1,string.len(Start))==Start
+ end
+
 
 -- ==================
 -- RPC Data
@@ -259,9 +263,9 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerClass = UnitClass("player")
 	-- Zone Data
 	local zone_name = GetRealZoneText()
-	if(zone_name == nil) then zone_name = L["ZONE_NAME_UNKNOWN"] end
+	if(zone_name == nil or zone_name == "") then zone_name = L["ZONE_NAME_UNKNOWN"] end
 	local sub_name = GetSubZoneText()
-	if(sub_name == nil) then sub_name = L["ZONE_NAME_UNKNOWN"] end
+	if(sub_name == nil or sub_name == "") then sub_name = L["ZONE_NAME_UNKNOWN"] end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
 		["@player_info@"] = (playerName .. " - " .. playerClass),
@@ -298,6 +302,9 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local time_conditions = {
 		["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"] or global_conditions["#arena#"])
 	}
+	local override_placeholders = {
+		"@dead_state@"
+	}
 	-- Extra Conditionals
 	global_conditions["#default#"] = (not time_conditions["start"])
 
@@ -305,6 +312,16 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 
 	for inKey,inValue in pairs(global_placeholders) do
 		local output = inValue:trim()
+		-- If the Placeholders contained in the messages is an overrider, we replace the rest of the output with just that placeholder
+		-- Only applies towards inner-placeholderswith subject to change data
+		for overrideKey, overrideValue in pairs(override_placeholders) do
+			if string.find(output, overrideValue) then
+				if(self:StartsWith(overrideValue, "@") and (inner_conditions[overrideValue] == nil or inner_conditions[overrideValue])) then
+					output = overrideValue
+					break
+				end
+			end
+		end
 
 		if(global_conditions[inKey] == nil or global_conditions[inKey]) then
 			for key,value in pairs(inner_placeholders) do
