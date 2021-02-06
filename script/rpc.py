@@ -12,6 +12,7 @@ import os
 import socket
 import sys
 import struct
+import typing
 import uuid
 
 
@@ -74,7 +75,7 @@ class DiscordIpcClient(metaclass=ABCMeta):
     def _recv(self, size: int) -> bytes:
         pass
 
-    def _recv_header(self) -> (int, int):
+    def _recv_header(self) -> typing.Tuple[int, int]:
         header = self._recv_exactly(8)
         return struct.unpack("<II", header)
 
@@ -116,7 +117,7 @@ class DiscordIpcClient(metaclass=ABCMeta):
         self._write(header)
         self._write(data_bytes)
 
-    def recv(self) -> (int, "JSON"):
+    def recv(self) -> typing.Tuple[int, str]:
         """Receives a packet from discord.
 
         Returns op code and payload.
@@ -143,6 +144,7 @@ class WinDiscordIpcClient(DiscordIpcClient):
     _pipe_pattern = R'\\?\pipe\discord-ipc-{}'
 
     def _connect(self):
+        path = ""
         for i in range(10):
             path = self._pipe_pattern.format(i)
             try:
@@ -189,6 +191,7 @@ class UnixDiscordIpcClient(DiscordIpcClient):
     @staticmethod
     def _get_pipe_pattern():
         env_keys = ('XDG_RUNTIME_DIR', 'TMPDIR', 'TMP', 'TEMP')
+        dir_path = ""
         for env_key in env_keys:
             dir_path = os.environ.get(env_key)
             if dir_path:
