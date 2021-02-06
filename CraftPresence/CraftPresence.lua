@@ -325,7 +325,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	if(sub_name == nil or sub_name == "") then sub_name = L["ZONE_NAME_UNKNOWN"] end
 	-- Extra Character Data
 	local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-	local specId, specName, specDescription, specIcon, specBackground, specRoleId = GetSpecializationInfo(GetActiveSpecGroup())
+	local specId, specName, specDescription, specIcon, specBackground, specRoleId = GetSpecializationInfo(GetSpecialization())
 	local roleName = self:FormatWord(GetSpecializationRoleByID(specId))
 	-- Keystone Data
 	local ownedKeystoneData = self:GetOwnedKeystone()
