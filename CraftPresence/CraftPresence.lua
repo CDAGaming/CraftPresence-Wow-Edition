@@ -168,6 +168,20 @@ function CraftPresence:StartsWith(String,Start)
 	return string.sub(String,1,string.len(Start))==Start
 end
 
+function CraftPresence:GetActiveKeystone()
+	local keystoneInfo = nil
+	local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
+
+	if mapID then
+		local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
+		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+
+		keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel }
+	end
+
+	return keystoneInfo;
+end
+
 -- ==================
 -- RPC Data
 -- ==================
@@ -279,6 +293,11 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	if(sub_name == nil or sub_name == "") then sub_name = L["ZONE_NAME_UNKNOWN"] end
 	-- Single Variable Data
 	local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+	local keyStoneData = self:GetActiveKeystone()
+	local difficultyInfo = difficultyName
+	if keyStoneData ~= nil then
+		difficultyInfo = difficultyInfo .. " (" .. keyStoneData.level .. ")"
+	end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
 		["@player_info@"] = (playerName .. " - " .. playerClass),
@@ -298,6 +317,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@sub_zone_name@"] = sub_name,
 		["@dead_state@"] = self:GetDeadInnerMessage(),
 		["@difficulty_name@"] = difficultyName,
+		["@difficulty_info@"] = difficultyInfo,
+		["@keystone_level@"] = keyStoneData.level,
 		["@instance_type@"] = instanceType,
 		["@localized_name@"] = name,
 		["@instance_difficulty@"] = tostring(difficultyID),
