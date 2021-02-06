@@ -177,6 +177,8 @@ function CraftPresence:GetOwnedKeystone()
 		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
 
 		keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel }
+	else
+		keystoneInfo = { dungeon = nil, level = 0}
 	end
 
 	return keystoneInfo;
@@ -191,6 +193,8 @@ function CraftPresence:GetActiveKeystone()
 		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
 
 		keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel }
+	else
+		keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0}
 	end
 
 	return keystoneInfo
@@ -333,8 +337,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@dead_state@"] = self:GetDeadInnerMessage(),
 		["@difficulty_name@"] = difficultyName,
 		["@difficulty_info@"] = difficultyInfo,
-		["@active_keystone_level@"] = activeKeystoneData.level,
-		["@owned_keystone_level@"] = ownedKeystoneData.level,
+		["@active_keystone_level@"] = ("+" .. tostring(activeKeystoneData.level)),
+		["@owned_keystone_level@"] = ("+" .. tostring(ownedKeystoneData.level)),
 		["@instance_type@"] = instanceType,
 		["@localized_name@"] = name,
 		["@instance_difficulty@"] = tostring(difficultyID),
