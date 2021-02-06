@@ -168,7 +168,7 @@ function CraftPresence:StartsWith(String,Start)
 	return string.sub(String,1,string.len(Start))==Start
 end
 
-function CraftPresence:GetActiveKeystone()
+function CraftPresence:GetOwnedKeystone()
 	local keystoneInfo = nil
 	local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
 
@@ -180,6 +180,20 @@ function CraftPresence:GetActiveKeystone()
 	end
 
 	return keystoneInfo;
+end
+
+function CraftPresence:GetActiveKeystone()
+	local keystoneInfo = nil
+	local mapID = C_ChallengeMode.GetActiveChallengeMapID()
+
+	if mapID then
+		local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
+		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+
+		keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel }
+	end
+
+	return keystoneInfo
 end
 
 -- ==================
@@ -293,10 +307,11 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	if(sub_name == nil or sub_name == "") then sub_name = L["ZONE_NAME_UNKNOWN"] end
 	-- Single Variable Data
 	local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-	local keyStoneData = self:GetActiveKeystone()
+	local ownedKeystoneData = self:GetOwnedKeystone()
+	local activeKeystoneData = self:GetActiveKeystone()
 	local difficultyInfo = difficultyName
-	if keyStoneData ~= nil then
-		difficultyInfo = difficultyInfo .. " (" .. keyStoneData.level .. ")"
+	if activeKeystoneData ~= nil then
+		difficultyInfo = (difficultyInfo .. " (+" .. activeKeystoneData.level .. ")")
 	end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
@@ -318,7 +333,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@dead_state@"] = self:GetDeadInnerMessage(),
 		["@difficulty_name@"] = difficultyName,
 		["@difficulty_info@"] = difficultyInfo,
-		["@keystone_level@"] = keyStoneData.level,
+		["@active_keystone_level@"] = activeKeystoneData.level,
+		["@owned_keystone_level@"] = ownedKeystoneData.level,
 		["@instance_type@"] = instanceType,
 		["@localized_name@"] = name,
 		["@instance_difficulty@"] = tostring(difficultyID),
