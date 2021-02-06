@@ -176,9 +176,9 @@ function CraftPresence:GetOwnedKeystone()
 		local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
 		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
 
-		keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel }
+		keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel, formattedLevel = ("+" .. keystoneLevel) }
 	else
-		keystoneInfo = { dungeon = nil, level = 0}
+		keystoneInfo = { dungeon = nil, level = 0, formattedLevel = ""}
 	end
 
 	return keystoneInfo;
@@ -192,9 +192,9 @@ function CraftPresence:GetActiveKeystone()
 		local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
 		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
 
-		keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel }
+		keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel, formattedLevel = ("+" .. activeKeystoneLevel) }
 	else
-		keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0}
+		keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0, formattedLevel = ""}
 	end
 
 	return keystoneInfo
@@ -314,8 +314,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local ownedKeystoneData = self:GetOwnedKeystone()
 	local activeKeystoneData = self:GetActiveKeystone()
 	local difficultyInfo = difficultyName
-	if activeKeystoneData ~= nil then
-		difficultyInfo = (difficultyInfo .. " (+" .. tostring(activeKeystoneData.level) .. ")")
+	if activeKeystoneData ~= nil and activeKeystoneData.formattedLevel ~= nil and activeKeystoneData.formattedLevel ~= "" then
+		difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
 	end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
@@ -337,8 +337,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@dead_state@"] = self:GetDeadInnerMessage(),
 		["@difficulty_name@"] = difficultyName,
 		["@difficulty_info@"] = difficultyInfo,
-		["@active_keystone_level@"] = ("+" .. tostring(activeKeystoneData.level)),
-		["@owned_keystone_level@"] = ("+" .. tostring(ownedKeystoneData.level)),
+		["@active_keystone_level@"] = activeKeystoneData.formattedLevel,
+		["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel,
 		["@instance_type@"] = instanceType,
 		["@localized_name@"] = name,
 		["@instance_difficulty@"] = tostring(difficultyID),
