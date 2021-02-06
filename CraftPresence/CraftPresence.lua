@@ -168,6 +168,12 @@ function CraftPresence:StartsWith(String,Start)
 	return string.sub(String,1,string.len(Start))==Start
 end
 
+function CraftPresence:FormatWord(str)
+	if(str == nil or str == "") then return str end
+	str = string.lower(str)
+	return (str:sub(1,1):upper()..str:sub(2))
+end
+
 function CraftPresence:GetOwnedKeystone()
 	local keystoneInfo = nil
 	local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
@@ -187,14 +193,21 @@ end
 function CraftPresence:GetActiveKeystone()
 	local keystoneInfo = nil
 	local mapID = C_ChallengeMode.GetActiveChallengeMapID()
+	local formattedKeyAffixes = ""
 
 	if mapID then
 		local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
 		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+		if activeAffixIDs ~= nil then
+			for key, affixId in pairs(activeAffixIDs) do
+				local name, description, fileDataId = C_ChallengeMode.GetAffixInfo(affixID)
+				formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
+			end
+		end
 
-		keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel, formattedLevel = ("+" .. activeKeystoneLevel) }
+		keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel, formattedLevel = ("+" .. activeKeystoneLevel), formattedAffixes = formattedKeyAffixes }
 	else
-		keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0, formattedLevel = ""}
+		keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0, formattedLevel = "", formattedAffixes = formattedKeyAffixes }
 	end
 
 	return keystoneInfo
@@ -289,6 +302,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local name, instanceType, difficultyID, difficultyName, maxPlayers,
 		dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
 	local playerName = UnitName("player")
+	local playerLevel = UnitLevel("player")
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
@@ -309,8 +323,11 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	if(zone_name == nil or zone_name == "") then zone_name = L["ZONE_NAME_UNKNOWN"] end
 	local sub_name = GetSubZoneText()
 	if(sub_name == nil or sub_name == "") then sub_name = L["ZONE_NAME_UNKNOWN"] end
-	-- Single Variable Data
+	-- Extra Character Data
 	local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+	local specId, specName, specDescription, specIcon, specBackground, specRoleId = GetSpecializationInfo(GetActiveSpecGroup())
+	local roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+	-- Keystone Data
 	local ownedKeystoneData = self:GetOwnedKeystone()
 	local activeKeystoneData = self:GetActiveKeystone()
 	local difficultyInfo = difficultyName
@@ -319,12 +336,15 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
-		["@player_info@"] = (playerName .. " - " .. playerClass),
+		["@player_info@"] = (playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel)) .. " " .. specName .. " " .. playerClass),
 		["@player_name@"] = playerName,
+		["@player_level@"] = playerLevel,
 		["@player_class@"] = playerClass,
 		["@player_alliance@"] = playerAlliance,
 		["@player_covenant@"] = playerCovenant,
 		["@player_faction@"] = localizedFaction,
+		["@player_spec_name@"] = specName,
+		["@player_spec_role@"] = roleName,
 		["@item_level@"] = string.format("%.2f", avgItemLevel),
 		["@item_level_equipped@"] = string.format("%.2f", avgItemLevelEquipped),
 		["@item_level_pvp@"] = string.format("%.2f", avgItemLevelPvp),
@@ -338,6 +358,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@difficulty_name@"] = difficultyName,
 		["@difficulty_info@"] = difficultyInfo,
 		["@active_keystone_level@"] = activeKeystoneData.formattedLevel,
+		["@active_keystone_affixes@"] = activeKeystoneData.activeAffixes,
 		["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel,
 		["@instance_type@"] = instanceType,
 		["@localized_name@"] = name,

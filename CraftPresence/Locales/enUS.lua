@@ -76,3 +76,4 @@ L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
 
 L["ZONE_NAME_UNKNOWN"] = "Unknown"
+L["LEVEL_TAG_FORMAT"] = "Level %s"
