@@ -311,7 +311,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local activeKeystoneData = self:GetActiveKeystone()
 	local difficultyInfo = difficultyName
 	if activeKeystoneData ~= nil then
-		difficultyInfo = (difficultyInfo .. " (+" .. activeKeystoneData.level .. ")")
+		difficultyInfo = (difficultyInfo .. " (+" .. tostring(activeKeystoneData.level) .. ")")
 	end
 	-- Calculate Inner Placeholders
 	local inner_placeholders = {
@@ -333,8 +333,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@dead_state@"] = self:GetDeadInnerMessage(),
 		["@difficulty_name@"] = difficultyName,
 		["@difficulty_info@"] = difficultyInfo,
-		["@active_keystone_level@"] = activeKeystoneData.level,
-		["@owned_keystone_level@"] = ownedKeystoneData.level,
+		["@active_keystone_level@"] = ("+" .. tostring(activeKeystoneData.level)),
+		["@owned_keystone_level@"] = ("+" .. tostring(ownedKeystoneData.level)),
 		["@instance_type@"] = instanceType,
 		["@localized_name@"] = name,
 		["@instance_difficulty@"] = tostring(difficultyID),
