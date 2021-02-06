@@ -3,65 +3,65 @@ CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
 local options = {
-    name = "CraftPresence",
-    handler = CraftPresence,
-    type = 'group',
-    args = {
+	name = "CraftPresence",
+	handler = CraftPresence,
+	type = 'group',
+	args = {
 		clientId = {
-            type = "input",
-            name = L["TITLE_CLIENT_ID"],
-            desc = L["COMMENT_CLIENT_ID"],
-            usage = L["USAGE_CLIENT_ID"],
-            get = "GetClientId",
-            set = "SetClientId",
+			type = "input",
+			name = L["TITLE_CLIENT_ID"],
+			desc = L["COMMENT_CLIENT_ID"],
+			usage = L["USAGE_CLIENT_ID"],
+			get = "GetClientId",
+			set = "SetClientId",
 		},
 		gameStateMessage = {
-            type = "input",
-            name = L["TITLE_GAME_STATE_MESSAGE"],
-            desc = L["COMMENT_GAME_STATE_MESSAGE"],
-            usage = L["USAGE_GAME_STATE_MESSAGE"],
-            get = "GetGameStateMessage",
-            set = "SetGameStateMessage",
-        },
+			type = "input",
+			name = L["TITLE_GAME_STATE_MESSAGE"],
+			desc = L["COMMENT_GAME_STATE_MESSAGE"],
+			usage = L["USAGE_GAME_STATE_MESSAGE"],
+			get = "GetGameStateMessage",
+			set = "SetGameStateMessage",
+		},
 		detailsMessage = {
-            type = "input",
-            name = L["TITLE_DETAILS_MESSAGE"],
-            desc = L["COMMENT_DETAILS_MESSAGE"],
-            usage = L["USAGE_DETAILS_MESSAGE"],
-            get = "GetDetailsMessage",
-            set = "SetDetailsMessage",
+			type = "input",
+			name = L["TITLE_DETAILS_MESSAGE"],
+			desc = L["COMMENT_DETAILS_MESSAGE"],
+			usage = L["USAGE_DETAILS_MESSAGE"],
+			get = "GetDetailsMessage",
+			set = "SetDetailsMessage",
 		},
 		largeImageKey = {
-            type = "input",
-            name = L["TITLE_LARGE_IMAGE_KEY"],
-            desc = L["COMMENT_LARGE_IMAGE_KEY"],
-            usage = L["USAGE_LARGE_IMAGE_KEY"],
-            get = "GetLargeImageKey",
-            set = "SetLargeImageKey",
+			type = "input",
+			name = L["TITLE_LARGE_IMAGE_KEY"],
+			desc = L["COMMENT_LARGE_IMAGE_KEY"],
+			usage = L["USAGE_LARGE_IMAGE_KEY"],
+			get = "GetLargeImageKey",
+			set = "SetLargeImageKey",
 		},
 		largeImageMessage = {
-            type = "input",
-            name = L["TITLE_LARGE_IMAGE_MESSAGE"],
-            desc = L["COMMENT_LARGE_IMAGE_MESSAGE"],
-            usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
-            get = "GetLargeImageMessage",
-            set = "SetLargeImageMessage",
+			type = "input",
+			name = L["TITLE_LARGE_IMAGE_MESSAGE"],
+			desc = L["COMMENT_LARGE_IMAGE_MESSAGE"],
+			usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
+			get = "GetLargeImageMessage",
+			set = "SetLargeImageMessage",
 		},
 		smallImageKey = {
-            type = "input",
-            name = L["TITLE_SMALL_IMAGE_KEY"],
-            desc = L["COMMENT_SMALL_IMAGE_KEY"],
-            usage = L["USAGE_SMALL_IMAGE_KEY"],
-            get = "GetSmallImageKey",
-            set = "SetSmallImageKey",
+			type = "input",
+			name = L["TITLE_SMALL_IMAGE_KEY"],
+			desc = L["COMMENT_SMALL_IMAGE_KEY"],
+			usage = L["USAGE_SMALL_IMAGE_KEY"],
+			get = "GetSmallImageKey",
+			set = "SetSmallImageKey",
 		},
 		smallImageMessage = {
-            type = "input",
-            name = L["TITLE_SMALL_IMAGE_MESSAGE"],
-            desc = L["COMMENT_SMALL_IMAGE_MESSAGE"],
-            usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
-            get = "GetSmallImageMessage",
-            set = "SetSmallImageMessage",
+			type = "input",
+			name = L["TITLE_SMALL_IMAGE_MESSAGE"],
+			desc = L["COMMENT_SMALL_IMAGE_MESSAGE"],
+			usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
+			get = "GetSmallImageMessage",
+			set = "SetSmallImageMessage",
 		},
 		dungeonPlaceholderMessage = {
 			type = "input",
@@ -111,32 +111,32 @@ local options = {
 			get = "GetDeadInnerMessage",
 			set = "SetDeadInnerMessage",
 		},
-        showLoggingInChat = {
-            type = "toggle",
-            name = L["TITLE_SHOW_LOGGING_IN_CHAT"],
-            desc = L["COMMENT_SHOW_LOGGING_IN_CHAT"],
-            get = "IsShowLoggingInChat",
-            set = "ToggleShowLoggingInChat",
-        },
-        debugMode = {
-            type = "toggle",
-            name = L["TITLE_DEBUG_MODE"],
-            desc = L["COMMENT_DEBUG_MODE"],
-            get = "IsDebugMode",
-            set = "ToggleDebugMode"
+		showLoggingInChat = {
+			type = "toggle",
+			name = L["TITLE_SHOW_LOGGING_IN_CHAT"],
+			desc = L["COMMENT_SHOW_LOGGING_IN_CHAT"],
+			get = "IsShowLoggingInChat",
+			set = "ToggleShowLoggingInChat",
+		},
+		debugMode = {
+			type = "toggle",
+			name = L["TITLE_DEBUG_MODE"],
+			desc = L["COMMENT_DEBUG_MODE"],
+			get = "IsDebugMode",
+			set = "ToggleDebugMode"
 		},
 		verboseMode = {
-            type = "toggle",
-            name = L["TITLE_VERBOSE_MODE"],
-            desc = L["COMMENT_VERBOSE_MODE"],
-            get = "IsVerboseMode",
-            set = "ToggleVerboseMode"
-        },
-    },
+			type = "toggle",
+			name = L["TITLE_VERBOSE_MODE"],
+			desc = L["COMMENT_VERBOSE_MODE"],
+			get = "IsVerboseMode",
+			set = "ToggleVerboseMode"
+		},
+	},
 }
 
 local defaults = {
-    profile = {
+	profile = {
 		clientId = L["DEFAULT_CLIENT_ID"],
 		gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
 		detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
@@ -150,10 +150,10 @@ local defaults = {
 		arenaPlaceholderMessage = L["DEFAULT_ARENA_MESSAGE"],
 		defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
 		deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
-        showLoggingInChat = true,
+		showLoggingInChat = true,
 		debugMode = true,
 		verboseMode = true,
-    },
+	},
 }
 
 -- ==================
@@ -166,7 +166,7 @@ end
 
 function CraftPresence:StartsWith(String,Start)
 	return string.sub(String,1,string.len(Start))==Start
- end
+end
 
 -- ==================
 -- RPC Data
@@ -218,7 +218,7 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
 	local a = 0
 	if r == 0 and g == 0 and b == 0 and (force == 0 or force == nil) then a = 0 else a = 1 end
 
-    -- and now paint it
+	-- and now paint it
 	frame.texture:SetColorTexture(r, g, b, a)
 	frame.texture:SetAllPoints(frame)
 end
@@ -481,8 +481,8 @@ function CraftPresence:OnDisable()
 end
 
 function CraftPresence:ChatCommand(input)
-    if not input or input:trim() == "" then
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+	if not input or input:trim() == "" then
+		InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
 	else
 		if input == "test" then
 			self:TestFrames()
@@ -493,14 +493,14 @@ function CraftPresence:ChatCommand(input)
 		else
 			LibStub("AceConfigCmd-3.0"):HandleCommand("cp", "CraftPresence", input)
 		end
-    end
+	end
 end
 -- ====================================================
 -- Getters and Setters (Config Data)
 -- ====================================================
 
 function CraftPresence:GetClientId(info)
-    return self.db.profile.clientId
+	return self.db.profile.clientId
 end
 
 function CraftPresence:SetClientId(info, newValue)
@@ -512,51 +512,51 @@ function CraftPresence:SetClientId(info, newValue)
 end
 
 function CraftPresence:GetGameStateMessage(info)
-    return self.db.profile.gameStateMessage
+	return self.db.profile.gameStateMessage
 end
 
 function CraftPresence:SetGameStateMessage(info, newValue)
-    self.db.profile.gameStateMessage = newValue
+	self.db.profile.gameStateMessage = newValue
 end
 
 function CraftPresence:GetDetailsMessage(info)
-    return self.db.profile.detailsMessage
+	return self.db.profile.detailsMessage
 end
 
 function CraftPresence:SetDetailsMessage(info, newValue)
-    self.db.profile.detailsMessage = newValue
+	self.db.profile.detailsMessage = newValue
 end
 
 function CraftPresence:GetLargeImageKey(info)
-    return self.db.profile.largeImageKey
+	return self.db.profile.largeImageKey
 end
 
 function CraftPresence:SetLargeImageKey(info, newValue)
-    self.db.profile.largeImageKey = newValue
+	self.db.profile.largeImageKey = newValue
 end
 
 function CraftPresence:GetLargeImageMessage(info)
-    return self.db.profile.largeImageMessage
+	return self.db.profile.largeImageMessage
 end
 
 function CraftPresence:SetLargeImageMessage(info, newValue)
-    self.db.profile.largeImageMessage = newValue
+	self.db.profile.largeImageMessage = newValue
 end
 
 function CraftPresence:GetSmallImageKey(info)
-    return self.db.profile.smallImageKey
+	return self.db.profile.smallImageKey
 end
 
 function CraftPresence:SetSmallImageKey(info, newValue)
-    self.db.profile.smallImageKey = newValue
+	self.db.profile.smallImageKey = newValue
 end
 
 function CraftPresence:GetSmallImageMessage(info)
-    return self.db.profile.smallImageMessage
+	return self.db.profile.smallImageMessage
 end
 
 function CraftPresence:SetSmallImageMessage(info, newValue)
-    self.db.profile.smallImageMessage = newValue
+	self.db.profile.smallImageMessage = newValue
 end
 
 -- ================================
@@ -564,76 +564,76 @@ end
 -- ================================
 
 function CraftPresence:GetDungeonPlaceholderMessage(info)
-    return self.db.profile.dungeonPlaceholderMessage
+	return self.db.profile.dungeonPlaceholderMessage
 end
 
 function CraftPresence:SetDungeonPlaceholderMessage(info, newValue)
-    self.db.profile.dungeonPlaceholderMessage = newValue
+	self.db.profile.dungeonPlaceholderMessage = newValue
 end
 
 function CraftPresence:GetRaidPlaceholderMessage(info)
-    return self.db.profile.raidPlaceholderMessage
+	return self.db.profile.raidPlaceholderMessage
 end
 
 function CraftPresence:SetRaidPlaceholderMessage(info, newValue)
-    self.db.profile.raidPlaceholderMessage = newValue
+	self.db.profile.raidPlaceholderMessage = newValue
 end
 
 function CraftPresence:GetBattlegroundPlaceholderMessage(info)
-    return self.db.profile.battlegroundPlaceholderMessage
+	return self.db.profile.battlegroundPlaceholderMessage
 end
 
 function CraftPresence:SetBattlegroundPlaceholderMessage(info, newValue)
-    self.db.profile.battlegroundPlaceholderMessage = newValue
+	self.db.profile.battlegroundPlaceholderMessage = newValue
 end
 
 function CraftPresence:GetArenaPlaceholderMessage(info)
-    return self.db.profile.arenaPlaceholderMessage
+	return self.db.profile.arenaPlaceholderMessage
 end
 
 function CraftPresence:SetArenaPlaceholderMessage(info, newValue)
-    self.db.profile.arenaPlaceholderMessage = newValue
+	self.db.profile.arenaPlaceholderMessage = newValue
 end
 
 function CraftPresence:GetDefaultPlaceholderMessage(info)
-    return self.db.profile.defaultPlaceholderMessage
+	return self.db.profile.defaultPlaceholderMessage
 end
 
 function CraftPresence:SetDefaultPlaceholderMessage(info, newValue)
-    self.db.profile.defaultPlaceholderMessage = newValue
+	self.db.profile.defaultPlaceholderMessage = newValue
 end
 
 function CraftPresence:GetDeadInnerMessage(info)
-    return self.db.profile.deadStateInnerMessage
+	return self.db.profile.deadStateInnerMessage
 end
 
 function CraftPresence:SetDeadInnerMessage(info, newValue)
-    self.db.profile.deadStateInnerMessage = newValue
+	self.db.profile.deadStateInnerMessage = newValue
 end
 
 -- ================================
 -- Core Settings
 -- ================================
 function CraftPresence:IsShowLoggingInChat(info)
-    return self.db.profile.showLoggingInChat
+	return self.db.profile.showLoggingInChat
 end
 
 function CraftPresence:ToggleShowLoggingInChat(info, value)
-    self.db.profile.showLoggingInChat = value
+	self.db.profile.showLoggingInChat = value
 end
 
 function CraftPresence:IsDebugMode(info)
-    return self.db.profile.debugMode
+	return self.db.profile.debugMode
 end
 
 function CraftPresence:ToggleDebugMode(info, value)
-    self.db.profile.debugMode = value
+	self.db.profile.debugMode = value
 end
 
 function CraftPresence:IsVerboseMode(info)
-    return self.db.profile.verboseMode
+	return self.db.profile.verboseMode
 end
 
 function CraftPresence:ToggleVerboseMode(info, value)
-    self.db.profile.verboseMode = value
+	self.db.profile.verboseMode = value
 end
