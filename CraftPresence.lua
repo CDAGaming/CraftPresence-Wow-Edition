@@ -292,6 +292,9 @@ function CraftPresence:PaintSomething(text)
 		if #trio > 2 then b = string.byte(trio:sub(3,3)) end
 		squares_painted = squares_painted + 1
 		self:PaintFrame(frames[squares_painted], r, g, b)
+		-- print the next frame black to signal a separator
+		squares_painted = squares_painted + 1
+		self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
 	end
 
 	-- and then paint the last one black

@@ -31,13 +31,31 @@ def callback(hwnd, extra):
             win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
         process_hwnd = hwnd
 
+def decode_read_data(read):
+    decoded = ""
+    try:
+        decoded = bytes(read).decode('utf-8').rstrip('\0')
+        if decoded.startswith("$"):
+            print("DEBUGGER: Current Decoded => %s" % decoded)
+    except:
+        return decoded
+    
+    return decoded
+
+def get_decoded_chunks(decoded):
+    return decoded.replace('$RPCEvent$', '').split('|')
+
+def verify_read_data(decoded):
+    parts = get_decoded_chunks(decoded)
+    return (len(parts) == 9 and decoded.endswith('$RPCEvent$') and decoded.startswith('$RPCEvent$') and decoded != "$RPCEvent$")
 
 def read_squares(hwnd):
     rect = win32gui.GetWindowRect(hwnd)
     #height = (win32api.GetSystemMetrics(win32con.SM_CYCAPTION) +
     #        win32api.GetSystemMetrics(win32con.SM_CYBORDER) * 4 +
     #        win32api.GetSystemMetrics(win32con.SM_CYEDGE) * 2)
-    new_rect = (rect[0], rect[1], rect[2], config["my_width"])
+    new_rect = (rect[0], rect[1], rect[2], config["pixel_width"])
+    waiting_for_null = False
     try:
         im = ImageGrab.grab(new_rect)
     except Image.DecompressionBombError:
@@ -45,37 +63,39 @@ def read_squares(hwnd):
         return
 
     read = []
-    for square_idx in range(int(im.width / config["my_width"])):
-        x = int(square_idx * config["my_width"] + config["my_width"] / 2)
-        y = int(config["my_width"] / 2)
-        r, g, b = im.getpixel((x, y))
+    current_decoded = ""
+    for square_idx in range(im.width):
+        x = int(square_idx * config["pixel_width"] / 2)
+        y = int(config["pixel_width"] / 2)
+        try:
+            r, g, b = im.getpixel((x, y))
+        except IndexError:
+            break
 
         if config["debug"]:
             im.putpixel((x, y), (255, 255, 255))
 
         if r == g == b == 0:
-            break
+            waiting_for_null = False
+        elif not waiting_for_null:
+            read.append(r)
+            read.append(g)
+            read.append(b)
 
-        read.append(r)
-        read.append(g)
-        read.append(b)
+            current_decoded = decode_read_data(read)
+            if verify_read_data(current_decoded):
+                break
+            else:
+                waiting_for_null = True
 
-    decoded = ""
-    try:
-        decoded = bytes(read).decode('utf-8').rstrip('\0')
-    except:
-        if not config["debug"]:
-            return
-    parts = decoded.replace('$RPCEvent$', '').split('|')
+    parts = get_decoded_chunks(current_decoded)
 
     if config["debug"]:
         im.show()
         return
 
     # sanity check
-    if (len(parts) != 9 or
-            not decoded.endswith('$RPCEvent$') or
-            not decoded.startswith('$RPCEvent$')):
+    if not(verify_read_data(current_decoded)):
         return
 
     first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line = parts
