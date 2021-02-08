@@ -293,12 +293,18 @@ function CraftPresence:PaintSomething(text)
 		squares_painted = squares_painted + 1
 		self:PaintFrame(frames[squares_painted], r, g, b)
 		-- print the next frame black to signal a separator
-		squares_painted = squares_painted + 1
-		self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
+		-- if the pixel before it is allocated
+		if r == nil then r = 0 end
+		if g == nil then g = 0 end
+		if b == nil then b = 0 end
+		if not(r == 0 and b == 0 and g == 0) then
+			squares_painted = squares_painted + 1
+			self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
+		end
 	end
 
 	-- and then paint the last one black
-	self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
+	--self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
 end
 
 function CraftPresence:ParsePlaceholderData(global_placeholders)

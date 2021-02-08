@@ -35,8 +35,8 @@ def decode_read_data(read):
     decoded = ""
     try:
         decoded = bytes(read).decode('utf-8').rstrip('\0')
-        if decoded.startswith("$"):
-            print("DEBUGGER: Current Decoded => %s" % decoded)
+        if decoded.startswith("$") and config["verbose"]:
+            print("Current Decoded => %s" % decoded)
     except:
         return decoded
     

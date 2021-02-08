@@ -1,5 +1,6 @@
 {
-  "debug": true,
-  "my_width": 12,
+  "debug": false,
+  "verbose": false,
+  "pixel_width": 12,
   "process_name": "World of Warcraft"
 }
