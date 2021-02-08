@@ -224,7 +224,7 @@ local last_encoded = ""
 local nullKey = "Skip"
 
 function CraftPresence:CreateFrames()
-	local size = 12
+	local size = 6
 	frame_count = math.floor(GetScreenWidth() / size)
 	if self:IsDebugMode() and self:IsShowLoggingInChat() then
 		self:Print("Debug => Max bytes that can be stored: " .. (frame_count * 3) - 1)
