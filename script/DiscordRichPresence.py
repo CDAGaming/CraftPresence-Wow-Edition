@@ -50,11 +50,13 @@ def verify_read_data(decoded):
     return (len(parts) == 9 and decoded.endswith('$RPCEvent$') and decoded.startswith('$RPCEvent$') and decoded != "$RPCEvent$")
 
 def read_squares(hwnd):
-    rect = win32gui.GetWindowRect(hwnd)
+    x, y, x1, y1 = win32gui.GetClientRect(hwnd)
+    x, y = win32gui.ClientToScreen(hwnd, (x, y))
+    x1, y1 = win32gui.ClientToScreen(hwnd, (x1 - x, y1 - y))
     #height = (win32api.GetSystemMetrics(win32con.SM_CYCAPTION) +
     #        win32api.GetSystemMetrics(win32con.SM_CYBORDER) * 4 +
     #        win32api.GetSystemMetrics(win32con.SM_CYEDGE) * 2)
-    new_rect = (rect[0], rect[1], rect[2], config["pixel_size"])
+    new_rect = (x, y, x1, (y + config["pixel_size"]))
     waiting_for_null = False
     try:
         im = ImageGrab.grab(new_rect)
