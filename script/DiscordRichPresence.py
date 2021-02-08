@@ -54,7 +54,7 @@ def read_squares(hwnd):
     #height = (win32api.GetSystemMetrics(win32con.SM_CYCAPTION) +
     #        win32api.GetSystemMetrics(win32con.SM_CYBORDER) * 4 +
     #        win32api.GetSystemMetrics(win32con.SM_CYEDGE) * 2)
-    new_rect = (rect[0], rect[1], rect[2], config["pixel_width"])
+    new_rect = (rect[0], rect[1], rect[2], config["pixel_size"])
     waiting_for_null = False
     try:
         im = ImageGrab.grab(new_rect)
@@ -65,8 +65,8 @@ def read_squares(hwnd):
     read = []
     current_decoded = ""
     for square_idx in range(im.width):
-        x = int(square_idx * config["pixel_width"] / 2)
-        y = int(config["pixel_width"] / 2)
+        x = int(square_idx * config["pixel_size"] / 2)
+        y = int(config["pixel_size"] / 2)
         try:
             r, g, b = im.getpixel((x, y))
         except IndexError:
