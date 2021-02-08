@@ -200,7 +200,7 @@ function CraftPresence:GetActiveKeystone()
 		local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
 		if activeAffixIDs ~= nil then
 			for key, affixId in pairs(activeAffixIDs) do
-				local name, description, fileDataId = C_ChallengeMode.GetAffixInfo(affixID)
+				local name, description, fileDataId = C_ChallengeMode.GetAffixInfo(affixId)
 				formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
 			end
 		end
