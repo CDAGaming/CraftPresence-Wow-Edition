@@ -187,7 +187,7 @@ function CraftPresence:GetOwnedKeystone()
 		keystoneInfo = { dungeon = nil, level = 0, formattedLevel = ""}
 	end
 
-	return keystoneInfo;
+	return keystoneInfo
 end
 
 function CraftPresence:GetActiveKeystone()
@@ -507,7 +507,7 @@ function CraftPresence:TestFrames()
 end
 
 function CraftPresence:PaintMessageWait(force)
-	local proceed = force ~= nil and force == true;
+	local proceed = (force ~= nil and force == true)
 	local encoded = self:EncodeConfigData()
 	local changed = last_encoded ~= encoded or proceed
 	if(changed and encoded ~= nil) then
