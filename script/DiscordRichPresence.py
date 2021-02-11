@@ -25,33 +25,39 @@ last_seventh_line = None
 last_eighth_line = None
 last_ninth_line = None
 
+
 def callback(hwnd, extra):
     global process_hwnd
     if (win32gui.GetWindowText(hwnd) == config["process_name"] and
             win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
         process_hwnd = hwnd
 
+
 def decode_read_data(read):
     decoded = ""
     try:
         decoded = bytes(read).decode('utf-8').rstrip('\0')
-    except:
+    except UnicodeDecodeError:
         return decoded
-    
+
     return decoded
+
 
 def get_decoded_chunks(decoded):
     return decoded.replace('$RPCEvent$', '').split('|')
 
+
 def verify_read_data(decoded):
     parts = get_decoded_chunks(decoded)
-    return (len(parts) == 9 and decoded.endswith('$RPCEvent$') and decoded.startswith('$RPCEvent$') and decoded != "$RPCEvent$")
+    return (len(parts) == 9 and decoded.endswith('$RPCEvent$') and decoded.startswith(
+        '$RPCEvent$') and decoded != "$RPCEvent$")
+
 
 def read_squares(hwnd):
     x, y, x1, y1 = win32gui.GetClientRect(hwnd)
     x, y = win32gui.ClientToScreen(hwnd, (x, y))
     x1, y1 = win32gui.ClientToScreen(hwnd, (x1 - x, y1 - y))
-    #height = (win32api.GetSystemMetrics(win32con.SM_CYCAPTION) +
+    # height = (win32api.GetSystemMetrics(win32con.SM_CYCAPTION) +
     #        win32api.GetSystemMetrics(win32con.SM_CYBORDER) * 4 +
     #        win32api.GetSystemMetrics(win32con.SM_CYEDGE) * 2)
     new_rect = (x, y, x1, (y + config["pixel_size"]))
@@ -95,7 +101,7 @@ def read_squares(hwnd):
         return
 
     # sanity check
-    if not(verify_read_data(current_decoded)):
+    if not (verify_read_data(current_decoded)):
         return
 
     first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line = parts
@@ -148,11 +154,11 @@ while True:
                 while True:
                     try:
                         rpc_obj = (rpc.DiscordIpcClient
-                                .for_platform(first_line))
+                                   .for_platform(first_line))
                     except Exception as exc:
                         print("I couldn't connect to Discord (%s). It's "
-                            'probably not running. I will try again in 5 '
-                            'sec.' % str(exc))
+                              'probably not running. I will try again in 5 '
+                              'sec.' % str(exc))
                         time.sleep(5)
                         pass
                     else:
@@ -163,28 +169,28 @@ while True:
             assetsData = {}
             activity = {}
             # Asset Data Sync
-            if not("Skip" in second_line):
+            if not ("Skip" in second_line):
                 assetsData["large_image"] = second_line
-                if not("Skip" in third_line):
+                if not ("Skip" in third_line):
                     assetsData["large_text"] = third_line
-            if not("Skip" in fourth_line):
+            if not ("Skip" in fourth_line):
                 assetsData["small_image"] = fourth_line
-                if not("Skip" in fifth_line):
+                if not ("Skip" in fifth_line):
                     assetsData["small_text"] = fifth_line
             # Timer Data Setup
-            if("generated" in eighth_line):
+            if "generated" in eighth_line:
                 eighth_line = round(time.time())
-            if("generated" in ninth_line):
+            if "generated" in ninth_line:
                 ninth_line = round(time.time())
             # Timer Data Sync
-            if not("Skip" in str(eighth_line)):
+            if not ("Skip" in str(eighth_line)):
                 timerData["start"] = eighth_line
-                if not("Skip" in str(ninth_line)):
+                if not ("Skip" in str(ninth_line)):
                     timerData["end"] = ninth_line
             # Activity Data Sync
-            if not("Skip" in sixth_line):
+            if not ("Skip" in sixth_line):
                 activity["details"] = sixth_line
-            if not("Skip" in seventh_line):
+            if not ("Skip" in seventh_line):
                 activity["state"] = seventh_line
 
             activity["assets"] = assetsData
@@ -195,7 +201,7 @@ while True:
                 rpc_obj.set_activity(activity)
             except Exception as exc:
                 print('Looks like the connection to Discord was broken (%s). '
-                    'I will try to connect again in 5 sec.' % str(exc))
+                      'I will try to connect again in 5 sec.' % str(exc))
                 last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
                 rpc_obj = None
     elif not process_hwnd and rpc_obj:

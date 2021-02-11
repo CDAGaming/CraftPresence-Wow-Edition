@@ -175,7 +175,7 @@ function CraftPresence:FormatWord(str)
 end
 
 function CraftPresence:GetOwnedKeystone()
-	local keystoneInfo = nil
+	local keystoneInfo
 	local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
 
 	if mapID then
@@ -191,7 +191,7 @@ function CraftPresence:GetOwnedKeystone()
 end
 
 function CraftPresence:GetActiveKeystone()
-	local keystoneInfo = nil
+	local keystoneInfo
 	local mapID = C_ChallengeMode.GetActiveChallengeMapID()
 	local formattedKeyAffixes = ""
 
@@ -315,11 +315,12 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
-	-- Covenant Setup (If porting to clasic, only use faction data)
+	-- Covenant Setup (If porting to classic, only use faction data)
 	local playerAlliance = "None"
 	local playerCovenant = "None"
 	local playerCovenantId = C_Covenants.GetActiveCovenantID()
 	local playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
+	local playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
 	local englishFaction, localizedFaction = UnitFactionGroup("player")
 	if playerCovenantId == 0 or not(string.find(name, "Shadowlands")) then
 		playerAlliance = localizedFaction
@@ -351,6 +352,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@player_class@"] = playerClass,
 		["@player_alliance@"] = playerAlliance,
 		["@player_covenant@"] = playerCovenant,
+		["@player_covenant_renown@"] = playerCovenantRenown,
 		["@player_faction@"] = localizedFaction,
 		["@player_spec_name@"] = specName,
 		["@player_spec_role@"] = roleName,
@@ -403,7 +405,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	for inKey,inValue in pairs(global_placeholders) do
 		local output = inValue:trim()
 		-- If the Placeholders contained in the messages is an overrider, we replace the rest of the output with just that placeholder
-		-- Only applies towards inner-placeholderswith subject to change data
+		-- Only applies towards inner-placeholders with subject to change data
 		for overrideKey, overrideValue in pairs(override_placeholders) do
 			if string.find(output, overrideValue) then
 				if(self:StartsWith(overrideValue, "@") and (inner_conditions[overrideValue] == nil or inner_conditions[overrideValue])) then
