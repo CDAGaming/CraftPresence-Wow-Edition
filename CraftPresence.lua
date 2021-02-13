@@ -383,7 +383,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	}
 	-- Calculate limiting RPC conditions
 	local global_conditions = {
-		["#dungeon#"] = (inner_placeholders["@instance_type@"] == "party"),
+		["#dungeon#"] = (inner_placeholders["@instance_type@"] == "party" and not(string.find(name, "Garrison"))),
 		["#raid#"] = (inner_placeholders["@instance_type@"] == "raid"),
 		["#battleground#"] = (inner_placeholders["@instance_type@"] == "pvp"),
 		["#arena#"] = (inner_placeholders["@instance_type@"] == "arena")
