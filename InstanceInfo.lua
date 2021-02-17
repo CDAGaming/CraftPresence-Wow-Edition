@@ -1,4 +1,5 @@
 local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
+
 -- Programmatically generate list of all dungeons and raids, to be used in determining what expansion
 -- the instance your are currently inside, actually belongs to.
 
@@ -37,7 +38,8 @@ function CraftPresence:GenerateInstanceTable()
 end
 
 
---[[Figure out which expansion our current instance belongs to.
+--[[
+Figure out which expansion our current instance belongs to.
 
 Problem: Remade dungeons, such as Deadmines, belong to more than 1 expansion,
 but retain only one name and instanceID. Making a simple list of ID's insufficient.
