@@ -2,31 +2,29 @@
 -- the instance your are currently inside, actually belongs to.
 
 -- Generate table of dungeon and raid instances by expansion
+local InstanceTable
 function GenerateInstanceTable()
     local instTable = {}
 
-    instTable.trackedTypes = "party, raid"
-
     local numTiers = EJ_GetNumTiers()
-    local numToScan = 10000
     local raid = false
 
     -- Run this twice, once for dungeons, once for raids
     for b=1, 2 do
         local instanceType = ""
-        if raid then instanceType = "Raids" else instanceType = "Dungeons" end
-        instTable[instanceType] = {}
 
         for t=1, numTiers do
             EJ_SelectTier(t)
             local tierName = EJ_GetTierInfo(t)
-            instTable[instanceType][tierName] = {}
+            local instanceIndex = 1
+            local id, name = EJ_GetInstanceByIndex(instanceIndex, raid)
 
-            for i=1, numToScan do
-                local id, name = EJ_GetInstanceByIndex(i, raid)
-                if name then
-                    instTable[instanceType][tierName][name] = id
+            while id do
+                if not(id == nil) then
+                    instTable[id] = tierName
                 end
+                instanceIndex = instanceIndex + 1
+                id, name = EJ_GetInstanceByIndex(instanceIndex, raid)
             end
         end
 
@@ -56,7 +54,6 @@ function GetCurrentInstanceTier()
     -- Bail out if we're not even in an instance!
     if not IsInInstance() then return "NotAnInstance" end
 
-
     -- Generate a chronologically ordered list of expansion names
     local tierList = {}
 
@@ -64,41 +61,23 @@ function GetCurrentInstanceTier()
         tierList[i] = EJ_GetTierInfo(i)
     end
 
-
     local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
     local instanceID = EJ_GetInstanceForMap(C_Map.GetBestMapForUnit("player"))
 
-    -- Determine the search key to be used. This should be refactored somehow.
-    local searchType = (
-            function()
-                if instanceType == "party" then
-                    return "Dungeons"
-                elseif instanceType == "raid" then
-                    return "Raids"
-                end
-            end
-    )()
-
     -- First, check if we even track this type of instance, if not, bail out
-    if not string.find(InstanceTable.trackedTypes, instanceType) then return "UnknownInstanceType" end
+    local trackedTypes = {
+        party = true,
+        raid = true,
+    }
+
+    if not trackedTypes[instanceType] then return "UnknownInstanceType" end
 
     -- Second, is it Heroic? If so, skip all of Vanilla. Else, search the entire instance table
     local startIndex = (difficulty == 2) and 2 or 1
 
-
     -- Perform the actual search, scanning by instanceID, skipping Classic if we're in Heroic
-    for i = startIndex, #tierList do
-        subTable = InstanceTable[searchType][tierList[i]]
-
-        for k, v in pairs(subTable) do
-            if (instanceID == v) then
-                return tierList[i]
-            end
-        end
-    end
-    return "UnknownTier"
+    return InstanceTable[instanceID] or "UnknownTier"
 end
-
 
 -- Celebratory print()
 local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
