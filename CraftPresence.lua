@@ -322,7 +322,9 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
 	local playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
 	local englishFaction, localizedFaction = UnitFactionGroup("player")
-	if playerCovenantId == 0 or not(string.find(name, "Shadowlands")) then
+	-- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
+	-- Then use the Faction as the Alliance; otherwise setup Covenant Data
+	if playerCovenantId == 0 or not((string.find(name, "Shadowlands")) or (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))) then
 		playerAlliance = localizedFaction
 	else
 		playerCovenant = playerCovenantData.name

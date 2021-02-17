@@ -1,9 +1,10 @@
+local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 -- Programmatically generate list of all dungeons and raids, to be used in determining what expansion
 -- the instance your are currently inside, actually belongs to.
 
 -- Generate table of dungeon and raid instances by expansion
 local InstanceTable
-function GenerateInstanceTable()
+function CraftPresence:GenerateInstanceTable()
     local instTable = {}
 
     local numTiers = EJ_GetNumTiers()
@@ -47,9 +48,9 @@ We can then simply skip scanning Vanilla, the next hit will accurately tell us o
 
 This can break if something like a TBC instance is remade, for example, so this is a fragile approach.
 --]]
-function GetCurrentInstanceTier()
+function CraftPresence:GetCurrentInstanceTier()
     -- Check that the InstanceTable even exists, if not, create it
-    InstanceTable = InstanceTable or GenerateInstanceTable()
+    InstanceTable = InstanceTable or CraftPresence:GenerateInstanceTable()
 
     -- Bail out if we're not even in an instance!
     if not IsInInstance() then return "NotAnInstance" end
@@ -80,5 +81,5 @@ function GetCurrentInstanceTier()
 end
 
 -- Celebratory print()
-local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
-print( format('You are in "%s (%s)", from the "%s" expansion.', name, difficultyName, GetCurrentInstanceTier()))
+--local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
+--print( format('You are in "%s (%s)", from the "%s" expansion.', name, difficultyName, GetCurrentInstanceTier()))
