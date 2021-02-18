@@ -77,3 +77,17 @@ L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be 
 
 L["ZONE_NAME_UNKNOWN"] = "Unknown"
 L["LEVEL_TAG_FORMAT"] = "Level %s"
+-- Logging Data
+L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
+L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
+L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
+L["VERBOSE_PLACEHOLDER_INTRO"] = "Available Placeholders (<key> -> <value>):"
+L["VERBOSE_PLACEHOLDER_DATA"] = "%s Data: %s -> %s"
+L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
+L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
+-- The values below should NEVER be changed
+L["UNKNOWN_KEY"] = "Skip"
+L["DEBUG_LOG"] = "[Debug] %s"
+L["VERBOSE_LOG"] = "[Verbose] %s"
+L["ERROR_LOG"] = "[Error] %s"
+L["WARNING_LOG"] = "[Warning] %s"

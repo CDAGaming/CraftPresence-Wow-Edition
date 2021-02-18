@@ -174,6 +174,10 @@ function CraftPresence:FormatWord(str)
 	return (str:sub(1,1):upper()..str:sub(2))
 end
 
+-- ==================
+-- Player Update Data
+-- ==================
+
 function CraftPresence:GetOwnedKeystone()
 	local keystoneInfo
 	local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
@@ -217,95 +221,7 @@ end
 -- RPC Data
 -- ==================
 
-local frame_count = 0
-local frames = {}
 local realmData = {"US", "KR", "EU", "TW", "CH"}
-local last_encoded = ""
-local nullKey = "Skip"
-
-function CraftPresence:CreateFrames()
-	local size = 6
-	frame_count = math.floor(GetScreenWidth() / size)
-	if self:IsDebugMode() and self:IsShowLoggingInChat() then
-		self:Print("Debug => Max bytes that can be stored: " .. (frame_count * 3) - 1)
-	end
-
-	for i=1, frame_count do
-		frames[i] = CreateFrame("Frame", nil, UIParent)
-		frames[i]:SetFrameStrata("TOOLTIP")
-		frames[i]:SetWidth(size)
-		frames[i]:SetHeight(size)
-
-		-- initialise it as black
-		local t = frames[i]:CreateTexture(nil, "TOOLTIP")
-		t:SetColorTexture(0, 0, 0, 1)
-		t:SetAllPoints(frames[i])
-		frames[i].texture = t
-
-		frames[i]:SetPoint("TOPLEFT", (i - 1) * size, 0)
-		frames[i]:Show()
-	end
-	return frames
-end
-
-function CraftPresence:PaintFrame(frame, r, g, b, force)
-	-- turn them into black if they are null
-	if r == nil then r = 0 end
-	if g == nil then g = 0 end
-	if b == nil then b = 0 end
-
-	-- from 0-255 to 0.0-1.0
-	r = r / 255
-	g = g / 255
-	b = b / 255
-
-	-- set alpha to 1 if this pixel is black and force is 0 or null
-	local a = 0
-	if r == 0 and g == 0 and b == 0 and (force == 0 or force == nil) then a = 0 else a = 1 end
-
-	-- and now paint it
-	frame.texture:SetColorTexture(r, g, b, a)
-	frame.texture:SetAllPoints(frame)
-end
-
-function CraftPresence:PaintSomething(text)
-	local max_bytes = (frame_count - 1) * 3
-	if text:len() >= max_bytes then
-		if self:IsDebugMode() and self:IsShowLoggingInChat() then
-			self:Print("Error => You're painting too many bytes (" .. #text .. " vs " .. max_bytes .. ")")
-		end
-		return
-	end
-
-	-- clean all
-	self:CleanFrames()
-
-	local squares_painted = 0
-	local r = 0
-	local g = 0
-	local b = 0
-
-	for trio in text:gmatch".?.?.?" do
-		r = 0; g = 0; b = 0
-		r = string.byte(trio:sub(1,1))
-		if #trio > 1 then g = string.byte(trio:sub(2,2)) end
-		if #trio > 2 then b = string.byte(trio:sub(3,3)) end
-		squares_painted = squares_painted + 1
-		self:PaintFrame(frames[squares_painted], r, g, b)
-		-- print the next frame black to signal a separator
-		-- if the pixel before it is allocated
-		if r == nil then r = 0 end
-		if g == nil then g = 0 end
-		if b == nil then b = 0 end
-		if not(r == 0 and b == 0 and g == 0) then
-			squares_painted = squares_painted + 1
-			self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
-		end
-	end
-
-	-- and then paint the last one black
-	--self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
-end
 
 function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local name, instanceType, difficultyID, difficultyName, maxPlayers,
@@ -433,17 +349,21 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	return outputTable, inner_placeholders, time_conditions
 end
 
+local global_placeholders = {}
+local inner_placeholders = {}
+local time_conditions = {}
+
 function CraftPresence:EncodeConfigData()
-	-- Placeholder data and syncing
-	local global_placeholders = {
+	-- Re-Initialize and Sync Placeholder and Conditional Data
+	global_placeholders = {
 		["#dungeon#"] = self:GetDungeonPlaceholderMessage(),
 		["#raid#"] = self:GetRaidPlaceholderMessage(),
 		["#battleground#"] = self:GetBattlegroundPlaceholderMessage(),
 		["#arena#"] = self:GetArenaPlaceholderMessage(),
 		["#default#"] = self:GetDefaultPlaceholderMessage()
 	}
-	local inner_placeholders = {}
-	local time_conditions = {}
+	inner_placeholders = {}
+	time_conditions = {}
 	global_placeholders, inner_placeholders, time_conditions = self:ParsePlaceholderData(global_placeholders)
 	-- RPC Data syncing
 	local queued_details = self:GetDetailsMessage()
@@ -452,12 +372,9 @@ function CraftPresence:EncodeConfigData()
 	local queued_large_image_text = self:GetLargeImageMessage()
 	local queued_small_image_key = self:GetSmallImageKey()
 	local queued_small_image_text = self:GetSmallImageMessage()
-	local queued_time_start = nullKey
-	local queued_time_end = nullKey
+	local queued_time_start = L["UNKNOWN_KEY"]
+	local queued_time_end = L["UNKNOWN_KEY"]
 	for key,value in pairs(global_placeholders) do
-		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
-			self:Print("[Verbose] Global Data:", key, "=", value)
-		end
 		queued_details = queued_details:gsub(key, value)
 		queued_state = queued_state:gsub(key, value)
 		queued_large_image_key = queued_large_image_key:gsub(key, value)
@@ -466,9 +383,6 @@ function CraftPresence:EncodeConfigData()
 		queued_small_image_text = queued_small_image_text:gsub(key, value)
 	end
 	for innerKey,innerValue in pairs(inner_placeholders) do
-		if self:IsVerboseMode() and self:IsShowLoggingInChat() then
-			self:Print("[Verbose] Inner Data:", innerKey, "=", innerValue)
-		end
 		queued_details = queued_details:gsub(innerKey, innerValue)
 		queued_state = queued_state:gsub(innerKey, innerValue)
 		queued_large_image_key = queued_large_image_key:gsub(innerKey, innerValue)
@@ -486,42 +400,6 @@ function CraftPresence:EncodeConfigData()
 		end
 	end
 	return self:EncodeData(self:GetClientId(), string.lower(queued_large_image_key:gsub("%s+", "_")), queued_large_image_text, string.lower(queued_small_image_key:gsub("%s+", "_")), queued_small_image_text, queued_details, queued_state, queued_time_start, queued_time_end)
-end
-
-function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
-	if(clientId == nil or clientId == "") then clientId = L["DEFAULT_CLIENT_ID"] end
-	if largeImageKey == "" then largeImageKey = nil end
-	if largeImageText == "" then largeImageText = nil end
-	if smallImageKey == "" then smallImageKey = nil end
-	if smallImageText == "" then smallImageText = nil end
-	if details == "" then details = nil end
-	if gameState == "" then gameState = nil end
-	return ("$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or nullKey) .. "|" .. (largeImageText or nullKey) .. "|" .. (smallImageKey or nullKey) .. "|" .. (smallImageText or nullKey) .. "|" .. (details or nullKey) .. "|" .. (gameState or nullKey) .. "|" .. (startTime or nullKey) .. "|" .. (endTime or nullKey) .. "$RPCEvent$")
-end
-
-function CraftPresence:CleanFrames()
-	for i=1, frame_count do
-		self:PaintFrame(frames[i], 0, 0, 0, 0)
-	end
-end
-
-function CraftPresence:TestFrames()
-	local encoded = self:EncodeConfigData()
-	if encoded ~= nil then self:PaintSomething(encoded) end
-end
-
-function CraftPresence:PaintMessageWait(force)
-	local proceed = (force ~= nil and force == true)
-	local encoded = self:EncodeConfigData()
-	local changed = last_encoded ~= encoded or proceed
-	if(changed and encoded ~= nil) then
-		last_encoded = encoded
-		if self:IsDebugMode() and self:IsShowLoggingInChat() then
-			self:Print("[Debug] Sending activity => " .. encoded:gsub("|", "||"))
-		end
-		self:PaintSomething(encoded)
-		C_Timer.After(10, function() self:CleanFrames() end)
-	end
 end
 
 function CraftPresence:OnInitialize()
@@ -563,13 +441,32 @@ function CraftPresence:ChatCommand(input)
 			self:TestFrames()
 		elseif input == "clean" or input == "clear" then
 			self:CleanFrames()
-		elseif input:trim() == "update" then
+		elseif input == "update" then
 			self:PaintMessageWait(true)
+		elseif input == "status" then
+			if self:IsVerboseMode() and self:IsShowLoggingInChat() then
+				self:Print(self:PrintLastEncoded())
+			else
+				self:Print(string.format(L["ERROR_LOG"], string.format(L["ERROR_COMMAND_CONFIG"], (L["TITLE_VERBOSE_MODE"] .. ", " .. L["TITLE_SHOW_LOGGING_IN_CHAT"]))))
+			end
+		elseif input == "placeholders" then
+			if self:IsVerboseMode() and self:IsShowLoggingInChat() then
+				self:Print(string.format(L["VERBOSE_LOG"], L["VERBOSE_PLACEHOLDER_INTRO"]))
+				for key,value in pairs(global_placeholders) do
+					self:Print(string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_PLACEHOLDER_DATA"], "Global", key, value)))
+				end
+				for innerKey,innerValue in pairs(inner_placeholders) do
+					self:Print(string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_PLACEHOLDER_DATA"], "Inner", innerKey, innerValue)))
+				end
+			else
+				self:Print(string.format(L["ERROR_LOG"], string.format(L["ERROR_COMMAND_CONFIG"], (L["TITLE_VERBOSE_MODE"] .. ", " .. L["TITLE_SHOW_LOGGING_IN_CHAT"]))))
+			end
 		else
 			LibStub("AceConfigCmd-3.0"):HandleCommand("cp", "CraftPresence", input)
 		end
 	end
 end
+
 -- ====================================================
 -- Getters and Setters (Config Data)
 -- ====================================================

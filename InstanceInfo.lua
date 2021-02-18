@@ -81,7 +81,3 @@ function CraftPresence:GetCurrentInstanceTier()
     -- Perform the actual search, scanning by instanceID, skipping Classic if we're in Heroic
     return InstanceTable[instanceID] or "UnknownTier"
 end
-
--- Celebratory print()
---local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
---print( format('You are in "%s (%s)", from the "%s" expansion.', name, difficultyName, GetCurrentInstanceTier()))

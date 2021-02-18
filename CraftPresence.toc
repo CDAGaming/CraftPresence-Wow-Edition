@@ -2,7 +2,7 @@
 
 ## Title: CraftPresence
 ## Author: CDAGaming
-## Version: v0.0.5
+## Version: v0.0.6
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
 ## OptionalDeps: Ace3
@@ -14,3 +14,5 @@ Locales\Locales.xml
 
 CraftPresence.lua
 InstanceInfo.lua
+
+RPCDispatch.lua
