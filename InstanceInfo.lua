@@ -81,3 +81,21 @@ function CraftPresence:GetCurrentInstanceTier()
     -- Perform the actual search, scanning by instanceID, skipping Classic if we're in Heroic
     return InstanceTable[instanceID] or "UnknownTier"
 end
+
+function CraftPresence:GetCurrentLockoutData()
+    local lockoutData = { name = "", difficulty = "", difficultyId = 0, currentEncounters = 0, totalEncounters = 0, formattedEncounterData = "" }
+    if IsInInstance() then
+        local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
+        local instanceID = EJ_GetInstanceForMap(C_Map.GetBestMapForUnit("player"))
+        for index = 1, GetNumSavedInstances() do
+            local instanceName, id, reset, instanceDifficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, instanceDifficultyName, numEncounters, encounterProgress, extendDisabled = GetSavedInstanceInfo(index)
+            if locked then
+                if (name == instanceName and difficulty == instanceDifficulty) then
+                    lockoutData = { name = instanceName, difficulty = difficultyName, difficultyId = difficulty, currentEncounters = encounterProgress, totalEncounters = numEncounters, formattedEncounterData = ("(" .. encounterProgress .. "/" .. numEncounters .. ")") }
+                    break
+                end
+            end
+        end
+    end
+    return lockoutData
+end

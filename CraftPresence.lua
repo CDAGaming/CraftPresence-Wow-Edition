@@ -72,6 +72,7 @@ local realmData = {"US", "KR", "EU", "TW", "CH"}
 function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local name, instanceType, difficultyID, difficultyName, maxPlayers,
 		dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
+	local lockoutData = self:GetCurrentLockoutData()
 	local playerName = UnitName("player")
 	local playerLevel = UnitLevel("player")
 	local playerRealm = GetRealmName()
@@ -143,7 +144,10 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@is_dynamic@"] = tostring(isDynamic),
 		["@instance_id@"] = tostring(instanceID),
 		["@instance_group_size@"] = tostring(instanceGroupSize),
-		["@lfg_dungeon_id@"] = tostring(LfgDungeonID)
+		["@lfg_dungeon_id@"] = tostring(LfgDungeonID),
+		["@lockout_encounters@"] = lockoutData.formattedEncounterData,
+		["@lockout_current_encounters@"] = lockoutData.currentEncounters,
+		["@lockout_total_encounters@"] = lockoutData.totalEncounters
 	}
 	-- Calculate limiting RPC conditions
 	local global_conditions = {
@@ -153,7 +157,8 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["#arena#"] = (inner_placeholders["@instance_type@"] == "arena")
 	}
 	local inner_conditions = {
-		["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player"))
+		["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player")),
+		["@lockout_encounters@"] = (lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
 	}
 	local time_conditions = {
 		["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"] or global_conditions["#arena#"])
