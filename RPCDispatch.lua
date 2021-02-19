@@ -13,7 +13,7 @@ end
 function CraftPresence:CreateFrames()
     local size = 6
     frame_count = math.floor(GetScreenWidth() / size)
-    if self:IsDebugMode() and self:IsShowLoggingInChat() then
+    if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
         self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
@@ -58,7 +58,7 @@ end
 function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     if text:len() >= max_bytes then
-        if self:IsDebugMode() and self:IsShowLoggingInChat() then
+        if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
             self:Print(string.format(L["ERROR_LOG"], string.format(L["ERROR_BYTE_OVERFLOW"], tostring(#text), tostring(max_bytes))))
         end
         return
@@ -119,7 +119,7 @@ function CraftPresence:PaintMessageWait(force)
     local changed = last_encoded ~= encoded or proceed
     if(changed and encoded ~= nil) then
         last_encoded = encoded
-        if self:IsDebugMode() and self:IsShowLoggingInChat() then
+        if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
             self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_SEND_ACTIVITY"], encoded:gsub("|", "||"))))
         end
         self:PaintSomething(encoded)
