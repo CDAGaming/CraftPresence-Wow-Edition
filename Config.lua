@@ -53,7 +53,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.clientId = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_CLIENT_ID"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_CLIENT_ID"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -70,7 +70,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.gameStateMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_GAME_STATE_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_GAME_STATE_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -87,7 +87,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.detailsMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DETAILS_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DETAILS_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -104,7 +104,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.largeImageKey = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_LARGE_IMAGE_KEY"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_LARGE_IMAGE_KEY"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -121,7 +121,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.largeImageMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_LARGE_IMAGE_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_LARGE_IMAGE_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -138,7 +138,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.smallImageKey = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SMALL_IMAGE_KEY"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SMALL_IMAGE_KEY"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -155,7 +155,7 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.smallImageMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SMALL_IMAGE_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SMALL_IMAGE_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -187,7 +187,7 @@ local placeholderOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.dungeonPlaceholderMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DUNGEON_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DUNGEON_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -204,7 +204,7 @@ local placeholderOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.raidPlaceholderMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_RAID_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_RAID_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -221,7 +221,7 @@ local placeholderOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.battlegroundPlaceholderMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_BATTLEGROUND_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_BATTLEGROUND_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -238,7 +238,7 @@ local placeholderOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.arenaPlaceholderMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_ARENA_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_ARENA_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -255,7 +255,7 @@ local placeholderOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.defaultPlaceholderMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_FALLBACK_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_FALLBACK_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -272,7 +272,7 @@ local placeholderOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.deadStateInnerMessage = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DEAD_MESSAGE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DEAD_MESSAGE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -304,7 +304,7 @@ local extraOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.showLoggingInChat = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SHOW_LOGGING_IN_CHAT"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SHOW_LOGGING_IN_CHAT"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -321,7 +321,7 @@ local extraOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.debugMode = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DEBUG_MODE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_DEBUG_MODE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -338,7 +338,7 @@ local extraOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.verboseMode = value;
                     if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
-                        self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_VERBOSE_MODE"], oldValue, value)))
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_VERBOSE_MODE"], tostring(oldValue), tostring(value))))
                     end
                 end
             end,
@@ -397,6 +397,6 @@ function CraftPresence:GetDefaults()
 end
 
 function CraftPresence:ResetDB()
-    self:Print("Config.resetDB")
+    CraftPresence:Print("Config.resetDB")
     CraftPresence.db:ResetProfile(false, true)
 end
