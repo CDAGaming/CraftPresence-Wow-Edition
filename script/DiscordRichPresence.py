@@ -181,14 +181,14 @@ while True:
                 if not ("Skip" in fifth_line):
                     assetsData["small_text"] = fifth_line
             # Timer Data Setup
-            if "generated" in eighth_line:
+            if "generated" in eighth_line or ("last" in eighth_line and not last_start_timestamp):
                 eighth_line = round(time.time())
-            if "last" in eighth_line:
+            elif "last" in eighth_line and last_start_timestamp:
                 eighth_line = last_start_timestamp
 
-            if "generated" in ninth_line:
+            if "generated" in ninth_line or ("last" in ninth_line and not last_end_timestamp):
                 ninth_line = round(time.time())
-            if "last" in ninth_line:
+            if "last" in ninth_line and last_end_timestamp:
                 ninth_line = last_end_timestamp
             # Timer Data Sync
             if not ("Skip" in str(eighth_line)):
