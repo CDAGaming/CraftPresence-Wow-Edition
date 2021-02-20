@@ -68,6 +68,12 @@ end
 -- ==================
 
 local realmData = {"US", "KR", "EU", "TW", "CH"}
+-- Update State Data
+local lastInstanceState
+local lastLocalPlane
+local hasInstanceChanged = false
+local playerAlliance = "None"
+local playerCovenant = "None"
 
 function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local name, instanceType, difficultyID, difficultyName, maxPlayers,
@@ -78,20 +84,21 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 	local playerRealm = GetRealmName()
 	local playerRegion = realmData[GetCurrentRegion()]
 	local playerClass = UnitClass("player")
+	hasInstanceChanged = ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or ((lastLocalPlane == nil) or (name ~= lastLocalPlane))
 	-- Covenant Setup (If porting to classic, only use faction data)
-	local playerAlliance = "None"
-	local playerCovenant = "None"
 	local playerCovenantId = C_Covenants.GetActiveCovenantID()
 	local playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
 	local playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
 	local englishFaction, localizedFaction = UnitFactionGroup("player")
 	-- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
 	-- Then use the Faction as the Alliance; otherwise setup Covenant Data
-	if playerCovenantId == 0 or not((string.find(name, "Shadowlands")) or (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))) then
-		playerAlliance = localizedFaction
-	else
-		playerCovenant = playerCovenantData.name
-		playerAlliance = playerCovenant
+	if hasInstanceChanged then
+		if playerCovenantId == 0 or not((string.find(name, "Shadowlands")) or (string.find(name, "Torghast")) or (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))) then
+			playerAlliance = localizedFaction
+		else
+			playerCovenant = playerCovenantData.name
+			playerAlliance = playerCovenant
+		end
 	end
 	-- Zone Data
 	local zone_name = GetRealZoneText()
@@ -137,6 +144,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 		["@active_keystone_affixes@"] = activeKeystoneData.activeAffixes,
 		["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel,
 		["@instance_type@"] = instanceType,
+		["@instance_changed@"] = tostring(hasInstanceChanged),
 		["@localized_name@"] = name,
 		["@instance_difficulty@"] = tostring(difficultyID),
 		["@max_players@"] = tostring(maxPlayers),
@@ -197,6 +205,11 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
 			outputTable[inKey] = ""
 		end
 	end
+	-- Update Instance Status before exiting method
+	if hasInstanceChanged then
+		lastInstanceState = instanceType
+		lastLocalPlane = name
+	end
 	return outputTable, inner_placeholders, time_conditions
 end
 
@@ -244,9 +257,17 @@ function CraftPresence:EncodeConfigData()
 	for timeKey,timeValue in pairs(time_conditions) do
 		if timeValue then
 			if timeKey == "start" then
-				queued_time_start = "generated"
+				if hasInstanceChanged then
+					queued_time_start = "generated"
+				else
+					queued_time_start = "last"
+				end
 			elseif timeKey == "end" then
-				queued_time_end = "generated"
+				if hasInstanceChanged then
+					queued_time_end = "generated"
+				else
+					queued_time_end = "last"
+				end
 			end
 		end
 	end
@@ -265,9 +286,6 @@ local AddonDB_Defaults = {
 function CraftPresence:OnInitialize()
 	-- Called when the addon is loaded
 	self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", AddonDB_Defaults)
-	--LibStub("AceConfig-3.0"):RegisterOptionsTable("CraftPresence", options)
-	--self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("CraftPresence", "CraftPresence")
-	self:Print("Config - Init")
 	LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable)
 	self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
 	self.optionsFrame.default = self.ResetDB

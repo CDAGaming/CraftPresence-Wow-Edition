@@ -25,6 +25,9 @@ last_seventh_line = None
 last_eighth_line = None
 last_ninth_line = None
 
+last_start_timestamp = None
+last_end_timestamp = None
+
 
 def callback(hwnd, extra):
     global process_hwnd
@@ -180,13 +183,20 @@ while True:
             # Timer Data Setup
             if "generated" in eighth_line:
                 eighth_line = round(time.time())
+            if "last" in eighth_line:
+                eighth_line = last_start_timestamp
+
             if "generated" in ninth_line:
                 ninth_line = round(time.time())
+            if "last" in ninth_line:
+                ninth_line = last_end_timestamp
             # Timer Data Sync
             if not ("Skip" in str(eighth_line)):
                 timerData["start"] = eighth_line
+                last_start_timestamp = eighth_line
                 if not ("Skip" in str(ninth_line)):
                     timerData["end"] = ninth_line
+                    last_end_timestamp = ninth_line
             # Activity Data Sync
             if not ("Skip" in sixth_line):
                 activity["details"] = sixth_line
