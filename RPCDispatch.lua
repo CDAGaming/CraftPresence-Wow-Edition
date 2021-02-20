@@ -17,7 +17,7 @@ function CraftPresence:CreateFrames()
         self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
-    for i=1, frame_count do
+    for i = 1, frame_count do
         frames[i] = CreateFrame("Frame", nil, UIParent)
         frames[i]:SetFrameStrata("TOOLTIP")
         frames[i]:SetWidth(size)
@@ -37,9 +37,15 @@ end
 
 function CraftPresence:PaintFrame(frame, r, g, b, force)
     -- set pixel to black if they are null
-    if r == nil then r = 0 end
-    if g == nil then g = 0 end
-    if b == nil then b = 0 end
+    if r == nil then
+        r = 0
+    end
+    if g == nil then
+        g = 0
+    end
+    if b == nil then
+        b = 0
+    end
 
     -- from 0-255 to 0.0-1.0
     r = r / 255
@@ -48,7 +54,11 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
 
     -- set alpha to 1 if this pixel is black and force is 0 or null
     local a = 0
-    if r == 0 and g == 0 and b == 0 and (force == 0 or force == nil) then a = 0 else a = 1 end
+    if r == 0 and g == 0 and b == 0 and (force == 0 or force == nil) then
+        a = 0
+    else
+        a = 1
+    end
 
     -- and now paint it
     frame.texture:SetColorTexture(r, g, b, a)
@@ -72,19 +82,31 @@ function CraftPresence:PaintSomething(text)
     local g = 0
     local b = 0
 
-    for trio in text:gmatch".?.?.?" do
-        r = 0; g = 0; b = 0
-        r = string.byte(trio:sub(1,1))
-        if #trio > 1 then g = string.byte(trio:sub(2,2)) end
-        if #trio > 2 then b = string.byte(trio:sub(3,3)) end
+    for trio in text:gmatch ".?.?.?" do
+        r = 0;
+        g = 0;
+        b = 0
+        r = string.byte(trio:sub(1, 1))
+        if #trio > 1 then
+            g = string.byte(trio:sub(2, 2))
+        end
+        if #trio > 2 then
+            b = string.byte(trio:sub(3, 3))
+        end
         squares_painted = squares_painted + 1
         self:PaintFrame(frames[squares_painted], r, g, b)
         -- print the next frame black to signal a separator
         -- if the pixel before it is allocated
-        if r == nil then r = 0 end
-        if g == nil then g = 0 end
-        if b == nil then b = 0 end
-        if not(r == 0 and b == 0 and g == 0) then
+        if r == nil then
+            r = 0
+        end
+        if g == nil then
+            g = 0
+        end
+        if b == nil then
+            b = 0
+        end
+        if not (r == 0 and b == 0 and g == 0) then
             squares_painted = squares_painted + 1
             self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
         end
@@ -92,37 +114,55 @@ function CraftPresence:PaintSomething(text)
 end
 
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
-    if(clientId == nil or clientId == "") then clientId = L["DEFAULT_CLIENT_ID"] end
-    if largeImageKey == "" then largeImageKey = nil end
-    if largeImageText == "" then largeImageText = nil end
-    if smallImageKey == "" then smallImageKey = nil end
-    if smallImageText == "" then smallImageText = nil end
-    if details == "" then details = nil end
-    if gameState == "" then gameState = nil end
+    if (clientId == nil or clientId == "") then
+        clientId = L["DEFAULT_CLIENT_ID"]
+    end
+    if largeImageKey == "" then
+        largeImageKey = nil
+    end
+    if largeImageText == "" then
+        largeImageText = nil
+    end
+    if smallImageKey == "" then
+        smallImageKey = nil
+    end
+    if smallImageText == "" then
+        smallImageText = nil
+    end
+    if details == "" then
+        details = nil
+    end
+    if gameState == "" then
+        gameState = nil
+    end
     return ("$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or L["UNKNOWN_KEY"]) .. "|" .. (largeImageText or L["UNKNOWN_KEY"]) .. "|" .. (smallImageKey or L["UNKNOWN_KEY"]) .. "|" .. (smallImageText or L["UNKNOWN_KEY"]) .. "|" .. (details or L["UNKNOWN_KEY"]) .. "|" .. (gameState or L["UNKNOWN_KEY"]) .. "|" .. (startTime or L["UNKNOWN_KEY"]) .. "|" .. (endTime or L["UNKNOWN_KEY"]) .. "$RPCEvent$")
 end
 
 function CraftPresence:CleanFrames()
-    for i=1, frame_count do
+    for i = 1, frame_count do
         self:PaintFrame(frames[i], 0, 0, 0, 0)
     end
 end
 
 function CraftPresence:TestFrames()
     local encoded = self:EncodeConfigData()
-    if encoded ~= nil then self:PaintSomething(encoded) end
+    if encoded ~= nil then
+        self:PaintSomething(encoded)
+    end
 end
 
 function CraftPresence:PaintMessageWait(force)
     local proceed = (force ~= nil and force == true)
     local encoded = self:EncodeConfigData()
     local changed = last_encoded ~= encoded or proceed
-    if(changed and encoded ~= nil) then
+    if (changed and encoded ~= nil) then
         last_encoded = encoded
         if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
             self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_SEND_ACTIVITY"], encoded:gsub("|", "||"))))
         end
         self:PaintSomething(encoded)
-        C_Timer.After(10, function() self:CleanFrames() end)
+        C_Timer.After(10, function()
+            self:CleanFrames()
+        end)
     end
 end

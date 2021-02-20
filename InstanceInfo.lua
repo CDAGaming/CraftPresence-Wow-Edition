@@ -12,17 +12,17 @@ function CraftPresence:GenerateInstanceTable()
     local raid = false
 
     -- Run this twice, once for dungeons, once for raids
-    for b=1, 2 do
+    for b = 1, 2 do
         local instanceType = ""
 
-        for t=1, numTiers do
+        for t = 1, numTiers do
             EJ_SelectTier(t)
             local tierName = EJ_GetTierInfo(t)
             local instanceIndex = 1
             local id, name = EJ_GetInstanceByIndex(instanceIndex, raid)
 
             while id do
-                if not(id == nil) then
+                if not (id == nil) then
                     instTable[id] = tierName
                 end
                 instanceIndex = instanceIndex + 1
@@ -55,7 +55,9 @@ function CraftPresence:GetCurrentInstanceTier()
     InstanceTable = InstanceTable or CraftPresence:GenerateInstanceTable()
 
     -- Bail out if we're not even in an instance!
-    if not IsInInstance() then return "NotAnInstance" end
+    if not IsInInstance() then
+        return "NotAnInstance"
+    end
 
     -- Generate a chronologically ordered list of expansion names
     local tierList = {}
@@ -73,7 +75,9 @@ function CraftPresence:GetCurrentInstanceTier()
         raid = true,
     }
 
-    if not trackedTypes[instanceType] then return "UnknownInstanceType" end
+    if not trackedTypes[instanceType] then
+        return "UnknownInstanceType"
+    end
 
     -- Second, is it Heroic? If so, skip all of Vanilla. Else, search the entire instance table
     local startIndex = (difficulty == 2) and 2 or 1

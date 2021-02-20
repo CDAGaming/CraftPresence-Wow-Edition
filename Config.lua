@@ -356,15 +356,15 @@ local aboutGroup = {
         generalText1 = {
             type = "description", order = 10, fontSize = "medium", name = "CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence.", width = "full"
         },
-        thanksHeader = {order = 20, type = "header", name = "Credits", },
+        thanksHeader = { order = 20, type = "header", name = "Credits", },
         generalText2 = {
             type = "description", order = 40, fontSize = "medium", name = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
         },
-        blank1 = { type = "description", order = 50, fontSize = "small", name = "",width = "full", },
+        blank1 = { type = "description", order = 50, fontSize = "small", name = "", width = "full", },
         generalText3 = {
             type = "description", order = 53, fontSize = "medium", name = "Thanks to Attka for the original base project, that makes this possible."
         },
-        blank2 = { type = "description", order = 56, fontSize = "small",name = "",width = "full", },
+        blank2 = { type = "description", order = 56, fontSize = "small", name = "", width = "full", },
         generalText4 = {
             type = "description", order = 60, fontSize = "medium", name = "Special thanks to $API_ONE and $API_TWO"
         }
