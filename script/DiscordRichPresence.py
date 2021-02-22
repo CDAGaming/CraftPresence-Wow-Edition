@@ -60,9 +60,6 @@ def read_squares(hwnd):
     x, y, x1, y1 = win32gui.GetClientRect(hwnd)
     x, y = win32gui.ClientToScreen(hwnd, (x, y))
     x1, y1 = win32gui.ClientToScreen(hwnd, (x1 - x, y1 - y))
-    # height = (win32api.GetSystemMetrics(win32con.SM_CYCAPTION) +
-    #        win32api.GetSystemMetrics(win32con.SM_CYBORDER) * 4 +
-    #        win32api.GetSystemMetrics(win32con.SM_CYEDGE) * 2)
     new_rect = (x, y, x1, (y + config["pixel_size"]))
     waiting_for_null = False
     try:
@@ -180,16 +177,16 @@ while True:
                 assetsData["small_image"] = fourth_line
                 if not ("Skip" in fifth_line):
                     assetsData["small_text"] = fifth_line
-            # Timer Data Setup
-            if "generated" in eighth_line or ("last" in eighth_line and not last_start_timestamp):
+            # Start Timer Data Setup
+            if "generated" in eighth_line:
                 eighth_line = round(time.time())
-            elif "last" in eighth_line and last_start_timestamp:
-                eighth_line = last_start_timestamp
-
-            if "generated" in ninth_line or ("last" in ninth_line and not last_end_timestamp):
+            elif "last" in eighth_line:
+                eighth_line = last_start_timestamp or round(time.time())
+            # End Timer Data Setup
+            if "generated" in ninth_line:
                 ninth_line = round(time.time())
-            if "last" in ninth_line and last_end_timestamp:
-                ninth_line = last_end_timestamp
+            elif "last" in ninth_line:
+                ninth_line = last_end_timestamp or round(time.time())
             # Timer Data Sync
             if not ("Skip" in str(eighth_line)):
                 timerData["start"] = eighth_line
@@ -213,11 +210,13 @@ while True:
                 print('Looks like the connection to Discord was broken (%s). '
                       'I will try to connect again in 5 sec.' % str(exc))
                 last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
+                last_start_timestamp, last_end_timestamp = None, None
                 rpc_obj = None
     elif not process_hwnd and rpc_obj:
         print('Target process is no longer active, disconnecting')
         rpc_obj.close()
         rpc_obj = None
-        # clear these so it gets reread and resubmitted upon reconnection
+        # clear these so it gets re-read and resubmitted upon reconnection
         last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
+        last_start_timestamp, last_end_timestamp = None, None
     time.sleep(5)
