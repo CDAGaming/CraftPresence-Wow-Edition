@@ -181,7 +181,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         ["@lockout_encounters@"] = (lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
     }
     local extra_conditions = {
-        ["torghast"] = (string.find(name, "Torghast") and not(sub_name == L["ZONE_NAME_UNKNOWN"]))
+        ["torghast"] = (string.find(name, "Torghast") and (inner_placeholders["@instance_type@"] == "scenario"))
     }
     local time_conditions = {
         ["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"] or global_conditions["#arena#"]),
