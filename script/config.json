@@ -1,5 +1,7 @@
 {
   "debug": false,
   "pixel_size": 6,
+  "refresh_rate": 5,
+  "scan_rate": 1,
   "process_name": "World of Warcraft"
 }

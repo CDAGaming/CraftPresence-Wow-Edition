@@ -1,10 +1,11 @@
-import rpc
-import time
 import json
 import os
+import time
 
-from PIL import Image, ImageGrab
 import win32gui
+from PIL import Image, ImageGrab
+
+import rpc
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -27,6 +28,8 @@ last_ninth_line = None
 
 last_start_timestamp = None
 last_end_timestamp = None
+
+last_activity = {}
 
 
 def callback(hwnd, extra):
@@ -109,6 +112,11 @@ def read_squares(hwnd):
     return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line
 
 
+print("========== DiscordRichPresence Service - v0.0.8 ==========")
+print("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
+print("Note: Please keep this script open while logging and sending Rich Presence updates.")
+print("==========================================================")
+
 while True:
     process_hwnd = None
     win32gui.EnumWindows(callback, None)
@@ -126,7 +134,7 @@ while True:
         lines = read_squares(process_hwnd)
 
         if not lines:
-            time.sleep(1)
+            time.sleep(config["scan_rate"])
             continue
 
         first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line = lines
@@ -156,10 +164,10 @@ while True:
                         rpc_obj = (rpc.DiscordIpcClient
                                    .for_platform(first_line))
                     except Exception as exc:
-                        print("I couldn't connect to Discord (%s). It's "
+                        print("Unable to connect to Discord (%s). It's "
                               'probably not running. I will try again in 5 '
                               'sec.' % str(exc))
-                        time.sleep(5)
+                        time.sleep(config["refresh_rate"])
                         pass
                     else:
                         break
@@ -202,16 +210,19 @@ while True:
 
             activity["assets"] = assetsData
             activity["timestamps"] = timerData
-            print("Setting new activity: %s" % activity)
+            if activity != last_activity:
+                print("Setting new activity: %s" % activity)
 
-            try:
-                rpc_obj.set_activity(activity)
-            except Exception as exc:
-                print('Looks like the connection to Discord was broken (%s). '
-                      'I will try to connect again in 5 sec.' % str(exc))
-                last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
-                last_start_timestamp, last_end_timestamp = None, None
-                rpc_obj = None
+                try:
+                    rpc_obj.set_activity(activity)
+                    last_activity = activity
+                except Exception as exc:
+                    print('Looks like the connection to Discord was broken (%s). '
+                          'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
+                    last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
+                    last_start_timestamp, last_end_timestamp = None, None
+                    last_activity = {}
+                    rpc_obj = None
     elif not process_hwnd and rpc_obj:
         print('Target process is no longer active, disconnecting')
         rpc_obj.close()
@@ -219,4 +230,5 @@ while True:
         # clear these so it gets re-read and resubmitted upon reconnection
         last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
         last_start_timestamp, last_end_timestamp = None, None
-    time.sleep(5)
+        last_activity = {}
+    time.sleep(config["refresh_rate"])
