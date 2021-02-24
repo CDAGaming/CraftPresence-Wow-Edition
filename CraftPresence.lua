@@ -180,8 +180,12 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         ["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player")),
         ["@lockout_encounters@"] = (lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
     }
+    local extra_conditions = {
+        ["torghast"] = (string.find(name, "Torghast") and not(sub_name == L["ZONE_NAME_UNKNOWN"]))
+    }
     local time_conditions = {
-        ["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"] or global_conditions["#arena#"])
+        ["start"] = (global_conditions["#dungeon#"] or global_conditions["#raid#"] or global_conditions["#battleground#"] or global_conditions["#arena#"]),
+        ["start:extra"] = (extra_conditions["torghast"])
     }
     local override_placeholders = {
         "@dead_state@"
@@ -268,13 +272,13 @@ function CraftPresence:EncodeConfigData()
     end
     for timeKey, timeValue in pairs(time_conditions) do
         if timeValue then
-            if timeKey == "start" then
+            if (string.find(timeKey, "start")) then
                 if hasInstanceChanged then
                     queued_time_start = "generated"
                 else
                     queued_time_start = "last"
                 end
-            elseif timeKey == "end" then
+            elseif (string.find(timeKey, "end")) then
                 if hasInstanceChanged then
                     queued_time_end = "generated"
                 else
