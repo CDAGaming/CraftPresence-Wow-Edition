@@ -103,13 +103,19 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         end
     end
     -- Zone Data
+    local formatted_zone_info
     local zone_name = GetRealZoneText()
+    local sub_name = GetSubZoneText()
+    -- Null-Case to ensure Zone Name always equals something
     if (zone_name == nil or zone_name == "") then
         zone_name = L["ZONE_NAME_UNKNOWN"]
     end
-    local sub_name = GetSubZoneText()
+    -- Format the zone info based on zone data
     if (sub_name == nil or sub_name == "") then
+        formatted_zone_info = zone_name
         sub_name = L["ZONE_NAME_UNKNOWN"]
+    else
+        formatted_zone_info = (sub_name .. " - " .. zone_name)
     end
     -- Extra Character Data
     local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
@@ -140,7 +146,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         ["@realm_info@"] = (playerRegion .. " - " .. playerRealm),
         ["@player_region@"] = playerRegion,
         ["@player_realm@"] = playerRealm,
-        ["@zone_info@"] = (sub_name .. " - " .. zone_name),
+        ["@zone_info@"] = formatted_zone_info,
         ["@zone_name@"] = zone_name,
         ["@sub_zone_name@"] = sub_name,
         ["@dead_state@"] = self:GetFromDb("deadStateInnerMessage"),
