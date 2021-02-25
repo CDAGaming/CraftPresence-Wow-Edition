@@ -82,6 +82,23 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     local lockoutData = self:GetCurrentLockoutData()
     local playerName = UnitName("player")
+    -- Player Name Tweaks (DND/AFK Data)
+    local isAfk = UnitIsAFK("player")
+    local isOnDnd = UnitIsDND("player")
+    local playerStatus
+    local playerPrefix = ""
+    if isAfk then
+        playerStatus = L["AFK_LABEL"]
+    elseif isOnDnd then
+        playerStatus = L["DND_LABEL"]
+    end
+    -- Parse Player Status
+    if not(playerStatus == nil) then
+        playerPrefix = ("(" .. playerStatus .. ")") .. " "
+    else
+        playerStatus = L["ONLINE_LABEL"]
+    end
+    -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
     local playerRegion = realmData[GetCurrentRegion()]
@@ -130,10 +147,11 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     end
     -- Calculate Inner Placeholders
     local inner_placeholders = {
-        ["@player_info@"] = (playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel)) .. " " .. specName .. " " .. playerClass),
+        ["@player_info@"] = (playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel)) .. " " .. specName .. " " .. playerClass),
         ["@player_name@"] = playerName,
         ["@player_level@"] = playerLevel,
         ["@player_class@"] = playerClass,
+        ["@player_status@"] = playerStatus,
         ["@player_alliance@"] = playerAlliance,
         ["@player_covenant@"] = playerCovenant,
         ["@player_covenant_renown@"] = playerCovenantRenown,
@@ -318,6 +336,8 @@ function CraftPresence:OnEnable()
     self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "DispatchUpdate")
     self:RegisterEvent("ZONE_CHANGED_INDOORS", "DispatchUpdate")
     self:RegisterEvent("PLAYER_UNGHOST", "DispatchUpdate")
+    self:RegisterEvent("PLAYER_FLAGS_CHANGED", "DispatchUpdate")
+    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "DispatchUpdate")
 
     self:CreateFrames()
     self:PaintMessageWait()

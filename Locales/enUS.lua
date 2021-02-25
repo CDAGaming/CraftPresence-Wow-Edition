@@ -87,6 +87,10 @@ L["VERBOSE_PLACEHOLDER_DATA"] = "%s Data: %s -> %s"
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
+-- Data Default Values
+L["ONLINE_LABEL"] = "Online"
+L["AFK_LABEL"] = "AFK"
+L["DND_LABEL"] = "DND"
 -- The values below should NEVER be changed
 L["UNKNOWN_KEY"] = "Skip"
 L["DEBUG_LOG"] = "[Debug] %s"
