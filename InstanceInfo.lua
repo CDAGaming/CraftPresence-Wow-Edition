@@ -67,7 +67,11 @@ function CraftPresence:GetCurrentInstanceTier()
     end
 
     local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
-    local instanceID = EJ_GetInstanceForMap(C_Map.GetBestMapForUnit("player"))
+    local unitMapID = C_Map.GetBestMapForUnit("player")
+    if not unitMapID then
+        unitMapID = C_Map.GetFallbackWorldMapID()
+    end
+    local instanceID = EJ_GetInstanceForMap(unitMapID)
 
     -- First, check if we even track this type of instance, if not, bail out
     local trackedTypes = {
@@ -90,7 +94,11 @@ function CraftPresence:GetCurrentLockoutData()
     local lockoutData = { name = "", difficulty = "", difficultyId = 0, currentEncounters = 0, totalEncounters = 0, formattedEncounterData = "" }
     if IsInInstance() then
         local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
-        local instanceID = EJ_GetInstanceForMap(C_Map.GetBestMapForUnit("player"))
+        local unitMapID = C_Map.GetBestMapForUnit("player")
+        if not unitMapID then
+            unitMapID = C_Map.GetFallbackWorldMapID()
+        end
+        local instanceID = EJ_GetInstanceForMap(unitMapID)
         for index = 1, GetNumSavedInstances() do
             local instanceName, id, reset, instanceDifficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, instanceDifficultyName, numEncounters, encounterProgress, extendDisabled = GetSavedInstanceInfo(index)
             if locked then
