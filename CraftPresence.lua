@@ -315,9 +315,14 @@ function CraftPresence:GetFromDb(grp, key, ...)
 end
 
 function CraftPresence:DispatchUpdate()
-    C_Timer.After(self:GetFromDb("callbackDelay"), function()
+    local delay = self:GetFromDb("callbackDelay")
+    if delay >= 1 and delay <= 60 then
+        C_Timer.After(delay, function()
+            self:PaintMessageWait()
+        end)
+    else
         self:PaintMessageWait()
-    end)
+    end
 end
 
 function CraftPresence:OnDisable()

@@ -341,7 +341,7 @@ local extraOptionsGroup = {
         },
         blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
         callbackDelay = {
-            type = "range", min = 1, max = 60, step = 1, order = 16, name = L["TITLE_CALLBACK_DELAY"], desc = L["COMMENT_CALLBACK_DELAY"], width = 1.50,
+            type = "range", min = 0, max = 60, step = 1, order = 16, name = L["TITLE_CALLBACK_DELAY"], desc = L["COMMENT_CALLBACK_DELAY"], width = 1.50,
             get = function(info)
                 return CraftPresence.GetFromDb(nil, "callbackDelay")
             end,
