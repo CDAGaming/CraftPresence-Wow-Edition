@@ -77,7 +77,6 @@ L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be 
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
-L["USAGE_CALLBACK_DELAY"] = "<Delay seconds here>"
 L["ERROR_CALLBACK_DELAY"] = "Error: Sanity Checks failed for Callback Delay. Please enter a numerical value above 0."
 
 -- Logging Data
