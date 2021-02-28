@@ -23,53 +23,14 @@ function CraftPresence:FormatWord(str)
 end
 
 -- ==================
--- Player Update Data
--- ==================
-
-function CraftPresence:GetOwnedKeystone()
-    local keystoneInfo
-    local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
-
-    if mapID then
-        local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
-        local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
-
-        keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel, formattedLevel = ("+" .. keystoneLevel) }
-    else
-        keystoneInfo = { dungeon = nil, level = 0, formattedLevel = "" }
-    end
-
-    return keystoneInfo
-end
-
-function CraftPresence:GetActiveKeystone()
-    local keystoneInfo
-    local mapID = C_ChallengeMode.GetActiveChallengeMapID()
-    local formattedKeyAffixes = ""
-
-    if mapID then
-        local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
-        local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
-        if activeAffixIDs ~= nil then
-            for key, affixId in pairs(activeAffixIDs) do
-                local name, description, fileDataId = C_ChallengeMode.GetAffixInfo(affixId)
-                formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
-            end
-        end
-
-        keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel, formattedLevel = ("+" .. activeKeystoneLevel), formattedAffixes = formattedKeyAffixes }
-    else
-        keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0, formattedLevel = "", formattedAffixes = formattedKeyAffixes }
-    end
-
-    return keystoneInfo
-end
-
--- ==================
 -- RPC Data
 -- ==================
 
+-- Storage Data
 local realmData = { "US", "KR", "EU", "TW", "CH" }
+local stored_global_placeholders = {}
+local stored_inner_placeholders = {}
+local stored_time_conditions = {}
 -- Update State Data
 local lastInstanceState
 local lastLocalPlane
@@ -247,22 +208,18 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     return outputTable, inner_placeholders, time_conditions
 end
 
-local global_placeholders = {}
-local inner_placeholders = {}
-local time_conditions = {}
-
 function CraftPresence:EncodeConfigData()
     -- Re-Initialize and Sync Placeholder and Conditional Data
-    global_placeholders = {
+    stored_global_placeholders = {
         ["#dungeon#"] = self:GetFromDb("dungeonPlaceholderMessage"),
         ["#raid#"] = self:GetFromDb("raidPlaceholderMessage"),
         ["#battleground#"] = self:GetFromDb("battlegroundPlaceholderMessage"),
         ["#arena#"] = self:GetFromDb("arenaPlaceholderMessage"),
         ["#default#"] = self:GetFromDb("defaultPlaceholderMessage")
     }
-    inner_placeholders = {}
-    time_conditions = {}
-    global_placeholders, inner_placeholders, time_conditions = self:ParsePlaceholderData(global_placeholders)
+    stored_inner_placeholders = {}
+    stored_time_conditions = {}
+    stored_global_placeholders, stored_inner_placeholders, stored_time_conditions = self:ParsePlaceholderData(stored_global_placeholders)
     -- RPC Data syncing
     local queued_details = self:GetFromDb("detailsMessage")
     local queued_state = self:GetFromDb("gameStateMessage")
@@ -272,7 +229,7 @@ function CraftPresence:EncodeConfigData()
     local queued_small_image_text = self:GetFromDb("smallImageMessage")
     local queued_time_start = L["UNKNOWN_KEY"]
     local queued_time_end = L["UNKNOWN_KEY"]
-    for key, value in pairs(global_placeholders) do
+    for key, value in pairs(stored_global_placeholders) do
         queued_details = queued_details:gsub(key, value)
         queued_state = queued_state:gsub(key, value)
         queued_large_image_key = queued_large_image_key:gsub(key, value)
@@ -280,7 +237,7 @@ function CraftPresence:EncodeConfigData()
         queued_small_image_key = queued_small_image_key:gsub(key, value)
         queued_small_image_text = queued_small_image_text:gsub(key, value)
     end
-    for innerKey, innerValue in pairs(inner_placeholders) do
+    for innerKey, innerValue in pairs(stored_inner_placeholders) do
         queued_details = queued_details:gsub(innerKey, innerValue)
         queued_state = queued_state:gsub(innerKey, innerValue)
         queued_large_image_key = queued_large_image_key:gsub(innerKey, innerValue)
@@ -288,7 +245,7 @@ function CraftPresence:EncodeConfigData()
         queued_small_image_key = queued_small_image_key:gsub(innerKey, innerValue)
         queued_small_image_text = queued_small_image_text:gsub(innerKey, innerValue)
     end
-    for timeKey, timeValue in pairs(time_conditions) do
+    for timeKey, timeValue in pairs(stored_time_conditions) do
         if timeValue then
             if (string.find(timeKey, "start")) then
                 if hasInstanceChanged then
@@ -386,10 +343,10 @@ function CraftPresence:ChatCommand(input)
         elseif input == "placeholders" then
             if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
                 self:Print(string.format(L["VERBOSE_LOG"], L["VERBOSE_PLACEHOLDER_INTRO"]))
-                for key, value in pairs(global_placeholders) do
+                for key, value in pairs(stored_global_placeholders) do
                     self:Print(string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_PLACEHOLDER_DATA"], "Global", key, value)))
                 end
-                for innerKey, innerValue in pairs(inner_placeholders) do
+                for innerKey, innerValue in pairs(stored_inner_placeholders) do
                     self:Print(string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_PLACEHOLDER_DATA"], "Inner", innerKey, innerValue)))
                 end
             else

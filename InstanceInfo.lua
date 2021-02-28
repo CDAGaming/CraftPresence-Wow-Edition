@@ -103,3 +103,42 @@ function CraftPresence:GetCurrentLockoutData()
     end
     return lockoutData
 end
+
+function CraftPresence:GetOwnedKeystone()
+    local keystoneInfo
+    local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
+
+    if mapID then
+        local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
+        local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+
+        keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel, formattedLevel = ("+" .. keystoneLevel) }
+    else
+        keystoneInfo = { dungeon = nil, level = 0, formattedLevel = "" }
+    end
+
+    return keystoneInfo
+end
+
+function CraftPresence:GetActiveKeystone()
+    local keystoneInfo
+    local mapID = C_ChallengeMode.GetActiveChallengeMapID()
+    local formattedKeyAffixes = ""
+
+    if mapID then
+        local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
+        local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+        if activeAffixIDs ~= nil then
+            for key, affixId in pairs(activeAffixIDs) do
+                local name, description, fileDataId = C_ChallengeMode.GetAffixInfo(affixId)
+                formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
+            end
+        end
+
+        keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel, formattedLevel = ("+" .. activeKeystoneLevel), formattedAffixes = formattedKeyAffixes }
+    else
+        keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0, formattedLevel = "", formattedAffixes = formattedKeyAffixes }
+    end
+
+    return keystoneInfo
+end
