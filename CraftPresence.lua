@@ -315,7 +315,7 @@ function CraftPresence:GetFromDb(grp, key, ...)
 end
 
 function CraftPresence:DispatchUpdate()
-    C_Timer.After(2, function()
+    C_Timer.After(self:GetFromDb("callbackDelay"), function()
         self:PaintMessageWait()
     end)
 end

@@ -75,8 +75,11 @@ L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive l
 L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
 
-L["ZONE_NAME_UNKNOWN"] = "Unknown"
-L["LEVEL_TAG_FORMAT"] = "Level %s"
+L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
+L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
+L["USAGE_CALLBACK_DELAY"] = "<Delay seconds here>"
+L["ERROR_CALLBACK_DELAY"] = "Error: Sanity Checks failed for Callback Delay. Please enter a numerical value above 0."
+
 -- Logging Data
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
@@ -91,6 +94,8 @@ L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to a
 L["ONLINE_LABEL"] = "Online"
 L["AFK_LABEL"] = "AFK"
 L["DND_LABEL"] = "DND"
+L["ZONE_NAME_UNKNOWN"] = "Unknown"
+L["LEVEL_TAG_FORMAT"] = "Level %s"
 -- The values below should NEVER be changed
 L["UNKNOWN_KEY"] = "Skip"
 L["DEBUG_LOG"] = "[Debug] %s"

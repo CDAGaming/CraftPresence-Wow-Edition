@@ -2,11 +2,6 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
---local Config = CraftPresence:NewModule("Config", "AceEvent-3.0")
---CraftPresence.Config = Config
-
---local private = {}
-
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
     profile = {
@@ -26,6 +21,7 @@ local DB_DEFAULTS = {
         showLoggingInChat = true,
         debugMode = true,
         verboseMode = true,
+        callbackDelay = 2
     },
 }
 
@@ -344,6 +340,23 @@ local extraOptionsGroup = {
             end,
         },
         blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        callbackDelay = {
+            type = "range", min = 1, max = 60, step = 1, order = 16, name = L["TITLE_CALLBACK_DELAY"], desc = L["COMMENT_CALLBACK_DELAY"], width = 0.50, usage = L["USAGE_CALLBACK_DELAY"],
+            get = function(info)
+                return CraftPresence.GetFromDb(nil, "callbackDelay")
+            end,
+            set = function(info, value)
+                local oldValue = CraftPresence.GetFromDb(nil, "callbackDelay")
+                local isValid = true
+                if isValid then
+                    CraftPresence.db.profile.callbackDelay = value;
+                    if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_CALLBACK_DELAY"], tostring(oldValue), tostring(value))))
+                    end
+                end
+            end,
+        },
+        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
     }
 }
 
