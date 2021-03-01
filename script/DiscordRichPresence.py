@@ -116,8 +116,8 @@ def read_squares(hwnd):
     waiting_for_null = False
     try:
         im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
-    except Image.DecompressionBombError:
-        print('DecompressionBombError')
+    except win32ui.error:
+        # print('win32ui.error')
         return
 
     read = []
