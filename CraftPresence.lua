@@ -135,7 +135,6 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         ["@active_keystone_affixes@"] = activeKeystoneData.activeAffixes,
         ["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel,
         ["@instance_type@"] = instanceType,
-        ["@instance_changed@"] = tostring(hasInstanceChanged),
         ["@localized_name@"] = name,
         ["@instance_difficulty@"] = tostring(difficultyID),
         ["@max_players@"] = tostring(maxPlayers),

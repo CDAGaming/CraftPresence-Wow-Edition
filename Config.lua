@@ -19,8 +19,8 @@ local DB_DEFAULTS = {
         defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
         deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
         showLoggingInChat = true,
-        debugMode = true,
-        verboseMode = true,
+        debugMode = false,
+        verboseMode = false,
         callbackDelay = 2
     },
 }
