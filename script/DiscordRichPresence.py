@@ -3,7 +3,9 @@ import os
 import time
 
 import win32gui
-from PIL import Image, ImageGrab
+import win32ui
+from ctypes import windll
+from PIL import Image
 
 import rpc
 
@@ -59,14 +61,61 @@ def verify_read_data(decoded):
         '$RPCEvent$') and decoded != "$RPCEvent$")
 
 
+def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0, right_specific=0, bottom_offset=0, bottom_specific=0):
+    # Change the line below depending on whether you want the whole window
+    # or just the client area.
+    left, top, right, bottom = win32gui.GetClientRect(hwnd)
+    # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+
+    # Calculate offsets and final width and height
+    if left_specific > 0:
+        left = left_specific
+    if right_specific > 0:
+        right = right_specific
+    if top_specific > 0:
+        top = top_specific
+    if bottom_specific > 0:
+        bottom = bottom_specific
+
+    left = left + left_offset
+    right = right + right_offset
+    top = top + top_offset
+    bottom = bottom + bottom_offset
+
+    width = right - left
+    height = bottom - top
+
+    hwnd_dc = win32gui.GetWindowDC(hwnd)
+    mfc_dc = win32ui.CreateDCFromHandle(hwnd_dc)
+    save_dc = mfc_dc.CreateCompatibleDC()
+
+    save_bitmap = win32ui.CreateBitmap()
+    save_bitmap.CreateCompatibleBitmap(mfc_dc, width, height)
+
+    save_dc.SelectObject(save_bitmap)
+
+    result = windll.user32.PrintWindow(hwnd, save_dc.GetSafeHdc(), window_type)
+
+    bmpinfo = save_bitmap.GetInfo()
+    bmpstr = save_bitmap.GetBitmapBits(True)
+
+    im = Image.frombuffer(
+        'RGB',
+        (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
+        bmpstr, 'raw', 'BGRX', 0, 1)
+
+    win32gui.DeleteObject(save_bitmap.GetHandle())
+    save_dc.DeleteDC()
+    mfc_dc.DeleteDC()
+    win32gui.ReleaseDC(hwnd, hwnd_dc)
+
+    return im
+
+
 def read_squares(hwnd):
-    x, y, x1, y1 = win32gui.GetClientRect(hwnd)
-    x, y = win32gui.ClientToScreen(hwnd, (x, y))
-    x1, y1 = win32gui.ClientToScreen(hwnd, (x1 - x, y1 - y))
-    new_rect = (x, y, x1, (y + config["pixel_size"]))
     waiting_for_null = False
     try:
-        im = ImageGrab.grab(new_rect)
+        im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
     except Image.DecompressionBombError:
         print('DecompressionBombError')
         return
@@ -130,7 +179,7 @@ while True:
         else:
             print("Launching in DEBUG mode but I couldn't find target process.")
         break
-    elif win32gui.GetForegroundWindow() == process_hwnd:
+    elif process_hwnd:
         lines = read_squares(process_hwnd)
 
         if not lines:
@@ -165,8 +214,8 @@ while True:
                                    .for_platform(first_line))
                     except Exception as exc:
                         print("Unable to connect to Discord (%s). It's "
-                              'probably not running. I will try again in 5 '
-                              'sec.' % str(exc))
+                              'probably not running. I will try again in %s '
+                              'sec.' % (str(exc), config["refresh_rate"]))
                         time.sleep(config["refresh_rate"])
                         pass
                     else:
