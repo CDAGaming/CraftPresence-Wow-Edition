@@ -26,6 +26,10 @@ end
 -- RPC Data
 -- ==================
 
+-- Compatibility Data
+local version, build, date, toc_version
+local retail_toc = 90002
+local classic_toc = 11306
 -- Storage Data
 local realmData = { "US", "KR", "EU", "TW", "CH" }
 local stored_global_placeholders = {}
@@ -41,9 +45,14 @@ local playerCovenant = "None"
 function CraftPresence:ParsePlaceholderData(global_placeholders)
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
-    local lockoutData = self:GetCurrentLockoutData()
-    local playerName = UnitName("player")
+    local difficultyInfo = difficultyName
+    -- Retail: Lockout Data is only available for Retail Wow
+    local lockoutData
+    if toc_version >= retail_toc then
+        self:GetCurrentLockoutData()
+    end
     -- Player Name Tweaks (DND/AFK Data)
+    local playerName = UnitName("player")
     local isAfk = UnitIsAFK("player")
     local isOnDnd = UnitIsDND("player")
     local playerStatus
@@ -65,16 +74,23 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     local playerRegion = realmData[GetCurrentRegion()]
     local playerClass = UnitClass("player")
     hasInstanceChanged = ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or ((lastLocalPlane == nil) or (name ~= lastLocalPlane))
-    -- Covenant Setup (If porting to classic, only use faction data)
-    local playerCovenantId = C_Covenants.GetActiveCovenantID()
-    local playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
-    local playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
-    local englishFaction, localizedFaction = UnitFactionGroup("player")
+    -- Covenant and Faction Setup
     -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
     -- Then use the Faction as the Alliance; otherwise setup Covenant Data
+    local englishFaction, localizedFaction = UnitFactionGroup("player")
+    local playerCovenantId = 0
+    local playerCovenantData
+    local playerCovenantRenown = 0
     if hasInstanceChanged then
+        if toc_version >= retail_toc then
+            playerCovenantId = C_Covenants.GetActiveCovenantID()
+            playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
+            playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
+        end
+
         if playerCovenantId == 0 or not ((string.find(name, "Shadowlands")) or (string.find(name, "Torghast")) or (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))) then
             playerAlliance = localizedFaction
+            playerCovenant = "None"
         else
             playerCovenant = playerCovenantData.name
             playerAlliance = playerCovenant
@@ -95,33 +111,22 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     else
         formatted_zone_info = (sub_name .. " - " .. zone_name)
     end
-    -- Extra Character Data
-    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-    local specId, specName, specDescription, specIcon, specBackground, specRoleId = GetSpecializationInfo(GetSpecialization())
-    local roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-    -- Keystone Data
-    local ownedKeystoneData = self:GetOwnedKeystone()
-    local activeKeystoneData = self:GetActiveKeystone()
-    local difficultyInfo = difficultyName
-    if activeKeystoneData ~= nil and activeKeystoneData.formattedLevel ~= nil and activeKeystoneData.formattedLevel ~= "" then
-        difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
-    end
     -- Calculate Inner Placeholders
     local inner_placeholders = {
-        ["@player_info@"] = (playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel)) .. " " .. specName .. " " .. playerClass),
+        ["@player_info@"] = "", -- Version-Dependent
         ["@player_name@"] = playerName,
         ["@player_level@"] = playerLevel,
         ["@player_class@"] = playerClass,
         ["@player_status@"] = playerStatus,
         ["@player_alliance@"] = playerAlliance,
         ["@player_covenant@"] = playerCovenant,
-        ["@player_covenant_renown@"] = playerCovenantRenown,
+        ["@player_covenant_renown@"] = "0", -- Retail-Only
         ["@player_faction@"] = localizedFaction,
-        ["@player_spec_name@"] = specName,
-        ["@player_spec_role@"] = roleName,
-        ["@item_level@"] = string.format("%.2f", avgItemLevel),
-        ["@item_level_equipped@"] = string.format("%.2f", avgItemLevelEquipped),
-        ["@item_level_pvp@"] = string.format("%.2f", avgItemLevelPvp),
+        ["@player_spec_name@"] = "", -- Retail-Only
+        ["@player_spec_role@"] = "", -- Retail-Only
+        ["@item_level@"] = "0", -- Retail-Only
+        ["@item_level_equipped@"] = "0", -- Retail-Only
+        ["@item_level_pvp@"] = "0", -- Retail-Only
         ["@realm_info@"] = (playerRegion .. " - " .. playerRealm),
         ["@player_region@"] = playerRegion,
         ["@player_realm@"] = playerRealm,
@@ -130,10 +135,10 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         ["@sub_zone_name@"] = sub_name,
         ["@dead_state@"] = self:GetFromDb("deadStateInnerMessage"),
         ["@difficulty_name@"] = difficultyName,
-        ["@difficulty_info@"] = difficultyInfo,
-        ["@active_keystone_level@"] = activeKeystoneData.formattedLevel,
-        ["@active_keystone_affixes@"] = activeKeystoneData.activeAffixes,
-        ["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel,
+        ["@difficulty_info@"] = difficultyInfo, -- Retail-Effected
+        ["@active_keystone_level@"] = "", -- Retail-Only
+        ["@active_keystone_affixes@"] = "", -- Retail-Only
+        ["@owned_keystone_level@"] = "", -- Retail-Only
         ["@instance_type@"] = instanceType,
         ["@localized_name@"] = name,
         ["@instance_difficulty@"] = tostring(difficultyID),
@@ -143,10 +148,42 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         ["@instance_id@"] = tostring(instanceID),
         ["@instance_group_size@"] = tostring(instanceGroupSize),
         ["@lfg_dungeon_id@"] = tostring(LfgDungeonID),
-        ["@lockout_encounters@"] = lockoutData.formattedEncounterData,
-        ["@lockout_current_encounters@"] = lockoutData.currentEncounters,
-        ["@lockout_total_encounters@"] = lockoutData.totalEncounters
+        ["@lockout_encounters@"] = "", -- Retail-Only
+        ["@lockout_current_encounters@"] = 0, -- Retail-Only
+        ["@lockout_total_encounters@"] = 0 -- Retail-Only
     }
+    -- Version Dependent Data
+    if toc_version >= retail_toc then
+        -- Extra Character Data
+        local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+        local specId, specName, specDescription, specIcon, specBackground, specRoleId = GetSpecializationInfo(GetSpecialization())
+        local roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        -- Keystone Data
+        local ownedKeystoneData = self:GetOwnedKeystone()
+        local activeKeystoneData = self:GetActiveKeystone()
+        difficultyInfo = difficultyName
+        if activeKeystoneData ~= nil and activeKeystoneData.formattedLevel ~= nil and activeKeystoneData.formattedLevel ~= "" then
+            difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
+        end
+        -- Inner Placeholder Adjustments
+        inner_placeholders["@player_info@"] = (playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel)) .. " " .. specName .. " " .. playerClass)
+        inner_placeholders["@player_covenant_renown@"] = tostring(playerCovenantRenown)
+        inner_placeholders["@player_spec_name@"] = specName
+        inner_placeholders["@player_spec_role@"] = roleName
+        inner_placeholders["@item_level@"] = string.format("%.2f", avgItemLevel)
+        inner_placeholders["@item_level_equipped@"] = string.format("%.2f", avgItemLevelEquipped)
+        inner_placeholders["@item_level_pvp@"] = string.format("%.2f", avgItemLevelPvp)
+        inner_placeholders["@difficulty_info@"] = difficultyInfo
+        inner_placeholders["@active_keystone_level@"] = activeKeystoneData.formattedLevel
+        inner_placeholders["@active_keystone_affixes@"] = activeKeystoneData.formattedAffixes
+        inner_placeholders["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel
+        inner_placeholders["@lockout_encounters@"] = lockoutData.formattedEncounterData
+        inner_placeholders["@lockout_current_encounters@"] = lockoutData.currentEncounters
+        inner_placeholders["@lockout_total_encounters@"] = lockoutData.totalEncounters
+    elseif toc_version <= classic_toc then
+        -- Inner Placeholder Adjustments
+        inner_placeholders["@player_info@"] = (playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel)) .. " " .. playerClass)
+    end
     -- Calculate limiting RPC conditions
     local global_conditions = {
         ["#dungeon#"] = (inner_placeholders["@instance_type@"] == "party" and not (string.find(name, "Garrison"))),
@@ -287,6 +324,7 @@ end
 function CraftPresence:OnEnable()
     -- Called when the addon is enabled
     self:Print(L["ADDON_INTRO"])
+    version, build, date, toc_version = GetBuildInfo()
     self:RegisterEvent("PLAYER_LOGIN", "DispatchUpdate")
     self:RegisterEvent("ZONE_CHANGED", "DispatchUpdate")
     self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "DispatchUpdate")
