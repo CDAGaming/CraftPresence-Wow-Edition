@@ -49,7 +49,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     -- Retail: Lockout Data is only available for Retail Wow
     local lockoutData
     if toc_version >= retail_toc then
-        self:GetCurrentLockoutData()
+        lockoutData = self:GetCurrentLockoutData()
     end
     -- Player Name Tweaks (DND/AFK Data)
     local playerName = UnitName("player")
