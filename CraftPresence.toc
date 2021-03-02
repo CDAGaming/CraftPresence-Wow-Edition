@@ -1,8 +1,13 @@
+#@retail@
 ## Interface: 90002
+#@end-retail@
+#@non-retail@
+# ## Interface: 11306
+#@end-non-retail@
 
 ## Title: CraftPresence
 ## Author: CDAGaming
-## Version: v0.0.8
+## Version: @project-version@
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
 ## OptionalDeps: Ace3
