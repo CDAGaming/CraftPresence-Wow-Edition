@@ -63,7 +63,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
         playerStatus = L["DND_LABEL"]
     end
     -- Parse Player Status
-    if not(playerStatus == nil) then
+    if not (playerStatus == nil) then
         playerPrefix = ("(" .. playerStatus .. ")") .. " "
     else
         playerStatus = L["ONLINE_LABEL"]

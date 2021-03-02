@@ -1,10 +1,10 @@
 import json
 import os
 import time
+from ctypes import windll
 
 import win32gui
 import win32ui
-from ctypes import windll
 from PIL import Image
 
 import rpc
@@ -61,7 +61,8 @@ def verify_read_data(decoded):
         '$RPCEvent$') and decoded != "$RPCEvent$")
 
 
-def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0, right_specific=0, bottom_offset=0, bottom_specific=0):
+def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0,
+                    right_specific=0, bottom_offset=0, bottom_specific=0):
     # Change the line below depending on whether you want the whole window
     # or just the client area.
     left, top, right, bottom = win32gui.GetClientRect(hwnd)

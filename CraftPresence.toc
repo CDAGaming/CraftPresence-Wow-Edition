@@ -16,7 +16,6 @@
 
 Libraries\Libraries.xml
 Locales\Locales.xml
-
 CraftPresence.lua
 InstanceInfo.lua
 Config.lua
