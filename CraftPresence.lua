@@ -193,7 +193,7 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     }
     local inner_conditions = {
         ["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player")),
-        ["@lockout_encounters@"] = (lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
+        ["@lockout_encounters@"] = (lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
     }
     local extra_conditions = {
         ["torghast"] = (string.find(name, "Torghast") and (inner_placeholders["@instance_type@"] == "scenario"))
@@ -331,7 +331,9 @@ function CraftPresence:OnEnable()
     self:RegisterEvent("ZONE_CHANGED_INDOORS", "DispatchUpdate")
     self:RegisterEvent("PLAYER_UNGHOST", "DispatchUpdate")
     self:RegisterEvent("PLAYER_FLAGS_CHANGED", "DispatchUpdate")
-    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "DispatchUpdate")
+    if toc_version >= retail_toc then
+        self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "DispatchUpdate")
+    end
 
     self:CreateFrames()
     self:PaintMessageWait()
