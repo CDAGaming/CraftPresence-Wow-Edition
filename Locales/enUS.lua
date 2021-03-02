@@ -75,6 +75,9 @@ L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive l
 L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
 
+L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
+L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config."
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
 L["ERROR_CALLBACK_DELAY"] = "Error: Sanity Checks failed for Callback Delay. Please enter a numerical value above 0."
@@ -102,4 +105,5 @@ L["VERBOSE_LOG"] = "[Verbose] %s"
 L["ERROR_LOG"] = "[Error] %s"
 L["WARNING_LOG"] = "[Warning] %s"
 L["ADDON_NAME"] = "CraftPresence"
-L["ADDON_VERSION"] = "v0.0.8.2"
+L["ADDON_AFFIX"] = "cp"
+L["ADDON_VERSION"] = "v0.0.8.4"

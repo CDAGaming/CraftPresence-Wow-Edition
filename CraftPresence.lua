@@ -1,6 +1,25 @@
 local CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
+local icon = LibStub("LibDBIcon-1.0")
+
+local minimapState = { hide = false }
+
+local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("CraftPresence", {
+    type = "launcher",
+    text = L["ADDON_NAME"],
+    icon = "Interface\\Addons\\CraftPresence\\images\\icon.blp",
+    OnClick = function(clickedframe, button)
+        CraftPresence.ShowConfig()
+    end,
+    OnTooltipShow = function(tt)
+        tt:AddLine(L["ADDON_NAME"])
+        tt:AddLine(" ")
+        tt:AddLine("Click to access config data.")
+        tt:AddLine(" ")
+        tt:AddLine("Toggle minimap button by typing |c33c9fcff/cp minimap|r")
+    end
+})
 
 -- ==================
 -- Utilities
@@ -317,8 +336,11 @@ function CraftPresence:OnInitialize()
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
     self.optionsFrame.default = self.ResetDB
     -- Command Registration
-    self:RegisterChatCommand("craftpresence", "ChatCommand")
-    self:RegisterChatCommand("cp", "ChatCommand")
+    self:RegisterChatCommand(string.lower(L["ADDON_NAME"]), "ChatCommand")
+    self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
+    -- Icon Registration
+    self:UpdateMinimapState(false)
+    icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
 end
 
 function CraftPresence:OnEnable()
@@ -368,11 +390,26 @@ function CraftPresence:OnDisable()
     -- Called when the addon is disabled
 end
 
+function CraftPresence:UpdateMinimapState(update_state)
+    minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
+    if update_state then
+        if minimapState["hide"] then
+            icon:Hide(L["ADDON_NAME"])
+        else
+            icon:Show(L["ADDON_NAME"])
+        end
+    end
+end
+
+function CraftPresence:ShowConfig()
+    -- a bug can occur in blizzard's implementation of this call
+    InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+    InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+end
+
 function CraftPresence:ChatCommand(input)
     if not input or input:trim() == "" then
-        -- a bug can occur in blizzard's implementation of this call
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        self:ShowConfig()
     else
         if input == "test" then
             self:TestFrames()
@@ -380,6 +417,14 @@ function CraftPresence:ChatCommand(input)
             self:CleanFrames()
         elseif input == "update" then
             self:PaintMessageWait(true)
+        elseif input == "minimap" then
+            -- This command event is a copy from Config.lua's update event for showMinimapIcon
+            local oldValue = self.db.profile.showMinimapIcon
+            self.db.profile.showMinimapIcon = not self.db.profile.showMinimapIcon
+            if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
+                self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SHOW_MINIMAP_ICON"], tostring(oldValue), tostring(self.db.profile.showMinimapIcon))))
+                self:UpdateMinimapState(true)
+            end
         elseif input == "status" then
             if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
                 self:Print(self:PrintLastEncoded())
@@ -399,7 +444,7 @@ function CraftPresence:ChatCommand(input)
                 self:Print(string.format(L["ERROR_LOG"], string.format(L["ERROR_COMMAND_CONFIG"], (L["TITLE_VERBOSE_MODE"] .. ", " .. L["TITLE_SHOW_LOGGING_IN_CHAT"]))))
             end
         else
-            LibStub("AceConfigCmd-3.0"):HandleCommand("cp", "CraftPresence", input)
+            LibStub("AceConfigCmd-3.0"):HandleCommand(L["ADDON_AFFIX"], L["ADDON_NAME"], input)
         end
     end
 end

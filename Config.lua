@@ -21,6 +21,7 @@ local DB_DEFAULTS = {
         showLoggingInChat = true,
         debugMode = false,
         verboseMode = false,
+        showMinimapIcon = true,
         callbackDelay = 2
     },
 }
@@ -340,8 +341,26 @@ local extraOptionsGroup = {
             end,
         },
         blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        showMinimapIcon = {
+            type = "toggle", order = 16, name = L["TITLE_SHOW_MINIMAP_ICON"], desc = L["COMMENT_SHOW_MINIMAP_ICON"],
+            get = function(info)
+                return CraftPresence.GetFromDb(nil, "showMinimapIcon")
+            end,
+            set = function(info, value)
+                local oldValue = CraftPresence.GetFromDb(nil, "showMinimapIcon")
+                local isValid = true
+                if isValid then
+                    CraftPresence.db.profile.showMinimapIcon = value;
+                    if oldValue ~= value and CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat") then
+                        CraftPresence:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SHOW_MINIMAP_ICON"], tostring(oldValue), tostring(value))))
+                        CraftPresence:UpdateMinimapState(true)
+                    end
+                end
+            end,
+        },
+        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
         callbackDelay = {
-            type = "range", min = 0, max = 60, step = 1, order = 16, name = L["TITLE_CALLBACK_DELAY"], desc = L["COMMENT_CALLBACK_DELAY"], width = 1.50,
+            type = "range", min = 0, max = 60, step = 1, order = 18, name = L["TITLE_CALLBACK_DELAY"], desc = L["COMMENT_CALLBACK_DELAY"], width = 1.50,
             get = function(info)
                 return CraftPresence.GetFromDb(nil, "callbackDelay")
             end,
