@@ -460,6 +460,5 @@ function CraftPresence:GetDefaults()
 end
 
 function CraftPresence:ResetDB()
-    CraftPresence:Print("Config.resetDB")
     CraftPresence.db:ResetProfile(false, true)
 end
