@@ -100,13 +100,13 @@ function CraftPresence:ParsePlaceholderData(global_placeholders)
     local playerCovenantId = 0
     local playerCovenantData
     local playerCovenantRenown = 0
-    if hasInstanceChanged then
-        if toc_version >= retail_toc then
-            playerCovenantId = C_Covenants.GetActiveCovenantID()
-            playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
-            playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
-        end
+    if toc_version >= retail_toc then
+        playerCovenantId = C_Covenants.GetActiveCovenantID()
+        playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
+        playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
+    end
 
+    if hasInstanceChanged then
         if playerCovenantId == 0 or not ((string.find(name, "Shadowlands")) or (string.find(name, "Torghast")) or (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))) then
             playerAlliance = localizedFaction
             playerCovenant = "None"
