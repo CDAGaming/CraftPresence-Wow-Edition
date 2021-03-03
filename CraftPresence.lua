@@ -421,10 +421,7 @@ function CraftPresence:ChatCommand(input)
             -- This command event is a copy from Config.lua's update event for showMinimapIcon
             local oldValue = self.db.profile.showMinimapIcon
             self.db.profile.showMinimapIcon = not self.db.profile.showMinimapIcon
-            if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
-                self:Print(string.format(L["VERBOSE_LOG"], string.format(L["DEBUG_VALUE_CHANGED"], L["TITLE_SHOW_MINIMAP_ICON"], tostring(oldValue), tostring(self.db.profile.showMinimapIcon))))
-                self:UpdateMinimapState(true)
-            end
+            CraftPresence:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, self.db.profile.showMinimapIcon)
         elseif input == "status" then
             if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
                 self:Print(self:PrintLastEncoded())

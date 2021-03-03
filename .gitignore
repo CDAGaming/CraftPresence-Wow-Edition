@@ -32,3 +32,5 @@ CraftPresence/.vscode/
 .vscode/
 
 script/__pycache__/
+
+luacheck.exe

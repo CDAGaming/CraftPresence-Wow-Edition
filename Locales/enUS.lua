@@ -92,6 +92,11 @@ L["VERBOSE_PLACEHOLDER_DATA"] = "%s Data: %s -> %s"
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
+-- Frame Text Data
+L["ADDON_INFO_ONE"] = "CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence."
+L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
+L["ADDON_INFO_THREE"] = "Thanks to Attka for the original base project, that makes this possible."
+L["ADDON_INFO_FOUR"] = "Special thanks to $API_ONE and $API_TWO"
 -- Data Default Values
 L["ONLINE_LABEL"] = "Online"
 L["AFK_LABEL"] = "AFK"
