@@ -95,7 +95,7 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
 
     save_dc.SelectObject(save_bitmap)
 
-    result = windll.user32.PrintWindow(hwnd, save_dc.GetSafeHdc(), window_type)
+    windll.user32.PrintWindow(hwnd, save_dc.GetSafeHdc(), window_type)
 
     bmpinfo = save_bitmap.GetInfo()
     bmpstr = save_bitmap.GetBitmapBits(True)
@@ -218,7 +218,6 @@ while True:
                               'probably not running. I will try again in %s '
                               'sec.' % (str(exc), config["refresh_rate"]))
                         time.sleep(config["refresh_rate"])
-                        pass
                     else:
                         break
                 print('Connected to Discord.')
