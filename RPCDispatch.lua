@@ -53,7 +53,7 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
     b = b / 255
 
     -- set alpha to 1 if this pixel is black and force is 0 or null
-    local a = 0
+    local a
     if r == 0 and g == 0 and b == 0 and (force == 0 or force == nil) then
         a = 0
     else
@@ -69,7 +69,11 @@ function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     if text:len() >= max_bytes then
         if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
-            self:Print(string.format(L["ERROR_LOG"], string.format(L["ERROR_BYTE_OVERFLOW"], tostring(#text), tostring(max_bytes))))
+            self:Print(string.format(
+                    L["ERROR_LOG"], string.format(
+                            L["ERROR_BYTE_OVERFLOW"], tostring(#text), tostring(max_bytes)
+                    )
+            ))
         end
         return
     end
@@ -78,20 +82,21 @@ function CraftPresence:PaintSomething(text)
     self:CleanFrames()
 
     local squares_painted = 0
-    local r = 0
-    local g = 0
-    local b = 0
+    local r
+    local g
+    local b
 
     for trio in text:gmatch ".?.?.?" do
-        r = 0;
-        g = 0;
-        b = 0
         r = string.byte(trio:sub(1, 1))
         if #trio > 1 then
             g = string.byte(trio:sub(2, 2))
+        else
+            g = 0
         end
         if #trio > 2 then
             b = string.byte(trio:sub(3, 3))
+        else
+            b = 0
         end
         squares_painted = squares_painted + 1
         self:PaintFrame(frames[squares_painted], r, g, b)
@@ -113,29 +118,40 @@ function CraftPresence:PaintSomething(text)
     end
 end
 
-function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText, details, gameState, startTime, endTime)
-    if (clientId == nil or clientId == "") then
+function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
+                                  details, gameState, startTime, endTime)
+    if clientId == nil or clientId == "" then
         clientId = L["DEFAULT_CLIENT_ID"]
     end
-    if largeImageKey == "" then
-        largeImageKey = nil
+    if largeImageKey == nil or largeImageKey == "" then
+        largeImageKey = L["UNKNOWN_KEY"]
     end
-    if largeImageText == "" then
-        largeImageText = nil
+    if largeImageText == nil or largeImageText == "" then
+        largeImageText = L["UNKNOWN_KEY"]
     end
-    if smallImageKey == "" then
-        smallImageKey = nil
+    if smallImageKey == nil or smallImageKey == "" then
+        smallImageKey = L["UNKNOWN_KEY"]
     end
-    if smallImageText == "" then
-        smallImageText = nil
+    if smallImageText == nil or smallImageText == "" then
+        smallImageText = L["UNKNOWN_KEY"]
     end
-    if details == "" then
-        details = nil
+    if details == nil or details == "" then
+        details = L["UNKNOWN_KEY"]
     end
-    if gameState == "" then
-        gameState = nil
+    if gameState == nil or gameState == "" then
+        gameState = L["UNKNOWN_KEY"]
     end
-    return ("$RPCEvent$" .. (clientId) .. "|" .. (largeImageKey or L["UNKNOWN_KEY"]) .. "|" .. (largeImageText or L["UNKNOWN_KEY"]) .. "|" .. (smallImageKey or L["UNKNOWN_KEY"]) .. "|" .. (smallImageText or L["UNKNOWN_KEY"]) .. "|" .. (details or L["UNKNOWN_KEY"]) .. "|" .. (gameState or L["UNKNOWN_KEY"]) .. "|" .. (startTime or L["UNKNOWN_KEY"]) .. "|" .. (endTime or L["UNKNOWN_KEY"]) .. "$RPCEvent$")
+    if startTime == nil or startTime == "" then
+        startTime = L["UNKNOWN_KEY"]
+    end
+    if endTime == nil or endTime == "" then
+        endTime = L["UNKNOWN_KEY"]
+    end
+    return string.format(
+            L["RPC_EVENT_FORMAT"],
+            clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
+            details, gameState, startTime, endTime
+    )
 end
 
 function CraftPresence:CleanFrames()

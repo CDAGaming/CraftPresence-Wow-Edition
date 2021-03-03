@@ -12,21 +12,19 @@ function CraftPresence:GenerateInstanceTable()
     local raid = false
 
     -- Run this twice, once for dungeons, once for raids
-    for b = 1, 2 do
-        local instanceType = ""
-
+    for _ = 1, 2 do
         for t = 1, numTiers do
             EJ_SelectTier(t)
             local tierName = EJ_GetTierInfo(t)
             local instanceIndex = 1
-            local id, name = EJ_GetInstanceByIndex(instanceIndex, raid)
+            local id, _ = EJ_GetInstanceByIndex(instanceIndex, raid)
 
             while id do
                 if not (id == nil) then
                     instTable[id] = tierName
                 end
                 instanceIndex = instanceIndex + 1
-                id, name = EJ_GetInstanceByIndex(instanceIndex, raid)
+                id, _ = EJ_GetInstanceByIndex(instanceIndex, raid)
             end
         end
 
@@ -59,14 +57,7 @@ function CraftPresence:GetCurrentInstanceTier()
         return "NotAnInstance"
     end
 
-    -- Generate a chronologically ordered list of expansion names
-    local tierList = {}
-
-    for i = 1, EJ_GetNumTiers() do
-        tierList[i] = EJ_GetTierInfo(i)
-    end
-
-    local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
+    local _, instanceType, _, _ = GetInstanceInfo()
     local unitMapID = C_Map.GetBestMapForUnit("player")
     if not unitMapID then
         unitMapID = C_Map.GetFallbackWorldMapID()
@@ -83,27 +74,34 @@ function CraftPresence:GetCurrentInstanceTier()
         return "UnknownInstanceType"
     end
 
-    -- Second, is it Heroic? If so, skip all of Vanilla. Else, search the entire instance table
-    local startIndex = (difficulty == 2) and 2 or 1
-
     -- Perform the actual search, scanning by instanceID, skipping Classic if we're in Heroic
     return InstanceTable[instanceID] or "UnknownTier"
 end
 
 function CraftPresence:GetCurrentLockoutData()
-    local lockoutData = { name = "", difficulty = "", difficultyId = 0, currentEncounters = 0, totalEncounters = 0, formattedEncounterData = "" }
+    local lockoutData = {
+        name = "",
+        difficulty = "",
+        difficultyId = 0,
+        currentEncounters = 0,
+        totalEncounters = 0,
+        formattedEncounterData = ""
+    }
+
     if IsInInstance() then
-        local name, instanceType, difficulty, difficultyName = GetInstanceInfo()
-        local unitMapID = C_Map.GetBestMapForUnit("player")
-        if not unitMapID then
-            unitMapID = C_Map.GetFallbackWorldMapID()
-        end
-        local instanceID = EJ_GetInstanceForMap(unitMapID)
+        local name, _, difficulty, difficultyName = GetInstanceInfo()
         for index = 1, GetNumSavedInstances() do
-            local instanceName, id, reset, instanceDifficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, instanceDifficultyName, numEncounters, encounterProgress, extendDisabled = GetSavedInstanceInfo(index)
+            local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, stageStatus, _ = GetSavedInstanceInfo(index)
             if locked then
-                if (name == instanceName and difficulty == instanceDifficulty) then
-                    lockoutData = { name = instanceName, difficulty = difficultyName, difficultyId = difficulty, currentEncounters = encounterProgress, totalEncounters = numEncounters, formattedEncounterData = ("(" .. encounterProgress .. "/" .. numEncounters .. ")") }
+                if (name == areaName and difficulty == areaSc) then
+                    lockoutData = {
+                        name = areaName,
+                        difficulty = difficultyName,
+                        difficultyId = difficulty,
+                        currentEncounters = stageStatus,
+                        totalEncounters = numStages,
+                        formattedEncounterData = ("(" .. stageStatus .. "/" .. numStages .. ")")
+                    }
                     break
                 end
             end
@@ -120,9 +118,17 @@ function CraftPresence:GetOwnedKeystone()
         local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
         local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
 
-        keystoneInfo = { dungeon = keystoneDungeon, level = keystoneLevel, formattedLevel = ("+" .. keystoneLevel) }
+        keystoneInfo = {
+            dungeon = keystoneDungeon,
+            level = keystoneLevel,
+            formattedLevel = ("+" .. keystoneLevel)
+        }
     else
-        keystoneInfo = { dungeon = nil, level = 0, formattedLevel = "" }
+        keystoneInfo = {
+            dungeon = nil,
+            level = 0,
+            formattedLevel = ""
+        }
     end
 
     return keystoneInfo
@@ -137,15 +143,29 @@ function CraftPresence:GetActiveKeystone()
         local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
         local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
         if activeAffixIDs ~= nil then
-            for key, affixId in pairs(activeAffixIDs) do
-                local name, description, fileDataId = C_ChallengeMode.GetAffixInfo(affixId)
+            for _, affixId in pairs(activeAffixIDs) do
+                local name, _, _ = C_ChallengeMode.GetAffixInfo(affixId)
                 formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
             end
         end
 
-        keystoneInfo = { dungeon = keystoneDungeon, activeAffixes = activeAffixIDs, wasCharged = wasActiveKeystoneCharged, level = activeKeystoneLevel, formattedLevel = ("+" .. activeKeystoneLevel), formattedAffixes = formattedKeyAffixes }
+        keystoneInfo = {
+            dungeon = keystoneDungeon,
+            activeAffixes = activeAffixIDs,
+            wasCharged = wasActiveKeystoneCharged,
+            level = activeKeystoneLevel,
+            formattedLevel = ("+" .. activeKeystoneLevel),
+            formattedAffixes = formattedKeyAffixes
+        }
     else
-        keystoneInfo = { dungeon = nil, activeAffixes = nil, wasCharged = false, level = 0, formattedLevel = "", formattedAffixes = formattedKeyAffixes }
+        keystoneInfo = {
+            dungeon = nil,
+            activeAffixes = nil,
+            wasCharged = false,
+            level = 0,
+            formattedLevel = "",
+            formattedAffixes = formattedKeyAffixes
+        }
     end
 
     return keystoneInfo
