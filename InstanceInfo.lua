@@ -87,13 +87,15 @@ function CraftPresence:GetCurrentLockoutData()
         totalEncounters = 0,
         formattedEncounterData = ""
     }
+    local foundData = false
 
     if IsInInstance() then
-        local name, _, difficulty, difficultyName = GetInstanceInfo()
+        local instanceName, _, difficulty, difficultyName = GetInstanceInfo()
         for index = 1, GetNumSavedInstances() do
             local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, stageStatus, _ = GetSavedInstanceInfo(index)
             if locked then
-                if (name == areaName and difficulty == areaSc) then
+                if (instanceName == areaName and difficulty == areaSc) then
+                    foundData = true
                     lockoutData = {
                         name = areaName,
                         difficulty = difficultyName,
@@ -104,6 +106,27 @@ function CraftPresence:GetCurrentLockoutData()
                     }
                     break
                 end
+            end
+        end
+        if not foundData then
+            -- Attempt to use Scenario Data, if our Instance isn't a Saved Instance
+            local _, _, steps = C_Scenario.GetStepInfo()
+            if steps > 0 then
+                local completedSteps = 0
+                for i=1, steps do
+                    local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
+                    if completed then
+                        completedSteps = completedSteps + 1
+                    end
+                end
+                lockoutData = {
+                    name = instanceName,
+                    difficulty = difficultyName,
+                    difficultyId = difficulty,
+                    currentEncounters = completedSteps,
+                    totalEncounters = steps,
+                    formattedEncounterData = ("(" .. completedSteps .. "/" .. steps .. ")")
+                }
             end
         end
     end

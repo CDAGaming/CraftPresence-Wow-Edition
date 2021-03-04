@@ -389,6 +389,9 @@ function CraftPresence:OnEnable()
     if toc_version >= retail_toc then
         self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "DispatchUpdate")
     end
+    self:RegisterEvent("CHALLENGE_MODE_START", "DispatchUpdate")
+    self:RegisterEvent("CHALLENGE_MODE_COMPLETED", "DispatchUpdate")
+    --self:RegisterEvent("SCENARIO_COMPLETED", "DispatchUpdate")
 
     self:CreateFrames()
     self:PaintMessageWait()
