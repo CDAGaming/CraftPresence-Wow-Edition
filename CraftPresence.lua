@@ -380,21 +380,40 @@ function CraftPresence:OnEnable()
     if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
         self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))
     end
-    self:RegisterEvent("PLAYER_LOGIN", "DispatchUpdate")
-    self:RegisterEvent("ZONE_CHANGED", "DispatchUpdate")
-    self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "DispatchUpdate")
-    self:RegisterEvent("ZONE_CHANGED_INDOORS", "DispatchUpdate")
-    self:RegisterEvent("PLAYER_UNGHOST", "DispatchUpdate")
-    self:RegisterEvent("PLAYER_FLAGS_CHANGED", "DispatchUpdate")
-    if toc_version >= retail_toc then
-        self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "DispatchUpdate")
-    end
-    self:RegisterEvent("CHALLENGE_MODE_START", "DispatchUpdate")
-    self:RegisterEvent("CHALLENGE_MODE_COMPLETED", "DispatchUpdate")
+    --self:RegisterEvent("PLAYER_LOGIN", "DispatchUpdate")
+    --self:RegisterEvent("ZONE_CHANGED", "DispatchUpdate")
+    --self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "DispatchUpdate")
+    --self:RegisterEvent("ZONE_CHANGED_INDOORS", "DispatchUpdate")
+    --self:RegisterEvent("PLAYER_LEVEL_CHANGED", "DispatchUpdate")
+    --self:RegisterEvent("PLAYER_UNGHOST", "DispatchUpdate")
+    --self:RegisterEvent("PLAYER_FLAGS_CHANGED", "DispatchUpdate")
+    --if toc_version >= retail_toc then
+    --    self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "DispatchUpdate")
+    --end
+    --self:RegisterEvent("CHALLENGE_MODE_START", "DispatchUpdate")
+    --self:RegisterEvent("CHALLENGE_MODE_COMPLETED", "DispatchUpdate")
+    --self:RegisterEvent("CHALLENGE_MODE_RESET", "DispatchUpdate")
     --self:RegisterEvent("SCENARIO_COMPLETED", "DispatchUpdate")
+    --self:RegisterEvent("BOSS_KILL", "DispatchUpdate")
+
+    CraftPresence:AddTriggers("DispatchUpdate",
+            "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED", "PLAYER_UNGHOST", "PLAYER_FLAGS_CHANGED",
+            "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
+            "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
+            "SCENARIO_COMPLETED", "BOSS_KILL"
+    )
+    if toc_version >= retail_toc then
+        CraftPresence:AddTriggers("DispatchUpdate", "PLAYER_SPECIALIZATION_CHANGED")
+    end
 
     self:CreateFrames()
     self:PaintMessageWait()
+end
+
+function CraftPresence:AddTriggers(event, ...)
+    for _,v in ipairs(arg) do
+        self:RegisterEvent(tostring(v), tostring(event))
+    end
 end
 
 function CraftPresence:GetFromDb(grp, key, ...)
