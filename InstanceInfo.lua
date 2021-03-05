@@ -38,7 +38,6 @@ function CraftPresence:GenerateInstanceTable()
     return instTable
 end
 
-
 --- Figure out which expansion our current instance belongs to.
 ---
 --- Problem: Remade dungeons, such as Deadmines, belong to more than 1 expansion,
@@ -130,7 +129,7 @@ function CraftPresence:GetCurrentLockoutData()
                 local _, _, steps = C_Scenario.GetStepInfo()
                 if steps > 0 then
                     local completedSteps = 0
-                    for i=1, steps do
+                    for i = 1, steps do
                         local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
                         if completed then
                             completedSteps = completedSteps + 1

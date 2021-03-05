@@ -77,6 +77,8 @@ local hasInstanceChanged = false
 local playerAlliance = "None"
 local playerCovenant = "None"
 
+--- Parses Game information to form placeholder information
+--- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
 function CraftPresence:ParseGameData(queued_global_placeholders)
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
@@ -299,8 +301,10 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
     return outputTable, queued_inner_placeholders, queued_time_conditions
 end
 
+--- Re-Initialize and Sync Placeholder and Conditional Data
+--- @return string @ newEncodedString
 function CraftPresence:EncodeConfigData()
-    -- Re-Initialize and Sync Placeholder and Conditional Data
+    -- Variable Setup
     global_placeholders = {
         ["#dungeon#"] = self:GetFromDb("dungeonPlaceholderMessage"),
         ["#raid#"] = self:GetFromDb("raidPlaceholderMessage"),
@@ -398,12 +402,13 @@ function CraftPresence:OnEnable()
     if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
         self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))
     end
-
+    -- Register Universal Events
     CraftPresence:AddTriggers("DispatchUpdate",
             "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED", "PLAYER_UNGHOST", "PLAYER_FLAGS_CHANGED",
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
             "BOSS_KILL"
     )
+    -- Register Retail-Only Events
     if toc_version >= retail_toc then
         CraftPresence:AddTriggers("DispatchUpdate",
                 "PLAYER_SPECIALIZATION_CHANGED",
