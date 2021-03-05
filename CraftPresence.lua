@@ -464,6 +464,7 @@ function CraftPresence:OnDisable()
     self:Print(L["ADDON_CLOSE"])
     self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
     icon:Hide(L["ADDON_NAME"])
+    self:UnregisterAllEvents()
 end
 
 --- Updates the minimap status with config data
