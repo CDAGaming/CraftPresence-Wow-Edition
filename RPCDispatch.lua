@@ -192,11 +192,17 @@ end
 --- @param force boolean Whether or not to force an update regardless of changes
 --- @param update boolean Whether to update last_encoded if proceeding
 --- @param clean boolean Whether or not to clear frames after a period of time
-function CraftPresence:PaintMessageWait(force, update, clean)
+--- @param msg string Exact message to parse; Defaults to EncodeConfigData if non-present
+function CraftPresence:PaintMessageWait(force, update, clean, msg)
     local proceed = (force ~= nil and force == true)
     local will_update = (update == nil or update == true)
     local will_clean = (clean == nil or clean == true)
-    local encoded = self:EncodeConfigData()
+    local encoded
+    if msg ~= nil then
+        encoded = tostring(msg)
+    else
+        encoded = self:EncodeConfigData()
+    end
     local changed = last_encoded ~= encoded or proceed
     if (changed and encoded ~= nil) then
         if will_update then
