@@ -129,8 +129,6 @@ function CraftPresence:GetCurrentLockoutData()
                         formattedEncounterData = ("(" .. completedSteps .. "/" .. steps .. ")")
                     }
                 end
-            else
-                -- TODO: Add GetInstanceLockTimeRemaining implementation
             end
         end
     end
