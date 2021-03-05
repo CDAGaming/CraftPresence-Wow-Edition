@@ -416,6 +416,8 @@ local aboutGroup = {
     }
 }
 
+--- Retrieves the option table to be used in the Config Menu
+--- @return table @ opts
 function CraftPresence:getOptionsTable()
     local profilesGroup = LibStub("AceDBOptions-3.0"):GetOptionsTable(CraftPresence.db)
 
@@ -439,10 +441,17 @@ function CraftPresence:getOptionsTable()
     return opts;
 end
 
+--- Retrieves whether or not logging changed data is allowed
+--- @return boolean @ canLogChanges
 function CraftPresence:CanLogChanges()
     return (CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat"))
 end
 
+--- Prints change data, if possible, using the specified parameters
+---
+--- @param fieldName string The config name the change belongs to
+--- @param oldValue any The old value of the config variable
+--- @param value any The new value of the config variable
 function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
     if oldValue ~= value and CraftPresence.CanLogChanges() then
         CraftPresence:Print(
@@ -455,10 +464,13 @@ function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
     end
 end
 
+--- Retrieves the default settings for the config menu
+--- @return table @ DB_DEFAULTS
 function CraftPresence:GetDefaults()
     return DB_DEFAULTS;
 end
 
+--- Resets the settings in the config to their defaults
 function CraftPresence:ResetDB()
     CraftPresence.db:ResetProfile(false, true)
 end
