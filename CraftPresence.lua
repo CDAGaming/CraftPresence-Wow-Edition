@@ -394,7 +394,7 @@ function CraftPresence:OnEnable()
         )
     end
 
-    self:CreateFrames()
+    self:CreateFrames(6)
     self:PaintMessageWait()
 end
 
@@ -456,7 +456,7 @@ function CraftPresence:ChatCommand(input)
         self:ShowConfig()
     else
         if input == "test" then
-            self:TestFrames()
+            self:PaintMessageWait(true, false, false)
         elseif input == "clean" or input == "clear" then
             self:CleanFrames()
         elseif input == "update" then
@@ -468,7 +468,7 @@ function CraftPresence:ChatCommand(input)
             CraftPresence:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, self.db.profile.showMinimapIcon)
         elseif input == "status" then
             if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
-                self:Print(self:PrintLastEncoded())
+                self:Print(self:GetLastEncoded())
             else
                 self:Print(string.format(
                         L["ERROR_LOG"], string.format(
