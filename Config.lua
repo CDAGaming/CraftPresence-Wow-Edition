@@ -362,6 +362,7 @@ local extraOptionsGroup = {
                 local isValid = true
                 if isValid then
                     CraftPresence.db.profile.showMinimapIcon = value;
+                    CraftPresence:UpdateMinimapState(true)
                     CraftPresence:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, value)
                 end
             end,
