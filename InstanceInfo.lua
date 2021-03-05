@@ -109,24 +109,28 @@ function CraftPresence:GetCurrentLockoutData()
             end
         end
         if not foundData then
-            -- Attempt to use Scenario Data, if our Instance isn't a Saved Instance
-            local _, _, steps = C_Scenario.GetStepInfo()
-            if steps > 0 then
-                local completedSteps = 0
-                for i=1, steps do
-                    local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
-                    if completed then
-                        completedSteps = completedSteps + 1
+            -- Attempt to use Scenario Data, if our Instance isn't a Saved Instance and is a Scenario
+            if C_Scenario.IsInScenario() then
+                local _, _, steps = C_Scenario.GetStepInfo()
+                if steps > 0 then
+                    local completedSteps = 0
+                    for i=1, steps do
+                        local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
+                        if completed then
+                            completedSteps = completedSteps + 1
+                        end
                     end
+                    lockoutData = {
+                        name = instanceName,
+                        difficulty = difficultyName,
+                        difficultyId = difficulty,
+                        currentEncounters = completedSteps,
+                        totalEncounters = steps,
+                        formattedEncounterData = ("(" .. completedSteps .. "/" .. steps .. ")")
+                    }
                 end
-                lockoutData = {
-                    name = instanceName,
-                    difficulty = difficultyName,
-                    difficultyId = difficulty,
-                    currentEncounters = completedSteps,
-                    totalEncounters = steps,
-                    formattedEncounterData = ("(" .. completedSteps .. "/" .. steps .. ")")
-                }
+            else
+                -- TODO: Add GetInstanceLockTimeRemaining implementation
             end
         end
     end
