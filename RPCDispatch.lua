@@ -213,7 +213,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
         end
         self:PaintSomething(encoded)
         if will_clean then
-            C_Timer.After(10, function()
+            C_Timer.After(self:GetFromDb("frameClearDelay"), function()
                 self:CleanFrames()
             end)
         end

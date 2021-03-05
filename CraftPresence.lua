@@ -417,7 +417,7 @@ function CraftPresence:OnEnable()
         )
     end
 
-    self:CreateFrames(6)
+    self:CreateFrames(self:GetFromDb("frameSize"))
     self:PaintMessageWait()
 end
 
@@ -475,7 +475,7 @@ end
 --- Updates the minimap status with config data
 --- @param update_state boolean Whether or not to update the icon state
 function CraftPresence:UpdateMinimapState(update_state)
-    minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
+    minimapState = { hide = not CraftPresence:GetFromDb("showMinimapIcon") }
     if update_state then
         if minimapState["hide"] then
             icon:Hide(L["ADDON_NAME"])

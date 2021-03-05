@@ -76,11 +76,19 @@ L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be kept off if you wish to avoid spam)."
 
 L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
-L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config."
+L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config. (May require a reload)"
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
-L["ERROR_CALLBACK_DELAY"] = "Error: Sanity Checks failed for Callback Delay. Please enter a numerical value above 0."
+L["ERROR_CALLBACK_DELAY"] = "Error: Sanity Checks failed for Callback Delay. Please enter a numerical value above 0 and below 30."
+
+L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after events before drawn frames are cleared (Doesn't effect debug states)"
+L["ERROR_FRAME_CLEAR_DELAY"] = "Error: Sanity Checks failed for Frame Clear Delay. Please enter a numerical value above 5 and below 15."
+
+L["TITLE_FRAME_SIZE"] = "Frame Render Size"
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The size that each frame pixel should render at (This value needs to be the same as the script's config_size property)"
+L["ERROR_FRAME_CLEAR_DELAY"] = "Error: Sanity Checks failed for Frame Render Size. Please enter a numerical value above 5 and below 15."
 
 -- Logging Data
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"

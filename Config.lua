@@ -22,7 +22,9 @@ local DB_DEFAULTS = {
         debugMode = false,
         verboseMode = false,
         showMinimapIcon = true,
-        callbackDelay = 2
+        callbackDelay = 2,
+        frameSize = 6,
+        frameClearDelay = 10
     },
 }
 
@@ -370,7 +372,7 @@ local extraOptionsGroup = {
         blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
         callbackDelay = {
             type = "range", order = 18, width = 1.50,
-            min = 0, max = 60, step = 1,
+            min = 0, max = 30, step = 1,
             name = L["TITLE_CALLBACK_DELAY"],
             desc = L["COMMENT_CALLBACK_DELAY"],
             get = function(_)
@@ -386,6 +388,42 @@ local extraOptionsGroup = {
             end,
         },
         blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
+        frameClearDelay = {
+            type = "range", order = 20, width = 1.50,
+            min = 5, max = 15, step = 1,
+            name = L["TITLE_FRAME_CLEAR_DELAY"],
+            desc = L["COMMENT_FRAME_CLEAR_DELAY"],
+            get = function(_)
+                return CraftPresence.GetFromDb(nil, "frameClearDelay")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence.GetFromDb(nil, "frameClearDelay")
+                local isValid = true
+                if isValid then
+                    CraftPresence.db.profile.frameClearDelay = value;
+                    CraftPresence:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
+                end
+            end,
+        },
+        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
+        frameSize = {
+            type = "range", order = 22, width = 1.50,
+            min = 5, max = 15, step = 1,
+            name = L["TITLE_FRAME_SIZE"],
+            desc = L["COMMENT_FRAME_SIZE"],
+            get = function(_)
+                return CraftPresence.GetFromDb(nil, "frameSize")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence.GetFromDb(nil, "frameSize")
+                local isValid = true
+                if isValid then
+                    CraftPresence.db.profile.frameSize = value;
+                    CraftPresence:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
+                end
+            end,
+        },
+        blank7 = { type = "description", order = 23, fontSize = "small", name = " " },
     }
 }
 
