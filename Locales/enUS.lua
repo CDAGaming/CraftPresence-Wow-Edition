@@ -92,12 +92,16 @@ L["VERBOSE_PLACEHOLDER_DATA"] = "%s Data: %s -> %s"
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
+L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
 -- Frame Text Data
 L["ADDON_INFO_ONE"] = "CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence."
 L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
 L["ADDON_INFO_THREE"] = "Thanks to Attka and wowdim on Github for the original base project, that makes this possible."
-L["ADDON_INFO_FOUR"] = "Special thanks to `the-emerald/python-discord-rpc` and `Attk4/wow-discord-rich-presence`"
+L["ADDON_INFO_FOUR"] = "Special thanks to the-emerald/python-discord-rpc and Attk4/wow-discord-rich-presence"
+
+L["ADDON_TOOLTIP_THREE"] = "Click to access config data."
+L["ADDON_TOOLTIP_FIVE"] = "Toggle minimap button by typing |c33c9fcff/cp minimap|r"
 -- Data Default Values
 L["ONLINE_LABEL"] = "Online"
 L["AFK_LABEL"] = "AFK"

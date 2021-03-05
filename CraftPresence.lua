@@ -5,19 +5,19 @@ local icon = LibStub("LibDBIcon-1.0")
 
 local minimapState = { hide = false }
 
-local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("CraftPresence", {
+local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
     type = "launcher",
     text = L["ADDON_NAME"],
-    icon = "Interface\\Addons\\CraftPresence\\images\\icon.blp",
+    icon = string.format("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
     OnClick = function(clickedframe, button)
         CraftPresence.ShowConfig()
     end,
     OnTooltipShow = function(tt)
         tt:AddLine(L["ADDON_NAME"])
         tt:AddLine(" ")
-        tt:AddLine("Click to access config data.")
+        tt:AddLine(L["ADDON_TOOLTIP_THREE"])
         tt:AddLine(" ")
-        tt:AddLine("Toggle minimap button by typing |c33c9fcff/cp minimap|r")
+        tt:AddLine(L["ADDON_TOOLTIP_FIVE"])
     end
 })
 
@@ -25,14 +25,30 @@ local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("
 -- Utilities
 -- ==================
 
+--- Determines whether the specified string contains digit characters
+---
+--- @param str string The input string to evaluate
+---
+--- @return boolean @ containsDigit
 function CraftPresence:ContainsDigit(str)
     return string.find(str, "%d") and true or false
 end
 
+--- Determines whether the specified string starts with the specified pattern
+---
+--- @param String string The input string to evaluate
+--- @param Start string The target string to locate at the first index
+---
+--- @return boolean @ startsWith
 function CraftPresence:StartsWith(String, Start)
     return string.sub(String, 1, string.len(Start)) == Start
 end
 
+--- Formats the following word to proper casing (Xxxx)
+---
+--- @param str string The input string to evaluate
+---
+--- @return string @ formattedString
 function CraftPresence:FormatWord(str)
     if (str == nil or str == "") then
         return str
@@ -359,8 +375,9 @@ local AddonDB_Defaults = {
     },
 }
 
+--- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
-    -- Called when the addon is loaded
+    -- Main Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", AddonDB_Defaults)
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable)
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
@@ -373,8 +390,9 @@ function CraftPresence:OnInitialize()
     icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
 end
 
+--- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Called when the addon is enabled
+    -- Print initial data and register events depending on platform
     self:Print(L["ADDON_INTRO"])
     version, build, date, toc_version = GetBuildInfo()
     if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
@@ -398,6 +416,9 @@ function CraftPresence:OnEnable()
     self:PaintMessageWait()
 end
 
+--- Registers the specified event for the subsequent argument values
+---
+--- @param event any The event tag to register with argument values
 function CraftPresence:AddTriggers(event, ...)
     local args = { ... }
     for _, v in ipairs(args) do
@@ -405,6 +426,12 @@ function CraftPresence:AddTriggers(event, ...)
     end
 end
 
+--- Retrieves Config Data based on the specified parameters
+---
+--- @param grp string The config group to retrieve
+--- @param key string The config key to retrieve
+---
+--- @return any configValue
 function CraftPresence:GetFromDb(grp, key, ...)
     local DB_DEFAULTS = CraftPresence:GetDefaults()
     if CraftPresence.db.profile[grp] == nil then
@@ -419,6 +446,7 @@ function CraftPresence:GetFromDb(grp, key, ...)
     return CraftPresence.db.profile[grp][key]
 end
 
+--- Dispatches and prepares a new frame update
 function CraftPresence:DispatchUpdate()
     local delay = self:GetFromDb("callbackDelay")
     if delay >= 1 and delay <= 60 then
@@ -430,10 +458,16 @@ function CraftPresence:DispatchUpdate()
     end
 end
 
+--- Instructions to be called when the addon is disabled
 function CraftPresence:OnDisable()
-    -- Called when the addon is disabled
+    -- Clean up Data before disabling
+    self:Print(L["ADDON_CLOSE"])
+    self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
+    icon:Hide(L["ADDON_NAME"])
 end
 
+--- Updates the minimap status with config data
+--- @param update_state boolean Whether or not to update the icon state
 function CraftPresence:UpdateMinimapState(update_state)
     minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
     if update_state then
@@ -445,12 +479,15 @@ function CraftPresence:UpdateMinimapState(update_state)
     end
 end
 
+--- Display the addon's config frame
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
     InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
 end
 
+--- Interprets the specified input to perform specific commands
+--- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
     if not input or input:trim() == "" then
         self:ShowConfig()
