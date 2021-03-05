@@ -1,10 +1,13 @@
 local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
--- Programmatically generate list of all dungeons and raids, to be used in determining what expansion
--- the instance your are currently inside, actually belongs to.
-
--- Generate table of dungeon and raid instances by expansion
 local InstanceTable
+
+--- Generate table of dungeon and raid instances by expansion
+---
+--- Programmatically generates a list of all dungeons and raids, to be used in determining what expansion
+--- the instance your are currently inside, actually belongs to.
+---
+--- @return table @ instTable
 function CraftPresence:GenerateInstanceTable()
     local instTable = {}
 
@@ -36,18 +39,18 @@ function CraftPresence:GenerateInstanceTable()
 end
 
 
---[[
-Figure out which expansion our current instance belongs to.
-
-Problem: Remade dungeons, such as Deadmines, belong to more than 1 expansion,
-but retain only one name and instanceID. Making a simple list of ID's insufficient.
-
-At the time of writing (Legion), remade Vanilla dungeons are all Heroic variants.
-Meaning, if we enter a "vanilla" instance, on Heroic difficulty, it must be a remake.
-We can then simply skip scanning Vanilla, the next hit will accurately tell us our real tier.
-
-This can break if something like a TBC instance is remade, for example, so this is a fragile approach.
---]]
+--- Figure out which expansion our current instance belongs to.
+---
+--- Problem: Remade dungeons, such as Deadmines, belong to more than 1 expansion,
+--- but retain only one name and instanceID. Making a simple list of ID's insufficient.
+---
+--- At the time of writing (Legion), remade Vanilla dungeons are all Heroic variants.
+--- Meaning, if we enter a "vanilla" instance, on Heroic difficulty, it must be a remake.
+--- We can then simply skip scanning Vanilla, the next hit will accurately tell us our real tier.
+---
+--- This can break if something like a TBC instance is remade, for example, so this is a fragile approach.
+---
+--- @return string @ instanceTier
 function CraftPresence:GetCurrentInstanceTier()
     -- Check that the InstanceTable even exists, if not, create it
     InstanceTable = InstanceTable or CraftPresence:GenerateInstanceTable()
@@ -74,10 +77,23 @@ function CraftPresence:GetCurrentInstanceTier()
         return "UnknownInstanceType"
     end
 
-    -- Perform the actual search, scanning by instanceID, skipping Classic if we're in Heroic
+    -- Perform the actual search, scanning by instanceID, returning UnknownTier
+    -- if said instance is unable to be located in the table
     return InstanceTable[instanceID] or "UnknownTier"
 end
 
+--- Retrieve current Instance/Scenario Lockout Data
+---
+--- Format:
+--- lockoutData {
+---     string @ name,
+---     string @ difficulty,
+---     number @ difficultyId,
+---     number @ currentEncounters,
+---     string @ formattedEncounterData
+--- }
+---
+--- @return table @ lockoutData
 function CraftPresence:GetCurrentLockoutData()
     local lockoutData = {
         name = "",
@@ -135,6 +151,16 @@ function CraftPresence:GetCurrentLockoutData()
     return lockoutData
 end
 
+--- Retrieves your currently owned Keystone Information
+---
+--- Format:
+--- keystoneInfo {
+---     string @ dungeon,
+---     number @ level,
+---     string @ formattedLevel
+--- }
+---
+--- @return table @ keystoneInfo
 function CraftPresence:GetOwnedKeystone()
     local keystoneInfo
     local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
@@ -159,6 +185,19 @@ function CraftPresence:GetOwnedKeystone()
     return keystoneInfo
 end
 
+--- Retrieves your currently active Keystone Information
+---
+--- Format:
+--- keystoneInfo {
+---     string @ dungeon,
+---     table @ activeAffixes,
+---     boolean @ wasCharged,
+---     number @ level,
+---     string @ formattedLevel,
+---     string @ formattedAffixes
+--- }
+---
+--- @return table @ keystoneInfo
 function CraftPresence:GetActiveKeystone()
     local keystoneInfo
     local mapID = C_ChallengeMode.GetActiveChallengeMapID()
