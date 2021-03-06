@@ -87,8 +87,8 @@ L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after events before drawn frames are
 L["ERROR_FRAME_CLEAR_DELAY"] = "Error: Sanity Checks failed for Frame Clear Delay. Please enter a numerical value above 5 and below 15."
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_CLEAR_DELAY"] = "The size that each frame pixel should render at (This value needs to be the same as the script's config_size property)"
-L["ERROR_FRAME_CLEAR_DELAY"] = "Error: Sanity Checks failed for Frame Render Size. Please enter a numerical value above 5 and below 15."
+L["COMMENT_FRAME_SIZE"] = "The size that each frame pixel should render at (This value needs to be the same as the script's config_size property)"
+L["ERROR_FRAME_SIZE"] = "Error: Sanity Checks failed for Frame Render Size. Please enter a numerical value above 5 and below 15."
 
 -- Logging Data
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
@@ -124,5 +124,5 @@ L["ERROR_LOG"] = "[Error] %s"
 L["WARNING_LOG"] = "[Warning] %s"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_AFFIX"] = "cp"
-L["ADDON_VERSION"] = "v0.0.9.6"
+L["ADDON_VERSION"] = "v0.0.9.7"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
