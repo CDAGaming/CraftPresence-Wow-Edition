@@ -162,7 +162,7 @@ def read_squares(hwnd):
     return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line
 
 
-print("========== DiscordRichPresence Service - v0.0.9.7 ==========")
+print("========== DiscordRichPresence Service - v0.1.0 ==========")
 print("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
 print("Note: Please keep this script open while logging and sending Rich Presence updates.")
 print("==========================================================")

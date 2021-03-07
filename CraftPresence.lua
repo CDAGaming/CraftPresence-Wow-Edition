@@ -383,7 +383,7 @@ local AddonDB_Defaults = {
 function CraftPresence:OnInitialize()
     -- Main Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", AddonDB_Defaults)
-    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable)
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, { string.lower(L["ADDON_NAME"]), L["ADDON_AFFIX"] })
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
     self.optionsFrame.default = self.ResetDB
     -- Command Registration
@@ -399,7 +399,7 @@ function CraftPresence:OnEnable()
     -- Print initial data and register events depending on platform
     self:Print(L["ADDON_INTRO"])
     version, build, date, toc_version = GetBuildInfo()
-    if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
+    if self:GetFromDb("verboseMode") then
         self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))
     end
     -- Register Universal Events
@@ -454,7 +454,7 @@ end
 --- Dispatches and prepares a new frame update
 function CraftPresence:DispatchUpdate()
     local delay = self:GetFromDb("callbackDelay")
-    if delay >= 1 and delay <= 60 then
+    if delay >= 1 and delay <= 30 then
         C_Timer.After(delay, function()
             self:PaintMessageWait()
         end)
@@ -495,34 +495,45 @@ end
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
-    if not input or input:trim() == "" then
-        self:ShowConfig()
+    if not input or input:trim() == "" or input == "help" then
+        self:Print(string.format(
+                L["HELP_COMMANDS"],
+                L["ADDON_NAME"],
+                L["ADDON_AFFIX"], string.lower(L["ADDON_NAME"])
+        ))
     else
         if input == "test" then
-            self:PaintMessageWait(true, false, false)
+            if self:GetFromDb("debugMode") then
+                self:PaintMessageWait(true, false, false)
+            else
+                self:Print(string.format(
+                        L["ERROR_LOG"], string.format(
+                                L["ERROR_COMMAND_CONFIG"],
+                                (L["TITLE_DEBUG_MODE"])
+                        )
+                ))
+            end
         elseif input == "clean" or input == "clear" then
             self:CleanFrames()
         elseif input == "update" then
             self:PaintMessageWait(true)
+        elseif input == "config" then
+            self:ShowConfig()
         elseif input == "minimap" then
-            -- This command event is a copy from Config.lua's update event for showMinimapIcon
-            local oldValue = self.db.profile.showMinimapIcon
-            self.db.profile.showMinimapIcon = not self.db.profile.showMinimapIcon
-            CraftPresence:UpdateMinimapState(true)
-            CraftPresence:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, self.db.profile.showMinimapIcon)
+            CraftPresence:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "status" then
-            if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
+            if self:GetFromDb("verboseMode") then
                 self:Print(self:GetLastEncoded())
             else
                 self:Print(string.format(
                         L["ERROR_LOG"], string.format(
                                 L["ERROR_COMMAND_CONFIG"],
-                                (L["TITLE_VERBOSE_MODE"] .. ", " .. L["TITLE_SHOW_LOGGING_IN_CHAT"])
+                                (L["TITLE_VERBOSE_MODE"])
                         )
                 ))
             end
         elseif input == "placeholders" then
-            if self:GetFromDb("verboseMode") and self:GetFromDb("showLoggingInChat") then
+            if self:GetFromDb("verboseMode") then
                 self:Print(string.format(L["VERBOSE_LOG"], L["VERBOSE_PLACEHOLDER_INTRO"]))
                 for key, value in pairs(global_placeholders) do
                     self:Print(string.format(
@@ -542,7 +553,7 @@ function CraftPresence:ChatCommand(input)
                 self:Print(string.format(
                         L["ERROR_LOG"], string.format(
                                 L["ERROR_COMMAND_CONFIG"],
-                                (L["TITLE_VERBOSE_MODE"] .. ", " .. L["TITLE_SHOW_LOGGING_IN_CHAT"])
+                                (L["TITLE_VERBOSE_MODE"])
                         )
                 ))
             end

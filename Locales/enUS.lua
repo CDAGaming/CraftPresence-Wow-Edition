@@ -1,5 +1,8 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
+local COLOR1 = '|cFF00FF7F'
+local COLOR2 = '|cfd9b9b9b'
+
 L["TITLE_CLIENT_ID"] = "Client ID"
 L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles"
 L["USAGE_CLIENT_ID"] = "<18-digit numerical id here>"
@@ -57,7 +60,7 @@ L["USAGE_ARENA_MESSAGE"] = "<Your message here>"
 L["DEFAULT_ARENA_MESSAGE"] = "@zone_name@ - In Arena"
 
 L["TITLE_FALLBACK_MESSAGE"] = "Default Placeholder Message"
-L["COMMENT_FALLBACK_MESSAGE"] = "The message(s) to be interpreted as the #default# placeholder (TODO: Can be annotated with :optional where used if you wish it to show standalone)."
+L["COMMENT_FALLBACK_MESSAGE"] = "The message(s) to be interpreted as the #default# placeholder."
 L["USAGE_FALLBACK_MESSAGE"] = "<Your message here>"
 L["DEFAULT_FALLBACK_MESSAGE"] = "@zone_info@@dead_state@"
 
@@ -65,9 +68,6 @@ L["TITLE_DEAD_MESSAGE"] = "Dead State Inner Placeholder Message"
 L["COMMENT_DEAD_MESSAGE"] = "The message(s) to be interpreted as the @dead_state@ placeholder."
 L["USAGE_DEAD_MESSAGE"] = "<Your message here>"
 L["DEFAULT_DEAD_MESSAGE"] = "Corpse Running"
-
-L["TITLE_SHOW_LOGGING_IN_CHAT"] = "Show Logging in Chat"
-L["COMMENT_SHOW_LOGGING_IN_CHAT"] = "Toggles the display of logging within chat."
 
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
@@ -102,6 +102,18 @@ L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to acces
 L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
+-- Command Data
+L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
+ */cp|r or */craftpresence|r or */cp|r ^help|r  -  Displays this helpful menu.
+ */cp|r ^config|r  -  Displays the *OptionsUI|r.
+ */cp|r ^test|r  -  Toggles debugging of Rich Presence Frames.
+ */cp|r ^clean|r or */cp|r ^clear|r  -  Reset all frames to their original positions and colors.
+ */cp|r ^update|r  -  Forcibly update your Rich Presence display.
+ */cp|r ^minimap|r  -  Toggles the display of the minimap button.
+ */cp|r ^status|r  -  Views the last sent Rich Presence event.
+ */cp|r ^placeholders|r  -  Views the currently available placeholders.
+ NOTE: All commands must be prefixed with either */%s|r or */%s|r
+]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
 -- Frame Text Data
 L["ADDON_INFO_ONE"] = "CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence."
 L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
@@ -124,5 +136,5 @@ L["ERROR_LOG"] = "[Error] %s"
 L["WARNING_LOG"] = "[Warning] %s"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_AFFIX"] = "cp"
-L["ADDON_VERSION"] = "v0.0.9.7"
+L["ADDON_VERSION"] = "v0.1.0"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"

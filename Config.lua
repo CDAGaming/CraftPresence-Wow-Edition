@@ -18,7 +18,6 @@ local DB_DEFAULTS = {
         arenaPlaceholderMessage = L["DEFAULT_ARENA_MESSAGE"],
         defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
         deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
-        showLoggingInChat = true,
         debugMode = false,
         verboseMode = false,
         showMinimapIcon = true,
@@ -38,7 +37,7 @@ local generalOptionsGroup = {
         return CraftPresence.db.profile[info[#info]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value;
+        CraftPresence.db.profile[info[#info]] = value
     end,
     args = {
         clientId = {
@@ -47,13 +46,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_CLIENT_ID"],
             usage = L["USAGE_CLIENT_ID"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "clientId")
+                return CraftPresence:GetFromDb("clientId")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "clientId")
+                local oldValue = CraftPresence:GetFromDb("clientId")
                 local isValid = (value ~= nil and CraftPresence:ContainsDigit(value) and string.len(value) == 18)
                 if isValid then
-                    CraftPresence.db.profile.clientId = value;
+                    CraftPresence.db.profile.clientId = value
                     CraftPresence:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)
                 end
             end,
@@ -65,13 +64,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_GAME_STATE_MESSAGE"],
             usage = L["USAGE_GAME_STATE_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "gameStateMessage")
+                return CraftPresence:GetFromDb("gameStateMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "gameStateMessage")
+                local oldValue = CraftPresence:GetFromDb("gameStateMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.gameStateMessage = value;
+                    CraftPresence.db.profile.gameStateMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_GAME_STATE_MESSAGE"], oldValue, value)
                 end
             end,
@@ -83,13 +82,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_DETAILS_MESSAGE"],
             usage = L["USAGE_DETAILS_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "detailsMessage")
+                return CraftPresence:GetFromDb("detailsMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "detailsMessage")
+                local oldValue = CraftPresence:GetFromDb("detailsMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.detailsMessage = value;
+                    CraftPresence.db.profile.detailsMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_DETAILS_MESSAGE"], oldValue, value)
                 end
             end,
@@ -101,13 +100,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_LARGE_IMAGE_KEY"],
             usage = L["USAGE_LARGE_IMAGE_KEY"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "largeImageKey")
+                return CraftPresence:GetFromDb("largeImageKey")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "largeImageKey")
+                local oldValue = CraftPresence:GetFromDb("largeImageKey")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.largeImageKey = value;
+                    CraftPresence.db.profile.largeImageKey = value
                     CraftPresence:PrintChangedValue(L["TITLE_LARGE_IMAGE_KEY"], oldValue, value)
                 end
             end,
@@ -119,13 +118,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_LARGE_IMAGE_MESSAGE"],
             usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "largeImageMessage")
+                return CraftPresence:GetFromDb("largeImageMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "largeImageMessage")
+                local oldValue = CraftPresence:GetFromDb("largeImageMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.largeImageMessage = value;
+                    CraftPresence.db.profile.largeImageMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_LARGE_IMAGE_MESSAGE"], oldValue, value)
                 end
             end,
@@ -137,13 +136,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_SMALL_IMAGE_KEY"],
             usage = L["USAGE_SMALL_IMAGE_KEY"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "smallImageKey")
+                return CraftPresence:GetFromDb("smallImageKey")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "smallImageKey")
+                local oldValue = CraftPresence:GetFromDb("smallImageKey")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.smallImageKey = value;
+                    CraftPresence.db.profile.smallImageKey = value
                     CraftPresence:PrintChangedValue(L["TITLE_SMALL_IMAGE_KEY"], oldValue, value)
                 end
             end,
@@ -155,13 +154,13 @@ local generalOptionsGroup = {
             desc = L["COMMENT_SMALL_IMAGE_MESSAGE"],
             usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "smallImageMessage")
+                return CraftPresence:GetFromDb("smallImageMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "smallImageMessage")
+                local oldValue = CraftPresence:GetFromDb("smallImageMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.smallImageMessage = value;
+                    CraftPresence.db.profile.smallImageMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_SMALL_IMAGE_MESSAGE"], oldValue, value)
                 end
             end,
@@ -179,7 +178,7 @@ local placeholderOptionsGroup = {
         return CraftPresence.db.profile[info[#info]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value;
+        CraftPresence.db.profile[info[#info]] = value
     end,
     args = {
         dungeonPlaceholderMessage = {
@@ -188,13 +187,13 @@ local placeholderOptionsGroup = {
             desc = L["COMMENT_DUNGEON_MESSAGE"],
             usage = L["USAGE_DUNGEON_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "dungeonPlaceholderMessage")
+                return CraftPresence:GetFromDb("dungeonPlaceholderMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "dungeonPlaceholderMessage")
+                local oldValue = CraftPresence:GetFromDb("dungeonPlaceholderMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.dungeonPlaceholderMessage = value;
+                    CraftPresence.db.profile.dungeonPlaceholderMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_DUNGEON_MESSAGE"], oldValue, value)
                 end
             end,
@@ -204,13 +203,13 @@ local placeholderOptionsGroup = {
             type = "input", order = 12, width = 3.0,
             name = L["TITLE_RAID_MESSAGE"], desc = L["COMMENT_RAID_MESSAGE"], usage = L["USAGE_RAID_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "raidPlaceholderMessage")
+                return CraftPresence:GetFromDb("raidPlaceholderMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "raidPlaceholderMessage")
+                local oldValue = CraftPresence:GetFromDb("raidPlaceholderMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.raidPlaceholderMessage = value;
+                    CraftPresence.db.profile.raidPlaceholderMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_RAID_MESSAGE"], oldValue, value)
                 end
             end,
@@ -222,13 +221,13 @@ local placeholderOptionsGroup = {
             desc = L["COMMENT_BATTLEGROUND_MESSAGE"],
             usage = L["USAGE_BATTLEGROUND_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "battlegroundPlaceholderMessage")
+                return CraftPresence:GetFromDb("battlegroundPlaceholderMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "battlegroundPlaceholderMessage")
+                local oldValue = CraftPresence:GetFromDb("battlegroundPlaceholderMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.battlegroundPlaceholderMessage = value;
+                    CraftPresence.db.profile.battlegroundPlaceholderMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_BATTLEGROUND_MESSAGE"], oldValue, value)
                 end
             end,
@@ -240,13 +239,13 @@ local placeholderOptionsGroup = {
             desc = L["COMMENT_ARENA_MESSAGE"],
             usage = L["USAGE_ARENA_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "arenaPlaceholderMessage")
+                return CraftPresence:GetFromDb("arenaPlaceholderMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "arenaPlaceholderMessage")
+                local oldValue = CraftPresence:GetFromDb("arenaPlaceholderMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.arenaPlaceholderMessage = value;
+                    CraftPresence.db.profile.arenaPlaceholderMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_ARENA_MESSAGE"], oldValue, value)
                 end
             end,
@@ -258,13 +257,13 @@ local placeholderOptionsGroup = {
             desc = L["COMMENT_FALLBACK_MESSAGE"],
             usage = L["USAGE_FALLBACK_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "defaultPlaceholderMessage")
+                return CraftPresence:GetFromDb("defaultPlaceholderMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "defaultPlaceholderMessage")
+                local oldValue = CraftPresence:GetFromDb("defaultPlaceholderMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.defaultPlaceholderMessage = value;
+                    CraftPresence.db.profile.defaultPlaceholderMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_FALLBACK_MESSAGE"], oldValue, value)
                 end
             end,
@@ -274,13 +273,13 @@ local placeholderOptionsGroup = {
             type = "input", order = 20, width = 3.0,
             name = L["TITLE_DEAD_MESSAGE"], desc = L["COMMENT_DEAD_MESSAGE"], usage = L["USAGE_DEAD_MESSAGE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "deadStateInnerMessage")
+                return CraftPresence:GetFromDb("deadStateInnerMessage")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "deadStateInnerMessage")
+                local oldValue = CraftPresence:GetFromDb("deadStateInnerMessage")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.deadStateInnerMessage = value;
+                    CraftPresence.db.profile.deadStateInnerMessage = value
                     CraftPresence:PrintChangedValue(L["TITLE_DEAD_MESSAGE"], oldValue, value)
                 end
             end,
@@ -298,132 +297,109 @@ local extraOptionsGroup = {
         return CraftPresence.db.profile[info[#info]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value;
+        CraftPresence.db.profile[info[#info]] = value
     end,
     args = {
-        showLoggingInChat = {
-            type = "toggle", order = 10,
-            name = L["TITLE_SHOW_LOGGING_IN_CHAT"],
-            desc = L["COMMENT_SHOW_LOGGING_IN_CHAT"],
-            get = function(_)
-                return CraftPresence.GetFromDb(nil, "showLoggingInChat")
-            end,
-            set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "showLoggingInChat")
-                local isValid = true
-                if isValid then
-                    CraftPresence.db.profile.showLoggingInChat = value;
-                    CraftPresence:PrintChangedValue(L["TITLE_SHOW_LOGGING_IN_CHAT"], oldValue, value)
-                end
-            end,
-        },
-        blank1 = { type = "description", order = 11, fontSize = "small", name = " " },
         debugMode = {
-            type = "toggle", order = 12,
+            type = "toggle", order = 10,
             name = L["TITLE_DEBUG_MODE"],
             desc = L["COMMENT_DEBUG_MODE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "debugMode")
+                return CraftPresence:GetFromDb("debugMode")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "debugMode")
+                local oldValue = CraftPresence:GetFromDb("debugMode")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.debugMode = value;
+                    CraftPresence.db.profile.debugMode = value
                     CraftPresence:PrintChangedValue(L["TITLE_DEBUG_MODE"], oldValue, value)
                 end
             end,
         },
-        blank2 = { type = "description", order = 13, fontSize = "small", name = " " },
+        blank1 = { type = "description", order = 11, fontSize = "small", name = " " },
         verboseMode = {
-            type = "toggle", order = 14,
+            type = "toggle", order = 12,
             name = L["TITLE_VERBOSE_MODE"],
             desc = L["COMMENT_VERBOSE_MODE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "verboseMode")
+                return CraftPresence:GetFromDb("verboseMode")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "verboseMode")
+                local oldValue = CraftPresence:GetFromDb("verboseMode")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.verboseMode = value;
+                    CraftPresence.db.profile.verboseMode = value
                     CraftPresence:PrintChangedValue(L["TITLE_VERBOSE_MODE"], oldValue, value)
                 end
             end,
         },
-        blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        blank2 = { type = "description", order = 13, fontSize = "small", name = " " },
         showMinimapIcon = {
-            type = "toggle", order = 16,
+            type = "toggle", order = 14,
             name = L["TITLE_SHOW_MINIMAP_ICON"],
             desc = L["COMMENT_SHOW_MINIMAP_ICON"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "showMinimapIcon")
+                return CraftPresence:GetFromDb("showMinimapIcon")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "showMinimapIcon")
-                local isValid = true
-                if isValid then
-                    CraftPresence.db.profile.showMinimapIcon = value;
-                    CraftPresence:UpdateMinimapState(true)
-                    CraftPresence:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, value)
-                end
+                CraftPresence:UpdateMinimapSetting(value)
             end,
         },
-        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
+        blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
         callbackDelay = {
-            type = "range", order = 18, width = 1.50,
+            type = "range", order = 16, width = 1.50,
             min = 0, max = 30, step = 1,
             name = L["TITLE_CALLBACK_DELAY"],
             desc = L["COMMENT_CALLBACK_DELAY"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "callbackDelay")
+                return CraftPresence:GetFromDb("callbackDelay")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "callbackDelay")
+                local oldValue = CraftPresence:GetFromDb("callbackDelay")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.callbackDelay = value;
+                    CraftPresence.db.profile.callbackDelay = value
                     CraftPresence:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
                 end
             end,
         },
-        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
+        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
         frameClearDelay = {
-            type = "range", order = 20, width = 1.50,
+            type = "range", order = 18, width = 1.50,
             min = 5, max = 15, step = 1,
             name = L["TITLE_FRAME_CLEAR_DELAY"],
             desc = L["COMMENT_FRAME_CLEAR_DELAY"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "frameClearDelay")
+                return CraftPresence:GetFromDb("frameClearDelay")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "frameClearDelay")
+                local oldValue = CraftPresence:GetFromDb("frameClearDelay")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.frameClearDelay = value;
+                    CraftPresence.db.profile.frameClearDelay = value
                     CraftPresence:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                 end
             end,
         },
-        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
+        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
         frameSize = {
-            type = "range", order = 22, width = 1.50,
+            type = "range", order = 20, width = 1.50,
             min = 5, max = 15, step = 1,
             name = L["TITLE_FRAME_SIZE"],
             desc = L["COMMENT_FRAME_SIZE"],
             get = function(_)
-                return CraftPresence.GetFromDb(nil, "frameSize")
+                return CraftPresence:GetFromDb("frameSize")
             end,
             set = function(_, value)
-                local oldValue = CraftPresence.GetFromDb(nil, "frameSize")
+                local oldValue = CraftPresence:GetFromDb("frameSize")
                 local isValid = true
                 if isValid then
-                    CraftPresence.db.profile.frameSize = value;
+                    CraftPresence.db.profile.frameSize = value
                     CraftPresence:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
                 end
             end,
         },
-        blank7 = { type = "description", order = 23, fontSize = "small", name = " " },
+        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
     }
 }
 
@@ -467,23 +443,23 @@ function CraftPresence:getOptionsTable()
             return CraftPresence.db.profile[info[#info]]
         end,
         set = function(info, value)
-            CraftPresence.db.profile[info[#info]] = value;
+            CraftPresence.db.profile[info[#info]] = value
         end,
         args = {
-            generalOptionsGrp = generalOptionsGroup,
-            placeholderOptionsGrp = placeholderOptionsGroup,
-            extraOptionsGrp = extraOptionsGroup,
-            profilesGrp = profilesGroup,
-            aboutGrp = aboutGroup,
+            generalOptions = generalOptionsGroup,
+            placeholderOptions = placeholderOptionsGroup,
+            extraOptions = extraOptionsGroup,
+            profiles = profilesGroup,
+            about = aboutGroup,
         },
-    };
-    return opts;
+    }
+    return opts
 end
 
 --- Retrieves whether or not logging changed data is allowed
 --- @return boolean @ canLogChanges
 function CraftPresence:CanLogChanges()
-    return (CraftPresence.GetFromDb(nil, "verboseMode") and CraftPresence.GetFromDb(nil, "showLoggingInChat"))
+    return CraftPresence:GetFromDb("verboseMode")
 end
 
 --- Prints change data, if possible, using the specified parameters
@@ -503,10 +479,22 @@ function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
     end
 end
 
+--- Updates showMinimapIcon with the specified value
+--- @param newValue boolean The new value to change showMinimapIcon to
+function CraftPresence:UpdateMinimapSetting(newValue)
+    local oldValue = CraftPresence.db.profile.showMinimapIcon
+    local isValid = true
+    if isValid then
+        CraftPresence.db.profile.showMinimapIcon = newValue
+        CraftPresence:UpdateMinimapState(true)
+        CraftPresence:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
+    end
+end
+
 --- Retrieves the default settings for the config menu
 --- @return table @ DB_DEFAULTS
 function CraftPresence:GetDefaults()
-    return DB_DEFAULTS;
+    return DB_DEFAULTS
 end
 
 --- Resets the settings in the config to their defaults

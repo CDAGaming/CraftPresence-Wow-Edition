@@ -19,7 +19,7 @@ end
 --- @return table @ frames
 function CraftPresence:CreateFrames(size)
     frame_count = math.floor(GetScreenWidth() / size)
-    if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
+    if self:GetFromDb("debugMode") then
         self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
@@ -83,7 +83,7 @@ end
 function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     if text:len() >= max_bytes then
-        if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
+        if self:GetFromDb("debugMode") then
             self:Print(string.format(
                     L["ERROR_LOG"], string.format(
                             L["ERROR_BYTE_OVERFLOW"], tostring(#text), tostring(max_bytes)
@@ -208,14 +208,19 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
         if will_update then
             last_encoded = encoded
         end
-        if self:GetFromDb("debugMode") and self:GetFromDb("showLoggingInChat") then
+        if self:GetFromDb("debugMode") then
             self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_SEND_ACTIVITY"], encoded:gsub("|", "||"))))
         end
         self:PaintSomething(encoded)
         if will_clean then
-            C_Timer.After(self:GetFromDb("frameClearDelay"), function()
+            local delay = self:GetFromDb("frameClearDelay")
+            if delay >= 5 and delay <= 15 then
+                C_Timer.After(delay, function()
+                    self:CleanFrames()
+                end)
+            else
                 self:CleanFrames()
-            end)
+            end
         end
     end
 end
