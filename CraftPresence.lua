@@ -406,7 +406,7 @@ function CraftPresence:OnEnable()
     CraftPresence:AddTriggers("DispatchUpdate",
             "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED", "PLAYER_UNGHOST", "PLAYER_FLAGS_CHANGED",
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-            "BOSS_KILL"
+            "BOSS_KILL", "ENCOUNTER_START", "ENCOUNTER_END"
     )
     -- Register Retail-Only Events
     if toc_version >= retail_toc then
