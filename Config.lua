@@ -2,6 +2,16 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
+-- SCHEMA_DEFAULTS
+local SCHEMA_DEFAULTS = {
+    global = {
+        Characters = {
+            ['*'] = {
+            },
+        },
+    },
+}
+
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
     profile = {
@@ -495,6 +505,12 @@ end
 --- @return table @ DB_DEFAULTS
 function CraftPresence:GetDefaults()
     return DB_DEFAULTS
+end
+
+--- Retrieves the default schema settings for the config menu
+--- @return table @ SCHEMA_DEFAULTS
+function CraftPresence:GetSchemaDefaults()
+    return SCHEMA_DEFAULTS
 end
 
 --- Resets the settings in the config to their defaults

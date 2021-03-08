@@ -370,24 +370,17 @@ function CraftPresence:EncodeConfigData()
     )
 end
 
-local AddonDB_Defaults = {
-    global = {
-        Characters = {
-            ['*'] = {
-            },
-        },
-    },
-}
-
 --- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
     -- Main Initialization
-    self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", AddonDB_Defaults)
-    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, { string.lower(L["ADDON_NAME"]), L["ADDON_AFFIX"] })
+    self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetSchemaDefaults())
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
+        L["ADDON_ID"], L["ADDON_AFFIX"]
+    })
     self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
     self.optionsFrame.default = self.ResetDB
     -- Command Registration
-    self:RegisterChatCommand(string.lower(L["ADDON_NAME"]), "ChatCommand")
+    self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
     -- Icon Registration
     self:UpdateMinimapState(false)
@@ -416,7 +409,7 @@ function CraftPresence:OnEnable()
                 "SCENARIO_COMPLETED"
         )
     end
-
+    -- Create initial frames and initial rpc update
     self:CreateFrames(self:GetFromDb("frameSize"))
     self:PaintMessageWait()
 end
@@ -497,9 +490,8 @@ end
 function CraftPresence:ChatCommand(input)
     if not input or input:trim() == "" or input == "help" then
         self:Print(string.format(
-                L["HELP_COMMANDS"],
-                L["ADDON_NAME"],
-                L["ADDON_AFFIX"], string.lower(L["ADDON_NAME"])
+                L["HELP_COMMANDS"], L["ADDON_NAME"],
+                L["ADDON_AFFIX"], L["ADDON_ID"]
         ))
     else
         if input == "test" then
@@ -508,8 +500,7 @@ function CraftPresence:ChatCommand(input)
             else
                 self:Print(string.format(
                         L["ERROR_LOG"], string.format(
-                                L["ERROR_COMMAND_CONFIG"],
-                                (L["TITLE_DEBUG_MODE"])
+                                L["ERROR_COMMAND_CONFIG"], L["TITLE_DEBUG_MODE"]
                         )
                 ))
             end
@@ -527,8 +518,7 @@ function CraftPresence:ChatCommand(input)
             else
                 self:Print(string.format(
                         L["ERROR_LOG"], string.format(
-                                L["ERROR_COMMAND_CONFIG"],
-                                (L["TITLE_VERBOSE_MODE"])
+                                L["ERROR_COMMAND_CONFIG"], L["TITLE_VERBOSE_MODE"]
                         )
                 ))
             end
@@ -552,8 +542,7 @@ function CraftPresence:ChatCommand(input)
             else
                 self:Print(string.format(
                         L["ERROR_LOG"], string.format(
-                                L["ERROR_COMMAND_CONFIG"],
-                                (L["TITLE_VERBOSE_MODE"])
+                                L["ERROR_COMMAND_CONFIG"], L["TITLE_VERBOSE_MODE"]
                         )
                 ))
             end
