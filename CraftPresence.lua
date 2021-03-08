@@ -63,7 +63,7 @@ end
 
 -- Compatibility Data
 local version, build, date, toc_version
-local retail_toc = 90002
+local retail_toc = 90005
 local classic_toc = 11306
 -- Storage Data
 local realmData = { "US", "KR", "EU", "TW", "CH" }
