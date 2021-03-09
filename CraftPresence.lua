@@ -304,10 +304,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
     return outputTable, queued_inner_placeholders, queued_time_conditions
 end
 
---- Re-Initialize and Sync Placeholder and Conditional Data
---- @return string @ newEncodedString
-function CraftPresence:EncodeConfigData()
-    -- Variable Setup
+--- Synchronize Conditional Data with Game Info
+--- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
+function CraftPresence:SyncConditions()
     global_placeholders = {
         ["#dungeon#"] = self:GetFromDb("dungeonPlaceholderMessage"),
         ["#raid#"] = self:GetFromDb("raidPlaceholderMessage"),
@@ -317,7 +316,14 @@ function CraftPresence:EncodeConfigData()
     }
     inner_placeholders = {}
     time_conditions = {}
-    global_placeholders, inner_placeholders, time_conditions = self:ParseGameData(global_placeholders)
+    return self:ParseGameData(global_placeholders)
+end
+
+--- Creates and encodes a new RPC event from placeholder and conditional data
+--- @return string @ newEncodedString
+function CraftPresence:EncodeConfigData()
+    -- Sync Variable Data
+    global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
     -- RPC Data syncing
     local queued_details = self:GetFromDb("detailsMessage")
     local queued_state = self:GetFromDb("gameStateMessage")
@@ -528,6 +534,7 @@ function CraftPresence:ChatCommand(input)
         elseif input == "placeholders" then
             if self:GetFromDb("verboseMode") then
                 self:Print(string.format(L["VERBOSE_LOG"], L["VERBOSE_PLACEHOLDER_INTRO"]))
+                global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
                 for key, value in pairs(global_placeholders) do
                     self:Print(string.format(
                             L["VERBOSE_LOG"], string.format(
