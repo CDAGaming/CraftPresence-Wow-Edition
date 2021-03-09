@@ -201,7 +201,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
     local user_info_preset = playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel))
     if toc_version >= retail_toc then
         -- Extra Character Data
-        local titleName = UnitPVPName("player") or playerName
+        local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
         local specId, specName, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
         local roleName = self:FormatWord(GetSpecializationRoleByID(specId))
