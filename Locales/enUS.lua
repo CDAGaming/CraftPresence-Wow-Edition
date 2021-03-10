@@ -80,15 +80,18 @@ L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used 
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
-L["ERROR_CALLBACK_DELAY"] = "Error: Sanity Checks failed for Callback Delay. Please enter a numerical value above 0 and below 30."
+L["MINIMUM_CALLBACK_DELAY"] = 0
+L["MAXIMUM_CALLBACK_DELAY"] = 30
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
 L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after events before drawn frames are cleared (Doesn't effect debug states)"
-L["ERROR_FRAME_CLEAR_DELAY"] = "Error: Sanity Checks failed for Frame Clear Delay. Please enter a numerical value above 5 and below 15."
+L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
+L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
 L["COMMENT_FRAME_SIZE"] = "The size that each frame pixel should render at (This value needs to be the same as the script's config_size property)"
-L["ERROR_FRAME_SIZE"] = "Error: Sanity Checks failed for Frame Render Size. Please enter a numerical value above 5 and below 15."
+L["MINIMUM_FRAME_SIZE"] = 5
+L["MAXIMUM_FRAME_SIZE"] = 15
 
 -- Logging Data
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
@@ -102,6 +105,8 @@ L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to acces
 L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
+-- Config Error Standards
+L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 -- Command Data
 L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  */cp|r or */craftpresence|r or */cp|r ^help|r  -  Displays this helpful menu.

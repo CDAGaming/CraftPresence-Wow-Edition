@@ -214,7 +214,9 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
         self:PaintSomething(encoded)
         if will_clean then
             local delay = self:GetFromDb("frameClearDelay")
-            if delay >= 5 and delay <= 15 then
+            if (self:IsWithinValue(
+                    delay, math.max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"], true
+            )) then
                 C_Timer.After(delay, function()
                     self:CleanFrames()
                 end)

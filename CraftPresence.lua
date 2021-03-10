@@ -57,6 +57,41 @@ function CraftPresence:FormatWord(str)
     return (str:sub(1, 1):upper() .. str:sub(2))
 end
 
+--- Determines whether the specified value is within the specified range
+---
+--- @param value number The specified value to interpret
+--- @param min number The minimum the value is allowed to be
+--- @param max number The maximum the value is allowed to be
+--- @param contains boolean Whether the range should include min and max
+--- @param check_sanity boolean Whether to sanity check the min and max values
+---
+--- @return boolean @ isWithinValue
+function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
+    -- Sanity checks
+    local will_verify = (check_sanity == nil or check_sanity == true)
+    if will_verify then
+        if min > max then
+            min = max
+        end
+        if max < min then
+            max = min
+        end
+        if min < 0 then
+            min = 0
+        end
+        if max < 0 then
+            max = 0
+        end
+    end
+    -- Contains Checks
+    local will_contain = (contains ~= nil and contains == true)
+    if not will_contain then
+        min = min + 1
+        max = max - 1
+    end
+    return (value >= min and value <= max)
+end
+
 -- ==================
 -- RPC Data
 -- ==================
@@ -456,7 +491,7 @@ end
 --- Dispatches and prepares a new frame update
 function CraftPresence:DispatchUpdate()
     local delay = self:GetFromDb("callbackDelay")
-    if delay >= 1 and delay <= 30 then
+    if self:IsWithinValue(delay, math.max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"], true) then
         C_Timer.After(delay, function()
             self:PaintMessageWait()
         end)
