@@ -433,7 +433,8 @@ end
 
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Print initial data and register events depending on platform
+    -- Print initial data and register events
+    -- depending on platform and config data
     self:Print(L["ADDON_INTRO"])
     version, build, date, toc_version = GetBuildInfo()
     if self:GetFromDb("verboseMode") then
