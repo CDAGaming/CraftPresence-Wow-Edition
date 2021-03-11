@@ -98,8 +98,12 @@ L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
-L["VERBOSE_PLACEHOLDER_INTRO"] = "Available Placeholders (<key> -> <value>):"
-L["VERBOSE_PLACEHOLDER_DATA"] = "%s Data: %s -> %s"
+L["VERBOSE_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r -> ^<value>|r):]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
+L["VERBOSE_PLACEHOLDER_DATA"] = ([=[*%s|r -> ^%s|r]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
+L["VERBOSE_PLACEHOLDER_NOTE"] = ([=[
+NOTE: Placeholder keys surrounded by *#|r are global (Can include inner placeholders),
+while ones surrounded by *@|r are inner (Cannot include other placeholders)
+]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
@@ -109,7 +113,7 @@ L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 -- Command Data
 L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
- */cp|r or */craftpresence|r or */cp|r ^help|r  -  Displays this helpful menu.
+ */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.
  */cp|r ^config|r  -  Displays the *OptionsUI|r.
  */cp|r ^test|r  -  Toggles debugging of Rich Presence Frames.
  */cp|r ^clean|r or */cp|r ^clear|r  -  Reset all frames to their original positions and colors.

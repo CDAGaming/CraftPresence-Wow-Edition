@@ -532,7 +532,7 @@ end
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
-    if not input or input:trim() == "" or input == "help" then
+    if not input or input:trim() == "" or input == "help" or input == "?" then
         self:Print(string.format(
                 L["HELP_COMMANDS"], L["ADDON_NAME"],
                 L["ADDON_AFFIX"], L["ADDON_ID"]
@@ -567,30 +567,20 @@ function CraftPresence:ChatCommand(input)
                 ))
             end
         elseif input == "placeholders" then
-            if self:GetFromDb("verboseMode") then
-                self:Print(string.format(L["VERBOSE_LOG"], L["VERBOSE_PLACEHOLDER_INTRO"]))
-                global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
-                for key, value in pairs(global_placeholders) do
-                    self:Print(string.format(
-                            L["VERBOSE_LOG"], string.format(
-                                    L["VERBOSE_PLACEHOLDER_DATA"], "Global", key, value
-                            )
-                    ))
-                end
-                for innerKey, innerValue in pairs(inner_placeholders) do
-                    self:Print(string.format(
-                            L["VERBOSE_LOG"], string.format(
-                                    L["VERBOSE_PLACEHOLDER_DATA"], "Inner", innerKey, innerValue
-                            )
-                    ))
-                end
-            else
-                self:Print(string.format(
-                        L["ERROR_LOG"], string.format(
-                                L["ERROR_COMMAND_CONFIG"], L["TITLE_VERBOSE_MODE"]
-                        )
+            local placeholderString = L["VERBOSE_PLACEHOLDER_INTRO"]
+            global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
+            for key, value in pairs(global_placeholders) do
+                placeholderString = placeholderString .. "\n " .. (string.format(
+                        L["VERBOSE_PLACEHOLDER_DATA"], key, value
                 ))
             end
+            for innerKey, innerValue in pairs(inner_placeholders) do
+                placeholderString = placeholderString .. "\n " .. (string.format(
+                        L["VERBOSE_PLACEHOLDER_DATA"], innerKey, innerValue
+                ))
+            end
+            placeholderString = placeholderString .. "\n" .. L["VERBOSE_PLACEHOLDER_NOTE"]
+            self:Print(placeholderString)
         else
             LibStub("AceConfigCmd-3.0"):HandleCommand(L["ADDON_AFFIX"], L["ADDON_NAME"], input)
         end
