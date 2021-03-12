@@ -452,7 +452,7 @@ function CraftPresence:OnEnable()
         CraftPresence:AddTriggers("DispatchUpdate",
                 "PLAYER_SPECIALIZATION_CHANGED",
                 "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
-                "SCENARIO_COMPLETED", "CRITERIA_UPDATE"
+                "SCENARIO_COMPLETED", "SCENARIO_CRITERIA_UPDATE"
         )
     end
     -- Create initial frames and initial rpc update
