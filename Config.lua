@@ -473,7 +473,7 @@ function CraftPresence:getOptionsTable()
 
     local opts = {
         type = "group", childGroups = "tab",
-        name = string.format("%s %s", L["ADDON_NAME"], CraftPresence.addonVersion),
+        name = string.format("%s %s", L["ADDON_NAME"], CraftPresence:GetVersion()),
         get = function(info)
             return CraftPresence.db.profile[info[#info]]
         end,
@@ -528,7 +528,7 @@ end
 --- @param newValue boolean The new value to change showMinimapIcon to
 function CraftPresence:UpdateMinimapSetting(newValue)
     local oldValue = CraftPresence.db.profile.showMinimapIcon
-    local isValid = true
+    local isValid = (type(newValue) == "boolean")
     if isValid then
         CraftPresence.db.profile.showMinimapIcon = newValue
         CraftPresence:UpdateMinimapState(true)

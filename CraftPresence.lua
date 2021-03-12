@@ -436,8 +436,7 @@ end
 function CraftPresence:OnEnable()
     -- Print initial data and register events
     -- depending on platform and config data
-    addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
-    self:Print(string.format(L["ADDON_INTRO"], addonVersion))
+    self:Print(string.format(L["ADDON_INTRO"], self:GetVersion()))
     version, build, date, toc_version = GetBuildInfo()
     if self:GetFromDb("verboseMode") then
         self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))
@@ -530,6 +529,15 @@ function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
     InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+end
+
+--- Getter for CraftPresence:addonVersion
+--- @return string addonVersion
+function CraftPresence:GetVersion()
+    if addonVersion == nil or addonVersion == "" then
+        addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
+    end
+    return addonVersion
 end
 
 --- Interprets the specified input to perform specific commands
