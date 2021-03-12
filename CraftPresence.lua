@@ -450,7 +450,7 @@ function CraftPresence:OnEnable()
     -- Register Retail-Only Events
     if toc_version >= retail_toc then
         CraftPresence:AddTriggers("DispatchUpdate",
-                "PLAYER_SPECIALIZATION_CHANGED",
+                "ACTIVE_TALENT_GROUP_CHANGED",
                 "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                 "SCENARIO_COMPLETED", "SCENARIO_CRITERIA_UPDATE"
         )
@@ -491,7 +491,15 @@ function CraftPresence:GetFromDb(grp, key, ...)
 end
 
 --- Dispatches and prepares a new frame update
-function CraftPresence:DispatchUpdate()
+function CraftPresence:DispatchUpdate(...)
+    local args = { ... }
+    if self:GetFromDb("verboseMode") then
+        self:Print(string.format(
+                L["VERBOSE_LOG"], string.format(
+                        L["INFO_EVENT_FIRED"], args[1]
+                )
+        ))
+    end
     local delay = self:GetFromDb("callbackDelay")
     if self:IsWithinValue(delay, math.max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"], true) then
         C_Timer.After(delay, function()
