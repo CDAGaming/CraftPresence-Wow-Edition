@@ -2,7 +2,19 @@ local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
 local COLOR1 = '|cFF00FF7F'
 local COLOR2 = '|cfd9b9b9b'
+-- Config Category Data
+L["CATEGORY_TITLE_GENERAL"] = "General"
+L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info"
 
+L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
+L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
+
+L["CATEGORY_TITLE_EXTRA"] = "Extra"
+L["CATEGORY_COMMENT_EXTRA"] = "Extra customizability options for addon display info"
+
+L["CATEGORY_TITLE_ABOUT"] = "About"
+L["CATEGORY_COMMENT_ABOUT"] = "About this addon"
+-- Config Variable Data
 L["TITLE_CLIENT_ID"] = "Client ID"
 L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles"
 L["USAGE_CLIENT_ID"] = "<18-digit numerical id here>"
@@ -146,5 +158,5 @@ L["WARNING_LOG"] = "[Warning] %s"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
-L["ADDON_VERSION"] = "v0.1.4"
+L["ADDON_VERSION"] = "v0.1.5"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"

@@ -42,7 +42,8 @@ local DB_DEFAULTS = {
 --TAB:  GENERAL
 -----------------------------------------
 local generalOptionsGroup = {
-    type = "group", order = 10, name = "General",
+    type = "group", order = 10,
+    name = L["CATEGORY_TITLE_GENERAL"], desc = L["CATEGORY_COMMENT_GENERAL"],
     get = function(info)
         return CraftPresence.db.profile[info[#info]]
     end,
@@ -183,7 +184,8 @@ local generalOptionsGroup = {
 --TAB:  PLACEHOLDERS
 -----------------------------------------
 local placeholderOptionsGroup = {
-    type = "group", order = 15, name = "Placeholders",
+    type = "group", order = 15,
+    name = L["CATEGORY_TITLE_PLACEHOLDERS"], desc = L["CATEGORY_COMMENT_PLACEHOLDERS"],
     get = function(info)
         return CraftPresence.db.profile[info[#info]]
     end,
@@ -302,7 +304,8 @@ local placeholderOptionsGroup = {
 --TAB:  EXTRA
 -----------------------------------------
 local extraOptionsGroup = {
-    type = "group", order = 20, name = "Extra",
+    type = "group", order = 20,
+    name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
     get = function(info)
         return CraftPresence.db.profile[info[#info]]
     end,
@@ -438,7 +441,8 @@ local extraOptionsGroup = {
 --TAB:  ABOUT
 -----------------------------------------
 local aboutGroup = {
-    type = "group", order = 25, name = "About",
+    type = "group", order = 25,
+    name = L["CATEGORY_TITLE_ABOUT"], desc = L["CATEGORY_COMMENT_ABOUT"],
     args = {
         generalText1 = {
             type = "description", order = 10, width = "full", fontSize = "medium",
