@@ -473,7 +473,7 @@ function CraftPresence:getOptionsTable()
 
     local opts = {
         type = "group", childGroups = "tab",
-        name = string.format("%s %s", L["ADDON_NAME"], L["ADDON_VERSION"]),
+        name = string.format("%s %s", L["ADDON_NAME"], CraftPresence.addonVersion),
         get = function(info)
             return CraftPresence.db.profile[info[#info]]
         end,

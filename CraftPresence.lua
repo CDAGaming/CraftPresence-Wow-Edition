@@ -4,6 +4,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local icon = LibStub("LibDBIcon-1.0")
 
 local minimapState = { hide = false }
+local addonVersion = ""
 
 local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
     type = "launcher",
@@ -435,7 +436,8 @@ end
 function CraftPresence:OnEnable()
     -- Print initial data and register events
     -- depending on platform and config data
-    self:Print(L["ADDON_INTRO"])
+    addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
+    self:Print(string.format(L["ADDON_INTRO"], addonVersion))
     version, build, date, toc_version = GetBuildInfo()
     if self:GetFromDb("verboseMode") then
         self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))

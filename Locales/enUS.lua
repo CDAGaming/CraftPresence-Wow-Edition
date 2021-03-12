@@ -118,7 +118,7 @@ while ones surrounded by *@|r are inner (Cannot include other placeholders)
 ]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
-L["ADDON_INTRO"] = "Discord Rich Presence Loaded. Use /cp or /craftpresence to access config."
+L["ADDON_INTRO"] = "CraftPresence %s Loaded. Use /cp or /craftpresence to access config."
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
 -- Config Error Standards
@@ -158,5 +158,4 @@ L["WARNING_LOG"] = "[Warning] %s"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
-L["ADDON_VERSION"] = "v0.1.5"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
