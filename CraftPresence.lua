@@ -424,20 +424,37 @@ end
 
 --- Dispatches and prepares a new frame update
 function CraftPresence:DispatchUpdate(...)
-    local args = { ... }
-    if self:GetFromDb("debugMode") then
-        self:Print(string.format(
-                L["DEBUG_LOG"], string.format(
-                        L["INFO_EVENT_FIRED"], args[1]
-                )
-        ))
-
-        if self:GetFromDb("verboseMode") then
+    if ... ~= nil then
+        -- Event Conditional Setup
+        -- Format: [EVENT_NAME] = event_condition
+        local args = { ... }
+        local ignore_event = false
+        local event_conditions = {
+            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player"),
+            ["ENCOUNTER_END"] = (args[6] ~= 1)
+        }
+        for key, value in pairs(event_conditions) do
+            if args[1] == key and value then
+                ignore_event = true
+                break
+            end
+        end
+        if ignore_event then return end
+        -- Print Details if needed before continuing
+        if self:GetFromDb("debugMode") then
             self:Print(string.format(
-                    L["VERBOSE_LOG"], string.format(
-                            L["INFO_EVENT_ARGS"], self:SerializeTable(args)
+                    L["DEBUG_LOG"], string.format(
+                            L["INFO_EVENT_FIRED"], args[1]
                     )
             ))
+
+            if self:GetFromDb("verboseMode") then
+                self:Print(string.format(
+                        L["VERBOSE_LOG"], string.format(
+                                L["INFO_EVENT_ARGS"], self:SerializeTable(args)
+                        )
+                ))
+            end
         end
     end
 
