@@ -71,19 +71,31 @@ function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
     return (value >= min and value <= max)
 end
 
+--- Parse and Serialize a table into a printable string
+---
+--- @param val any The table or object within the table
+--- @param name string The name of the object
+--- @param skipnewlines boolean Whether or not new lines will be skipped
+--- @param depth number Object depth to interpret within
+---
+--- @return string @ tableString
 function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
     skipnewlines = skipnewlines or false
     depth = depth or 0
 
     local tmp = string.rep(" ", depth)
 
-    if name then tmp = tmp .. name .. " = " end
+    if name then
+        tmp = tmp .. name .. " = "
+    end
 
     if type(val) == "table" then
         tmp = tmp .. "{" .. (not skipnewlines and "\n" or "")
 
         for k, v in pairs(val) do
-            tmp =  tmp .. CraftPresence:SerializeTable(v, k, skipnewlines, depth + 1) .. "," .. (not skipnewlines and "\n" or "")
+            tmp = tmp .. CraftPresence:SerializeTable(
+                    v, k, skipnewlines, depth + 1
+            ) .. "," .. (not skipnewlines and "\n" or "")
         end
 
         tmp = tmp .. string.rep(" ", depth) .. "}"

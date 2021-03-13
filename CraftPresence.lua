@@ -169,7 +169,10 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
         local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
         local specId, specName, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-        local roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        local roleName = ""
+        if specId ~= nil then
+            self:FormatWord(GetSpecializationRoleByID(specId))
+        end
         -- Keystone Data
         local ownedKeystoneData = self:GetOwnedKeystone()
         local activeKeystoneData = self:GetActiveKeystone()
