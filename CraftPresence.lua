@@ -23,77 +23,6 @@ local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L
 })
 
 -- ==================
--- Utilities
--- ==================
-
---- Determines whether the specified string contains digit characters
----
---- @param str string The input string to evaluate
----
---- @return boolean @ containsDigit
-function CraftPresence:ContainsDigit(str)
-    return string.find(str, "%d") and true or false
-end
-
---- Determines whether the specified string starts with the specified pattern
----
---- @param String string The input string to evaluate
---- @param Start string The target string to locate at the first index
----
---- @return boolean @ startsWith
-function CraftPresence:StartsWith(String, Start)
-    return string.sub(String, 1, string.len(Start)) == Start
-end
-
---- Formats the following word to proper casing (Xxxx)
----
---- @param str string The input string to evaluate
----
---- @return string @ formattedString
-function CraftPresence:FormatWord(str)
-    if (str == nil or str == "") then
-        return str
-    end
-    str = string.lower(str)
-    return (str:sub(1, 1):upper() .. str:sub(2))
-end
-
---- Determines whether the specified value is within the specified range
----
---- @param value number The specified value to interpret
---- @param min number The minimum the value is allowed to be
---- @param max number The maximum the value is allowed to be
---- @param contains boolean Whether the range should include min and max
---- @param check_sanity boolean Whether to sanity check the min and max values
----
---- @return boolean @ isWithinValue
-function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
-    -- Sanity checks
-    local will_verify = (check_sanity == nil or check_sanity == true)
-    if will_verify then
-        if min > max then
-            min = max
-        end
-        if max < min then
-            max = min
-        end
-        if min < 0 then
-            min = 0
-        end
-        if max < 0 then
-            max = 0
-        end
-    end
-    -- Contains Checks
-    local will_contain = (contains ~= nil and contains == true)
-    if not will_contain then
-        min = min + 1
-        max = max - 1
-    end
-    return (value >= min and value <= max)
-end
-
--- ==================
 -- RPC Data
 -- ==================
 
@@ -493,13 +422,22 @@ end
 --- Dispatches and prepares a new frame update
 function CraftPresence:DispatchUpdate(...)
     local args = { ... }
-    if self:GetFromDb("verboseMode") then
+    if self:GetFromDb("debugMode") then
         self:Print(string.format(
-                L["VERBOSE_LOG"], string.format(
+                L["DEBUG_LOG"], string.format(
                         L["INFO_EVENT_FIRED"], args[1]
                 )
         ))
+
+        if self:GetFromDb("verboseMode") then
+            self:Print(string.format(
+                    L["VERBOSE_LOG"], string.format(
+                            L["INFO_EVENT_ARGS"], self:SerializeTable(args)
+                    )
+            ))
+        end
     end
+
     local delay = self:GetFromDb("callbackDelay")
     if self:IsWithinValue(delay, math.max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"], true) then
         C_Timer.After(delay, function()

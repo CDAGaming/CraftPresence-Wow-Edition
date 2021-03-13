@@ -17,6 +17,7 @@
 Libraries\Libraries.xml
 Locales\Locales.xml
 CraftPresence.lua
+Utils.lua
 InstanceInfo.lua
 Config.lua
 RPCDispatch.lua

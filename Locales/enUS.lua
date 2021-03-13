@@ -110,9 +110,10 @@ L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
 L["INFO_EVENT_FIRED"] = "Event Fired => %s"
+L["INFO_EVENT_ARGS"] = "Args => %s"
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
-L["VERBOSE_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r -> ^<value>|r):]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
-L["VERBOSE_PLACEHOLDER_DATA"] = ([=[*%s|r -> ^%s|r]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
+L["VERBOSE_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
+L["VERBOSE_PLACEHOLDER_DATA"] = ([=[*%s|r => ^%s|r]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
 L["VERBOSE_PLACEHOLDER_NOTE"] = ([=[
 NOTE: Placeholder keys surrounded by *#|r are global (Can include inner placeholders),
 while ones surrounded by *@|r are inner (Cannot include other placeholders)
