@@ -57,12 +57,18 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
     local playerName = UnitName("player")
     local isAfk = UnitIsAFK("player")
     local isOnDnd = UnitIsDND("player")
+    local isDead = UnitIsDead("player")
+    local isGhost = UnitIsGhost("player")
     local playerStatus
     local playerPrefix = ""
     if isAfk then
         playerStatus = L["AFK_LABEL"]
     elseif isOnDnd then
         playerStatus = L["DND_LABEL"]
+    elseif isGhost then
+        playerStatus = L["GHOST_LABEL"]
+    elseif isDead then
+        playerStatus = L["DEAD_LABEL"]
     end
     -- Parse Player Status
     if not (playerStatus == nil) then
@@ -143,7 +149,6 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
         ["@zone_info@"] = formatted_zone_info,
         ["@zone_name@"] = zone_name,
         ["@sub_zone_name@"] = sub_name,
-        ["@dead_state@"] = self:GetFromDb("deadStateInnerMessage"),
         ["@difficulty_name@"] = difficultyName,
         ["@difficulty_info@"] = difficultyInfo, -- Retail-Effected
         ["@active_keystone_level@"] = "", -- Retail-Only
@@ -203,6 +208,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
         queued_inner_placeholders["@player_info@"] = (user_info_preset .. " " .. playerClass)
     end
     -- Calculate limiting RPC conditions
+    -- If the condition is true, the placeholder will be active
     local queued_global_conditions = {
         ["#dungeon#"] = (
                 queued_inner_placeholders["@instance_type@"] == "party" and not (string.find(name, "Garrison"))
@@ -212,7 +218,6 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
         ["#arena#"] = (queued_inner_placeholders["@instance_type@"] == "arena")
     }
     local queued_inner_conditions = {
-        ["@dead_state@"] = (UnitIsDeadOrGhost("player") and not UnitIsDead("player")),
         ["@lockout_encounters@"] = (lockoutData ~= nil and
                 lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
     }
@@ -226,8 +231,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
                 queued_global_conditions["#arena#"]),
         ["start:extra"] = (queued_extra_conditions["torghast"])
     }
+    -- If these placeholders are active, they will override the field they are in
     local queued_override_placeholders = {
-        "@dead_state@"
+        -- N/A
     }
     -- Extra Conditionals
     queued_global_conditions["#default#"] = (not queued_time_conditions["start"])

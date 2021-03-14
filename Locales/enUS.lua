@@ -76,11 +76,6 @@ L["COMMENT_FALLBACK_MESSAGE"] = "The message(s) to be interpreted as the #defaul
 L["USAGE_FALLBACK_MESSAGE"] = "<Your message here>"
 L["DEFAULT_FALLBACK_MESSAGE"] = "@zone_info@@dead_state@"
 
-L["TITLE_DEAD_MESSAGE"] = "Dead State Inner Placeholder Message"
-L["COMMENT_DEAD_MESSAGE"] = "The message(s) to be interpreted as the @dead_state@ placeholder."
-L["USAGE_DEAD_MESSAGE"] = "<Your message here>"
-L["DEFAULT_DEAD_MESSAGE"] = "Corpse Running"
-
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
 
@@ -149,6 +144,8 @@ L["ADDON_TOOLTIP_FIVE"] = "Toggle minimap button by typing |c33c9fcff/cp minimap
 L["ONLINE_LABEL"] = "Online"
 L["AFK_LABEL"] = "AFK"
 L["DND_LABEL"] = "DND"
+L["GHOST_LABEL"] = "Ghost"
+L["DEAD_LABEL"] = "Dead"
 L["ZONE_NAME_UNKNOWN"] = "Unknown"
 L["LEVEL_TAG_FORMAT"] = "Level %s"
 -- The values below should NEVER be changed

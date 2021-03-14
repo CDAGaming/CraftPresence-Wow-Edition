@@ -27,7 +27,6 @@ local DB_DEFAULTS = {
         battlegroundPlaceholderMessage = L["DEFAULT_BATTLEGROUND_MESSAGE"],
         arenaPlaceholderMessage = L["DEFAULT_ARENA_MESSAGE"],
         defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
-        deadStateInnerMessage = L["DEFAULT_DEAD_MESSAGE"],
         debugMode = false,
         verboseMode = false,
         showMinimapIcon = true,
@@ -281,22 +280,6 @@ local placeholderOptionsGroup = {
             end,
         },
         blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
-        deadStateInnerMessage = {
-            type = "input", order = 20, width = 3.0,
-            name = L["TITLE_DEAD_MESSAGE"], desc = L["COMMENT_DEAD_MESSAGE"], usage = L["USAGE_DEAD_MESSAGE"],
-            get = function(_)
-                return CraftPresence:GetFromDb("deadStateInnerMessage")
-            end,
-            set = function(_, value)
-                local oldValue = CraftPresence:GetFromDb("deadStateInnerMessage")
-                local isValid = (type(value) == "string")
-                if isValid then
-                    CraftPresence.db.profile.deadStateInnerMessage = value
-                    CraftPresence:PrintChangedValue(L["TITLE_DEAD_MESSAGE"], oldValue, value)
-                end
-            end,
-        },
-        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
     }
 }
 
