@@ -387,7 +387,7 @@ function CraftPresence:OnEnable()
     CraftPresence:AddTriggers("DispatchUpdate",
             "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED", "PLAYER_UNGHOST", "PLAYER_FLAGS_CHANGED",
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-            "ENCOUNTER_START", "ENCOUNTER_END"
+            "UPDATE_INSTANCE_INFO"
     )
     -- Register Retail-Only Events
     if toc_version >= retail_toc then
@@ -441,7 +441,7 @@ function CraftPresence:DispatchUpdate(...)
         local ignore_event = false
         local event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player"),
-            ["ENCOUNTER_END"] = (args[6] ~= 1)
+            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance())
         }
         for key, value in pairs(event_conditions) do
             if args[1] == key and value then
