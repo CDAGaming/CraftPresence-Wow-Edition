@@ -452,16 +452,16 @@ function CraftPresence:DispatchUpdate(...)
         if ignore_event then return end
         -- Print Details if needed before continuing
         if self:GetFromDb("debugMode") then
-            self:Print(string.format(
-                    L["DEBUG_LOG"], string.format(
-                            L["INFO_EVENT_FIRED"], args[1]
-                    )
-            ))
-
             if self:GetFromDb("verboseMode") then
                 self:Print(string.format(
                         L["VERBOSE_LOG"], string.format(
-                                L["INFO_EVENT_ARGS"], self:SerializeTable(args)
+                                L["INFO_EVENT_FIRED"], self:SerializeTable(args)
+                        )
+                ))
+            else
+                self:Print(string.format(
+                        L["DEBUG_LOG"], string.format(
+                                L["INFO_EVENT_FIRED"], args[1]
                         )
                 ))
             end
