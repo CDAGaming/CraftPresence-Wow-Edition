@@ -175,8 +175,12 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
         local specId, specName, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
         local roleName = ""
+        -- Hotfix: Prevent a null-case with specId
+        -- (Only happens if events fire too quickly for into to populate)
         if specId ~= nil then
-            self:FormatWord(GetSpecializationRoleByID(specId))
+            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        else
+            specName = ""
         end
         -- Keystone Data
         local ownedKeystoneData = self:GetOwnedKeystone()
