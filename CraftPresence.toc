@@ -13,6 +13,7 @@
 ## OptionalDeps: Ace3
 ## X-Embeds: Ace3
 ## X-Credits: Attka
+## X-Curse-Project-ID: 457334
 
 Libraries\Libraries.xml
 Locales\Locales.xml

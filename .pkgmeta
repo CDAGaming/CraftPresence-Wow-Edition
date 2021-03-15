@@ -1,1 +1,3 @@
 package-as: CraftPresence
+ignore:
+  - Images            # ignore the images folder
