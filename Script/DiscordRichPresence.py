@@ -235,8 +235,8 @@ while True:
                                    .for_platform(first_line))
                     except Exception as exc:
                         root_logger.error("Unable to connect to Discord (%s). It's "
-                                      'probably not running. I will try again in %s '
-                                      'sec.' % (str(exc), config["refresh_rate"]))
+                                          'probably not running. I will try again in %s '
+                                          'sec.' % (str(exc), config["refresh_rate"]))
                         time.sleep(config["refresh_rate"])
                     else:
                         break
@@ -287,7 +287,7 @@ while True:
                     last_activity = activity
                 except Exception as exc:
                     root_logger.error('Looks like the connection to Discord was broken (%s). '
-                                  'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
+                                      'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
                     last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
                     last_start_timestamp, last_end_timestamp = None, None
                     last_activity = {}
