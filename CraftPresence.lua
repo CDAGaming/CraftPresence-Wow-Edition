@@ -43,8 +43,14 @@ local playerAlliance = "None"
 local playerCovenant = "None"
 
 --- Parses Game information to form placeholder information
+---
+--- @param queued_global_placeholders table Queued Global Plaseholders to interpret
+--- @param force_instance_change boolean Whether to force an instance change (Default: false)
+---
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
-function CraftPresence:ParseGameData(queued_global_placeholders)
+function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_change)
+    force_instance_change = force_instance_change ~= nil and force_instance_change == true
+    -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     local difficultyInfo = difficultyName
@@ -81,7 +87,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
     local playerRealm = GetRealmName()
     local playerRegion = realmData[GetCurrentRegion()]
     local playerClass = UnitClass("player")
-    hasInstanceChanged = (
+    hasInstanceChanged = force_instance_change or (
             ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
                     ((lastLocalPlane == nil) or (name ~= lastLocalPlane))
     )
@@ -97,7 +103,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
         playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
     end
-
+    -- Covenant and/or Faction data is only updated if the instance is changed
     if hasInstanceChanged then
         if (playerCovenantId == 0 or not (
                 (string.find(name, "Shadowlands")) or
@@ -283,8 +289,11 @@ function CraftPresence:ParseGameData(queued_global_placeholders)
 end
 
 --- Synchronize Conditional Data with Game Info
+---
+--- @param force_instance_change boolean Whether to force an instance change (Default: false)
+---
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
-function CraftPresence:SyncConditions()
+function CraftPresence:SyncConditions(force_instance_change)
     global_placeholders = {
         ["#dungeon#"] = self:GetFromDb("dungeonPlaceholderMessage"),
         ["#raid#"] = self:GetFromDb("raidPlaceholderMessage"),
@@ -294,14 +303,17 @@ function CraftPresence:SyncConditions()
     }
     inner_placeholders = {}
     time_conditions = {}
-    return self:ParseGameData(global_placeholders)
+    return self:ParseGameData(global_placeholders, force_instance_change)
 end
 
 --- Creates and encodes a new RPC event from placeholder and conditional data
+---
+--- @param force_instance_change boolean Whether to force an instance change (Default: false)
+---
 --- @return string @ newEncodedString
-function CraftPresence:EncodeConfigData()
+function CraftPresence:EncodeConfigData(force_instance_change)
     -- Sync Variable Data
-    global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
+    global_placeholders, inner_placeholders, time_conditions = self:SyncConditions(force_instance_change)
     -- RPC Data syncing
     local queued_details = self:GetFromDb("detailsMessage")
     local queued_state = self:GetFromDb("gameStateMessage")

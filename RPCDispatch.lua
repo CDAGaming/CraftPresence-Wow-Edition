@@ -201,7 +201,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
     if msg ~= nil then
         encoded = tostring(msg)
     else
-        encoded = self:EncodeConfigData()
+        encoded = self:EncodeConfigData(proceed)
     end
     local changed = last_encoded ~= encoded or proceed
     if (changed and encoded ~= nil) then
