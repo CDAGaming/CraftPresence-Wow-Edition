@@ -1,5 +1,7 @@
 import json
+import logging
 import os
+import sys
 import time
 from ctypes import windll
 
@@ -11,8 +13,26 @@ import rpc
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+log_path = dir_path + '/output.log'
+log_format = "%(asctime)s [%(levelname)s] %(message)s"
+log_date_style = "%m/%d/%Y %I:%M:%S %p"
+
 f = open(dir_path + '/config.json')
 config = json.load(f)
+
+logging.basicConfig(filename=log_path,
+                    filemode='w',
+                    format=log_format,
+                    datefmt=log_date_style,
+                    level=logging.DEBUG
+                    )
+
+root_logger = logging.getLogger()
+log_formatter = logging.Formatter(log_format, log_date_style)
+
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setFormatter(log_formatter)
+root_logger.addHandler(console_handler)
 
 # these are internal use variables, don't touch them
 decoded = ''
@@ -118,7 +138,7 @@ def read_squares(hwnd):
     try:
         im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
     except win32ui.error:
-        # print('win32ui.error')
+        # root_logger.error('win32ui.error')
         return
 
     read = []
@@ -162,10 +182,10 @@ def read_squares(hwnd):
     return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line
 
 
-print("========== DiscordRichPresence Service - v1.0.0 ==========")
-print("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
-print("Note: Please keep this script open while logging and sending Rich Presence updates.")
-print("==========================================================")
+root_logger.info("========== DiscordRichPresence Service - v1.0.1 ==========")
+root_logger.info("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
+root_logger.info("Note: Please keep this script open while logging and sending Rich Presence updates.")
+root_logger.info("==========================================================")
 
 while True:
     process_hwnd = None
@@ -175,10 +195,10 @@ while True:
         # if in DEBUG mode, squares are read, the image with the dot matrix is
         # shown and then the script quits.
         if process_hwnd:
-            print('DEBUG: reading squares. Is everything alright?')
+            root_logger.debug('DEBUG: reading squares. Is everything alright?')
             read_squares(process_hwnd)
         else:
-            print("Launching in DEBUG mode but I couldn't find target process.")
+            root_logger.debug("Launching in DEBUG mode but I couldn't find target process.")
         break
     elif process_hwnd:
         lines = read_squares(process_hwnd)
@@ -204,23 +224,23 @@ while True:
 
             if not rpc_obj or hasIdChanged:
                 if rpc_obj:
-                    print('The client id has been changed, reconnecting with new id...')
+                    root_logger.info('The client id has been changed, reconnecting with new id...')
                     rpc_obj.close()
                 else:
-                    print('Not connected to Discord, connecting...')
+                    root_logger.info('Not connected to Discord, connecting...')
 
                 while True:
                     try:
                         rpc_obj = (rpc.DiscordIpcClient
                                    .for_platform(first_line))
                     except Exception as exc:
-                        print("Unable to connect to Discord (%s). It's "
-                              'probably not running. I will try again in %s '
-                              'sec.' % (str(exc), config["refresh_rate"]))
+                        root_logger.error("Unable to connect to Discord (%s). It's "
+                                      'probably not running. I will try again in %s '
+                                      'sec.' % (str(exc), config["refresh_rate"]))
                         time.sleep(config["refresh_rate"])
                     else:
                         break
-                print('Connected to Discord.')
+                root_logger.info('Connected to Discord.')
 
             timerData = {}
             assetsData = {}
@@ -260,20 +280,20 @@ while True:
             activity["assets"] = assetsData
             activity["timestamps"] = timerData
             if activity != last_activity:
-                print("Setting new activity: %s" % activity)
+                root_logger.info("Setting new activity: %s" % activity)
 
                 try:
                     rpc_obj.set_activity(activity)
                     last_activity = activity
                 except Exception as exc:
-                    print('Looks like the connection to Discord was broken (%s). '
-                          'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
+                    root_logger.error('Looks like the connection to Discord was broken (%s). '
+                                  'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
                     last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line = None, None, None, None, None, None, None, None, None
                     last_start_timestamp, last_end_timestamp = None, None
                     last_activity = {}
                     rpc_obj = None
     elif not process_hwnd and rpc_obj:
-        print('Target process is no longer active, disconnecting')
+        root_logger.info('Target process is no longer active, disconnecting')
         rpc_obj.close()
         rpc_obj = None
         # clear these so it gets re-read and resubmitted upon reconnection

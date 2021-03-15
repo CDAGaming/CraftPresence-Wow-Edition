@@ -34,3 +34,5 @@ CraftPresence/.vscode/
 script/__pycache__/
 
 luacheck.exe
+
+*.log
