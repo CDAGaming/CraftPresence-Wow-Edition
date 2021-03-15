@@ -553,20 +553,49 @@ function CraftPresence:ChatCommand(input)
                         )
                 ))
             end
-        elseif input == "placeholders" then
-            local placeholderString = L["VERBOSE_PLACEHOLDER_INTRO"]
+        elseif self:StartsWith(input, "placeholders") then
+            local placeholderString = L["INFO_PLACEHOLDER_INTRO"]
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
+            -- Query Parsing
+            local query = string.match(input, ":(.*)")
+            local found_placeholders = false
+            if query ~= nil then
+                self:Print(string.format(L["INFO_PLACEHOLDERS_QUERY"], query))
+                query = string.lower(query)
+            end
+            -- Global placeholder iteration to form placeholderString
             for key, value in pairs(global_placeholders) do
-                placeholderString = placeholderString .. "\n " .. (string.format(
-                        L["VERBOSE_PLACEHOLDER_DATA"], key, value
-                ))
+                local strKey = tostring(key)
+                local strValue = tostring(value)
+                if (query == nil or (
+                        (string.lower(strKey)):find(query, 1, true) or
+                                (string.lower(strValue)):find(query, 1, true))
+                ) then
+                    found_placeholders = true
+                    placeholderString = placeholderString .. "\n " .. (string.format(
+                            L["INFO_PLACEHOLDER_DATA"], strKey, strValue
+                    ))
+                end
             end
-            for innerKey, innerValue in pairs(inner_placeholders) do
-                placeholderString = placeholderString .. "\n " .. (string.format(
-                        L["VERBOSE_PLACEHOLDER_DATA"], innerKey, innerValue
-                ))
+            -- Inner placeholder iteration to form placeholderString
+            for key, value in pairs(inner_placeholders) do
+                local strKey = tostring(key)
+                local strValue = tostring(value)
+                if (query == nil or (
+                        (string.lower(strKey)):find(query, 1, true) or
+                                (string.lower(strValue)):find(query, 1, true))
+                ) then
+                    found_placeholders = true
+                    placeholderString = placeholderString .. "\n " .. (string.format(
+                            L["INFO_PLACEHOLDER_DATA"], strKey, strValue
+                    ))
+                end
             end
-            placeholderString = placeholderString .. "\n" .. L["VERBOSE_PLACEHOLDER_NOTE"]
+            -- Final parsing of placeholderString before printing
+            if not found_placeholders then
+                placeholderString = placeholderString .. "\n " .. L["INFO_PLACEHOLDER_NONE"]
+            end
+            placeholderString = placeholderString .. "\n" .. L["INFO_PLACEHOLDER_NOTE"]
             self:Print(placeholderString)
         else
             LibStub("AceConfigCmd-3.0"):HandleCommand(L["ADDON_AFFIX"], L["ADDON_NAME"], input)

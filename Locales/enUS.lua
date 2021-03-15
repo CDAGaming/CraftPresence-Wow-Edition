@@ -1,7 +1,8 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
-local COLOR1 = '|cFF00FF7F'
-local COLOR2 = '|cfd9b9b9b'
+local COLOR_GREEN = '|cFF00FF7F'
+local COLOR_GREY = '|cfd9b9b9b'
+local COLOR_RED = '|cffff0000'
 -- Config Category Data
 L["CATEGORY_TITLE_GENERAL"] = "General"
 L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info"
@@ -106,12 +107,14 @@ L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
 L["INFO_EVENT_FIRED"] = "Event Fired => %s"
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
-L["VERBOSE_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
-L["VERBOSE_PLACEHOLDER_DATA"] = ([=[*%s|r => ^%s|r]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
-L["VERBOSE_PLACEHOLDER_NOTE"] = ([=[
+L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_NONE"] = ([=[*No placeholders found within specified parameters|r]=]):gsub('*', COLOR_RED):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_DATA"] = ([=[*%s|r => ^%s|r]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_NOTE"] = ([=[
 NOTE: Placeholder keys surrounded by *#|r are global (Can include inner placeholders),
 while ones surrounded by *@|r are inner (Cannot include other placeholders)
-]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
+]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ADDON_INTRO"] = "CraftPresence %s Loaded. Use /cp or /craftpresence to access config."
@@ -128,9 +131,10 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  */cp|r ^update|r  -  Forcibly update your Rich Presence display.
  */cp|r ^minimap|r  -  Toggles the display of the minimap button.
  */cp|r ^status|r  -  Views the last sent Rich Presence event.
- */cp|r ^placeholders|r  -  Views the currently available placeholders.
- NOTE: All commands must be prefixed with either */%s|r or */%s|r
-]=]):gsub('*', COLOR1):gsub('%^', COLOR2)
+ */cp|r ^placeholders[:query]|r  -  Views the currently available placeholders.
+ NOTE: All commands must be prefixed with either */%s|r or */%s|r.
+ Optional arguments in commands are represented by *[syntax]|r.
+]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 -- Frame Text Data
 L["ADDON_INFO_ONE"] = "CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence."
 L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
