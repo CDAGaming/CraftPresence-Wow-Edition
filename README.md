@@ -1,40 +1,37 @@
 # CraftPresence
-Completely customize the way others see you play Minecraft via Discord's Rich Presence API & the DiscordIPC API by [jagrosh](https://github.com/jagrosh)!
+Completely customize the way others see you play World of Warcraft via Discord's Rich Presence API & the DiscordIPC API by [suclearnub](https://github.com/suclearnub/python-discord-rpc)!
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9f6a38f53cd148aebb307112c7ccd947)](https://www.codacy.com/gl/CDAGaming/CraftPresence-Wow-Edition/dashboard?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=CDAGaming/CraftPresence-Wow-Edition&amp;utm_campaign=Badge_Grade)
-[![Pipeline Status](https://gitlab.com/CDAGaming/CraftPresence/badges/master/pipeline.svg)](https://gitlab.com/CDAGaming/CraftPresence/commits/master)
+[![CraftPresence Workflow](https://github.com/CDAGaming/CraftPresence-Wow-Edition/actions/workflows/main.yml/badge.svg)](https://gitlab.com/CDAGaming/CraftPresence-Wow-Edition/-/commits/master)
 
 [![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_craftpresence_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 [![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 
+## Author's Note
+*   At this time, the pixel-generation/reading that makes this possible has not been verified by Blizzard. An email and ticket have been put in to gain approval, though until this happens, use with caution.
+*   While a video, is aditionally planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
+
 ## Port Notes
-*   Some versions of CraftPresence for Minecraft 1.14.x - 1.17.x require the [FabricMC ModLoader](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-*   Some versions of CraftPresence for Minecraft 1.13.x require the [Rift ModLoader](https://www.curseforge.com/minecraft/mc-mods/rift)
+*   Please check [here](https://www.curseforge.com/minecraft/mc-mods/craftpresence) for the Minecraft Version of this addon
 
 ## Features
-In addition to having the ability to change your discord status from "Playing Minecraft",
+In addition to having the ability to change your discord status from "Playing <x>",
 This mod offers plenty of customization options to specify entirely how others see you play.
-From having your current biome show up, to which dimension your in, as well as which server you're in, and more.
+From having your current zone show up, to which instance your in, as well as which realm you're in, and far more.
 The customization possibilities are limitless, with the only real limit being how creative you customize your display.
 
-### Launcher and Pack Integration Support
-CraftPresence will detect whether your Launch Directory contains:
+### Client Support
+CraftPresence will detect and adjust its abilities towards the following versions:
 
-*   A valid Twitch/Overwolf/Curse/GDLauncher Manifest (manifest.json, minecraftinstance.json)
-*   A MultiMC Instance (instance.cfg)
-*   A MCUpdater Instance (instance.json)
-*   A Technic installedPacks File (installedPacks)
+*   Retail -> 9.0.5 (37899)
+*   Classic -> 1.13.6 (37497)
 
-If using any of these launchers, it'll put the packs name in your display as well as show it's icon (when not in a server).
+As this addon uses a singlular codebase, Addon code is loaded depending upon which version you are loading it within.
 
-Note: In v1.6.0 and above, it'll instead parse the Pack's name into the `&PACK&` placeholder, that you can configure for usage in the RPC
+For example, this will mean that while the placeholders will remain the same, their contents may change depending on the version.
 
-As an example, this is how the mod will convert a pack's name to an iconKey:
-
-Example: `All the Mods 3` would parse as `allthemods3`
-
-Note: MultiMC natively has an Icon Key Property that is used instead of converting from the Pack's Display Name
+Aditionally, while PTR and pre-release versions of the game should work fine, they are often untested until closer to release and may contain issues.
 
 ## Commands
 CraftPresence currently offers the following Commands:
@@ -42,172 +39,89 @@ CraftPresence currently offers the following Commands:
 Keep in mind the following:
 
 *   Commands must be prefixed by either `/craftpresence` or `/cp`
-*   In v1.5.0 and above, these commands are only usable via the Commands Gui, found within the Config Gui
 
 ___
 
-*   `/cp view` - Help command to display the commands available to view and control a variety of display data
-*   `/cp reload` - Reloads mod data (In v1.4.8 and Above, this forces a Tick Event)
-*   `/cp reboot` - Reboots the RPC
-*   `/cp shutdown` - Shutdown the RPC (Can be turned on from `/cp reboot`)
-*   `/cp request` - View Join Request Info
-*   `/cp view currentData` - Displays your Current RPC Data, in text form
-*   `/cp view assets (large | small | all)` - Displays all asset icon keys available to you
-*   `/cp view dimensions` - Displays all Dimension Names available for use, requires `Show Current Dimension` to be enabled
-*   `/cp view biomes` - Displays all Biome Names available for use, requires `Show Current Biome` to be enabled
-*   `/cp view servers` - Displays all Server Addresses available for use, requires `Show Game State` to be enabled
-*   `/cp view screens` - Displays all Gui Names available for use, if Per-Gui is enabled
-*   `/cp view items` - Displays all Item Names available for use, if Per-Item is enabled
-*   `/cp view entities` - Displays all Entity Names available for use, if Per-Entity is enabled
+*   `/cp config` - Displays the Config menu to customize options and placeholder data
+*   `/cp update` - Reloads mod data (Ie forces a Tick Event)
+*   `/cp test` - Toggles debugging of Rich Presence Frames (Requires `Debug Mode`)
+*   `/cp (clear | clean)` - Reset all frames to their original positions and colors.
+*   `/cp status` - Displays your last sent RPC Data, in text form (Requires `Verbose Mode`)
+*   `/cp placeholders (:query)` - Views the currently available placeholders (With specified query, if any)
+*   `/cp minimap` - Toggles the display of the minimap button (Requires Reload)
 *   `/cp (help | ?)` - Help Command to display the above commands and these explanations
-
-## KeyBinds
-CraftPresence currently contains the following KeyBinds:
-
-Notes: 
-
-*   In v1.5.5 up to v1.7.8, KeyBinds are now customized in the Accessibility Settings in the Config Gui, and not the normal controls menu
-*   In v1.7.8 and above, KeyBinds can now be customized in either the dedicated menu in the Config Gui or the normal control menu on applicable versions
-
-___
-
-*   `Open Config Gui` - KeyBind to open the CraftPresence Config Gui (Default: GRAVE/TILDE Key)
 
 ## Placeholders
 In some configuration areas, CraftPresence provides some placeholders to make things easier:
 
 Keep in mind the following:
 
-*   In v1.6.0 and above, you can now define where in the Rich Presence the messages should go
 *   Placeholders are not case-sensitive, but should be entered lowercase to prevent issues with recognizing them on v1.5.x and below
-*   As of v1.6.8, you can now also use minified versions of placeholders, which are trimmed down to a length of 4; `&DIM&` and `&DIMENSION&` are the same in this case
+*   Global placeholders (Represented by text surrounded by `#` symbols) cannot include other global's but can include Inner Placeholders
+*   Inner placeholders (Represented by text surrounded by `@` symbols) cannot include other placeholders within them
 
 ___
 
 ### Presence Display / Global Placeholders
-These placeholders can be added within the `Presence Settings` menu within the Config Gui.
+These placeholders can be added within the `General Settings` menu within the Config Gui.
 
-As these placeholders are global, they can be set in any of the RPC fields within `Presence Settings` and customized at a deeper level via their sub-placeholders.
+As these placeholders are global, they can be set in any of the RPC fields within `Presence Settings` and customized at a deeper level via usage of the inner-placeholders.
 
-*   `&MAINMENU&` - The message to display whilst in the main menu. (See `Status Messages::Main Menu Message` for sub-placeholders)
-*   `&BRAND&` - The minecraft branding label, displayed as interpreted by minecraft.
-*   `&MCVERSION&` - The minecraft version, displayed as interpreted by minecraft.
-*   `&IGN&` - The non-world player info message. (See `Status Messages::Player Outer Info` for sub-placeholders)
-*   `&MODS&` - The message to display with your mod count. (See `Status Messages::Mods` for sub-placeholders)
-*   `&PACK&` - The message to display whilst using a valid modpack. (See `Status Messages::Modpack Message` for sub-placeholders)
-*   `&DIMENSION&` - The Dimension Message, if in use. (See `Dimension Messages` for sub-placeholders)
-*   `&BIOME&` - The Biome Message, if in use. (See `Biome Messages` for sub-placeholders)
-*   `&SERVER&` - The Server/SinglePlayer Message, if in use. (See `Server Messages` for sub-placeholders)
-*   `&SCREEN&` - The Gui Screen Message, if in use. (See `Advanced Settings::Gui Messages` for sub-placeholders)
-*   `&TILEENTITY&` - The TileEntity (Block/Item) Message, if in use. (See `Advanced Settings::Item Messages` for sub-placeholders)
-*   `&TARGETENTITY&` - The Targeted Entity Message, if in use. (See `Advanced Settings :: Entity Target Messages` for sub-placeholders)
-*   `&ATTACKINGENTITY&` - The Attacking Entity Message, if in use. (See `Advanced Settings :: Entity Attacking Messages` for sub-placeholders)
-*   `&RIDINGENTITY&` - The Riding Entity Message, if in use. (See `Advanced Settings :: Entity Riding Messages` for sub-placeholders)
+*   `#dungeon#` - The message to generate whilst in a scenario instance. (See `Placeholders::Dungeon Placeholder Message` for more info)
+*   `#raid#` - The message to generate whilst in a raid instance. (See `Placeholders::Raid Placeholder Message` for more info)
+*   `#battleground#` - The message to generate whilst in a battleground instance. (See `Placeholders::Battleground Placeholder Message` for sub-placeholders)
+*   `#arena#` - The message to generate whilst in an arena instance. (See `Placeholders::Arena Placeholder Message` for sub-placeholders)
+*   `#default#` - The message to generate whilst not in a detected instance. (See `Placeholders::Default Placeholder Message` for sub-placeholders)
 
 ___
 
-### Main Menu Message Placeholders
-These placeholders translate to the `&MAINMENU&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
+### Presence Display / Inner Placeholders
+These placeholders are able to work alongside of/within the aforementioned Global Placeholders.
 
-You can configure using these Sub-Placeholders within the `Status Messages::Main Menu Message` setting.
+You can configure some of these placeholders throughout different areas of the game.
 
-*   `&IGN&` - Your Minecraft username
-*   `&MODS&` - The number of mods currently in your mods folder
-
-___
-
-### Biome Placeholders
-These placeholders translate to the `&BIOME&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders throughout the `Biome Messages` area of the Config Gui.
-
-*   `&BIOME&` - The Current Biome Name
-
-___
-
-### Dimension Placeholders
-These placeholders translate to the `&DIMENSION&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders throughout the `Dimension Messages` area of the Config Gui.
-
-*   `&DIMENSION&` - The Current Dimension Name
-*   `&ICON&` - The Default Dimension Icon Name
-
-___
-
-### Server/LAN Message Placeholders
-These placeholders translate to the `&SERVER&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders throughout the `Server Messages` area of the Config Gui.
-
-*   `&IP&` - The Current Server IP Address
-*   `&NAME&` - The Current Server Name
-*   `&MOTD&` - The Current Server MOTD (Message of The Day)
-*   `&ICON&` - The Default Server Icon Name
-*   `&PLAYERS&` - The Current Player Count `(10 / 100 Players)`
-*   `&IGN&` - Your Minecraft Username
-*   `&TIME&` - The Current World Time
-*   `&MODS&` - The Number of Mods currently in your Mods Folder
-
-___
-
-### SinglePlayer Placeholders
-These placeholders translate to the `&SERVER&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders within the `Status Messages::SinglePlayer Message` setting.
-
-*   `&IGN&` - Your Minecraft Username
-*   `&TIME&` - The Current World Time
-*   `&MODS&` - The Number of Mods currently in your Mods Folder
+*   `@player_info@` - (Preset) Shows basic character info such as status, name, and level (Version-dependent)
+*   `@player_name@` - Your player's in-game name
+*   `@title_name@` - The currently active title for your character, or `@player_name@` if not applicable
+*   `@player_level@` - The player's current in-game level
+*   `@player_class@` - The player's current in-game class name
+*   `@player_status@` - The player's current in-game status (Support AFK, DND, and alive states)
+*   `@player_alliance@` - (Preset) The player's current faction/covenant (Dependent on location and applicability)
+*   `@player_covenant@` - The player's current covenant name, or `None` if not applicable
+*   `@player_covenant_renown@` - The player's current covenant renown level, if applicable
+*   `@player_faction@` - The player's current faction name
+*   `@player_spec_name@` - The player's current specialization name
+*   `@player_spec_role@` - The player's current instance role, tied to current spec if applicable
+*   `@item_level@` - The player's current item level
+*   `@item_level_equipped@` - The player's currently equipped item level
+*   `@item_level_pvp@` - The player's currently scaled item level, for pvp scenarios
+*   `@realm_info@` - (Preset) The player's current region and realm in use
+*   `@player_region@` - The player's current region in use
+*   `@player_realm@` - The player's current realm in use
+*   `@zone_info@` - (Preset) The player's current location, formatted with zone and sub-zone info as applicable
+*   `@zone_name@` - The player's current in-game zone name, or `Unknown` if not applicable
+*   `@sub_zone_name@` - The player's current in-game sub-zone name, or `Unknown` if not applicable
+*   `@difficulty_name@` - The player's current difficulty level (Applicable while in a valid instance)
+*   `@difficulty_info@` - (Preset) The player's current difficulty info, formatted with keystone and difficulty data as applicable
+*   `@active_keystone_level@` - The player's currently active keystone level, if applicable
+*   `@active_keystone_affixes@` - The player's currently active keystone affix names, if applicable
+*   `@owned_keystone_level@` - The player's currently owned keystone level, if applicable
+*   `@instance_type@` - The player's current in-game instance type, or `none` if not applicable
+*   `@localized_name@` - The player's current in-game map instance name (Can be otherwise known as the continent name)
+*   `@instance_difficulty@` - The player's current instance difficulty id, if applicable
+*   `@max_players@` - The current amount of players allowed in the given instance, if applicable
+*   `@dynamic_difficulty@` - The dynamic difficulty level for an instance, if applicable
+*   `@is_dynamic@` - Whether the instance difficulty can be changed while zoned in, if applicable
+*   `@instance_id@` - The player's current in-game instance map id, if applicable
+*   `@instance_group_size@` - The number of players currently within your instance group, if applicable
+*   `@lfg_dungeon_id@` - The dungeon id for the player's current instance, if applicable
+*   `@lockout_encounters@` - (Preset) The player's current lockout info within an instance, if applicable, containing total and current data
+*   `@lockout_current_encounters@` - The player's current encounters/stages completed in an instance, if applicable
+*   `@lockout_total_encounters@` - The player's total encounters/stages within an instance, if applicable
 
 ___
-
-### Gui Placeholders
-These placeholders translate to the `&SCREEN&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders throughout the `Advanced Settings::Gui Messages` area of the Config Gui.
-
-*   `&SCREEN&` - The Current Gui Screen Name (Supports `Container` and `Screen` type interfaces)
-*   `&CLASS&` - The Current Gui Class (Ex: `net.minecraft.xxx`)
-
-___
-
-### Item Placeholders
-These placeholders translate to the `&TILEENTITY&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders throughout the `Advanced Settings::Item Messages` area of the Config Gui.
-
-*   `&MAIN&` - The Current Item your Main Hand is Holding
-*   `&OFFHAND&` - The Current Item your Off Hand is Holding
-*   `&HELMET&` - The Current Helmet Armor Piece you have Equipped
-*   `&CHEST&` - The Current Chest Armor Piece you have Equipped
-*   `&LEGS&` - The Current Leggings Armor Piece you have Equipped
-*   `&BOOTS&` - The Current Boots Armor Piece you have Equipped
-
-___
-
-## Entity Placeholders
-These placeholders translate to the `&TARGETENTITY&`, `&ATTACKINGENTITY&`, and `&RIDINGENTITY&` Global Placeholder in the `Presence Settings` menu within the Config Gui.
-
-You can configure these Sub-Placeholders throughout the `Advanced Settings::Entity [Target,Attacking,Riding] Messages` area of the Config Gui.
-
-*   `&ENTITY&` - The Entity Name
-
-Additionally, these sub placeholders support nbt data, where in this case the Entity's nbt data is parsed into sub-placeholders (Outlined in Tooltips)
-
-## Versions of CraftPresence
-Beginning in v1.5.2, CraftPresence is now split into different editions, based on the Minecraft Version you use it in:
-
-*   Legacy Version (Minecraft 1.2.5 and Below):
-    *   Server Support is unavailable in 1.2.5 and Below (Only SinglePlayer will work with showGameStatus enabled)
-    *   Minecraft 1.1.0 and below may not work on Forge, and may require a Modified Minecraft Jar with Risugami's ModLoader + ModLoaderMP
-
-**Support for issues related to Vanilla code, Forge, or Risugami's ModLoader is extremely limited**
 
 ## Disclaimers & Additional Info
-
-### Minecraft Object Obfuscation
-Due to obfuscation in Minecraft, some of Minecraft Objects such as Screens, Dimensions, or Servers must be opened once in the session to be separately customized.
 
 ### Icon Requesting
 Not seeing an Icon you like or have a suggestion for an Icon to add/modify on the default Client ID?
@@ -231,22 +145,17 @@ Need some assistance with one of my mods or wish to provide feedback?
 I can be contacted via the following methods:
 
 *   [Email](mailto:cstack2011@yahoo.com)
-*   [CurseForge](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
+*   [CurseForge - Minecraft Edition](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 *   [Discord :: ![Discord Chat](https://img.shields.io/discord/455206084907368457.svg)](https://discord.com/invite/BdKkbpP)
 
-Additionally, codebase documentation for this mod is available [here](https://cdagaming.gitlab.io/craftpresence-documentation/) with further guides available on [the wiki](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Home)
+Additionally, codebase documentation for this mod is available [here](https://gitlab.com/CDAGaming/CraftPresence-Wow-Edition) with further guides available on [the wiki](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Home)
 
 #### Licensing
 This Mod is under the MIT License as well as the Apache 2.0 License
 
 This project makes usage of the following dependencies internally:
 
-*   [DiscordIPC API](https://github.com/jagrosh/DiscordIPC) by [jagrosh](https://github.com/jagrosh)
-    *   [JUnixSocket](https://github.com/kohlschutter/junixsocket) by [kohlschutter](https://github.com/kohlschutter)
-
-*   [Google's Guava Api](https://github.com/google/guava) by [Google](https://github.com/google/)
-
-*   [Java Native Access (JNA) API](https://github.com/java-native-access/jna) on v1.5.x and Below
+TBD -- UNDER CONSTRUCTION
 
 #### Discord Terms of Service
 As with other RPC Mods, this Mod uses your in-game data to send display information to a 3rd party service (In this Case, Discord).
