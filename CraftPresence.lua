@@ -37,10 +37,48 @@ local inner_placeholders = {}
 local time_conditions = {}
 -- Update State Data
 local lastInstanceState
+local lastPlayerStatus
 local lastLocalPlane
 local hasInstanceChanged = false
 local playerAlliance = "None"
 local playerCovenant = "None"
+
+--- Retrieves the Player Status for the specified unit
+---
+--- @param unit string The unit name (Default: player)
+--- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
+---
+--- @return string, string @ playerStatus, playerPrefix
+function CraftPresence:GetPlayerStatus(unit, sync)
+    unit = unit or "player"
+    -- Player Name Tweaks (DND/AFK Data)
+    local isAfk = UnitIsAFK(unit)
+    local isOnDnd = UnitIsDND(unit)
+    local isDead = UnitIsDead(unit)
+    local isGhost = UnitIsGhost(unit)
+    local playerStatus
+    local playerPrefix = ""
+    if isAfk then
+        playerStatus = L["AFK_LABEL"]
+    elseif isOnDnd then
+        playerStatus = L["DND_LABEL"]
+    elseif isGhost then
+        playerStatus = L["GHOST_LABEL"]
+    elseif isDead then
+        playerStatus = L["DEAD_LABEL"]
+    end
+    -- Parse Player Status
+    if not (playerStatus == nil) then
+        playerPrefix = ("(" .. playerStatus .. ")") .. " "
+    else
+        playerStatus = L["ONLINE_LABEL"]
+    end
+    -- Return Data (and sync if needed)
+    if sync then
+        lastPlayerStatus = playerStatus
+    end
+    return playerStatus, playerPrefix
+end
 
 --- Parses Game information to form placeholder information
 ---
@@ -59,29 +97,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     if toc_version >= retail_toc then
         lockoutData = self:GetCurrentLockoutData()
     end
-    -- Player Name Tweaks (DND/AFK Data)
+    -- Player Data
     local playerName = UnitName("player")
-    local isAfk = UnitIsAFK("player")
-    local isOnDnd = UnitIsDND("player")
-    local isDead = UnitIsDead("player")
-    local isGhost = UnitIsGhost("player")
-    local playerStatus
-    local playerPrefix = ""
-    if isAfk then
-        playerStatus = L["AFK_LABEL"]
-    elseif isOnDnd then
-        playerStatus = L["DND_LABEL"]
-    elseif isGhost then
-        playerStatus = L["GHOST_LABEL"]
-    elseif isDead then
-        playerStatus = L["DEAD_LABEL"]
-    end
-    -- Parse Player Status
-    if not (playerStatus == nil) then
-        playerPrefix = ("(" .. playerStatus .. ")") .. " "
-    else
-        playerStatus = L["ONLINE_LABEL"]
-    end
+    local playerStatus, playerPrefix = self:GetPlayerStatus("player", true)
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
@@ -452,7 +470,7 @@ function CraftPresence:DispatchUpdate(...)
         local args = { ... }
         local ignore_event = false
         local event_conditions = {
-            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player"),
+            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" and (lastPlayerStatus ~= self:GetPlayerStatus(args[2]))),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance())
         }
         for key, value in pairs(event_conditions) do
