@@ -1,8 +1,8 @@
 local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
--- ==================
--- Data Utilities
--- ==================
+----------------------------------
+--LUA UTILITIES
+----------------------------------
 
 --- Determines whether the specified string contains digit characters
 ---
@@ -110,4 +110,57 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
     end
 
     return tmp
+end
+
+----------------------------------
+--API UTILITIES
+----------------------------------
+
+local lastPlayerStatus
+
+--- Retrieves the Player Status for the specified unit
+---
+--- @param unit string The unit name (Default: player)
+--- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
+---
+--- @return string, string @ playerStatus, playerPrefix
+function CraftPresence:GetPlayerStatus(unit, sync)
+    unit = unit or "player"
+    -- Player Name Tweaks (DND/AFK Data)
+    local isAfk = UnitIsAFK(unit)
+    local isOnDnd = UnitIsDND(unit)
+    local isDead = UnitIsDead(unit)
+    local isGhost = UnitIsGhost(unit)
+    local playerStatus
+    local playerPrefix = ""
+    if isAfk then
+        playerStatus = L["AFK_LABEL"]
+    elseif isOnDnd then
+        playerStatus = L["DND_LABEL"]
+    elseif isGhost then
+        playerStatus = L["GHOST_LABEL"]
+    elseif isDead then
+        playerStatus = L["DEAD_LABEL"]
+    end
+    -- Parse Player Status
+    if not (playerStatus == nil) then
+        playerPrefix = ("(" .. playerStatus .. ")") .. " "
+    else
+        playerStatus = L["ONLINE_LABEL"]
+    end
+    -- Return Data (and sync if needed)
+    if sync then
+        lastPlayerStatus = playerStatus
+    end
+    return playerStatus, playerPrefix
+end
+
+----------------------------------
+--API GETTERS AND SETTERS
+----------------------------------
+
+--- Retrieves the Last Player Status, if any
+--- @return string @ lastPlayerStatus
+function CraftPresence:GetLastPlayerStatus()
+    return lastPlayerStatus
 end

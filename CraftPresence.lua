@@ -37,48 +37,10 @@ local inner_placeholders = {}
 local time_conditions = {}
 -- Update State Data
 local lastInstanceState
-local lastPlayerStatus
-local lastLocalPlane
+local lastAreaName
 local hasInstanceChanged = false
-local playerAlliance = "None"
-local playerCovenant = "None"
-
---- Retrieves the Player Status for the specified unit
----
---- @param unit string The unit name (Default: player)
---- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
----
---- @return string, string @ playerStatus, playerPrefix
-function CraftPresence:GetPlayerStatus(unit, sync)
-    unit = unit or "player"
-    -- Player Name Tweaks (DND/AFK Data)
-    local isAfk = UnitIsAFK(unit)
-    local isOnDnd = UnitIsDND(unit)
-    local isDead = UnitIsDead(unit)
-    local isGhost = UnitIsGhost(unit)
-    local playerStatus
-    local playerPrefix = ""
-    if isAfk then
-        playerStatus = L["AFK_LABEL"]
-    elseif isOnDnd then
-        playerStatus = L["DND_LABEL"]
-    elseif isGhost then
-        playerStatus = L["GHOST_LABEL"]
-    elseif isDead then
-        playerStatus = L["DEAD_LABEL"]
-    end
-    -- Parse Player Status
-    if not (playerStatus == nil) then
-        playerPrefix = ("(" .. playerStatus .. ")") .. " "
-    else
-        playerStatus = L["ONLINE_LABEL"]
-    end
-    -- Return Data (and sync if needed)
-    if sync then
-        lastPlayerStatus = playerStatus
-    end
-    return playerStatus, playerPrefix
-end
+local playerAlliance = L["TYPE_NONE"]
+local playerCovenant = L["TYPE_NONE"]
 
 --- Parses Game information to form placeholder information
 ---
@@ -107,7 +69,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local playerClass = UnitClass("player")
     hasInstanceChanged = force_instance_change or (
             ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
-                    ((lastLocalPlane == nil) or (name ~= lastLocalPlane))
+                    ((lastAreaName == nil) or (name ~= lastAreaName))
     )
     -- Covenant and Faction Setup
     -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
@@ -129,7 +91,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
                         (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))
         )) then
             playerAlliance = localizedFaction
-            playerCovenant = "None"
+            playerCovenant = L["TYPE_NONE"]
         else
             playerCovenant = playerCovenantData.name
             playerAlliance = playerCovenant
@@ -141,12 +103,12 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local sub_name = GetSubZoneText()
     -- Null-Case to ensure Zone Name always equals something
     if (zone_name == nil or zone_name == "") then
-        zone_name = L["ZONE_NAME_UNKNOWN"]
+        zone_name = L["TYPE_UNKNOWN"]
     end
     -- Format the zone info based on zone data
     if (sub_name == nil or sub_name == "") then
         formatted_zone_info = zone_name
-        sub_name = L["ZONE_NAME_UNKNOWN"]
+        sub_name = L["TYPE_UNKNOWN"]
     else
         formatted_zone_info = (sub_name .. " - " .. zone_name)
     end
@@ -301,7 +263,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- Update Instance Status before exiting method
     if hasInstanceChanged then
         lastInstanceState = instanceType
-        lastLocalPlane = name
+        lastAreaName = name
     end
     return outputTable, queued_inner_placeholders, queued_time_conditions
 end
@@ -470,7 +432,9 @@ function CraftPresence:DispatchUpdate(...)
         local args = { ... }
         local ignore_event = false
         local event_conditions = {
-            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" and (lastPlayerStatus ~= self:GetPlayerStatus(args[2]))),
+            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" and (
+                    self:GetLastPlayerStatus() ~= self:GetPlayerStatus(args[2])
+            )),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance())
         }
         for key, value in pairs(event_conditions) do
