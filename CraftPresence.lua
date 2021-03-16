@@ -433,7 +433,7 @@ function CraftPresence:DispatchUpdate(...)
         local ignore_event = false
         local event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" and (
-                    self:GetLastPlayerStatus() ~= self:GetPlayerStatus(args[2])
+                    self:GetLastPlayerStatus() ~= self:GetPlayerStatus(args[2], false)
             )),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance())
         }
