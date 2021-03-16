@@ -24,22 +24,23 @@ debug_mode = config["debug"]
 log_level = logging.INFO
 if debug_mode:
     log_level = logging.DEBUG
-
+# Setup Basic Logging
 logging.basicConfig(filename=log_path,
                     filemode='w',
                     format=log_format,
                     datefmt=log_date_style,
                     level=log_level
                     )
-
+# Setup Main Logger and Formatting
 root_logger = logging.getLogger()
 log_formatter = logging.Formatter(log_format, log_date_style)
-
+# Optional handlers
 console_handler = logging.StreamHandler(sys.stdout)
 console_handler.setFormatter(log_formatter)
 root_logger.addHandler(console_handler)
 
 # these are internal use variables, don't touch them
+process_version = "v1.0.2"
 decoded = ''
 process_hwnd = None
 rpc_obj = None
@@ -187,7 +188,7 @@ def read_squares(hwnd):
     return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line
 
 
-root_logger.info("========== DiscordRichPresence Service - v1.0.2 ==========")
+root_logger.info("========== DiscordRichPresence Service - " + process_version + " ==========")
 root_logger.info("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
 root_logger.info("Note: Please keep this script open while logging and sending Rich Presence updates.")
 root_logger.info("==========================================================")
