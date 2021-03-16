@@ -12,19 +12,24 @@ from PIL import Image
 import rpc
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-
+# Logging Data
 log_path = dir_path + '/output.log'
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
 log_date_style = "%m/%d/%Y %I:%M:%S %p"
-
+# Config Data
 f = open(dir_path + '/config.json')
 config = json.load(f)
+debug_mode = config["debug"]
+# Adjust log level depending on mode
+log_level = logging.INFO
+if debug_mode:
+    log_level = logging.DEBUG
 
 logging.basicConfig(filename=log_path,
                     filemode='w',
                     format=log_format,
                     datefmt=log_date_style,
-                    level=logging.DEBUG
+                    level=log_level
                     )
 
 root_logger = logging.getLogger()
@@ -138,7 +143,7 @@ def read_squares(hwnd):
     try:
         im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
     except win32ui.error:
-        # root_logger.error('win32ui.error')
+        root_logger.debug('win32ui.error')
         return
 
     read = []
@@ -151,7 +156,7 @@ def read_squares(hwnd):
         except IndexError:
             break
 
-        if config["debug"]:
+        if debug_mode:
             im.putpixel((x, y), (255, 255, 255))
 
         if r == g == b == 0:
@@ -169,7 +174,7 @@ def read_squares(hwnd):
 
     parts = get_decoded_chunks(current_decoded)
 
-    if config["debug"]:
+    if debug_mode:
         im.show()
         return
 
@@ -191,7 +196,7 @@ while True:
     process_hwnd = None
     win32gui.EnumWindows(callback, None)
 
-    if config["debug"]:
+    if debug_mode:
         # if in DEBUG mode, squares are read, the image with the dot matrix is
         # shown and then the script quits.
         if process_hwnd:
