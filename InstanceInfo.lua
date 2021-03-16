@@ -94,6 +94,7 @@ end
 ---
 --- @return table @ lockoutData
 function CraftPresence:GetCurrentLockoutData()
+    -- Assign default data before execution
     local lockoutData = {
         name = "",
         difficulty = "",
@@ -102,47 +103,47 @@ function CraftPresence:GetCurrentLockoutData()
         totalEncounters = 0,
         formattedEncounterData = ""
     }
-    local foundData = false
 
+    -- If we are in an instance, do the following:
+    -- * Scan through Scenario step info, if applicable
+    -- * Otherwise, Detect lockout data, if present
     if IsInInstance() then
         local instanceName, _, difficulty, difficultyName = GetInstanceInfo()
-        for index = 1, GetNumSavedInstances() do
-            local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, stageStatus, _ = GetSavedInstanceInfo(index)
-            if locked then
-                if (instanceName == areaName and difficulty == areaSc) then
-                    foundData = true
-                    lockoutData = {
-                        name = areaName,
-                        difficulty = difficultyName,
-                        difficultyId = difficulty,
-                        currentEncounters = stageStatus,
-                        totalEncounters = numStages,
-                        formattedEncounterData = ("(" .. stageStatus .. "/" .. numStages .. ")")
-                    }
-                    break
-                end
-            end
-        end
-        if not foundData then
-            -- Attempt to use Scenario Data, if our Instance isn't a Saved Instance and is a Scenario
-            if C_Scenario.IsInScenario() then
-                local _, _, steps = C_Scenario.GetStepInfo()
-                if steps > 0 then
-                    local completedSteps = 0
-                    for i = 1, steps do
-                        local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
-                        if completed then
-                            completedSteps = completedSteps + 1
-                        end
+        if C_Scenario.IsInScenario() then
+            local _, _, steps = C_Scenario.GetStepInfo()
+            if steps > 0 then
+                local completedSteps = 0
+                for i = 1, steps do
+                    local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
+                    if completed then
+                        completedSteps = completedSteps + 1
                     end
-                    lockoutData = {
-                        name = instanceName,
-                        difficulty = difficultyName,
-                        difficultyId = difficulty,
-                        currentEncounters = completedSteps,
-                        totalEncounters = steps,
-                        formattedEncounterData = ("(" .. completedSteps .. "/" .. steps .. ")")
-                    }
+                end
+
+                lockoutData = {
+                    name = instanceName,
+                    difficulty = difficultyName,
+                    difficultyId = difficulty,
+                    currentEncounters = completedSteps,
+                    totalEncounters = steps,
+                    formattedEncounterData = ("(" .. completedSteps .. "/" .. steps .. ")")
+                }
+            end
+        else
+            for index = 1, GetNumSavedInstances() do
+                local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, stageStatus, _ = GetSavedInstanceInfo(index)
+                if locked then
+                    if (instanceName == areaName and difficulty == areaSc) then
+                        lockoutData = {
+                            name = areaName,
+                            difficulty = difficultyName,
+                            difficultyId = difficulty,
+                            currentEncounters = stageStatus,
+                            totalEncounters = numStages,
+                            formattedEncounterData = ("(" .. stageStatus .. "/" .. numStages .. ")")
+                        }
+                        break
+                    end
                 end
             end
         end

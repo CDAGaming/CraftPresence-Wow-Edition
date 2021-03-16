@@ -38,6 +38,7 @@ local time_conditions = {}
 -- Update State Data
 local lastInstanceState
 local lastAreaName
+local lastEventName
 local hasInstanceChanged = false
 local playerAlliance = L["TYPE_NONE"]
 local playerCovenant = L["TYPE_NONE"]
@@ -377,7 +378,8 @@ function CraftPresence:OnEnable()
     end
     -- Register Universal Events
     CraftPresence:AddTriggers("DispatchUpdate",
-            "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED", "PLAYER_UNGHOST", "PLAYER_FLAGS_CHANGED",
+            "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED",
+            "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
             "UPDATE_INSTANCE_INFO"
     )
@@ -428,14 +430,15 @@ end
 function CraftPresence:DispatchUpdate(...)
     if ... ~= nil then
         -- Event Conditional Setup
-        -- Format: [EVENT_NAME] = event_condition
+        -- Format: [EVENT_NAME] = ignore_event_condition
         local args = { ... }
         local ignore_event = false
         local event_conditions = {
-            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" and (
-                    self:GetLastPlayerStatus() ~= self:GetPlayerStatus(args[2], false)
+            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" or (
+                    self:GetLastPlayerStatus() == self:GetPlayerStatus(args[2], false)
             )),
-            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance())
+            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance()),
+            ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD")
         }
         for key, value in pairs(event_conditions) do
             if args[1] == key and value then
@@ -445,6 +448,8 @@ function CraftPresence:DispatchUpdate(...)
         end
         if ignore_event then return end
         -- Print Details if needed before continuing
+        lastEventName = args[1]
+
         if self:GetFromDb("debugMode") then
             if self:GetFromDb("verboseMode") then
                 self:Print(string.format(
