@@ -131,16 +131,16 @@ function CraftPresence:GetCurrentLockoutData()
             end
         else
             for index = 1, GetNumSavedInstances() do
-                local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, stageStatus, _ = GetSavedInstanceInfo(index)
+                local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, curProg, _ = GetSavedInstanceInfo(index)
                 if locked then
                     if (instanceName == areaName and difficulty == areaSc) then
                         lockoutData = {
                             name = areaName,
                             difficulty = difficultyName,
                             difficultyId = difficulty,
-                            currentEncounters = stageStatus,
+                            currentEncounters = curProg,
                             totalEncounters = numStages,
-                            formattedEncounterData = ("(" .. stageStatus .. "/" .. numStages .. ")")
+                            formattedEncounterData = ("(" .. curProg .. "/" .. numStages .. ")")
                         }
                         break
                     end

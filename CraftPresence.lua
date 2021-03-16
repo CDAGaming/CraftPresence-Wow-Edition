@@ -446,7 +446,9 @@ function CraftPresence:DispatchUpdate(...)
                 break
             end
         end
-        if ignore_event then return end
+        if ignore_event then
+            return
+        end
         -- Print Details if needed before continuing
         lastEventName = args[1]
 
