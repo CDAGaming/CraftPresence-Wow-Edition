@@ -44,7 +44,7 @@ class DiscordIpcClient(metaclass=ABCMeta):
         self.client_id = client_id
         self._connect()
         self._do_handshake()
-        logger.info("connected via ID %s", client_id)
+        logger.info("Connected via ID %s", client_id)
 
     @classmethod
     def for_platform(cls, client_id, platform=sys.platform):
@@ -89,7 +89,7 @@ class DiscordIpcClient(metaclass=ABCMeta):
         return buf
 
     def close(self):
-        logger.warning("closing connection")
+        logger.info("Closing Connection")
         try:
             self.send({}, op=OP_CLOSE)
         finally:

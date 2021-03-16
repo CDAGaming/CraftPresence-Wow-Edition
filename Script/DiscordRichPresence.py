@@ -246,7 +246,6 @@ while True:
                         time.sleep(config["refresh_rate"])
                     else:
                         break
-                root_logger.info('Connected to Discord.')
 
             timerData = {}
             assetsData = {}
