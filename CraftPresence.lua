@@ -438,7 +438,10 @@ function CraftPresence:DispatchUpdate(...)
             ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" or (
                     self:GetLastPlayerStatus() == self:GetPlayerStatus(args[2], false)
             )),
-            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or lastEventName == eventName or self:GetCachedLockout() == self:GetCurrentLockoutData(false)),
+            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
+                    lastEventName == eventName or
+                    self:GetCachedLockout() == self:GetCurrentLockoutData(false)
+            ),
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD")
         }
         for key, value in pairs(ignore_event_conditions) do
