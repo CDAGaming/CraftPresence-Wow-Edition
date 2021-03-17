@@ -128,7 +128,7 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  */cp|r ^config|r  -  Displays the *OptionsUI|r.
  */cp|r ^test|r  -  Toggles debugging of Rich Presence Frames.
  */cp|r ^clean|r or */cp|r ^clear|r  -  Reset all frames to their original positions and colors.
- */cp|r ^update|r  -  Forcibly update your Rich Presence display.
+ */cp|r ^update[:force]|r  -  Forcibly update your Rich Presence display (Also forces an instance change if specified).
  */cp|r ^minimap|r  -  Toggles the display of the minimap button.
  */cp|r ^status|r  -  Views the last sent Rich Presence event.
  */cp|r ^placeholders[:query]|r  -  Views the currently available placeholders.

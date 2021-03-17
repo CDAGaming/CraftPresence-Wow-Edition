@@ -1,6 +1,16 @@
 local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local InstanceTable
+-- Lockout Data Storage
+local defaultLockoutData = {
+    name = "",
+    difficulty = "",
+    difficultyId = 0,
+    currentEncounters = 0,
+    totalEncounters = 0,
+    formattedEncounterData = ""
+}
+local cachedLockoutState = defaultLockoutData
 
 --- Generate table of dungeon and raid instances by expansion
 ---
@@ -83,6 +93,8 @@ end
 
 --- Retrieve current Instance/Scenario Lockout Data
 ---
+--- @param sync boolean Whether the lockoutData should be cached
+---
 --- Format:
 --- lockoutData {
 ---     string @ name,
@@ -93,16 +105,9 @@ end
 --- }
 ---
 --- @return table @ lockoutData
-function CraftPresence:GetCurrentLockoutData()
+function CraftPresence:GetCurrentLockoutData(sync)
     -- Assign default data before execution
-    local lockoutData = {
-        name = "",
-        difficulty = "",
-        difficultyId = 0,
-        currentEncounters = 0,
-        totalEncounters = 0,
-        formattedEncounterData = ""
-    }
+    local lockoutData = defaultLockoutData
 
     -- If we are in an instance, do the following:
     -- * Scan through Scenario step info, if applicable
@@ -147,6 +152,9 @@ function CraftPresence:GetCurrentLockoutData()
                 end
             end
         end
+    end
+    if sync then
+        cachedLockoutState = lockoutData
     end
     return lockoutData
 end
@@ -233,4 +241,14 @@ function CraftPresence:GetActiveKeystone()
     end
 
     return keystoneInfo
+end
+
+----------------------------------
+--API GETTERS AND SETTERS
+----------------------------------
+
+--- Retrieves the Cached Lockout Data, if any
+--- @return table @ cachedLockoutState
+function CraftPresence:GetCachedLockout()
+    return cachedLockoutState
 end

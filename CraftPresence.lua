@@ -58,7 +58,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- Retail: Lockout Data is only available for Retail Wow
     local lockoutData
     if toc_version >= retail_toc then
-        lockoutData = self:GetCurrentLockoutData()
+        lockoutData = self:GetCurrentLockoutData(true)
     end
     -- Player Data
     local playerName = UnitName("player")
@@ -432,16 +432,17 @@ function CraftPresence:DispatchUpdate(...)
         -- Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
         local args = { ... }
+        local eventName = args[1]
         local ignore_event = false
-        local event_conditions = {
+        local ignore_event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" or (
                     self:GetLastPlayerStatus() == self:GetPlayerStatus(args[2], false)
             )),
-            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance()),
+            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or lastEventName == eventName or self:GetCachedLockout() == self:GetCurrentLockoutData(false)),
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD")
         }
-        for key, value in pairs(event_conditions) do
-            if args[1] == key and value then
+        for key, value in pairs(ignore_event_conditions) do
+            if eventName == key and value then
                 ignore_event = true
                 break
             end
@@ -450,7 +451,7 @@ function CraftPresence:DispatchUpdate(...)
             return
         end
         -- Print Details if needed before continuing
-        lastEventName = args[1]
+        lastEventName = eventName
 
         if self:GetFromDb("debugMode") then
             if self:GetFromDb("verboseMode") then
@@ -462,7 +463,7 @@ function CraftPresence:DispatchUpdate(...)
             else
                 self:Print(string.format(
                         L["DEBUG_LOG"], string.format(
-                                L["INFO_EVENT_FIRED"], args[1]
+                                L["INFO_EVENT_FIRED"], eventName
                         )
                 ))
             end
@@ -538,8 +539,13 @@ function CraftPresence:ChatCommand(input)
             end
         elseif input == "clean" or input == "clear" then
             self:CleanFrames()
-        elseif input == "update" then
-            self:PaintMessageWait(true)
+        elseif self:StartsWith(input, "update") then
+            -- Query Parsing
+            local query = string.match(input, ":(.*)")
+            if query ~= nil then
+                query = string.lower(query)
+            end
+            self:PaintMessageWait(true, (query == "force"))
         elseif input == "config" then
             self:ShowConfig()
         elseif input == "minimap" then
