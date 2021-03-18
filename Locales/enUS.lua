@@ -75,7 +75,7 @@ L["DEFAULT_ARENA_MESSAGE"] = "@zone_name@ - In Arena"
 L["TITLE_FALLBACK_MESSAGE"] = "Default Placeholder Message"
 L["COMMENT_FALLBACK_MESSAGE"] = "The message(s) to be interpreted as the #default# placeholder."
 L["USAGE_FALLBACK_MESSAGE"] = "<Your message here>"
-L["DEFAULT_FALLBACK_MESSAGE"] = "@zone_info@@dead_state@"
+L["DEFAULT_FALLBACK_MESSAGE"] = "@zone_info@"
 
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
@@ -107,6 +107,7 @@ L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
 L["INFO_EVENT_FIRED"] = "Event Fired => %s"
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
+L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 L["INFO_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 L["INFO_PLACEHOLDER_NONE"] = ([=[*No placeholders found within specified parameters|r]=]):gsub('*', COLOR_RED):gsub('%^', COLOR_GREY)
@@ -131,6 +132,7 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  */cp|r ^update[:force]|r  -  Forcibly update your Rich Presence display (Also forces an instance change if specified).
  */cp|r ^minimap|r  -  Toggles the display of the minimap button.
  */cp|r ^status|r  -  Views the last sent Rich Presence event.
+ */cp|r ^reset[:grp,key]|r  -  Resets all (or a specific) setting(s) within the *OptionsUI|r.
  */cp|r ^placeholders[:query]|r  -  Views the currently available placeholders.
  NOTE: All commands must be prefixed with either */%s|r or */%s|r.
  Optional arguments in commands are represented by *[syntax]|r.

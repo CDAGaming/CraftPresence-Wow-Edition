@@ -533,5 +533,6 @@ end
 
 --- Resets the settings in the config to their defaults
 function CraftPresence:ResetDB()
+    CraftPresence:Print(L["INFO_RESET_CONFIG"])
     CraftPresence.db:ResetProfile(false, true)
 end

@@ -410,17 +410,18 @@ end
 ---
 --- @param grp string The config group to retrieve
 --- @param key string The config key to retrieve
+--- @param reset boolean Whether to reset this property value
 ---
 --- @return any configValue
-function CraftPresence:GetFromDb(grp, key, ...)
+function CraftPresence:GetFromDb(grp, key, reset)
     local DB_DEFAULTS = CraftPresence:GetDefaults()
-    if CraftPresence.db.profile[grp] == nil then
+    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
         CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
     end
     if not key then
         return CraftPresence.db.profile[grp]
     end
-    if CraftPresence.db.profile[grp][key] == nil then
+    if CraftPresence.db.profile[grp][key] == nil or reset then
         CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
     end
     return CraftPresence.db.profile[grp][key]
@@ -551,6 +552,14 @@ function CraftPresence:ChatCommand(input)
             self:PaintMessageWait(true, (query == "force"))
         elseif input == "config" then
             self:ShowConfig()
+        elseif self:StartsWith(input, "reset") then
+            local query = string.match(input, ":(.*)")
+            if query ~= nil then
+                local sub_query = string.match(query, ",(.*)")
+                self:GetFromDb(query, sub_query, true)
+            else
+                self:ResetDB()
+            end
         elseif input == "minimap" then
             CraftPresence:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "status" then
