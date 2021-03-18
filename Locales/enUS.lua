@@ -110,7 +110,7 @@ L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
 L["INFO_EVENT_SKIPPED"] = "Event Skipped => %s"
-L["INFO_EVENT_FIRED"] = "Event Fired => %s"
+L["INFO_EVENT_PROCESSING"] = "Event Processing => %s"
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 L["INFO_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
