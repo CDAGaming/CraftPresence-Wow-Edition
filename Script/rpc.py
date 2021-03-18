@@ -89,7 +89,7 @@ class DiscordIpcClient(metaclass=ABCMeta):
         return buf
 
     def close(self):
-        logger.info("Closing Connection")
+        logger.info("Closing connection")
         try:
             self.send({}, op=OP_CLOSE)
         finally:
