@@ -30,6 +30,7 @@ local DB_DEFAULTS = {
         debugMode = false,
         verboseMode = false,
         showMinimapIcon = true,
+        queuedPipeline = false,
         callbackDelay = 2,
         frameSize = 6,
         frameClearDelay = 10
@@ -342,8 +343,25 @@ local extraOptionsGroup = {
             end,
         },
         blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        queuedPipeline = {
+            type = "toggle", order = 16,
+            name = L["TITLE_QUEUED_PIPELINE"],
+            desc = L["COMMENT_QUEUED_PIPELINE"],
+            get = function(_)
+                return CraftPresence:GetFromDb("queuedPipeline")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb("queuedPipeline")
+                local isValid = (type(value) == "boolean")
+                if isValid then
+                    CraftPresence.db.profile.queuedPipeline = value
+                    CraftPresence:PrintChangedValue(L["TITLE_QUEUED_PIPELINE"], oldValue, value)
+                end
+            end,
+        },
+        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
         callbackDelay = {
-            type = "range", order = 16, width = 1.50,
+            type = "range", order = 18, width = 1.50,
             min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
             name = L["TITLE_CALLBACK_DELAY"],
             desc = L["COMMENT_CALLBACK_DELAY"],
@@ -366,9 +384,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
+        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
         frameClearDelay = {
-            type = "range", order = 18, width = 1.50,
+            type = "range", order = 20, width = 1.50,
             min = L["MINIMUM_FRAME_CLEAR_DELAY"], max = L["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
             name = L["TITLE_FRAME_CLEAR_DELAY"],
             desc = L["COMMENT_FRAME_CLEAR_DELAY"],
@@ -391,9 +409,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
+        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
         frameSize = {
-            type = "range", order = 20, width = 1.50,
+            type = "range", order = 22, width = 1.50,
             min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
             name = L["TITLE_FRAME_SIZE"],
             desc = L["COMMENT_FRAME_SIZE"],
@@ -416,7 +434,7 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
+        blank7 = { type = "description", order = 23, fontSize = "small", name = " " },
     }
 }
 

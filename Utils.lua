@@ -119,6 +119,7 @@ end
 ----------------------------------
 
 local lastPlayerStatus
+local timer_locked = false
 
 --- Retrieves the Player Status for the specified unit
 ---
@@ -165,4 +166,19 @@ end
 --- @return string @ lastPlayerStatus
 function CraftPresence:GetLastPlayerStatus()
     return lastPlayerStatus
+end
+
+--- Sets whether or not the timer is locked
+--- @param newValue boolean New variable value
+function CraftPresence:SetTimerLocked(newValue)
+    -- This method only executes if we are operating in a non-queue pipeline
+    if not self:GetFromDb("queuedPipeline") then
+        timer_locked = newValue
+    end
+end
+
+--- Returns whether or not the timer is locked
+--- @return boolean @ timer_locked
+function CraftPresence:IsTimerLocked()
+    return timer_locked
 end

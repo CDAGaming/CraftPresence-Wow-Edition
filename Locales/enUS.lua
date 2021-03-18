@@ -86,6 +86,9 @@ L["COMMENT_VERBOSE_MODE"] = "Toggles the display of debugger logging (Should be 
 L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
 L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config. (May require a reload)"
 
+L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
+L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate in a line/queue or skip in-between events"
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
 L["MINIMUM_CALLBACK_DELAY"] = 0
@@ -102,11 +105,12 @@ L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 
 -- Logging Data
+L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
+L["INFO_EVENT_SKIPPED"] = "Event Skipped => %s"
 L["INFO_EVENT_FIRED"] = "Event Fired => %s"
-L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 L["INFO_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)

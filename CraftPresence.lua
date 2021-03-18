@@ -377,7 +377,7 @@ function CraftPresence:OnEnable()
         self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))
     end
     -- Register Universal Events
-    CraftPresence:AddTriggers("DispatchUpdate",
+    CraftPresence:AddTriggers("PrepareUpdate",
             "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED",
             "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
@@ -385,7 +385,7 @@ function CraftPresence:OnEnable()
     )
     -- Register Retail-Only Events
     if toc_version >= retail_toc then
-        CraftPresence:AddTriggers("DispatchUpdate",
+        CraftPresence:AddTriggers("PrepareUpdate",
                 "ACTIVE_TALENT_GROUP_CHANGED",
                 "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                 "SCENARIO_COMPLETED", "CRITERIA_COMPLETE"
@@ -427,12 +427,48 @@ function CraftPresence:GetFromDb(grp, key, reset)
     return CraftPresence.db.profile[grp][key]
 end
 
---- Dispatches and prepares a new frame update
-function CraftPresence:DispatchUpdate(...)
-    if ... ~= nil then
+--- Prepares a new frame update, given the specified arguments
+function CraftPresence:PrepareUpdate(...)
+    local args = { ... }
+    local delay = self:GetFromDb("callbackDelay")
+    if self:IsWithinValue(delay, math.max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"], true) then
+        -- If we are working off a callback delay,
+        -- ensure the callback timer is free before applying a new delay
+        -- to the next upcoming event in the pipeline
+        -- Note: If we are running in a queued pipeline, this will always be true
+        if self:IsTimerLocked() then
+            if self:GetFromDb("debugMode") then
+                if self:GetFromDb("verboseMode") then
+                    self:Print(string.format(
+                            L["VERBOSE_LOG"], string.format(
+                                    L["INFO_EVENT_SKIPPED"], self:SerializeTable(args)
+                            )
+                    ))
+                else
+                    self:Print(string.format(
+                            L["DEBUG_LOG"], string.format(
+                                    L["INFO_EVENT_SKIPPED"], args[1]
+                            )
+                    ))
+                end
+            end
+            return
+        else
+            self:SetTimerLocked(true)
+            C_Timer.After(delay, function()
+                self:DispatchUpdate(args)
+            end)
+        end
+    else
+        self:DispatchUpdate(args)
+    end
+end
+
+--- Dispatches a new frame update, given the specified arguments
+function CraftPresence:DispatchUpdate(args)
+    if args ~= nil then
         -- Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
-        local args = { ... }
         local eventName = args[1]
         local ignore_event = false
         local ignore_event_conditions = {
@@ -451,37 +487,31 @@ function CraftPresence:DispatchUpdate(...)
                 break
             end
         end
+
+        -- Print Details if needed before continuing
         if ignore_event then
             return
-        end
-        -- Print Details if needed before continuing
-        lastEventName = eventName
-
-        if self:GetFromDb("debugMode") then
-            if self:GetFromDb("verboseMode") then
-                self:Print(string.format(
-                        L["VERBOSE_LOG"], string.format(
-                                L["INFO_EVENT_FIRED"], self:SerializeTable(args)
-                        )
-                ))
-            else
-                self:Print(string.format(
-                        L["DEBUG_LOG"], string.format(
-                                L["INFO_EVENT_FIRED"], eventName
-                        )
-                ))
+        else
+            lastEventName = eventName
+            if self:GetFromDb("debugMode") then
+                if self:GetFromDb("verboseMode") then
+                    self:Print(string.format(
+                            L["VERBOSE_LOG"], string.format(
+                                    L["INFO_EVENT_FIRED"], self:SerializeTable(args)
+                            )
+                    ))
+                else
+                    self:Print(string.format(
+                            L["DEBUG_LOG"], string.format(
+                                    L["INFO_EVENT_FIRED"], eventName
+                            )
+                    ))
+                end
             end
         end
     end
 
-    local delay = self:GetFromDb("callbackDelay")
-    if self:IsWithinValue(delay, math.max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"], true) then
-        C_Timer.After(delay, function()
-            self:PaintMessageWait()
-        end)
-    else
-        self:PaintMessageWait()
-    end
+    self:PaintMessageWait()
 end
 
 --- Instructions to be called when the addon is disabled
@@ -543,6 +573,7 @@ function CraftPresence:ChatCommand(input)
             end
         elseif input == "clean" or input == "clear" then
             self:CleanFrames()
+            self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then
             -- Query Parsing
             local query = string.match(input, ":(.*)")

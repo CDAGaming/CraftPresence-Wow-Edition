@@ -219,10 +219,16 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
             )) then
                 C_Timer.After(delay, function()
                     self:CleanFrames()
+                    self:SetTimerLocked(false)
                 end)
             else
                 self:CleanFrames()
+                self:SetTimerLocked(false)
             end
         end
+    else
+        -- If encoded data has not changed, we will release the timer immediatly
+        -- if we are running within a non-queued pipeline
+        self:SetTimerLocked(false)
     end
 end
