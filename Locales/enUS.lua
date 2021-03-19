@@ -110,6 +110,20 @@ The size that each frame pixel should render at
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 
+L["TITLE_PRIMARY_BUTTON"] = "Primary Button"
+L["COMMENT_PRIMARY_BUTTON"] = "The data to be interpreted for the Primary Button area of the RPC"
+
+L["TITLE_SECONDARY_BUTTON"] = "Secondary Button"
+L["COMMENT_SECONDARY_BUTTON"] = "The data to be interpreted for the Secondary Button area of the RPC"
+
+L["TITLE_BUTTON_LABEL"] = "Label"
+L["COMMENT_BUTTON_LABEL"] = "The message(s) to be interpreted as the label."
+L["USAGE_BUTTON_LABEL"] = "<Your message here>"
+
+L["TITLE_BUTTON_URL"] = "Url"
+L["COMMENT_BUTTON_URL"] = "The message(s) to be interpreted as the url."
+L["USAGE_BUTTON_URL"] = "<Your message here>"
+
 -- Logging Data
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
@@ -159,6 +173,9 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  Optional arguments in commands are represented by *[syntax]|r.
 ]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 -- Frame Text Data
+L["ADDON_HEADER_BUTTONS"] = "Buttons"
+L["ADDON_HEADER_CREDITS"] = "Credits"
+
 L["ADDON_INFO_ONE"] = ([=[
 CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence.
 ]=])
@@ -180,6 +197,7 @@ L["LEVEL_TAG_FORMAT"] = "Level %s"
 
 -- NOTE: The values below should NEVER be changed
 L["UNKNOWN_KEY"] = "Skip"
+L["ARRAY_SPLIT_KEY"] = "=="
 L["DEBUG_LOG"] = "[Debug] %s"
 L["VERBOSE_LOG"] = "[Verbose] %s"
 L["ERROR_LOG"] = "[Error] %s"
@@ -187,4 +205,4 @@ L["WARNING_LOG"] = "[Warning] %s"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
-L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
+L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"

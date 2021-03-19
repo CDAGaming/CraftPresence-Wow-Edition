@@ -33,7 +33,15 @@ local DB_DEFAULTS = {
         queuedPipeline = false,
         callbackDelay = 2,
         frameSize = 6,
-        frameClearDelay = 10
+        frameClearDelay = 10,
+        primaryButton = {
+            label = "",
+            url = ""
+        },
+        secondaryButton = {
+            label = "",
+            url = ""
+        }
     },
 }
 
@@ -435,7 +443,20 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank7 = { type = "description", order = 23, fontSize = "small", name = " " },
+        buttonHeader = { order = 22, type = "header", name = L["ADDON_HEADER_BUTTONS"], },
+        primaryButton = {
+            name = L["TITLE_PRIMARY_BUTTON"],
+            desc = L["COMMENT_PRIMARY_BUTTON"],
+            type = "group", order = 23,
+            args = CraftPresence:GetButtonArgs("primaryButton")
+        },
+        secondaryButton = {
+            name = L["TITLE_SECONDARY_BUTTON"],
+            desc = L["COMMENT_SECONDARY_BUTTON"],
+            type = "group", order = 24,
+            args = CraftPresence:GetButtonArgs("secondaryButton")
+        },
+        blank7 = { type = "description", order = 25, fontSize = "small", name = " " },
     }
 }
 
@@ -450,7 +471,7 @@ local aboutGroup = {
             type = "description", order = 10, width = "full", fontSize = "medium",
             name = L["ADDON_INFO_ONE"],
         },
-        thanksHeader = { order = 20, type = "header", name = "Credits", },
+        thanksHeader = { order = 20, type = "header", name = L["ADDON_HEADER_CREDITS"], },
         generalText2 = {
             type = "description", order = 40, fontSize = "medium",
             name = L["ADDON_INFO_TWO"]

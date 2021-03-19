@@ -304,6 +304,13 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local queued_small_image_text = self:GetFromDb("smallImageMessage")
     local queued_time_start = L["UNKNOWN_KEY"]
     local queued_time_end = L["UNKNOWN_KEY"]
+    local queued_primary_button = (
+            self:GetFromDb("primaryButton", "label") .. L["ARRAY_SPLIT_KEY"] .. self:GetFromDb("primaryButton", "url")
+    )
+    local queued_secondary_button = (
+            self:GetFromDb("secondaryButton", "label") .. L["ARRAY_SPLIT_KEY"] .. self:GetFromDb("secondaryButton", "url")
+    )
+    -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do
         queued_details = queued_details:gsub(key, value)
         queued_state = queued_state:gsub(key, value)
@@ -311,7 +318,10 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         queued_large_image_text = queued_large_image_text:gsub(key, value)
         queued_small_image_key = queued_small_image_key:gsub(key, value)
         queued_small_image_text = queued_small_image_text:gsub(key, value)
+        queued_primary_button = queued_primary_button:gsub(key, value)
+        queued_secondary_button = queued_secondary_button:gsub(key, value)
     end
+    -- Inner Placeholder Syncing
     for innerKey, innerValue in pairs(inner_placeholders) do
         queued_details = queued_details:gsub(innerKey, innerValue)
         queued_state = queued_state:gsub(innerKey, innerValue)
@@ -319,7 +329,10 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
         queued_small_image_key = queued_small_image_key:gsub(innerKey, innerValue)
         queued_small_image_text = queued_small_image_text:gsub(innerKey, innerValue)
+        queued_primary_button = queued_primary_button:gsub(innerKey, innerValue)
+        queued_secondary_button = queued_secondary_button:gsub(innerKey, innerValue)
     end
+    -- Time Condition Syncing
     for timeKey, timeValue in pairs(time_conditions) do
         if timeValue then
             if (string.find(timeKey, "start")) then
@@ -346,7 +359,9 @@ function CraftPresence:EncodeConfigData(force_instance_change)
             queued_details,
             queued_state,
             queued_time_start,
-            queued_time_end
+            queued_time_end,
+            queued_primary_button,
+            queued_secondary_button
     )
 end
 

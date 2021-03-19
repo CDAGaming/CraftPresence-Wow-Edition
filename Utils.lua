@@ -114,6 +114,28 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
     return tmp
 end
 
+--- Splits a string by the specified arguments
+---
+--- @param str string The input string to interpret
+--- @param inSplitPattern string The pattern to split the string by
+--- @param outResults table The output result data (Can be predefined)
+---
+--- @return table @ outResults
+function CraftPresence:Split(str, inSplitPattern, outResults)
+    if not outResults then
+        outResults = { }
+    end
+    local theStart = 1
+    local theSplitStart, theSplitEnd = string.find(str, inSplitPattern, theStart)
+    while theSplitStart do
+        table.insert(outResults, string.sub(str, theStart, theSplitStart - 1))
+        theStart = theSplitEnd + 1
+        theSplitStart, theSplitEnd = string.find(str, inSplitPattern, theStart)
+    end
+    table.insert(outResults, string.sub(str, theStart))
+    return outResults
+end
+
 ----------------------------------
 --API UTILITIES
 ----------------------------------
@@ -229,4 +251,45 @@ function CraftPresence:SetToDb(grp, key, newValue, reset)
         end
         CraftPresence.db.profile[grp][key] = newValue
     end
+end
+
+--- Generate Button Arguments for the specified arguments
+---
+--- @param grp string The group the config variable is located at
+--- @param key string The key the config variable is located at
+---
+--- @return table @ generatedData
+function CraftPresence:GetButtonArgs(grp, key)
+    return {
+        label = {
+            type = "input", order = 1, width = 3.0,
+            name = L["TITLE_BUTTON_LABEL"], desc = L["COMMENT_BUTTON_LABEL"], usage = L["USAGE_BUTTON_LABEL"],
+            get = function(_)
+                return CraftPresence:GetFromDb(grp, key or "label")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb(grp, key or "label")
+                local isValid = (type(value) == "string")
+                if isValid then
+                    CraftPresence:SetToDb(grp, key or "label", value)
+                    CraftPresence:PrintChangedValue(("(" .. grp .. ", " .. (key or "label") .. ")"), oldValue, value)
+                end
+            end,
+        },
+        url = {
+            type = "input", order = 2, width = 3.0,
+            name = L["TITLE_BUTTON_URL"], desc = L["COMMENT_BUTTON_URL"], usage = L["USAGE_BUTTON_URL"],
+            get = function(_)
+                return CraftPresence:GetFromDb(grp, key or "url")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb(grp, key or "url")
+                local isValid = (type(value) == "string")
+                if isValid then
+                    CraftPresence:SetToDb(grp, key or "url", value)
+                    CraftPresence:PrintChangedValue(("(" .. grp .. ", " .. (key or "url") .. ")"), oldValue, value)
+                end
+            end,
+        },
+    }
 end

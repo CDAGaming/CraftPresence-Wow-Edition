@@ -144,8 +144,10 @@ end
 --- @param gameState string The game state message for Rich Presence
 --- @param startTime string The starting timestamp for Rich Presence
 --- @param endTime string The ending timestamp for Rich Presence (Requires startTime to display)
+--- @param primaryButton string The primary button to attach to the Rich Presence
+--- @param secondaryButton string The secondary button to attach to the Rich Presence
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
-                                  details, gameState, startTime, endTime)
+                                  details, gameState, startTime, endTime, primaryButton, secondaryButton)
     if clientId == nil or clientId == "" then
         clientId = L["DEFAULT_CLIENT_ID"]
     end
@@ -173,10 +175,42 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     if endTime == nil or endTime == "" then
         endTime = L["UNKNOWN_KEY"]
     end
+    -- Additional Sanity Checks for Primary Button
+    if primaryButton == nil or primaryButton == "" then
+        primaryButton = L["UNKNOWN_KEY"]
+    else
+        local button_data = self:Split(primaryButton, L["ARRAY_SPLIT_KEY"])
+        primaryButton = ""
+        for i = 1, #button_data do
+            if button_data[i] == nil or button_data[i] == "" then
+                button_data[i] = button_data[i]:gsub(button_data[i], L["UNKNOWN_KEY"])
+            end
+            primaryButton = primaryButton .. button_data[i]
+            if i ~= #button_data then
+                primaryButton = primaryButton .. L["ARRAY_SPLIT_KEY"]
+            end
+        end
+    end
+    -- Additional Sanity Checks for Secondary Button
+    if secondaryButton == nil or secondaryButton == "" then
+        secondaryButton = L["UNKNOWN_KEY"]
+    else
+        local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
+        secondaryButton = ""
+        for i = 1, #button_data do
+            if button_data[i] == nil or button_data[i] == "" then
+                button_data[i] = button_data[i]:gsub(button_data[i], L["UNKNOWN_KEY"])
+            end
+            secondaryButton = secondaryButton .. button_data[i]
+            if i ~= #button_data then
+                secondaryButton = secondaryButton .. L["ARRAY_SPLIT_KEY"]
+            end
+        end
+    end
     return string.format(
             L["RPC_EVENT_FORMAT"],
             clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
-            details, gameState, startTime, endTime
+            details, gameState, startTime, endTime, primaryButton, secondaryButton
     )
 end
 
