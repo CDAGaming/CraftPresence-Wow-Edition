@@ -1,5 +1,5 @@
 # CraftPresence
-Completely customize the way others see you play World of Warcraft via Discord's Rich Presence API & the DiscordIPC API by [suclearnub](https://github.com/suclearnub/python-discord-rpc)!
+Completely customize the way others see you play World of Warcraft via Discord's Rich Presence API & the pypresence API by [qwertyquerty](https://github.com/qwertyquerty/pypresence)!
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9f6a38f53cd148aebb307112c7ccd947)](https://www.codacy.com/gl/CDAGaming/CraftPresence-Wow-Edition/dashboard?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=CDAGaming/CraftPresence-Wow-Edition&amp;utm_campaign=Badge_Grade)

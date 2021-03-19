@@ -8,8 +8,7 @@ from ctypes import windll
 import win32gui
 import win32ui
 from PIL import Image
-
-import rpc
+from pypresence import Presence
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 # Logging Data
@@ -230,15 +229,15 @@ while True:
 
             if not rpc_obj or hasIdChanged:
                 if rpc_obj:
-                    root_logger.info('The client id has been changed, reconnecting with new id...')
+                    root_logger.info("The client id has been changed, reconnecting with new ID %s..." % first_line)
                     rpc_obj.close()
                 else:
-                    root_logger.info('Not connected to Discord, connecting...')
+                    root_logger.info("Not connected to Discord, connecting to ID %s..." % first_line)
 
                 while True:
                     try:
-                        rpc_obj = (rpc.DiscordIpcClient
-                                   .for_platform(first_line))
+                        rpc_obj = Presence(client_id=first_line)
+                        rpc_obj.connect()
                     except Exception as exc:
                         root_logger.error("Unable to connect to Discord (%s). It's "
                                           'probably not running. I will try again in %s '
@@ -290,7 +289,17 @@ while True:
                 root_logger.info("Setting new activity: %s" % activity)
 
                 try:
-                    rpc_obj.set_activity(activity)
+                    rpc_obj.update(
+                        state=activity.get("state") or None,
+                        details=activity.get("details") or None,
+                        start=timerData.get("start") or None,
+                        end=timerData.get("end") or None,
+                        large_image=assetsData.get("large_image") or None,
+                        large_text=assetsData.get("large_text") or None,
+                        small_image=assetsData.get("small_image") or None,
+                        small_text=assetsData.get("small_text") or None,
+                        buttons=activity.get("buttons") or None
+                    )
                     last_activity = activity
                 except Exception as exc:
                     root_logger.error('Looks like the connection to Discord was broken (%s). '
