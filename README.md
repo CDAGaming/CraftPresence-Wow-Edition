@@ -47,6 +47,7 @@ ___
 *   `/cp test` - Toggles debugging of Rich Presence Frames (Requires `Debug Mode`)
 *   `/cp (clear | clean)` - Reset all frames to their original positions and colors.
 *   `/cp status` - Displays your last sent RPC Data, in text form (Requires `Verbose Mode`)
+*   `/cp reset (:grp,key)` - Resets all (or a specific) setting(s) within the config menu.
 *   `/cp placeholders (:query)` - Views the currently available placeholders (With specified query, if any)
 *   `/cp minimap` - Toggles the display of the minimap button (Requires Reload)
 *   `/cp (help | ?)` - Help Command to display the above commands and these explanations

@@ -65,6 +65,8 @@ local generalOptionsGroup = {
                 if isValid then
                     CraftPresence.db.profile.clientId = value
                     CraftPresence:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)
+                else
+                    CraftPresence:PrintInvalidValue(L["ERROR_CLIENT_ID"])
                 end
             end,
         },
