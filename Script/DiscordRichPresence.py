@@ -249,6 +249,7 @@ while True:
 
             timerData = {}
             assetsData = {}
+            buttonsData = []
             activity = {}
             # Asset Data Sync
             if not ("Skip" in second_line):
@@ -284,6 +285,7 @@ while True:
 
             activity["assets"] = assetsData
             activity["timestamps"] = timerData
+            activity["buttons"] = buttonsData
             if activity != last_activity:
                 root_logger.info("Setting new activity: %s" % activity)
 
