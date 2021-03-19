@@ -386,9 +386,8 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
         frameClearDelay = {
-            type = "range", order = 20, width = 1.50,
+            type = "range", order = 19, width = 1.50,
             min = L["MINIMUM_FRAME_CLEAR_DELAY"], max = L["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
             name = L["TITLE_FRAME_CLEAR_DELAY"],
             desc = L["COMMENT_FRAME_CLEAR_DELAY"],
@@ -411,9 +410,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
+        blank6 = { type = "description", order = 20, fontSize = "small", name = " " },
         frameSize = {
-            type = "range", order = 22, width = 1.50,
+            type = "range", order = 21, width = 1.50,
             min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
             name = L["TITLE_FRAME_SIZE"],
             desc = L["COMMENT_FRAME_SIZE"],
@@ -507,6 +506,12 @@ end
 --- @param value any The new value of the config variable
 function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
     if oldValue ~= value and CraftPresence.CanLogChanges() then
+        if oldValue == nil or oldValue == "" then
+            oldValue = L["TYPE_NONE"]
+        end
+        if value == nil or value == "" then
+            value = L["TYPE_NONE"]
+        end
         CraftPresence:Print(
                 string.format(
                         L["VERBOSE_LOG"], string.format(

@@ -406,27 +406,6 @@ function CraftPresence:AddTriggers(event, ...)
     end
 end
 
---- Retrieves Config Data based on the specified parameters
----
---- @param grp string The config group to retrieve
---- @param key string The config key to retrieve
---- @param reset boolean Whether to reset this property value
----
---- @return any configValue
-function CraftPresence:GetFromDb(grp, key, reset)
-    local DB_DEFAULTS = CraftPresence:GetDefaults()
-    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
-        CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
-    end
-    if not key then
-        return CraftPresence.db.profile[grp]
-    end
-    if CraftPresence.db.profile[grp][key] == nil or reset then
-        CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
-    end
-    return CraftPresence.db.profile[grp][key]
-end
-
 --- Prepares and Dispatches a new frame update, given the specified arguments
 function CraftPresence:DispatchUpdate(...)
     local args = { ... }
