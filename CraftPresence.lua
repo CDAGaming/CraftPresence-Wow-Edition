@@ -304,11 +304,12 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local queued_small_image_text = self:GetFromDb("smallImageMessage")
     local queued_time_start = L["UNKNOWN_KEY"]
     local queued_time_end = L["UNKNOWN_KEY"]
+    local split_key = L["ARRAY_SPLIT_KEY"]
     local queued_primary_button = (
-            self:GetFromDb("primaryButton", "label") .. L["ARRAY_SPLIT_KEY"] .. self:GetFromDb("primaryButton", "url")
+            self:GetFromDb("primaryButton", "label") .. split_key .. self:GetFromDb("primaryButton", "url")
     )
     local queued_secondary_button = (
-            self:GetFromDb("secondaryButton", "label") .. L["ARRAY_SPLIT_KEY"] .. self:GetFromDb("secondaryButton", "url")
+            self:GetFromDb("secondaryButton", "label") .. split_key .. self:GetFromDb("secondaryButton", "url")
     )
     -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do
@@ -562,7 +563,7 @@ function CraftPresence:ChatCommand(input)
             if query ~= nil then
                 query = string.lower(query)
             end
-            self:PaintMessageWait(true, (query == "force"))
+            self:PaintMessageWait(true, true, true, nil, (query == "force"))
         elseif input == "config" then
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then

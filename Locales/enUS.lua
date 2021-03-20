@@ -88,8 +88,7 @@ L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
 L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config. (Requires reload)"
 
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
-L["COMMENT_QUEUED_PIPELINE"] = ([=[
-Toggles whether the callback delay will operate in a line/queue or skip in-between events
+L["COMMENT_QUEUED_PIPELINE"] = ([=[Toggles whether the callback delay will operate in a skip or queue style
 ]=])
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
@@ -103,8 +102,7 @@ L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_SIZE"] = ([=[
-The size that each frame pixel should render at
+L["COMMENT_FRAME_SIZE"] = ([=[The size that each frame pixel should render at
 (This value needs to be the same as the script's config_size property)
 ]=])
 L["MINIMUM_FRAME_SIZE"] = 5
@@ -139,22 +137,17 @@ L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
 
 -- Command: /cp placeholders
-L["INFO_PLACEHOLDERS_QUERY"] = ([=[
-Searching for placeholders containing ^%s|r...
-]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_INTRO"] = ([=[
-Available Placeholders (*<key>|r => ^<value>|r):
-]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_NONE"] = ([=[
-*No placeholders found within specified parameters|r
-]=]):gsub('*', COLOR_RED):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_DATA"] = ([=[
-*%s|r => ^%s|r
-]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_NOTE"] = ([=[
-NOTE: Placeholder keys surrounded by *#|r are global (Can include inner placeholders),
-while ones surrounded by *@|r are inner (Cannot include other placeholders)
-]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]
+):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]
+):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_NONE"] = ([=[*No placeholders found within specified parameters|r]=]
+):gsub('*', COLOR_RED):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_DATA"] = ([=[*%s|r => ^%s|r]=]
+):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["INFO_PLACEHOLDER_NOTE"] = ([=[NOTE: Placeholder keys surrounded by *#|r are global (Can include inner placeholders),
+while ones surrounded by *@|r are inner (Cannot include other placeholders)]=]
+):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
@@ -176,8 +169,7 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
 L["ADDON_HEADER_BUTTONS"] = "Buttons"
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
-L["ADDON_INFO_ONE"] = ([=[
-CraftPresence allows you to completely customize the way others see you play with Discord Rich Presence.
+L["ADDON_INFO_ONE"] = ([=[CraftPresence allows you to customize the way others see you play with Discord Rich Presence.
 ]=])
 L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
 L["ADDON_INFO_THREE"] = "Thanks to Attka and wowdim on Github for the original base project, that makes this possible."
