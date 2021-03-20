@@ -19,24 +19,26 @@ log_date_style = "%m/%d/%Y %I:%M:%S %p"
 f = open(dir_path + '/config.json')
 config = json.load(f)
 debug_mode = config["debug"]
+log_mode = config["log_mode"]
 # Adjust log level depending on mode
 log_level = logging.INFO
 if debug_mode:
     log_level = logging.DEBUG
-# Setup Basic Logging
-logging.basicConfig(filename=log_path,
-                    filemode='w',
-                    format=log_format,
-                    datefmt=log_date_style,
-                    level=log_level
-                    )
 # Setup Main Logger and Formatting
 root_logger = logging.getLogger("DRPLogger")
+root_logger.setLevel(log_level)
 log_formatter = logging.Formatter(log_format, log_date_style)
-# Optional handlers
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setFormatter(log_formatter)
-root_logger.addHandler(console_handler)
+# Setup handlers depending on config options
+if log_mode == "full" or log_mode == "console":
+    console_handler = logging.StreamHandler(stream=sys.stdout)
+    console_handler.setFormatter(log_formatter)
+    console_handler.setLevel(log_level)
+    root_logger.addHandler(console_handler)
+if log_mode == "full" or log_mode == "file":
+    file_handler = logging.FileHandler(log_path, mode='w')
+    file_handler.setFormatter(log_formatter)
+    file_handler.setLevel(log_level)
+    root_logger.addHandler(file_handler)
 
 # these are internal use variables, don't touch them
 process_version = "v1.0.5"
