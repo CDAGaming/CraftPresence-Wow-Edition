@@ -93,8 +93,6 @@ end
 
 --- Retrieve current Instance/Scenario Lockout Data
 ---
---- @param sync boolean Whether the lockoutData should be cached
----
 --- Format:
 --- lockoutData {
 ---     string @ name,
@@ -103,6 +101,8 @@ end
 ---     number @ currentEncounters,
 ---     string @ formattedEncounterData
 --- }
+---
+--- @param sync boolean Whether the lockoutData should be cached
 ---
 --- @return table @ lockoutData
 function CraftPresence:GetCurrentLockoutData(sync)

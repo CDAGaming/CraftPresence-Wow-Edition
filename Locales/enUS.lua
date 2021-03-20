@@ -88,8 +88,7 @@ L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
 L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config. (Requires reload)"
 
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
-L["COMMENT_QUEUED_PIPELINE"] = ([=[Toggles whether the callback delay will operate in a skip or queue style
-]=])
+L["COMMENT_QUEUED_PIPELINE"] = ([=[Toggles whether the callback delay will operate in a skip or queue style]=])
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
@@ -103,8 +102,7 @@ L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
 L["COMMENT_FRAME_SIZE"] = ([=[The size that each frame pixel should render at
-(This value needs to be the same as the script's config_size property)
-]=])
+(This value needs to be the same as the script's config_size property)]=])
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 

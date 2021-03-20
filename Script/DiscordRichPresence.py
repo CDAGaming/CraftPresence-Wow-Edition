@@ -31,7 +31,7 @@ logging.basicConfig(filename=log_path,
                     level=log_level
                     )
 # Setup Main Logger and Formatting
-root_logger = logging.getLogger()
+root_logger = logging.getLogger("DRPLogger")
 log_formatter = logging.Formatter(log_format, log_date_style)
 # Optional handlers
 console_handler = logging.StreamHandler(sys.stdout)
