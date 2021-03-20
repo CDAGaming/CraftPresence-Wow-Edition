@@ -114,11 +114,34 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
     return tmp
 end
 
+--- Splits a string by the specified arguments
+---
+--- @param str string The input string to interpret
+--- @param inSplitPattern string The pattern to split the string by
+--- @param outResults table The output result data (Can be predefined)
+---
+--- @return table @ outResults
+function CraftPresence:Split(str, inSplitPattern, outResults)
+    if not outResults then
+        outResults = { }
+    end
+    local theStart = 1
+    local theSplitStart, theSplitEnd = string.find(str, inSplitPattern, theStart)
+    while theSplitStart do
+        table.insert(outResults, string.sub(str, theStart, theSplitStart - 1))
+        theStart = theSplitEnd + 1
+        theSplitStart, theSplitEnd = string.find(str, inSplitPattern, theStart)
+    end
+    table.insert(outResults, string.sub(str, theStart))
+    return outResults
+end
+
 ----------------------------------
 --API UTILITIES
 ----------------------------------
 
 local lastPlayerStatus
+local timer_locked = false
 
 --- Retrieves the Player Status for the specified unit
 ---
@@ -165,4 +188,108 @@ end
 --- @return string @ lastPlayerStatus
 function CraftPresence:GetLastPlayerStatus()
     return lastPlayerStatus
+end
+
+--- Sets whether or not the timer is locked
+--- @param newValue boolean New variable value
+function CraftPresence:SetTimerLocked(newValue)
+    -- This method only executes if we are operating in a non-queue pipeline
+    if not self:GetFromDb("queuedPipeline") then
+        timer_locked = newValue
+    end
+end
+
+--- Returns whether or not the timer is locked
+--- @return boolean @ timer_locked
+function CraftPresence:IsTimerLocked()
+    return timer_locked
+end
+
+----------------------------------
+--CONFIG GETTERS AND SETTERS
+----------------------------------
+
+--- Retrieves Config Data based on the specified parameters
+---
+--- @param grp string The config group to retrieve
+--- @param key string The config key to retrieve
+--- @param reset boolean Whether to reset this property value
+---
+--- @return any configValue
+function CraftPresence:GetFromDb(grp, key, reset)
+    local DB_DEFAULTS = CraftPresence:GetDefaults()
+    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
+        CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
+    end
+    if not key then
+        return CraftPresence.db.profile[grp]
+    end
+    if CraftPresence.db.profile[grp][key] == nil or reset then
+        CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
+    end
+    return CraftPresence.db.profile[grp][key]
+end
+
+--- Sets Config Data based on the specified parameters
+---
+--- @param grp string The config group to retrieve
+--- @param key string The config key to retrieve
+--- @param newValue any The new config value to set
+--- @param reset boolean Whether to reset this property value
+---
+--- @return any configValue
+function CraftPresence:SetToDb(grp, key, newValue, reset)
+    local DB_DEFAULTS = CraftPresence:GetDefaults()
+    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
+        CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
+    end
+    if not key then
+        CraftPresence.db.profile[grp] = newValue
+    else
+        if CraftPresence.db.profile[grp][key] == nil or reset then
+            CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
+        end
+        CraftPresence.db.profile[grp][key] = newValue
+    end
+end
+
+--- Generate Button Arguments for the specified arguments
+---
+--- @param grp string The group the config variable is located at
+--- @param key string The key the config variable is located at
+---
+--- @return table @ generatedData
+function CraftPresence:GetButtonArgs(grp, key)
+    return {
+        label = {
+            type = "input", order = 1, width = 3.0,
+            name = L["TITLE_BUTTON_LABEL"], desc = L["COMMENT_BUTTON_LABEL"], usage = L["USAGE_BUTTON_LABEL"],
+            get = function(_)
+                return CraftPresence:GetFromDb(grp, key or "label")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb(grp, key or "label")
+                local isValid = (type(value) == "string")
+                if isValid then
+                    CraftPresence:SetToDb(grp, key or "label", value)
+                    CraftPresence:PrintChangedValue(("(" .. grp .. ", " .. (key or "label") .. ")"), oldValue, value)
+                end
+            end,
+        },
+        url = {
+            type = "input", order = 2, width = 3.0,
+            name = L["TITLE_BUTTON_URL"], desc = L["COMMENT_BUTTON_URL"], usage = L["USAGE_BUTTON_URL"],
+            get = function(_)
+                return CraftPresence:GetFromDb(grp, key or "url")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb(grp, key or "url")
+                local isValid = (type(value) == "string")
+                if isValid then
+                    CraftPresence:SetToDb(grp, key or "url", value)
+                    CraftPresence:PrintChangedValue(("(" .. grp .. ", " .. (key or "url") .. ")"), oldValue, value)
+                end
+            end,
+        },
+    }
 end

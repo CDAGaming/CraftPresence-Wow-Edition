@@ -304,6 +304,14 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local queued_small_image_text = self:GetFromDb("smallImageMessage")
     local queued_time_start = L["UNKNOWN_KEY"]
     local queued_time_end = L["UNKNOWN_KEY"]
+    local split_key = L["ARRAY_SPLIT_KEY"]
+    local queued_primary_button = (
+            self:GetFromDb("primaryButton", "label") .. split_key .. self:GetFromDb("primaryButton", "url")
+    )
+    local queued_secondary_button = (
+            self:GetFromDb("secondaryButton", "label") .. split_key .. self:GetFromDb("secondaryButton", "url")
+    )
+    -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do
         queued_details = queued_details:gsub(key, value)
         queued_state = queued_state:gsub(key, value)
@@ -311,7 +319,10 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         queued_large_image_text = queued_large_image_text:gsub(key, value)
         queued_small_image_key = queued_small_image_key:gsub(key, value)
         queued_small_image_text = queued_small_image_text:gsub(key, value)
+        queued_primary_button = queued_primary_button:gsub(key, value)
+        queued_secondary_button = queued_secondary_button:gsub(key, value)
     end
+    -- Inner Placeholder Syncing
     for innerKey, innerValue in pairs(inner_placeholders) do
         queued_details = queued_details:gsub(innerKey, innerValue)
         queued_state = queued_state:gsub(innerKey, innerValue)
@@ -319,7 +330,10 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
         queued_small_image_key = queued_small_image_key:gsub(innerKey, innerValue)
         queued_small_image_text = queued_small_image_text:gsub(innerKey, innerValue)
+        queued_primary_button = queued_primary_button:gsub(innerKey, innerValue)
+        queued_secondary_button = queued_secondary_button:gsub(innerKey, innerValue)
     end
+    -- Time Condition Syncing
     for timeKey, timeValue in pairs(time_conditions) do
         if timeValue then
             if (string.find(timeKey, "start")) then
@@ -346,7 +360,9 @@ function CraftPresence:EncodeConfigData(force_instance_change)
             queued_details,
             queued_state,
             queued_time_start,
-            queued_time_end
+            queued_time_end,
+            queued_primary_button,
+            queued_secondary_button
     )
 end
 
@@ -406,33 +422,12 @@ function CraftPresence:AddTriggers(event, ...)
     end
 end
 
---- Retrieves Config Data based on the specified parameters
----
---- @param grp string The config group to retrieve
---- @param key string The config key to retrieve
---- @param reset boolean Whether to reset this property value
----
---- @return any configValue
-function CraftPresence:GetFromDb(grp, key, reset)
-    local DB_DEFAULTS = CraftPresence:GetDefaults()
-    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
-        CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
-    end
-    if not key then
-        return CraftPresence.db.profile[grp]
-    end
-    if CraftPresence.db.profile[grp][key] == nil or reset then
-        CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
-    end
-    return CraftPresence.db.profile[grp][key]
-end
-
---- Dispatches and prepares a new frame update
+--- Prepares and Dispatches a new frame update, given the specified arguments
 function CraftPresence:DispatchUpdate(...)
-    if ... ~= nil then
-        -- Event Conditional Setup
+    local args = { ... }
+    if args ~= nil then
+        -- Ignore Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
-        local args = { ... }
         local eventName = args[1]
         local ignore_event = false
         local ignore_event_conditions = {
@@ -451,36 +446,54 @@ function CraftPresence:DispatchUpdate(...)
                 break
             end
         end
+
+        -- Skip Execution of method if ignore condition hit
+        -- Otherwise, proceed on to reading event data
         if ignore_event then
             return
-        end
-        -- Print Details if needed before continuing
-        lastEventName = eventName
-
-        if self:GetFromDb("debugMode") then
-            if self:GetFromDb("verboseMode") then
-                self:Print(string.format(
-                        L["VERBOSE_LOG"], string.format(
-                                L["INFO_EVENT_FIRED"], self:SerializeTable(args)
-                        )
-                ))
+        else
+            -- Store event name, and print logging info if needed
+            lastEventName = eventName
+            local logPrefix = L["INFO_EVENT_PROCESSING"]
+            if self:IsTimerLocked() then
+                logPrefix = L["INFO_EVENT_SKIPPED"]
+            end
+            -- Logging is different depending on verbose/debug states
+            if self:GetFromDb("debugMode") then
+                if self:GetFromDb("verboseMode") then
+                    self:Print(string.format(
+                            L["VERBOSE_LOG"], string.format(
+                                    logPrefix, self:SerializeTable(args)
+                            )
+                    ))
+                else
+                    self:Print(string.format(
+                            L["DEBUG_LOG"], string.format(
+                                    logPrefix, eventName
+                            )
+                    ))
+                end
+            end
+            -- If the timer is locked, exit the method at this stage
+            -- Otherwise, proceed to frame processing
+            if self:IsTimerLocked() then
+                return
             else
-                self:Print(string.format(
-                        L["DEBUG_LOG"], string.format(
-                                L["INFO_EVENT_FIRED"], eventName
-                        )
-                ))
+                -- If we are using a callback delay,
+                -- the timer is locked if in a skip-style pipeline.
+                -- Otherwise, execute the next method normally.
+                local delay = self:GetFromDb("callbackDelay")
+                local min_delay = math.max(L["MINIMUM_CALLBACK_DELAY"], 1)
+                if self:IsWithinValue(delay, min_delay, L["MAXIMUM_CALLBACK_DELAY"], true) then
+                    self:SetTimerLocked(true)
+                    C_Timer.After(delay, function()
+                        self:PaintMessageWait()
+                    end)
+                else
+                    self:PaintMessageWait()
+                end
             end
         end
-    end
-
-    local delay = self:GetFromDb("callbackDelay")
-    if self:IsWithinValue(delay, math.max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"], true) then
-        C_Timer.After(delay, function()
-            self:PaintMessageWait()
-        end)
-    else
-        self:PaintMessageWait()
     end
 end
 
@@ -543,13 +556,14 @@ function CraftPresence:ChatCommand(input)
             end
         elseif input == "clean" or input == "clear" then
             self:CleanFrames()
+            self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then
             -- Query Parsing
             local query = string.match(input, ":(.*)")
             if query ~= nil then
                 query = string.lower(query)
             end
-            self:PaintMessageWait(true, (query == "force"))
+            self:PaintMessageWait(true, true, true, nil, (query == "force"))
         elseif input == "config" then
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then
