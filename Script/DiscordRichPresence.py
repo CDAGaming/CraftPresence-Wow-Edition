@@ -41,7 +41,7 @@ if log_mode == "full" or log_mode == "file":
     root_logger.addHandler(file_handler)
 
 # these are internal use variables, don't touch them
-process_version = "v1.0.5"
+process_version = "v1.1.0"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''
