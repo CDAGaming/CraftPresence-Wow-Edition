@@ -2,7 +2,8 @@ local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
 local COLOR_GREEN = '|cFF00FF7F'
 local COLOR_GREY = '|cfd9b9b9b'
-local COLOR_RED = '|cffff0000'
+local COLOR_RED = '|cFFFF6060'
+local COLOR_GOLD = '|cFFFFD700'
 
 -- Config Category Data
 L["CATEGORY_TITLE_GENERAL"] = "General"
@@ -190,8 +191,8 @@ L["UNKNOWN_KEY"] = "Skip"
 L["ARRAY_SPLIT_KEY"] = "=="
 L["DEBUG_LOG"] = "[Debug] %s"
 L["VERBOSE_LOG"] = "[Verbose] %s"
-L["ERROR_LOG"] = "[Error] %s"
-L["WARNING_LOG"] = "[Warning] %s"
+L["ERROR_LOG"] = ([=[*[Error]|r %s]=]):gsub('*', COLOR_RED)
+L["WARNING_LOG"] = ([=[*[Warning]|r %s]=]):gsub('*', COLOR_GOLD)
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
