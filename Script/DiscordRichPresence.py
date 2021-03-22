@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import json
 import logging
 import os
@@ -9,6 +11,8 @@ import win32gui
 import win32ui
 from PIL import Image
 from pypresence import Presence
+
+from colored_log import ColoredFormatter
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 # Logging Data
@@ -28,10 +32,11 @@ if debug_mode:
 root_logger = logging.getLogger("DRPLogger")
 root_logger.setLevel(log_level)
 log_formatter = logging.Formatter(log_format, log_date_style)
+color_formatter = ColoredFormatter(log_format, log_date_style)
 # Setup handlers depending on config options
 if log_mode == "full" or log_mode == "console":
     console_handler = logging.StreamHandler(stream=sys.stdout)
-    console_handler.setFormatter(log_formatter)
+    console_handler.setFormatter(color_formatter)
     console_handler.setLevel(log_level)
     root_logger.addHandler(console_handler)
 if log_mode == "full" or log_mode == "file":
@@ -41,7 +46,7 @@ if log_mode == "full" or log_mode == "file":
     root_logger.addHandler(file_handler)
 
 # these are internal use variables, don't touch them
-process_version = "v1.1.0"
+process_version = "v1.1.1"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''
