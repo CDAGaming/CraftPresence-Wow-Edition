@@ -43,6 +43,7 @@ color_formatter = log_formatter
 # Import Optional Colored Formatter, if able
 try:
     from colored_log import ColoredFormatter
+
     color_formatter = ColoredFormatter(log_format, log_date_style)
 except ModuleNotFoundError as err:
     pass
