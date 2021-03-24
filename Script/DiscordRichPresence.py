@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
+# Import Packaged Modules
 import json
 import logging
 import os
 import sys
 import time
-from ctypes import windll
 
-import win32gui
-import win32ui
-from PIL import Image
-from pypresence import Presence
-
-from colored_log import ColoredFormatter
-
+# Internal Data (Do not touch)
+process_version = "v1.1.2"
+unknown_key = "Skip"
+array_split_key = "=="
+decoded = ''
+process_hwnd = None
 dir_path = os.path.dirname(os.path.realpath(__file__))
+help_url = "https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft"
 # Logging Data
 log_path = dir_path + '/output.log'
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
@@ -24,6 +24,7 @@ f = open(dir_path + '/config.json')
 config = json.load(f)
 debug_mode = config["debug"]
 log_mode = config["log_mode"]
+
 # Adjust log level depending on mode
 log_level = logging.INFO
 if debug_mode:
@@ -32,7 +33,13 @@ if debug_mode:
 root_logger = logging.getLogger("DRPLogger")
 root_logger.setLevel(log_level)
 log_formatter = logging.Formatter(log_format, log_date_style)
-color_formatter = ColoredFormatter(log_format, log_date_style)
+color_formatter = log_formatter
+# Import Optional Colored Formatter, if able
+try:
+    from colored_log import ColoredFormatter
+    color_formatter = ColoredFormatter(log_format, log_date_style)
+except ModuleNotFoundError as err:
+    pass
 # Setup handlers depending on config options
 if log_mode == "full" or log_mode == "console":
     console_handler = logging.StreamHandler(stream=sys.stdout)
@@ -45,12 +52,13 @@ if log_mode == "full" or log_mode == "file":
     file_handler.setLevel(log_level)
     root_logger.addHandler(file_handler)
 
-# these are internal use variables, don't touch them
-process_version = "v1.1.1"
-unknown_key = "Skip"
-array_split_key = "=="
-decoded = ''
-process_hwnd = None
+# Initial Welcome Messages
+root_logger.info("========== DiscordRichPresence Service - " + process_version + " ==========")
+root_logger.info("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
+root_logger.info("Note: Please keep this script open while logging and sending Rich Presence updates.")
+root_logger.info("==========================================================")
+
+# RPC Data
 rpc_obj = None
 last_first_line = None
 last_second_line = None
@@ -68,6 +76,21 @@ last_start_timestamp = None
 last_end_timestamp = None
 
 last_activity = {}
+
+# Import Third-Party Modules
+try:
+    from ctypes import windll
+    import win32gui
+    import win32ui
+    from PIL import Image
+    from pypresence import Presence
+except ModuleNotFoundError as err:
+    root_logger.error(
+        "A module is missing, preventing script execution! (Please review %s for Install Requirements)",
+        help_url,
+        exc_info=True
+    )
+    exit(1)
 
 
 def callback(hwnd, extra):
@@ -160,7 +183,7 @@ def read_squares(hwnd):
     try:
         im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
     except win32ui.error:
-        root_logger.debug('win32ui.error')
+        root_logger.debug('win32ui.error', exc_info=True)
         return
 
     read = []
@@ -203,11 +226,6 @@ def read_squares(hwnd):
 
     return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line, tenth_line, eleventh_line
 
-
-root_logger.info("========== DiscordRichPresence Service - " + process_version + " ==========")
-root_logger.info("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
-root_logger.info("Note: Please keep this script open while logging and sending Rich Presence updates.")
-root_logger.info("==========================================================")
 
 while True:
     process_hwnd = None
