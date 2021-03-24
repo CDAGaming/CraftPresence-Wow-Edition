@@ -6,9 +6,11 @@ import logging
 import os
 import sys
 import time
+# Import Sub-Package Data
+from logging.handlers import TimedRotatingFileHandler
 
 # Internal Data (Do not touch)
-process_version = "v1.1.2"
+process_version = "v1.1.3"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''
@@ -16,7 +18,11 @@ process_hwnd = None
 dir_path = os.path.dirname(os.path.realpath(__file__))
 help_url = "https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft"
 # Logging Data
-log_path = dir_path + '/output.log'
+log_path = dir_path + '/logs'
+log_ext = '.log'
+
+log_prefix = log_path + '/output'
+single_log_path = log_prefix + log_ext
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
 log_date_style = "%m/%d/%Y %I:%M:%S %p"
 # Config Data
@@ -41,13 +47,22 @@ try:
 except ModuleNotFoundError as err:
     pass
 # Setup handlers depending on config options
-if log_mode == "full" or log_mode == "console":
+if log_mode == "full" or log_mode == "v1" or log_mode == "console":
     console_handler = logging.StreamHandler(stream=sys.stdout)
     console_handler.setFormatter(color_formatter)
     console_handler.setLevel(log_level)
     root_logger.addHandler(console_handler)
-if log_mode == "full" or log_mode == "file":
-    file_handler = logging.FileHandler(log_path, mode='w')
+if log_mode == "full" or log_mode == "multiple_files" or log_mode == "files":
+    if not os.path.exists(log_path):
+        os.makedirs(log_path)
+    staged_handler = TimedRotatingFileHandler(single_log_path, when="s", interval=5)
+    staged_handler.suffix = "%Y-%m-%d_%H-%M-%S"
+    staged_handler.namer = lambda name: name.replace(log_ext, "") + log_ext
+    staged_handler.setFormatter(log_formatter)
+    staged_handler.setLevel(log_level)
+    root_logger.addHandler(staged_handler)
+if log_mode == "v1" or log_mode == "single_file" or log_mode == "file":
+    file_handler = logging.FileHandler(single_log_path, mode='w')
     file_handler.setFormatter(log_formatter)
     file_handler.setLevel(log_level)
     root_logger.addHandler(file_handler)
