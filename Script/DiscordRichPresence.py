@@ -56,9 +56,12 @@ if log_mode == "full" or log_mode == "v1" or log_mode == "console":
 if log_mode == "full" or log_mode == "multiple_files" or log_mode == "files":
     if not os.path.exists(log_path):
         os.makedirs(log_path)
-    staged_handler = TimedRotatingFileHandler(single_log_path, when="s", interval=5)
+    staged_handler = TimedRotatingFileHandler(single_log_path, when="midnight", interval=1)
     staged_handler.suffix = "%Y-%m-%d_%H-%M-%S"
     staged_handler.namer = lambda name: name.replace(log_ext, "") + log_ext
+    should_roll_over = os.path.isfile(single_log_path)
+    if should_roll_over:  # log already exists, roll over!
+        staged_handler.doRollover()
     staged_handler.setFormatter(log_formatter)
     staged_handler.setLevel(log_level)
     root_logger.addHandler(staged_handler)
