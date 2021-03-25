@@ -6,6 +6,7 @@ import logging
 import os
 import sys
 import time
+from datetime import datetime
 # Import Sub-Package Data
 from logging.handlers import TimedRotatingFileHandler
 
@@ -25,6 +26,8 @@ log_prefix = log_path + '/output'
 single_log_path = log_prefix + log_ext
 log_format = "%(asctime)s [%(levelname)s] %(message)s"
 log_date_style = "%m/%d/%Y %I:%M:%S %p"
+log_format_style = "%Y-%m-%d_%H-%M-%S"
+start_timestamp = datetime.now().strftime(log_format_style)
 # Config Data
 f = open(dir_path + '/config.json')
 config = json.load(f)
@@ -57,7 +60,7 @@ if log_mode == "full" or log_mode == "multiple_files" or log_mode == "files":
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     staged_handler = TimedRotatingFileHandler(single_log_path, when="midnight", interval=1)
-    staged_handler.suffix = "%Y-%m-%d_%H-%M-%S"
+    staged_handler.suffix = start_timestamp
     staged_handler.namer = lambda name: name.replace(log_ext, "") + log_ext
     should_roll_over = os.path.isfile(single_log_path)
     if should_roll_over:  # log already exists, roll over!
