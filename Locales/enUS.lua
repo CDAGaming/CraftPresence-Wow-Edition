@@ -133,7 +133,7 @@ L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ADDON_INTRO"] = "CraftPresence %s Loaded. Use /cp or /craftpresence to access config."
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
-L["ADDON_BUILD_INFO"] = "Build Info: v%s (%s) dated %s => %s"
+L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
 L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]

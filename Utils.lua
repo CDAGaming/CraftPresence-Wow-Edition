@@ -142,6 +142,37 @@ end
 
 local lastPlayerStatus
 local timer_locked = false
+-- Compatibility Data
+local build_info, compatibility_info
+
+--- Retrieves and Syncronizes App Build Info
+--- @return table @ build_info
+function CraftPresence:GetBuildInfo()
+    if not build_info then
+        local version, build, date, tocversion = GetBuildInfo()
+        build_info = {}
+        build_info["version"] = version
+        build_info["build"] = build
+        build_info["date"] = date
+        build_info["toc_version"] = tocversion
+    end
+    return build_info
+end
+
+--- Retrieves and Syncronizes App Compatibility Info
+--- @return table @ compatibility_info
+function CraftPresence:GetCompatibilityInfo()
+    if not compatibility_info then
+        compatibility_info = {}
+        compatibility_info["retail"] = 90005
+        compatibility_info["classic"] = 11306
+        compatibility_info["5.0.x"] = 50001
+        compatibility_info["6.0.x"] = 60000
+        compatibility_info["7.0.x"] = 70000
+        compatibility_info["9.0.x"] = 90000
+    end
+    return compatibility_info
+end
 
 --- Retrieves the Player Status for the specified unit
 ---
@@ -292,4 +323,41 @@ function CraftPresence:GetButtonArgs(grp, key)
             end,
         },
     }
+end
+
+----------------------------------
+--QUEUE SYSTEM UTILITIES
+----------------------------------
+
+local queued_data = { }
+local queue_frame
+
+function CraftPresence:After(seconds, func, ...)
+    local args = { ... }
+    local f = function()
+        func(args)
+    end
+
+    if C_Timer ~= nil then
+        C_Timer.After(seconds, f)
+    else
+        CraftPresence:SetupQueueSystem()
+        queued_data[f] = GetTime() + seconds
+    end
+end
+
+function CraftPresence:SetupQueueSystem()
+    if not queue_frame then
+        queue_frame = CreateFrame("Frame", nil, UIParent)
+        queue_frame:SetScript("OnUpdate", function (self, elapsed)
+            local elapsed_time = GetTime()
+            if queued_data ~= nil then
+                for key, value in pairs(queued_data) do
+                    if elapsed_time > value then
+                        key(); queued_data[key] = nil;
+                    end
+                end
+            end
+        end)
+    end
 end

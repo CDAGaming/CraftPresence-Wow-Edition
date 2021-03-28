@@ -11,7 +11,7 @@ from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 
 # Internal Data (Do not touch)
-process_version = "v1.1.3"
+process_version = "v1.1.5"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''
@@ -206,6 +206,9 @@ def read_squares(hwnd):
         im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
     except win32ui.error:
         root_logger.debug('win32ui.error', exc_info=True)
+        return
+    except ValueError:
+        root_logger.error('Unable to retrieve enough Image Data, try resizing your window perhaps?')
         return
 
     read = []

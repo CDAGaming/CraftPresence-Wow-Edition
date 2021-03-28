@@ -31,7 +31,11 @@ function CraftPresence:CreateFrames(size)
 
         -- initialise pixels as black to represent initial null data
         local t = frames[i]:CreateTexture(nil, "TOOLTIP")
-        t:SetColorTexture(0, 0, 0, 1)
+        if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["7.0.x"] then
+            t:SetColorTexture(0, 0, 0, 1)
+        else
+            t:SetTexture(0, 0, 0, 1)
+        end
         t:SetAllPoints(frames[i])
         frames[i].texture = t
 
@@ -74,7 +78,11 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
     end
 
     -- and now paint it
-    frame.texture:SetColorTexture(r, g, b, a)
+    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["7.0.x"] then
+        frame.texture:SetColorTexture(r, g, b, a)
+    else
+        frame.texture:SetTexture(r, g, b, a)
+    end
     frame.texture:SetAllPoints(frame)
 end
 
@@ -252,7 +260,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
             if (self:IsWithinValue(
                     delay, math.max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"], true
             )) then
-                C_Timer.After(delay, function()
+                self:After(delay, function()
                     self:CleanFrames()
                     self:SetTimerLocked(false)
                 end)

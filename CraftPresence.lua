@@ -6,6 +6,10 @@ local icon = LibStub("LibDBIcon-1.0")
 local minimapState = { hide = false }
 local addonVersion = ""
 
+local realmData = { "US", "KR", "EU", "TW", "CH" }
+local buildData = {}
+local compatData = {}
+
 local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
     type = "launcher",
     text = L["ADDON_NAME"],
@@ -26,12 +30,7 @@ local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L
 -- RPC Data
 -- ==================
 
--- Compatibility Data
-local version, build, date, toc_version
-local retail_toc = 90005
-local classic_toc = 11306
 -- Storage Data
-local realmData = { "US", "KR", "EU", "TW", "CH" }
 local global_placeholders = {}
 local inner_placeholders = {}
 local time_conditions = {}
@@ -55,9 +54,8 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     local difficultyInfo = difficultyName
-    -- Retail: Lockout Data is only available for Retail Wow
     local lockoutData
-    if toc_version >= retail_toc then
+    if buildData["toc_version"] >= compatData["6.0.x"] then
         lockoutData = self:GetCurrentLockoutData(true)
     end
     -- Player Data
@@ -66,7 +64,11 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
-    local playerRegion = realmData[GetCurrentRegion()]
+    local playerRegionId = 1
+    if buildData["toc_version"] >= compatData["6.0.x"] then
+        playerRegionId = GetCurrentRegion()
+    end
+    local playerRegion = realmData[playerRegionId]
     local playerClass = UnitClass("player")
     hasInstanceChanged = force_instance_change or (
             ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
@@ -79,7 +81,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local playerCovenantId = 0
     local playerCovenantData
     local playerCovenantRenown = 0
-    if toc_version >= retail_toc then
+    if buildData["toc_version"] >= compatData["9.0.x"] then
         playerCovenantId = C_Covenants.GetActiveCovenantID()
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
         playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
@@ -156,7 +158,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     }
     -- Version Dependent Data
     local user_info_preset = playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel))
-    if toc_version >= retail_toc then
+    if buildData["toc_version"] >= compatData["5.0.x"] then
         -- Extra Character Data
         local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
@@ -194,7 +196,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         queued_inner_placeholders["@lockout_encounters@"] = lockoutData.formattedEncounterData
         queued_inner_placeholders["@lockout_current_encounters@"] = lockoutData.currentEncounters
         queued_inner_placeholders["@lockout_total_encounters@"] = lockoutData.totalEncounters
-    elseif toc_version <= classic_toc then
+    else
         -- Inner Placeholder Adjustments
         queued_inner_placeholders["@player_info@"] = (user_info_preset .. " " .. playerClass)
     end
@@ -388,9 +390,10 @@ function CraftPresence:OnEnable()
     -- Print initial data and register events
     -- depending on platform and config data
     self:Print(string.format(L["ADDON_INTRO"], self:GetVersion()))
-    version, build, date, toc_version = GetBuildInfo()
+    buildData = self:GetBuildInfo()
+    compatData = self:GetCompatibilityInfo()
     if self:GetFromDb("verboseMode") then
-        self:Print(string.format(L["ADDON_BUILD_INFO"], version, build, date, toc_version))
+        self:Print(string.format(L["ADDON_BUILD_INFO"], self:SerializeTable(buildData)))
     end
     -- Register Universal Events
     CraftPresence:AddTriggers("DispatchUpdate",
@@ -399,8 +402,8 @@ function CraftPresence:OnEnable()
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
             "UPDATE_INSTANCE_INFO"
     )
-    -- Register Retail-Only Events
-    if toc_version >= retail_toc then
+    -- Register Version-Specific Events
+    if buildData["toc_version"] >= compatData["6.0.x"] then
         CraftPresence:AddTriggers("DispatchUpdate",
                 "ACTIVE_TALENT_GROUP_CHANGED",
                 "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
@@ -486,7 +489,7 @@ function CraftPresence:DispatchUpdate(...)
                 local min_delay = math.max(L["MINIMUM_CALLBACK_DELAY"], 1)
                 if self:IsWithinValue(delay, min_delay, L["MAXIMUM_CALLBACK_DELAY"], true) then
                     self:SetTimerLocked(true)
-                    C_Timer.After(delay, function()
+                    self:After(delay, function()
                         self:PaintMessageWait()
                     end)
                 else
