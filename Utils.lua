@@ -346,7 +346,7 @@ function CraftPresence:After(seconds, func, ...)
     if C_Timer ~= nil then
         C_Timer.After(seconds, f)
     else
-        CraftPresence:SetupQueueSystem()
+        self:SetupQueueSystem()
         queued_data[f] = GetTime() + seconds
     end
 end
@@ -355,7 +355,7 @@ end
 function CraftPresence:SetupQueueSystem()
     if not queue_frame then
         queue_frame = CreateFrame("Frame", nil, UIParent)
-        queue_frame:SetScript("OnUpdate", function (self, elapsed)
+        queue_frame:SetScript("OnUpdate", function ()
             local elapsed_time = GetTime()
             if queued_data ~= nil then
                 for key, value in pairs(queued_data) do
