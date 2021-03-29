@@ -12,6 +12,9 @@ L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info"
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
 
+L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
+L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data"
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customizability options for addon display info"
 
@@ -165,7 +168,6 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  Optional arguments in commands are represented by *[syntax]|r.
 ]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 -- Frame Text Data
-L["ADDON_HEADER_BUTTONS"] = "Buttons"
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
 L["ADDON_INFO_ONE"] = ([=[CraftPresence allows you to customize the way others see you play with Discord Rich Presence.

@@ -295,10 +295,40 @@ local placeholderOptionsGroup = {
 }
 
 -----------------------------------------
+--TAB:  BUTTONS
+-----------------------------------------
+local buttonOptionsGroup = {
+    type = "group", order = 20,
+    name = L["CATEGORY_TITLE_BUTTONS"], desc = L["CATEGORY_COMMENT_BUTTONS"],
+    get = function(info)
+        return CraftPresence.db.profile[info[#info]]
+    end,
+    set = function(info, value)
+        CraftPresence.db.profile[info[#info]] = value
+    end,
+    args = {
+        buttonHeader = { order = 1, type = "header", name = L["CATEGORY_TITLE_BUTTONS"], },
+        primaryButton = {
+            name = L["TITLE_PRIMARY_BUTTON"],
+            desc = L["COMMENT_PRIMARY_BUTTON"],
+            type = "group", order = 2,
+            args = CraftPresence:GetButtonArgs("primaryButton")
+        },
+        secondaryButton = {
+            name = L["TITLE_SECONDARY_BUTTON"],
+            desc = L["COMMENT_SECONDARY_BUTTON"],
+            type = "group", order = 3,
+            args = CraftPresence:GetButtonArgs("secondaryButton")
+        },
+        blank1 = { type = "description", order = 4, fontSize = "small", name = " " },
+    }
+}
+
+-----------------------------------------
 --TAB:  EXTRA
 -----------------------------------------
 local extraOptionsGroup = {
-    type = "group", order = 20,
+    type = "group", order = 25,
     name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
     get = function(info)
         return CraftPresence.db.profile[info[#info]]
@@ -443,20 +473,7 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        buttonHeader = { order = 22, type = "header", name = L["ADDON_HEADER_BUTTONS"], },
-        primaryButton = {
-            name = L["TITLE_PRIMARY_BUTTON"],
-            desc = L["COMMENT_PRIMARY_BUTTON"],
-            type = "group", order = 23,
-            args = CraftPresence:GetButtonArgs("primaryButton")
-        },
-        secondaryButton = {
-            name = L["TITLE_SECONDARY_BUTTON"],
-            desc = L["COMMENT_SECONDARY_BUTTON"],
-            type = "group", order = 24,
-            args = CraftPresence:GetButtonArgs("secondaryButton")
-        },
-        blank7 = { type = "description", order = 25, fontSize = "small", name = " " },
+        blank7 = { type = "description", order = 22, fontSize = "small", name = " " },
     }
 }
 
@@ -464,7 +481,7 @@ local extraOptionsGroup = {
 --TAB:  ABOUT
 -----------------------------------------
 local aboutGroup = {
-    type = "group", order = 25,
+    type = "group", order = 30,
     name = L["CATEGORY_TITLE_ABOUT"], desc = L["CATEGORY_COMMENT_ABOUT"],
     args = {
         generalText1 = {
@@ -506,6 +523,7 @@ function CraftPresence:getOptionsTable()
         args = {
             generalOptions = generalOptionsGroup,
             placeholderOptions = placeholderOptionsGroup,
+            buttonOptions = buttonOptionsGroup,
             extraOptions = extraOptionsGroup,
             profiles = profilesGroup,
             about = aboutGroup,
