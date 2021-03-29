@@ -169,6 +169,7 @@ function CraftPresence:GetCompatibilityInfo()
         compatibility_info["5.0.x"] = 50001
         compatibility_info["6.0.x"] = 60000
         compatibility_info["7.0.x"] = 70000
+        compatibility_info["8.0.x"] = 80000
         compatibility_info["9.0.x"] = 90000
     end
     return compatibility_info
@@ -332,6 +333,10 @@ end
 local queued_data = { }
 local queue_frame
 
+--- Schedules a function to occur after the specified delay
+---
+--- @param seconds number The delay in seconds until task execution
+--- @param func function The function to perform when delay expires
 function CraftPresence:After(seconds, func, ...)
     local args = { ... }
     local f = function()
@@ -346,6 +351,7 @@ function CraftPresence:After(seconds, func, ...)
     end
 end
 
+--- Initializes Queue Systems
 function CraftPresence:SetupQueueSystem()
     if not queue_frame then
         queue_frame = CreateFrame("Frame", nil, UIParent)

@@ -397,7 +397,7 @@ function CraftPresence:OnEnable()
     end
     -- Register Universal Events
     CraftPresence:AddTriggers("DispatchUpdate",
-            "PLAYER_LOGIN", "PLAYER_LEVEL_CHANGED",
+            "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
             "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
             "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
             "UPDATE_INSTANCE_INFO"
@@ -408,6 +408,11 @@ function CraftPresence:OnEnable()
                 "ACTIVE_TALENT_GROUP_CHANGED",
                 "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                 "SCENARIO_COMPLETED", "CRITERIA_COMPLETE"
+        )
+    end
+    if buildData["toc_version"] >= compatData["8.0.x"] then
+        CraftPresence:AddTriggers("DispatchUpdate",
+                "PLAYER_LEVEL_CHANGED"
         )
     end
     -- Create initial frames and initial rpc update
@@ -441,7 +446,9 @@ function CraftPresence:DispatchUpdate(...)
                     lastEventName == eventName or
                     self:GetCachedLockout() == self:GetCurrentLockoutData(false)
             ),
-            ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD")
+            ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
+            ["PLAYER_LEVEL_UP"] = (lastEventName == "PLAYER_LEVEL_CHANGED"),
+            ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP")
         }
         for key, value in pairs(ignore_event_conditions) do
             if eventName == key and value then
