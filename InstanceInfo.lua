@@ -170,24 +170,25 @@ end
 ---
 --- @return table @ keystoneInfo
 function CraftPresence:GetOwnedKeystone()
-    local keystoneInfo
-    local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
+    local keystoneInfo = {
+        dungeon = nil,
+        level = 0,
+        formattedLevel = ""
+    }
 
-    if mapID then
-        local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
-        local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+    if C_MythicPlus ~= nil then
+        local mapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
 
-        keystoneInfo = {
-            dungeon = keystoneDungeon,
-            level = keystoneLevel,
-            formattedLevel = ("+" .. keystoneLevel)
-        }
-    else
-        keystoneInfo = {
-            dungeon = nil,
-            level = 0,
-            formattedLevel = ""
-        }
+        if mapID then
+            local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
+            local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+
+            keystoneInfo = {
+                dungeon = keystoneDungeon,
+                level = keystoneLevel,
+                formattedLevel = ("+" .. keystoneLevel)
+            }
+        end
     end
 
     return keystoneInfo

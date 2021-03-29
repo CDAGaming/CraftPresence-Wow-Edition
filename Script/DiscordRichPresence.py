@@ -203,7 +203,7 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
 def read_squares(hwnd):
     waiting_for_null = False
     try:
-        im = take_screenshot(hwnd, 3, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
+        im = take_screenshot(hwnd, 1, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
     except win32ui.error:
         root_logger.debug('win32ui.error', exc_info=True)
         return
