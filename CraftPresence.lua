@@ -163,8 +163,8 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
         local specId
-        local specName = L["TYPE_NONE"]
-        local roleName = L["TYPE_NONE"]
+        local specName = ""
+        local roleName = ""
         local specInfo = GetSpecialization()
         -- Hotfix: Prevent a null-case with Spec Info
         -- (Only happens if events fire too quickly for into to populate, or if you don't have a spec learned/available)
@@ -359,17 +359,17 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         end
     end
     return self:EncodeData(
-            self:GetFromDb("clientId"),
+            self:GetFromDb("clientId"):gsub("%s+", " "),
             string.lower(queued_large_image_key:gsub("%s+", "_")),
-            queued_large_image_text,
+            queued_large_image_text:gsub("%s+", " "),
             string.lower(queued_small_image_key:gsub("%s+", "_")),
-            queued_small_image_text,
-            queued_details,
-            queued_state,
-            queued_time_start,
-            queued_time_end,
-            queued_primary_button,
-            queued_secondary_button
+            queued_small_image_text:gsub("%s+", " "),
+            queued_details:gsub("%s+", " "),
+            queued_state:gsub("%s+", " "),
+            queued_time_start:gsub("%s+", " "),
+            queued_time_end:gsub("%s+", " "),
+            queued_primary_button:gsub("%s+", " "),
+            queued_secondary_button:gsub("%s+", " ")
     )
 end
 
