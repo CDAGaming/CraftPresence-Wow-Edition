@@ -11,7 +11,10 @@ from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
 
 # Internal Data (Do not touch)
-process_version = "v1.1.5"
+is_windows = sys.platform.startswith('win')
+is_linux = sys.platform.startswith('linux')
+is_macos = sys.platform.startswith('darwin')
+process_version = "v1.2.0"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''
@@ -101,11 +104,13 @@ last_activity = {}
 
 # Import Third-Party Modules
 try:
-    from ctypes import windll
-    import win32gui
-    import win32ui
-    from PIL import Image
+    if is_windows:
+        from ctypes import windll
+        import win32gui
+        import win32ui
+    from PIL import Image, ImageGrab
     from pypresence import Presence
+    import psutil
 except ModuleNotFoundError as err:
     root_logger.error(
         "A module is missing, preventing script execution! (Please review %s for Install Requirements)",
@@ -148,14 +153,23 @@ def parse_button_data(line_data):
     return button_data
 
 
-def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0,
-                    right_specific=0, bottom_offset=0, bottom_specific=0):
-    # Change the line below depending on whether you want the whole window
-    # or just the client area.
-    left, top, right, bottom = win32gui.GetClientRect(hwnd)
-    # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+def is_running(process_name):
+    """
+    Check if there is any running process that contains the given name processName.
+    """
+    # Iterate over the all the running process
+    for proc in psutil.process_iter():
+        try:
+            # Check if process name contains the given name string.
+            if process_name.lower() in proc.name().lower():
+                return True
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+    return False
 
-    # Calculate offsets and final width and height
+
+def interpret_offsets(left=0, top=0, right=0, bottom=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0,
+                      right_specific=0, bottom_offset=0, bottom_specific=0):
     if left_specific > 0:
         left = left_specific
     if right_specific > 0:
@@ -169,6 +183,20 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
     right = right + right_offset
     top = top + top_offset
     bottom = bottom + bottom_offset
+
+    return left, top, right, bottom
+
+
+def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0,
+                    right_specific=0, bottom_offset=0, bottom_specific=0):
+    # Change the line below depending on whether you want the whole window
+    # or just the client area.
+    left, top, right, bottom = win32gui.GetClientRect(hwnd)
+    # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+
+    # Calculate offsets and final width and height
+    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset, top_specific,
+                                                 right_offset, right_specific, bottom_offset, bottom_specific)
 
     width = right - left
     height = bottom - top
@@ -202,14 +230,33 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
 
 def read_squares(hwnd):
     waiting_for_null = False
-    try:
-        im = take_screenshot(hwnd, 1, 0, 0, 0, 0, 0, 0, 0, config["pixel_size"])
-    except win32ui.error:
-        root_logger.debug('win32ui.error', exc_info=True)
-        return
-    except ValueError:
-        root_logger.error('Unable to retrieve enough Image Data, try resizing your window perhaps?')
-        return
+    im = None
+    if is_windows:
+        try:
+            im = take_screenshot(
+                hwnd, config["window_type"],
+                config["left_offset"], config["left_specific"],
+                config["top_offset"], config["top_specific"],
+                config["right_offset"], config["right_specific"],
+                config["bottom_offset"], config["pixel_size"]
+            )
+        except win32ui.error:
+            root_logger.debug('win32ui.error', exc_info=True)
+            return
+        except ValueError:
+            root_logger.error('Unable to retrieve enough Image Data, try resizing your window perhaps?')
+            return
+    else:
+        im = ImageGrab.grab()
+        im_width, im_height = im.size
+        left, top, right, bottom = interpret_offsets(
+            0, 0, im_width, im_height,
+            config["left_offset"], config["left_specific"],
+            config["top_offset"], config["top_specific"],
+            config["right_offset"], config["right_specific"],
+            config["bottom_offset"], config["pixel_size"]
+        )
+        im = im.crop((left, top, right, bottom))
 
     read = []
     current_decoded = ""
@@ -254,7 +301,10 @@ def read_squares(hwnd):
 
 while True:
     process_hwnd = None
-    win32gui.EnumWindows(callback, None)
+    if is_windows:
+        win32gui.EnumWindows(callback, None)
+    else:
+        process_hwnd = is_running(config["process_name"])
 
     if debug_mode:
         # if in DEBUG mode, squares are read, the image with the dot matrix is
