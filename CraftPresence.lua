@@ -54,7 +54,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     local difficultyInfo = difficultyName
-    local lockoutData
+    local lockoutData = {}
     if buildData["toc_version"] >= compatData["6.0.x"] then
         lockoutData = self:GetCurrentLockoutData(true)
     end
@@ -162,14 +162,19 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         -- Extra Character Data
         local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-        local specId, specName, _, _, _, _ = GetSpecializationInfo(GetSpecialization())
-        local roleName = ""
-        -- Hotfix: Prevent a null-case with specId
-        -- (Only happens if events fire too quickly for into to populate)
-        if specId ~= nil then
-            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-        else
-            specName = ""
+        local specId
+        local specName = L["TYPE_NONE"]
+        local roleName = L["TYPE_NONE"]
+        local specInfo = GetSpecialization()
+        -- Hotfix: Prevent a null-case with Spec Info
+        -- (Only happens if events fire too quickly for into to populate, or if you don't have a spec learned/available)
+        if specInfo ~= nil then
+            specId, specName = GetSpecializationInfo(GetSpecialization())
+            if specId ~= nil then
+                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+            else
+                specName = L["TYPE_NONE"]
+            end
         end
         -- Keystone Data
         local ownedKeystoneData = self:GetOwnedKeystone()
@@ -186,9 +191,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         queued_inner_placeholders["@player_covenant_renown@"] = tostring(playerCovenantRenown)
         queued_inner_placeholders["@player_spec_name@"] = specName
         queued_inner_placeholders["@player_spec_role@"] = roleName
-        queued_inner_placeholders["@item_level@"] = string.format("%.2f", avgItemLevel)
-        queued_inner_placeholders["@item_level_equipped@"] = string.format("%.2f", avgItemLevelEquipped)
-        queued_inner_placeholders["@item_level_pvp@"] = string.format("%.2f", avgItemLevelPvp)
+        queued_inner_placeholders["@item_level@"] = string.format("%.2f", avgItemLevel or 0)
+        queued_inner_placeholders["@item_level_equipped@"] = string.format("%.2f", avgItemLevelEquipped or 0)
+        queued_inner_placeholders["@item_level_pvp@"] = string.format("%.2f", avgItemLevelPvp or 0)
         queued_inner_placeholders["@difficulty_info@"] = difficultyInfo
         queued_inner_placeholders["@active_keystone_level@"] = activeKeystoneData.formattedLevel
         queued_inner_placeholders["@active_keystone_affixes@"] = activeKeystoneData.formattedAffixes
@@ -212,7 +217,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     }
     local queued_inner_conditions = {
         ["@lockout_encounters@"] = (lockoutData ~= nil and
-                lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0)
+                (lockoutData.currentEncounters or 0) > 0 and (lockoutData.totalEncounters or 0) > 0)
     }
     local queued_extra_conditions = {
         ["torghast"] = (string.find(name, "Torghast") and (queued_inner_placeholders["@instance_type@"] == "scenario"))

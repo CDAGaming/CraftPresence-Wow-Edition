@@ -208,37 +208,38 @@ end
 ---
 --- @return table @ keystoneInfo
 function CraftPresence:GetActiveKeystone()
-    local keystoneInfo
-    local mapID = C_ChallengeMode.GetActiveChallengeMapID()
     local formattedKeyAffixes = ""
+    local keystoneInfo = {
+        dungeon = nil,
+        activeAffixes = nil,
+        wasCharged = false,
+        level = 0,
+        formattedLevel = "",
+        formattedAffixes = formattedKeyAffixes
+    }
 
-    if mapID then
-        local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
-        local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
-        if activeAffixIDs ~= nil then
-            for _, affixId in pairs(activeAffixIDs) do
-                local name, _, _ = C_ChallengeMode.GetAffixInfo(affixId)
-                formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
+    if C_ChallengeMode ~= nil then
+        local mapID = C_ChallengeMode.GetActiveChallengeMapID()
+
+        if mapID then
+            local activeKeystoneLevel, activeAffixIDs, wasActiveKeystoneCharged = C_ChallengeMode.GetActiveKeystoneInfo()
+            local keystoneDungeon = C_ChallengeMode.GetMapUIInfo(mapID)
+            if activeAffixIDs ~= nil then
+                for _, affixId in pairs(activeAffixIDs) do
+                    local name, _, _ = C_ChallengeMode.GetAffixInfo(affixId)
+                    formattedKeyAffixes = formattedKeyAffixes .. ", " .. name
+                end
             end
-        end
 
-        keystoneInfo = {
-            dungeon = keystoneDungeon,
-            activeAffixes = activeAffixIDs,
-            wasCharged = wasActiveKeystoneCharged,
-            level = activeKeystoneLevel,
-            formattedLevel = ("+" .. activeKeystoneLevel),
-            formattedAffixes = formattedKeyAffixes
-        }
-    else
-        keystoneInfo = {
-            dungeon = nil,
-            activeAffixes = nil,
-            wasCharged = false,
-            level = 0,
-            formattedLevel = "",
-            formattedAffixes = formattedKeyAffixes
-        }
+            keystoneInfo = {
+                dungeon = keystoneDungeon,
+                activeAffixes = activeAffixIDs,
+                wasCharged = wasActiveKeystoneCharged,
+                level = activeKeystoneLevel,
+                formattedLevel = ("+" .. activeKeystoneLevel),
+                formattedAffixes = formattedKeyAffixes
+            }
+        end
     end
 
     return keystoneInfo
