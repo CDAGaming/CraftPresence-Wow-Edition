@@ -355,12 +355,13 @@ end
 function CraftPresence:SetupQueueSystem()
     if not queue_frame then
         queue_frame = CreateFrame("Frame", nil, UIParent)
-        queue_frame:SetScript("OnUpdate", function ()
+        queue_frame:SetScript("OnUpdate", function()
             local elapsed_time = GetTime()
             if queued_data ~= nil then
                 for key, value in pairs(queued_data) do
                     if elapsed_time > value then
-                        key(); queued_data[key] = nil;
+                        key();
+                        queued_data[key] = nil;
                     end
                 end
             end
