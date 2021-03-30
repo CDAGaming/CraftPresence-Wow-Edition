@@ -408,6 +408,11 @@ function CraftPresence:OnEnable()
             "UPDATE_INSTANCE_INFO"
     )
     -- Register Version-Specific Events
+    if buildData["toc_version"] >= compatData["5.0.x"] then
+        CraftPresence:AddTriggers("DispatchUpdate",
+                "PLAYER_SPECIALIZATION_CHANGED"
+        )
+    end
     if buildData["toc_version"] >= compatData["6.0.x"] then
         CraftPresence:AddTriggers("DispatchUpdate",
                 "ACTIVE_TALENT_GROUP_CHANGED",
