@@ -575,6 +575,7 @@ function CraftPresence:ChatCommand(input)
                 ))
             end
         elseif input == "clean" or input == "clear" then
+            self:Print(L["INFO_COMMAND_CLEAR"])
             self:CleanFrames()
             self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then

@@ -151,6 +151,9 @@ L["INFO_PLACEHOLDER_NOTE"] = ([=[NOTE: Placeholder keys surrounded by *#|r are g
 while ones surrounded by *@|r are inner (Cannot include other placeholders)]=]
 ):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
 
+-- Command: /cp clear|clean
+L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
+
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 -- General Command Data
