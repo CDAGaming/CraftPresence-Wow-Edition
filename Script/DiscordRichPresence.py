@@ -14,7 +14,7 @@ from logging.handlers import TimedRotatingFileHandler
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.2.0"
+process_version = "v1.2.1"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''
@@ -108,15 +108,16 @@ try:
         from ctypes import windll
         import win32gui
         import win32ui
+    else:
+        import psutil
     from PIL import Image, ImageGrab
     from pypresence import Presence
-    import psutil
 except ModuleNotFoundError as err:
     root_logger.error(
-        "A module is missing, preventing script execution! (Please review %s for Install Requirements)",
-        help_url,
-        exc_info=True
+        "A module is missing (%s), preventing script execution! (Please review %s for Install Requirements)",
+        err.name, help_url
     )
+    input("Press Enter to continue...")
     exit(1)
 
 
