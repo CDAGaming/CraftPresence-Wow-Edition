@@ -458,8 +458,11 @@ function CraftPresence:DispatchUpdate(...)
             ),
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
             ["PLAYER_LEVEL_UP"] = (lastEventName == "PLAYER_LEVEL_CHANGED"),
-            ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP")
+            ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP"),
+            ["ACTIVE_TALENT_GROUP_CHANGED"] = (args[2] == args[3]),
+            ["PLAYER_SPECIALIZATION_CHANGED"] = (args[2] ~= "player")
         }
+
         for key, value in pairs(ignore_event_conditions) do
             if eventName == key and value then
                 ignore_event = true
