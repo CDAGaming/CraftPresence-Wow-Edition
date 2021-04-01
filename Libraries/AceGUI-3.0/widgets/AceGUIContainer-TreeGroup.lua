@@ -2,7 +2,7 @@
 TreeGroup Container
 Container that uses a tree control to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TreeGroup", 45
+local Type, Version = "TreeGroup", 41
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -14,9 +14,16 @@ local select, tremove, unpack, tconcat = select, table.remove, unpack, table.con
 -- WoW APIs
 local CreateFrame, UIParent = CreateFrame, UIParent
 
+local wowLegion, wowBfa
+do
+	local _, _, _, interface = GetBuildInfo()
+	wowLegion = (interface >= 70000)
+	wowBfa = (interface >= 80000)
+end
+
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
--- GLOBALS: FONT_COLOR_CODE_CLOSE
+-- GLOBALS: GameTooltip, FONT_COLOR_CODE_CLOSE
 
 -- Recycling functions
 local new, del
@@ -57,6 +64,7 @@ end
 local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 	local self = button.obj
 	local toggle = button.toggle
+	local frame = self.frame
 	local text = treeline.text or ""
 	local icon = treeline.icon
 	local iconCoords = treeline.iconCoords
@@ -75,6 +83,8 @@ local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 		button:UnlockHighlight()
 		button.selected = false
 	end
+	local normalTexture = button:GetNormalTexture()
+	local line = button.line
 	button.level = level
 	if ( level == 1 ) then
 		button:SetNormalFontObject("GameFontNormal")
@@ -109,11 +119,11 @@ local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 
 	if canExpand then
 		if not isExpanded then
-			toggle:SetNormalTexture(130838) -- Interface\\Buttons\\UI-PlusButton-UP
-			toggle:SetPushedTexture(130836) -- Interface\\Buttons\\UI-PlusButton-DOWN
+			toggle:SetNormalTexture("Interface\\Buttons\\UI-PlusButton-UP")
+			toggle:SetPushedTexture("Interface\\Buttons\\UI-PlusButton-DOWN")
 		else
-			toggle:SetNormalTexture(130821) -- Interface\\Buttons\\UI-MinusButton-UP
-			toggle:SetPushedTexture(130820) -- Interface\\Buttons\\UI-MinusButton-DOWN
+			toggle:SetNormalTexture("Interface\\Buttons\\UI-MinusButton-UP")
+			toggle:SetPushedTexture("Interface\\Buttons\\UI-MinusButton-DOWN")
 		end
 		toggle:Show()
 	else
@@ -196,6 +206,7 @@ end
 
 local function Button_OnDoubleClick(button)
 	local self = button.obj
+	local status = self.status or self.localstatus
 	local status = (self.status or self.localstatus).groups
 	status[button.uniquevalue] = not status[button.uniquevalue]
 	self:RefreshTree()
@@ -206,13 +217,11 @@ local function Button_OnEnter(frame)
 	self:Fire("OnButtonEnter", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		local tooltip = AceGUI.tooltip
-		tooltip:SetOwner(frame, "ANCHOR_NONE")
-		tooltip:ClearAllPoints()
-		tooltip:SetPoint("LEFT",frame,"RIGHT")
-		tooltip:SetText(frame.text:GetText() or "", 1, .82, 0, true)
+		GameTooltip:SetOwner(frame, "ANCHOR_NONE")
+		GameTooltip:SetPoint("LEFT",frame,"RIGHT")
+		GameTooltip:SetText(frame.text:GetText() or "", 1, .82, 0, true)
 
-		tooltip:Show()
+		GameTooltip:Show()
 	end
 end
 
@@ -221,7 +230,7 @@ local function Button_OnLeave(frame)
 	self:Fire("OnButtonLeave", frame.uniquevalue, frame)
 
 	if self.enabletooltips then
-		AceGUI.tooltip:Hide()
+		GameTooltip:Hide()
 	end
 end
 
@@ -267,16 +276,15 @@ end
 local function Dragger_OnMouseUp(frame)
 	local treeframe = frame:GetParent()
 	local self = treeframe.obj
-	local treeframeParent = treeframe:GetParent()
+	local frame = treeframe:GetParent()
 	treeframe:StopMovingOrSizing()
 	--treeframe:SetScript("OnUpdate", nil)
 	treeframe:SetUserPlaced(false)
 	--Without this :GetHeight will get stuck on the current height, causing the tree contents to not resize
 	treeframe:SetHeight(0)
-	treeframe:ClearAllPoints()
-	treeframe:SetPoint("TOPLEFT", treeframeParent, "TOPLEFT",0,0)
-	treeframe:SetPoint("BOTTOMLEFT", treeframeParent, "BOTTOMLEFT",0,0)
-
+	treeframe:SetPoint("TOPLEFT", frame, "TOPLEFT",0,0)
+	treeframe:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT",0,0)
+	
 	local status = self.status or self.localstatus
 	status.treewidth = treeframe:GetWidth()
 
@@ -373,6 +381,7 @@ local methods = {
 
 	["BuildLevel"] = function(self, tree, level, parent)
 		local groups = (self.status or self.localstatus).groups
+		local hasChildren = self.hasChildren
 
 		for i, v in ipairs(tree) do
 			if v.children then
@@ -420,7 +429,8 @@ local methods = {
 		local maxlines = (floor(((self.treeframe:GetHeight()or 0) - 20 ) / 18))
 		if maxlines <= 0 then return end
 
-		if self.frame:GetParent() == UIParent and not fromOnUpdate then
+		-- workaround for lag spikes on WoW 8.0
+		if wowBfa and self.frame:GetParent() == UIParent and not fromOnUpdate then
 			self.frame:SetScript("OnUpdate", FirstFrameUpdate)
 			return
 		end
@@ -629,7 +639,7 @@ local PaneBackdrop  = {
 local DraggerBackdrop  = {
 	bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 	edgeFile = nil,
-	tile = true, tileSize = 16, edgeSize = 1,
+	tile = true, tileSize = 16, edgeSize = 0,
 	insets = { left = 3, right = 3, top = 7, bottom = 7 }
 }
 
@@ -637,7 +647,7 @@ local function Constructor()
 	local num = AceGUI:GetNextWidgetNum(Type)
 	local frame = CreateFrame("Frame", nil, UIParent)
 
-	local treeframe = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local treeframe = CreateFrame("Frame", nil, frame)
 	treeframe:SetPoint("TOPLEFT")
 	treeframe:SetPoint("BOTTOMLEFT")
 	treeframe:SetWidth(DEFAULT_TREE_WIDTH)
@@ -652,7 +662,7 @@ local function Constructor()
 	treeframe:SetScript("OnSizeChanged", Tree_OnSizeChanged)
 	treeframe:SetScript("OnMouseWheel", Tree_OnMouseWheel)
 
-	local dragger = CreateFrame("Frame", nil, treeframe, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local dragger = CreateFrame("Frame", nil, treeframe)
 	dragger:SetWidth(8)
 	dragger:SetPoint("TOP", treeframe, "TOPRIGHT")
 	dragger:SetPoint("BOTTOM", treeframe, "BOTTOMRIGHT")
@@ -675,9 +685,13 @@ local function Constructor()
 
 	local scrollbg = scrollbar:CreateTexture(nil, "BACKGROUND")
 	scrollbg:SetAllPoints(scrollbar)
-	scrollbg:SetColorTexture(0,0,0,0.4)
+	if wowLegion then
+		scrollbg:SetColorTexture(0, 0, 0, 0.4)
+	else
+		scrollbg:SetTexture(0, 0, 0, 0.4)
+	end
 
-	local border = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local border = CreateFrame("Frame",nil,frame)
 	border:SetPoint("TOPLEFT", treeframe, "TOPRIGHT")
 	border:SetPoint("BOTTOMRIGHT")
 	border:SetBackdrop(PaneBackdrop)

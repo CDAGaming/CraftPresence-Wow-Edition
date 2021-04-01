@@ -2,7 +2,7 @@
 Keybinding Widget
 Set Keybindings in the Config UI.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Keybinding", 26
+local Type, Version = "Keybinding", 25
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
@@ -16,6 +16,12 @@ local CreateFrame, UIParent = CreateFrame, UIParent
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
 -- GLOBALS: NOT_BOUND
+
+local wowMoP
+do
+	local _, _, _, interface = GetBuildInfo()
+	wowMoP = (interface >= 50000)
+end
 
 --[[-----------------------------------------------------------------------------
 Scripts
@@ -188,7 +194,7 @@ local function Constructor()
 	local name = "AceGUI30KeybindingButton" .. AceGUI:GetNextWidgetNum(Type)
 
 	local frame = CreateFrame("Frame", nil, UIParent)
-	local button = CreateFrame("Button", name, frame, "UIPanelButtonTemplate")
+	local button = CreateFrame("Button", name, frame, wowMoP and "UIPanelButtonTemplate" or "UIPanelButtonTemplate2")
 
 	button:EnableMouse(true)
 	button:EnableMouseWheel(false)
@@ -214,7 +220,7 @@ local function Constructor()
 	label:SetJustifyH("CENTER")
 	label:SetHeight(18)
 
-	local msgframe = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local msgframe = CreateFrame("Frame", nil, UIParent)
 	msgframe:SetHeight(30)
 	msgframe:SetBackdrop(ControlBackdrop)
 	msgframe:SetBackdropColor(0,0,0)

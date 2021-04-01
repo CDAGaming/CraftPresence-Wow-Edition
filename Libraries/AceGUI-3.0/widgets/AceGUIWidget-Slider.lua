@@ -2,13 +2,19 @@
 Slider Widget
 Graphical Slider, like, for Range values.
 -------------------------------------------------------------------------------]]
-local Type, Version = "Slider", 23
+local Type, Version = "Slider", 22
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
 local min, max, floor = math.min, math.max, math.floor
 local tonumber, pairs = tonumber, pairs
+
+local wowThirdLegion
+do
+	local _, _, _, interface = GetBuildInfo()
+	wowThirdLegion = (interface >= 70300)
+end
 
 -- WoW APIs
 local PlaySound = PlaySound
@@ -57,9 +63,10 @@ local function Frame_OnMouseDown(frame)
 	AceGUI:ClearFocus()
 end
 
-local function Slider_OnValueChanged(frame, newvalue)
+local function Slider_OnValueChanged(frame)
 	local self = frame.obj
 	if not frame.setup then
+		local newvalue = frame:GetValue()
 		if self.step and self.step > 0 then
 			local min_value = self.min or 0
 			newvalue = floor((newvalue - min_value) / self.step + 0.5) * self.step + min_value
@@ -107,7 +114,7 @@ local function EditBox_OnEnterPressed(frame)
 	end
 
 	if value then
-		PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+		PlaySound(wowThirdLegion and 856 or "igMainMenuOptionCheckBoxOn") -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 		self.slider:SetValue(value)
 		self:Fire("OnMouseUp", value)
 	end
@@ -225,7 +232,7 @@ local function Constructor()
 	label:SetJustifyH("CENTER")
 	label:SetHeight(15)
 
-	local slider = CreateFrame("Slider", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local slider = CreateFrame("Slider", nil, frame)
 	slider:SetOrientation("HORIZONTAL")
 	slider:SetHeight(15)
 	slider:SetHitRectInsets(0, 0, -10, 0)
@@ -247,7 +254,7 @@ local function Constructor()
 	local hightext = slider:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 	hightext:SetPoint("TOPRIGHT", slider, "BOTTOMRIGHT", -2, 3)
 
-	local editbox = CreateFrame("EditBox", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local editbox = CreateFrame("EditBox", nil, frame)
 	editbox:SetAutoFocus(false)
 	editbox:SetFontObject(GameFontHighlightSmall)
 	editbox:SetPoint("TOP", slider, "BOTTOM")

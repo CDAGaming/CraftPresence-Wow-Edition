@@ -1,4 +1,4 @@
---[[ $Id: AceGUIWidget-DropDown-Items.lua 1202 2019-05-15 23:11:22Z nevcairiel $ ]]--
+--[[ $Id: AceGUIWidget-DropDown-Items.lua 1167 2017-08-29 22:08:48Z funkydude $ ]]--
 
 local AceGUI = LibStub("AceGUI-3.0")
 
@@ -8,6 +8,13 @@ local select, assert = select, assert
 -- WoW APIs
 local PlaySound = PlaySound
 local CreateFrame = CreateFrame
+
+local wowLegion, wowThirdLegion
+do
+	local _, _, _, interface = GetBuildInfo()
+	wowLegion = (interface >= 70000)
+	wowThirdLegion = (interface >= 70300)
+end
 
 local function fixlevels(parent,...)
 	local i = 1
@@ -169,7 +176,7 @@ function ItemBase.Create(type)
 	self.text = text
 
 	local highlight = frame:CreateTexture(nil, "OVERLAY")
-	highlight:SetTexture(136810) -- Interface\\QuestFrame\\UI-QuestTitleHighlight
+	highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
 	highlight:SetBlendMode("ADD")
 	highlight:SetHeight(14)
 	highlight:ClearAllPoints()
@@ -182,7 +189,7 @@ function ItemBase.Create(type)
 	check:SetWidth(16)
 	check:SetHeight(16)
 	check:SetPoint("LEFT",frame,"LEFT",3,-1)
-	check:SetTexture(130751) -- Interface\\Buttons\\UI-CheckBox-Check
+	check:SetTexture("Interface\\Buttons\\UI-CheckBox-Check")
 	check:Hide()
 	self.check = check
 
@@ -190,7 +197,7 @@ function ItemBase.Create(type)
 	sub:SetWidth(16)
 	sub:SetHeight(16)
 	sub:SetPoint("RIGHT",frame,"RIGHT",-3,-1)
-	sub:SetTexture(130940) -- Interface\\ChatFrame\\ChatFrameExpandArrow
+	sub:SetTexture("Interface\\ChatFrame\\ChatFrameExpandArrow")
 	sub:Hide()
 	self.sub = sub
 
@@ -343,9 +350,9 @@ do
 		if self.disabled then return end
 		self.value = not self.value
 		if self.value then
-			PlaySound(856) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
+			PlaySound(wowThirdLegion and 856 or "igMainMenuOptionCheckBoxOn") -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON
 		else
-			PlaySound(857) -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
+			PlaySound(wowThirdLegion and 857 or "igMainMenuOptionCheckBoxOff") -- SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF
 		end
 		UpdateToggle(self)
 		self:Fire("OnValueChanged", self.value)
@@ -455,7 +462,11 @@ do
 
 		local line = self.frame:CreateTexture(nil, "OVERLAY")
 		line:SetHeight(1)
-		line:SetColorTexture(.5, .5, .5)
+		if wowLegion then
+			line:SetColorTexture(.5, .5, .5)
+		else
+			line:SetTexture(.5, .5, .5)
+		end
 		line:SetPoint("LEFT", self.frame, "LEFT", 10, 0)
 		line:SetPoint("RIGHT", self.frame, "RIGHT", -10, 0)
 

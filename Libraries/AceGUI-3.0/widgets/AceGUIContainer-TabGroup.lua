@@ -2,12 +2,19 @@
 TabGroup Container
 Container that uses tabs on top to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TabGroup", 37
+local Type, Version = "TabGroup", 36
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
-local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, table.wipe
+local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, wipe
+
+local wowCata, wowThirdLegion
+do
+	local _, _, _, interface = GetBuildInfo()
+	wowCata = (interface >= 40000)
+	wowThirdLegion = (interface >= 70300)
+end
 
 -- WoW APIs
 local PlaySound = PlaySound
@@ -39,7 +46,11 @@ end
 local function Tab_SetText(frame, text)
 	frame:_SetText(text)
 	local width = frame.obj.frame.width or frame.obj.frame:GetWidth() or 0
-	PanelTemplates_TabResize(frame, 0, nil, nil, width, frame:GetFontString():GetStringWidth())
+	if wowCata then
+		PanelTemplates_TabResize(frame, 0, nil, nil, width, frame:GetFontString():GetStringWidth())
+	else
+		PanelTemplates_TabResize(frame, 0, nil, width)
+	end
 end
 
 local function Tab_SetSelected(frame, selected)
@@ -63,7 +74,7 @@ Scripts
 -------------------------------------------------------------------------------]]
 local function Tab_OnClick(frame)
 	if not (frame.selected or frame.disabled) then
-		PlaySound(841) -- SOUNDKIT.IG_CHARACTER_INFO_TAB
+		PlaySound(wowThirdLegion and 841 or "igCharacterInfoTab") -- SOUNDKIT.IG_CHARACTER_INFO_TAB
 		frame.obj:SelectTab(frame.value)
 	end
 end
@@ -165,6 +176,7 @@ local methods = {
 
 	["BuildTabs"] = function(self)
 		local hastitle = (self.titletext:GetText() and self.titletext:GetText() ~= "")
+		local status = self.status or self.localstatus
 		local tablist = self.tablist
 		local tabs = self.tabs
 
@@ -255,7 +267,11 @@ local methods = {
 			end
 
 			for i = starttab, endtab do
-				PanelTemplates_TabResize(tabs[i], padding + 4, nil, nil, width, tabs[i]:GetFontString():GetStringWidth())
+				if wowCata then
+					PanelTemplates_TabResize(tabs[i], padding + 4, nil, nil, width, tabs[i]:GetFontString():GetStringWidth())
+				else
+					PanelTemplates_TabResize(tabs[i], padding + 4, nil, width)
+				end
 			end
 			starttab = endtab + 1
 		end
@@ -316,7 +332,7 @@ local function Constructor()
 	titletext:SetHeight(18)
 	titletext:SetText("")
 
-	local border = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate" or nil)
+	local border = CreateFrame("Frame", nil, frame)
 	border:SetPoint("TOPLEFT", 1, -27)
 	border:SetPoint("BOTTOMRIGHT", -1, 3)
 	border:SetBackdrop(PaneBackdrop)

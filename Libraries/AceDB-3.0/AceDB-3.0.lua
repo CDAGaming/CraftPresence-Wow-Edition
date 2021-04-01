@@ -40,15 +40,15 @@
 -- end
 -- @class file
 -- @name AceDB-3.0.lua
--- @release $Id: AceDB-3.0.lua 1217 2019-07-11 03:06:18Z funkydude $
-local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 27
-local AceDB = LibStub:NewLibrary(ACEDB_MAJOR, ACEDB_MINOR)
+-- @release $Id: AceDB-3.0.lua 1142 2016-07-11 08:36:19Z nevcairiel $
+local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 26
+local AceDB, oldminor = LibStub:NewLibrary(ACEDB_MAJOR, ACEDB_MINOR)
 
 if not AceDB then return end -- No upgrade needed
 
 -- Lua APIs
 local type, pairs, next, error = type, pairs, next, error
-local setmetatable, rawset, rawget = setmetatable, rawset, rawget
+local setmetatable, getmetatable, rawset, rawget = setmetatable, getmetatable, rawset, rawget
 
 -- WoW APIs
 local _G = _G
@@ -264,7 +264,7 @@ local factionrealmKey = factionKey .. " - " .. realmKey
 local localeKey = GetLocale():lower()
 
 local regionTable = { "US", "KR", "EU", "TW", "CN" }
-local regionKey = regionTable[GetCurrentRegion()]
+local regionKey = _G["GetCurrentRegion"] and regionTable[GetCurrentRegion()] or string.sub(GetCVar("realmList"), 1, 2):upper()
 local factionrealmregionKey = factionrealmKey .. " - " .. regionKey
 
 -- Actual database initialization function

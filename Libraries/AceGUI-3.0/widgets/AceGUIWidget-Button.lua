@@ -13,12 +13,19 @@ local pairs = pairs
 local _G = _G
 local PlaySound, CreateFrame, UIParent = PlaySound, CreateFrame, UIParent
 
+local wowMoP, wowThirdLegion
+do
+	local _, _, _, interface = GetBuildInfo()
+	wowMoP = (interface >= 50000)
+	wowThirdLegion = (interface >= 70300)
+end
+
 --[[-----------------------------------------------------------------------------
 Scripts
 -------------------------------------------------------------------------------]]
 local function Button_OnClick(frame, ...)
 	AceGUI:ClearFocus()
-	PlaySound(852) -- SOUNDKIT.IG_MAINMENU_OPTION
+	PlaySound(wowThirdLegion and 852 or "igMainMenuOption") -- SOUNDKIT.IG_MAINMENU_OPTION
 	frame.obj:Fire("OnClick", ...)
 end
 
@@ -74,7 +81,7 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
 	local name = "AceGUI30Button" .. AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Button", name, UIParent, "UIPanelButtonTemplate")
+	local frame = CreateFrame("Button", name, UIParent, wowMoP and "UIPanelButtonTemplate" or "UIPanelButtonTemplate2")
 	frame:Hide()
 
 	frame:EnableMouse(true)
