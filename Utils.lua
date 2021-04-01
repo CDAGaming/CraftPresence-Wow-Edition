@@ -160,17 +160,23 @@ function CraftPresence:GetBuildInfo()
 end
 
 --- Retrieves and Syncronizes App Compatibility Info
+--- (Note some TOC version require extra filtering)
+---
 --- @return table @ compatibility_info
 function CraftPresence:GetCompatibilityInfo()
     if not compatibility_info then
-        compatibility_info = {}
-        compatibility_info["retail"] = 90005
-        compatibility_info["classic"] = 11306
-        compatibility_info["5.0.x"] = 50001
-        compatibility_info["6.0.x"] = 60000
-        compatibility_info["7.0.x"] = 70000
-        compatibility_info["8.0.x"] = 80000
-        compatibility_info["9.0.x"] = 90000
+        compatibility_info = {
+            ["retail"] = 90005, -- Latest Retail
+            ["classic"] = 11306, -- Latest Classic
+            ["9.0.x"] = 90000, -- SL 9.0.x
+            ["8.0.x"] = 80000, -- BFA 8.0.X
+            ["7.0.x"] = 70000, -- LEG 7.0.X
+            ["6.0.x"] = 60000, -- WOD 6.0.X
+            ["5.0.x"] = 50000, -- MOP 5.0.X
+            ["3.2.x"] = 30200, -- WOTLK 3.2.X
+            ["2.5.x"] = 20500, -- TBC Classic
+            ["1.13.x"] = 11300, -- Vanilla Classic
+        }
     end
     return compatibility_info
 end

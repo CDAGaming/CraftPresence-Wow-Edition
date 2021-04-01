@@ -1,7 +1,7 @@
 local CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-local icon = LibStub("LibDBIcon-1.0")
+local icon
 
 local minimapState = { hide = false }
 local addonVersion = ""
@@ -10,21 +10,7 @@ local realmData = { "US", "KR", "EU", "TW", "CH" }
 local buildData = {}
 local compatData = {}
 
-local CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
-    type = "launcher",
-    text = L["ADDON_NAME"],
-    icon = string.format("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
-    OnClick = function(clickedframe, button)
-        CraftPresence.ShowConfig()
-    end,
-    OnTooltipShow = function(tt)
-        tt:AddLine(L["ADDON_NAME"])
-        tt:AddLine(" ")
-        tt:AddLine(L["ADDON_TOOLTIP_THREE"])
-        tt:AddLine(" ")
-        tt:AddLine(L["ADDON_TOOLTIP_FIVE"])
-    end
-})
+local CraftPresenceLDB
 
 -- ==================
 -- RPC Data
@@ -52,7 +38,14 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     force_instance_change = force_instance_change ~= nil and force_instance_change == true
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
-    dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
+    dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID
+    if buildData["toc_version"] >= compatData["2.5.x"] then
+        name, instanceType, difficultyID, difficultyName, maxPlayers,
+        dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
+    else
+        -- Fallback Data, as needed
+        name = ""
+    end
     local difficultyInfo = difficultyName
     local lockoutData = {}
     if buildData["toc_version"] >= compatData["6.0.x"] then
@@ -376,18 +369,41 @@ end
 --- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
     -- Main Initialization
+    buildData = self:GetBuildInfo()
+    compatData = self:GetCompatibilityInfo()
+    -- Options Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetSchemaDefaults())
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         L["ADDON_ID"], L["ADDON_AFFIX"]
     })
-    self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
-    self.optionsFrame.default = self.ResetDB
+    if buildData["toc_version"] >= compatData["2.5.x"] then
+        self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
+        self.optionsFrame.default = self.ResetDB
+    end
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
     -- Icon Registration
-    self:UpdateMinimapState(false)
-    icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
+    if buildData["toc_version"] >= compatData["2.5.x"] then
+        icon = LibStub("LibDBIcon-1.0")
+        CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
+            type = "launcher",
+            text = L["ADDON_NAME"],
+            icon = string.format("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
+            OnClick = function(clickedframe, button)
+                CraftPresence.ShowConfig()
+            end,
+            OnTooltipShow = function(tt)
+                tt:AddLine(L["ADDON_NAME"])
+                tt:AddLine(" ")
+                tt:AddLine(L["ADDON_TOOLTIP_THREE"])
+                tt:AddLine(" ")
+                tt:AddLine(L["ADDON_TOOLTIP_FIVE"])
+            end
+        })
+        self:UpdateMinimapState(false)
+        icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
+    end
 end
 
 --- Instructions to be called when the addon is enabled
@@ -395,8 +411,6 @@ function CraftPresence:OnEnable()
     -- Print initial data and register events
     -- depending on platform and config data
     self:Print(string.format(L["ADDON_INTRO"], self:GetVersion()))
-    buildData = self:GetBuildInfo()
-    compatData = self:GetCompatibilityInfo()
     if self:GetFromDb("verboseMode") then
         self:Print(string.format(L["ADDON_BUILD_INFO"], self:SerializeTable(buildData)))
     end
@@ -525,7 +539,9 @@ function CraftPresence:OnDisable()
     -- Clean up Data before disabling
     self:Print(L["ADDON_CLOSE"])
     self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
-    icon:Hide(L["ADDON_NAME"])
+    if buildData["toc_version"] >= compatData["2.5.x"] then
+        icon:Hide(L["ADDON_NAME"])
+    end
     self:UnregisterAllEvents()
 end
 
@@ -534,10 +550,14 @@ end
 function CraftPresence:UpdateMinimapState(update_state)
     minimapState = { hide = not CraftPresence:GetFromDb("showMinimapIcon") }
     if update_state then
-        if minimapState["hide"] then
-            icon:Hide(L["ADDON_NAME"])
+        if buildData["toc_version"] >= compatData["2.5.x"] then
+            if minimapState["hide"] then
+                icon:Hide(L["ADDON_NAME"])
+            else
+                icon:Show(L["ADDON_NAME"])
+            end
         else
-            icon:Show(L["ADDON_NAME"])
+            -- TODO: ERROR LOGGING
         end
     end
 end
@@ -545,8 +565,12 @@ end
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
-    InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
-    InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+    if buildData["toc_version"] >= compatData["2.5.x"] then
+        InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+        InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+    else
+        -- TODO: ERROR LOGGING
+    end
 end
 
 --- Getter for CraftPresence:addonVersion
