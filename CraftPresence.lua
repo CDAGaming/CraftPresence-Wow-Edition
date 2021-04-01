@@ -557,7 +557,11 @@ function CraftPresence:UpdateMinimapState(update_state)
                 icon:Show(L["ADDON_NAME"])
             end
         else
-            -- TODO: ERROR LOGGING
+            self:Print(string.format(
+                    L["ERROR_LOG"], string.format(
+                            L["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"
+                    )
+            ))
         end
     end
 end
@@ -569,7 +573,11 @@ function CraftPresence:ShowConfig()
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     else
-        -- TODO: ERROR LOGGING
+        self:Print(string.format(
+                L["ERROR_LOG"], string.format(
+                        L["ERROR_FUNCTION_DISABLED"], "ShowConfig"
+                )
+        ))
     end
 end
 

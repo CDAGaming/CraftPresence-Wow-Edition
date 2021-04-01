@@ -156,6 +156,7 @@ L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
 
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
+L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
 -- General Command Data
 L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.
