@@ -173,9 +173,7 @@ function CraftPresence:GetCompatibilityInfo()
             ["7.0.x"] = 70000, -- LEG 7.0.X
             ["6.0.x"] = 60000, -- WOD 6.0.X
             ["5.0.x"] = 50000, -- MOP 5.0.X
-            ["3.2.x"] = 30200, -- WOTLK 3.2.X
             ["2.5.x"] = 20500, -- TBC Classic
-            ["1.13.x"] = 11300, -- Vanilla Classic
         }
     end
     return compatibility_info
