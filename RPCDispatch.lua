@@ -31,10 +31,7 @@ function CraftPresence:CreateFrames(size)
 
         -- initialise pixels as black to represent initial null data
         local t = frames[i]:CreateTexture(nil, "TOOLTIP")
-        if (
-                self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["7.0.x"] or
-                        self:IsClassicRebased() or self:IsTBCRebased()
-        ) then
+        if t.SetColorTexture then
             t:SetColorTexture(0, 0, 0, 1)
         else
             t:SetTexture(0, 0, 0, 1)
@@ -81,10 +78,7 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
     end
 
     -- and now paint it
-    if (
-            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["7.0.x"] or
-                    self:IsClassicRebased() or self:IsTBCRebased()
-    ) then
+    if frame.texture.SetColorTexture then
         frame.texture:SetColorTexture(r, g, b, a)
     else
         frame.texture:SetTexture(r, g, b, a)
