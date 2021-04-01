@@ -13,11 +13,13 @@ local pairs = pairs
 local _G = _G
 local PlaySound, CreateFrame, UIParent = PlaySound, CreateFrame, UIParent
 
-local wowMoP, wowThirdLegion
+local wowMoP, wowThirdLegion, wowClassicRebased, wowTBCRebased
 do
 	local _, _, _, interface = GetBuildInfo()
 	wowMoP = (interface >= 50000)
 	wowThirdLegion = (interface >= 70300)
+	wowClassicRebased = (interface >= 11300 and interface < 20000)
+	wowTBCRebased = (interface >= 20500 and interface < 30000)
 end
 
 --[[-----------------------------------------------------------------------------
@@ -81,7 +83,7 @@ Constructor
 -------------------------------------------------------------------------------]]
 local function Constructor()
 	local name = "AceGUI30Button" .. AceGUI:GetNextWidgetNum(Type)
-	local frame = CreateFrame("Button", name, UIParent, wowMoP and "UIPanelButtonTemplate" or "UIPanelButtonTemplate2")
+	local frame = CreateFrame("Button", name, UIParent, (wowMoP or wowClassicRebased or wowTBCRebased) and "UIPanelButtonTemplate" or "UIPanelButtonTemplate2")
 	frame:Hide()
 
 	frame:EnableMouse(true)

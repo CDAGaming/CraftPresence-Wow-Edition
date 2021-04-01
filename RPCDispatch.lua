@@ -33,7 +33,7 @@ function CraftPresence:CreateFrames(size)
         local t = frames[i]:CreateTexture(nil, "TOOLTIP")
         if (
                 self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["7.0.x"] or
-                self:IsClassicRebased() or self:IsTBCRebased()
+                        self:IsClassicRebased() or self:IsTBCRebased()
         ) then
             t:SetColorTexture(0, 0, 0, 1)
         else

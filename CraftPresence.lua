@@ -39,7 +39,10 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID
-    if buildData["toc_version"] >= compatData["2.5.x"] then
+    if (
+            buildData["toc_version"] >= compatData["2.5.x"] or
+                    self:IsClassicRebased() or self:IsTBCRebased()
+    ) then
         name, instanceType, difficultyID, difficultyName, maxPlayers,
         dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     else
@@ -58,7 +61,10 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
     local playerRegionId = 1
-    if buildData["toc_version"] >= compatData["6.0.x"] then
+    if (
+            buildData["toc_version"] >= compatData["6.0.x"] or
+                    self:IsClassicRebased() or self:IsTBCRebased()
+    ) then
         playerRegionId = GetCurrentRegion()
     end
     local playerRegion = realmData[playerRegionId]
@@ -151,14 +157,21 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     }
     -- Version Dependent Data
     local user_info_preset = playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel))
-    if buildData["toc_version"] >= compatData["5.0.x"] then
+    if (
+            buildData["toc_version"] >= compatData["5.0.x"] or
+                    self:IsClassicRebased() or self:IsTBCRebased()
+    ) then
         -- Extra Character Data
         local titleName = UnitPVPName("player")
-        local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+        local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
         local specId
         local specName = ""
         local roleName = ""
-        local specInfo = GetSpecialization()
+        local specInfo
+        if buildData["toc_version"] >= compatData["5.0.x"] then
+            avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+            specInfo = GetSpecialization()
+        end
         -- Hotfix: Prevent a null-case with Spec Info
         -- (Only happens if events fire too quickly for into to populate, or if you don't have a spec learned/available)
         if specInfo ~= nil then
@@ -376,15 +389,18 @@ function CraftPresence:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         L["ADDON_ID"], L["ADDON_AFFIX"]
     })
-    if buildData["toc_version"] >= compatData["2.5.x"] then
-        self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
-        self.optionsFrame.default = self.ResetDB
-    end
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
-    -- Icon Registration
-    if buildData["toc_version"] >= compatData["2.5.x"] then
+    -- Version-Specific Registration
+    if (
+            buildData["toc_version"] >= compatData["2.5.x"] or
+                    self:IsClassicRebased() or self:IsTBCRebased()
+    ) then
+        -- UI Registration
+        self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
+        self.optionsFrame.default = self.ResetDB
+        -- Icon Registration
         icon = LibStub("LibDBIcon-1.0")
         CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
             type = "launcher",
@@ -539,7 +555,10 @@ function CraftPresence:OnDisable()
     -- Clean up Data before disabling
     self:Print(L["ADDON_CLOSE"])
     self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
-    if buildData["toc_version"] >= compatData["2.5.x"] then
+    if (
+            buildData["toc_version"] >= compatData["2.5.x"] or
+                    self:IsClassicRebased() or self:IsTBCRebased()
+    ) then
         icon:Hide(L["ADDON_NAME"])
     end
     self:UnregisterAllEvents()
@@ -550,7 +569,10 @@ end
 function CraftPresence:UpdateMinimapState(update_state)
     minimapState = { hide = not CraftPresence:GetFromDb("showMinimapIcon") }
     if update_state then
-        if buildData["toc_version"] >= compatData["2.5.x"] then
+        if (
+                buildData["toc_version"] >= compatData["2.5.x"] or
+                        self:IsClassicRebased() or self:IsTBCRebased()
+        ) then
             if minimapState["hide"] then
                 icon:Hide(L["ADDON_NAME"])
             else
@@ -569,11 +591,14 @@ end
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
-    if buildData["toc_version"] >= compatData["2.5.x"] then
+    if (
+            buildData["toc_version"] >= compatData["2.5.x"] or
+                    CraftPresence:IsClassicRebased() or CraftPresence:IsTBCRebased()
+    ) then
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     else
-        self:Print(string.format(
+        CraftPresence:Print(string.format(
                 L["ERROR_LOG"], string.format(
                         L["ERROR_FUNCTION_DISABLED"], "ShowConfig"
                 )
