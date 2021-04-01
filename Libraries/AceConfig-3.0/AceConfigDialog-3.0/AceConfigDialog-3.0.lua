@@ -131,7 +131,11 @@ do
 	end
 	function del(t)
 		--delcount = delcount + 1
-		wipe(t)
+		if wipe then
+			wipe(t)
+		else
+			t = {}
+		end
 		pool[t] = true
 	end
 --	function cached()
@@ -1750,7 +1754,11 @@ local function RefreshOnUpdate(this)
 			end
 		end
 		this.closeAll = nil
-		wipe(this.closeAllOverride)
+		if wipe then
+			wipe(this.closeAllOverride)
+		else
+			this.closeAllOverride = {}
+		end
 	end
 
 	for appName in pairs(this.apps) do

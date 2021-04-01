@@ -184,9 +184,15 @@ local methods = {
 
 		local width = self.frame.width or self.frame:GetWidth() or 0
 
-		wipe(widths)
-		wipe(rowwidths)
-		wipe(rowends)
+		if wipe then
+			wipe(widths)
+			wipe(rowwidths)
+			wipe(rowends)
+		else
+			widths = {}
+			rowwidths = {}
+			rowends = {}
+		end
 
 		--Place Text into tabs and get thier initial width
 		for i, v in ipairs(tablist) do

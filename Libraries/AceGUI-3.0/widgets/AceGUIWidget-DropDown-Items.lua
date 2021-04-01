@@ -9,13 +9,10 @@ local select, assert = select, assert
 local PlaySound = PlaySound
 local CreateFrame = CreateFrame
 
-local wowLegion, wowThirdLegion, wowClassicRebased, wowTBCRebased
+local wowThirdLegion
 do
 	local _, _, _, interface = GetBuildInfo()
-	wowLegion = (interface >= 70000)
 	wowThirdLegion = (interface >= 70300)
-	wowClassicRebased = (interface >= 11300 and interface < 20000)
-	wowTBCRebased = (interface >= 20500 and interface < 30000)
 end
 
 local function fixlevels(parent,...)
@@ -464,7 +461,7 @@ do
 
 		local line = self.frame:CreateTexture(nil, "OVERLAY")
 		line:SetHeight(1)
-		if wowLegion or wowClassicRebased or wowTBCRebased then
+		if line.SetColorTexture then
 			line:SetColorTexture(.5, .5, .5)
 		else
 			line:SetTexture(.5, .5, .5)

@@ -11,15 +11,6 @@ local pairs = pairs
 -- WoW APIs
 local CreateFrame, UIParent = CreateFrame, UIParent
 
-local wowLegion, wowClassicRebased, wowTBCRebased
-do
-	local _, _, _, interface = GetBuildInfo()
-	wowLegion = (interface >= 70000)
-	wowClassicRebased = (interface >= 11300 and interface < 20000)
-	wowTBCRebased = (interface >= 20500 and interface < 30000)
-
-end
-
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
 -- GLOBALS: ShowUIPanel, HideUIPanel, ColorPickerFrame, OpacitySliderFrame
@@ -155,7 +146,7 @@ local function Constructor()
 	local texture = frame:CreateTexture(nil, "BACKGROUND")
 	texture:SetWidth(16)
 	texture:SetHeight(16)
-	if wowLegion or wowClassicRebased or wowTBCRebased then
+	if texture.SetColorTexture then
 		texture:SetColorTexture(1, 1, 1)
 	else
 		texture:SetTexture(1, 1, 1)

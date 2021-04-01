@@ -98,7 +98,11 @@ local methods = {
 
 	["OnRelease"] = function(self)
 		self.status = nil
-		wipe(self.localstatus)
+		if wipe then
+			wipe(self.localstatus)
+		else
+			self.localstatus = {}
+		end
 	end,
 
 	["OnWidthSet"] = function(self, width)
