@@ -13,10 +13,12 @@ local min, max, floor, abs = math.min, math.max, math.floor, math.abs
 -- WoW APIs
 local CreateFrame, UIParent = CreateFrame, UIParent
 
-local wowLegion
+local wowLegion, wowClassicRebased, wowTBCRebased
 do
 	local _, _, _, interface = GetBuildInfo()
 	wowLegion = (interface >= 70000)
+	wowClassicRebased = (interface >= 11300 and interface < 20000)
+	wowTBCRebased = (interface >= 20500 and interface < 30000)
 end
 
 --[[-----------------------------------------------------------------------------
@@ -182,7 +184,7 @@ local function Constructor()
 
 	local scrollbg = scrollbar:CreateTexture(nil, "BACKGROUND")
 	scrollbg:SetAllPoints(scrollbar)
-	if wowLegion then
+	if wowLegion or wowClassicRebased or wowTBCRebased then
 		scrollbg:SetColorTexture(0, 0, 0, 0.4)
 	else
 		scrollbg:SetTexture(0, 0, 0, 0.4)

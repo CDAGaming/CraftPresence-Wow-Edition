@@ -14,11 +14,13 @@ local select, tremove, unpack, tconcat = select, table.remove, unpack, table.con
 -- WoW APIs
 local CreateFrame, UIParent = CreateFrame, UIParent
 
-local wowLegion, wowBfa
+local wowLegion, wowBfa, wowClassicRebased, wowTBCRebased
 do
 	local _, _, _, interface = GetBuildInfo()
 	wowLegion = (interface >= 70000)
 	wowBfa = (interface >= 80000)
+	wowClassicRebased = (interface >= 11300 and interface < 20000)
+	wowTBCRebased = (interface >= 20500 and interface < 30000)
 end
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
@@ -685,7 +687,7 @@ local function Constructor()
 
 	local scrollbg = scrollbar:CreateTexture(nil, "BACKGROUND")
 	scrollbg:SetAllPoints(scrollbar)
-	if wowLegion then
+	if wowLegion or wowClassicRebased or wowTBCRebased then
 		scrollbg:SetColorTexture(0, 0, 0, 0.4)
 	else
 		scrollbg:SetTexture(0, 0, 0, 0.4)

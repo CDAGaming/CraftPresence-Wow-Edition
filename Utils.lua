@@ -173,10 +173,32 @@ function CraftPresence:GetCompatibilityInfo()
             ["7.0.x"] = 70000, -- LEG 7.0.X
             ["6.0.x"] = 60000, -- WOD 6.0.X
             ["5.0.x"] = 50000, -- MOP 5.0.X
+            ["4.0.x"] = 40000, -- CATA 4.0.X
+            ["3.0.x"] = 30000, -- WOTLK 3.0.X
             ["2.5.x"] = 20500, -- TBC Classic
+            ["2.0.x"] = 20000, -- TBC 2.0.x
+            ["1.13.x"] = 11300, -- Vanilla Classic
         }
     end
     return compatibility_info
+end
+
+--- Compatibility Helper: Determine if Build is 1.x on a Rebased API
+--- @return boolean @ is_classic_rebased
+function CraftPresence:IsClassicRebased()
+    return (
+            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["1.13.x"] and
+                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["2.0.x"]
+    )
+end
+
+--- Compatibility Helper: Determine if Build is 2.x on a Rebased API
+--- @return boolean @ is_tbc_rebased
+function CraftPresence:IsTBCRebased()
+    return (
+            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.5.x"] and
+                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["3.0.x"]
+    )
 end
 
 --- Retrieves the Player Status for the specified unit
