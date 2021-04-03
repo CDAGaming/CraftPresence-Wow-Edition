@@ -53,10 +53,10 @@ local generalOptionsGroup = {
     type = "group", order = 10,
     name = L["CATEGORY_TITLE_GENERAL"], desc = L["CATEGORY_COMMENT_GENERAL"],
     get = function(info)
-        return CraftPresence.db.profile[info[#info]]
+        return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value
+        CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
     end,
     args = {
         clientId = {
@@ -69,7 +69,7 @@ local generalOptionsGroup = {
             end,
             set = function(_, value)
                 local oldValue = CraftPresence:GetFromDb("clientId")
-                local isValid = (value ~= nil and CraftPresence:ContainsDigit(value) and string.len(value) == 18)
+                local isValid = (value ~= nil and CraftPresence:ContainsDigit(value) and CraftPresence:GetLength(value) == 18)
                 if isValid then
                     CraftPresence.db.profile.clientId = value
                     CraftPresence:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)
@@ -197,10 +197,10 @@ local placeholderOptionsGroup = {
     type = "group", order = 15,
     name = L["CATEGORY_TITLE_PLACEHOLDERS"], desc = L["CATEGORY_COMMENT_PLACEHOLDERS"],
     get = function(info)
-        return CraftPresence.db.profile[info[#info]]
+        return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value
+        CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
     end,
     args = {
         dungeonPlaceholderMessage = {
@@ -301,10 +301,10 @@ local buttonOptionsGroup = {
     type = "group", order = 20,
     name = L["CATEGORY_TITLE_BUTTONS"], desc = L["CATEGORY_COMMENT_BUTTONS"],
     get = function(info)
-        return CraftPresence.db.profile[info[#info]]
+        return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value
+        CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
     end,
     args = {
         buttonHeader = { order = 1, type = "header", name = L["CATEGORY_TITLE_BUTTONS"], },
@@ -331,10 +331,10 @@ local extraOptionsGroup = {
     type = "group", order = 25,
     name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
     get = function(info)
-        return CraftPresence.db.profile[info[#info]]
+        return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
     end,
     set = function(info, value)
-        CraftPresence.db.profile[info[#info]] = value
+        CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
     end,
     args = {
         debugMode = {
@@ -515,10 +515,10 @@ function CraftPresence:getOptionsTable()
         type = "group", childGroups = "tab",
         name = string.format("%s %s", L["ADDON_NAME"], CraftPresence:GetVersion()),
         get = function(info)
-            return CraftPresence.db.profile[info[#info]]
+            return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
         end,
         set = function(info, value)
-            CraftPresence.db.profile[info[#info]] = value
+            CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
         end,
         args = {
             generalOptions = generalOptionsGroup,

@@ -9,7 +9,7 @@ local last_encoded = ""
 --- Retrieves the Last Sent Encoded Event Message
 --- @return string @ lastEncodedMessage
 function CraftPresence:GetLastEncoded()
-    return string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_LAST_ENCODED"], last_encoded:gsub("|", "||")))
+    return string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_LAST_ENCODED"], string.gsub(last_encoded, "|", "||")))
 end
 
 --- Creates an array of frames with the specified size at the TOPLEFT of screen
@@ -29,12 +29,12 @@ function CraftPresence:CreateFrames(size)
         frames[i]:SetWidth(size)
         frames[i]:SetHeight(size)
 
-        -- initialise pixels as black to represent initial null data
+        -- initialise pixels as null data (RBGA all 0'd)
         local t = frames[i]:CreateTexture(nil, "TOOLTIP")
         if t.SetColorTexture then
-            t:SetColorTexture(0, 0, 0, 1)
+            t:SetColorTexture(0, 0, 0, 0)
         else
-            t:SetTexture(0, 0, 0, 1)
+            t:SetTexture(0, 0, 0, 0)
         end
         t:SetAllPoints(frames[i])
         frames[i].texture = t
@@ -90,11 +90,11 @@ end
 --- @param text string The text to be interpreted and converted
 function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
-    if text:len() >= max_bytes then
+    if self:GetLength(text) >= max_bytes then
         if self:GetFromDb("debugMode") then
             self:Print(string.format(
                     L["ERROR_LOG"], string.format(
-                            L["ERROR_BYTE_OVERFLOW"], tostring(#text), tostring(max_bytes)
+                            L["ERROR_BYTE_OVERFLOW"], tostring(self:GetLength(text)), tostring(max_bytes)
                     )
             ))
         end
@@ -109,15 +109,19 @@ function CraftPresence:PaintSomething(text)
     local g
     local b
 
-    for trio in text:gmatch ".?.?.?" do
-        r = string.byte(trio:sub(1, 1))
-        if #trio > 1 then
-            g = string.byte(trio:sub(2, 2))
+    -- Locate and parse matches for pattern
+    -- (Pattern will split string into pairs of up to 3 characters)
+
+    -- Convert each matching pair into an RGB value
+    for trio in self:FindMatches(text, ".?.?.?") do
+        r = string.byte(string.sub(trio, 1, 1))
+        if self:GetLength(trio) > 1 then
+            g = string.byte(string.sub(trio, 2, 2))
         else
             g = 0
         end
-        if #trio > 2 then
-            b = string.byte(trio:sub(3, 3))
+        if self:GetLength(trio) > 2 then
+            b = string.byte(string.sub(trio, 3, 3))
         else
             b = 0
         end
@@ -189,12 +193,12 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     else
         local button_data = self:Split(primaryButton, L["ARRAY_SPLIT_KEY"])
         primaryButton = ""
-        for i = 1, #button_data do
+        for i, _ in button_data do
             if button_data[i] == nil or button_data[i] == "" then
-                button_data[i] = button_data[i]:gsub(button_data[i], L["UNKNOWN_KEY"])
+                button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
             primaryButton = primaryButton .. button_data[i]
-            if i ~= #button_data then
+            if i ~= self:GetLength(button_data) then
                 primaryButton = primaryButton .. L["ARRAY_SPLIT_KEY"]
             end
         end
@@ -205,12 +209,12 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     else
         local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
         secondaryButton = ""
-        for i = 1, #button_data do
+        for i, value in button_data do
             if button_data[i] == nil or button_data[i] == "" then
-                button_data[i] = button_data[i]:gsub(button_data[i], L["UNKNOWN_KEY"])
+                button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
             secondaryButton = secondaryButton .. button_data[i]
-            if i ~= #button_data then
+            if i ~= self:GetLength(button_data) then
                 secondaryButton = secondaryButton .. L["ARRAY_SPLIT_KEY"]
             end
         end
@@ -252,7 +256,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
             last_encoded = encoded
         end
         if self:GetFromDb("debugMode") then
-            self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_SEND_ACTIVITY"], encoded:gsub("|", "||"))))
+            self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_SEND_ACTIVITY"], string.gsub(encoded, "|", "||"))))
         end
         self:PaintSomething(encoded)
         if will_clean then

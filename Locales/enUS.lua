@@ -92,7 +92,7 @@ L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
 L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config. (Requires reload)"
 
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
-L["COMMENT_QUEUED_PIPELINE"] = ([=[Toggles whether the callback delay will operate in a skip or queue style]=])
+L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate in a skip or queue style"
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
@@ -105,8 +105,7 @@ L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_SIZE"] = ([=[The size that each frame pixel should render at
-(This value needs to be the same as the script's config_size property)]=])
+L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at (Should equal the script's config_size property)"
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 
@@ -134,6 +133,7 @@ L["INFO_EVENT_PROCESSING"] = "Event Processing => %s"
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
+L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["ADDON_INTRO"] = "CraftPresence %s Loaded. Use /cp or /craftpresence to access config."
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
@@ -153,6 +153,9 @@ while ones surrounded by *@|r are inner (Cannot include other placeholders)]=]
 
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
+
+-- Command: /cp set:<category> <args>
+L["USAGE_COMMAND_SET"] = "Please use the correct syntax => /cp set:<category> <args>"
 
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
@@ -174,8 +177,7 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
 -- Frame Text Data
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
-L["ADDON_INFO_ONE"] = ([=[CraftPresence allows you to customize the way others see you play with Discord Rich Presence.
-]=])
+L["ADDON_INFO_ONE"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
 L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
 L["ADDON_INFO_THREE"] = "Thanks to Attka and wowdim on Github for the original base project, that makes this possible."
 L["ADDON_INFO_FOUR"] = "Special thanks to the-emerald/python-discord-rpc and Attk4/wow-discord-rich-presence"
@@ -202,4 +204,6 @@ L["WARNING_LOG"] = ([=[*[Warning]|r %s]=]):gsub('*', COLOR_GOLD)
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
+L["CONFIG_COMMAND"] = "cp set"
+L["CONFIG_COMMAND_ALT"] = "craftpresence set"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"

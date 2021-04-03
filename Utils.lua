@@ -6,13 +6,70 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 --LUA UTILITIES
 ----------------------------------
 
+--- Trims a String of leading and duplicate spaces
+---
+--- @param str string The input string to evaluate
+---
+--- @return string @ trimmed_string
+function CraftPresence:TrimString(str)
+    if str == nil or str == "" then return str end
+    str = string.gsub(str, "^%s*(.-)%s*$", "%1")
+    str = string.gsub(str, "%s+", " ")
+    return str
+end
+
+--- Retrieves the length of the specified object
+---
+--- @param obj any The object to evaluate
+---
+--- @return number @ object_length
+function CraftPresence:GetLength(obj)
+    local index = 0
+    if table.getn and type(obj) == "table" then
+        index = table.getn(obj)
+    elseif type(obj) == "string" then
+        index = string.len(obj)
+    end
+    return index
+end
+
+--- Locate one or multiple matches for the specified pattern
+---
+--- @param str string The input string to evaluate
+--- @param pattern string The pattern to parse against
+--- @param multiple boolean Whether or not to find all/the first match
+---
+--- @return any @ match_data
+function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
+    multiple = multiple == nil or multiple == true
+    plain = plain ~= nil and plain == true
+    index = index or 1
+    if multiple then
+        if string.gfind then
+            return string.gfind(str, pattern)
+        elseif string.gmatch then
+            return string.gmatch(str, pattern)
+        else
+            return nil
+        end
+    else
+        if string.find then
+            return string.find(str, pattern, index, plain)
+        elseif string.match then
+            return string.match(str, pattern, index)
+        else
+            return nil
+        end
+    end
+end
+
 --- Determines whether the specified string contains digit characters
 ---
 --- @param str string The input string to evaluate
 ---
 --- @return boolean @ containsDigit
 function CraftPresence:ContainsDigit(str)
-    return string.find(str, "%d") and true or false
+    return self:FindMatches(str, "%d", false) and true or false
 end
 
 --- Determines whether the specified string starts with the specified pattern
@@ -22,7 +79,7 @@ end
 ---
 --- @return boolean @ startsWith
 function CraftPresence:StartsWith(String, Start)
-    return string.sub(String, 1, string.len(Start)) == Start
+    return string.sub(String, 1, self:GetLength(Start)) == Start
 end
 
 --- Formats the following word to proper casing (Xxxx)
@@ -126,11 +183,11 @@ function CraftPresence:Split(str, inSplitPattern, outResults)
         outResults = { }
     end
     local theStart = 1
-    local theSplitStart, theSplitEnd = string.find(str, inSplitPattern, theStart)
+    local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
     while theSplitStart do
         table.insert(outResults, string.sub(str, theStart, theSplitStart - 1))
         theStart = theSplitEnd + 1
-        theSplitStart, theSplitEnd = string.find(str, inSplitPattern, theStart)
+        theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
     end
     table.insert(outResults, string.sub(str, theStart))
     return outResults
@@ -150,6 +207,11 @@ local build_info, compatibility_info
 function CraftPresence:GetBuildInfo()
     if not build_info then
         local version, build, date, tocversion = GetBuildInfo()
+        version = version or "0.0.0"
+        build = build or "0000"
+        date = date or "Jan 1 1969"
+        tocversion = tocversion or tonumber(build)
+
         build_info = {}
         build_info["version"] = version
         build_info["build"] = build
@@ -178,6 +240,7 @@ function CraftPresence:GetCompatibilityInfo()
             ["2.5.x"] = 20500, -- TBC Classic
             ["2.0.x"] = 20000, -- TBC 2.0.x
             ["1.13.x"] = 11300, -- Vanilla Classic
+            ["1.12.2"] = 6005 -- Vanilla 1.12.2
         }
     end
     return compatibility_info
@@ -209,28 +272,30 @@ end
 --- @return string, string @ playerStatus, playerPrefix
 function CraftPresence:GetPlayerStatus(unit, sync)
     unit = unit or "player"
-    -- Player Name Tweaks (DND/AFK Data)
-    local isAfk = UnitIsAFK(unit)
-    local isOnDnd = UnitIsDND(unit)
-    local isDead = UnitIsDead(unit)
-    local isGhost = UnitIsGhost(unit)
-    local playerStatus
+    local playerStatus = L["ONLINE_LABEL"]
     local playerPrefix = ""
-    if isAfk then
-        playerStatus = L["AFK_LABEL"]
-    elseif isOnDnd then
-        playerStatus = L["DND_LABEL"]
-    elseif isGhost then
-        playerStatus = L["GHOST_LABEL"]
-    elseif isDead then
-        playerStatus = L["DEAD_LABEL"]
+    -- Ensure Version Compatibility
+    if self:GetBuildInfo()["toc_version"] > self:GetCompatibilityInfo()["1.12.2"] then
+        -- Player Name Tweaks (DND/AFK Data)
+        local isAfk = UnitIsAFK(unit)
+        local isOnDnd = UnitIsDND(unit)
+        local isDead = UnitIsDead(unit)
+        local isGhost = UnitIsGhost(unit)
+        if isAfk then
+            playerStatus = L["AFK_LABEL"]
+        elseif isOnDnd then
+            playerStatus = L["DND_LABEL"]
+        elseif isGhost then
+            playerStatus = L["GHOST_LABEL"]
+        elseif isDead then
+            playerStatus = L["DEAD_LABEL"]
+        end
+        -- Parse Player Status
+        if not (playerStatus == nil) then
+            playerPrefix = ("(" .. playerStatus .. ")") .. " "
+        end
     end
-    -- Parse Player Status
-    if not (playerStatus == nil) then
-        playerPrefix = ("(" .. playerStatus .. ")") .. " "
-    else
-        playerStatus = L["ONLINE_LABEL"]
-    end
+
     -- Return Data (and sync if needed)
     if sync then
         lastPlayerStatus = playerStatus

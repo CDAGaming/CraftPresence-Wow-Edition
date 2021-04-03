@@ -83,9 +83,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- Covenant and/or Faction data is only updated if the instance is changed
     if hasInstanceChanged then
         if (playerCovenantId == 0 or not (
-                (string.find(name, "Shadowlands")) or
-                        (string.find(name, "Torghast")) or
-                        (string.find(self:GetCurrentInstanceTier(), "Shadowlands"))
+                (self:FindMatches(name, "Shadowlands", false)) or
+                        (self:FindMatches(name, "Torghast", false)) or
+                        (self:FindMatches(self:GetCurrentInstanceTier(), "Shadowlands", false))
         )) then
             playerAlliance = localizedFaction
             playerCovenant = L["TYPE_NONE"]
@@ -207,7 +207,8 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- If the condition is true, the placeholder will be active
     local queued_global_conditions = {
         ["#dungeon#"] = (
-                queued_inner_placeholders["@instance_type@"] == "party" and not (string.find(name, "Garrison"))
+                queued_inner_placeholders["@instance_type@"] == "party" and
+                        not self:FindMatches(name, "Garrison", false)
         ),
         ["#raid#"] = (queued_inner_placeholders["@instance_type@"] == "raid"),
         ["#battleground#"] = (queued_inner_placeholders["@instance_type@"] == "pvp"),
@@ -218,7 +219,8 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
                 (lockoutData.currentEncounters or 0) > 0 and (lockoutData.totalEncounters or 0) > 0)
     }
     local queued_extra_conditions = {
-        ["torghast"] = (string.find(name, "Torghast") and (queued_inner_placeholders["@instance_type@"] == "scenario"))
+        ["torghast"] = (self:FindMatches(name, "Torghast", false) and
+                queued_inner_placeholders["@instance_type@"] == "scenario")
     }
     local queued_time_conditions = {
         ["start"] = (queued_global_conditions["#dungeon#"] or
@@ -237,13 +239,13 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local outputTable = {}
 
     for inKey, inValue in pairs(queued_global_placeholders) do
-        local output = inValue:trim()
+        local output = self:TrimString(inValue)
         -- If the Placeholders contained in the messages is an overrider,
         -- we replace the rest of the output with just that placeholder.
         --
         -- Note: Only applies towards inner-placeholders with subject to change data
         for _, overrideValue in pairs(queued_override_placeholders) do
-            if string.find(output, overrideValue) then
+            if self:FindMatches(output, overrideValue, false) then
                 if (self:StartsWith(overrideValue, "@") and
                         (queued_inner_conditions[overrideValue] == nil or queued_inner_conditions[overrideValue])
                 ) then
@@ -256,12 +258,12 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         if (queued_global_conditions[inKey] == nil or queued_global_conditions[inKey]) then
             for key, value in pairs(queued_inner_placeholders) do
                 if (queued_inner_conditions[key] == nil or queued_inner_conditions[key]) then
-                    output = output:gsub(key, value)
+                    output = string.gsub(output, key, value)
                 else
-                    output = output:gsub(key, "")
+                    output = string.gsub(output, key, "")
                 end
             end
-            outputTable[inKey] = output:trim()
+            outputTable[inKey] = self:TrimString(output)
         else
             outputTable[inKey] = ""
         end
@@ -318,36 +320,36 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     )
     -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do
-        queued_details = queued_details:gsub(key, value)
-        queued_state = queued_state:gsub(key, value)
-        queued_large_image_key = queued_large_image_key:gsub(key, value)
-        queued_large_image_text = queued_large_image_text:gsub(key, value)
-        queued_small_image_key = queued_small_image_key:gsub(key, value)
-        queued_small_image_text = queued_small_image_text:gsub(key, value)
-        queued_primary_button = queued_primary_button:gsub(key, value)
-        queued_secondary_button = queued_secondary_button:gsub(key, value)
+        queued_details = string.gsub(queued_details, key, value)
+        queued_state = string.gsub(queued_state, key, value)
+        queued_large_image_key = string.gsub(queued_large_image_key, key, value)
+        queued_large_image_text = string.gsub(queued_large_image_text, key, value)
+        queued_small_image_key = string.gsub(queued_small_image_key, key, value)
+        queued_small_image_text = string.gsub(queued_small_image_text, key, value)
+        queued_primary_button = string.gsub(queued_primary_button, key, value)
+        queued_secondary_button = string.gsub(queued_secondary_button, key, value)
     end
     -- Inner Placeholder Syncing
-    for innerKey, innerValue in pairs(inner_placeholders) do
-        queued_details = queued_details:gsub(innerKey, innerValue)
-        queued_state = queued_state:gsub(innerKey, innerValue)
-        queued_large_image_key = queued_large_image_key:gsub(innerKey, innerValue)
-        queued_large_image_text = queued_large_image_text:gsub(innerKey, innerValue)
-        queued_small_image_key = queued_small_image_key:gsub(innerKey, innerValue)
-        queued_small_image_text = queued_small_image_text:gsub(innerKey, innerValue)
-        queued_primary_button = queued_primary_button:gsub(innerKey, innerValue)
-        queued_secondary_button = queued_secondary_button:gsub(innerKey, innerValue)
+    for key, value in pairs(inner_placeholders) do
+        queued_details = string.gsub(queued_details, key, value)
+        queued_state = string.gsub(queued_state, key, value)
+        queued_large_image_key = string.gsub(queued_large_image_key, key, value)
+        queued_large_image_text = string.gsub(queued_large_image_text, key, value)
+        queued_small_image_key = string.gsub(queued_small_image_key, key, value)
+        queued_small_image_text = string.gsub(queued_small_image_text, key, value)
+        queued_primary_button = string.gsub(queued_primary_button, key, value)
+        queued_secondary_button = string.gsub(queued_secondary_button, key, value)
     end
     -- Time Condition Syncing
     for timeKey, timeValue in pairs(time_conditions) do
         if timeValue then
-            if (string.find(timeKey, "start")) then
+            if (self:FindMatches(timeKey, "start", false)) then
                 if hasInstanceChanged then
                     queued_time_start = "generated"
                 else
                     queued_time_start = "last"
                 end
-            elseif (string.find(timeKey, "end")) then
+            elseif (self:FindMatches(timeKey, "end", false)) then
                 if hasInstanceChanged then
                     queued_time_end = "generated"
                 else
@@ -357,17 +359,17 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         end
     end
     return self:EncodeData(
-            self:GetFromDb("clientId"):gsub("%s+", " "),
-            string.lower(queued_large_image_key:gsub("%s+", "_")),
-            queued_large_image_text:gsub("%s+", " "),
-            string.lower(queued_small_image_key:gsub("%s+", "_")),
-            queued_small_image_text:gsub("%s+", " "),
-            queued_details:gsub("%s+", " "),
-            queued_state:gsub("%s+", " "),
-            queued_time_start:gsub("%s+", " "),
-            queued_time_end:gsub("%s+", " "),
-            queued_primary_button:gsub("%s+", " "),
-            queued_secondary_button:gsub("%s+", " ")
+            string.gsub(self:GetFromDb("clientId"), "%s+", " "),
+            string.gsub(string.lower(queued_large_image_key), "%s+", "_"),
+            string.gsub(queued_large_image_text, "%s+", " "),
+            string.gsub(string.lower(queued_small_image_key), "%s+", "_"),
+            string.gsub(queued_small_image_text, "%s+", " "),
+            string.gsub(queued_details, "%s+", " "),
+            string.gsub(queued_state, "%s+", " "),
+            string.gsub(queued_time_start, "%s+", " "),
+            string.gsub(queued_time_end, "%s+", " "),
+            string.gsub(queued_primary_button, "%s+", " "),
+            string.gsub(queued_secondary_button, "%s+", " ")
     )
 end
 
@@ -380,7 +382,7 @@ function CraftPresence:OnInitialize()
     -- Options Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetSchemaDefaults())
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
-        L["ADDON_ID"], L["ADDON_AFFIX"]
+        (L["CONFIG_COMMAND"]), (L["CONFIG_COMMAND_ALT"])
     })
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
@@ -471,9 +473,9 @@ function CraftPresence:DispatchUpdate(...)
         local eventName = args[1]
         local ignore_event = false
         local ignore_event_conditions = {
-            ["PLAYER_FLAGS_CHANGED"] = (args[2] ~= "player" or (
-                    self:GetLastPlayerStatus() == self:GetPlayerStatus(args[2], false)
-            )),
+            ["PLAYER_FLAGS_CHANGED"] = (
+                    self:GetLastPlayerStatus() == self:GetPlayerStatus("player", false)
+            ),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
                     lastEventName == eventName or
                     self:GetCachedLockout() == self:GetCurrentLockoutData(false)
@@ -481,8 +483,8 @@ function CraftPresence:DispatchUpdate(...)
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
             ["PLAYER_LEVEL_UP"] = (lastEventName == "PLAYER_LEVEL_CHANGED"),
             ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP"),
-            ["ACTIVE_TALENT_GROUP_CHANGED"] = (args[2] == args[3]),
-            ["PLAYER_SPECIALIZATION_CHANGED"] = (args[2] ~= "player")
+            ["ACTIVE_TALENT_GROUP_CHANGED"] = (type(args) ~= "table" or args[2] == args[3]),
+            ["PLAYER_SPECIALIZATION_CHANGED"] = (type(args) ~= "table" or args[2] ~= "player")
         }
 
         for key, value in pairs(ignore_event_conditions) do
@@ -506,9 +508,15 @@ function CraftPresence:DispatchUpdate(...)
             -- Logging is different depending on verbose/debug states
             if self:GetFromDb("debugMode") then
                 if self:GetFromDb("verboseMode") then
+                    local serializedArgs = ""
+                    if type(args) == "table" then
+                        serializedArgs = self:SerializeTable(args)
+                    else
+                        serializedArgs = args
+                    end
                     self:Print(string.format(
                             L["VERBOSE_LOG"], string.format(
-                                    logPrefix, self:SerializeTable(args)
+                                    logPrefix, serializedArgs
                             )
                     ))
                 else
@@ -601,7 +609,7 @@ end
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
-    if not input or input:trim() == "" or input == "help" or input == "?" then
+    if not input or self:TrimString(input) == "" or input == "help" or input == "?" then
         self:Print(string.format(
                 L["HELP_COMMANDS"], L["ADDON_NAME"],
                 L["ADDON_AFFIX"], L["ADDON_ID"]
@@ -623,7 +631,7 @@ function CraftPresence:ChatCommand(input)
             self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then
             -- Query Parsing
-            local query = string.match(input, ":(.*)")
+            local _, _, query = self:FindMatches(input, ":(.*)", false)
             if query ~= nil then
                 query = string.lower(query)
             end
@@ -631,9 +639,9 @@ function CraftPresence:ChatCommand(input)
         elseif input == "config" then
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then
-            local query = string.match(input, ":(.*)")
+            local _, _, query = self:FindMatches(input, ":(.*)", false)
             if query ~= nil then
-                local sub_query = string.match(query, ",(.*)")
+                local sub_query = self:FindMatches(query, ",(.*)", false)
                 self:GetFromDb(query, sub_query, true)
             else
                 self:ResetDB()
@@ -654,7 +662,7 @@ function CraftPresence:ChatCommand(input)
             local placeholderString = L["INFO_PLACEHOLDER_INTRO"]
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
-            local query = string.match(input, ":(.*)")
+            local _, _, query = self:FindMatches(input, ":(.*)", false)
             local found_placeholders = false
             if query ~= nil then
                 self:Print(string.format(L["INFO_PLACEHOLDERS_QUERY"], query))
@@ -665,8 +673,8 @@ function CraftPresence:ChatCommand(input)
                 local strKey = tostring(key)
                 local strValue = tostring(value)
                 if (query == nil or (
-                        (string.lower(strKey)):find(query, 1, true) or
-                                (string.lower(strValue)):find(query, 1, true))
+                        self:FindMatches(string.lower(strKey), query, false, 1, true) or
+                                self:FindMatches(string.lower(strValue), query, false, 1, true))
                 ) then
                     found_placeholders = true
                     placeholderString = placeholderString .. "\n " .. (string.format(
@@ -679,8 +687,8 @@ function CraftPresence:ChatCommand(input)
                 local strKey = tostring(key)
                 local strValue = tostring(value)
                 if (query == nil or (
-                        (string.lower(strKey)):find(query, 1, true) or
-                                (string.lower(strValue)):find(query, 1, true))
+                        self:FindMatches(string.lower(strKey), query, false, 1, true) or
+                                self:FindMatches(string.lower(strValue), query, false, 1, true))
                 ) then
                     found_placeholders = true
                     placeholderString = placeholderString .. "\n " .. (string.format(
@@ -694,8 +702,15 @@ function CraftPresence:ChatCommand(input)
             end
             placeholderString = placeholderString .. "\n" .. L["INFO_PLACEHOLDER_NOTE"]
             self:Print(placeholderString)
+        elseif self:StartsWith(input, "set") then
+            local _, _, query = self:FindMatches(input, " (.*)", false)
+            LibStub("AceConfigCmd-3.0"):HandleCommand(L["CONFIG_COMMAND"], L["ADDON_NAME"], query or "")
         else
-            LibStub("AceConfigCmd-3.0"):HandleCommand(L["ADDON_AFFIX"], L["ADDON_NAME"], input)
+            self:Print(string.format(
+                    L["ERROR_LOG"], string.format(
+                            L["ERROR_COMMAND_UNKNOWN"], input
+                    )
+            ))
         end
     end
 end
