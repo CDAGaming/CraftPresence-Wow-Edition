@@ -610,10 +610,21 @@ end
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
     if not input or self:TrimString(input) == "" or input == "help" or input == "?" then
-        self:Print(string.format(
-                L["HELP_COMMANDS"], L["ADDON_NAME"],
-                L["ADDON_AFFIX"], L["ADDON_ID"]
-        ))
+        self:Print(
+                string.format(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+                        L["USAGE_CMD_HELP"] .. "\n" ..
+                        L["USAGE_CMD_CONFIG"] .. "\n" ..
+                        L["USAGE_CMD_TEST"] .. "\n" ..
+                        L["USAGE_CMD_CLEAN"] .. "\n" ..
+                        L["USAGE_CMD_UPDATE"] .. "\n" ..
+                        L["USAGE_CMD_MINIMAP"] .. "\n" ..
+                        L["USAGE_CMD_STATUS"] .. "\n" ..
+                        L["USAGE_CMD_RESET"] .. "\n" ..
+                        L["USAGE_CMD_SET"] .. "\n" ..
+                        L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
+                        string.format(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                        L["USAGE_CMD_NOTE_TWO"] .. "\n"
+        )
     else
         if input == "test" then
             if self:GetFromDb("debugMode") then

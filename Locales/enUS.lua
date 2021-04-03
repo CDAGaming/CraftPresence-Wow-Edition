@@ -1,5 +1,26 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
+----------------------
+--LOCAL FUNCTIONS
+-------------------
+
+--- Replaces a String with the specified formatting
+---
+--- @param str string The input string to evaluate
+--- @param replacer_one string The first replacer
+--- @param replacer_two string The second replacer
+--- @param pattern_one string The first pattern
+--- @param pattern_two string The second pattern
+---
+--- @return string @ formatted_string
+local function SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+    if str == nil or str == "" then return str end
+    str = string.gsub(str, pattern_one or "*", replacer_one or "")
+    str = string.gsub(str, pattern_two or "%^", replacer_two or "")
+    return str
+end
+
+-- Color Codes
 local GREEN = '|cFF00FF7F'
 local GREY = '|cfd9b9b9b'
 local RED = '|cFFFF6060'
@@ -139,12 +160,12 @@ L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
-L["PLACEHOLDERS_QUERY"] = ("Searching for placeholders containing " .. GREY .. "%s|r...")
-L["PLACEHOLDERS_INTRO"] = ("Available Placeholders (" .. GREEN .. "<key>|r => " .. GREY .. "<value>|r):")
-L["PLACEHOLDERS_FOUND_NONE"] = (RED .. "No placeholders found within specified parameters|r")
-L["PLACEHOLDERS_FOUND_DATA"] = (GREEN .. "%s|r => " .. GREY .. "%s|r")
-L["PLACEHOLDERS_NOTE"] = ("NOTE: Placeholders enclosed by " .. GREEN .. "#|r are global (Can have inner placeholders),")
-L["PLACEHOLDERS_NOTE_TWO"] = ("while ones enclosed by " .. GREY .. "@|r are inner (Cannot have any other placeholders)")
+L["PLACEHOLDERS_QUERY"] = SetFormat("Searching for placeholders containing *%s|r...", GREY)
+L["PLACEHOLDERS_INTRO"] = SetFormat("Available Placeholders (*<key>|r => ^<value>|r):", GREEN, GREY)
+L["PLACEHOLDERS_FOUND_NONE"] = SetFormat("*No placeholders found within specified parameters|r", RED)
+L["PLACEHOLDERS_FOUND_DATA"] = SetFormat("*%s|r => ^%s|r", GREEN, GREY)
+L["PLACEHOLDERS_NOTE"] = SetFormat("NOTE: Keys enclosed by *#|r are global (Can have inner keys),", GREEN)
+L["PLACEHOLDERS_NOTE_TWO"] = SetFormat("while ones enclosed by *@|r are inner (Cannot have any other keys)", GREY)
 
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
@@ -156,19 +177,21 @@ L["USAGE_COMMAND_SET"] = "Please use the correct syntax => /cp set:<category> <a
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
 -- General Command Data
-L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
- */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.
- */cp|r ^config|r  -  Displays the *OptionsUI|r.
- */cp|r ^test|r  -  Toggles debugging of Rich Presence Frames.
- */cp|r ^clean|r or */cp|r ^clear|r  -  Reset all frames to their original positions and colors.
- */cp|r ^update[:force]|r  -  Forcibly update your Rich Presence display (Also forces an instance change if specified).
- */cp|r ^minimap|r  -  Toggles the display of the minimap button.
- */cp|r ^status|r  -  Views the last sent Rich Presence event.
- */cp|r ^reset[:grp,key]|r  -  Resets all (or a specific) setting(s) within the *OptionsUI|r.
- */cp|r ^placeholders[:query]|r  -  Views the currently available placeholders.
- NOTE: All commands must be prefixed with either */%s|r or */%s|r.
- Optional arguments in commands are represented by *[syntax]|r.
-]=]):gsub('*', GREEN):gsub('%^', GREY)
+L["USAGE_CMD_INTRO"] = SetFormat("*%s|r Command Usage:", GREEN)
+L["USAGE_CMD_HELP"] = SetFormat(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.", GREEN, GREY)
+L["USAGE_CMD_CONFIG"] = SetFormat(" */cp|r ^config|r  -  Displays the *ConfigUI|r.", GREEN, GREY)
+L["USAGE_CMD_TEST"] = SetFormat(" */cp|r ^test|r  -  Toggles debugging of RPC frames.", GREEN, GREY)
+L["USAGE_CMD_CLEAN"] = SetFormat(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.", GREEN, GREY)
+L["USAGE_CMD_UPDATE"] = SetFormat(" */cp|r ^update[:force]|r  -  Force an RPC update.", GREEN, GREY)
+L["USAGE_CMD_MINIMAP"] = SetFormat(" */cp|r ^minimap|r  -  Toggles the minimap button.", GREEN, GREY)
+L["USAGE_CMD_STATUS"] = SetFormat(" */cp|r ^status|r  -  Views the last sent RPC event.", GREEN, GREY)
+L["USAGE_CMD_RESET"] = SetFormat(" */cp|r ^reset[:grp,key]|r  -  Reset options in the *ConfigUI|r.", GREEN, GREY)
+L["USAGE_CMD_SET"] = SetFormat(" */cp|r ^set[:grp,key]|r  -  Set options in the *ConfigUI|r.", GREEN, GREY)
+L["USAGE_CMD_PLACEHOLDERS"] = SetFormat(" */cp|r ^placeholders[:query]|r  -  View RPC placeholders.", GREEN, GREY)
+
+L["USAGE_CMD_NOTE"] = SetFormat("NOTE: All commands must be prefixed with either */%s|r or */%s|r.", GREEN, GREY)
+L["USAGE_CMD_NOTE_TWO"] = SetFormat("Optional arguments in commands are represented by *[syntax]|r.", GREEN, GREY)
+
 -- Frame Text Data
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
@@ -192,10 +215,10 @@ L["LEVEL_TAG_FORMAT"] = "Level %s"
 -- NOTE: The values below should NEVER be changed
 L["UNKNOWN_KEY"] = "Skip"
 L["ARRAY_SPLIT_KEY"] = "=="
-L["DEBUG_LOG"] = "[Debug] %s"
-L["VERBOSE_LOG"] = "[Verbose] %s"
-L["ERROR_LOG"] = (RED .. "[Error]|r %s")
-L["WARNING_LOG"] = (GOLD .. "[Warning]|r %s")
+L["DEBUG_LOG"] = SetFormat("*[Debug]|r %s", GREY)
+L["VERBOSE_LOG"] = SetFormat("*[Verbose]|r %s", GREY)
+L["ERROR_LOG"] = SetFormat("*[Error]|r %s", RED)
+L["WARNING_LOG"] = SetFormat("*[Warning]|r %s", GOLD)
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
