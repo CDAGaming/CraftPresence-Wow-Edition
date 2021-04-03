@@ -1,9 +1,9 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
-local COLOR_GREEN = '|cFF00FF7F'
-local COLOR_GREY = '|cfd9b9b9b'
-local COLOR_RED = '|cFFFF6060'
-local COLOR_GOLD = '|cFFFFD700'
+local GREEN = '|cFF00FF7F'
+local GREY = '|cfd9b9b9b'
+local RED = '|cFFFF6060'
+local GOLD = '|cFFFFD700'
 
 -- Config Category Data
 L["CATEGORY_TITLE_GENERAL"] = "General"
@@ -139,17 +139,12 @@ L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
-L["INFO_PLACEHOLDERS_QUERY"] = ([=[Searching for placeholders containing ^%s|r...]=]
-):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_INTRO"] = ([=[Available Placeholders (*<key>|r => ^<value>|r):]=]
-):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_NONE"] = ([=[*No placeholders found within specified parameters|r]=]
-):gsub('*', COLOR_RED):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_DATA"] = ([=[*%s|r => ^%s|r]=]
-):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
-L["INFO_PLACEHOLDER_NOTE"] = ([=[NOTE: Placeholder keys surrounded by *#|r are global (Can include inner placeholders),
-while ones surrounded by *@|r are inner (Cannot include other placeholders)]=]
-):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+L["PLACEHOLDERS_QUERY"] = ("Searching for placeholders containing " .. GREY .. "%s|r...")
+L["PLACEHOLDERS_INTRO"] = ("Available Placeholders (" .. GREEN .. "<key>|r => " .. GREY .. "<value>|r):")
+L["PLACEHOLDERS_FOUND_NONE"] = (RED .. "No placeholders found within specified parameters|r")
+L["PLACEHOLDERS_FOUND_DATA"] = (GREEN .. "%s|r => " .. RED .. "%s|r")
+L["PLACEHOLDERS_NOTE"] = ("NOTE: Placeholders enclosed by " .. GREEN .. "#|r are global (Can have inner placeholders),")
+L["PLACEHOLDERS_NOTE_TWO"] = ("while ones enclosed by " .. GREY .. "@|r are inner (Cannot have any other placeholders)")
 
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
@@ -173,7 +168,7 @@ L["HELP_COMMANDS"] = ([=[Here is a list of all important *%s|r commands:
  */cp|r ^placeholders[:query]|r  -  Views the currently available placeholders.
  NOTE: All commands must be prefixed with either */%s|r or */%s|r.
  Optional arguments in commands are represented by *[syntax]|r.
-]=]):gsub('*', COLOR_GREEN):gsub('%^', COLOR_GREY)
+]=]):gsub('*', GREEN):gsub('%^', GREY)
 -- Frame Text Data
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
@@ -199,8 +194,8 @@ L["UNKNOWN_KEY"] = "Skip"
 L["ARRAY_SPLIT_KEY"] = "=="
 L["DEBUG_LOG"] = "[Debug] %s"
 L["VERBOSE_LOG"] = "[Verbose] %s"
-L["ERROR_LOG"] = ([=[*[Error]|r %s]=]):gsub('*', COLOR_RED)
-L["WARNING_LOG"] = ([=[*[Warning]|r %s]=]):gsub('*', COLOR_GOLD)
+L["ERROR_LOG"] = (RED .. "[Error]|r %s")
+L["WARNING_LOG"] = (GOLD .. "[Warning]|r %s")
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"

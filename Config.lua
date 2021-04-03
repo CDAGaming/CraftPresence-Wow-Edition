@@ -69,7 +69,11 @@ local generalOptionsGroup = {
             end,
             set = function(_, value)
                 local oldValue = CraftPresence:GetFromDb("clientId")
-                local isValid = (value ~= nil and CraftPresence:ContainsDigit(value) and CraftPresence:GetLength(value) == 18)
+                local isValid = (
+                        value ~= nil and
+                                CraftPresence:ContainsDigit(value) and
+                                CraftPresence:GetLength(value) == 18
+                )
                 if isValid then
                     CraftPresence.db.profile.clientId = value
                     CraftPresence:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)

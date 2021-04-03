@@ -240,7 +240,7 @@ function CraftPresence:GetCompatibilityInfo()
             ["2.5.x"] = 20500, -- TBC Classic
             ["2.0.x"] = 20000, -- TBC 2.0.x
             ["1.13.x"] = 11300, -- Vanilla Classic
-            ["1.12.2"] = 6005 -- Vanilla 1.12.2
+            ["1.12.1"] = 5875 -- Vanilla 1.12.1
         }
     end
     return compatibility_info
@@ -275,7 +275,7 @@ function CraftPresence:GetPlayerStatus(unit, sync)
     local playerStatus = L["ONLINE_LABEL"]
     local playerPrefix = ""
     -- Ensure Version Compatibility
-    if self:GetBuildInfo()["toc_version"] > self:GetCompatibilityInfo()["1.12.2"] then
+    if self:GetBuildInfo()["toc_version"] > self:GetCompatibilityInfo()["1.12.1"] then
         -- Player Name Tweaks (DND/AFK Data)
         local isAfk = UnitIsAFK(unit)
         local isOnDnd = UnitIsDND(unit)

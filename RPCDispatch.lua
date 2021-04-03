@@ -9,7 +9,11 @@ local last_encoded = ""
 --- Retrieves the Last Sent Encoded Event Message
 --- @return string @ lastEncodedMessage
 function CraftPresence:GetLastEncoded()
-    return string.format(L["VERBOSE_LOG"], string.format(L["VERBOSE_LAST_ENCODED"], string.gsub(last_encoded, "|", "||")))
+    return string.format(
+            L["VERBOSE_LOG"], string.format(
+                    L["VERBOSE_LAST_ENCODED"], string.gsub(last_encoded, "|", "||")
+            )
+    )
 end
 
 --- Creates an array of frames with the specified size at the TOPLEFT of screen
@@ -209,7 +213,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     else
         local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
         secondaryButton = ""
-        for i, value in button_data do
+        for i, _ in button_data do
             if button_data[i] == nil or button_data[i] == "" then
                 button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
@@ -256,7 +260,11 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
             last_encoded = encoded
         end
         if self:GetFromDb("debugMode") then
-            self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_SEND_ACTIVITY"], string.gsub(encoded, "|", "||"))))
+            self:Print(
+                    string.format(L["DEBUG_LOG"], string.format(
+                            L["DEBUG_SEND_ACTIVITY"], string.gsub(encoded, "|", "||")
+                    ))
+            )
         end
         self:PaintSomething(encoded)
         if will_clean then

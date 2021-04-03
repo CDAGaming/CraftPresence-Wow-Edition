@@ -388,7 +388,7 @@ function CraftPresence:OnInitialize()
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
     -- Version-Specific Registration
-    if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
+    if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.5.x"] or isRebasedApi then
             self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
@@ -508,7 +508,7 @@ function CraftPresence:DispatchUpdate(...)
             -- Logging is different depending on verbose/debug states
             if self:GetFromDb("debugMode") then
                 if self:GetFromDb("verboseMode") then
-                    local serializedArgs = ""
+                    local serializedArgs
                     if type(args) == "table" then
                         serializedArgs = self:SerializeTable(args)
                     else
@@ -555,7 +555,7 @@ function CraftPresence:OnDisable()
     -- Clean up Data before disabling
     self:Print(L["ADDON_CLOSE"])
     self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
-    if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
+    if buildData["toc_version"] >= compatData["1.12.1"] then
         icon:Hide(L["ADDON_NAME"])
     end
     self:UnregisterAllEvents()
@@ -566,7 +566,7 @@ end
 function CraftPresence:UpdateMinimapState(update_state)
     minimapState = { hide = not CraftPresence:GetFromDb("showMinimapIcon") }
     if update_state then
-        if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
+        if buildData["toc_version"] >= compatData["1.12.1"] then
             if minimapState["hide"] then
                 icon:Hide(L["ADDON_NAME"])
             else
@@ -659,13 +659,13 @@ function CraftPresence:ChatCommand(input)
                 ))
             end
         elseif self:StartsWith(input, "placeholders") then
-            local placeholderString = L["INFO_PLACEHOLDER_INTRO"]
+            local placeholderStr = L["PLACEHOLDERS_INTRO"]
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
             local _, _, query = self:FindMatches(input, ":(.*)", false)
             local found_placeholders = false
             if query ~= nil then
-                self:Print(string.format(L["INFO_PLACEHOLDERS_QUERY"], query))
+                self:Print(string.format(L["PLACEHOLDERS_QUERY"], query))
                 query = string.lower(query)
             end
             -- Global placeholder iteration to form placeholderString
@@ -677,8 +677,8 @@ function CraftPresence:ChatCommand(input)
                                 self:FindMatches(string.lower(strValue), query, false, 1, true))
                 ) then
                     found_placeholders = true
-                    placeholderString = placeholderString .. "\n " .. (string.format(
-                            L["INFO_PLACEHOLDER_DATA"], strKey, strValue
+                    placeholderStr = placeholderStr .. "\n " .. (string.format(
+                            L["PLACEHOLDER_FOUND_DATA"], strKey, strValue
                     ))
                 end
             end
@@ -691,17 +691,17 @@ function CraftPresence:ChatCommand(input)
                                 self:FindMatches(string.lower(strValue), query, false, 1, true))
                 ) then
                     found_placeholders = true
-                    placeholderString = placeholderString .. "\n " .. (string.format(
-                            L["INFO_PLACEHOLDER_DATA"], strKey, strValue
+                    placeholderStr = placeholderStr .. "\n " .. (string.format(
+                            L["PLACEHOLDER_FOUND_DATA"], strKey, strValue
                     ))
                 end
             end
             -- Final parsing of placeholderString before printing
             if not found_placeholders then
-                placeholderString = placeholderString .. "\n " .. L["INFO_PLACEHOLDER_NONE"]
+                placeholderStr = placeholderStr .. "\n " .. L["PLACEHOLDERS_FOUND_NONE"]
             end
-            placeholderString = placeholderString .. "\n" .. L["INFO_PLACEHOLDER_NOTE"]
-            self:Print(placeholderString)
+            placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
+            self:Print(placeholderStr)
         elseif self:StartsWith(input, "set") then
             local _, _, query = self:FindMatches(input, " (.*)", false)
             LibStub("AceConfigCmd-3.0"):HandleCommand(L["CONFIG_COMMAND"], L["ADDON_NAME"], query or "")
