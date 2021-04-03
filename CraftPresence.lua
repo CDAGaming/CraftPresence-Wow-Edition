@@ -426,27 +426,27 @@ function CraftPresence:OnEnable()
     end
     -- Register Universal Events
     CraftPresence:AddTriggers("DispatchUpdate",
-            "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
-            "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
-            "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-            "UPDATE_INSTANCE_INFO"
+            { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
+              "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
+              "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
+              "UPDATE_INSTANCE_INFO" }
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.x"] then
         CraftPresence:AddTriggers("DispatchUpdate",
-                "PLAYER_SPECIALIZATION_CHANGED"
+                { "PLAYER_SPECIALIZATION_CHANGED" }
         )
     end
     if buildData["toc_version"] >= compatData["6.0.x"] then
         CraftPresence:AddTriggers("DispatchUpdate",
-                "ACTIVE_TALENT_GROUP_CHANGED",
-                "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
-                "SCENARIO_COMPLETED", "CRITERIA_COMPLETE"
+                { "ACTIVE_TALENT_GROUP_CHANGED",
+                  "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
+                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }
         )
     end
     if buildData["toc_version"] >= compatData["8.0.x"] then
         CraftPresence:AddTriggers("DispatchUpdate",
-                "PLAYER_LEVEL_CHANGED"
+                { "PLAYER_LEVEL_CHANGED" }
         )
     end
     -- Create initial frames and initial rpc update
@@ -456,17 +456,26 @@ end
 
 --- Registers the specified event for the subsequent argument values
 ---
---- @param event any The event tag to register with argument values
-function CraftPresence:AddTriggers(event, ...)
-    local args = { ... }
-    for _, v in ipairs(args) do
-        self:RegisterEvent(tostring(v), tostring(event))
+--- @param event string The event tag to register with argument values
+--- @param args table The events to bind to the event tag
+function CraftPresence:AddTriggers(event, args)
+    if type(args) ~= "table" then
+        args = { args }
+    end
+
+    if args ~= nil then
+        for _, v in ipairs(args) do
+            self:RegisterEvent(tostring(v), tostring(event))
+        end
     end
 end
 
 --- Prepares and Dispatches a new frame update, given the specified arguments
-function CraftPresence:DispatchUpdate(...)
-    local args = { ... }
+function CraftPresence:DispatchUpdate(args)
+    if type(args) ~= "table" then
+        args = { args }
+    end
+
     if args ~= nil then
         -- Ignore Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
