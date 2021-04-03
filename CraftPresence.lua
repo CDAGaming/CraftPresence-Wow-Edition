@@ -678,7 +678,7 @@ function CraftPresence:ChatCommand(input)
                 ) then
                     found_placeholders = true
                     placeholderStr = placeholderStr .. "\n " .. (string.format(
-                            L["PLACEHOLDER_FOUND_DATA"], strKey, strValue
+                            L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
                     ))
                 end
             end
@@ -692,7 +692,7 @@ function CraftPresence:ChatCommand(input)
                 ) then
                     found_placeholders = true
                     placeholderStr = placeholderStr .. "\n " .. (string.format(
-                            L["PLACEHOLDER_FOUND_DATA"], strKey, strValue
+                            L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
                     ))
                 end
             end
