@@ -142,7 +142,7 @@ L["ADDON_BUILD_INFO"] = "Build Info: %s"
 L["PLACEHOLDERS_QUERY"] = ("Searching for placeholders containing " .. GREY .. "%s|r...")
 L["PLACEHOLDERS_INTRO"] = ("Available Placeholders (" .. GREEN .. "<key>|r => " .. GREY .. "<value>|r):")
 L["PLACEHOLDERS_FOUND_NONE"] = (RED .. "No placeholders found within specified parameters|r")
-L["PLACEHOLDERS_FOUND_DATA"] = (GREEN .. "%s|r => " .. RED .. "%s|r")
+L["PLACEHOLDERS_FOUND_DATA"] = (GREEN .. "%s|r => " .. GREY .. "%s|r")
 L["PLACEHOLDERS_NOTE"] = ("NOTE: Placeholders enclosed by " .. GREEN .. "#|r are global (Can have inner placeholders),")
 L["PLACEHOLDERS_NOTE_TWO"] = ("while ones enclosed by " .. GREY .. "@|r are inner (Cannot have any other placeholders)")
 
