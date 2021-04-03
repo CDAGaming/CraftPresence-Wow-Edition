@@ -422,8 +422,8 @@ local extraOptionsGroup = {
                     CraftPresence:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
                 else
                     CraftPresence:PrintInvalidValue(
-                            L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
-                            L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"]
+                            string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
+                            L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
                     )
                 end
             end,
@@ -446,8 +446,8 @@ local extraOptionsGroup = {
                     CraftPresence:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                 else
                     CraftPresence:PrintInvalidValue(
-                            L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
-                            L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"]
+                            string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
+                            L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
                     )
                 end
             end,
@@ -471,8 +471,8 @@ local extraOptionsGroup = {
                     CraftPresence:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
                 else
                     CraftPresence:PrintInvalidValue(
-                            L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
-                            L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"]
+                            string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
+                            L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
                     )
                 end
             end,
@@ -567,12 +567,8 @@ end
 
 --- Prints a formatted message, meant to symbolize an invalid value
 --- @param logStyle string The log format to follow
-function CraftPresence:PrintInvalidValue(logStyle, ...)
-    CraftPresence:Print(string.format(
-            L["ERROR_LOG"], string.format(
-                    logStyle, ...
-            )
-    ))
+function CraftPresence:PrintInvalidValue(logStyle)
+    CraftPresence:Print(string.format(L["ERROR_LOG"], logStyle))
 end
 
 --- Updates showMinimapIcon with the specified value

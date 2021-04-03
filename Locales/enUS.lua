@@ -170,9 +170,6 @@ L["PLACEHOLDERS_NOTE_TWO"] = SetFormat("while ones enclosed by *@|r are inner (C
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
 
--- Command: /cp set:<category> <args>
-L["USAGE_COMMAND_SET"] = "Please use the correct syntax => /cp set:<category> <args>"
-
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
