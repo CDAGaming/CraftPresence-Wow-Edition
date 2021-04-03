@@ -45,18 +45,16 @@ function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
     plain = plain ~= nil and plain == true
     index = index or 1
     if multiple then
-        if string.gfind then
-            return string.gfind(str, pattern)
-        elseif string.gmatch then
+        if string.gmatch then
             return string.gmatch(str, pattern)
+        elseif string.gfind then
+            return string.gfind(str, pattern)
         else
             return nil
         end
     else
         if string.find then
             return string.find(str, pattern, index, plain)
-        elseif string.match then
-            return string.match(str, pattern, index)
         else
             return nil
         end
@@ -428,8 +426,10 @@ local queue_frame
 ---
 --- @param seconds number The delay in seconds until task execution
 --- @param func function The function to perform when delay expires
-function CraftPresence:After(seconds, func, ...)
-    local args = { ... }
+function CraftPresence:After(seconds, func, args)
+    if type(args) ~= "table" then
+        args = { args }
+    end
     local f = function()
         func(args)
     end

@@ -197,7 +197,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     else
         local button_data = self:Split(primaryButton, L["ARRAY_SPLIT_KEY"])
         primaryButton = ""
-        for i, _ in button_data do
+        for i, _ in pairs(button_data) do
             if button_data[i] == nil or button_data[i] == "" then
                 button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
@@ -213,7 +213,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     else
         local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
         secondaryButton = ""
-        for i, _ in button_data do
+        for i, _ in pairs(button_data) do
             if button_data[i] == nil or button_data[i] == "" then
                 button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
