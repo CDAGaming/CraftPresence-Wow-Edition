@@ -425,7 +425,13 @@ function CraftPresence:OnEnable()
         self:Print(string.format(L["ADDON_BUILD_INFO"], self:SerializeTable(buildData)))
     end
     -- Register Universal Events
-    CraftPresence:AddTriggers("DispatchUpdate",
+    local eventName
+    if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
+        eventName = "DispatchModernUpdate"
+    else
+        eventName = "DispatchLegacyUpdate"
+    end
+    CraftPresence:AddTriggers(eventName,
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
               "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
               "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
@@ -433,19 +439,19 @@ function CraftPresence:OnEnable()
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.x"] then
-        CraftPresence:AddTriggers("DispatchUpdate",
+        CraftPresence:AddTriggers(eventName,
                 { "PLAYER_SPECIALIZATION_CHANGED" }
         )
     end
     if buildData["toc_version"] >= compatData["6.0.x"] then
-        CraftPresence:AddTriggers("DispatchUpdate",
+        CraftPresence:AddTriggers(eventName,
                 { "ACTIVE_TALENT_GROUP_CHANGED",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                   "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }
         )
     end
     if buildData["toc_version"] >= compatData["8.0.x"] then
-        CraftPresence:AddTriggers("DispatchUpdate",
+        CraftPresence:AddTriggers(eventName,
                 { "PLAYER_LEVEL_CHANGED" }
         )
     end
@@ -463,11 +469,25 @@ function CraftPresence:AddTriggers(event, args)
         args = { args }
     end
 
-    if args ~= nil then
+    if event ~= nil and args ~= nil then
         for _, v in ipairs(args) do
             self:RegisterEvent(tostring(v), tostring(event))
         end
     end
+end
+
+--- Prepares and Dispatches a new frame update, given the specified arguments
+function CraftPresence:DispatchLegacyUpdate()
+    self:DispatchUpdate({
+        event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
+    })
+end
+
+--- Prepares and Dispatches a new frame update, given the specified arguments
+function CraftPresence:DispatchModernUpdate(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+    self:DispatchUpdate({
+        event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
+    })
 end
 
 --- Prepares and Dispatches a new frame update, given the specified arguments

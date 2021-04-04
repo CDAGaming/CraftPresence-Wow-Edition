@@ -12,7 +12,9 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 ---
 --- @return string @ trimmed_string
 function CraftPresence:TrimString(str)
-    if str == nil or str == "" then return str end
+    if str == nil or str == "" then
+        return str
+    end
     str = string.gsub(str, "^%s*(.-)%s*$", "%1")
     str = string.gsub(str, "%s+", " ")
     return str
