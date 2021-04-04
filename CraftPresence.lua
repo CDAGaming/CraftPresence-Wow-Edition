@@ -54,7 +54,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     end
     -- Player Data
     local playerName = UnitName("player")
-    local playerStatus, playerPrefix = self:GetPlayerStatus("player", true)
+    local playerStatus, playerPrefix = self:GetPlayerStatus("player", true, isRebasedApi)
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
@@ -503,7 +503,7 @@ function CraftPresence:DispatchUpdate(args)
         local ignore_event = false
         local ignore_event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (
-                    self:GetLastPlayerStatus() == self:GetPlayerStatus("player", false)
+                    self:GetLastPlayerStatus() == self:GetPlayerStatus("player", false, isRebasedApi)
             ),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
                     lastEventName == eventName or

@@ -197,7 +197,7 @@ end
 --API UTILITIES
 ----------------------------------
 
-local lastPlayerStatus
+local lastPlayerStatus = ""
 local timer_locked = false
 -- Compatibility Data
 local build_info, compatibility_info
@@ -268,32 +268,36 @@ end
 ---
 --- @param unit string The unit name (Default: player)
 --- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
+--- @param isRebasedApi boolean Whether the client is on a rebased api
 ---
 --- @return string, string @ playerStatus, playerPrefix
-function CraftPresence:GetPlayerStatus(unit, sync)
+function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
     unit = unit or "player"
-    local playerStatus = L["ONLINE_LABEL"]
+    local playerStatus = ""
     local playerPrefix = ""
+    local isAfk, isOnDnd, isDead, isGhost
     -- Ensure Version Compatibility
-    if self:GetBuildInfo()["toc_version"] > self:GetCompatibilityInfo()["1.12.1"] then
-        -- Player Name Tweaks (DND/AFK Data)
-        local isAfk = UnitIsAFK(unit)
-        local isOnDnd = UnitIsDND(unit)
-        local isDead = UnitIsDead(unit)
-        local isGhost = UnitIsGhost(unit)
-        if isAfk then
-            playerStatus = L["AFK_LABEL"]
-        elseif isOnDnd then
-            playerStatus = L["DND_LABEL"]
-        elseif isGhost then
-            playerStatus = L["GHOST_LABEL"]
-        elseif isDead then
-            playerStatus = L["DEAD_LABEL"]
-        end
-        -- Parse Player Status
-        if not (playerStatus == nil) then
-            playerPrefix = ("(" .. playerStatus .. ")") .. " "
-        end
+    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.x"] or isRebasedApi then
+        isAfk = UnitIsAFK(unit)
+        isOnDnd = UnitIsDND(unit)
+    end
+    -- Sync Player Name Tweaks (DND/AFK Data)
+    isDead = UnitIsDead(unit)
+    isGhost = UnitIsGhost(unit)
+    if isAfk then
+        playerStatus = L["AFK_LABEL"]
+    elseif isOnDnd then
+        playerStatus = L["DND_LABEL"]
+    elseif isGhost then
+        playerStatus = L["GHOST_LABEL"]
+    elseif isDead then
+        playerStatus = L["DEAD_LABEL"]
+    end
+    -- Parse Player Status
+    if not (playerStatus == nil) then
+        playerPrefix = ("(" .. playerStatus .. ")") .. " "
+    else
+        playerStatus = L["ONLINE_LABEL"]
     end
 
     -- Return Data (and sync if needed)
