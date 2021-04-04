@@ -512,8 +512,8 @@ function CraftPresence:DispatchUpdate(args)
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
             ["PLAYER_LEVEL_UP"] = (lastEventName == "PLAYER_LEVEL_CHANGED"),
             ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP"),
-            ["ACTIVE_TALENT_GROUP_CHANGED"] = (type(args) ~= "table" or args[2] == args[3]),
-            ["PLAYER_SPECIALIZATION_CHANGED"] = (type(args) ~= "table" or args[2] ~= "player")
+            ["ACTIVE_TALENT_GROUP_CHANGED"] = (args[2] == args[3]),
+            ["PLAYER_SPECIALIZATION_CHANGED"] = (args[2] ~= "player")
         }
 
         for key, value in pairs(ignore_event_conditions) do
@@ -537,15 +537,9 @@ function CraftPresence:DispatchUpdate(args)
             -- Logging is different depending on verbose/debug states
             if self:GetFromDb("debugMode") then
                 if self:GetFromDb("verboseMode") then
-                    local serializedArgs
-                    if type(args) == "table" then
-                        serializedArgs = self:SerializeTable(args)
-                    else
-                        serializedArgs = args
-                    end
                     self:Print(string.format(
                             L["VERBOSE_LOG"], string.format(
-                                    logPrefix, serializedArgs
+                                    logPrefix, self:SerializeTable(args)
                             )
                     ))
                 else
