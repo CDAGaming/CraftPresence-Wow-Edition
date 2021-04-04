@@ -294,7 +294,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
         playerStatus = L["DEAD_LABEL"]
     end
     -- Parse Player Status
-    if playerStatus == nil or playerStatus == "" then
+    if not (playerStatus == nil or playerStatus == "") then
         playerPrefix = ("(" .. playerStatus .. ")") .. " "
     else
         playerStatus = L["ONLINE_LABEL"]
