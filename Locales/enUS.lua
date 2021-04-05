@@ -1,8 +1,19 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
 ----------------------
---LOCAL FUNCTIONS
+--LUA UTILITIES (From Utils.lua)
 -------------------
+
+--- Determines if the specified object is null or empty
+---
+--- @param obj any The object to interpret
+---
+--- @return boolean @ is_object_empty
+local function IsNullOrEmpty(obj)
+    return obj == nil or
+            (type(obj) == "string" and obj == "") or
+            (type(obj) == "table" and obj == {})
+end
 
 --- Replaces a String with the specified formatting
 ---
@@ -14,7 +25,7 @@ local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 ---
 --- @return string @ formatted_string
 local function SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    if str == nil or str == "" then return str end
+    if IsNullOrEmpty(str) then return str end
     str = string.gsub(str, pattern_one or "*", replacer_one or "")
     str = string.gsub(str, pattern_two or "%^", replacer_two or "")
     return str

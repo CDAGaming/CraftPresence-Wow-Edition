@@ -549,10 +549,10 @@ end
 --- @param value any The new value of the config variable
 function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
     if oldValue ~= value and CraftPresence.CanLogChanges() then
-        if oldValue == nil or oldValue == "" then
+        if CraftPresence:IsNullOrEmpty(oldValue) then
             oldValue = L["TYPE_NONE"]
         end
-        if value == nil or value == "" then
+        if CraftPresence:IsNullOrEmpty(value) then
             value = L["TYPE_NONE"]
         end
         CraftPresence:Print(

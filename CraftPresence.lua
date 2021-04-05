@@ -96,11 +96,11 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local zone_name = GetRealZoneText()
     local sub_name = GetSubZoneText()
     -- Null-Case to ensure Zone Name always equals something
-    if (zone_name == nil or zone_name == "") then
+    if self:IsNullOrEmpty(zone_name) then
         zone_name = L["TYPE_UNKNOWN"]
     end
     -- Format the zone info based on zone data
-    if (sub_name == nil or sub_name == "") then
+    if self:IsNullOrEmpty(sub_name) then
         formatted_zone_info = zone_name
         sub_name = L["TYPE_UNKNOWN"]
     else
@@ -620,7 +620,7 @@ end
 --- Getter for CraftPresence:addonVersion
 --- @return string addonVersion
 function CraftPresence:GetVersion()
-    if addonVersion == nil or addonVersion == "" then
+    if self:IsNullOrEmpty(addonVersion) then
         addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
     end
     return addonVersion
@@ -629,7 +629,7 @@ end
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
-    if not input or self:TrimString(input) == "" or input == "help" or input == "?" then
+    if self:IsNullOrEmpty(input) or input == "help" or input == "?" then
         self:Print(
                 string.format(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
                         L["USAGE_CMD_HELP"] .. "\n" ..

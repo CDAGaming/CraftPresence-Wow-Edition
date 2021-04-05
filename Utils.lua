@@ -6,13 +6,24 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 --LUA UTILITIES
 ----------------------------------
 
+--- Determines if the specified object is null or empty
+---
+--- @param obj any The object to interpret
+---
+--- @return boolean @ is_object_empty
+function CraftPresence:IsNullOrEmpty(obj)
+    return obj == nil or
+            (type(obj) == "string" and obj == "") or
+            (type(obj) == "table" and obj == {})
+end
+
 --- Trims a String of leading and duplicate spaces
 ---
 --- @param str string The input string to evaluate
 ---
 --- @return string @ trimmed_string
 function CraftPresence:TrimString(str)
-    if str == nil or str == "" then
+    if self:IsNullOrEmpty(str) then
         return str
     end
     str = string.gsub(str, "^%s*(.-)%s*$", "%1")
@@ -51,16 +62,11 @@ function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
             return string.gmatch(str, pattern)
         elseif string.gfind then
             return string.gfind(str, pattern)
-        else
-            return nil
         end
-    else
-        if string.find then
-            return string.find(str, pattern, index, plain)
-        else
-            return nil
-        end
+    elseif string.find then
+        return string.find(str, pattern, index, plain)
     end
+    return nil
 end
 
 --- Determines whether the specified string contains digit characters
@@ -88,7 +94,7 @@ end
 ---
 --- @return string @ formattedString
 function CraftPresence:FormatWord(str)
-    if (str == nil or str == "") then
+    if self:IsNullOrEmpty(str) then
         return str
     end
     str = string.lower(str)
@@ -264,6 +270,10 @@ function CraftPresence:IsTBCRebased()
     )
 end
 
+----------------------------------
+--API GETTERS AND SETTERS
+----------------------------------
+
 --- Retrieves the Player Status for the specified unit
 ---
 --- @param unit string The unit name (Default: player)
@@ -294,7 +304,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
         playerStatus = L["DEAD_LABEL"]
     end
     -- Parse Player Status
-    if not (playerStatus == nil or playerStatus == "") then
+    if not self:IsNullOrEmpty(playerStatus) then
         playerPrefix = ("(" .. playerStatus .. ")") .. " "
     else
         playerStatus = L["ONLINE_LABEL"]
@@ -306,10 +316,6 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
     end
     return playerStatus, playerPrefix
 end
-
-----------------------------------
---API GETTERS AND SETTERS
-----------------------------------
 
 --- Retrieves the Last Player Status, if any
 --- @return string @ lastPlayerStatus
@@ -432,6 +438,7 @@ local queue_frame
 ---
 --- @param seconds number The delay in seconds until task execution
 --- @param func function The function to perform when delay expires
+--- @param args any The arguments, if any, to use with the function
 function CraftPresence:After(seconds, func, args)
     if type(args) ~= "table" then
         args = { args }

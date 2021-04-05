@@ -164,41 +164,41 @@ end
 --- @param secondaryButton string The secondary button to attach to the Rich Presence
 function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
                                   details, gameState, startTime, endTime, primaryButton, secondaryButton)
-    if clientId == nil or clientId == "" then
+    if self:IsNullOrEmpty(clientId) then
         clientId = L["DEFAULT_CLIENT_ID"]
     end
-    if largeImageKey == nil or largeImageKey == "" then
+    if self:IsNullOrEmpty(largeImageKey) then
         largeImageKey = L["UNKNOWN_KEY"]
     end
-    if largeImageText == nil or largeImageText == "" then
+    if self:IsNullOrEmpty(largeImageText) then
         largeImageText = L["UNKNOWN_KEY"]
     end
-    if smallImageKey == nil or smallImageKey == "" then
+    if self:IsNullOrEmpty(smallImageKey) then
         smallImageKey = L["UNKNOWN_KEY"]
     end
-    if smallImageText == nil or smallImageText == "" then
+    if self:IsNullOrEmpty(smallImageText) then
         smallImageText = L["UNKNOWN_KEY"]
     end
-    if details == nil or details == "" then
+    if self:IsNullOrEmpty(details) then
         details = L["UNKNOWN_KEY"]
     end
-    if gameState == nil or gameState == "" then
+    if self:IsNullOrEmpty(gameState) then
         gameState = L["UNKNOWN_KEY"]
     end
-    if startTime == nil or startTime == "" then
+    if self:IsNullOrEmpty(startTime) then
         startTime = L["UNKNOWN_KEY"]
     end
-    if endTime == nil or endTime == "" then
+    if self:IsNullOrEmpty(endTime) then
         endTime = L["UNKNOWN_KEY"]
     end
     -- Additional Sanity Checks for Primary Button
-    if primaryButton == nil or primaryButton == "" then
+    if self:IsNullOrEmpty(primaryButton) then
         primaryButton = L["UNKNOWN_KEY"]
     else
         local button_data = self:Split(primaryButton, L["ARRAY_SPLIT_KEY"])
         primaryButton = ""
         for i, _ in pairs(button_data) do
-            if button_data[i] == nil or button_data[i] == "" then
+            if self:IsNullOrEmpty(button_data[i]) then
                 button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
             primaryButton = primaryButton .. button_data[i]
@@ -208,13 +208,13 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         end
     end
     -- Additional Sanity Checks for Secondary Button
-    if secondaryButton == nil or secondaryButton == "" then
+    if self:IsNullOrEmpty(secondaryButton) then
         secondaryButton = L["UNKNOWN_KEY"]
     else
         local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
         secondaryButton = ""
         for i, _ in pairs(button_data) do
-            if button_data[i] == nil or button_data[i] == "" then
+            if self:IsNullOrEmpty(button_data[i]) then
                 button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
             secondaryButton = secondaryButton .. button_data[i]
