@@ -423,7 +423,7 @@ local extraOptionsGroup = {
                 else
                     CraftPresence:PrintInvalidValue(
                             string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
-                            L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
+                                    L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
                     )
                 end
             end,
@@ -447,7 +447,7 @@ local extraOptionsGroup = {
                 else
                     CraftPresence:PrintInvalidValue(
                             string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
-                            L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
+                                    L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
                     )
                 end
             end,
@@ -472,7 +472,7 @@ local extraOptionsGroup = {
                 else
                     CraftPresence:PrintInvalidValue(
                             string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
-                            L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
+                                    L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
                     )
                 end
             end,

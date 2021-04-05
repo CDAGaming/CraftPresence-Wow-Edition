@@ -25,7 +25,9 @@ end
 ---
 --- @return string @ formatted_string
 local function SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    if IsNullOrEmpty(str) then return str end
+    if IsNullOrEmpty(str) then
+        return str
+    end
     str = string.gsub(str, pattern_one or "*", replacer_one or "")
     str = string.gsub(str, pattern_two or "%^", replacer_two or "")
     return str
