@@ -1,21 +1,18 @@
 local CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-local icon
 
+-- Critical Data (Do not remove)
+local CraftPresenceLDB
+local icon
 local minimapState = { hide = false }
 local addonVersion = ""
-
+-- Build and Integration Data
 local realmData = { "US", "KR", "EU", "TW", "CH" }
 local buildData = {}
 local compatData = {}
+local integrationData = {}
 local isRebasedApi = false
-
-local CraftPresenceLDB
-
--- ==================
--- RPC Data
--- ==================
 
 -- Storage Data
 local global_placeholders = {}
@@ -644,6 +641,7 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_STATUS"] .. "\n" ..
                         L["USAGE_CMD_RESET"] .. "\n" ..
                         L["USAGE_CMD_SET"] .. "\n" ..
+                        L["USAGE_CMD_INTEGRATION"] .. "\n" ..
                         L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
                         string.format(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
                         L["USAGE_CMD_NOTE_TWO"] .. "\n"
@@ -691,6 +689,23 @@ function CraftPresence:ChatCommand(input)
                                 L["ERROR_COMMAND_CONFIG"], L["TITLE_VERBOSE_MODE"]
                         )
                 ))
+            end
+        elseif self:StartsWith(input, "integration") then
+            -- Query Parsing
+            local _, _, query = self:FindMatches(input, ":(.*)", false)
+            if query ~= nil and not integrationData[query] then
+                self:Print(string.format(L["INTEGRATION_QUERY"], query))
+                query = string.lower(query)
+
+                -- Integration Parsing
+                if (query == "viragdevtool" or query == "vdt") and ViragDevTool_AddData then
+                    ViragDevTool_AddData(CraftPresence, "CraftPresence")
+                    -- Uncomment for single-use integration
+                    -- integrationData["viragdevtool"] = true
+                    -- integrationData["vdt"] = true
+                else
+                    self:Print(L["INTEGRATION_NOT_FOUND"])
+                end
             end
         elseif self:StartsWith(input, "placeholders") then
             local placeholderStr = L["PLACEHOLDERS_INTRO"]

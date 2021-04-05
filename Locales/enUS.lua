@@ -167,6 +167,10 @@ L["PLACEHOLDERS_FOUND_DATA"] = SetFormat("*%s|r => ^%s|r", GREEN, GREY)
 L["PLACEHOLDERS_NOTE"] = SetFormat("NOTE: Keys enclosed by *#|r are global (Can have inner keys),", GREEN)
 L["PLACEHOLDERS_NOTE_TWO"] = SetFormat("while ones enclosed by *@|r are inner (Cannot have any other keys)", GREY)
 
+-- Command: /cp integration
+L["INTEGRATION_QUERY"] = SetFormat("Enabling integrations for *%s|r...", GREY)
+L["INTEGRATION_NOT_FOUND"] = SetFormat("*No integrations to enable within specified parameters|r", RED)
+
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
 
@@ -184,6 +188,7 @@ L["USAGE_CMD_MINIMAP"] = SetFormat(" */cp|r ^minimap|r  -  Toggles the minimap b
 L["USAGE_CMD_STATUS"] = SetFormat(" */cp|r ^status|r  -  Views the last sent RPC event.", GREEN, GREY)
 L["USAGE_CMD_RESET"] = SetFormat(" */cp|r ^reset[:grp,key]|r  -  Reset options in the *ConfigUI|r.", GREEN, GREY)
 L["USAGE_CMD_SET"] = SetFormat(" */cp|r ^set[:grp,key]|r  -  Set options in the *ConfigUI|r.", GREEN, GREY)
+L["USAGE_CMD_INTEGRATION"] = SetFormat(" */cp|r ^integration[:query]|r  -  Enable integrations.", GREEN, GREY)
 L["USAGE_CMD_PLACEHOLDERS"] = SetFormat(" */cp|r ^placeholders[:query]|r  -  View RPC placeholders.", GREEN, GREY)
 
 L["USAGE_CMD_NOTE"] = SetFormat("NOTE: All commands must be prefixed with either */%s|r or */%s|r.", GREEN, GREY)
