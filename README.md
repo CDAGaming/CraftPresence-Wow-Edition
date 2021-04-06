@@ -24,8 +24,19 @@ The customization possibilities are limitless, with the only real limit being ho
 ### Client Support
 CraftPresence will detect and adjust its abilities towards the following versions:
 
-*   Retail -> 9.0.5 (37899)
-*   Classic -> 1.13.6 (37497)
+| Version                  | Status | Download | Notes    |
+|--------------------------|--------|----------|----------|
+| Retail (9.0.5)           | OK     | Any      | N/A      |
+| BFA (8.x)                | OK     | Any      | N/A      |
+| Legion (7.x)             | OK     | Any      | >= 0.5.4 |
+| WOD (6.x)                | OK     | Any      | >= 0.5.4 |
+| MOP (5.x)                | OK     | Any      | >= 0.5.4 |
+| Cataclysm (4.x)          | OK     | Any      | >= 0.5.4 |
+| WOTLK (3.x)              | OK     | Any      | >= 0.5.4 |
+| TBC Classic (2.5.x)      | OK     | Any      | N/A      |
+| TBC (2.0.x - 2.4.x)      | OK     | Any      | >= 0.5.4 |
+| Vanilla Classic (1.13.x) | OK     | Any      | N/A      |
+| Vanilla (1.12.x)         | OK     | Source   | legacy   |
 
 As this addon uses a singlular codebase, Addon code is loaded depending upon which version you are loading it within.
 
@@ -47,6 +58,7 @@ ___
 *   `/cp test` - Toggles debugging of Rich Presence Frames (Requires `Debug Mode`)
 *   `/cp (clear | clean)` - Reset all frames to their original positions and colors.
 *   `/cp status` - Displays your last sent RPC Data, in text form (Requires `Verbose Mode`)
+*   `/cp set (grp,key)` - Sets specific setting(s) within the config menu manually.
 *   `/cp reset (:grp,key)` - Resets all (or a specific) setting(s) within the config menu.
 *   `/cp placeholders (:query)` - Views the currently available placeholders (With specified query, if any)
 *   `/cp minimap` - Toggles the display of the minimap button (Requires Reload)
