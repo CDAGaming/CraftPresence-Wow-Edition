@@ -24,21 +24,21 @@ The customization possibilities are limitless, with the only real limit being ho
 ### Client Support
 CraftPresence will detect and adjust its abilities towards the following versions:
 
-| Version                  | Status | Download | Notes    |
-|--------------------------|--------|----------|----------|
-| Retail (9.0.5)           | OK     | Any      | N/A      |
-| BFA (8.x)                | OK     | Any      | N/A      |
-| Legion (7.x)             | OK     | Any      | >= 0.5.4 |
-| WOD (6.x)                | OK     | Any      | >= 0.5.4 |
-| MOP (5.x)                | OK     | Any      | >= 0.5.4 |
-| Cataclysm (4.x)          | OK     | Any      | >= 0.5.4 |
-| WOTLK (3.x)              | OK     | Any      | >= 0.5.4 |
-| TBC Classic (2.5.x)      | OK     | Any      | N/A      |
-| TBC (2.0.x - 2.4.x)      | OK     | Any      | >= 0.5.4 |
-| Vanilla Classic (1.13.x) | OK     | Any      | N/A      |
-| Vanilla (1.12.x)         | OK     | Source   | legacy   |
+| Version                  | Status | Download | Notes           |
+|--------------------------|--------|----------|-----------------|
+| Retail (9.0.5)           | OK     | Any      | N/A             |
+| BFA (8.x)                | OK     | Any      | N/A             |
+| Legion (7.x)             | OK     | Any      | v0.5.4 or above |
+| WOD (6.x)                | OK     | Any      | v0.5.4 or above |
+| MOP (5.x)                | OK     | Any      | v0.5.4 or above |
+| Cataclysm (4.x)          | OK     | Any      | v0.5.4 or above |
+| WOTLK (3.x)              | OK     | Any      | v0.5.4 or above |
+| TBC Classic (2.5.x)      | OK     | Any      | N/A             |
+| TBC (2.0.x - 2.4.x)      | OK     | Any      | v0.5.4 or above |
+| Vanilla Classic (1.13.x) | OK     | Any      | N/A             |
+| Vanilla (1.0.x - 1.12.x) | OK     | Source   | legacy          |
 
-As this addon uses a singlular codebase, Addon code is loaded depending upon which version you are loading it within.
+As this addon uses a singular codebase, Addon code is loaded depending upon which version you are loading it within.
 
 For example, this will mean that while the placeholders will remain the same, their contents may change depending on the version.
 
