@@ -699,7 +699,8 @@ function CraftPresence:ChatCommand(input)
 
                 -- Integration Parsing
                 if (query == "viragdevtool" or query == "vdt") and ViragDevTool_AddData then
-                    ViragDevTool_AddData(CraftPresence, "CraftPresence")
+                    ViragDevTool_AddData(CraftPresence, L["ADDON_NAME"])
+                    ViragDevTool_AddData(L, L["ADDON_NAME"] .. "_Locale")
                     -- Uncomment for single-use integration
                     -- integrationData["viragdevtool"] = true
                     -- integrationData["vdt"] = true
