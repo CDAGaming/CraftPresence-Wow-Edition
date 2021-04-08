@@ -387,7 +387,7 @@ function CraftPresence:OnInitialize()
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
-        if buildData["toc_version"] >= compatData["2.5.x"] or isRebasedApi then
+        if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
             self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
             self.optionsFrame.default = self.ResetDB
         end
@@ -605,7 +605,7 @@ end
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
-    if buildData["toc_version"] >= compatData["2.5.x"] or isRebasedApi then
+    if InterfaceOptionsFrame_OpenToCategory then
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     else
