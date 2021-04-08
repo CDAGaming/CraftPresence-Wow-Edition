@@ -11,7 +11,8 @@ local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, wipe
 
 local wowCata, wowAboveTBCRebased, wowThirdLegion
 do
-	local _, _, _, interface = GetBuildInfo()
+	local _, build, _, interface = GetBuildInfo()
+	interface = interface or tonumber(build)
 	wowCata = (interface >= 40000)
 	wowThirdLegion = (interface >= 70300)
 	wowAboveTBCRebased = (interface >= 20500)

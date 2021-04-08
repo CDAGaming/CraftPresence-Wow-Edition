@@ -10,7 +10,8 @@ local tostring, pairs = tostring, pairs
 
 local wowThirdLegion
 do
-	local _, _, _, interface = GetBuildInfo()
+	local _, build, _, interface = GetBuildInfo()
+	interface = interface or tonumber(build)
 	wowThirdLegion = (interface >= 70300)
 end
 

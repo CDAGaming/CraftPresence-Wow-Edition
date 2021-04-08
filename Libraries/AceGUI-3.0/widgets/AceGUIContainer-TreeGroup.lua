@@ -16,7 +16,8 @@ local CreateFrame, UIParent = CreateFrame, UIParent
 
 local wowBfa, wowWotlk, wowClassicRebased, wowTBCRebased
 do
-	local _, _, _, interface = GetBuildInfo()
+	local _, build, _, interface = GetBuildInfo()
+	interface = interface or tonumber(build)
 	wowBfa = (interface >= 80000)
 	wowWotlk = (interface >= 30000)
 	wowClassicRebased = (interface >= 11300 and interface < 20000)

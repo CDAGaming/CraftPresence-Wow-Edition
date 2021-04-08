@@ -15,7 +15,8 @@ local PlaySound, CreateFrame, UIParent = PlaySound, CreateFrame, UIParent
 
 local wowMoP, wowThirdLegion, wowClassicRebased, wowTBCRebased
 do
-	local _, _, _, interface = GetBuildInfo()
+	local _, build, _, interface = GetBuildInfo()
+	interface = interface or tonumber(build)
 	wowMoP = (interface >= 50000)
 	wowThirdLegion = (interface >= 70300)
 	wowClassicRebased = (interface >= 11300 and interface < 20000)
