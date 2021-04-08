@@ -4,7 +4,7 @@ local LIBSTUB_MAJOR, LIBSTUB_MINOR = "LibStub", 2  -- NEVER MAKE THIS AN SVN REV
 local LibStub = _G[LIBSTUB_MAJOR]
 
 if not LibStub or LibStub.minor < LIBSTUB_MINOR then
-	LibStub = LibStub or {libs = {}, minors = {} }
+	LibStub = LibStub or { libs = {}, minors = {} }
 	_G[LIBSTUB_MAJOR] = LibStub
 	LibStub.minor = LIBSTUB_MINOR
 	
