@@ -92,16 +92,20 @@ local function UpdateButton(button, treeline, selected, canExpand, isExpanded)
 	if ( level == 1 ) then
 		if button.SetNormalFontObject then
 			button:SetNormalFontObject("GameFontNormal")
-		else
+		elseif button.SetTextFontObject then
 			button:SetTextFontObject("GameFontNormal")
+		else
+			button:SetFontObject("GameFontNormal")
 		end
 		button:SetHighlightFontObject("GameFontHighlight")
 		button.text:SetPoint("LEFT", (icon and 16 or 0) + 8, 2)
 	else
 		if button.SetNormalFontObject then
 			button:SetNormalFontObject("GameFontHighlightSmall")
-		else
+		elseif button.SetTextFontObject then
 			button:SetTextFontObject("GameFontHighlightSmall")
+		else
+			button:SetFontObject("GameFontHighlightSmall")
 		end
 		button:SetHighlightFontObject("GameFontHighlightSmall")
 		button.text:SetPoint("LEFT", (icon and 16 or 0) + 8 * level, 2)

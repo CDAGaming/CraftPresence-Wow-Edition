@@ -152,15 +152,19 @@ local methods = {
 			self.button:SetText(NOT_BOUND)
 			if self.button.SetNormalFontObject then
 				self.button:SetNormalFontObject("GameFontNormal")
-			else
+			elseif self.button.SetTextFontObject then
 				self.button:SetTextFontObject("GameFontNormal")
+			else
+				self.button:SetFontObject("GameFontNormal")
 			end
 		else
 			self.button:SetText(key)
 			if self.button.SetNormalFontObject then
 				self.button:SetNormalFontObject("GameFontHighlight")
-			else
+			elseif self.button.SetTextFontObject then
 				self.button:SetTextFontObject("GameFontHighlight")
+			else
+				self.button:SetFontObject("GameFontHighlight")
 			end
 		end
 	end,

@@ -9,13 +9,15 @@ if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 -- Lua APIs
 local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, wipe
 
-local wowCata, wowAboveTBCRebased, wowThirdLegion
+local wowCata, wowWotlk, wowThirdLegion, wowClassicRebased, wowTBCRebased
 do
 	local _, build, _, interface = GetBuildInfo()
 	interface = interface or tonumber(build)
+	wowWotlk = (interface >= 30000)
 	wowCata = (interface >= 40000)
 	wowThirdLegion = (interface >= 70300)
-	wowAboveTBCRebased = (interface >= 20500)
+	wowClassicRebased = (interface >= 11300 and interface < 20000)
+	wowTBCRebased = (interface >= 20500 and interface < 30000)
 end
 
 -- WoW APIs
@@ -48,12 +50,12 @@ end
 local function Tab_SetText(frame, text)
 	frame:_SetText(text)
 	local width = frame.obj.frame.width or frame.obj.frame:GetWidth() or 0
-	if wowCata then
+	if (wowCata or wowClassicRebased or wowTBCRebased) then
 		PanelTemplates_TabResize(frame, 0, nil, nil, width, frame:GetFontString():GetStringWidth())
-	elseif not wowAboveTBCRebased then
-		PanelTemplates_TabResize(0, frame, nil, width)
-	else
+	elseif wowWotlk then
 		PanelTemplates_TabResize(frame, 0, nil, width)
+	else
+		PanelTemplates_TabResize(0, frame, nil, width)
 	end
 end
 
@@ -277,12 +279,12 @@ local methods = {
 			end
 
 			for i = starttab, endtab do
-				if wowCata then
+				if (wowCata or wowClassicRebased or wowTBCRebased) then
 					PanelTemplates_TabResize(tabs[i], padding + 4, nil, nil, width, tabs[i]:GetFontString():GetStringWidth())
-				elseif not wowAboveTBCRebased then
-					PanelTemplates_TabResize(padding + 4, tabs[i], nil, width)
-				else
+				elseif wowWotlk then
 					PanelTemplates_TabResize(tabs[i], padding + 4, nil, width)
+				else
+					PanelTemplates_TabResize(padding + 4, tabs[i], nil, width)
 				end
 			end
 			starttab = endtab + 1
