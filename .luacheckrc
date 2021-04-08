@@ -1,4 +1,4 @@
-ignore = {"113", "212"}
+ignore = {"111", "113", "212"}
 
 include_files = {'**/*.lua'}
 
