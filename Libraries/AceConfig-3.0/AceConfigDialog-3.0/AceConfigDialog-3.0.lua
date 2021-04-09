@@ -29,7 +29,7 @@ do
 end
 
 -- Lua APIs
-local tinsert, tsort, tremove, wipe, tsetn = table.insert, table.sort, table.remove, table.wipe, table.setn
+local tconcat, tinsert, tsort, tremove, wipe, tsetn = table.concat, table.insert, table.sort, table.remove, table.wipe, table.setn
 local strmatch, format = string.match, string.format
 local error = error
 local pairs, next, select, type, unpack, ipairs = pairs, next, select, type, unpack, ipairs
