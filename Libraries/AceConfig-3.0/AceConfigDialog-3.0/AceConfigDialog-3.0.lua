@@ -1,13 +1,13 @@
 --- AceConfigDialog-3.0 generates AceGUI-3.0 based windows based on option tables.
 -- @class file
 -- @name AceConfigDialog-3.0
--- @release $Id: AceConfigDialog-3.0.lua 1169 2018-02-27 16:18:28Z nevcairiel $
+-- @release $Id: AceConfigDialog-3.0.lua 1248 2021-02-05 14:27:49Z funkehdude $
 
 local LibStub = LibStub
 local gui = LibStub("AceGUI-3.0")
 local reg = LibStub("AceConfigRegistry-3.0")
 
-local MAJOR, MINOR = "AceConfigDialog-3.0", 66
+local MAJOR, MINOR = "AceConfigDialog-3.0", 81
 local AceConfigDialog, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigDialog then return end
@@ -15,6 +15,7 @@ if not AceConfigDialog then return end
 AceConfigDialog.OpenFrames = AceConfigDialog.OpenFrames or {}
 AceConfigDialog.Status = AceConfigDialog.Status or {}
 AceConfigDialog.frame = AceConfigDialog.frame or CreateFrame("Frame")
+AceConfigDialog.tooltip = AceConfigDialog.tooltip or CreateFrame("GameTooltip", "AceConfigDialogTooltip", UIParent, "GameTooltipTemplate")
 
 AceConfigDialog.frame.apps = AceConfigDialog.frame.apps or {}
 AceConfigDialog.frame.closing = AceConfigDialog.frame.closing or {}
@@ -28,16 +29,16 @@ do
 end
 
 -- Lua APIs
-local tconcat, tinsert, tsort, tremove, tsort = table.concat, table.insert, table.sort, table.remove, table.sort
+local tinsert, tsort, tremove, wipe = table.insert, table.sort, table.remove, table.wipe
 local strmatch, format = string.match, string.format
-local assert, loadstring, error = assert, loadstring, error
-local pairs, next, select, type, unpack, wipe, ipairs = pairs, next, select, type, unpack, wipe, ipairs
-local rawset, tostring, tonumber = rawset, tostring, tonumber
+local error = error
+local pairs, next, select, type, unpack, ipairs = pairs, next, select, type, unpack, ipairs
+local tostring, tonumber = tostring, tonumber
 local math_min, math_max, math_floor = math.min, math.max, math.floor
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
--- GLOBALS: NORMAL_FONT_COLOR, GameTooltip, StaticPopupDialogs, ACCEPT, CANCEL, StaticPopup_Show
+-- GLOBALS: NORMAL_FONT_COLOR, ACCEPT, CANCEL
 -- GLOBALS: PlaySound, GameFontHighlight, GameFontHighlightSmall, GameFontHighlightLarge
 -- GLOBALS: CloseSpecialWindows, InterfaceOptions_AddCategory, geterrorhandler
 
@@ -336,7 +337,7 @@ local function compareOptions(a,b)
 		return NameA:upper() < NameB:upper()
 	end
 	if OrderA < 0 then
-		if OrderB > 0 then
+		if OrderB >= 0 then
 			return false
 		end
 	else
@@ -544,8 +545,9 @@ local function OptionOnMouseOver(widget, event)
 	local options = user.options
 	local path = user.path
 	local appName = user.appName
+	local tooltip = AceConfigDialog.tooltip
 
-	GameTooltip:SetOwner(widget.frame, "ANCHOR_TOPRIGHT")
+	tooltip:SetOwner(widget.frame, "ANCHOR_TOPRIGHT")
 	local name = GetOptionsMemberValue("name", opt, options, path, appName)
 	local desc = GetOptionsMemberValue("desc", opt, options, path, appName)
 	local usage = GetOptionsMemberValue("usage", opt, options, path, appName)
@@ -553,23 +555,23 @@ local function OptionOnMouseOver(widget, event)
 
 	if descStyle and descStyle ~= "tooltip" then return end
 
-	GameTooltip:SetText(name, 1, .82, 0, true)
+	tooltip:SetText(name, 1, .82, 0, true)
 
 	if opt.type == "multiselect" then
-		GameTooltip:AddLine(user.text, 0.5, 0.5, 0.8, true)
-	end	
+		tooltip:AddLine(user.text, 0.5, 0.5, 0.8, true)
+	end
 	if type(desc) == "string" then
-		GameTooltip:AddLine(desc, 1, 1, 1, true)
+		tooltip:AddLine(desc, 1, 1, 1, true)
 	end
 	if type(usage) == "string" then
-		GameTooltip:AddLine("Usage: "..usage, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
+		tooltip:AddLine("Usage: "..usage, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
 	end
 
-	GameTooltip:Show()
+	tooltip:Show()
 end
 
 local function OptionOnMouseLeave(widget, event)
-	GameTooltip:Hide()
+	AceConfigDialog.tooltip:Hide()
 end
 
 local function GetFuncName(option)
@@ -580,71 +582,127 @@ local function GetFuncName(option)
 		return "set"
 	end
 end
-local function confirmPopup(appName, rootframe, basepath, info, message, func, ...)
-	if not StaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"] then
-		StaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"] = {}
-	end
-	local t = StaticPopupDialogs["ACECONFIGDIALOG30_CONFIRM_DIALOG"]
-	for k in pairs(t) do
-		t[k] = nil
-	end
-	t.text = message
-	t.button1 = ACCEPT
-	t.button2 = CANCEL
-	t.preferredIndex = STATICPOPUP_NUMDIALOGS
-	local dialog, oldstrata
-	t.OnAccept = function()
-		safecall(func, unpack(t))
-		if dialog and oldstrata then
-			dialog:SetFrameStrata(oldstrata)
-		end
-		AceConfigDialog:Open(appName, rootframe, unpack(basepath or emptyTbl))
-		del(info)
-	end
-	t.OnCancel = function()
-		if dialog and oldstrata then
-			dialog:SetFrameStrata(oldstrata)
-		end
-		AceConfigDialog:Open(appName, rootframe, unpack(basepath or emptyTbl))
-		del(info)
-	end
-	for i = 1, select("#", ...) do
-		t[i] = select(i, ...) or false
-	end
-	t.timeout = 0
-	t.whileDead = 1
-	t.hideOnEscape = 1
+do
+	local frame = AceConfigDialog.popup
+	if not frame or oldminor < 81 then
+		frame = CreateFrame("Frame", nil, UIParent)
+		AceConfigDialog.popup = frame
+		frame:Hide()
+		frame:SetPoint("CENTER", UIParent, "CENTER")
+		frame:SetSize(320, 72)
+		frame:EnableMouse(true) -- Do not allow click-through on the frame
+		frame:SetFrameStrata("TOOLTIP")
+		frame:SetFrameLevel(100) -- Lots of room to draw under it
+		frame:SetScript("OnKeyDown", function(self, key)
+			if key == "ESCAPE" then
+				self:SetPropagateKeyboardInput(false)
+				if self.cancel:IsShown() then
+					self.cancel:Click()
+				else -- Showing a validation error
+					self:Hide()
+				end
+			else
+				self:SetPropagateKeyboardInput(true)
+			end
+		end)
 
-	dialog = StaticPopup_Show("ACECONFIGDIALOG30_CONFIRM_DIALOG")
-	if dialog then
-		oldstrata = dialog:GetFrameStrata()
-		dialog:SetFrameStrata("TOOLTIP")
+		if not frame.SetFixedFrameStrata then -- API capability check (classic check)
+			frame:SetBackdrop({
+				bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]],
+				edgeFile = [[Interface\DialogFrame\UI-DialogBox-Border]],
+				tile = true,
+				tileSize = 32,
+				edgeSize = 32,
+				insets = { left = 11, right = 11, top = 11, bottom = 11 },
+			})
+		else
+			local border = CreateFrame("Frame", nil, frame, "DialogBorderOpaqueTemplate")
+			border:SetAllPoints(frame)
+			frame:SetFixedFrameStrata(true)
+			frame:SetFixedFrameLevel(true)
+		end
+
+		local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+		text:SetSize(290, 0)
+		text:SetPoint("TOP", 0, -16)
+		frame.text = text
+
+		local function newButton(text)
+			local button = CreateFrame("Button", nil, frame)
+			button:SetSize(128, 21)
+			button:SetNormalFontObject(GameFontNormal)
+			button:SetHighlightFontObject(GameFontHighlight)
+			button:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
+			button:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+			button:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
+			button:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+			button:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
+			button:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
+			button:SetText(text)
+			return button
+		end
+
+		local accept = newButton(ACCEPT)
+		accept:SetPoint("BOTTOMRIGHT", frame, "BOTTOM", -6, 16)
+		frame.accept = accept
+
+		local cancel = newButton(CANCEL)
+		cancel:SetPoint("LEFT", accept, "RIGHT", 13, 0)
+		frame.cancel = cancel
 	end
+end
+local function confirmPopup(appName, rootframe, basepath, info, message, func, ...)
+	local frame = AceConfigDialog.popup
+	frame:Show()
+	frame.text:SetText(message)
+	-- From StaticPopup.lua
+	-- local height = 32 + text:GetHeight() + 2;
+	-- height = height + 6 + accept:GetHeight()
+	-- We add 32 + 2 + 6 + 21 (button height) == 61
+	local height = 61 + frame.text:GetHeight()
+	frame:SetHeight(height)
+
+	frame.accept:ClearAllPoints()
+	frame.accept:SetPoint("BOTTOMRIGHT", frame, "BOTTOM", -6, 16)
+	frame.cancel:Show()
+
+	local t = {...}
+	local tCount = select("#", ...)
+	frame.accept:SetScript("OnClick", function(self)
+		safecall(func, unpack(t, 1, tCount)) -- Manually set count as unpack() stops on nil (bug with #table)
+		AceConfigDialog:Open(appName, rootframe, unpack(basepath or emptyTbl))
+		frame:Hide()
+		self:SetScript("OnClick", nil)
+		frame.cancel:SetScript("OnClick", nil)
+		del(info)
+	end)
+	frame.cancel:SetScript("OnClick", function(self)
+		AceConfigDialog:Open(appName, rootframe, unpack(basepath or emptyTbl))
+		frame:Hide()
+		self:SetScript("OnClick", nil)
+		frame.accept:SetScript("OnClick", nil)
+		del(info)
+	end)
 end
 
 local function validationErrorPopup(message)
-	if not StaticPopupDialogs["ACECONFIGDIALOG30_VALIDATION_ERROR_DIALOG"] then
-		StaticPopupDialogs["ACECONFIGDIALOG30_VALIDATION_ERROR_DIALOG"] = {}
-	end
-	local t = StaticPopupDialogs["ACECONFIGDIALOG30_VALIDATION_ERROR_DIALOG"]
-	t.text = message
-	t.button1 = OKAY
-	t.preferredIndex = STATICPOPUP_NUMDIALOGS
-	local dialog, oldstrata
-	t.OnAccept = function()
-		if dialog and oldstrata then
-			dialog:SetFrameStrata(oldstrata)
-		end
-	end
-	t.timeout = 0
-	t.whileDead = 1
-	t.hideOnEscape = 1
+	local frame = AceConfigDialog.popup
+	frame:Show()
+	frame.text:SetText(message)
+	-- From StaticPopup.lua
+	-- local height = 32 + text:GetHeight() + 2;
+	-- height = height + 6 + accept:GetHeight()
+	-- We add 32 + 2 + 6 + 21 (button height) == 61
+	local height = 61 + frame.text:GetHeight()
+	frame:SetHeight(height)
 
-	dialog = StaticPopup_Show("ACECONFIGDIALOG30_VALIDATION_ERROR_DIALOG")
-	if dialog then
-		oldstrata = dialog:GetFrameStrata()
-		dialog:SetFrameStrata("TOOLTIP")
-	end
+	frame.accept:ClearAllPoints()
+	frame.accept:SetPoint("BOTTOM", frame, "BOTTOM", 0, 16)
+	frame.cancel:Hide()
+
+	frame.accept:SetScript("OnClick", function()
+		frame:Hide()
+	end)
 end
 
 local function ActivateControl(widget, event, ...)
@@ -897,7 +955,7 @@ end
 
 local function MultiControlOnClosed(widget, event, ...)
 	local user = widget:GetUserDataTable()
-	if user.valuechanged then
+	if user.valuechanged and not widget:IsReleasing() then
 		local iscustom = user.rootframe:GetUserData("iscustom")
 		local basepath = user.rootframe:GetUserData("basepath") or emptyTbl
 		if iscustom then
@@ -1075,6 +1133,23 @@ local function InjectInfo(control, options, option, path, rootframe, appName)
 	control:SetCallback("OnEnter", OptionOnMouseOver)
 end
 
+local function CreateControl(userControlType, fallbackControlType)
+	local control
+	if userControlType then
+		control = gui:Create(userControlType)
+		if not control then
+			geterrorhandler()(("Invalid Custom Control Type - %s"):format(tostring(userControlType)))
+		end
+	end
+	if not control then
+		control = gui:Create(fallbackControlType)
+	end
+	return control
+end
+
+local function sortTblAsStrings(x,y)
+	return tostring(x) < tostring(y) -- Support numbers as keys
+end
 
 --[[
 	options - root of the options table being fed
@@ -1123,8 +1198,9 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					local imageCoords = GetOptionsMemberValue("imageCoords",v, options, path, appName)
 					local image, width, height = GetOptionsMemberValue("image",v, options, path, appName)
 
-					if type(image) == "string" or type(image) == "number" then
-						control = gui:Create("Icon")
+					local iconControl = type(image) == "string" or type(image) == "number"
+					control = CreateControl(v.dialogControl or v.control, iconControl and "Icon" or "Button")
+					if iconControl then
 						if not width then
 							width = GetOptionsMemberValue("imageWidth",v, options, path, appName)
 						end
@@ -1145,19 +1221,13 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 						control:SetImageSize(width, height)
 						control:SetLabel(name)
 					else
-						control = gui:Create("Button")
 						control:SetText(name)
 					end
 					control:SetCallback("OnClick",ActivateControl)
 
 				elseif v.type == "input" then
-					local controlType = v.dialogControl or v.control or (v.multiline and "MultiLineEditBox") or "EditBox"
-					control = gui:Create(controlType)
-					if not control then
-						geterrorhandler()(("Invalid Custom Control Type - %s"):format(tostring(controlType)))
-						control = gui:Create(v.multiline and "MultiLineEditBox" or "EditBox")
-					end
-					
+					control = CreateControl(v.dialogControl or v.control, v.multiline and "MultiLineEditBox" or "EditBox")
+
 					if v.multiline and control.SetNumLines then
 						control:SetNumLines(tonumber(v.multiline) or 4)
 					end
@@ -1170,7 +1240,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					control:SetText(text)
 
 				elseif v.type == "toggle" then
-					control = gui:Create("CheckBox")
+					control = CreateControl(v.dialogControl or v.control, "CheckBox")
 					control:SetLabel(name)
 					control:SetTriState(v.tristate)
 					local value = GetOptionsMemberValue("get",v, options, path, appName)
@@ -1193,7 +1263,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 						end
 					end
 				elseif v.type == "range" then
-					control = gui:Create("Slider")
+					control = CreateControl(v.dialogControl or v.control, "Slider")
 					control:SetLabel(name)
 					control:SetSliderValues(v.softMin or v.min or 0, v.softMax or v.max or 100, v.bigStep or v.step or 0)
 					control:SetIsPercent(v.isPercent)
@@ -1207,6 +1277,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 
 				elseif v.type == "select" then
 					local values = GetOptionsMemberValue("values", v, options, path, appName)
+					local sorting = GetOptionsMemberValue("sorting", v, options, path, appName)
 					if v.style == "radio" then
 						local disabled = CheckOptionDisabled(v, options, path, appName)
 						local width = GetOptionsMemberValue("width",v,options,path,appName)
@@ -1217,12 +1288,14 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 
 						control:PauseLayout()
 						local optionValue = GetOptionsMemberValue("get",v, options, path, appName)
-						local t = {}
-						for value, text in pairs(values) do
-							t[#t+1]=value
+						if not sorting then
+							sorting = {}
+							for value, text in pairs(values) do
+								sorting[#sorting+1]=value
+							end
+							tsort(sorting, sortTblAsStrings)
 						end
-						tsort(t)
-						for k, value in ipairs(t) do
+						for k, value in ipairs(sorting) do
 							local text = values[value]
 							local radio = gui:Create("CheckBox")
 							radio:SetLabel(text)
@@ -1249,19 +1322,14 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 						control:ResumeLayout()
 						control:DoLayout()
 					else
-						local controlType = v.dialogControl or v.control or "Dropdown"
-						control = gui:Create(controlType)
-						if not control then
-							geterrorhandler()(("Invalid Custom Control Type - %s"):format(tostring(controlType)))
-							control = gui:Create("Dropdown")
-						end
+						control = CreateControl(v.dialogControl or v.control, "Dropdown")
 						local itemType = v.itemControl
 						if itemType and not gui:GetWidgetVersion(itemType) then
 							geterrorhandler()(("Invalid Custom Item Type - %s"):format(tostring(itemType)))
 							itemType = nil
 						end
 						control:SetLabel(name)
-						control:SetList(values, nil, itemType)
+						control:SetList(values, sorting, itemType)
 						local value = GetOptionsMemberValue("get",v, options, path, appName)
 						if not values[value] then
 							value = nil
@@ -1274,8 +1342,6 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					local values = GetOptionsMemberValue("values", v, options, path, appName)
 					local disabled = CheckOptionDisabled(v, options, path, appName)
 
-					local controlType = v.dialogControl or v.control
-					
 					local valuesort = new()
 					if values then
 						for value, text in pairs(values) do
@@ -1284,6 +1350,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					end
 					tsort(valuesort)
 
+					local controlType = v.dialogControl or v.control
 					if controlType then
 						control = gui:Create(controlType)
 						if not control then
@@ -1357,7 +1424,7 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					del(valuesort)
 
 				elseif v.type == "color" then
-					control = gui:Create("ColorPicker")
+					control = CreateControl(v.dialogControl or v.control, "ColorPicker")
 					control:SetLabel(name)
 					control:SetHasAlpha(GetOptionsMemberValue("hasAlpha",v, options, path, appName))
 					control:SetColor(GetOptionsMemberValue("get",v, options, path, appName))
@@ -1365,18 +1432,18 @@ local function FeedOptions(appName, options,container,rootframe,path,group,inlin
 					control:SetCallback("OnValueConfirmed",ActivateControl)
 
 				elseif v.type == "keybinding" then
-					control = gui:Create("Keybinding")
+					control = CreateControl(v.dialogControl or v.control, "Keybinding")
 					control:SetLabel(name)
 					control:SetKey(GetOptionsMemberValue("get",v, options, path, appName))
 					control:SetCallback("OnKeyChanged",ActivateControl)
 
 				elseif v.type == "header" then
-					control = gui:Create("Heading")
+					control = CreateControl(v.dialogControl or v.control, "Heading")
 					control:SetText(name)
 					control.width = "fill"
 
 				elseif v.type == "description" then
-					control = gui:Create("Label")
+					control = CreateControl(v.dialogControl or v.control, "Label")
 					control:SetText(name)
 
 					local fontSize = GetOptionsMemberValue("fontSize",v, options, path, appName)
@@ -1464,6 +1531,7 @@ local function TreeOnButtonEnter(widget, event, uniquevalue, button)
 	local option = user.option
 	local path = user.path
 	local appName = user.appName
+	local tooltip = AceConfigDialog.tooltip
 
 	local feedpath = new()
 	for i = 1, #path do
@@ -1480,24 +1548,25 @@ local function TreeOnButtonEnter(widget, event, uniquevalue, button)
 	local name = GetOptionsMemberValue("name", group, options, feedpath, appName)
 	local desc = GetOptionsMemberValue("desc", group, options, feedpath, appName)
 
-	GameTooltip:SetOwner(button, "ANCHOR_NONE")
+	tooltip:SetOwner(button, "ANCHOR_NONE")
+	tooltip:ClearAllPoints()
 	if widget.type == "TabGroup" then
-		GameTooltip:SetPoint("BOTTOM",button,"TOP")
+		tooltip:SetPoint("BOTTOM",button,"TOP")
 	else
-		GameTooltip:SetPoint("LEFT",button,"RIGHT")
+		tooltip:SetPoint("LEFT",button,"RIGHT")
 	end
 
-	GameTooltip:SetText(name, 1, .82, 0, true)
+	tooltip:SetText(name, 1, .82, 0, true)
 
 	if type(desc) == "string" then
-		GameTooltip:AddLine(desc, 1, 1, 1, true)
+		tooltip:AddLine(desc, 1, 1, 1, true)
 	end
 
-	GameTooltip:Show()
+	tooltip:Show()
 end
 
 local function TreeOnButtonLeave(widget, event, value, button)
-	GameTooltip:Hide()
+	AceConfigDialog.tooltip:Hide()
 end
 
 
@@ -1544,10 +1613,6 @@ local function GroupSelected(widget, event, uniquevalue)
 	end
 
 	BuildPath(feedpath, ("\001"):split(uniquevalue))
-	local group = options
-	for i = 1, #feedpath do
-		group = GetSubOption(group, feedpath[i])
-	end
 	widget:ReleaseChildren()
 	AceConfigDialog:FeedGroup(user.appName,options,widget,rootframe,feedpath)
 
