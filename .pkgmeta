@@ -1,3 +1,12 @@
 package-as: CraftPresence
 ignore:
-  - Images            # ignore the images folder
+  - *.png
+  - Libraries/Ace3/Ace3.lua
+  - Libraries/Ace3/Ace3.toc
+  - Libraries/Ace3/tests
+  - Libraries/Ace3/AceBucket-3.0
+  - Libraries/Ace3/AceComm-3.0
+  - Libraries/Ace3/AceHook-3.0
+  - Libraries/Ace3/AceSerializer-3.0
+  - Libraries/Ace3/AceTab-3.0
+  - Libraries/Ace3/AceTimer-3.0
