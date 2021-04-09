@@ -593,7 +593,8 @@ do
 		AceConfigDialog.popup = frame
 		frame:Hide()
 		frame:SetPoint("CENTER", UIParent, "CENTER")
-		frame:SetSize(320, 72)
+		frame:SetWidth(320)
+		frame:SetHeight(72)
 		frame:EnableMouse(true) -- Do not allow click-through on the frame
 		frame:SetFrameStrata("TOOLTIP")
 		frame:SetFrameLevel(100) -- Lots of room to draw under it
@@ -627,13 +628,15 @@ do
 		end
 
 		local text = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-		text:SetSize(290, 0)
+		text:SetWidth(290)
+		text:SetHeight(0)
 		text:SetPoint("TOP", 0, -16)
 		frame.text = text
 
 		local function newButton(text)
 			local button = CreateFrame("Button", nil, frame)
-			button:SetSize(128, 21)
+			button:SetWidth(128)
+			button:SetHeight(21)
 			button:SetNormalFontObject(GameFontNormal)
 			button:SetHighlightFontObject(GameFontHighlight)
 			button:SetNormalTexture("Interface\\Buttons\\UI-DialogBox-Button-Up")
