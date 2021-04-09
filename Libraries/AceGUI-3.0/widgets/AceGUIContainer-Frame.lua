@@ -6,8 +6,15 @@ local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
-local pairs, assert, type = pairs, assert, type
-local wipe = table.wipe
+local pairs, assert, type, wipe, tsetn = pairs, assert, type, table.wipe, table.setn
+
+wipe = (wipe or function(table)
+	for k, _ in pairs(table) do
+		table[k] = nil
+	end
+	tsetn(table, 0)
+	return table
+end)
 
 local wowThirdLegion
 do
@@ -100,11 +107,7 @@ local methods = {
 
 	["OnRelease"] = function(self)
 		self.status = nil
-		if wipe then
-			wipe(self.localstatus)
-		else
-			self.localstatus = {}
-		end
+		wipe(self.localstatus)
 	end,
 
 	["OnWidthSet"] = function(self, width)

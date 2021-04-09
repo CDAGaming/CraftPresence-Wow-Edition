@@ -31,11 +31,19 @@ local AceGUI, oldminor = LibStub:NewLibrary(ACEGUI_MAJOR, ACEGUI_MINOR)
 if not AceGUI then return end -- No upgrade needed
 
 -- Lua APIs
-local tinsert, wipe = table.insert, table.wipe
+local tinsert, wipe, tsetn = table.insert, table.wipe, table.setn
 local select, pairs, next, type = select, pairs, next, type
 local error, assert = error, assert
 local setmetatable, rawget = setmetatable, rawget
 local math_max = math.max
+
+wipe = (wipe or function(table)
+	for k, _ in pairs(table) do
+		table[k] = nil
+	end
+	tsetn(table, 0)
+	return table
+end)
 
 -- WoW APIs
 local UIParent = UIParent

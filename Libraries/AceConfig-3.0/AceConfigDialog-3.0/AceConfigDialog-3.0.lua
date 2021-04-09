@@ -29,12 +29,20 @@ do
 end
 
 -- Lua APIs
-local tinsert, tsort, tremove, wipe = table.insert, table.sort, table.remove, table.wipe
+local tinsert, tsort, tremove, wipe, tsetn = table.insert, table.sort, table.remove, table.wipe, table.setn
 local strmatch, format = string.match, string.format
 local error = error
 local pairs, next, select, type, unpack, ipairs = pairs, next, select, type, unpack, ipairs
 local tostring, tonumber = tostring, tonumber
 local math_min, math_max, math_floor = math.min, math.max, math.floor
+
+wipe = (wipe or function(table)
+	for k, _ in pairs(table) do
+		table[k] = nil
+	end
+	tsetn(table, 0)
+	return table
+end)
 
 -- Global vars/functions that we don't upvalue since they might get hooked, or upgraded
 -- List them here for Mikk's FindGlobals script
@@ -133,11 +141,7 @@ do
 	end
 	function del(t)
 		--delcount = delcount + 1
-		if wipe then
-			wipe(t)
-		else
-			t = {}
-		end
+		wipe(t)
 		pool[t] = true
 	end
 --	function cached()
@@ -1820,11 +1824,7 @@ local function RefreshOnUpdate(this)
 			end
 		end
 		this.closeAll = nil
-		if wipe then
-			wipe(this.closeAllOverride)
-		else
-			this.closeAllOverride = {}
-		end
+		wipe(this.closeAllOverride)
 	end
 
 	for appName in pairs(this.apps) do
