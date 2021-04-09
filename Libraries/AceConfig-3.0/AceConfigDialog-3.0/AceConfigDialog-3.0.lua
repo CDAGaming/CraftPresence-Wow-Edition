@@ -607,11 +607,11 @@ do
 			button:SetSize(128, 21)
 			button:SetNormalFontObject(GameFontNormal)
 			button:SetHighlightFontObject(GameFontHighlight)
-			button:SetNormalTexture(130763) -- "Interface\\Buttons\\UI-DialogBox-Button-Up"
+			button:SetNormalTexture("Interface\\Buttons\\UI-DialogBox-Button-Up")
 			button:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-			button:SetPushedTexture(130761) -- "Interface\\Buttons\\UI-DialogBox-Button-Down"
+			button:SetPushedTexture("Interface\\Buttons\\UI-DialogBox-Button-Down")
 			button:GetPushedTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
-			button:SetHighlightTexture(130762) -- "Interface\\Buttons\\UI-DialogBox-Button-Highlight"
+			button:SetHighlightTexture("Interface\\Buttons\\UI-DialogBox-Button-Highlight")
 			button:GetHighlightTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
 			button:SetText(text)
 			return button
