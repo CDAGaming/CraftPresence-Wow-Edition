@@ -8,10 +8,10 @@
 -- :IterateOptionsTables() (and :GetOptionsTable() if only given one argument) return a function reference that the requesting config handling addon must call with valid "uiType", "uiName".
 -- @class file
 -- @name AceConfigRegistry-3.0
--- @release $Id: AceConfigRegistry-3.0.lua 1169 2018-02-27 16:18:28Z nevcairiel $
+-- @release $Id: AceConfigRegistry-3.0.lua 1207 2019-06-23 12:08:33Z nevcairiel $
 local CallbackHandler = LibStub("CallbackHandler-1.0")
 
-local MAJOR, MINOR = "AceConfigRegistry-3.0", 18
+local MAJOR, MINOR = "AceConfigRegistry-3.0", 20
 local AceConfigRegistry = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigRegistry then return end
@@ -59,7 +59,6 @@ local optstring={["nil"]=true,["string"]=true, _="string"}
 local optstringfunc={["nil"]=true,["string"]=true,["function"]=true, _="string or funcref"}
 local optstringnumberfunc={["nil"]=true,["string"]=true,["number"]=true,["function"]=true, _="string, number or funcref"}
 local optnumber={["nil"]=true,["number"]=true, _="number"}
-local optmethod={["nil"]=true,["string"]=true,["function"]=true, _="methodname or funcref"}
 local optmethodfalse={["nil"]=true,["string"]=true,["function"]=true,["boolean"]={[false]=true},  _="methodname, funcref or false"}
 local optmethodnumber={["nil"]=true,["string"]=true,["function"]=true,["number"]=true,  _="methodname, funcref or number"}
 local optmethodtable={["nil"]=true,["string"]=true,["function"]=true,["table"]=true,  _="methodname, funcref or table"}
@@ -95,13 +94,20 @@ local basekeys={
 }
 
 local typedkeys={
-	header={},
+	header={
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
+	},
 	description={
 		image=optstringnumberfunc,
 		imageCoords=optmethodtable,
 		imageHeight=optnumber,
 		imageWidth=optnumber,
 		fontSize=optstringfunc,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	group={
 		args=istable,
@@ -118,6 +124,9 @@ local typedkeys={
 		imageCoords=optmethodtable,
 		imageHeight=optnumber,
 		imageWidth=optnumber,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	input={
 		pattern=optstring,
@@ -131,6 +140,9 @@ local typedkeys={
 		tristate=optbool,
 		image=optstringnumberfunc,
 		imageCoords=optmethodtable,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	tristate={
 	},
@@ -142,9 +154,13 @@ local typedkeys={
 		step=optnumber,
 		bigStep=optnumber,
 		isPercent=optbool,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	select={
 		values=ismethodtable,
+		sorting=optmethodtable,
 		style={
 			["nil"]=true,
 			["string"]={dropdown=true,radio=true},
@@ -165,9 +181,14 @@ local typedkeys={
 	},
 	color={
 		hasAlpha=optmethodbool,
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 	keybinding={
-		-- TODO
+		control=optstring,
+		dialogControl=optstring,
+		dropdownControl=optstring,
 	},
 }
 

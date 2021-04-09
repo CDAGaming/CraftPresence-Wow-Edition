@@ -28,9 +28,9 @@
 -- end
 -- @class file
 -- @name AceAddon-3.0.lua
--- @release $Id: AceAddon-3.0.lua 1084 2013-04-27 20:14:11Z nevcairiel $
+-- @release $Id: AceAddon-3.0.lua 1238 2020-08-28 16:18:42Z nevcairiel $
 
-local MAJOR, MINOR = "AceAddon-3.0", 12
+local MAJOR, MINOR = "AceAddon-3.0", 13
 local AceAddon, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceAddon then return end -- No Upgrade needed.
@@ -67,17 +67,17 @@ local function CreateDispatcher(argCount)
 		local xpcall, eh = ...
 		local method, ARGS
 		local function call() return method(ARGS) end
-	
+
 		local function dispatch(func, ...)
 			 method = func
 			 if not method then return end
 			 ARGS = ...
 			 return xpcall(call, eh)
 		end
-	
+
 		return dispatch
 	]]
-	
+
 	local ARGS = {}
 	for i = 1, argCount do ARGS[i] = "arg"..i end
 	code = code:gsub("ARGS", tconcat(ARGS, ", "))

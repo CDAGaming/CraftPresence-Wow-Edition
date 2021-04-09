@@ -2,12 +2,24 @@
 TabGroup Container
 Container that uses tabs on top to switch between groups.
 -------------------------------------------------------------------------------]]
-local Type, Version = "TabGroup", 36
+local Type, Version = "TabGroup", 37
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
-local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, wipe
+local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, table.wipe
+
+local tsetn = function(t,n)
+	setmetatable(t,{__len=function() return n end})
+end
+
+wipe = (wipe or function(table)
+	for k, _ in pairs(table) do
+		table[k] = nil
+	end
+	tsetn(table, 0)
+	return table
+end)
 
 local wowCata, wowWotlk, wowThirdLegion, wowClassicRebased, wowTBCRebased
 do
@@ -182,7 +194,6 @@ local methods = {
 
 	["BuildTabs"] = function(self)
 		local hastitle = (self.titletext:GetText() and self.titletext:GetText() ~= "")
-		local status = self.status or self.localstatus
 		local tablist = self.tablist
 		local tabs = self.tabs
 
@@ -190,15 +201,9 @@ local methods = {
 
 		local width = self.frame.width or self.frame:GetWidth() or 0
 
-		if wipe then
-			wipe(widths)
-			wipe(rowwidths)
-			wipe(rowends)
-		else
-			widths = {}
-			rowwidths = {}
-			rowends = {}
-		end
+		wipe(widths)
+		wipe(rowwidths)
+		wipe(rowends)
 
 		--Place Text into tabs and get thier initial width
 		for i, v in ipairs(tablist) do

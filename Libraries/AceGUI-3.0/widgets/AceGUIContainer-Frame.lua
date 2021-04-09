@@ -1,13 +1,24 @@
 --[[-----------------------------------------------------------------------------
 Frame Container
 -------------------------------------------------------------------------------]]
-local Type, Version = "Frame", 26
+local Type, Version = "Frame", 28
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
-local pairs, assert, type = pairs, assert, type
-local wipe = table.wipe
+local pairs, assert, type, wipe = pairs, assert, type, table.wipe
+
+local tsetn = function(t,n)
+	setmetatable(t,{__len=function() return n end})
+end
+
+wipe = (wipe or function(table)
+	for k, _ in pairs(table) do
+		table[k] = nil
+	end
+	tsetn(table, 0)
+	return table
+end)
 
 local wowThirdLegion
 do
@@ -90,6 +101,7 @@ local methods = {
 	["OnAcquire"] = function(self)
 		self.frame:SetParent(UIParent)
 		self.frame:SetFrameStrata("FULLSCREEN_DIALOG")
+		self.frame:SetFrameLevel(100) -- Lots of room to draw under it
 		self:SetTitle()
 		self:SetStatusText()
 		self:ApplyStatus()
@@ -99,11 +111,7 @@ local methods = {
 
 	["OnRelease"] = function(self)
 		self.status = nil
-		if wipe then
-			wipe(self.localstatus)
-		else
-			self.localstatus = {}
-		end
+		wipe(self.localstatus)
 	end,
 
 	["OnWidthSet"] = function(self, width)
@@ -197,6 +205,7 @@ local function Constructor()
 	frame:SetMovable(true)
 	frame:SetResizable(true)
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")
+	frame:SetFrameLevel(100) -- Lots of room to draw under it
 	frame:SetBackdrop(FrameBackdrop)
 	frame:SetBackdropColor(0, 0, 0, 1)
 	frame:SetMinResize(400, 200)
