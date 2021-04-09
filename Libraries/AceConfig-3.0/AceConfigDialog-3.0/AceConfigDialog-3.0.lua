@@ -637,8 +637,14 @@ do
 			local button = CreateFrame("Button", nil, frame)
 			button:SetWidth(128)
 			button:SetHeight(21)
-			button:SetNormalFontObject(GameFontNormal)
-			button:SetHighlightFontObject(GameFontHighlight)
+			if button.SetNormalFontObject then
+				button:SetNormalFontObject("GameFontNormal")
+			elseif button.SetTextFontObject then
+				button:SetTextFontObject("GameFontNormal")
+			else
+				button:SetFontObject("GameFontNormal")
+			end
+			button:SetHighlightFontObject("GameFontHighlight")
 			button:SetNormalTexture("Interface\\Buttons\\UI-DialogBox-Button-Up")
 			button:GetNormalTexture():SetTexCoord(0.0, 1.0, 0.0, 0.71875)
 			button:SetPushedTexture("Interface\\Buttons\\UI-DialogBox-Button-Down")
