@@ -14,7 +14,7 @@ from logging.handlers import TimedRotatingFileHandler
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.2.1"
+process_version = "v1.2.2"
 unknown_key = "Skip"
 array_split_key = "=="
 decoded = ''

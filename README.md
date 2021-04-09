@@ -26,7 +26,7 @@ CraftPresence will detect and adjust its abilities towards the following version
 
 | Version                  | Status | Download | Notes           |
 |--------------------------|--------|----------|-----------------|
-| Retail (9.0.5)           | OK     | Any      | N/A             |
+| Shadowlands (9.x)        | OK     | Any      | N/A             |
 | BFA (8.x)                | OK     | Any      | N/A             |
 | Legion (7.x)             | OK     | Any      | v0.5.4 or above |
 | WOD (6.x)                | OK     | Any      | v0.5.4 or above |
