@@ -29,12 +29,16 @@ do
 end
 
 -- Lua APIs
-local tconcat, tinsert, tsort, tremove, wipe, tsetn = table.concat, table.insert, table.sort, table.remove, table.wipe, table.setn
+local tconcat, tinsert, tsort, tremove, wipe = table.concat, table.insert, table.sort, table.remove, table.wipe
 local strmatch, format = string.match, string.format
 local error = error
 local pairs, next, select, type, unpack, ipairs = pairs, next, select, type, unpack, ipairs
 local tostring, tonumber = tostring, tonumber
 local math_min, math_max, math_floor = math.min, math.max, math.floor
+
+local tsetn = function(t,n)
+	setmetatable(t,{__len=function() return n end})
+end
 
 wipe = (wipe or function(table)
 	for k, _ in pairs(table) do

@@ -7,7 +7,11 @@ local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
 
 -- Lua APIs
-local pairs, ipairs, assert, type, wipe, tsetn = pairs, ipairs, assert, type, table.wipe, table.setn
+local pairs, ipairs, assert, type, wipe = pairs, ipairs, assert, type, table.wipe
+
+local tsetn = function(t,n)
+	setmetatable(t,{__len=function() return n end})
+end
 
 wipe = (wipe or function(table)
 	for k, _ in pairs(table) do

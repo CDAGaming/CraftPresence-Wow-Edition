@@ -31,11 +31,15 @@ local AceGUI, oldminor = LibStub:NewLibrary(ACEGUI_MAJOR, ACEGUI_MINOR)
 if not AceGUI then return end -- No upgrade needed
 
 -- Lua APIs
-local tconcat, tinsert, wipe, tsetn = table.concat, table.insert, table.wipe, table.setn
+local tconcat, tinsert, wipe = table.concat, table.insert, table.wipe
 local select, pairs, next, type = select, pairs, next, type
 local error, assert = error, assert
 local setmetatable, rawget = setmetatable, rawget
 local math_max = math.max
+
+local tsetn = function(t,n)
+	setmetatable(t,{__len=function() return n end})
+end
 
 wipe = (wipe or function(table)
 	for k, _ in pairs(table) do
