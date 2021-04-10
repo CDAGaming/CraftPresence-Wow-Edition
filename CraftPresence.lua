@@ -415,12 +415,8 @@ end
 
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Print initial data and register events
-    -- depending on platform and config data
-    self:Print(string.format(L["ADDON_INTRO"], self:GetVersion()))
-    if self:GetFromDb("verboseMode") then
-        self:Print(string.format(L["ADDON_BUILD_INFO"], self:SerializeTable(buildData)))
-    end
+    -- Print any Initial Data
+    self:PrintInitialData()
     -- Register Universal Events
     local eventName
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
@@ -680,6 +676,8 @@ function CraftPresence:ChatCommand(input)
             end
         elseif input == "minimap" then
             CraftPresence:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
+        elseif input == "about" then
+            self:PrintInitialData()
         elseif input == "status" then
             if self:GetFromDb("verboseMode") then
                 self:Print(self:GetLastEncoded())

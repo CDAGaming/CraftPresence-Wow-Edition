@@ -324,6 +324,14 @@ end
 --API GETTERS AND SETTERS
 ----------------------------------
 
+--- Print initial data and register events, depending on platform and config data
+function CraftPresence:PrintInitialData()
+    self:Print(string.format(L["ADDON_INTRO"], self:GetVersion()))
+    if self:GetFromDb("verboseMode") then
+        self:Print(string.format(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
+    end
+end
+
 --- Retrieves the Player Status for the specified unit
 ---
 --- @param unit string The unit name (Default: player)
