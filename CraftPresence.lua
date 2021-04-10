@@ -37,7 +37,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID
-    if buildData["toc_version"] >= compatData["2.5.x"] or isRebasedApi then
+    if buildData["toc_version"] >= compatData["2.5.0"] or isRebasedApi then
         name, instanceType, difficultyID, difficultyName, maxPlayers,
         dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     else
@@ -46,7 +46,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     end
     local difficultyInfo = difficultyName
     local lockoutData = {}
-    if buildData["toc_version"] >= compatData["6.0.x"] then
+    if buildData["toc_version"] >= compatData["6.0.0"] then
         lockoutData = self:GetCurrentLockoutData(true)
     end
     -- Player Data
@@ -56,7 +56,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
     local playerRegionId = 1
-    if buildData["toc_version"] >= compatData["6.0.x"] or isRebasedApi then
+    if buildData["toc_version"] >= compatData["6.0.0"] or isRebasedApi then
         playerRegionId = GetCurrentRegion()
     end
     local playerRegion = realmData[playerRegionId]
@@ -72,7 +72,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     local playerCovenantId = 0
     local playerCovenantData
     local playerCovenantRenown = 0
-    if buildData["toc_version"] >= compatData["9.0.x"] then
+    if buildData["toc_version"] >= compatData["9.0.0"] then
         playerCovenantId = C_Covenants.GetActiveCovenantID()
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
         playerCovenantRenown = C_CovenantSanctumUI.GetRenownLevel()
@@ -149,7 +149,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     }
     -- Version Dependent Data
     local user_info_preset = playerPrefix .. playerName .. " - " .. (string.format(L["LEVEL_TAG_FORMAT"], playerLevel))
-    if buildData["toc_version"] >= compatData["5.0.x"] or isRebasedApi then
+    if buildData["toc_version"] >= compatData["5.0.0"] or isRebasedApi then
         -- Extra Character Data
         local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
@@ -157,7 +157,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         local specName = ""
         local roleName = ""
         local specInfo
-        if buildData["toc_version"] >= compatData["5.0.x"] then
+        if buildData["toc_version"] >= compatData["5.0.0"] then
             avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
             specInfo = GetSpecialization()
         end
@@ -387,7 +387,7 @@ function CraftPresence:OnInitialize()
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
-        if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
+        if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
             self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
             self.optionsFrame.default = self.ResetDB
         end
@@ -423,7 +423,7 @@ function CraftPresence:OnEnable()
     end
     -- Register Universal Events
     local eventName
-    if buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi then
+    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
         eventName = "DispatchModernUpdate"
     else
         eventName = "DispatchLegacyUpdate"
@@ -435,19 +435,19 @@ function CraftPresence:OnEnable()
               "UPDATE_INSTANCE_INFO" }
     )
     -- Register Version-Specific Events
-    if buildData["toc_version"] >= compatData["5.0.x"] then
+    if buildData["toc_version"] >= compatData["5.0.0"] then
         CraftPresence:AddTriggers(eventName,
                 { "PLAYER_SPECIALIZATION_CHANGED" }
         )
     end
-    if buildData["toc_version"] >= compatData["6.0.x"] then
+    if buildData["toc_version"] >= compatData["6.0.0"] then
         CraftPresence:AddTriggers(eventName,
                 { "ACTIVE_TALENT_GROUP_CHANGED",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                   "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }
         )
     end
-    if buildData["toc_version"] >= compatData["8.0.x"] then
+    if buildData["toc_version"] >= compatData["8.0.0"] then
         CraftPresence:AddTriggers(eventName,
                 { "PLAYER_LEVEL_CHANGED" }
         )
@@ -605,7 +605,7 @@ end
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
-    if (buildData["toc_version"] >= compatData["2.0.x"] or isRebasedApi) and InterfaceOptionsFrame_OpenToCategory then
+    if (buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi) and InterfaceOptionsFrame_OpenToCategory then
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     else
@@ -704,6 +704,8 @@ function CraftPresence:ChatCommand(input)
                     -- Uncomment for single-use integration
                     -- integrationData["viragdevtool"] = true
                     -- integrationData["vdt"] = true
+                elseif (query == "reload" or query == "rl" or query == "reloadui") and ReloadUI then
+                    ReloadUI()
                 else
                     self:Print(L["INTEGRATION_NOT_FOUND"])
                 end

@@ -286,37 +286,37 @@ function CraftPresence:GetCompatibilityInfo()
         compatibility_info = {
             ["retail"] = 90005, -- Latest Retail
             ["classic"] = 11306, -- Latest Classic
-            ["9.0.x"] = 90000, -- SL 9.0.x
-            ["8.0.x"] = 80000, -- BFA 8.0.X
-            ["7.0.x"] = 70000, -- LEG 7.0.X
-            ["6.0.x"] = 60000, -- WOD 6.0.X
-            ["5.0.x"] = 50000, -- MOP 5.0.X
-            ["4.0.x"] = 40000, -- CATA 4.0.X
-            ["3.0.x"] = 30000, -- WOTLK 3.0.X
-            ["2.5.x"] = 20500, -- TBC Classic
-            ["2.0.x"] = 20000, -- TBC 2.0.x
-            ["1.13.x"] = 11300, -- Vanilla Classic
+            ["9.0.0"] = 90000, -- Shadowlands 9.0.0
+            ["8.0.0"] = 80000, -- BFA 8.0.0
+            ["7.0.0"] = 70000, -- Legion 7.0.0
+            ["6.0.0"] = 60000, -- WOD 6.0.0
+            ["5.0.0"] = 50000, -- MOP 5.0.0
+            ["4.0.0"] = 40000, -- CATA 4.0.0
+            ["3.0.0"] = 30000, -- WOTLK 3.0.0
+            ["2.5.0"] = 20500, -- TBC Classic
+            ["2.0.0"] = 20000, -- TBC 2.0.x
+            ["1.13.0"] = 11300, -- Vanilla Classic 1.13.0
             ["1.12.1"] = 5875 -- Vanilla 1.12.1
         }
     end
     return compatibility_info
 end
 
---- Compatibility Helper: Determine if Build is 1.x on a Rebased API
+--- Compatibility Helper: Determine if Build is Vanilla Classic
 --- @return boolean @ is_classic_rebased
 function CraftPresence:IsClassicRebased()
     return (
-            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["1.13.x"] and
-                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["2.0.x"]
+            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["1.13.0"] and
+                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["2.0.0"]
     )
 end
 
---- Compatibility Helper: Determine if Build is 2.x on a Rebased API
+--- Compatibility Helper: Determine if Build is TBC Classic
 --- @return boolean @ is_tbc_rebased
 function CraftPresence:IsTBCRebased()
     return (
-            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.5.x"] and
-                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["3.0.x"]
+            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.5.0"] and
+                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["3.0.0"]
     )
 end
 
@@ -337,7 +337,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
     local playerPrefix = ""
     local isAfk, isOnDnd, isDead, isGhost
     -- Ensure Version Compatibility
-    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.x"] or isRebasedApi then
+    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or isRebasedApi then
         isAfk = UnitIsAFK(unit)
         isOnDnd = UnitIsDND(unit)
     end
