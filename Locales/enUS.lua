@@ -168,7 +168,7 @@ L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
-L["ADDON_INTRO"] = "CraftPresence %s Loaded. Use /cp or /craftpresence to access config."
+L["ADDON_INTRO"] = SetFormat("CraftPresence ^%s|r Loaded.\n Use */cp|r or */craftpresence|r to access commands.", GREEN, GREY)
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
