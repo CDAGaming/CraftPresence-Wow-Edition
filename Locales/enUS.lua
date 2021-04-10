@@ -183,6 +183,7 @@ L["PLACEHOLDERS_NOTE_TWO"] = SetFormat("while ones enclosed by *@|r are inner (C
 -- Command: /cp integration
 L["INTEGRATION_QUERY"] = SetFormat("Enabling integrations for *%s|r...", GREY)
 L["INTEGRATION_NOT_FOUND"] = SetFormat("*No integrations to enable within specified parameters|r", RED)
+L["INTEGRATION_ALREADY_USED"] = SetFormat("*Specified integration has already been used|r", RED)
 
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."

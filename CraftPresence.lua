@@ -693,22 +693,33 @@ function CraftPresence:ChatCommand(input)
         elseif self:StartsWith(input, "integration") then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, ":(.*)", false)
-            if query ~= nil and not integrationData[query] then
-                self:Print(string.format(L["INTEGRATION_QUERY"], query))
-                query = string.lower(query)
+            if query ~= nil then
+                if not integrationData[query] then
+                    self:Print(string.format(L["INTEGRATION_QUERY"], query))
+                    query = string.lower(query)
 
-                -- Integration Parsing
-                if (query == "viragdevtool" or query == "vdt") and ViragDevTool_AddData then
-                    ViragDevTool_AddData(CraftPresence, L["ADDON_NAME"])
-                    ViragDevTool_AddData(L, L["ADDON_NAME"] .. "_Locale")
-                    -- Uncomment for single-use integration
-                    -- integrationData["viragdevtool"] = true
-                    -- integrationData["vdt"] = true
-                elseif (query == "reload" or query == "rl" or query == "reloadui") and ReloadUI then
-                    ReloadUI()
+                    -- Integration Parsing
+                    if (query == "viragdevtool" or query == "vdt") and ViragDevTool_AddData then
+                        ViragDevTool_AddData(CraftPresence, L["ADDON_NAME"])
+                        ViragDevTool_AddData(L, L["ADDON_NAME"] .. "_Locale")
+                        -- Uncomment for single-use integration
+                        -- integrationData["viragdevtool"] = true
+                        -- integrationData["vdt"] = true
+                    elseif (query == "reload" or query == "rl" or query == "reloadui") and ReloadUI then
+                        ReloadUI()
+                    else
+                        self:Print(L["INTEGRATION_NOT_FOUND"])
+                    end
                 else
-                    self:Print(L["INTEGRATION_NOT_FOUND"])
+                    self:Print(L["INTEGRATION_ALREADY_USED"])
                 end
+            else
+                self:Print(
+                        string.format(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+                                L["USAGE_CMD_INTEGRATION"] .. "\n" ..
+                                string.format(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                                L["USAGE_CMD_NOTE_TWO"] .. "\n"
+                )
             end
         elseif self:StartsWith(input, "placeholders") then
             local placeholderStr = L["PLACEHOLDERS_INTRO"]
