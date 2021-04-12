@@ -538,7 +538,7 @@ function CraftPresence:DispatchUpdate(args)
         local ignore_event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (
                     (args[2] ~= nil and args[2] ~= "player") or
-                    self:GetLastPlayerStatus() == self:GetPlayerStatus("player", false, isRebasedApi)
+                            self:GetLastPlayerStatus() == self:GetPlayerStatus("player", false, isRebasedApi)
             ),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
                     lastEventName == eventName or

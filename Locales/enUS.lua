@@ -212,8 +212,8 @@ L["USAGE_CMD_STATUS"] = SetFormat(" */cp|r ^status|r  -  Views the last sent RPC
 L["USAGE_CMD_RESET"] = SetFormat(" */cp|r ^reset[:grp,key]|r  -  Reset options in the *ConfigUI|r.", GREEN, GREY)
 L["USAGE_CMD_SET"] = SetFormat(" */cp|r ^set[:grp,key]|r  -  Set options in the *ConfigUI|r.", GREEN, GREY)
 L["USAGE_CMD_INTEGRATION"] = SetFormat(" */cp|r ^integration[:query]|r  -  Enable integrations.", GREEN, GREY)
-L["USAGE_CMD_CREATE"] = SetFormat("*/cp|r ^create [::value_type::][query]|r  -  Create custom data.", GREEN, GREY)
-L["USAGE_CMD_REMOVE"] = SetFormat("*/cp|r ^remove [query]|r  -  Remove custom placeholder data.", GREEN, GREY)
+L["USAGE_CMD_CREATE"] = SetFormat(" */cp|r ^create [::value_type::][query]|r  -  Create custom data.", GREEN, GREY)
+L["USAGE_CMD_REMOVE"] = SetFormat(" */cp|r ^remove [query]|r  -  Remove custom placeholder data.", GREEN, GREY)
 L["USAGE_CMD_PLACEHOLDERS"] = SetFormat(" */cp|r ^placeholders[:query]|r  -  View RPC placeholders.", GREEN, GREY)
 
 L["USAGE_CMD_NOTE"] = SetFormat("NOTE: All commands must be prefixed with either */%s|r or */%s|r.", GREEN, GREY)
