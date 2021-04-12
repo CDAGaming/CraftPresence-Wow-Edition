@@ -56,6 +56,22 @@ end)
 --LUA UTILITIES
 ----------------------------------
 
+local lastIndex = 0
+
+--- Retrieves the Next Available Button Id for use in the currently open Screen
+---
+--- @return number @ lastIndex
+function CraftPresence:GetNextIndex()
+    lastIndex = lastIndex + 1
+    return lastIndex;
+end
+
+--- Resets the Button Index to 0
+--- Normally used when closing a screen and no longer using the allocated Id's
+function CraftPresence:ResetIndex()
+    lastIndex = 0;
+end
+
 --- Determines if the specified object is null or empty
 ---
 --- @param obj any The object to interpret
@@ -453,7 +469,7 @@ end
 function CraftPresence:GetButtonArgs(grp, key)
     return {
         label = {
-            type = "input", order = 1, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_BUTTON_LABEL"], desc = L["COMMENT_BUTTON_LABEL"], usage = L["USAGE_BUTTON_LABEL"],
             get = function(_)
                 return CraftPresence:GetFromDb(grp, key or "label")
@@ -468,7 +484,7 @@ function CraftPresence:GetButtonArgs(grp, key)
             end,
         },
         url = {
-            type = "input", order = 2, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_BUTTON_URL"], desc = L["COMMENT_BUTTON_URL"], usage = L["USAGE_BUTTON_URL"],
             get = function(_)
                 return CraftPresence:GetFromDb(grp, key or "url")

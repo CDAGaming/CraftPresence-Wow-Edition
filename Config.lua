@@ -50,7 +50,7 @@ local DB_DEFAULTS = {
 --TAB:  GENERAL
 -----------------------------------------
 local generalOptionsGroup = {
-    type = "group", order = 10,
+    type = "group", order = CraftPresence:GetNextIndex(),
     name = L["CATEGORY_TITLE_GENERAL"], desc = L["CATEGORY_COMMENT_GENERAL"],
     get = function(info)
         return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
@@ -60,7 +60,7 @@ local generalOptionsGroup = {
     end,
     args = {
         clientId = {
-            type = "input", order = 10, width = 1.25,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 1.25,
             name = L["TITLE_CLIENT_ID"],
             desc = L["COMMENT_CLIENT_ID"],
             usage = L["USAGE_CLIENT_ID"],
@@ -82,9 +82,9 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank1 = { type = "description", order = 11, fontSize = "small", name = " " },
+        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         gameStateMessage = {
-            type = "input", order = 12, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_GAME_STATE_MESSAGE"],
             desc = L["COMMENT_GAME_STATE_MESSAGE"],
             usage = L["USAGE_GAME_STATE_MESSAGE"],
@@ -100,9 +100,9 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank2 = { type = "description", order = 13, fontSize = "small", name = " " },
+        blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         detailsMessage = {
-            type = "input", order = 14, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_DETAILS_MESSAGE"],
             desc = L["COMMENT_DETAILS_MESSAGE"],
             usage = L["USAGE_DETAILS_MESSAGE"],
@@ -118,9 +118,9 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        blank3 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         largeImageKey = {
-            type = "input", order = 16, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_LARGE_IMAGE_KEY"],
             desc = L["COMMENT_LARGE_IMAGE_KEY"],
             usage = L["USAGE_LARGE_IMAGE_KEY"],
@@ -136,9 +136,9 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
+        blank4 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         largeImageMessage = {
-            type = "input", order = 18, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_LARGE_IMAGE_MESSAGE"],
             desc = L["COMMENT_LARGE_IMAGE_MESSAGE"],
             usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
@@ -154,9 +154,9 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
+        blank5 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         smallImageKey = {
-            type = "input", order = 20, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_SMALL_IMAGE_KEY"],
             desc = L["COMMENT_SMALL_IMAGE_KEY"],
             usage = L["USAGE_SMALL_IMAGE_KEY"],
@@ -172,9 +172,9 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank6 = { type = "description", order = 21, fontSize = "small", name = " " },
+        blank6 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         smallImageMessage = {
-            type = "input", order = 22, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_SMALL_IMAGE_MESSAGE"],
             desc = L["COMMENT_SMALL_IMAGE_MESSAGE"],
             usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
@@ -190,7 +190,7 @@ local generalOptionsGroup = {
                 end
             end,
         },
-        blank7 = { type = "description", order = 23, fontSize = "small", name = " " },
+        blank7 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
     }
 }
 
@@ -198,7 +198,7 @@ local generalOptionsGroup = {
 --TAB:  PLACEHOLDERS
 -----------------------------------------
 local placeholderOptionsGroup = {
-    type = "group", order = 15,
+    type = "group", order = CraftPresence:GetNextIndex(),
     name = L["CATEGORY_TITLE_PLACEHOLDERS"], desc = L["CATEGORY_COMMENT_PLACEHOLDERS"],
     get = function(info)
         return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
@@ -208,7 +208,7 @@ local placeholderOptionsGroup = {
     end,
     args = {
         dungeonPlaceholderMessage = {
-            type = "input", order = 10, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_DUNGEON_MESSAGE"],
             desc = L["COMMENT_DUNGEON_MESSAGE"],
             usage = L["USAGE_DUNGEON_MESSAGE"],
@@ -224,9 +224,9 @@ local placeholderOptionsGroup = {
                 end
             end,
         },
-        blank1 = { type = "description", order = 11, fontSize = "small", name = " " },
+        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         raidPlaceholderMessage = {
-            type = "input", order = 12, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_RAID_MESSAGE"], desc = L["COMMENT_RAID_MESSAGE"], usage = L["USAGE_RAID_MESSAGE"],
             get = function(_)
                 return CraftPresence:GetFromDb("raidPlaceholderMessage")
@@ -240,9 +240,9 @@ local placeholderOptionsGroup = {
                 end
             end,
         },
-        blank2 = { type = "description", order = 13, fontSize = "small", name = " " },
+        blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         battlegroundPlaceholderMessage = {
-            type = "input", order = 14, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_BATTLEGROUND_MESSAGE"],
             desc = L["COMMENT_BATTLEGROUND_MESSAGE"],
             usage = L["USAGE_BATTLEGROUND_MESSAGE"],
@@ -258,9 +258,9 @@ local placeholderOptionsGroup = {
                 end
             end,
         },
-        blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        blank3 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         arenaPlaceholderMessage = {
-            type = "input", order = 16, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_ARENA_MESSAGE"],
             desc = L["COMMENT_ARENA_MESSAGE"],
             usage = L["USAGE_ARENA_MESSAGE"],
@@ -276,9 +276,9 @@ local placeholderOptionsGroup = {
                 end
             end,
         },
-        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
+        blank4 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         defaultPlaceholderMessage = {
-            type = "input", order = 18, width = 3.0,
+            type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
             name = L["TITLE_FALLBACK_MESSAGE"],
             desc = L["COMMENT_FALLBACK_MESSAGE"],
             usage = L["USAGE_FALLBACK_MESSAGE"],
@@ -294,7 +294,7 @@ local placeholderOptionsGroup = {
                 end
             end,
         },
-        blank5 = { type = "description", order = 19, fontSize = "small", name = " " },
+        blank5 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
     }
 }
 
@@ -302,7 +302,7 @@ local placeholderOptionsGroup = {
 --TAB:  BUTTONS
 -----------------------------------------
 local buttonOptionsGroup = {
-    type = "group", order = 20,
+    type = "group", order = CraftPresence:GetNextIndex(),
     name = L["CATEGORY_TITLE_BUTTONS"], desc = L["CATEGORY_COMMENT_BUTTONS"],
     get = function(info)
         return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
@@ -311,20 +311,20 @@ local buttonOptionsGroup = {
         CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
     end,
     args = {
-        buttonHeader = { order = 1, type = "header", name = L["CATEGORY_TITLE_BUTTONS"], },
+        buttonHeader = { order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_BUTTONS"], },
         primaryButton = {
             name = L["TITLE_PRIMARY_BUTTON"],
             desc = L["COMMENT_PRIMARY_BUTTON"],
-            type = "group", order = 2,
+            type = "group", order = CraftPresence:GetNextIndex(),
             args = CraftPresence:GetButtonArgs("primaryButton")
         },
         secondaryButton = {
             name = L["TITLE_SECONDARY_BUTTON"],
             desc = L["COMMENT_SECONDARY_BUTTON"],
-            type = "group", order = 3,
+            type = "group", order = CraftPresence:GetNextIndex(),
             args = CraftPresence:GetButtonArgs("secondaryButton")
         },
-        blank1 = { type = "description", order = 4, fontSize = "small", name = " " },
+        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
     }
 }
 
@@ -332,7 +332,7 @@ local buttonOptionsGroup = {
 --TAB:  EXTRA
 -----------------------------------------
 local extraOptionsGroup = {
-    type = "group", order = 25,
+    type = "group", order = CraftPresence:GetNextIndex(),
     name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
     get = function(info)
         return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
@@ -342,7 +342,7 @@ local extraOptionsGroup = {
     end,
     args = {
         debugMode = {
-            type = "toggle", order = 10,
+            type = "toggle", order = CraftPresence:GetNextIndex(),
             name = L["TITLE_DEBUG_MODE"],
             desc = L["COMMENT_DEBUG_MODE"],
             get = function(_)
@@ -357,9 +357,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank1 = { type = "description", order = 11, fontSize = "small", name = " " },
+        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         verboseMode = {
-            type = "toggle", order = 12,
+            type = "toggle", order = CraftPresence:GetNextIndex(),
             name = L["TITLE_VERBOSE_MODE"],
             desc = L["COMMENT_VERBOSE_MODE"],
             get = function(_)
@@ -374,9 +374,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank2 = { type = "description", order = 13, fontSize = "small", name = " " },
+        blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         showMinimapIcon = {
-            type = "toggle", order = 14,
+            type = "toggle", order = CraftPresence:GetNextIndex(),
             name = L["TITLE_SHOW_MINIMAP_ICON"],
             desc = L["COMMENT_SHOW_MINIMAP_ICON"],
             get = function(_)
@@ -386,9 +386,9 @@ local extraOptionsGroup = {
                 CraftPresence:UpdateMinimapSetting(value)
             end,
         },
-        blank3 = { type = "description", order = 15, fontSize = "small", name = " " },
+        blank3 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         queuedPipeline = {
-            type = "toggle", order = 16,
+            type = "toggle", order = CraftPresence:GetNextIndex(),
             name = L["TITLE_QUEUED_PIPELINE"],
             desc = L["COMMENT_QUEUED_PIPELINE"],
             get = function(_)
@@ -403,9 +403,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank4 = { type = "description", order = 17, fontSize = "small", name = " " },
+        blank4 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         callbackDelay = {
-            type = "range", order = 18, width = 1.50,
+            type = "range", order = CraftPresence:GetNextIndex(), width = 1.50,
             min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
             name = L["TITLE_CALLBACK_DELAY"],
             desc = L["COMMENT_CALLBACK_DELAY"],
@@ -429,7 +429,7 @@ local extraOptionsGroup = {
             end,
         },
         frameClearDelay = {
-            type = "range", order = 19, width = 1.50,
+            type = "range", order = CraftPresence:GetNextIndex(), width = 1.50,
             min = L["MINIMUM_FRAME_CLEAR_DELAY"], max = L["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
             name = L["TITLE_FRAME_CLEAR_DELAY"],
             desc = L["COMMENT_FRAME_CLEAR_DELAY"],
@@ -452,9 +452,9 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank6 = { type = "description", order = 20, fontSize = "small", name = " " },
+        blank6 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         frameSize = {
-            type = "range", order = 21, width = 1.50,
+            type = "range", order = CraftPresence:GetNextIndex(), width = 1.50,
             min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
             name = L["TITLE_FRAME_SIZE"],
             desc = L["COMMENT_FRAME_SIZE"],
@@ -477,7 +477,7 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank7 = { type = "description", order = 22, fontSize = "small", name = " " },
+        blank7 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
     }
 }
 
@@ -485,26 +485,26 @@ local extraOptionsGroup = {
 --TAB:  ABOUT
 -----------------------------------------
 local aboutGroup = {
-    type = "group", order = 30,
+    type = "group", order = CraftPresence:GetNextIndex(),
     name = L["CATEGORY_TITLE_ABOUT"], desc = L["CATEGORY_COMMENT_ABOUT"],
     args = {
         generalText1 = {
-            type = "description", order = 10, width = "full", fontSize = "medium",
+            type = "description", order = CraftPresence:GetNextIndex(), width = "full", fontSize = "medium",
             name = L["ADDON_INFO_ONE"],
         },
-        thanksHeader = { order = 20, type = "header", name = L["ADDON_HEADER_CREDITS"], },
+        thanksHeader = { order = CraftPresence:GetNextIndex(), type = "header", name = L["ADDON_HEADER_CREDITS"], },
         generalText2 = {
-            type = "description", order = 40, fontSize = "medium",
+            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
             name = L["ADDON_INFO_TWO"]
         },
-        blank1 = { type = "description", order = 50, fontSize = "small", name = "", width = "full", },
+        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full", },
         generalText3 = {
-            type = "description", order = 53, fontSize = "medium",
+            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
             name = L["ADDON_INFO_THREE"]
         },
-        blank2 = { type = "description", order = 56, fontSize = "small", name = "", width = "full", },
+        blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full", },
         generalText4 = {
-            type = "description", order = 60, fontSize = "medium",
+            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
             name = L["ADDON_INFO_FOUR"]
         }
     }
