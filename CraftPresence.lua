@@ -176,9 +176,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         local ownedKeystoneData = self:GetOwnedKeystone()
         local activeKeystoneData = self:GetActiveKeystone()
         difficultyInfo = difficultyName
-        if (activeKeystoneData ~= nil and
-                activeKeystoneData.formattedLevel ~= nil and activeKeystoneData.formattedLevel ~= ""
-        ) then
+        if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
             difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
         end
         -- Inner Placeholder Adjustments
