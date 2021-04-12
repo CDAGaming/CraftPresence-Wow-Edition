@@ -498,12 +498,16 @@ local aboutGroup = {
             type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
             name = L["ADDON_INFO_TWO"]
         },
-        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full", },
+        blank1 = {
+            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full",
+        },
         generalText3 = {
             type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
             name = L["ADDON_INFO_THREE"]
         },
-        blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full", },
+        blank2 = {
+            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full",
+        },
         generalText4 = {
             type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
             name = L["ADDON_INFO_FOUR"]

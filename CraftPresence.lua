@@ -720,13 +720,19 @@ function CraftPresence:ChatCommand(input)
                 splitQuery[2] = splitQuery[2] or ""
                 if customPlaceholders[splitQuery[1]] and not overrideKey then
                     self:Print(string.format(L["ERROR_LOG"], L["COMMAND_CREATE_OVERRIDE"]))
-                else
+                elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
                     customPlaceholders[splitQuery[1]] = {
                         ["type"] = typeQuery,
                         ["data"] = splitQuery[2]
                     }
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
-                    self:Print(string.format(L["COMMAND_CREATE_ADDED"], splitQuery[1], splitQuery[2], typeQuery))
+                    self:Print(string.format(
+                            L["COMMAND_CREATE_ADDED"], splitQuery[1], self:SerializeTable(
+                                    customPlaceholders[splitQuery[1]]
+                            )
+                    ))
+                else
+                    self:Print(string.format(L["ERROR_LOG"], L["COMMAND_CREATE_OVERWRITE"]))
                 end
             else
                 self:Print(
