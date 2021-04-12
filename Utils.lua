@@ -275,6 +275,7 @@ end
 ----------------------------------
 
 local lastPlayerStatus = ""
+local addonVersion = ""
 local timer_locked = false
 -- Compatibility Data
 local build_info, compatibility_info
@@ -339,6 +340,15 @@ function CraftPresence:IsTBCRebased()
             self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.5.0"] and
                     self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["3.0.0"]
     )
+end
+
+--- Getter for CraftPresence:addonVersion
+--- @return string addonVersion
+function CraftPresence:GetVersion()
+    if self:IsNullOrEmpty(addonVersion) then
+        addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
+    end
+    return addonVersion
 end
 
 ----------------------------------

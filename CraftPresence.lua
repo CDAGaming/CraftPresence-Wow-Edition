@@ -6,7 +6,6 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local CraftPresenceLDB
 local icon
 local minimapState = { hide = false }
-local addonVersion = ""
 -- Build and Integration Data
 local realmData = { "US", "KR", "EU", "TW", "CH" }
 local buildData = {}
@@ -633,15 +632,6 @@ function CraftPresence:ShowConfig()
                 )
         ))
     end
-end
-
---- Getter for CraftPresence:addonVersion
---- @return string addonVersion
-function CraftPresence:GetVersion()
-    if self:IsNullOrEmpty(addonVersion) then
-        addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
-    end
-    return addonVersion
 end
 
 --- Interprets the specified input to perform specific commands
