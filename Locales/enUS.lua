@@ -188,6 +188,14 @@ L["INTEGRATION_ALREADY_USED"] = SetFormat("*Specified integration has already be
 -- Command: /cp clear|clean
 L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
 
+-- Command: /cp create
+L["COMMAND_CREATE_ADDED"] = SetFormat("Added custom placeholder *%s|r with value ^%s|r (Type: ^%s|r)", GREEN, GREY)
+L["COMMAND_CREATE_OVERRIDE"] = "Specified arguments will replace other placeholders, please use the create:override cmd"
+
+-- Command: /cp remove
+L["COMMAND_REMOVE_REMOVED"] = SetFormat("Removed custom placeholder *%s|r", GREEN)
+L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
+
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
@@ -203,6 +211,8 @@ L["USAGE_CMD_STATUS"] = SetFormat(" */cp|r ^status|r  -  Views the last sent RPC
 L["USAGE_CMD_RESET"] = SetFormat(" */cp|r ^reset[:grp,key]|r  -  Reset options in the *ConfigUI|r.", GREEN, GREY)
 L["USAGE_CMD_SET"] = SetFormat(" */cp|r ^set[:grp,key]|r  -  Set options in the *ConfigUI|r.", GREEN, GREY)
 L["USAGE_CMD_INTEGRATION"] = SetFormat(" */cp|r ^integration[:query]|r  -  Enable integrations.", GREEN, GREY)
+L["USAGE_CMD_CREATE"] = SetFormat("*/cp|r ^create [::value_type::][query]|r  -  Create custom data.", GREEN, GREY)
+L["USAGE_CMD_REMOVE"] = SetFormat("*/cp|r ^remove [query]|r  -  Remove custom placeholder data.", GREEN, GREY)
 L["USAGE_CMD_PLACEHOLDERS"] = SetFormat(" */cp|r ^placeholders[:query]|r  -  View RPC placeholders.", GREEN, GREY)
 
 L["USAGE_CMD_NOTE"] = SetFormat("NOTE: All commands must be prefixed with either */%s|r or */%s|r.", GREEN, GREY)

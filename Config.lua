@@ -41,7 +41,8 @@ local DB_DEFAULTS = {
         secondaryButton = {
             label = "",
             url = ""
-        }
+        },
+        customPlaceholders = {}
     },
 }
 

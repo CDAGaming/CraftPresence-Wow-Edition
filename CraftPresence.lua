@@ -17,6 +17,7 @@ local isRebasedApi = false
 -- Storage Data
 local global_placeholders = {}
 local inner_placeholders = {}
+local custom_placeholders = {}
 local time_conditions = {}
 -- Update State Data
 local lastInstanceState
@@ -287,6 +288,7 @@ function CraftPresence:SyncConditions(force_instance_change)
         ["#default#"] = self:GetFromDb("defaultPlaceholderMessage")
     }
     inner_placeholders = {}
+    custom_placeholders = self:GetFromDb("customPlaceholders")
     time_conditions = {}
     return self:ParseGameData(global_placeholders, force_instance_change)
 end
@@ -336,6 +338,28 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         queued_small_image_text = string.gsub(queued_small_image_text, key, value)
         queued_primary_button = string.gsub(queued_primary_button, key, value)
         queued_secondary_button = string.gsub(queued_secondary_button, key, value)
+    end
+    -- Custom Placeholder Syncing
+    for key, value in pairs(custom_placeholders) do
+        -- Sanity Checks
+        local returnType = value["type"] or "string"
+        local returnValue = value["data"] or ""
+        if not self:IsNullOrEmpty(returnValue) then
+            if returnType == "function" and loadstring then
+                returnValue = loadstring(returnValue)()
+            else
+                returnValue = tostring(returnValue)
+            end
+        end
+        -- Main Parsing
+        queued_details = string.gsub(queued_details, key, returnValue)
+        queued_state = string.gsub(queued_state, key, returnValue)
+        queued_large_image_key = string.gsub(queued_large_image_key, key, returnValue)
+        queued_large_image_text = string.gsub(queued_large_image_text, key, returnValue)
+        queued_small_image_key = string.gsub(queued_small_image_key, key, returnValue)
+        queued_small_image_text = string.gsub(queued_small_image_text, key, returnValue)
+        queued_primary_button = string.gsub(queued_primary_button, key, returnValue)
+        queued_secondary_button = string.gsub(queued_secondary_button, key, returnValue)
     end
     -- Time Condition Syncing
     for timeKey, timeValue in pairs(time_conditions) do
@@ -638,6 +662,7 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_RESET"] .. "\n" ..
                         L["USAGE_CMD_SET"] .. "\n" ..
                         L["USAGE_CMD_INTEGRATION"] .. "\n" ..
+                        L["USAGE_CMD_CREATE"] .. "\n" ..
                         L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
                         string.format(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
                         L["USAGE_CMD_NOTE_TWO"] .. "\n"
@@ -688,6 +713,62 @@ function CraftPresence:ChatCommand(input)
                         )
                 ))
             end
+        elseif self:StartsWith(input, "create") then
+            -- Query Parsing
+            local overrideKey = self:StartsWith(input, "create:override")
+            local _, _, typeQuery = self:FindMatches(input, "::(.*)::", false)
+            local _, _, query = self:FindMatches(input, " (.*)", false)
+
+            -- Sanity Check Type
+            if typeQuery ~= nil then
+                _, _, query = self:FindMatches(input, ":: (.*)", false)
+            else
+                typeQuery = "string"
+            end
+            -- Main Parsing
+            if query ~= nil then
+                local customPlaceholders = self:GetFromDb("customPlaceholders")
+                local splitQuery = self:Split(query, " ")
+                splitQuery[2] = splitQuery[2] or ""
+                if customPlaceholders[splitQuery[1]] and not overrideKey then
+                    self:Print(string.format(L["ERROR_LOG"], L["COMMAND_CREATE_OVERRIDE"]))
+                else
+                    customPlaceholders[splitQuery[1]] = {
+                        ["type"] = typeQuery,
+                        ["data"] = splitQuery[2]
+                    }
+                    self:SetToDb("customPlaceholders", nil, customPlaceholders)
+                    self:Print(string.format(L["COMMAND_CREATE_ADDED"], splitQuery[1], splitQuery[2], typeQuery))
+                end
+            else
+                self:Print(
+                        string.format(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+                                L["USAGE_CMD_CREATE"] .. "\n" ..
+                                string.format(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                                L["USAGE_CMD_NOTE_TWO"] .. "\n"
+                )
+            end
+        elseif self:StartsWith(input, "remove") then
+            -- Query Parsing
+            local _, _, query = self:FindMatches(input, " (.*)", false)
+
+            if query ~= nil then
+                local customPlaceholders = self:GetFromDb("customPlaceholders")
+                if customPlaceholders[query] then
+                    customPlaceholders[query] = nil
+                    self:SetToDb("customPlaceholders", nil, customPlaceholders)
+                    self:Print(string.format(L["COMMAND_REMOVE_REMOVED"], query))
+                else
+                    self:Print(string.format(L["ERROR_LOG"], L["COMMAND_REMOVE_NO_MATCH"]))
+                end
+            else
+                self:Print(
+                        string.format(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+                                L["USAGE_CMD_REMOVE"] .. "\n" ..
+                                string.format(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                                L["USAGE_CMD_NOTE_TWO"] .. "\n"
+                )
+            end
         elseif self:StartsWith(input, "integration") then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, ":(.*)", false)
@@ -724,41 +805,19 @@ function CraftPresence:ChatCommand(input)
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
             local _, _, query = self:FindMatches(input, ":(.*)", false)
-            local found_placeholders = false
+            local foundAny = false
             if query ~= nil then
                 self:Print(string.format(L["PLACEHOLDERS_QUERY"], query))
                 query = string.lower(query)
             end
             -- Global placeholder iteration to form placeholderString
-            for key, value in pairs(global_placeholders) do
-                local strKey = tostring(key)
-                local strValue = tostring(value)
-                if (query == nil or (
-                        self:FindMatches(string.lower(strKey), query, false, 1, true) or
-                                self:FindMatches(string.lower(strValue), query, false, 1, true))
-                ) then
-                    found_placeholders = true
-                    placeholderStr = placeholderStr .. "\n " .. (string.format(
-                            L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
-                    ))
-                end
-            end
+            foundAny, placeholderStr = self:ParsePlaceholderTable(query, global_placeholders, foundAny, placeholderStr)
             -- Inner placeholder iteration to form placeholderString
-            for key, value in pairs(inner_placeholders) do
-                local strKey = tostring(key)
-                local strValue = tostring(value)
-                if (query == nil or (
-                        self:FindMatches(string.lower(strKey), query, false, 1, true) or
-                                self:FindMatches(string.lower(strValue), query, false, 1, true))
-                ) then
-                    found_placeholders = true
-                    placeholderStr = placeholderStr .. "\n " .. (string.format(
-                            L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
-                    ))
-                end
-            end
+            foundAny, placeholderStr = self:ParsePlaceholderTable(query, inner_placeholders, foundAny, placeholderStr)
+            -- Custom placeholder iteration to form placeholderString
+            foundAny, placeholderStr = self:ParsePlaceholderTable(query, custom_placeholders, foundAny, placeholderStr)
             -- Final parsing of placeholderString before printing
-            if not found_placeholders then
+            if not foundAny then
                 placeholderStr = placeholderStr .. "\n " .. L["PLACEHOLDERS_FOUND_NONE"]
             end
             placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]

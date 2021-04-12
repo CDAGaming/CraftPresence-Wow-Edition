@@ -247,19 +247,24 @@ end
 ---
 --- @param str string The input string to interpret
 --- @param inSplitPattern string The pattern to split the string by
+--- @param multiple boolean Whether to find multiple matches
 --- @param outResults table The output result data (Can be predefined)
 ---
 --- @return table @ outResults
-function CraftPresence:Split(str, inSplitPattern, outResults)
+function CraftPresence:Split(str, inSplitPattern, multiple, outResults)
     if not outResults then
         outResults = { }
     end
+    local doContinue = true
     local theStart = 1
     local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
-    while theSplitStart do
+    while theSplitStart and doContinue do
         table.insert(outResults, string.sub(str, theStart, theSplitStart - 1))
         theStart = theSplitEnd + 1
-        theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
+        doContinue = multiple
+        if doContinue then
+            theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
+        end
     end
     table.insert(outResults, string.sub(str, theStart))
     return outResults
@@ -410,6 +415,37 @@ end
 --- @return boolean @ timer_locked
 function CraftPresence:IsTimerLocked()
     return timer_locked
+end
+
+--- Parse a Placeholder Table with the specified filter for any matches
+--- (INTERNAL USAGE ONLY)
+---
+--- @param query string The query to filter the placeholderTable by
+--- @param placeholderTable table The table to iterate through
+--- @param found_placeholders boolean Output Value -- If any placeholders were found before or after
+--- @param placeholderStr string Output Value -- The current placeholder result string
+---
+--- @return boolean, string @ found_placeholders, placeholderStr
+function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_placeholders, placeholderStr)
+    found_placeholders = found_placeholders or false
+    placeholderStr = placeholderStr or ""
+    for key, value in pairs(placeholderTable) do
+        local strKey = tostring(key)
+        local strValue = tostring(value)
+        if type(value) == "table" then
+            strValue = self:SerializeTable(value)
+        end
+        if (query == nil or (
+                self:FindMatches(string.lower(strKey), query, false, 1, true) or
+                        self:FindMatches(string.lower(strValue), query, false, 1, true))
+        ) then
+            found_placeholders = true
+            placeholderStr = placeholderStr .. "\n " .. (string.format(
+                    L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
+            ))
+        end
+    end
+    return found_placeholders, placeholderStr
 end
 
 ----------------------------------
