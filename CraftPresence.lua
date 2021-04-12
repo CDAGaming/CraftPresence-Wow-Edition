@@ -6,6 +6,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local CraftPresenceLDB
 local icon
 local minimapState = { hide = false }
+local registeredEvents = {}
+local registryEventName
 -- Build and Integration Data
 local realmData = { "US", "KR", "EU", "TW", "CH" }
 local buildData = {}
@@ -439,13 +441,12 @@ function CraftPresence:OnEnable()
     -- Print any Initial Data
     self:PrintInitialData()
     -- Register Universal Events
-    local eventName
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-        eventName = "DispatchModernUpdate"
+        registryEventName = "DispatchModernUpdate"
     else
-        eventName = "DispatchLegacyUpdate"
+        registryEventName = "DispatchLegacyUpdate"
     end
-    CraftPresence:AddTriggers(eventName,
+    CraftPresence:AddTriggers(registryEventName,
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
               "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
               "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
@@ -453,19 +454,19 @@ function CraftPresence:OnEnable()
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.0"] then
-        CraftPresence:AddTriggers(eventName,
+        CraftPresence:AddTriggers(registryEventName,
                 { "PLAYER_SPECIALIZATION_CHANGED" }
         )
     end
     if buildData["toc_version"] >= compatData["6.0.0"] then
-        CraftPresence:AddTriggers(eventName,
+        CraftPresence:AddTriggers(registryEventName,
                 { "ACTIVE_TALENT_GROUP_CHANGED",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                   "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }
         )
     end
     if buildData["toc_version"] >= compatData["8.0.0"] then
-        CraftPresence:AddTriggers(eventName,
+        CraftPresence:AddTriggers(registryEventName,
                 { "PLAYER_LEVEL_CHANGED" }
         )
     end
@@ -485,7 +486,26 @@ function CraftPresence:AddTriggers(event, args)
 
     if event ~= nil and args ~= nil then
         for _, v in ipairs(args) do
-            self:RegisterEvent(tostring(v), tostring(event))
+            local eventTag, eventBinding = tostring(v), tostring(event)
+            registeredEvents[eventTag] = eventBinding
+            self:RegisterEvent(eventTag, eventBinding)
+        end
+    end
+end
+
+--- Un-Registers the specified events
+---
+--- @param args table The events to unregister
+function CraftPresence:RemoveTriggers(args)
+    if type(args) ~= "table" then
+        args = { args }
+    end
+
+    if args ~= nil then
+        for _, v in ipairs(args) do
+            local eventTag = tostring(v)
+            registeredEvents[eventTag] = nil
+            self:UnregisterEvent(eventTag)
         end
     end
 end
@@ -517,6 +537,7 @@ function CraftPresence:DispatchUpdate(args)
         local ignore_event = false
         local ignore_event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (
+                    (args[2] ~= nil and args[2] ~= "player") or
                     self:GetLastPlayerStatus() == self:GetPlayerStatus("player", false, isRebasedApi)
             ),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
@@ -780,6 +801,22 @@ function CraftPresence:ChatCommand(input)
                         -- integrationData["vdt"] = true
                     elseif (query == "reload" or query == "rl" or query == "reloadui") and ReloadUI then
                         ReloadUI()
+                    elseif (self:StartsWith(query, "event")) then
+                        -- Sub-Query Parsing
+                        local _, _, eventQuery = self:FindMatches(input, " (.*)", false)
+                        if eventQuery ~= nil then
+                            if registeredEvents[eventQuery] then
+                                self:RemoveTriggers(eventQuery)
+                            else
+                                self:AddTriggers(registryEventName, eventQuery)
+                            end
+                        else
+                            self:Print(string.format(
+                                    L["ERROR_LOG"], string.format(
+                                            L["ERROR_COMMAND_UNKNOWN"], input
+                                    )
+                            ))
+                        end
                     else
                         self:Print(L["INTEGRATION_NOT_FOUND"])
                     end
