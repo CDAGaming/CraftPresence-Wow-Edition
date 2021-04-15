@@ -98,6 +98,7 @@ local function onEnter(self)
 end
 
 local function onLeave(self)
+	self = self or this
 	local obj = self.dataObject
 	GameTooltip:Hide()
 	if obj.OnLeave then obj.OnLeave(self) end
@@ -166,9 +167,9 @@ do
 		local scale = Minimap:GetEffectiveScale()
 		px, py = px / scale, py / scale
 		if self.db then
-			self.db.minimapPos = math.deg(math.atan2(py - my, px - mx)) % 360
+			self.db.minimapPos = math.mod(math.deg(math.atan2(py - my, px - mx)), 360)
 		else
-			self.minimapPos = math.deg(math.atan2(py - my, px - mx)) % 360
+			self.minimapPos = math.mod(math.deg(math.atan2(py - my, px - mx)), 360)
 		end
 		updatePosition(self)
 	end
