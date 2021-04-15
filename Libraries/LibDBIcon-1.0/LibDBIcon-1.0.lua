@@ -32,13 +32,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 --             and cleaned up a lot so that it no longer sucks.
 --
 
-local DBICON10 = "LibDBIcon-1.0"
-local DBICON10_MINOR = tonumber(("$Rev: 34 $"):match("(%d+)"))
-if not LibStub then error(DBICON10 .. " requires LibStub.") end
-local ldb = LibStub("LibDataBroker-1.1", true)
-if not ldb then error(DBICON10 .. " requires LibDataBroker-1.1.") end
-local lib = LibStub:NewLibrary(DBICON10, DBICON10_MINOR)
+assert(LibStub, "LibDBIcon-1.0 requires LibStub")
+assert(LibStub:GetLibrary("LibDataBroker-1.1", true), "LibDBIcon-1.0 requires LibDataBroker-1.1")
+
+local lib, oldminor = LibStub:NewLibrary("LibDBIcon-1.0", 34)
 if not lib then return end
+oldminor = oldminor or 0
+
+local ldb = LibStub("LibDataBroker-1.1", true)
 
 lib.disabled = lib.disabled or nil
 lib.objects = lib.objects or {}
@@ -83,6 +84,7 @@ local function getAnchors(frame)
 end
 
 local function onEnter(self)
+	self = self or this
 	if self.isMoving then return end
 	local obj = self.dataObject
 	if obj.OnTooltipShow then
@@ -103,7 +105,7 @@ end
 
 --------------------------------------------------------------------------------
 
-local onClick, onMouseUp, onMouseDown, onDragStart, onDragStop, onDragEnd, updatePosition
+local onClick, onMouseUp, onMouseDown, onDragStart, onDragStop, updatePosition
 
 do
 	local minimapShapes = {
@@ -141,12 +143,24 @@ do
 	end
 end
 
-function onClick(self, b) if self.dataObject.OnClick then self.dataObject.OnClick(self, b) end end
-function onMouseDown(self) self.isMouseDown = true; self.icon:UpdateCoord() end
-function onMouseUp(self) self.isMouseDown = false; self.icon:UpdateCoord() end
+function onClick(self, b)
+	self = self or this
+	if self.dataObject.OnClick then self.dataObject.OnClick(self, b) end
+end
+function onMouseDown(self)
+	self = self or this
+	self.isMouseDown = true;
+	self.icon:UpdateCoord()
+end
+function onMouseUp(self)
+	self = self or this
+	self.isMouseDown = false;
+	self.icon:UpdateCoord()
+end
 
 do
 	local function onUpdate(self)
+		self = self or this
 		local mx, my = Minimap:GetCenter()
 		local px, py = GetCursorPosition()
 		local scale = Minimap:GetEffectiveScale()
@@ -160,6 +174,7 @@ do
 	end
 
 	function onDragStart(self)
+		self = self or this
 		self:LockHighlight()
 		self.isMouseDown = true
 		self.icon:UpdateCoord()
@@ -170,6 +185,7 @@ do
 end
 
 function onDragStop(self)
+	self = self or this
 	self:SetScript("OnUpdate", nil)
 	self.isMouseDown = false
 	self.icon:UpdateCoord()
@@ -196,14 +212,14 @@ local function createButton(name, object, db)
 	button:SetWidth(31)
 	button:SetHeight(31)
 	button:SetFrameLevel(8)
-	button:RegisterForClicks("anyUp")
+	--button:RegisterForClicks("anyUp")
 	button:RegisterForDrag("LeftButton")
 	button:SetHighlightTexture("Interface\\Minimap\\UI-Minimap-ZoomButton-Highlight")
 	local overlay = button:CreateTexture(nil, "OVERLAY")
 	overlay:SetWidth(53)
 	overlay:SetHeight(53)
 	overlay:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")
-	overlay:SetPoint("TOPLEFT")
+	overlay:SetPoint("TOPLEFT", 0, 0)
 	local background = button:CreateTexture(nil, "BACKGROUND")
 	background:SetWidth(20)
 	background:SetHeight(20)
