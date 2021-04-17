@@ -36,7 +36,7 @@ CraftPresence will detect and adjust its abilities towards the following version
 | TBC Classic (2.5.x)      | OK     | Any      | N/A             |
 | TBC (2.0.x - 2.4.x)      | OK     | Any      | v0.5.4 or above |
 | Vanilla Classic (1.13.x) | OK     | Any      | N/A             |
-| Vanilla (1.0.x - 1.12.x) | OK     | Source   | legacy          |
+| Vanilla (Under 1.12.x)   | OK     | Any      | v0.7.0 or above |
 
 As this addon uses a singular codebase, Addon code is loaded depending upon which version you are loading it within.
 
