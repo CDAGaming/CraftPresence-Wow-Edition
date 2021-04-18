@@ -292,6 +292,7 @@ function CraftPresence:DispatchUpdate(args)
             ),
             ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
                     lastEventName == eventName or
+                    buildData["toc_version"] < compatData["6.0.0"] or
                     self:GetCachedLockout() == self:GetCurrentLockoutData(false)
             ),
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),

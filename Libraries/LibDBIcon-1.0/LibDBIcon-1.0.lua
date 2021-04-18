@@ -41,6 +41,8 @@ oldminor = oldminor or 0
 
 local ldb = LibStub("LibDataBroker-1.1", true)
 
+local mod = math.mod or math.fmod
+
 lib.disabled = lib.disabled or nil
 lib.objects = lib.objects or {}
 lib.callbackRegistered = lib.callbackRegistered or nil
@@ -167,9 +169,9 @@ do
 		local scale = Minimap:GetEffectiveScale()
 		px, py = px / scale, py / scale
 		if self.db then
-			self.db.minimapPos = math.mod(math.deg(math.atan2(py - my, px - mx)), 360)
+			self.db.minimapPos = mod(math.deg(math.atan2(py - my, px - mx)), 360)
 		else
-			self.minimapPos = math.mod(math.deg(math.atan2(py - my, px - mx)), 360)
+			self.minimapPos = mod(math.deg(math.atan2(py - my, px - mx)), 360)
 		end
 		updatePosition(self)
 	end
