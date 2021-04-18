@@ -284,6 +284,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     }
     -- Synchronize any Extra Conditionals
     queued_global_conditions["#default#"] = (not queued_time_conditions["start"])
+    for key, value in pairs(buildData) do
+        queued_inner_placeholders["@" .. key .. "@"] = value
+    end
 
     -- Prepare the final list of global placeholders
     local outputTable = {}
