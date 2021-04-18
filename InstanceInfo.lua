@@ -1,7 +1,10 @@
 local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
-local InstanceTable
+-- Lua APIs
+local pairs = pairs
+
 -- Lockout Data Storage
+local InstanceTable
 local defaultLockoutData = {
     name = "",
     difficulty = "",
@@ -62,7 +65,7 @@ end
 --- @return string @ instanceTier
 function CraftPresence:GetCurrentInstanceTier()
     -- Check that the InstanceTable even exists, if not, create it
-    InstanceTable = InstanceTable or CraftPresence:GenerateInstanceTable()
+    InstanceTable = InstanceTable or self:GenerateInstanceTable()
 
     -- Bail out if we're not even in an instance!
     if not IsInInstance() then

@@ -2,18 +2,22 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
+-- Lua APIs
+local _G = getfenv() or _G or {}
+local next, type, assert, pairs = next, type, assert, pairs;
+local strgsub, strgmatch, strgfind, strformat = string.gsub, string.gmatch, string.gfind, string.format
+local strsub, strfind, strlower, tostring = string.sub, string.find, string.lower, tostring
+local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
+
 ----------------------------------
 --COMPATIBILITY UTILITIES
 ----------------------------------
-
-local _G = getfenv() or _G or {}
-local next = next;
 
 local function SecureNext(elements, key)
     return _G.securecall(next, elements, key);
 end
 
-InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory or (function(panel)
+local InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory or (function(panel)
     local panelName;
     if (type(panel) == "string") then
         panelName = panel
@@ -92,8 +96,8 @@ function CraftPresence:TrimString(str)
     if self:IsNullOrEmpty(str) then
         return str
     end
-    str = string.gsub(str, "^%s*(.-)%s*$", "%1")
-    str = string.gsub(str, "%s+", " ")
+    str = strgsub(str, "^%s*(.-)%s*$", "%1")
+    str = strgsub(str, "%s+", " ")
     return str
 end
 
@@ -104,10 +108,10 @@ end
 --- @return number @ object_length
 function CraftPresence:GetLength(obj)
     local index = 0
-    if table.getn and type(obj) == "table" then
-        index = table.getn(obj)
+    if tgetn and type(obj) == "table" then
+        index = tgetn(obj)
     elseif type(obj) == "string" then
-        index = string.len(obj)
+        index = strlen(obj)
     end
     return index
 end
@@ -124,13 +128,13 @@ function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
     plain = plain ~= nil and plain == true
     index = index or 1
     if multiple then
-        if string.gmatch then
-            return string.gmatch(str, pattern)
-        elseif string.gfind then
-            return string.gfind(str, pattern)
+        if strgmatch then
+            return strgmatch(str, pattern)
+        elseif strgfind then
+            return strgfind(str, pattern)
         end
-    elseif string.find then
-        return string.find(str, pattern, index, plain)
+    elseif strfind then
+        return strfind(str, pattern, index, plain)
     end
     return nil
 end
@@ -151,7 +155,7 @@ end
 ---
 --- @return boolean @ startsWith
 function CraftPresence:StartsWith(String, Start)
-    return string.sub(String, 1, self:GetLength(Start)) == Start
+    return strsub(String, 1, self:GetLength(Start)) == Start
 end
 
 --- Formats the following word to proper casing (Xxxx)
@@ -163,7 +167,7 @@ function CraftPresence:FormatWord(str)
     if self:IsNullOrEmpty(str) then
         return str
     end
-    str = string.lower(str)
+    str = strlower(str)
     return (str:sub(1, 1):upper() .. str:sub(2))
 end
 
@@ -214,7 +218,7 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
     skipnewlines = skipnewlines or false
     depth = depth or 0
 
-    local tmp = string.rep(" ", depth)
+    local tmp = strrep(" ", depth)
 
     if name then
         tmp = tmp .. name .. " = "
@@ -229,11 +233,11 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
             ) .. "," .. (not skipnewlines and "\n" or "")
         end
 
-        tmp = tmp .. string.rep(" ", depth) .. "}"
+        tmp = tmp .. strrep(" ", depth) .. "}"
     elseif type(val) == "number" then
         tmp = tmp .. tostring(val)
     elseif type(val) == "string" then
-        tmp = tmp .. string.format("%q", val)
+        tmp = tmp .. strformat("%q", val)
     elseif type(val) == "boolean" then
         tmp = tmp .. (val and "true" or "false")
     else
@@ -259,14 +263,14 @@ function CraftPresence:Split(str, inSplitPattern, multiple, outResults)
     local theStart = 1
     local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
     while theSplitStart and doContinue do
-        table.insert(outResults, string.sub(str, theStart, theSplitStart - 1))
+        tinsert(outResults, strsub(str, theStart, theSplitStart - 1))
         theStart = theSplitEnd + 1
         doContinue = multiple
         if doContinue then
             theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
         end
     end
-    table.insert(outResults, string.sub(str, theStart))
+    tinsert(outResults, strsub(str, theStart))
     return outResults
 end
 
@@ -274,7 +278,6 @@ end
 --API UTILITIES
 ----------------------------------
 
-local lastPlayerStatus = ""
 local addonVersion = ""
 local timer_locked = false
 -- Compatibility Data
@@ -342,6 +345,12 @@ function CraftPresence:IsTBCRebased()
     )
 end
 
+--- Compatibility Helper: Determine if Build is a rebased api
+--- @return boolean @ is_rebased_api
+function CraftPresence:IsRebasedApi()
+    return self:IsClassicRebased() or self:IsTBCRebased()
+end
+
 --- Getter for CraftPresence:addonVersion
 --- @return string addonVersion
 function CraftPresence:GetVersion()
@@ -351,65 +360,32 @@ function CraftPresence:GetVersion()
     return addonVersion
 end
 
+--- Display the addon's config frame
+function CraftPresence:ShowConfig()
+    -- a bug can occur in blizzard's implementation of this call
+    if (CraftPresence:GetBuildInfo()["toc_version"] >= CraftPresence:GetCompatibilityInfo()["2.0.0"] or
+            CraftPresence:isRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
+        InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+        InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+    else
+        CraftPresence:Print(strformat(
+                L["ERROR_LOG"], strformat(
+                        L["ERROR_FUNCTION_DISABLED"], "ShowConfig"
+                )
+        ))
+    end
+end
+
 ----------------------------------
 --API GETTERS AND SETTERS
 ----------------------------------
 
 --- Print initial data and register events, depending on platform and config data
 function CraftPresence:PrintInitialData()
-    self:Print(string.format(L["ADDON_INTRO"], self:GetVersion()))
+    self:Print(strformat(L["ADDON_INTRO"], self:GetVersion()))
     if self:GetFromDb("verboseMode") then
-        self:Print(string.format(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
+        self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
-end
-
---- Retrieves the Player Status for the specified unit
----
---- @param unit string The unit name (Default: player)
---- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
---- @param isRebasedApi boolean Whether the client is on a rebased api
----
---- @return string, string @ playerStatus, playerPrefix
-function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
-    unit = unit or "player"
-    local playerStatus = ""
-    local playerPrefix = ""
-    local isAfk, isOnDnd, isDead, isGhost
-    -- Ensure Version Compatibility
-    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or isRebasedApi then
-        isAfk = UnitIsAFK(unit)
-        isOnDnd = UnitIsDND(unit)
-    end
-    -- Sync Player Name Tweaks (DND/AFK Data)
-    isDead = UnitIsDead(unit)
-    isGhost = UnitIsGhost(unit)
-    if isAfk then
-        playerStatus = L["AFK_LABEL"]
-    elseif isOnDnd then
-        playerStatus = L["DND_LABEL"]
-    elseif isGhost then
-        playerStatus = L["GHOST_LABEL"]
-    elseif isDead then
-        playerStatus = L["DEAD_LABEL"]
-    end
-    -- Parse Player Status
-    if not self:IsNullOrEmpty(playerStatus) then
-        playerPrefix = ("(" .. playerStatus .. ")") .. " "
-    else
-        playerStatus = L["ONLINE_LABEL"]
-    end
-
-    -- Return Data (and sync if needed)
-    if sync then
-        lastPlayerStatus = playerStatus
-    end
-    return playerStatus, playerPrefix
-end
-
---- Retrieves the Last Player Status, if any
---- @return string @ lastPlayerStatus
-function CraftPresence:GetLastPlayerStatus()
-    return lastPlayerStatus
 end
 
 --- Sets whether or not the timer is locked
@@ -446,11 +422,11 @@ function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_plac
             strValue = self:SerializeTable(value)
         end
         if (query == nil or (
-                self:FindMatches(string.lower(strKey), query, false, 1, true) or
-                        self:FindMatches(string.lower(strValue), query, false, 1, true))
+                self:FindMatches(strlower(strKey), query, false, 1, true) or
+                        self:FindMatches(strlower(strValue), query, false, 1, true))
         ) then
             found_placeholders = true
-            placeholderStr = placeholderStr .. "\n " .. (string.format(
+            placeholderStr = placeholderStr .. "\n " .. (strformat(
                     L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
             ))
         end

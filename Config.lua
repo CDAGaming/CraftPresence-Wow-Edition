@@ -2,6 +2,9 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
+-- Lua APIs
+local strformat, type, tostring = string.format, type, tostring
+
 -- SCHEMA_DEFAULTS
 local SCHEMA_DEFAULTS = {
     global = {
@@ -423,7 +426,7 @@ local extraOptionsGroup = {
                     CraftPresence:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
                 else
                     CraftPresence:PrintInvalidValue(
-                            string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
+                            strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
                                     L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
                     )
                 end
@@ -447,7 +450,7 @@ local extraOptionsGroup = {
                     CraftPresence:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                 else
                     CraftPresence:PrintInvalidValue(
-                            string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
+                            strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
                                     L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
                     )
                 end
@@ -472,7 +475,7 @@ local extraOptionsGroup = {
                     CraftPresence:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
                 else
                     CraftPresence:PrintInvalidValue(
-                            string.format(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
+                            strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
                                     L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
                     )
                 end
@@ -522,7 +525,7 @@ function CraftPresence:getOptionsTable()
 
     local opts = {
         type = "group", childGroups = "tab",
-        name = string.format("%s %s", L["ADDON_NAME"], CraftPresence:GetVersion()),
+        name = strformat("%s %s", L["ADDON_NAME"], CraftPresence:GetVersion()),
         get = function(info)
             return CraftPresence.db.profile[info[CraftPresence:GetLength(info)]]
         end,
@@ -561,8 +564,8 @@ function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
             value = L["TYPE_NONE"]
         end
         CraftPresence:Print(
-                string.format(
-                        L["VERBOSE_LOG"], string.format(
+                strformat(
+                        L["VERBOSE_LOG"], strformat(
                                 L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
                         )
                 )
@@ -573,7 +576,7 @@ end
 --- Prints a formatted message, meant to symbolize an invalid value
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintInvalidValue(logStyle)
-    CraftPresence:Print(string.format(L["ERROR_LOG"], logStyle))
+    CraftPresence:Print(strformat(L["ERROR_LOG"], logStyle))
 end
 
 --- Updates showMinimapIcon with the specified value

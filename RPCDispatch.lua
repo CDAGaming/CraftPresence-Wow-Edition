@@ -2,6 +2,12 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
+-- Lua APIs
+local strformat, strgsub, tostring = string.format, string.gsub, tostring
+local strbyte, strsub, pairs = string.byte, string.sub, pairs
+local max, floor = math.max, math.floor
+
+-- Critical Data (Do not remove)
 local frame_count = 0
 local frames = {}
 local last_encoded = ""
@@ -9,9 +15,9 @@ local last_encoded = ""
 --- Retrieves the Last Sent Encoded Event Message
 --- @return string @ lastEncodedMessage
 function CraftPresence:GetLastEncoded()
-    return string.format(
-            L["VERBOSE_LOG"], string.format(
-                    L["VERBOSE_LAST_ENCODED"], string.gsub(last_encoded, "|", "||")
+    return strformat(
+            L["VERBOSE_LOG"], strformat(
+                    L["VERBOSE_LAST_ENCODED"], strgsub(last_encoded, "|", "||")
             )
     )
 end
@@ -22,9 +28,9 @@ end
 ---
 --- @return table @ frames
 function CraftPresence:CreateFrames(size)
-    frame_count = math.floor(GetScreenWidth() / size)
+    frame_count = floor(GetScreenWidth() / size)
     if self:GetFromDb("debugMode") then
-        self:Print(string.format(L["DEBUG_LOG"], string.format(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
+        self:Print(strformat(L["DEBUG_LOG"], strformat(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
     for i = 1, frame_count do
@@ -96,8 +102,8 @@ function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     if self:GetLength(text) >= max_bytes then
         if self:GetFromDb("debugMode") then
-            self:Print(string.format(
-                    L["ERROR_LOG"], string.format(
+            self:Print(strformat(
+                    L["ERROR_LOG"], strformat(
                             L["ERROR_BYTE_OVERFLOW"], tostring(self:GetLength(text)), tostring(max_bytes)
                     )
             ))
@@ -118,14 +124,14 @@ function CraftPresence:PaintSomething(text)
 
     -- Convert each matching pair into an RGB value
     for trio in self:FindMatches(text, ".?.?.?") do
-        r = string.byte(string.sub(trio, 1, 1))
+        r = strbyte(strsub(trio, 1, 1))
         if self:GetLength(trio) > 1 then
-            g = string.byte(string.sub(trio, 2, 2))
+            g = strbyte(strsub(trio, 2, 2))
         else
             g = 0
         end
         if self:GetLength(trio) > 2 then
-            b = string.byte(string.sub(trio, 3, 3))
+            b = strbyte(strsub(trio, 3, 3))
         else
             b = 0
         end
@@ -199,7 +205,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         primaryButton = ""
         for i, _ in pairs(button_data) do
             if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
+                button_data[i] = strgsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
             primaryButton = primaryButton .. button_data[i]
             if i ~= self:GetLength(button_data) then
@@ -215,7 +221,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         secondaryButton = ""
         for i, _ in pairs(button_data) do
             if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = string.gsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
+                button_data[i] = strgsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
             end
             secondaryButton = secondaryButton .. button_data[i]
             if i ~= self:GetLength(button_data) then
@@ -223,7 +229,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
             end
         end
     end
-    return string.format(
+    return strformat(
             L["RPC_EVENT_FORMAT"],
             clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
             details, gameState, startTime, endTime, primaryButton, secondaryButton
@@ -261,8 +267,8 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
         end
         if self:GetFromDb("debugMode") then
             self:Print(
-                    string.format(L["DEBUG_LOG"], string.format(
-                            L["DEBUG_SEND_ACTIVITY"], string.gsub(encoded, "|", "||")
+                    strformat(L["DEBUG_LOG"], strformat(
+                            L["DEBUG_SEND_ACTIVITY"], strgsub(encoded, "|", "||")
                     ))
             )
         end
@@ -270,7 +276,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
         if will_clean then
             local delay = self:GetFromDb("frameClearDelay")
             if (self:IsWithinValue(
-                    delay, math.max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"], true
+                    delay, max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"], true
             )) then
                 self:After(delay, function()
                     self:CleanFrames()
