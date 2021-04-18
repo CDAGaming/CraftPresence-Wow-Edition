@@ -364,7 +364,7 @@ end
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
     if (CraftPresence:GetBuildInfo()["toc_version"] >= CraftPresence:GetCompatibilityInfo()["2.0.0"] or
-            CraftPresence:isRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
+            CraftPresence:IsRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     else
