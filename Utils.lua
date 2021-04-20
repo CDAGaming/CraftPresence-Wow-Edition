@@ -310,7 +310,7 @@ function CraftPresence:GetCompatibilityInfo()
     if not compatibility_info then
         compatibility_info = {
             ["retail"] = 90005, -- Latest Retail
-            ["classic"] = 11306, -- Latest Classic
+            ["classic"] = 11307, -- Latest Classic
             ["9.0.0"] = 90000, -- Shadowlands 9.0.0
             ["8.0.0"] = 80000, -- BFA 8.0.0
             ["7.0.0"] = 70000, -- Legion 7.0.0
