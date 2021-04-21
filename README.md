@@ -36,7 +36,7 @@ CraftPresence will detect and adjust its abilities towards the following version
 | TBC Classic (2.5.x)      | OK     | Any      | N/A             |
 | TBC (2.0.x - 2.4.x)      | OK     | Any      | v0.5.4 or above |
 | Vanilla Classic (1.13.x) | OK     | Any      | N/A             |
-| Vanilla (Under 1.12.x)   | OK     | Any      | v0.7.0 or above |
+| Vanilla (Under 1.12.x)   | OK     | Any      | v0.7.8 or above |
 
 As this addon uses a singular codebase, Addon code is loaded depending upon which version you are loading it within.
 
@@ -54,13 +54,16 @@ Keep in mind the following:
 ___
 
 *   `/cp config` - Displays the Config menu to customize options and placeholder data
-*   `/cp update` - Reloads mod data (Ie forces a Tick Event)
+*   `/cp update (:force)` - Reloads mod data (IE forces a Tick Event)
 *   `/cp test` - Toggles debugging of Rich Presence Frames (Requires `Debug Mode`)
 *   `/cp (clear | clean)` - Reset all frames to their original positions and colors.
 *   `/cp status` - Displays your last sent RPC Data, in text form (Requires `Verbose Mode`)
+*   `/cp create (::value_type::)(query)`  -  Create custom/dynamic placeholders.
+*   `/cp remove (query)`  -  Remove custom/dynamic placeholders, if present.
 *   `/cp set (grp,key)` - Sets specific setting(s) within the config menu manually.
 *   `/cp reset (:grp,key)` - Resets all (or a specific) setting(s) within the config menu.
 *   `/cp placeholders (:query)` - Views the currently available placeholders (With specified query, if any)
+*   `/cp integration (:query)`  -  Enable optional integrations, using specified query
 *   `/cp minimap` - Toggles the display of the minimap button (Requires Reload)
 *   `/cp (help | ?)` - Help Command to display the above commands and these explanations
 
