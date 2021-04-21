@@ -281,7 +281,7 @@ end
 local addonVersion = ""
 local timer_locked = false
 -- Compatibility Data
-local build_info, compatibility_info
+local build_info, compatibility_info, flavor_info
 
 --- Retrieves and Syncronizes App Build Info
 --- @return table @ build_info
@@ -302,6 +302,21 @@ function CraftPresence:GetBuildInfo()
     return build_info
 end
 
+--- Retrieves and Syncronizes Build Flavor Info
+---
+--- @return table @ flavor_info
+function CraftPresence:GetFlavorInfo()
+    if not flavor_info then
+        flavor_info = {
+            ["retail"] = 90005, -- Latest Retail
+            ["classic"] = 11307, -- Latest Classic
+            ["ptr"] = 90100, -- Latest Retail PTR
+            ["classic_ptr"] = 11307 -- Latest Classic PTR
+        }
+    end
+    return flavor_info
+end
+
 --- Retrieves and Syncronizes App Compatibility Info
 --- (Note some TOC version require extra filtering)
 ---
@@ -309,8 +324,6 @@ end
 function CraftPresence:GetCompatibilityInfo()
     if not compatibility_info then
         compatibility_info = {
-            ["retail"] = 90005, -- Latest Retail
-            ["classic"] = 11307, -- Latest Classic
             ["9.0.0"] = 90000, -- Shadowlands 9.0.0
             ["8.0.0"] = 80000, -- BFA 8.0.0
             ["7.0.0"] = 70000, -- Legion 7.0.0

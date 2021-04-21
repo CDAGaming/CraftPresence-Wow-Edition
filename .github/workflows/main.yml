@@ -39,20 +39,20 @@ jobs:
           fetch-depth: 50
           submodules: "recursive"
 
-      # once cloned, we just run the GitHub Action for the packager project
-      - name: Package and release
-        uses: BigWigsMods/packager@master
+      # Release - Retail
+      - name: Package and release for Retail
+        uses: CDAGaming/packager@master
+        with:
+          args: -g retail -w 0
 
-      # another example where we supply additional arguments, this example is specifically to release
-      # for the Classic version of the game
+      # Release - Wow Classic
       - name: Package and release for Classic
-        uses: BigWigsMods/packager@master
+        uses: CDAGaming/packager@master
         with:
           args: -g classic -w 0
 
-      # another example where we supply additional arguments, this example is specifically to release
-      # for the TBC Classic version of the game
+      # Release - TBC Classic
       - name: Package and release for TBC Classic
-        uses: BigWigsMods/packager@master
+        uses: CDAGaming/packager@master
         with:
           args: -g bc -w 0
