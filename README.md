@@ -10,7 +10,7 @@ Completely customize the way others see you play World of Warcraft via Discord's
 
 ## Author's Note
 *   At this time, the pixel-generation/reading that makes this possible has not been verified by Blizzard. An email and ticket have been put in to gain approval, though until this happens, use with caution.
-*   While a video, is aditionally planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
+*   While a video is aditionally planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
 
 ## Port Notes
 *   Please check [here](https://www.curseforge.com/minecraft/mc-mods/craftpresence) for the Minecraft Version of this addon
