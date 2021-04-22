@@ -361,7 +361,6 @@ local extraOptionsGroup = {
                 end
             end,
         },
-        blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         verboseMode = {
             type = "toggle", order = CraftPresence:GetNextIndex(),
             name = L["TITLE_VERBOSE_MODE"],
@@ -390,7 +389,6 @@ local extraOptionsGroup = {
                 CraftPresence:UpdateMinimapSetting(value)
             end,
         },
-        blank3 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
         queuedPipeline = {
             type = "toggle", order = CraftPresence:GetNextIndex(),
             name = L["TITLE_QUEUED_PIPELINE"],
