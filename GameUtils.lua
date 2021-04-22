@@ -6,8 +6,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local strformat, strgsub, pairs, tostring = string.format, string.gsub, pairs, tostring
 -- Addon APIs
 local inkey, outkey = "@", "#"
-local setfmt = function(str, key)
-    return CraftPresence:SetFormat(str, key)
+local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
+    return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
 end
 
 ----------------------------------

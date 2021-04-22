@@ -65,8 +65,8 @@ L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
 
 -- Addon APIs
 local inkey, outkey = "@", "#"
-local setfmt = function(str, key)
-    return SetFormat(str, key)
+local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
+    return SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
 end
 
 -- Primary Logging Data
