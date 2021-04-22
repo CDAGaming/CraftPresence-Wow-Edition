@@ -4,6 +4,8 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
 -- Lua APIs
 local strformat, strgsub, pairs, tostring = string.format, string.gsub, pairs, tostring
+-- Addon APIs
+local setfmt, inkey, outkey = self.SetFormat, L["INNER_KEY"], L["GLOBAL_KEY"]
 
 ----------------------------------
 --GAME GETTERS AND SETTERS
@@ -82,11 +84,10 @@ local playerCovenant = L["TYPE_NONE"]
 
 --- Parses Game information to form placeholder information
 ---
---- @param queued_global_placeholders table Queued Global Plaseholders to interpret
 --- @param force_instance_change boolean Whether to force an instance change (Default: false)
 ---
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
-function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_change)
+function CraftPresence:ParseGameData(force_instance_change)
     force_instance_change = force_instance_change ~= nil and force_instance_change == true
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
@@ -160,49 +161,57 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
     else
         formatted_zone_info = (sub_name .. " - " .. zone_name)
     end
+    -- Calculate Global Placeholders
+    local queued_global_placeholders = {
+        [setfmt("*dungeon*", outkey)] = self:GetFromDb("dungeonPlaceholderMessage"),
+        [setfmt("*raid*", outkey)] = self:GetFromDb("raidPlaceholderMessage"),
+        [setfmt("*battleground*", outkey)] = self:GetFromDb("battlegroundPlaceholderMessage"),
+        [setfmt("*arena*", outkey)] = self:GetFromDb("arenaPlaceholderMessage"),
+        [setfmt("*default*", outkey)] = self:GetFromDb("defaultPlaceholderMessage")
+    }
     -- Calculate Inner Placeholders
     local queued_inner_placeholders = {
-        ["@player_info@"] = "", -- Version-Dependent
-        ["@player_name@"] = playerName,
-        ["@title_name@"] = playerName, -- Version-Dependent
-        ["@player_level@"] = playerLevel,
-        ["@player_class@"] = playerClass,
-        ["@player_status@"] = playerStatus,
-        ["@player_alliance@"] = playerAlliance,
-        ["@player_covenant@"] = playerCovenant,
-        ["@player_covenant_renown@"] = "0", -- Retail-Only
-        ["@player_faction@"] = localizedFaction,
-        ["@player_spec_name@"] = "", -- Retail-Only
-        ["@player_spec_role@"] = "", -- Retail-Only
-        ["@item_level@"] = "0", -- Retail-Only
-        ["@item_level_equipped@"] = "0", -- Retail-Only
-        ["@item_level_pvp@"] = "0", -- Retail-Only
-        ["@realm_info@"] = (playerRegion .. " - " .. playerRealm),
-        ["@player_region@"] = playerRegion,
-        ["@player_realm@"] = playerRealm,
-        ["@zone_info@"] = formatted_zone_info,
-        ["@zone_name@"] = zone_name,
-        ["@sub_zone_name@"] = sub_name,
-        ["@difficulty_name@"] = difficultyName,
-        ["@difficulty_info@"] = difficultyInfo, -- Retail-Effected
-        ["@active_keystone_level@"] = "", -- Retail-Only
-        ["@active_keystone_affixes@"] = "", -- Retail-Only
-        ["@owned_keystone_level@"] = "", -- Retail-Only
-        ["@instance_type@"] = instanceType,
-        ["@localized_name@"] = name,
-        ["@instance_difficulty@"] = tostring(difficultyID),
-        ["@max_players@"] = tostring(maxPlayers),
-        ["@dynamic_difficulty@"] = tostring(dynamicDifficulty),
-        ["@is_dynamic@"] = tostring(isDynamic),
-        ["@instance_id@"] = tostring(instanceID),
-        ["@instance_group_size@"] = tostring(instanceGroupSize),
-        ["@lfg_dungeon_id@"] = tostring(LfgDungeonID),
-        ["@lockout_encounters@"] = "", -- Retail-Only
-        ["@lockout_current_encounters@"] = 0, -- Retail-Only
-        ["@lockout_total_encounters@"] = 0 -- Retail-Only
+        [setfmt("*player_info*", inkey)] = "", -- Version-Dependent
+        [setfmt("*player_name*", inkey)] = playerName,
+        [setfmt("*title_name*", inkey)] = playerName, -- Version-Dependent
+        [setfmt("*player_level*", inkey)] = playerLevel,
+        [setfmt("*player_class*", inkey)] = playerClass,
+        [setfmt("*player_status*", inkey)] = playerStatus,
+        [setfmt("*player_alliance*", inkey)] = playerAlliance,
+        [setfmt("*player_covenant*", inkey)] = playerCovenant,
+        [setfmt("*player_covenant_renown*", inkey)] = "0", -- Retail-Only
+        [setfmt("*player_faction*", inkey)] = localizedFaction,
+        [setfmt("*player_spec_name*", inkey)] = "", -- Retail-Only
+        [setfmt("*player_spec_role*", inkey)] = "", -- Retail-Only
+        [setfmt("*item_level*", inkey)] = "0", -- Retail-Only
+        [setfmt("*item_level_equipped*", inkey)] = "0", -- Retail-Only
+        [setfmt("*item_level_pvp*", inkey)] = "0", -- Retail-Only
+        [setfmt("*realm_info*", inkey)] = (playerRegion .. " - " .. playerRealm),
+        [setfmt("*player_region*", inkey)] = playerRegion,
+        [setfmt("*player_realm*", inkey)] = playerRealm,
+        [setfmt("*zone_info*", inkey)] = formatted_zone_info,
+        [setfmt("*zone_name*", inkey)] = zone_name,
+        [setfmt("*sub_zone_name*", inkey)] = sub_name,
+        [setfmt("*difficulty_name*", inkey)] = difficultyName,
+        [setfmt("*difficulty_info*", inkey)] = difficultyInfo, -- Retail-Effected
+        [setfmt("*active_keystone_level*", inkey)] = "", -- Retail-Only
+        [setfmt("*active_keystone_affixes*", inkey)] = "", -- Retail-Only
+        [setfmt("*owned_keystone_level*", inkey)] = "", -- Retail-Only
+        [setfmt("*instance_type*", inkey)] = instanceType,
+        [setfmt("*localized_name*", inkey)] = name,
+        [setfmt("*instance_difficulty*", inkey)] = tostring(difficultyID),
+        [setfmt("*max_players*", inkey)] = tostring(maxPlayers),
+        [setfmt("*dynamic_difficulty*", inkey)] = tostring(dynamicDifficulty),
+        [setfmt("*is_dynamic*", inkey)] = tostring(isDynamic),
+        [setfmt("*instance_id*", inkey)] = tostring(instanceID),
+        [setfmt("*instance_group_size*", inkey)] = tostring(instanceGroupSize),
+        [setfmt("*lfg_dungeon_id*", inkey)] = tostring(LfgDungeonID),
+        [setfmt("*lockout_encounters*", inkey)] = "", -- Retail-Only
+        [setfmt("*lockout_current_encounters*", inkey)] = 0, -- Retail-Only
+        [setfmt("*lockout_total_encounters*", inkey)] = 0 -- Retail-Only
     }
     -- Version Dependent Data
-    local user_info_preset = playerPrefix .. playerName .. " - " .. (strformat(L["LEVEL_TAG_FORMAT"], playerLevel))
+    local userData = playerPrefix .. playerName .. " - " .. (strformat(L["LEVEL_TAG_FORMAT"], playerLevel))
     if buildData["toc_version"] >= compatData["5.0.0"] or isRebasedApi then
         -- Extra Character Data
         local titleName = UnitPVPName("player")
@@ -233,49 +242,49 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
             difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
         end
         -- Inner Placeholder Adjustments
-        queued_inner_placeholders["@title_name@"] = titleName
-        queued_inner_placeholders["@player_info@"] = (user_info_preset .. " " .. specName .. " " .. playerClass)
-        queued_inner_placeholders["@player_covenant_renown@"] = tostring(playerCovenantRenown)
-        queued_inner_placeholders["@player_spec_name@"] = specName
-        queued_inner_placeholders["@player_spec_role@"] = roleName
-        queued_inner_placeholders["@item_level@"] = strformat("%.2f", avgItemLevel or 0)
-        queued_inner_placeholders["@item_level_equipped@"] = strformat("%.2f", avgItemLevelEquipped or 0)
-        queued_inner_placeholders["@item_level_pvp@"] = strformat("%.2f", avgItemLevelPvp or 0)
-        queued_inner_placeholders["@difficulty_info@"] = difficultyInfo
-        queued_inner_placeholders["@active_keystone_level@"] = activeKeystoneData.formattedLevel
-        queued_inner_placeholders["@active_keystone_affixes@"] = activeKeystoneData.formattedAffixes
-        queued_inner_placeholders["@owned_keystone_level@"] = ownedKeystoneData.formattedLevel
-        queued_inner_placeholders["@lockout_encounters@"] = lockoutData.formattedEncounterData
-        queued_inner_placeholders["@lockout_current_encounters@"] = lockoutData.currentEncounters
-        queued_inner_placeholders["@lockout_total_encounters@"] = lockoutData.totalEncounters
+        queued_inner_placeholders[setfmt("*title_name*", inkey)] = titleName
+        queued_inner_placeholders[setfmt("*player_info*", inkey)] = (userData .. " " .. specName .. " " .. playerClass)
+        queued_inner_placeholders[setfmt("*player_covenant_renown*", inkey)] = tostring(playerCovenantRenown)
+        queued_inner_placeholders[setfmt("*player_spec_name*", inkey)] = specName
+        queued_inner_placeholders[setfmt("*player_spec_role*", inkey)] = roleName
+        queued_inner_placeholders[setfmt("*item_level*", inkey)] = strformat("%.2f", avgItemLevel or 0)
+        queued_inner_placeholders[setfmt("*item_level_equipped*", inkey)] = strformat("%.2f", avgItemLevelEquipped or 0)
+        queued_inner_placeholders[setfmt("*item_level_pvp*", inkey)] = strformat("%.2f", avgItemLevelPvp or 0)
+        queued_inner_placeholders[setfmt("*difficulty_info*", inkey)] = difficultyInfo
+        queued_inner_placeholders[setfmt("*active_keystone_level*", inkey)] = activeKeystoneData.formattedLevel
+        queued_inner_placeholders[setfmt("*active_keystone_affixes*", inkey)] = activeKeystoneData.formattedAffixes
+        queued_inner_placeholders[setfmt("*owned_keystone_level*", inkey)] = ownedKeystoneData.formattedLevel
+        queued_inner_placeholders[setfmt("*lockout_encounters*", inkey)] = lockoutData.formattedEncounterData
+        queued_inner_placeholders[setfmt("*lockout_current_encounters*", inkey)] = lockoutData.currentEncounters
+        queued_inner_placeholders[setfmt("*lockout_total_encounters*", inkey)] = lockoutData.totalEncounters
     else
         -- Inner Placeholder Adjustments
-        queued_inner_placeholders["@player_info@"] = (user_info_preset .. " " .. playerClass)
+        queued_inner_placeholders[setfmt("*player_info*", inkey)] = (userData .. " " .. playerClass)
     end
     -- Calculate limiting RPC conditions
     -- If the condition is true, the placeholder will be active
     local queued_global_conditions = {
-        ["#dungeon#"] = (
-                queued_inner_placeholders["@instance_type@"] == "party" and
+        [setfmt("*dungeon*", outkey)] = (
+                queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "party" and
                         not self:FindMatches(name, "Garrison", false)
         ),
-        ["#raid#"] = (queued_inner_placeholders["@instance_type@"] == "raid"),
-        ["#battleground#"] = (queued_inner_placeholders["@instance_type@"] == "pvp"),
-        ["#arena#"] = (queued_inner_placeholders["@instance_type@"] == "arena")
+        [setfmt("*raid*", outkey)] = (queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "raid"),
+        [setfmt("*battleground*", outkey)] = (queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "pvp"),
+        [setfmt("*arena*", outkey)] = (queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "arena")
     }
     local queued_inner_conditions = {
-        ["@lockout_encounters@"] = (lockoutData ~= nil and
+        [setfmt("*lockout_encounters*", inkey)] = (lockoutData ~= nil and
                 (lockoutData.currentEncounters or 0) > 0 and (lockoutData.totalEncounters or 0) > 0)
     }
     local queued_extra_conditions = {
         ["torghast"] = (self:FindMatches(name, "Torghast", false) and
-                queued_inner_placeholders["@instance_type@"] == "scenario")
+                queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "scenario")
     }
     local queued_time_conditions = {
-        ["start"] = (queued_global_conditions["#dungeon#"] or
-                queued_global_conditions["#raid#"] or
-                queued_global_conditions["#battleground#"] or
-                queued_global_conditions["#arena#"]),
+        ["start"] = (queued_global_conditions[setfmt("*dungeon*", outkey)] or
+                queued_global_conditions[setfmt("*raid*", outkey)] or
+                queued_global_conditions[setfmt("*battleground*", outkey)] or
+                queued_global_conditions[setfmt("*arena*", outkey)]),
         ["start:extra"] = (queued_extra_conditions["torghast"])
     }
     -- If these placeholders are active, they will override the field they are in
@@ -283,13 +292,13 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         -- N/A
     }
     -- Synchronize any Extra Conditionals
-    queued_global_conditions["#default#"] = (not queued_time_conditions["start"])
+    queued_global_conditions[setfmt("*default*", outkey)] = (not queued_time_conditions["start"])
     for key, value in pairs(buildData) do
-        queued_inner_placeholders["@" .. key .. "@"] = value
+        local formattedKey = ("*" .. key .. "*")
+        queued_inner_placeholders[setfmt(formattedKey, inkey)] = value
     end
 
     -- Prepare the final list of global placeholders
-    local outputTable = {}
     for inKey, inValue in pairs(queued_global_placeholders) do
         local output = self:TrimString(inValue)
         -- If the Placeholders contained in the messages is an overrider,
@@ -298,7 +307,7 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         -- Note: Only applies towards inner-placeholders with subject to change data
         for _, overrideValue in pairs(queued_override_placeholders) do
             if self:FindMatches(output, overrideValue, false) then
-                if (self:StartsWith(overrideValue, "@") and
+                if (self:StartsWith(overrideValue, inkey) and
                         (queued_inner_conditions[overrideValue] == nil or queued_inner_conditions[overrideValue])
                 ) then
                     output = overrideValue
@@ -315,9 +324,9 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
                     output = strgsub(output, key, "")
                 end
             end
-            outputTable[inKey] = self:TrimString(output)
+            queued_global_placeholders[inKey] = self:TrimString(output)
         else
-            outputTable[inKey] = ""
+            queued_global_placeholders[inKey] = ""
         end
     end
     -- Update Instance Status before exiting method
@@ -325,5 +334,5 @@ function CraftPresence:ParseGameData(queued_global_placeholders, force_instance_
         lastInstanceState = instanceType
         lastAreaName = name
     end
-    return outputTable, queued_inner_placeholders, queued_time_conditions
+    return queued_global_placeholders, queued_inner_placeholders, queued_time_conditions
 end

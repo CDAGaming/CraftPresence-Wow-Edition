@@ -29,17 +29,11 @@ local time_conditions = {}
 ---
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
 function CraftPresence:SyncConditions(force_instance_change)
-    global_placeholders = {
-        ["#dungeon#"] = self:GetFromDb("dungeonPlaceholderMessage"),
-        ["#raid#"] = self:GetFromDb("raidPlaceholderMessage"),
-        ["#battleground#"] = self:GetFromDb("battlegroundPlaceholderMessage"),
-        ["#arena#"] = self:GetFromDb("arenaPlaceholderMessage"),
-        ["#default#"] = self:GetFromDb("defaultPlaceholderMessage")
-    }
+    global_placeholders = {}
     inner_placeholders = {}
     custom_placeholders = self:GetFromDb("customPlaceholders")
     time_conditions = {}
-    return self:ParseGameData(global_placeholders, force_instance_change)
+    return self:ParseGameData(force_instance_change)
 end
 
 --- Creates and encodes a new RPC event from placeholder and conditional data

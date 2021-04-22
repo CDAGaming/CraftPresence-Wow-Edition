@@ -6,7 +6,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local _G = getfenv() or _G or {}
 local next, type, assert, pairs = next, type, assert, pairs;
 local strgsub, strgmatch, strgfind, strformat = string.gsub, string.gmatch, string.gfind, string.format
-local strsub, strfind, strlower, tostring = string.sub, string.find, string.lower, tostring
+local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
 
 ----------------------------------
@@ -168,7 +168,25 @@ function CraftPresence:FormatWord(str)
         return str
     end
     str = strlower(str)
-    return (str:sub(1, 1):upper() .. str:sub(2))
+    return (strupper(strsub(str, 1, 1)) .. strsub(str, 2))
+end
+
+--- Replaces a String with the specified formatting
+---
+--- @param str string The input string to evaluate
+--- @param replacer_one string The first replacer
+--- @param replacer_two string The second replacer
+--- @param pattern_one string The first pattern
+--- @param pattern_two string The second pattern
+---
+--- @return string @ formatted_string
+function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+    if self:IsNullOrEmpty(str) then
+        return str
+    end
+    str = strgsub(str, pattern_one or "*", replacer_one or "")
+    str = strgsub(str, pattern_two or "%^", replacer_two or "")
+    return str
 end
 
 --- Determines whether the specified value is within the specified range
