@@ -45,7 +45,9 @@ local DB_DEFAULTS = {
             label = "",
             url = ""
         },
-        customPlaceholders = {}
+        customPlaceholders = {},
+        innerPlaceholderKey = "@",
+        globalPlaceholderKey = "#"
     },
 }
 
@@ -480,6 +482,45 @@ local extraOptionsGroup = {
             end,
         },
         blank7 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+        globalPlaceholderKey = {
+            type = "input", order = CraftPresence:GetNextIndex(), width = 1.5,
+            name = L["TITLE_GLOBAL_PLACEHOLDER_KEY"],
+            desc = L["COMMENT_GLOBAL_PLACEHOLDER_KEY"],
+            usage = L["USAGE_GLOBAL_PLACEHOLDER_KEY"],
+            get = function(_)
+                return CraftPresence:GetFromDb("globalPlaceholderKey")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb("globalPlaceholderKey")
+                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1)
+                if isValid then
+                    CraftPresence.db.profile.globalPlaceholderKey = value
+                    CraftPresence:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
+                else
+                    CraftPresence:PrintInvalidValue(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
+                end
+            end,
+        },
+        innerPlaceholderKey = {
+            type = "input", order = CraftPresence:GetNextIndex(), width = 1.5,
+            name = L["TITLE_INNER_PLACEHOLDER_KEY"],
+            desc = L["COMMENT_INNER_PLACEHOLDER_KEY"],
+            usage = L["USAGE_INNER_PLACEHOLDER_KEY"],
+            get = function(_)
+                return CraftPresence:GetFromDb("innerPlaceholderKey")
+            end,
+            set = function(_, value)
+                local oldValue = CraftPresence:GetFromDb("innerPlaceholderKey")
+                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1)
+                if isValid then
+                    CraftPresence.db.profile.innerPlaceholderKey = value
+                    CraftPresence:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
+                else
+                    CraftPresence:PrintInvalidValue(L["ERROR_INNER_PLACEHOLDER_KEY"])
+                end
+            end,
+        },
+        blank8 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
     }
 }
 

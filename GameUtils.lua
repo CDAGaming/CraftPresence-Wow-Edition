@@ -4,8 +4,14 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
 -- Lua APIs
 local strformat, strgsub, pairs, tostring = string.format, string.gsub, pairs, tostring
+
 -- Addon APIs
-local inkey, outkey = "@", "#"
+local inkey = function()
+    return CraftPresence:GetFromDb("innerPlaceholderKey")
+end
+local outkey = function()
+    return CraftPresence:GetFromDb("globalPlaceholderKey")
+end
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
     return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
 end

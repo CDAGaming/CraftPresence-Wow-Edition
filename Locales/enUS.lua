@@ -193,6 +193,16 @@ L["TITLE_BUTTON_URL"] = "Url"
 L["COMMENT_BUTTON_URL"] = "The message to show as the url."
 L["USAGE_BUTTON_URL"] = "<Your message here>"
 
+L["TITLE_GLOBAL_PLACEHOLDER_KEY"] = "Global Placeholder Key"
+L["COMMENT_GLOBAL_PLACEHOLDER_KEY"] = "The key to use to represent Global Placeholders"
+L["USAGE_GLOBAL_PLACEHOLDER_KEY"] = "<1-digit character here>"
+L["ERROR_GLOBAL_PLACEHOLDER_KEY"] = "Sanity Checks failed for Global Placeholder Key. Please enter a 1-digit character."
+
+L["TITLE_INNER_PLACEHOLDER_KEY"] = "Inner Placeholder Key"
+L["COMMENT_INNER_PLACEHOLDER_KEY"] = "The key to use to represent Inner Placeholders"
+L["USAGE_INNER_PLACEHOLDER_KEY"] = "<1-digit character here>"
+L["ERROR_INNER_PLACEHOLDER_KEY"] = "Sanity Checks failed for Inner Placeholder Key. Please enter a 1-digit character."
+
 -- Logging Data
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
