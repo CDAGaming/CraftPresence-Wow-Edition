@@ -64,10 +64,12 @@ L["CONFIG_COMMAND_ALT"] = "craftpresence set"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
 
 -- Addon APIs
-local setfmt, inkey, outkey = SetFormat, L["INNER_KEY"], L["GLOBAL_KEY"]
+local inkey, outkey = "@", "#"
+local setfmt = function(str, key)
+    return SetFormat(str, key)
+end
 
 -- Primary Logging Data
-L["DEFAULT_MESSAGE_USAGE"] = "<Your message here>"
 L["DEBUG_LOG"] = setfmt("*[Debug]|r %s", GREY)
 L["VERBOSE_LOG"] = setfmt("*[Verbose]|r %s", GREY)
 L["ERROR_LOG"] = setfmt("*[Error]|r %s", RED)
@@ -97,57 +99,57 @@ L["ERROR_CLIENT_ID"] = "Sanity Checks failed for Client ID. Please enter a 18-di
 
 L["TITLE_GAME_STATE_MESSAGE"] = "Game State Message"
 L["COMMENT_GAME_STATE_MESSAGE"] = "The message to be displayed in the Game State area of the RPC."
-L["USAGE_GAME_STATE_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_GAME_STATE_MESSAGE"] = "<Your message here>"
 L["DEFAULT_GAME_STATE_MESSAGE"] = setfmt("*dungeon**raid**battleground**arena**default*", outkey)
 
 L["TITLE_DETAILS_MESSAGE"] = "Details Message"
 L["COMMENT_DETAILS_MESSAGE"] = "The message to be displayed in the Details area of the RPC."
-L["USAGE_DETAILS_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_DETAILS_MESSAGE"] = "<Your message here>"
 L["DEFAULT_DETAILS_MESSAGE"] = setfmt("*player_info*", inkey)
 
 L["TITLE_LARGE_IMAGE_KEY"] = "Large Image Key"
 L["COMMENT_LARGE_IMAGE_KEY"] = "The image key to be displayed as the Large Image of the RPC."
-L["USAGE_LARGE_IMAGE_KEY"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_LARGE_IMAGE_KEY"] = "<Your message here>"
 L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
 
 L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
 L["COMMENT_LARGE_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Large Image area of the RPC."
-L["USAGE_LARGE_IMAGE_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_LARGE_IMAGE_MESSAGE"] = "<Your message here>"
 L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
 
 L["TITLE_SMALL_IMAGE_KEY"] = "Small Image Key"
 L["COMMENT_SMALL_IMAGE_KEY"] = "The image key to be displayed as the Small Image of the RPC."
-L["USAGE_SMALL_IMAGE_KEY"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_SMALL_IMAGE_KEY"] = "<Your message here>"
 L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
 
 L["TITLE_SMALL_IMAGE_MESSAGE"] = "Small Image Message"
 L["COMMENT_SMALL_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Small Image area of the RPC."
-L["USAGE_SMALL_IMAGE_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_SMALL_IMAGE_MESSAGE"] = "<Your message here>"
 L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
 
 L["TITLE_DUNGEON_MESSAGE"] = "Dungeon Placeholder Message"
 L["COMMENT_DUNGEON_MESSAGE"] = setfmt("The message to show as the *dungeon* placeholder.", outkey)
-L["USAGE_DUNGEON_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_DUNGEON_MESSAGE"] = "<Your message here>"
 L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
 
 L["TITLE_RAID_MESSAGE"] = "Raid Placeholder Message"
 L["COMMENT_RAID_MESSAGE"] = setfmt("The message to show as the *raid* placeholder.", outkey)
-L["USAGE_RAID_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_RAID_MESSAGE"] = "<Your message here>"
 L["DEFAULT_RAID_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", inkey)
 
 L["TITLE_BATTLEGROUND_MESSAGE"] = "Battleground Placeholder Message"
 L["COMMENT_BATTLEGROUND_MESSAGE"] = setfmt("The message to show as the *battleground* placeholder.", outkey)
-L["USAGE_BATTLEGROUND_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_BATTLEGROUND_MESSAGE"] = "<Your message here>"
 L["DEFAULT_BATTLEGROUND_MESSAGE"] = setfmt("*zone_name* - In Battleground", inkey)
 
 L["TITLE_ARENA_MESSAGE"] = "Arena Placeholder Message"
 L["COMMENT_ARENA_MESSAGE"] = setfmt("The message to show as the *arena* placeholder.", outkey)
-L["USAGE_ARENA_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_ARENA_MESSAGE"] = "<Your message here>"
 L["DEFAULT_ARENA_MESSAGE"] = setfmt("*zone_name* - In Arena", inkey)
 
 L["TITLE_FALLBACK_MESSAGE"] = "Default Placeholder Message"
 L["COMMENT_FALLBACK_MESSAGE"] = setfmt("The message to show as the *default* placeholder.", outkey)
-L["USAGE_FALLBACK_MESSAGE"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_FALLBACK_MESSAGE"] = "<Your message here>"
 L["DEFAULT_FALLBACK_MESSAGE"] = setfmt("*zone_info*", inkey)
 
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
@@ -185,11 +187,11 @@ L["COMMENT_SECONDARY_BUTTON"] = "The data to show for the Secondary Button area 
 
 L["TITLE_BUTTON_LABEL"] = "Label"
 L["COMMENT_BUTTON_LABEL"] = "The message to show as the label."
-L["USAGE_BUTTON_LABEL"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_BUTTON_LABEL"] = "<Your message here>"
 
 L["TITLE_BUTTON_URL"] = "Url"
 L["COMMENT_BUTTON_URL"] = "The message to show as the url."
-L["USAGE_BUTTON_URL"] = L["DEFAULT_MESSAGE_USAGE"]
+L["USAGE_BUTTON_URL"] = "<Your message here>"
 
 -- Logging Data
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"

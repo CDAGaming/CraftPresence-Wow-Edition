@@ -181,7 +181,7 @@ end
 ---
 --- @return string @ formatted_string
 function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    if self:IsNullOrEmpty(str) then
+    if CraftPresence:IsNullOrEmpty(str) then
         return str
     end
     str = strgsub(str, pattern_one or "*", replacer_one or "")

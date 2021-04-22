@@ -5,7 +5,10 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 -- Lua APIs
 local strformat, strgsub, pairs, tostring = string.format, string.gsub, pairs, tostring
 -- Addon APIs
-local setfmt, inkey, outkey = self.SetFormat, L["INNER_KEY"], L["GLOBAL_KEY"]
+local inkey, outkey = "@", "#"
+local setfmt = function(str, key)
+    return CraftPresence:SetFormat(str, key)
+end
 
 ----------------------------------
 --GAME GETTERS AND SETTERS
