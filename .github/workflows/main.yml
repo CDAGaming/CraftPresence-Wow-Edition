@@ -41,18 +41,18 @@ jobs:
 
       # Release - Retail
       - name: Package and release for Retail
-        uses: CDAGaming/packager@master
+        uses: BigWigsMods/packager@master
         with:
           args: -g retail -w 0
 
       # Release - Wow Classic
       - name: Package and release for Classic
-        uses: CDAGaming/packager@master
+        uses: BigWigsMods/packager@master
         with:
           args: -g classic -w 0
 
       # Release - TBC Classic
       - name: Package and release for TBC Classic
-        uses: CDAGaming/packager@master
+        uses: BigWigsMods/packager@master
         with:
           args: -g bc -w 0

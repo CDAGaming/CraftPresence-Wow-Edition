@@ -171,11 +171,11 @@ This Mod is under the MIT License as well as the Apache 2.0 License
 
 This project makes usage of the following dependencies internally:
 
-*   [Ace3](https://www.wowace.com/projects/ace3) by [Kaelten](https://www.wowace.com/members/kaelten)
+*   [Ace3](https://www.curseforge.com/wow/addons/ace3) by [Kaelten](https://www.curseforge.com/members/kaelten)
     *   [LibDBIcon-1.0](https://www.curseforge.com/wow/addons/libdbicon-1-0) by [funkehdude](https://www.curseforge.com/members/funkehdude)
     *   [LibDataBroker-1.1](https://www.curseforge.com/wow/addons/libdatabroker-1-1) by [tekkub](https://www.curseforge.com/members/tekkub)
     *   [CallbackHandler-1.0](https://www.curseforge.com/wow/addons/callbackhandler) by [nevcairiel](https://www.curseforge.com/members/nevcairiel)
-    *   [LibStub](https://www.wowace.com/projects/libstub) by [Kaelten](https://www.wowace.com/members/kaelten)
+    *   [LibStub](https://www.curseforge.com/wow/addons/libstub) by [Kaelten](https://www.curseforge.com/members/kaelten)
 
 #### Discord Terms of Service
 As with other RPC Mods, this Mod uses your in-game data to send display information to a 3rd party service (In this Case, Discord).
