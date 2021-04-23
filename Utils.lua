@@ -612,7 +612,11 @@ end
 ---
 --- @return table @ generatedData
 function CraftPresence:GetPlaceholderArgs(rootKey)
-    local table_args = {}
+    local table_args = {
+        titleHeader = {
+            order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_CUSTOM_EXTENDED"]
+        }
+    }
     local custom_placeholders = CraftPresence:GetFromDb(rootKey)
     if type(custom_placeholders) == "table" then
         for key, value in pairs(custom_placeholders) do
@@ -648,6 +652,13 @@ function CraftPresence:GetPlaceholderArgs(rootKey)
                 args = value_args
             }
         end
+    end
+
+    if tgetn(table_args) == 0 then
+        table_args["emptyDescription"] = {
+            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
+            name = L["CATEGORY_COMMENT_CUSTOM_EMPTY"]
+        }
     end
     return table_args
 end

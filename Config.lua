@@ -559,7 +559,7 @@ function CraftPresence:getOptionsTable()
                         type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
                     },
                     globalPlaceholderKey = {
-                        type = "input", order = CraftPresence:GetNextIndex(), width = 1.5,
+                        type = "input", order = CraftPresence:GetNextIndex(), width = 1.0,
                         name = L["TITLE_GLOBAL_PLACEHOLDER_KEY"],
                         desc = L["COMMENT_GLOBAL_PLACEHOLDER_KEY"],
                         usage = L["USAGE_GLOBAL_PLACEHOLDER_KEY"],
@@ -583,7 +583,7 @@ function CraftPresence:getOptionsTable()
                         end,
                     },
                     innerPlaceholderKey = {
-                        type = "input", order = CraftPresence:GetNextIndex(), width = 1.5,
+                        type = "input", order = CraftPresence:GetNextIndex(), width = 1.0,
                         name = L["TITLE_INNER_PLACEHOLDER_KEY"],
                         desc = L["COMMENT_INNER_PLACEHOLDER_KEY"],
                         usage = L["USAGE_INNER_PLACEHOLDER_KEY"],
