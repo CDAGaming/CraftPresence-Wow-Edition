@@ -616,9 +616,10 @@ function CraftPresence:GetPlaceholderArgs(rootKey)
                 for innerKey, innerValue in pairs(value) do
                     value_args[innerKey] = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
+                        multiline = (strlower(innerKey) == "data"),
                         name = (L["TITLE_BUTTON_" .. strupper(innerKey)] or CraftPresence:FormatWord(innerKey)),
-                        desc = L["COMMENT_BUTTON_" .. strupper(innerKey)],
-                        usage = L["USAGE_BUTTON_" .. strupper(innerKey)],
+                        desc = (L["COMMENT_BUTTON_" .. strupper(innerKey)] or ""),
+                        usage = (L["USAGE_BUTTON_" .. strupper(innerKey)] or ""),
                         get = function(_)
                             return CraftPresence.db.profile[rootKey][key][innerKey]
                         end,
@@ -635,7 +636,6 @@ function CraftPresence:GetPlaceholderArgs(rootKey)
             end
             table_args[key] = {
                 name = key,
-                desc = "DNT",
                 type = "group", order = CraftPresence:GetNextIndex(),
                 args = value_args
             }

@@ -1,6 +1,7 @@
 local CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
+local config_registry = LibStub("AceConfigRegistry-3.0")
 
 -- Lua APIs
 local strgsub, strformat, strlower = string.gsub, string.format, string.lower
@@ -482,6 +483,7 @@ function CraftPresence:ChatCommand(input)
                                     customPlaceholders[splitQuery[1]]
                             )
                     ))
+                    config_registry:NotifyChange(L["ADDON_NAME"])
                 else
                     self:Print(strformat(L["ERROR_LOG"], L["COMMAND_CREATE_OVERWRITE"]))
                 end
@@ -503,6 +505,7 @@ function CraftPresence:ChatCommand(input)
                     customPlaceholders[query] = nil
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
                     self:Print(strformat(L["COMMAND_REMOVE_REMOVED"], query))
+                    config_registry:NotifyChange(L["ADDON_NAME"])
                 else
                     self:Print(strformat(L["ERROR_LOG"], L["COMMAND_REMOVE_NO_MATCH"]))
                 end
