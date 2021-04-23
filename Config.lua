@@ -37,7 +37,10 @@ local BLOCKED_CHARACTERS = {
     [")"] = true,
     ["="] = true,
     ["$"] = true,
-    ["?"] = true
+    ["?"] = true,
+    ["."] = true,
+    ["\\"] = true,
+    ["/"] = true
 }
 
 -- DB_DEFAULTS
