@@ -189,6 +189,56 @@ function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, p
     return str
 end
 
+--- Parses Multiple arguments through the SetFormat method
+--- (INTERNAL USAGE ONLY)
+---
+--- @param format_args table The format arguments to pass to each SetFormat call
+--- @param string_args table The strings to parse
+--- @param set_config boolean Whether to parse and save the resulting values as config data
+---
+--- @return table @ adjusted_data
+function CraftPresence:SetFormats(format_args, string_args, set_config)
+    local adjusted_data = {}
+    if type(format_args) == "table" and tgetn(format_args) <= 4 and type(string_args) == "table" then
+        for key, value in pairs(string_args) do
+            local strValue
+            if type(value) == "table" then
+                if set_config and tgetn(value) <= 2 then
+                    strValue = CraftPresence:GetFromDb(value[1], value[2])
+                elseif not set_config then
+                    strValue = CraftPresence:SerializeTable(value)
+                end
+            else
+                if set_config then
+                    strValue = CraftPresence:GetFromDb(value)
+                else
+                    strValue = value
+                end
+            end
+
+            if strValue ~= nil then
+                local newValue = CraftPresence:SetFormat(strValue, format_args[1], format_args[2], format_args[3], format_args[4])
+                if strValue ~= newValue then
+                    if type(value) == "table" then
+                        if set_config and tgetn(value) <= 2 then
+                            CraftPresence:SetToDb(value[1], value[2], newValue)
+                        end
+                    else
+                        if set_config then
+                            CraftPresence:SetToDb(value, nil, newValue)
+                        end
+                    end
+                    adjusted_data[key] = {
+                        ["old"] = strValue,
+                        ["new"] = newValue
+                    }
+                end
+            end
+        end
+    end
+    return adjusted_data
+end
+
 --- Determines whether the specified value is within the specified range
 ---
 --- @param value number The specified value to interpret

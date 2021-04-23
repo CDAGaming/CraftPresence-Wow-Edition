@@ -15,6 +15,22 @@ local SCHEMA_DEFAULTS = {
     },
 }
 
+-- PLACEHOLDER_AREAS
+local PLACEHOLDER_AREAS = {
+    "gameStateMessage", "detailsMessage",
+    "largeImageKey", "largeImageMessage",
+    "smallImageKey", "smallImageMessage",
+    "dungeonPlaceholderMessage", "raidPlaceholderMessage",
+    "battlegroundPlaceholderMessage", "arenaPlaceholderMessage",
+    "defaultPlaceholderMessage"
+}
+
+-- BLOCKED_CHARACTERS
+local BLOCKED_CHARACTERS = {
+    ["%"] = true,
+    ["^"] = true
+}
+
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
     profile = {
@@ -492,10 +508,11 @@ local extraOptionsGroup = {
             end,
             set = function(_, value)
                 local oldValue = CraftPresence:GetFromDb("globalPlaceholderKey")
-                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1)
+                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value])
                 if isValid then
                     CraftPresence.db.profile.globalPlaceholderKey = value
                     CraftPresence:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
+                    CraftPresence:SetFormats({value, nil, oldValue, nil}, PLACEHOLDER_AREAS, true)
                 else
                     CraftPresence:PrintInvalidValue(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
                 end
@@ -511,10 +528,11 @@ local extraOptionsGroup = {
             end,
             set = function(_, value)
                 local oldValue = CraftPresence:GetFromDb("innerPlaceholderKey")
-                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1)
+                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value])
                 if isValid then
                     CraftPresence.db.profile.innerPlaceholderKey = value
                     CraftPresence:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
+                    CraftPresence:SetFormats({value, nil, oldValue, nil}, PLACEHOLDER_AREAS, true)
                 else
                     CraftPresence:PrintInvalidValue(L["ERROR_INNER_PLACEHOLDER_KEY"])
                 end
