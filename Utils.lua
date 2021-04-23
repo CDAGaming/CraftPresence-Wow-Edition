@@ -217,7 +217,9 @@ function CraftPresence:SetFormats(format_args, string_args, set_config)
             end
 
             if strValue ~= nil then
-                local newValue = CraftPresence:SetFormat(strValue, format_args[1], format_args[2], format_args[3], format_args[4])
+                local newValue = CraftPresence:SetFormat(
+                        strValue, format_args[1], format_args[2], format_args[3], format_args[4]
+                )
                 if strValue ~= newValue then
                     if type(value) == "table" then
                         if set_config and tgetn(value) <= 2 then
@@ -605,7 +607,10 @@ function CraftPresence:GetButtonArgs(grp, key)
 end
 
 --- Generates Config Table for a set of custom arguments
---- DATA TBD TODO
+---
+--- @param rootKey string The config key to retrieve placeholder data
+---
+--- @return table @ generatedData
 function CraftPresence:GetPlaceholderArgs(rootKey)
     local table_args = {}
     local custom_placeholders = CraftPresence:GetFromDb(rootKey)
@@ -613,7 +618,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey)
         for key, value in pairs(custom_placeholders) do
             local value_args = {}
             if type(value) == "table" then
-                for innerKey, innerValue in pairs(value) do
+                for innerKey, _ in pairs(value) do
                     value_args[innerKey] = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         multiline = (strlower(innerKey) == "data"),
@@ -628,7 +633,10 @@ function CraftPresence:GetPlaceholderArgs(rootKey)
                             local isValid = (type(newValue) == "string")
                             if isValid then
                                 CraftPresence.db.profile[rootKey][key][innerKey] = newValue
-                                CraftPresence:PrintChangedValue(("(" .. rootKey .. "(" .. key .. ")" .. ", " .. innerKey .. ")"), oldValue, newValue)
+                                CraftPresence:PrintChangedValue(
+                                        ("(" .. rootKey .. " (" .. key .. ")" .. ", " .. innerKey .. ")"),
+                                        oldValue, newValue
+                                )
                             end
                         end,
                     }

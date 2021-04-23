@@ -124,7 +124,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank1 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     gameStateMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_GAME_STATE_MESSAGE"],
@@ -142,7 +144,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank2 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     detailsMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_DETAILS_MESSAGE"],
@@ -160,7 +164,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank3 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank3 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     largeImageKey = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_LARGE_IMAGE_KEY"],
@@ -178,7 +184,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank4 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank4 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     largeImageMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_LARGE_IMAGE_MESSAGE"],
@@ -196,7 +204,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank5 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank5 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     smallImageKey = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_SMALL_IMAGE_KEY"],
@@ -214,7 +224,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank6 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank6 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     smallImageMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_SMALL_IMAGE_MESSAGE"],
@@ -232,7 +244,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank7 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank7 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                 }
             },
             placeholderOptions = {
@@ -262,10 +276,14 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank1 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     raidPlaceholderMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_RAID_MESSAGE"], desc = L["COMMENT_RAID_MESSAGE"], usage = L["USAGE_RAID_MESSAGE"],
+                        name = L["TITLE_RAID_MESSAGE"],
+                        desc = L["COMMENT_RAID_MESSAGE"],
+                        usage = L["USAGE_RAID_MESSAGE"],
                         get = function(_)
                             return CraftPresence:GetFromDb("raidPlaceholderMessage")
                         end,
@@ -278,7 +296,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank2 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     battlegroundPlaceholderMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_BATTLEGROUND_MESSAGE"],
@@ -296,7 +316,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank3 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank3 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     arenaPlaceholderMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_ARENA_MESSAGE"],
@@ -314,7 +336,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank4 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank4 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     defaultPlaceholderMessage = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
                         name = L["TITLE_FALLBACK_MESSAGE"],
@@ -332,7 +356,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank5 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank5 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                 }
             },
             buttonOptions = {
@@ -345,7 +371,9 @@ function CraftPresence:getOptionsTable()
                     CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
                 end,
                 args = {
-                    buttonHeader = { order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_BUTTONS"], },
+                    buttonHeader = {
+                        order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_BUTTONS"]
+                    },
                     primaryButton = {
                         name = L["TITLE_PRIMARY_BUTTON"],
                         desc = L["COMMENT_PRIMARY_BUTTON"],
@@ -358,7 +386,9 @@ function CraftPresence:getOptionsTable()
                         type = "group", order = CraftPresence:GetNextIndex(),
                         args = CraftPresence:GetButtonArgs("secondaryButton")
                     },
-                    blank1 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank1 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                 }
             },
             customOptions = {
@@ -414,7 +444,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank2 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank2 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     showMinimapIcon = {
                         type = "toggle", order = CraftPresence:GetNextIndex(),
                         name = L["TITLE_SHOW_MINIMAP_ICON"],
@@ -442,7 +474,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank4 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank4 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     callbackDelay = {
                         type = "range", order = CraftPresence:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
@@ -491,7 +525,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank6 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank6 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     frameSize = {
                         type = "range", order = CraftPresence:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
@@ -516,7 +552,9 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank7 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank7 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     globalPlaceholderKey = {
                         type = "input", order = CraftPresence:GetNextIndex(), width = 1.5,
                         name = L["TITLE_GLOBAL_PLACEHOLDER_KEY"],
@@ -528,12 +566,14 @@ function CraftPresence:getOptionsTable()
                         set = function(_, value)
                             local oldValue = CraftPresence:GetFromDb("globalPlaceholderKey")
                             local isValid = (
-                                    type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value]
+                                    type(value) == "string" and
+                                            CraftPresence:GetLength(value) == 1 and
+                                            not BLOCKED_CHARACTERS[value]
                             )
                             if isValid and (value ~= CraftPresence.db.profile.innerPlaceholderKey) then
                                 CraftPresence.db.profile.globalPlaceholderKey = value
                                 CraftPresence:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
-                                CraftPresence:SetFormats({value, nil, oldValue, nil}, PLACEHOLDER_AREAS, true)
+                                CraftPresence:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true)
                             else
                                 CraftPresence:PrintInvalidValue(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
                             end
@@ -550,18 +590,22 @@ function CraftPresence:getOptionsTable()
                         set = function(_, value)
                             local oldValue = CraftPresence:GetFromDb("innerPlaceholderKey")
                             local isValid = (
-                                    type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value]
+                                    type(value) == "string" and
+                                            CraftPresence:GetLength(value) == 1 and
+                                            not BLOCKED_CHARACTERS[value]
                             )
                             if isValid and (value ~= CraftPresence.db.profile.globalPlaceholderKey) then
                                 CraftPresence.db.profile.innerPlaceholderKey = value
                                 CraftPresence:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
-                                CraftPresence:SetFormats({value, nil, oldValue, nil}, PLACEHOLDER_AREAS, true)
+                                CraftPresence:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true)
                             else
                                 CraftPresence:PrintInvalidValue(L["ERROR_INNER_PLACEHOLDER_KEY"])
                             end
                         end,
                     },
-                    blank8 = { type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " " },
+                    blank8 = {
+                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
+                    },
                 }
             },
             profiles = profilesGroup,
@@ -573,20 +617,24 @@ function CraftPresence:getOptionsTable()
                         type = "description", order = CraftPresence:GetNextIndex(), width = "full", fontSize = "medium",
                         name = L["ADDON_INFO_ONE"],
                     },
-                    thanksHeader = { order = CraftPresence:GetNextIndex(), type = "header", name = L["ADDON_HEADER_CREDITS"], },
+                    thanksHeader = {
+                        order = CraftPresence:GetNextIndex(), type = "header", name = L["ADDON_HEADER_CREDITS"]
+                    },
                     generalText2 = {
                         type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
                         name = L["ADDON_INFO_TWO"]
                     },
                     blank1 = {
-                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full",
+                        type = "description", order = CraftPresence:GetNextIndex(),
+                        fontSize = "small", name = "", width = "full"
                     },
                     generalText3 = {
                         type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
                         name = L["ADDON_INFO_THREE"]
                     },
                     blank2 = {
-                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = "", width = "full",
+                        type = "description", order = CraftPresence:GetNextIndex(),
+                        fontSize = "small", name = "", width = "full"
                     },
                     generalText4 = {
                         type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
