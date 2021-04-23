@@ -28,7 +28,16 @@ local PLACEHOLDER_AREAS = {
 -- BLOCKED_CHARACTERS
 local BLOCKED_CHARACTERS = {
     ["%"] = true,
-    ["^"] = true
+    ["^"] = true,
+    ["+"] = true,
+    ["-"] = true,
+    ["*"] = true,
+    ["|"] = true,
+    ["("] = true,
+    [")"] = true,
+    ["="] = true,
+    ["$"] = true,
+    ["?"] = true
 }
 
 -- DB_DEFAULTS
@@ -508,8 +517,10 @@ local extraOptionsGroup = {
             end,
             set = function(_, value)
                 local oldValue = CraftPresence:GetFromDb("globalPlaceholderKey")
-                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value])
-                if isValid then
+                local isValid = (
+                        type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value]
+                )
+                if isValid and (value ~= CraftPresence.db.profile.innerPlaceholderKey) then
                     CraftPresence.db.profile.globalPlaceholderKey = value
                     CraftPresence:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
                     CraftPresence:SetFormats({value, nil, oldValue, nil}, PLACEHOLDER_AREAS, true)
@@ -528,8 +539,10 @@ local extraOptionsGroup = {
             end,
             set = function(_, value)
                 local oldValue = CraftPresence:GetFromDb("innerPlaceholderKey")
-                local isValid = (type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value])
-                if isValid then
+                local isValid = (
+                        type(value) == "string" and CraftPresence:GetLength(value) == 1 and not BLOCKED_CHARACTERS[value]
+                )
+                if isValid and (value ~= CraftPresence.db.profile.globalPlaceholderKey) then
                     CraftPresence.db.profile.innerPlaceholderKey = value
                     CraftPresence:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
                     CraftPresence:SetFormats({value, nil, oldValue, nil}, PLACEHOLDER_AREAS, true)
