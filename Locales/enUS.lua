@@ -85,6 +85,9 @@ L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data"
 
+L["CATEGORY_TITLE_CUSTOM"] = "Custom"
+L["CATEGORY_COMMENT_CUSTOM"] = "Settings for customizing custom/dynamic placeholders"
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customizability options for addon display info"
 
@@ -192,6 +195,14 @@ L["USAGE_BUTTON_LABEL"] = "<Your message here>"
 L["TITLE_BUTTON_URL"] = "Url"
 L["COMMENT_BUTTON_URL"] = "The message to show as the url."
 L["USAGE_BUTTON_URL"] = "<Your message here>"
+
+L["TITLE_BUTTON_DATA"] = "Data"
+L["COMMENT_BUTTON_DATA"] = "The message to show for this custom placeholder"
+L["USAGE_BUTTON_DATA"] = "<Your message here>"
+
+L["TITLE_BUTTON_TYPE"] = "Type"
+L["COMMENT_BUTTON_TYPE"] = "The type of the message for this custom placeholder"
+L["USAGE_BUTTON_TYPE"] = "<Your type reference here>"
 
 L["TITLE_GLOBAL_PLACEHOLDER_KEY"] = "Global Placeholder Key"
 L["COMMENT_GLOBAL_PLACEHOLDER_KEY"] = "The key to use to represent Global Placeholders"

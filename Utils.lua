@@ -604,6 +604,46 @@ function CraftPresence:GetButtonArgs(grp, key)
     }
 end
 
+--- Generates Config Table for a set of custom arguments
+--- DATA TBD TODO
+function CraftPresence:GetPlaceholderArgs(rootKey)
+    local table_args = {}
+    local custom_placeholders = CraftPresence:GetFromDb(rootKey)
+    if type(custom_placeholders) == "table" then
+        for key, value in pairs(custom_placeholders) do
+            local value_args = {}
+            if type(value) == "table" then
+                for innerKey, innerValue in pairs(value) do
+                    value_args[innerKey] = {
+                        type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
+                        name = (L["TITLE_BUTTON_" .. strupper(innerKey)] or CraftPresence:FormatWord(innerKey)),
+                        desc = L["COMMENT_BUTTON_" .. strupper(innerKey)],
+                        usage = L["USAGE_BUTTON_" .. strupper(innerKey)],
+                        get = function(_)
+                            return CraftPresence.db.profile[rootKey][key][innerKey]
+                        end,
+                        set = function(_, newValue)
+                            local oldValue = CraftPresence.db.profile[rootKey][key][innerKey]
+                            local isValid = (type(newValue) == "string")
+                            if isValid then
+                                CraftPresence.db.profile[rootKey][key][innerKey] = newValue
+                                CraftPresence:PrintChangedValue(("(" .. rootKey .. "(" .. key .. ")" .. ", " .. innerKey .. ")"), oldValue, newValue)
+                            end
+                        end,
+                    }
+                end
+            end
+            table_args[key] = {
+                name = key,
+                desc = "DNT",
+                type = "group", order = CraftPresence:GetNextIndex(),
+                args = value_args
+            }
+        end
+    end
+    return table_args
+end
+
 ----------------------------------
 --QUEUE SYSTEM UTILITIES
 ----------------------------------
