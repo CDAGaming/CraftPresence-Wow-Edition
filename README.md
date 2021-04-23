@@ -61,7 +61,7 @@ ___
 *   `/cp create (::value_type::)(query)`  -  Create custom/dynamic placeholders.
 *   `/cp remove (query)`  -  Remove custom/dynamic placeholders, if present.
 *   `/cp set (grp,key)` - Sets specific setting(s) within the config menu manually.
-*   `/cp reset (:grp,key)` - Resets all (or a specific) setting(s) within the config menu.
+*   `/cp reset (grp,key)` - Resets all (or a specific) setting(s) within the config menu.
 *   `/cp placeholders (:query)` - Views the currently available placeholders (With specified query, if any)
 *   `/cp integration (:query)`  -  Enable optional integrations, using specified query
 *   `/cp minimap` - Toggles the display of the minimap button (Requires Reload)

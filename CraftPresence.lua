@@ -432,13 +432,14 @@ function CraftPresence:ChatCommand(input)
         elseif input == "config" then
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then
-            local _, _, query = self:FindMatches(input, ":(.*)", false)
+            local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
-                local sub_query = self:FindMatches(query, ",(.*)", false)
+                local _, _, sub_query = self:FindMatches(query, ",(.*)", false)
                 self:GetFromDb(query, sub_query, true)
             else
                 self:ResetDB()
             end
+            config_registry:NotifyChange(L["ADDON_NAME"])
         elseif input == "minimap" then
             CraftPresence:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "about" then
