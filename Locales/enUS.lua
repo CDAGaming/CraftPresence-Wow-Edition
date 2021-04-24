@@ -1,6 +1,11 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
+-- Addon APIs
 local CP_GlobalUtils = CP_GlobalUtils
+local inkey, outkey = "@", "#"
+local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
+    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+end
 
 -- Color Codes
 local GREEN = '|cFF00FF7F'
@@ -20,20 +25,14 @@ L["LEVEL_TAG_FORMAT"] = "Level %s"
 -- Internal Values (DNT)
 L["UNKNOWN_KEY"] = "Skip"
 L["ARRAY_SPLIT_KEY"] = "=="
-L["INNER_KEY"] = "@"
-L["GLOBAL_KEY"] = "#"
+L["DEFAULT_INNER_KEY"] = inkey
+L["DEFAULT_GLOBAL_KEY"] = outkey
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
 L["CONFIG_COMMAND"] = "cp set"
 L["CONFIG_COMMAND_ALT"] = "craftpresence set"
 L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
-
--- Addon APIs
-local inkey, outkey = "@", "#"
-local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-end
 
 -- Primary Logging Data
 L["DEBUG_LOG"] = setfmt("*[Debug]|r %s", GREY)

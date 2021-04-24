@@ -74,8 +74,8 @@ local DB_DEFAULTS = {
             url = ""
         },
         customPlaceholders = {},
-        innerPlaceholderKey = "@",
-        globalPlaceholderKey = "#"
+        innerPlaceholderKey = L["DEFAULT_INNER_KEY"],
+        globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"]
     },
 }
 

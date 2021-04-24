@@ -2,6 +2,7 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
+-- Addon APIs
 local CP_GlobalUtils = CP_GlobalUtils
 
 -- Lua APIs
