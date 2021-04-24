@@ -1,40 +1,6 @@
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 
-----------------------
---LUA UTILITIES (From Utils.lua)
-----------------------
-
--- Lua APIs
-local type, strgsub = type, string.gsub
-
---- Determines if the specified object is null or empty
----
---- @param obj any The object to interpret
----
---- @return boolean @ is_object_empty
-local function IsNullOrEmpty(obj)
-    return obj == nil or
-            (type(obj) == "string" and obj == "") or
-            (type(obj) == "table" and obj == {})
-end
-
---- Replaces a String with the specified formatting
----
---- @param str string The input string to evaluate
---- @param replacer_one string The first replacer
---- @param replacer_two string The second replacer
---- @param pattern_one string The first pattern
---- @param pattern_two string The second pattern
----
---- @return string @ formatted_string
-local function SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    if IsNullOrEmpty(str) then
-        return str
-    end
-    str = strgsub(str, pattern_one or "*", replacer_one or "")
-    str = strgsub(str, pattern_two or "%^", replacer_two or "")
-    return str
-end
+local CP_GlobalUtils = CP_GlobalUtils
 
 -- Color Codes
 local GREEN = '|cFF00FF7F'
@@ -66,7 +32,7 @@ L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
 -- Addon APIs
 local inkey, outkey = "@", "#"
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    return SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
 end
 
 -- Primary Logging Data

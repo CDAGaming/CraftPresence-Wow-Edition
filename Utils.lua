@@ -2,6 +2,8 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
+local CP_GlobalUtils = CP_GlobalUtils
+
 -- Lua APIs
 local _G = getfenv() or _G or {}
 local next, type, assert, pairs = next, type, assert, pairs;
@@ -82,9 +84,7 @@ end
 ---
 --- @return boolean @ is_object_empty
 function CraftPresence:IsNullOrEmpty(obj)
-    return obj == nil or
-            (type(obj) == "string" and obj == "") or
-            (type(obj) == "table" and obj == {})
+    return CP_GlobalUtils.IsNullOrEmpty(obj)
 end
 
 --- Trims a String of leading and duplicate spaces
@@ -181,12 +181,7 @@ end
 ---
 --- @return string @ formatted_string
 function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    if CraftPresence:IsNullOrEmpty(str) then
-        return str
-    end
-    str = strgsub(str, pattern_one or "*", replacer_one or "")
-    str = strgsub(str, pattern_two or "%^", replacer_two or "")
-    return str
+    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
 end
 
 --- Parses Multiple arguments through the SetFormat method

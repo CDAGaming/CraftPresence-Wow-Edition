@@ -14,8 +14,11 @@
 ## X-Curse-Project-ID: 457334
 ## X-Wago-ID: R4N2naNL
 
+GlobalUtils.lua
+
 Libraries\Libraries.xml
 Locales\Locales.xml
+
 CraftPresence.lua
 Utils.lua
 GameUtils.lua
