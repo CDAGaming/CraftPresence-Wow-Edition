@@ -88,15 +88,6 @@ function CraftPresence:IsNullOrEmpty(obj)
     return CP_GlobalUtils.IsNullOrEmpty(obj)
 end
 
---- Escapes Regex Characters within the specified string
----
---- @param str string The input string to evaluate
----
---- @return string @ escaped_string
-function CraftPresence:RegexEscape(str)
-    return CP_GlobalUtils.RegexEscape(str)
-end
-
 --- Replaces the specified area of a string
 ---
 --- @param str string The input string to evaluate
@@ -118,7 +109,6 @@ function CraftPresence:TrimString(str)
     if self:IsNullOrEmpty(str) then
         return str
     end
-    str = self:Replace(str, "^%s*(.-)%s*$", "%1")
     str = self:Replace(str, "%s+", " ")
     return str
 end

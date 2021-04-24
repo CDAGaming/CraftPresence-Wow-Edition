@@ -2,7 +2,7 @@
 CP_GlobalUtils = {}
 
 -- Lua APIs
-local strgsub = string.gsub
+local type, strsub, strfind = type, string.sub, string.find
 
 --- Determines if the specified object is null or empty
 ---
@@ -15,18 +15,6 @@ function CP_GlobalUtils.IsNullOrEmpty(obj)
             (type(obj) == "table" and obj == {})
 end
 
---- Escapes Regex Characters within the specified string
----
---- @param str string The input string to evaluate
----
---- @return string @ escaped_string
-function CP_GlobalUtils.RegexEscape(str)
-    if CP_GlobalUtils.IsNullOrEmpty(str) then
-        return str
-    end
-    return strgsub(str, "[%(%)%.%%%+%-%*%?%[%]%^%$]", "%%%0")
-end
-
 --- Replaces the specified area of a string
 ---
 --- @param str string The input string to evaluate
@@ -36,11 +24,16 @@ end
 ---
 --- @return string @ formatted_string
 function CP_GlobalUtils.Replace(str, old, new, plain)
-    if plain then
-        old = CP_GlobalUtils.RegexEscape(old)
-        new = CP_GlobalUtils.RegexEscape(new)
+    if CP_GlobalUtils.IsNullOrEmpty(str) then
+        return str
     end
-    return strgsub(str, old, new)
+
+    local b,e = strfind(str, old, 1, plain)
+    if b==nil then
+        return str
+    else
+        return strsub(str, 1, b-1) .. new .. CP_GlobalUtils.Replace(strsub(str, e+1), old, new, plain)
+    end
 end
 
 --- Replaces a String with the specified formatting
