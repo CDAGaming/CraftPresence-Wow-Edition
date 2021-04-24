@@ -3,7 +3,7 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
 -- Lua APIs
-local strformat, strgsub, pairs, tostring = string.format, string.gsub, pairs, tostring
+local strformat, pairs, tostring = string.format, pairs, tostring
 
 -- Addon APIs
 local inkey = function()
@@ -12,8 +12,8 @@ end
 local outkey = function()
     return CraftPresence:GetFromDb("globalPlaceholderKey")
 end
-local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+    return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
 ----------------------------------
@@ -328,9 +328,9 @@ function CraftPresence:ParseGameData(force_instance_change)
         if (queued_global_conditions[inKey] == nil or queued_global_conditions[inKey]) then
             for key, value in pairs(queued_inner_placeholders) do
                 if (queued_inner_conditions[key] == nil or queued_inner_conditions[key]) then
-                    output = strgsub(output, key, value)
+                    output = self:Replace(output, key, value, true)
                 else
-                    output = strgsub(output, key, "")
+                    output = self:Replace(output, key, "", true)
                 end
             end
             queued_global_placeholders[inKey] = self:TrimString(output)

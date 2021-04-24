@@ -26,22 +26,7 @@ local PLACEHOLDER_AREAS = {
 }
 
 -- BLOCKED_CHARACTERS
-local BLOCKED_CHARACTERS = {
-    ["%"] = true,
-    ["^"] = true,
-    ["+"] = true,
-    ["-"] = true,
-    ["*"] = true,
-    ["|"] = true,
-    ["("] = true,
-    [")"] = true,
-    ["="] = true,
-    ["$"] = true,
-    ["?"] = true,
-    ["."] = true,
-    ["\\"] = true,
-    ["/"] = true
-}
+local BLOCKED_CHARACTERS = {}
 
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
@@ -576,7 +561,7 @@ function CraftPresence:getOptionsTable()
                             if isValid and (value ~= CraftPresence.db.profile.innerPlaceholderKey) then
                                 CraftPresence.db.profile.globalPlaceholderKey = value
                                 CraftPresence:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
-                                CraftPresence:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true)
+                                CraftPresence:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true, true)
                             else
                                 CraftPresence:PrintInvalidValue(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
                             end
@@ -600,7 +585,7 @@ function CraftPresence:getOptionsTable()
                             if isValid and (value ~= CraftPresence.db.profile.globalPlaceholderKey) then
                                 CraftPresence.db.profile.innerPlaceholderKey = value
                                 CraftPresence:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
-                                CraftPresence:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true)
+                                CraftPresence:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true, true)
                             else
                                 CraftPresence:PrintInvalidValue(L["ERROR_INNER_PLACEHOLDER_KEY"])
                             end

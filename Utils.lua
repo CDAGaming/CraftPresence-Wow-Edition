@@ -8,7 +8,7 @@ local CP_GlobalUtils = CP_GlobalUtils
 -- Lua APIs
 local _G = getfenv() or _G or {}
 local next, type, assert, pairs = next, type, assert, pairs;
-local strgsub, strgmatch, strgfind, strformat = string.gsub, string.gmatch, string.gfind, string.format
+local strgmatch, strgfind, strformat = string.gmatch, string.gfind, string.format
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
 
@@ -88,6 +88,27 @@ function CraftPresence:IsNullOrEmpty(obj)
     return CP_GlobalUtils.IsNullOrEmpty(obj)
 end
 
+--- Escapes Regex Characters within the specified string
+---
+--- @param str string The input string to evaluate
+---
+--- @return string @ escaped_string
+function CraftPresence:RegexEscape(str)
+    return CP_GlobalUtils.RegexEscape(str)
+end
+
+--- Replaces the specified area of a string
+---
+--- @param str string The input string to evaluate
+--- @param old string The portion of the string to replace
+--- @param new string The string to replace the old portion with
+--- @param plain boolean Whether or not to forbid pattern matching filters
+---
+--- @return string @ formatted_string
+function CraftPresence:Replace(str, old, new, plain)
+    return CP_GlobalUtils.Replace(str, old, new, plain)
+end
+
 --- Trims a String of leading and duplicate spaces
 ---
 --- @param str string The input string to evaluate
@@ -97,8 +118,8 @@ function CraftPresence:TrimString(str)
     if self:IsNullOrEmpty(str) then
         return str
     end
-    str = strgsub(str, "^%s*(.-)%s*$", "%1")
-    str = strgsub(str, "%s+", " ")
+    str = self:Replace(str, "^%s*(.-)%s*$", "%1")
+    str = self:Replace(str, "%s+", " ")
     return str
 end
 
@@ -179,10 +200,11 @@ end
 --- @param replacer_two string The second replacer
 --- @param pattern_one string The first pattern
 --- @param pattern_two string The second pattern
+--- @param plain boolean Whether or not to forbid pattern matching filters
 ---
 --- @return string @ formatted_string
-function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
 --- Parses Multiple arguments through the SetFormat method
@@ -190,10 +212,11 @@ end
 ---
 --- @param format_args table The format arguments to pass to each SetFormat call
 --- @param string_args table The strings to parse
+--- @param plain boolean Whether or not to forbid pattern matching filters
 --- @param set_config boolean Whether to parse and save the resulting values as config data
 ---
 --- @return table @ adjusted_data
-function CraftPresence:SetFormats(format_args, string_args, set_config)
+function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
     local adjusted_data = {}
     if type(format_args) == "table" and tgetn(format_args) <= 4 and type(string_args) == "table" then
         for key, value in pairs(string_args) do
@@ -214,7 +237,7 @@ function CraftPresence:SetFormats(format_args, string_args, set_config)
 
             if strValue ~= nil then
                 local newValue = CraftPresence:SetFormat(
-                        strValue, format_args[1], format_args[2], format_args[3], format_args[4]
+                        strValue, format_args[1], format_args[2], format_args[3], format_args[4], plain
                 )
                 if strValue ~= newValue then
                     if type(value) == "table" then

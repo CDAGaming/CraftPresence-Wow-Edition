@@ -4,7 +4,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local config_registry = LibStub("AceConfigRegistry-3.0")
 
 -- Lua APIs
-local strgsub, strformat, strlower = string.gsub, string.format, string.lower
+local strformat, strlower = string.format, string.lower
 local loadstring, tostring, ipairs, pairs = loadstring, tostring, ipairs, pairs
 local type, max = type, math.max
 
@@ -63,25 +63,25 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     )
     -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do
-        queued_details = strgsub(queued_details, key, value)
-        queued_state = strgsub(queued_state, key, value)
-        queued_large_image_key = strgsub(queued_large_image_key, key, value)
-        queued_large_image_text = strgsub(queued_large_image_text, key, value)
-        queued_small_image_key = strgsub(queued_small_image_key, key, value)
-        queued_small_image_text = strgsub(queued_small_image_text, key, value)
-        queued_primary_button = strgsub(queued_primary_button, key, value)
-        queued_secondary_button = strgsub(queued_secondary_button, key, value)
+        queued_details = self:Replace(queued_details, key, value, true)
+        queued_state = self:Replace(queued_state, key, value, true)
+        queued_large_image_key = self:Replace(queued_large_image_key, key, value, true)
+        queued_large_image_text = self:Replace(queued_large_image_text, key, value, true)
+        queued_small_image_key = self:Replace(queued_small_image_key, key, value, true)
+        queued_small_image_text = self:Replace(queued_small_image_text, key, value, true)
+        queued_primary_button = self:Replace(queued_primary_button, key, value, true)
+        queued_secondary_button = self:Replace(queued_secondary_button, key, value, true)
     end
     -- Inner Placeholder Syncing
     for key, value in pairs(inner_placeholders) do
-        queued_details = strgsub(queued_details, key, value)
-        queued_state = strgsub(queued_state, key, value)
-        queued_large_image_key = strgsub(queued_large_image_key, key, value)
-        queued_large_image_text = strgsub(queued_large_image_text, key, value)
-        queued_small_image_key = strgsub(queued_small_image_key, key, value)
-        queued_small_image_text = strgsub(queued_small_image_text, key, value)
-        queued_primary_button = strgsub(queued_primary_button, key, value)
-        queued_secondary_button = strgsub(queued_secondary_button, key, value)
+        queued_details = self:Replace(queued_details, key, value, true)
+        queued_state = self:Replace(queued_state, key, value, true)
+        queued_large_image_key = self:Replace(queued_large_image_key, key, value, true)
+        queued_large_image_text = self:Replace(queued_large_image_text, key, value, true)
+        queued_small_image_key = self:Replace(queued_small_image_key, key, value, true)
+        queued_small_image_text = self:Replace(queued_small_image_text, key, value, true)
+        queued_primary_button = self:Replace(queued_primary_button, key, value, true)
+        queued_secondary_button = self:Replace(queued_secondary_button, key, value, true)
     end
     -- Custom Placeholder Syncing
     for key, value in pairs(custom_placeholders) do
@@ -95,15 +95,16 @@ function CraftPresence:EncodeConfigData(force_instance_change)
                 returnValue = tostring(returnValue)
             end
         end
+        value = returnValue
         -- Main Parsing
-        queued_details = strgsub(queued_details, key, returnValue)
-        queued_state = strgsub(queued_state, key, returnValue)
-        queued_large_image_key = strgsub(queued_large_image_key, key, returnValue)
-        queued_large_image_text = strgsub(queued_large_image_text, key, returnValue)
-        queued_small_image_key = strgsub(queued_small_image_key, key, returnValue)
-        queued_small_image_text = strgsub(queued_small_image_text, key, returnValue)
-        queued_primary_button = strgsub(queued_primary_button, key, returnValue)
-        queued_secondary_button = strgsub(queued_secondary_button, key, returnValue)
+        queued_details = self:Replace(queued_details, key, value, true)
+        queued_state = self:Replace(queued_state, key, value, true)
+        queued_large_image_key = self:Replace(queued_large_image_key, key, value, true)
+        queued_large_image_text = self:Replace(queued_large_image_text, key, value, true)
+        queued_small_image_key = self:Replace(queued_small_image_key, key, value, true)
+        queued_small_image_text = self:Replace(queued_small_image_text, key, value, true)
+        queued_primary_button = self:Replace(queued_primary_button, key, value, true)
+        queued_secondary_button = self:Replace(queued_secondary_button, key, value, true)
     end
     -- Time Condition Syncing
     for timeKey, timeValue in pairs(time_conditions) do
@@ -124,17 +125,17 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         end
     end
     return self:EncodeData(
-            strgsub(self:GetFromDb("clientId"), "%s+", " "),
-            strgsub(strlower(queued_large_image_key), "%s+", "_"),
-            strgsub(queued_large_image_text, "%s+", " "),
-            strgsub(strlower(queued_small_image_key), "%s+", "_"),
-            strgsub(queued_small_image_text, "%s+", " "),
-            strgsub(queued_details, "%s+", " "),
-            strgsub(queued_state, "%s+", " "),
-            strgsub(queued_time_start, "%s+", " "),
-            strgsub(queued_time_end, "%s+", " "),
-            strgsub(queued_primary_button, "%s+", " "),
-            strgsub(queued_secondary_button, "%s+", " ")
+            self:Replace(self:GetFromDb("clientId"), "%s+", " "),
+            self:Replace(strlower(queued_large_image_key), "%s+", "_"),
+            self:Replace(queued_large_image_text, "%s+", " "),
+            self:Replace(strlower(queued_small_image_key), "%s+", "_"),
+            self:Replace(queued_small_image_text, "%s+", " "),
+            self:Replace(queued_details, "%s+", " "),
+            self:Replace(queued_state, "%s+", " "),
+            self:Replace(queued_time_start, "%s+", " "),
+            self:Replace(queued_time_end, "%s+", " "),
+            self:Replace(queued_primary_button, "%s+", " "),
+            self:Replace(queued_secondary_button, "%s+", " ")
     )
 end
 

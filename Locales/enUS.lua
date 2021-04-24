@@ -3,8 +3,8 @@ local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
 -- Addon APIs
 local CP_GlobalUtils = CP_GlobalUtils
 local inkey, outkey = "@", "#"
-local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two)
-    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two)
+local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
 -- Color Codes

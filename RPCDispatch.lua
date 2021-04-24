@@ -3,7 +3,7 @@ local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
 local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 
 -- Lua APIs
-local strformat, strgsub, tostring = string.format, string.gsub, tostring
+local strformat, tostring = string.format, tostring
 local strbyte, strsub, pairs = string.byte, string.sub, pairs
 local max, floor = math.max, math.floor
 
@@ -17,7 +17,7 @@ local last_encoded = ""
 function CraftPresence:GetLastEncoded()
     return strformat(
             L["VERBOSE_LOG"], strformat(
-                    L["VERBOSE_LAST_ENCODED"], strgsub(last_encoded, "|", "||")
+                    L["VERBOSE_LAST_ENCODED"], self:Replace(last_encoded, "|", "||")
             )
     )
 end
@@ -205,7 +205,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         primaryButton = ""
         for i, _ in pairs(button_data) do
             if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = strgsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
+                button_data[i] = L["UNKNOWN_KEY"]
             end
             primaryButton = primaryButton .. button_data[i]
             if i ~= self:GetLength(button_data) then
@@ -221,7 +221,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         secondaryButton = ""
         for i, _ in pairs(button_data) do
             if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = strgsub(button_data[i], button_data[i], L["UNKNOWN_KEY"])
+                button_data[i] = L["UNKNOWN_KEY"]
             end
             secondaryButton = secondaryButton .. button_data[i]
             if i ~= self:GetLength(button_data) then
@@ -268,7 +268,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
         if self:GetFromDb("debugMode") then
             self:Print(
                     strformat(L["DEBUG_LOG"], strformat(
-                            L["DEBUG_SEND_ACTIVITY"], strgsub(encoded, "|", "||")
+                            L["DEBUG_SEND_ACTIVITY"], self:Replace(encoded, "|", "||")
                     ))
             )
         end
