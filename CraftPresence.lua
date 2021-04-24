@@ -440,7 +440,10 @@ function CraftPresence:ChatCommand(input)
             else
                 self:ResetDB()
             end
-            config_registry:NotifyChange(L["ADDON_NAME"])
+
+            if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+                config_registry:NotifyChange(L["ADDON_NAME"])
+            end
         elseif input == "minimap" then
             CraftPresence:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "about" then
@@ -485,7 +488,10 @@ function CraftPresence:ChatCommand(input)
                                     customPlaceholders[splitQuery[1]]
                             )
                     ))
-                    config_registry:NotifyChange(L["ADDON_NAME"])
+
+                    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+                        config_registry:NotifyChange(L["ADDON_NAME"])
+                    end
                 else
                     self:Print(strformat(L["ERROR_LOG"], L["COMMAND_CREATE_OVERWRITE"]))
                 end
@@ -507,7 +513,10 @@ function CraftPresence:ChatCommand(input)
                     customPlaceholders[query] = nil
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
                     self:Print(strformat(L["COMMAND_REMOVE_REMOVED"], query))
-                    config_registry:NotifyChange(L["ADDON_NAME"])
+
+                    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+                        config_registry:NotifyChange(L["ADDON_NAME"])
+                    end
                 else
                     self:Print(strformat(L["ERROR_LOG"], L["COMMAND_REMOVE_NO_MATCH"]))
                 end
