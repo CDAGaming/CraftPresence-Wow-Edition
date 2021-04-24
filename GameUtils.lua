@@ -6,12 +6,6 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local strformat, pairs, tostring = string.format, pairs, tostring
 
 -- Addon APIs
-local inkey = function()
-    return CraftPresence:GetFromDb("innerPlaceholderKey")
-end
-local outkey = function()
-    return CraftPresence:GetFromDb("globalPlaceholderKey")
-end
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
     return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
@@ -98,6 +92,8 @@ local playerCovenant = L["TYPE_NONE"]
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
 function CraftPresence:ParseGameData(force_instance_change)
     force_instance_change = force_instance_change ~= nil and force_instance_change == true
+    local inkey = CraftPresence:GetFromDb("innerPlaceholderKey")
+    local outkey = CraftPresence:GetFromDb("globalPlaceholderKey")
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID
