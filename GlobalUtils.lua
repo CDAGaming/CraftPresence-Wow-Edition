@@ -28,7 +28,7 @@ function CP_GlobalUtils.RandomString(length)
     if not length or length <= 0 then
         return ''
     end
-    if math.randomseed then
+    if math.randomseed and os then
         math.randomseed(os.clock() ^ 5)
     end
     return CP_GlobalUtils.RandomString(length - 1) .. charset[random(1, tgetn(charset))]

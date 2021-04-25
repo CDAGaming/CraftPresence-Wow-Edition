@@ -8,7 +8,7 @@ local CP_GlobalUtils = CP_GlobalUtils
 -- Lua APIs
 local _G = getfenv() or _G or {}
 local next, type, assert, pairs, tonumber = next, type, assert, pairs, tonumber;
-local strgmatch, strgfind, strformat, strtrim = string.gmatch, string.gfind, string.format, string.trim
+local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
@@ -119,7 +119,9 @@ function CraftPresence:TrimString(str)
     if self:IsNullOrEmpty(str) then
         return str
     end
-    return strtrim(str)
+    str = strgsub(str, "^%s+", "")
+    str = strgsub(str, "%s+$", "")
+    return str
 end
 
 --- Retrieves the length of the specified object
