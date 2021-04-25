@@ -126,11 +126,11 @@ function CP_GlobalUtils.Replace(str, old, new, plain)
         return str
     end
 
-    local b,e = strfind(str, old, 1, plain)
-    if b==nil then
+    local b, e = strfind(str, old, 1, plain)
+    if b == nil then
         return str
     else
-        return strsub(str, 1, b-1) .. new .. CP_GlobalUtils.Replace(strsub(str, e+1), old, new, plain)
+        return strsub(str, 1, b - 1) .. new .. CP_GlobalUtils.Replace(strsub(str, e + 1), old, new, plain)
     end
 end
 
