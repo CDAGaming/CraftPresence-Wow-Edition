@@ -656,6 +656,7 @@ end
 ---
 --- @return table @ generatedData
 function CraftPresence:GetPlaceholderArgs(rootKey)
+    local found_count = 0
     local table_args = {
         titleHeader = {
             order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_CUSTOM_EXTENDED"]
@@ -695,15 +696,14 @@ function CraftPresence:GetPlaceholderArgs(rootKey)
                 type = "group", order = CraftPresence:GetNextIndex(),
                 args = value_args
             }
+            found_count = found_count + 1
         end
     end
 
-    if tgetn(table_args) == 0 then
-        table_args["emptyDescription"] = {
-            type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
-            name = L["CATEGORY_COMMENT_CUSTOM_EMPTY"]
-        }
-    end
+    table_args[CraftPresence:RandomString(8)] = {
+        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
+        name = strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], found_count, (found_count == 1 and "") or "s")
+    }
     return table_args
 end
 
