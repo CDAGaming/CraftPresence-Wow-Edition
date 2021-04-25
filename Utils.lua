@@ -482,6 +482,7 @@ function CraftPresence:VersionToBuild(versionStr)
             else
                 buildStr = buildStr .. value
             end
+            buildStr = tonumber(buildStr)
         end
     end
     return buildStr
