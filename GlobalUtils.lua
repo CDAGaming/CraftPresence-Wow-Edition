@@ -2,7 +2,37 @@
 CP_GlobalUtils = {}
 
 -- Lua APIs
-local type, strsub, strfind = type, string.sub, string.find
+local type, strsub, strfind, tgetn = type, string.sub, string.find, table.getn
+local tinsert, strchar, random = table.insert, string.char, math.random
+
+local charset = {}
+do
+    -- [0-9a-zA-Z]
+    for c = 48, 57 do
+        tinsert(charset, strchar(c))
+    end
+    for c = 65, 90 do
+        tinsert(charset, strchar(c))
+    end
+    for c = 97, 122 do
+        tinsert(charset, strchar(c))
+    end
+end
+
+--- Generates a random string of numbers
+---
+--- @param length number The length of the resulting number
+---
+--- @return number @ random_string
+function CP_GlobalUtils.RandomString(length)
+    if not length or length <= 0 then
+        return ''
+    end
+    if math.randomseed then
+        math.randomseed(os.clock() ^ 5)
+    end
+    return CP_GlobalUtils.RandomString(length - 1) .. charset[random(1, tgetn(charset))]
+end
 
 --- Determines if the specified object is null or empty
 ---

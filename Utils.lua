@@ -80,6 +80,15 @@ function CraftPresence:ResetIndex()
     lastIndex = 0;
 end
 
+--- Generates a random string of numbers
+---
+--- @param length number The length of the resulting number
+---
+--- @return number @ random_string
+function CraftPresence:RandomString(length)
+    return CP_GlobalUtils.RandomString(length)
+end
+
 --- Determines if the specified object is null or empty
 ---
 --- @param obj any The object to interpret
