@@ -6,59 +6,11 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local CP_GlobalUtils = CP_GlobalUtils
 
 -- Lua APIs
-local _G = getfenv() or _G or {}
-local next, type, assert, pairs, tonumber = next, type, assert, pairs, tonumber;
+local type, pairs, tonumber = type, pairs, tonumber;
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
-
-----------------------------------
---COMPATIBILITY UTILITIES
-----------------------------------
-
-local function SecureNext(elements, key)
-    return _G.securecall(next, elements, key);
-end
-
-local InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory or (function(panel)
-    local panelName;
-    if (type(panel) == "string") then
-        panelName = panel
-        panel = nil
-    end
-
-    assert(panelName or panel, 'Usage: InterfaceOptionsFrame_OpenToCategory("categoryName" or panel)');
-
-    local elementToDisplay
-
-    for _, element in SecureNext, _G.INTERFACEOPTIONS_ADDONCATEGORIES do
-        if (element == panel or (panelName and element.name and element.name == panelName)) then
-            elementToDisplay = element
-            break
-        end
-    end
-
-    if (not elementToDisplay) then
-        return
-    end
-
-    InterfaceOptionsFrameTab2:Click();
-    local buttons = InterfaceOptionsFrameAddOns.buttons;
-    for i, button in SecureNext, buttons do
-        if (button.element == elementToDisplay) then
-            InterfaceOptionsFrameAddOns.buttons[i]:Click()
-        elseif (elementToDisplay.parent and button.element and (
-                button.element.name == elementToDisplay.parent and button.element.collapsed
-        )) then
-            OptionsListButtonToggle_OnClick(button.toggle)
-        end
-    end
-
-    if (not InterfaceOptionsFrame:IsShown()) then
-        InterfaceOptionsFrame_Show()
-    end
-end)
 
 ----------------------------------
 --LUA UTILITIES

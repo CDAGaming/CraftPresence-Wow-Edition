@@ -148,6 +148,7 @@ globals = {
 	"GetTime",
 	"InterfaceOptionsFrame",
 	"InterfaceOptionsFrameAddOns",
+	"InterfaceOptionsFrameCategories",
 	"InterfaceOptionsFrameTab2",
 	"InterfaceOptionsFrame_OnClick",
 	"InterfaceOptionsFrame_OpenToCategory",
