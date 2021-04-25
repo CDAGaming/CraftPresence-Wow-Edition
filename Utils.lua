@@ -369,17 +369,18 @@ local build_info, compatibility_info, flavor_info
 --- @return table @ build_info
 function CraftPresence:GetBuildInfo()
     if not build_info then
-        local version, build, date, tocversion = GetBuildInfo()
-        version = version or "0.0.0"
-        build = build or "0000"
-        date = date or "Jan 1 1969"
-        tocversion = tocversion or tonumber(build)
+        local version, build, date, tocversion = "0.0.0", "0000", "Jan 1 1969", "00000"
+        if GetBuildInfo then
+            version, build, date, tocversion = GetBuildInfo()
+            tocversion = tocversion or self:VersionToBuild(version)
+        end
 
-        build_info = {}
-        build_info["version"] = version
-        build_info["build"] = build
-        build_info["date"] = date
-        build_info["toc_version"] = tocversion
+        build_info = {
+            ["version"] = version,
+            ["build"] = build,
+            ["date"] = date,
+            ["toc_version"] = tocversion
+        }
     end
     return build_info
 end
@@ -413,10 +414,10 @@ function CraftPresence:GetCompatibilityInfo()
             ["5.0.0"] = 50000, -- MOP 5.0.0
             ["4.0.0"] = 40000, -- CATA 4.0.0
             ["3.0.0"] = 30000, -- WOTLK 3.0.0
-            ["2.5.0"] = 20500, -- TBC Classic
-            ["2.0.0"] = 20000, -- TBC 2.0.x
+            ["2.5.0"] = 20500, -- TBC Classic 2.5.0
+            ["2.0.0"] = 20000, -- TBC 2.0.0
             ["1.13.0"] = 11300, -- Vanilla Classic 1.13.0
-            ["1.12.1"] = 5875 -- Vanilla 1.12.1
+            ["1.12.1"] = 11201 -- Vanilla 1.12.1
         }
     end
     return compatibility_info
@@ -447,12 +448,34 @@ function CraftPresence:IsRebasedApi()
 end
 
 --- Getter for CraftPresence:addonVersion
---- @return string addonVersion
+--- @return string @ addonVersion
 function CraftPresence:GetVersion()
     if self:IsNullOrEmpty(addonVersion) then
         addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
     end
     return addonVersion
+end
+
+--- Compatibility Helper: Convert a Version into a build number
+--- @return string @ buildVersion
+function CraftPresence:VersionToBuild(versionStr)
+    if self:IsNullOrEmpty(versionStr) then
+        return versionStr
+    end
+    local buildStr = ""
+    local splitData = self:Split(versionStr, ".", true, true)
+    if splitData[1] and splitData[1] == versionStr then
+        buildStr = splitData[1]
+    else
+        for key, value in pairs(splitData) do
+            if key > 1 then
+                buildStr = buildStr .. strformat("%02d", value)
+            else
+                buildStr = buildStr .. value
+            end
+        end
+    end
+    return buildStr
 end
 
 --- Display the addon's config frame

@@ -360,7 +360,7 @@ function CraftPresence:OnDisable()
     -- Clean up Data before disabling
     self:Print(L["ADDON_CLOSE"])
     self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
-    if buildData["toc_version"] >= compatData["1.12.1"] then
+    if icon then
         icon:Hide(L["ADDON_NAME"])
     end
     self:UnregisterAllEvents()
@@ -371,7 +371,7 @@ end
 function CraftPresence:UpdateMinimapState(update_state)
     minimapState = { hide = not CraftPresence:GetFromDb("showMinimapIcon") }
     if update_state then
-        if buildData["toc_version"] >= compatData["1.12.1"] then
+        if icon then
             if minimapState["hide"] then
                 icon:Hide(L["ADDON_NAME"])
             else
