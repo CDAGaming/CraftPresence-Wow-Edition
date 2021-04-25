@@ -133,6 +133,8 @@ end
 --- @param str string The input string to evaluate
 --- @param pattern string The pattern to parse against
 --- @param multiple boolean Whether or not to find all/the first match
+--- @param index number The index to begin evaluation at
+--- @param plain boolean Whether or not to forbid pattern matching filters
 ---
 --- @return any @ match_data
 function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
@@ -331,22 +333,23 @@ end
 --- @param str string The input string to interpret
 --- @param inSplitPattern string The pattern to split the string by
 --- @param multiple boolean Whether to find multiple matches
+--- @param plain boolean Whether or not to forbid pattern matching filters
 --- @param outResults table The output result data (Can be predefined)
 ---
 --- @return table @ outResults
-function CraftPresence:Split(str, inSplitPattern, multiple, outResults)
+function CraftPresence:Split(str, inSplitPattern, multiple, plain, outResults)
     if not outResults then
         outResults = { }
     end
     local doContinue = true
     local theStart = 1
-    local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
+    local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart, plain)
     while theSplitStart and doContinue do
         tinsert(outResults, strsub(str, theStart, theSplitStart - 1))
         theStart = theSplitEnd + 1
         doContinue = multiple
         if doContinue then
-            theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart)
+            theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart, plain)
         end
     end
     tinsert(outResults, strsub(str, theStart))
