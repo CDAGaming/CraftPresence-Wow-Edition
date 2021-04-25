@@ -7,10 +7,11 @@ local CP_GlobalUtils = CP_GlobalUtils
 
 -- Lua APIs
 local _G = getfenv() or _G or {}
-local next, type, assert, pairs = next, type, assert, pairs;
-local strgmatch, strgfind, strformat = string.gmatch, string.gfind, string.format
+local next, type, assert, pairs, tonumber = next, type, assert, pairs, tonumber;
+local strgmatch, strgfind, strformat, strtrim = string.gmatch, string.gfind, string.format, string.trim
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
+local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
 ----------------------------------
 --COMPATIBILITY UTILITIES
@@ -109,8 +110,7 @@ function CraftPresence:TrimString(str)
     if self:IsNullOrEmpty(str) then
         return str
     end
-    str = self:Replace(str, "%s+", " ")
-    return str
+    return strtrim(str)
 end
 
 --- Retrieves the length of the specified object
@@ -692,12 +692,8 @@ function CraftPresence:After(seconds, func, args)
         func(args)
     end
 
-    if C_Timer ~= nil then
-        C_Timer.After(seconds, f)
-    else
-        self:SetupQueueSystem()
-        queued_data[f] = GetTime() + seconds
-    end
+    self:SetupQueueSystem()
+    queued_data[f] = GetTime() + seconds
 end
 
 --- Initializes Queue Systems

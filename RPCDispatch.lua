@@ -6,6 +6,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local strformat, tostring = string.format, tostring
 local strbyte, strsub, pairs = string.byte, string.sub, pairs
 local max, floor = math.max, math.floor
+local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
 
 -- Critical Data (Do not remove)
 local frame_count = 0

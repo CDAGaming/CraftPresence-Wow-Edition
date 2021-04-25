@@ -100,7 +100,6 @@ globals = {
 	"C_Map",
 	"C_MythicPlus",
 	"C_Scenario",
-	"C_Timer",
 	"EJ_GetInstanceByIndex",
 	"EJ_GetInstanceForMap",
 	"EJ_GetNumTiers",
