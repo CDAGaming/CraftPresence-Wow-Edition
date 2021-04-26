@@ -425,11 +425,11 @@ function CraftPresence:ChatCommand(input)
             self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then
             -- Query Parsing
-            local _, _, query = self:FindMatches(input, ":(.*)", false)
+            local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
                 query = strlower(query)
             end
-            self:PaintMessageWait(true, true, true, nil, (query == "force"))
+            self:PaintMessageWait(true, true, true, nil, (query == "force" or query == "true"))
         elseif input == "config" then
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then
@@ -506,7 +506,6 @@ function CraftPresence:ChatCommand(input)
         elseif self:StartsWith(input, "remove") then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
-
             if query ~= nil then
                 local customPlaceholders = self:GetFromDb("customPlaceholders")
                 if customPlaceholders[query] then
@@ -530,24 +529,25 @@ function CraftPresence:ChatCommand(input)
             end
         elseif self:StartsWith(input, "integration") then
             -- Query Parsing
-            local _, _, query = self:FindMatches(input, ":(.*)", false)
+            local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
                 if not integrationData[query] then
                     self:Print(strformat(L["INTEGRATION_QUERY"], query))
-                    query = strlower(query)
+                    local lower_query = strlower(query)
 
                     -- Integration Parsing
-                    if (query == "viragdevtool" or query == "vdt") and ViragDevTool_AddData then
+                    if (lower_query == "viragdevtool" or lower_query == "vdt") and ViragDevTool_AddData then
                         ViragDevTool_AddData(CraftPresence, L["ADDON_NAME"])
+                        ViragDevTool_AddData(registeredEvents, L["ADDON_NAME"] .. "_Events")
                         ViragDevTool_AddData(L, L["ADDON_NAME"] .. "_Locale")
                         -- Uncomment for single-use integration
                         -- integrationData["viragdevtool"] = true
                         -- integrationData["vdt"] = true
-                    elseif (query == "reload" or query == "rl" or query == "reloadui") and ReloadUI then
+                    elseif (lower_query == "reload" or lower_query == "rl" or lower_query == "reloadui") and ReloadUI then
                         ReloadUI()
-                    elseif (self:StartsWith(query, "event")) then
+                    elseif (self:StartsWith(lower_query, "event")) then
                         -- Sub-Query Parsing
-                        local _, _, eventQuery = self:FindMatches(input, " (.*)", false)
+                        local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
                         if eventQuery ~= nil then
                             if registeredEvents[eventQuery] then
                                 self:RemoveTriggers(eventQuery)
@@ -579,7 +579,7 @@ function CraftPresence:ChatCommand(input)
             local placeholderStr = L["PLACEHOLDERS_INTRO"]
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
-            local _, _, query = self:FindMatches(input, ":(.*)", false)
+            local _, _, query = self:FindMatches(input, " (.*)", false)
             local foundAny = false
             if query ~= nil then
                 self:Print(strformat(L["PLACEHOLDERS_QUERY"], query))

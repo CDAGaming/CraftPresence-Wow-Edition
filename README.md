@@ -54,7 +54,7 @@ Keep in mind the following:
 ___
 
 *   `/cp config` - Displays the Config menu to customize options and placeholder data
-*   `/cp update (:force)` - Reloads mod data (IE forces a Tick Event)
+*   `/cp update (force)` - Reloads mod data (IE forces a Tick Event)
 *   `/cp test` - Toggles debugging of Rich Presence Frames (Requires `Debug Mode`)
 *   `/cp (clear | clean)` - Reset all frames to their original positions and colors.
 *   `/cp status` - Displays your last sent RPC Data, in text form (Requires `Verbose Mode`)
@@ -62,8 +62,8 @@ ___
 *   `/cp remove (query)`  -  Remove custom/dynamic placeholders, if present.
 *   `/cp set (grp,key)` - Sets specific setting(s) within the config menu manually.
 *   `/cp reset (grp,key)` - Resets all (or a specific) setting(s) within the config menu.
-*   `/cp placeholders (:query)` - Views the currently available placeholders (With specified query, if any)
-*   `/cp integration (:query)`  -  Enable optional integrations, using specified query
+*   `/cp placeholders (query)` - Views the currently available placeholders (With specified query, if any)
+*   `/cp integration (query)`  -  Enable optional integrations, using specified query
 *   `/cp minimap` - Toggles the display of the minimap button (Requires Reload)
 *   `/cp (help | ?)` - Help Command to display the above commands and these explanations
 
