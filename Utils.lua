@@ -104,14 +104,16 @@ function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
     multiple = multiple == nil or multiple == true
     plain = plain ~= nil and plain == true
     index = index or 1
-    if multiple then
-        if strgmatch then
-            return strgmatch(str, pattern)
-        elseif strgfind then
-            return strgfind(str, pattern)
+    if not self:IsNullOrEmpty(str) then
+        if multiple then
+            if strgmatch then
+                return strgmatch(str, pattern)
+            elseif strgfind then
+                return strgfind(str, pattern)
+            end
+        elseif strfind then
+            return strfind(str, pattern, index, plain)
         end
-    elseif strfind then
-        return strfind(str, pattern, index, plain)
     end
     return nil
 end
@@ -127,12 +129,15 @@ end
 
 --- Determines whether the specified string starts with the specified pattern
 ---
---- @param String string The input string to evaluate
---- @param Start string The target string to locate at the first index
+--- @param str string The input string to evaluate
+--- @param start string The target string to locate at the first index
 ---
 --- @return boolean @ startsWith
-function CraftPresence:StartsWith(String, Start)
-    return strsub(String, 1, self:GetLength(Start)) == Start
+function CraftPresence:StartsWith(str, start)
+    if self:IsNullOrEmpty(str) then
+        return false
+    end
+    return strsub(str, 1, self:GetLength(start)) == start
 end
 
 --- Formats the following word to proper casing (Xxxx)
@@ -217,17 +222,22 @@ end
 
 --- Determines whether the specified value is within the specified range
 ---
---- @param value number The specified value to interpret
---- @param min number The minimum the value is allowed to be
---- @param max number The maximum the value is allowed to be
---- @param contains boolean Whether the range should include min and max
---- @param check_sanity boolean Whether to sanity check the min and max values
+--- @param value number The specified value to interpret (Default: 0)
+--- @param min number The minimum the value is allowed to be (Default: value)
+--- @param max number The maximum the value is allowed to be (Default: min)
+--- @param contains boolean Whether the range should include min and max (Default: false)
+--- @param check_sanity boolean Whether to sanity check the min and max values (Default: true)
 ---
 --- @return boolean @ isWithinValue
 function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
+    -- Data checks
+    value = value or 0
+    min = min or value
+    max = max or min
+    contains = (contains ~= nil and contains == true)
+    check_sanity = (check_sanity == nil or check_sanity == true)
     -- Sanity checks
-    local will_verify = (check_sanity == nil or check_sanity == true)
-    if will_verify then
+    if check_sanity then
         if min > max then
             min = max
         end
@@ -242,8 +252,7 @@ function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
         end
     end
     -- Contains Checks
-    local will_contain = (contains ~= nil and contains == true)
-    if not will_contain then
+    if not contains then
         min = min + 1
         max = max - 1
     end
@@ -304,18 +313,20 @@ function CraftPresence:Split(str, inSplitPattern, multiple, plain, outResults)
     if not outResults then
         outResults = { }
     end
-    local doContinue = true
-    local theStart = 1
-    local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart, plain)
-    while theSplitStart and doContinue do
-        tinsert(outResults, strsub(str, theStart, theSplitStart - 1))
-        theStart = theSplitEnd + 1
-        doContinue = multiple
-        if doContinue then
-            theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart, plain)
+    if not self:IsNullOrEmpty(str) then
+        local doContinue = true
+        local theStart = 1
+        local theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart, plain)
+        while theSplitStart and doContinue do
+            tinsert(outResults, strsub(str, theStart, theSplitStart - 1))
+            theStart = theSplitEnd + 1
+            doContinue = multiple
+            if doContinue then
+                theSplitStart, theSplitEnd = self:FindMatches(str, inSplitPattern, false, theStart, plain)
+            end
         end
+        tinsert(outResults, strsub(str, theStart))
     end
-    tinsert(outResults, strsub(str, theStart))
     return outResults
 end
 
