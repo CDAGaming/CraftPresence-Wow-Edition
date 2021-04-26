@@ -43,16 +43,16 @@ jobs:
       - name: Package and release for Retail
         uses: BigWigsMods/packager@master
         with:
-          args: -g retail -w 0
+          args: -g retail
 
       # Release - Wow Classic
       - name: Package and release for Classic
         uses: BigWigsMods/packager@master
         with:
-          args: -g classic -w 0
+          args: -g classic
 
       # Release - TBC Classic
       - name: Package and release for TBC Classic
         uses: BigWigsMods/packager@master
         with:
-          args: -g bc -w 0
+          args: -g bc
