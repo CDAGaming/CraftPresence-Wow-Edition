@@ -12,6 +12,7 @@
 ## X-Embeds: Ace3
 ## X-Credits: Attka
 ## X-Curse-Project-ID: 457334
+## X-WoWI-ID: 25986
 ## X-Wago-ID: R4N2naNL
 
 GlobalUtils.lua
