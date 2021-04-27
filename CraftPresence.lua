@@ -55,11 +55,12 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local queued_time_start = L["UNKNOWN_KEY"]
     local queued_time_end = L["UNKNOWN_KEY"]
     local split_key = L["ARRAY_SPLIT_KEY"]
+    local buttons = self:GetFromDb("buttons")
     local queued_primary_button = (
-            self:GetFromDb("primaryButton", "label") .. split_key .. self:GetFromDb("primaryButton", "url")
+            buttons["primaryButton"]["label"] .. split_key .. buttons["primaryButton"]["url"]
     )
     local queued_secondary_button = (
-            self:GetFromDb("secondaryButton", "label") .. split_key .. self:GetFromDb("secondaryButton", "url")
+            buttons["secondaryButton"]["label"] .. split_key .. buttons["secondaryButton"]["url"]
     )
     -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do

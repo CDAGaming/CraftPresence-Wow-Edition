@@ -50,13 +50,15 @@ local DB_DEFAULTS = {
         callbackDelay = 2,
         frameSize = 6,
         frameClearDelay = 10,
-        primaryButton = {
-            label = "",
-            url = ""
-        },
-        secondaryButton = {
-            label = "",
-            url = ""
+        buttons = {
+            primaryButton = {
+                label = "",
+                url = ""
+            },
+            secondaryButton = {
+                label = "",
+                url = ""
+            }
         },
         customPlaceholders = {},
         innerPlaceholderKey = L["DEFAULT_INNER_KEY"],
@@ -358,26 +360,7 @@ function CraftPresence:getOptionsTable()
                 set = function(info, value)
                     CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
                 end,
-                args = {
-                    buttonHeader = {
-                        order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_BUTTONS"]
-                    },
-                    primaryButton = {
-                        name = L["TITLE_PRIMARY_BUTTON"],
-                        desc = L["COMMENT_PRIMARY_BUTTON"],
-                        type = "group", order = CraftPresence:GetNextIndex(),
-                        args = CraftPresence:GetButtonArgs("primaryButton")
-                    },
-                    secondaryButton = {
-                        name = L["TITLE_SECONDARY_BUTTON"],
-                        desc = L["COMMENT_SECONDARY_BUTTON"],
-                        type = "group", order = CraftPresence:GetNextIndex(),
-                        args = CraftPresence:GetButtonArgs("secondaryButton")
-                    },
-                    blank1 = {
-                        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                }
+                args = CraftPresence:GetPlaceholderArgs("buttons", L["CATEGORY_TITLE_BUTTONS"])
             },
             customOptions = {
                 type = "group", order = CraftPresence:GetNextIndex(),
