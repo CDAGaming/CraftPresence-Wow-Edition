@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true, "raw")
 
 -- Addon APIs
 local CP_GlobalUtils = CP_GlobalUtils
@@ -149,11 +149,11 @@ L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at (Should equ
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 
-L["TITLE_PRIMARY_BUTTON"] = "Primary Button"
-L["COMMENT_PRIMARY_BUTTON"] = "The data to show for the Primary Button area of the RPC"
+L["TITLE_PRIMARYBUTTON"] = "Primary Button"
+L["COMMENT_PRIMARYBUTTON"] = "The data to show for the Primary Button area of the RPC"
 
-L["TITLE_SECONDARY_BUTTON"] = "Secondary Button"
-L["COMMENT_SECONDARY_BUTTON"] = "The data to show for the Secondary Button area of the RPC"
+L["TITLE_SECONDARYBUTTON"] = "Secondary Button"
+L["COMMENT_SECONDARYBUTTON"] = "The data to show for the Secondary Button area of the RPC"
 
 L["TITLE_BUTTON_LABEL"] = "Label"
 L["COMMENT_BUTTON_LABEL"] = "The message to show as the label."

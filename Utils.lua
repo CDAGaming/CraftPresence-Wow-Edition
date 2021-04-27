@@ -648,7 +648,8 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey)
                 end
             end
             table_args[key] = {
-                name = key,
+                name = (L["TITLE_" .. strupper(key)] or key),
+                desc = (L["COMMENT_" .. strupper(key)] or ""),
                 type = "group", order = CraftPresence:GetNextIndex(),
                 args = value_args
             }
