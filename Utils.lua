@@ -6,7 +6,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 local CP_GlobalUtils = CP_GlobalUtils
 
 -- Lua APIs
-local type, pairs, tonumber = type, pairs, tonumber;
+local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring;
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
@@ -330,6 +330,30 @@ function CraftPresence:Split(str, inSplitPattern, multiple, plain, outResults)
     return outResults
 end
 
+--- Retrieves the Return Value from a Dynamic Function
+---
+--- @param returnValue function The input (and output) for this event
+--- @param expectedType string The expected type of this event
+--- @param limit number How many times to iterate until a different type
+---
+--- @return string @ returnValue
+function CraftPresence:GetDynamicReturnValue(returnValue, expectedType, limit, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+    if not self:IsNullOrEmpty(returnValue) and (self:IsNullOrEmpty(expectedType) or expectedType == "function") and loadstring then
+        returnValue = loadstring(returnValue)()
+        while type(returnValue) == "function" and limit > 0 do
+            returnValue = returnValue(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+            limit = limit - 1
+        end
+    end
+    -- Sanity checks
+    if type(returnValue) == "table" then
+        returnValue = self:SerializeTable(returnValue)
+    else
+        returnValue = tostring(returnValue)
+    end
+    return returnValue
+end
+
 ----------------------------------
 --API UTILITIES
 ----------------------------------
@@ -430,6 +454,12 @@ function CraftPresence:GetVersion()
     return addonVersion
 end
 
+--- Getter for Addon Locale Data
+--- @return table @ localeData
+function CraftPresence:GetLocale()
+    return L
+end
+
 --- Compatibility Helper: Convert a Version into a build number
 --- @return string @ buildVersion
 function CraftPresence:VersionToBuild(versionStr)
@@ -512,7 +542,7 @@ function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_plac
         local strKey = tostring(key)
         local strValue = tostring(value)
         if type(value) == "table" then
-            strValue = self:SerializeTable(value)
+            strValue = self:GetDynamicReturnValue(value["data"] or value, value["type"] or type(value), 1, self)
         end
         if (query == nil or (
                 self:FindMatches(strlower(strKey), query, false, 1, true) or
@@ -621,11 +651,12 @@ end
 --- @param rootKey string The config key to retrieve placeholder data
 ---
 --- @return table @ generatedData
-function CraftPresence:GetPlaceholderArgs(rootKey)
+function CraftPresence:GetPlaceholderArgs(rootKey, titleKey)
+    titleKey = CraftPresence:TrimString(strformat(L["CATEGORY_TITLE_CUSTOM_EXTENDED"], titleKey or ""))
     local found_count = 0
     local table_args = {
         titleHeader = {
-            order = CraftPresence:GetNextIndex(), type = "header", name = L["CATEGORY_TITLE_CUSTOM_EXTENDED"]
+            order = CraftPresence:GetNextIndex(), type = "header", name = titleKey
         }
     }
     local custom_placeholders = CraftPresence:GetFromDb(rootKey)

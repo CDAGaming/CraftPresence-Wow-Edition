@@ -88,14 +88,7 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         -- Sanity Checks
         local returnType = value["type"] or "string"
         local returnValue = value["data"] or ""
-        if not self:IsNullOrEmpty(returnValue) then
-            if returnType == "function" and loadstring then
-                returnValue = loadstring(returnValue)()
-            else
-                returnValue = tostring(returnValue)
-            end
-        end
-        value = returnValue
+        value = self:GetDynamicReturnValue(returnValue, returnType, 1, self)
         -- Main Parsing
         queued_details = self:Replace(queued_details, key, value, true)
         queued_state = self:Replace(queued_state, key, value, true)

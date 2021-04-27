@@ -388,7 +388,7 @@ function CraftPresence:getOptionsTable()
                 set = function(info, value)
                     CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
                 end,
-                args = CraftPresence:GetPlaceholderArgs("customPlaceholders")
+                args = CraftPresence:GetPlaceholderArgs("customPlaceholders", L["CATEGORY_TITLE_CUSTOM"])
             },
             extraOptions = {
                 type = "group", order = CraftPresence:GetNextIndex(),
