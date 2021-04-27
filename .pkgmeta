@@ -1,4 +1,13 @@
 package-as: CraftPresence
+wowi-convert-changelog: no
+
+embedded-libraries:
+  - libstub
+  - callbackhandler
+  - libdatabroker-1-1
+  - libdbicon-1-0
+  - ace3
+
 ignore:
   - *.png
   - Libraries/Ace3/Ace3.lua
