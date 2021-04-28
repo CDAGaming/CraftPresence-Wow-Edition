@@ -1,9 +1,8 @@
-local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
-
-local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-
 -- Lua APIs
 local strformat, type, tostring = string.format, type, tostring
+
+-- Addon APIs
+local L = CraftPresence.locale
 
 -- SCHEMA_DEFAULTS
 local SCHEMA_DEFAULTS = {

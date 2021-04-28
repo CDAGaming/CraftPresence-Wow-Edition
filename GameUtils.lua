@@ -1,11 +1,8 @@
-local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
-
-local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-
 -- Lua APIs
 local strformat, pairs, tostring = string.format, pairs, tostring
 
 -- Addon APIs
+local L = CraftPresence.locale
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
     return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end

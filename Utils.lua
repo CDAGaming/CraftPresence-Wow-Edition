@@ -1,16 +1,13 @@
-local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
-
-local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-
--- Addon APIs
-local CP_GlobalUtils = CP_GlobalUtils
-
 -- Lua APIs
 local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring;
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
+
+-- Addon APIs
+local L = CraftPresence.locale
+local CP_GlobalUtils = CP_GlobalUtils
 
 ----------------------------------
 --LUA UTILITIES

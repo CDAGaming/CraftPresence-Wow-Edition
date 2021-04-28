@@ -1,12 +1,11 @@
-local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
-
-local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-
 -- Lua APIs
 local strformat, tostring = string.format, tostring
 local strbyte, strsub, pairs = string.byte, string.sub, pairs
 local max, floor = math.max, math.floor
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
+
+-- Addon APIs
+local L = CraftPresence.locale
 
 -- Critical Data (Do not remove)
 local frame_count = 0

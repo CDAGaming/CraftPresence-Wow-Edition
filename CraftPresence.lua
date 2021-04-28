@@ -1,18 +1,21 @@
-local CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
-
-local L = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-local config_registry = LibStub("AceConfigRegistry-3.0")
+-- Initial Addon Initializers (Do not remove)
+CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
+CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
+CraftPresence.registeredEvents = {}
 
 -- Lua APIs
 local strformat, strlower = string.format, string.lower
 local tostring, ipairs, pairs = tostring, ipairs, pairs
 local type, max = type, math.max
 
+-- Addon APIs
+local L = CraftPresence.locale
+local config_registry = LibStub("AceConfigRegistry-3.0")
+
 -- Critical Data (Do not remove)
 local CraftPresenceLDB, icon
 local lastEventName, registryEventName
 local minimapState = { hide = false }
-local registeredEvents = {}
 -- Build and Integration Data
 local buildData = {}
 local compatData = {}
@@ -161,7 +164,7 @@ function CraftPresence:OnInitialize()
             text = L["ADDON_NAME"],
             icon = strformat("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
             OnClick = function(_, _)
-                CraftPresence.ShowConfig()
+                CraftPresence:ShowConfig()
             end,
             OnTooltipShow = function(tt)
                 tt:AddLine(L["ADDON_NAME"])
@@ -227,7 +230,7 @@ function CraftPresence:AddTriggers(event, args)
     if event ~= nil and args ~= nil then
         for _, v in ipairs(args) do
             local eventTag, eventBinding = tostring(v), tostring(event)
-            registeredEvents[eventTag] = eventBinding
+            CraftPresence.registeredEvents[eventTag] = eventBinding
             self:RegisterEvent(eventTag, eventBinding)
         end
     end
@@ -244,7 +247,7 @@ function CraftPresence:RemoveTriggers(args)
     if args ~= nil then
         for _, v in ipairs(args) do
             local eventTag = tostring(v)
-            registeredEvents[eventTag] = nil
+            CraftPresence.registeredEvents[eventTag] = nil
             self:UnregisterEvent(eventTag)
         end
     end
@@ -530,20 +533,13 @@ function CraftPresence:ChatCommand(input)
                     local lower_query = strlower(query)
 
                     -- Integration Parsing
-                    if (lower_query == "viragdevtool" or lower_query == "vdt") and ViragDevTool_AddData then
-                        ViragDevTool_AddData(CraftPresence, L["ADDON_NAME"])
-                        ViragDevTool_AddData(registeredEvents, L["ADDON_NAME"] .. "_Events")
-                        ViragDevTool_AddData(L, L["ADDON_NAME"] .. "_Locale")
-                        -- Uncomment for single-use integration
-                        -- integrationData["viragdevtool"] = true
-                        -- integrationData["vdt"] = true
-                    elseif (lower_query == "reload" or lower_query == "rl") and ReloadUI then
+                    if (lower_query == "reload" or lower_query == "rl") and ReloadUI then
                         ReloadUI()
                     elseif (self:StartsWith(lower_query, "event")) then
                         -- Sub-Query Parsing
                         local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
                         if eventQuery ~= nil then
-                            if registeredEvents[eventQuery] then
+                            if CraftPresence.registeredEvents[eventQuery] then
                                 self:RemoveTriggers(eventQuery)
                             else
                                 self:AddTriggers(registryEventName, eventQuery)

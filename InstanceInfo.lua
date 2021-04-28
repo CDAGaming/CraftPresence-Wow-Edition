@@ -1,5 +1,3 @@
-local CraftPresence = LibStub("AceAddon-3.0"):GetAddon("CraftPresence")
-
 -- Lua APIs
 local pairs = pairs
 
