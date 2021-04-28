@@ -339,7 +339,9 @@ end
 --- @return string @ returnValue
 function CraftPresence:GetDynamicReturnValue(returnValue, expectedType, limit, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
     if not self:IsNullOrEmpty(returnValue) and (self:IsNullOrEmpty(expectedType) or expectedType == "function") and loadstring then
-        returnValue = loadstring(returnValue)()
+        if type(returnValue) == "string" then
+            returnValue = loadstring(returnValue)()
+        end
         while type(returnValue) == "function" and limit > 0 do
             returnValue = returnValue(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
             limit = limit - 1
