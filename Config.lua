@@ -360,7 +360,10 @@ function CraftPresence:getOptionsTable()
                 set = function(info, value)
                     CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
                 end,
-                args = CraftPresence:GetPlaceholderArgs("buttons", L["CATEGORY_TITLE_BUTTONS"])
+                args = CraftPresence:GetPlaceholderArgs("buttons", strformat(
+                        L["CATEGORY_TITLE_BUTTONS_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
+                        function(a1) return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], a1, (a1 == 1 and "") or "s") end
+                )
             },
             customOptions = {
                 type = "group", order = CraftPresence:GetNextIndex(),
@@ -371,7 +374,10 @@ function CraftPresence:getOptionsTable()
                 set = function(info, value)
                     CraftPresence.db.profile[info[CraftPresence:GetLength(info)]] = value
                 end,
-                args = CraftPresence:GetPlaceholderArgs("customPlaceholders", L["CATEGORY_TITLE_CUSTOM"])
+                args = CraftPresence:GetPlaceholderArgs("customPlaceholders", strformat(
+                        L["CATEGORY_TITLE_CUSTOM_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
+                        function(a1) return strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], a1, (a1 == 1 and "") or "s") end
+                )
             },
             extraOptions = {
                 type = "group", order = CraftPresence:GetNextIndex(),

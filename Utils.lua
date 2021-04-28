@@ -610,11 +610,16 @@ end
 --- Generates Config Table for a set of custom arguments
 ---
 --- @param rootKey string The config key to retrieve placeholder data
+--- @param titleKey string The title key to display (Can be a function returning a string)
+--- @param commentKey string The comment key to display (Can be a function returning a string)
 ---
 --- @return table @ generatedData
-function CraftPresence:GetPlaceholderArgs(rootKey, titleKey)
-    titleKey = CraftPresence:TrimString(strformat(L["CATEGORY_TITLE_CUSTOM_EXTENDED"], titleKey or ""))
+function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
+    titleKey = titleKey or rootKey
+    commentKey = commentKey or ""
     local found_count = 0
+
+    titleKey = CraftPresence:GetDynamicReturnValue(titleKey, type(titleKey), 1, CraftPresence)
     local table_args = {
         titleHeader = {
             order = CraftPresence:GetNextIndex(), type = "header", name = titleKey
@@ -659,9 +664,10 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey)
         end
     end
 
+    commentKey = CraftPresence:GetDynamicReturnValue(commentKey, type(commentKey), 1, found_count)
     table_args[CraftPresence:RandomString(8)] = {
         type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
-        name = strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], found_count, (found_count == 1 and "") or "s")
+        name = commentKey
     }
     return table_args
 end

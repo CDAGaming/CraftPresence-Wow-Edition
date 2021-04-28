@@ -48,7 +48,9 @@ L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
 
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
+L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "%s Buttons"
 L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data"
+L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 
 L["CATEGORY_TITLE_CUSTOM"] = "Custom"
 L["CATEGORY_TITLE_CUSTOM_EXTENDED"] = "%s Placeholders"
