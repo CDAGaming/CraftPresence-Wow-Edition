@@ -35,7 +35,7 @@ end
 ---
 --- @return number @ random_string
 function CraftPresence:RandomString(length)
-    return CP_GlobalUtils.RandomString(length)
+    return CP_GlobalUtils:RandomString(length)
 end
 
 --- Determines if the specified object is null or empty
@@ -44,7 +44,7 @@ end
 ---
 --- @return boolean @ is_object_empty
 function CraftPresence:IsNullOrEmpty(obj)
-    return CP_GlobalUtils.IsNullOrEmpty(obj)
+    return CP_GlobalUtils:IsNullOrEmpty(obj)
 end
 
 --- Replaces the specified area of a string
@@ -56,7 +56,7 @@ end
 ---
 --- @return string @ formatted_string
 function CraftPresence:Replace(str, old, new, plain)
-    return CP_GlobalUtils.Replace(str, old, new, plain)
+    return CP_GlobalUtils:Replace(str, old, new, plain)
 end
 
 --- Trims a String of leading and duplicate spaces
@@ -161,7 +161,7 @@ end
 ---
 --- @return string @ formatted_string
 function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    return CP_GlobalUtils.SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+    return CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
 --- Parses Multiple arguments through the SetFormat method
