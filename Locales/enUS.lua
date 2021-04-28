@@ -13,32 +13,32 @@ local GREY = '|cfd9b9b9b'
 local RED = '|cFFFF6060'
 local GOLD = '|cFFFFD700'
 
--- Data Default Values
-L["ONLINE_LABEL"] = "Online"
-L["AFK_LABEL"] = "AFK"
-L["DND_LABEL"] = "DND"
-L["GHOST_LABEL"] = "Ghost"
-L["DEAD_LABEL"] = "Dead"
+-- Data Default Values (DNT)
+L["LABEL_ONLINE"] = "Online"
+L["LABEL_AFK"] = "AFK"
+L["LABEL_DND"] = "DND"
+L["LABEL_GHOST"] = "Ghost"
+L["LABEL_DEAD"] = "Dead"
 L["TYPE_UNKNOWN"] = "Unknown"
 L["TYPE_NONE"] = "None"
-L["LEVEL_TAG_FORMAT"] = "Level %s"
+L["TYPE_SKIP"] = "Skip"
 -- Internal Values (DNT)
-L["UNKNOWN_KEY"] = "Skip"
 L["ARRAY_SPLIT_KEY"] = "=="
 L["DEFAULT_INNER_KEY"] = inkey
 L["DEFAULT_GLOBAL_KEY"] = outkey
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
-L["CONFIG_COMMAND"] = "cp set"
-L["CONFIG_COMMAND_ALT"] = "craftpresence set"
-L["RPC_EVENT_FORMAT"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
+L["COMMAND_CONFIG"] = "cp set"
+L["COMMAND_CONFIG_ALT"] = "craftpresence set"
+L["FORMAT_LEVEL"] = "Level %s"
+L["FORMAT_EVENT_RPC"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
 
 -- Primary Logging Data
-L["DEBUG_LOG"] = setfmt("*[Debug]|r %s", GREY)
-L["VERBOSE_LOG"] = setfmt("*[Verbose]|r %s", GREY)
-L["ERROR_LOG"] = setfmt("*[Error]|r %s", RED)
-L["WARNING_LOG"] = setfmt("*[Warning]|r %s", GOLD)
+L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)
+L["LOG_VERBOSE"] = setfmt("*[Verbose]|r %s", GREY)
+L["LOG_ERROR"] = setfmt("*[Error]|r %s", RED)
+L["LOG_WARNING"] = setfmt("*[Warning]|r %s", GOLD)
 
 -- Config Category Data
 L["CATEGORY_TITLE_GENERAL"] = "General"
@@ -200,10 +200,10 @@ L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
 L["PLACEHOLDERS_QUERY"] = setfmt("Searching for placeholders containing *%s|r...", GREY)
-L["PLACEHOLDERS_INTRO"] = setfmt("Available Placeholders (*<key>|r => ^<value>|r):", GREEN, GREY)
+L["PLACEHOLDERS_FOUND_INTRO"] = setfmt("Available Placeholders (*<key>|r => ^<value>|r):", GREEN, GREY)
 L["PLACEHOLDERS_FOUND_NONE"] = setfmt("*No placeholders found within specified parameters|r", RED)
 L["PLACEHOLDERS_FOUND_DATA"] = setfmt("*%s|r => ^%s|r", GREEN, GREY)
-L["PLACEHOLDERS_NOTE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),", GREEN, outkey)
+L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),", GREEN, outkey)
 L["PLACEHOLDERS_NOTE_TWO"] = setfmt("while ones enclosed by *^|r are inner (Cannot have any other keys)", GREY, inkey)
 
 -- Command: /cp integration
@@ -212,15 +212,15 @@ L["INTEGRATION_NOT_FOUND"] = setfmt("*No integrations to enable within specified
 L["INTEGRATION_ALREADY_USED"] = setfmt("*Specified integration has already been used|r", RED)
 
 -- Command: /cp clear|clean
-L["INFO_COMMAND_CLEAR"] = "Clearing active frame data..."
+L["COMMAND_CLEAR_SUCCESS"] = "Clearing active frame data..."
 
 -- Command: /cp create
-L["COMMAND_CREATE_ADDED"] = setfmt("Added custom placeholder *%s|r with the following data: %s", GREEN, GREY)
+L["COMMAND_CREATE_SUCCESS"] = setfmt("Added custom placeholder *%s|r with the following data: %s", GREEN, GREY)
 L["COMMAND_CREATE_OVERRIDE"] = "Specified arguments will replace other placeholders, please use the create:override cmd"
 L["COMMAND_CREATE_OVERWRITE"] = "Unable to use specified arguments (Would overwrite an inner/global placeholder)"
 
 -- Command: /cp remove
-L["COMMAND_REMOVE_REMOVED"] = setfmt("Removed custom placeholder *%s|r", GREEN)
+L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed custom placeholder *%s|r", GREEN)
 L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
 
 -- Config Error Standards

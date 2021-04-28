@@ -55,8 +55,8 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local queued_large_image_text = self:GetFromDb("largeImageMessage")
     local queued_small_image_key = self:GetFromDb("smallImageKey")
     local queued_small_image_text = self:GetFromDb("smallImageMessage")
-    local queued_time_start = L["UNKNOWN_KEY"]
-    local queued_time_end = L["UNKNOWN_KEY"]
+    local queued_time_start = L["TYPE_SKIP"]
+    local queued_time_end = L["TYPE_SKIP"]
     local split_key = L["ARRAY_SPLIT_KEY"]
     local buttons = self:GetFromDb("buttons")
     local queued_primary_button = (
@@ -145,7 +145,7 @@ function CraftPresence:OnInitialize()
     -- Options Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetSchemaDefaults())
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
-        (L["CONFIG_COMMAND"]), (L["CONFIG_COMMAND_ALT"])
+        (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
@@ -317,13 +317,13 @@ function CraftPresence:DispatchUpdate(args)
             if self:GetFromDb("debugMode") then
                 if self:GetFromDb("verboseMode") then
                     self:Print(strformat(
-                            L["VERBOSE_LOG"], strformat(
+                            L["LOG_VERBOSE"], strformat(
                                     logPrefix, self:SerializeTable(args)
                             )
                     ))
                 else
                     self:Print(strformat(
-                            L["DEBUG_LOG"], strformat(
+                            L["LOG_DEBUG"], strformat(
                                     logPrefix, eventName
                             )
                     ))
@@ -376,7 +376,7 @@ function CraftPresence:UpdateMinimapState(update_state)
             end
         else
             self:Print(strformat(
-                    L["ERROR_LOG"], strformat(
+                    L["LOG_ERROR"], strformat(
                             L["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"
                     )
             ))
@@ -411,13 +411,13 @@ function CraftPresence:ChatCommand(input)
                 self:PaintMessageWait(true, false, false)
             else
                 self:Print(strformat(
-                        L["ERROR_LOG"], strformat(
+                        L["LOG_ERROR"], strformat(
                                 L["ERROR_COMMAND_CONFIG"], L["TITLE_DEBUG_MODE"]
                         )
                 ))
             end
         elseif input == "clean" or input == "clear" then
-            self:Print(L["INFO_COMMAND_CLEAR"])
+            self:Print(L["COMMAND_CLEAR_SUCCESS"])
             self:CleanFrames()
             self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then
@@ -450,7 +450,7 @@ function CraftPresence:ChatCommand(input)
                 self:Print(self:GetLastEncoded())
             else
                 self:Print(strformat(
-                        L["ERROR_LOG"], strformat(
+                        L["LOG_ERROR"], strformat(
                                 L["ERROR_COMMAND_CONFIG"], L["TITLE_VERBOSE_MODE"]
                         )
                 ))
@@ -473,7 +473,7 @@ function CraftPresence:ChatCommand(input)
                 local splitQuery = self:Split(query, " ")
                 splitQuery[2] = splitQuery[2] or ""
                 if customPlaceholders[splitQuery[1]] and not overrideKey then
-                    self:Print(strformat(L["ERROR_LOG"], L["COMMAND_CREATE_OVERRIDE"]))
+                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_OVERRIDE"]))
                 elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
                     customPlaceholders[splitQuery[1]] = {
                         ["type"] = typeQuery,
@@ -481,7 +481,7 @@ function CraftPresence:ChatCommand(input)
                     }
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
                     self:Print(strformat(
-                            L["COMMAND_CREATE_ADDED"], splitQuery[1], self:SerializeTable(
+                            L["COMMAND_CREATE_SUCCESS"], splitQuery[1], self:SerializeTable(
                                     customPlaceholders[splitQuery[1]]
                             )
                     ))
@@ -490,7 +490,7 @@ function CraftPresence:ChatCommand(input)
                         config_registry:NotifyChange(L["ADDON_NAME"])
                     end
                 else
-                    self:Print(strformat(L["ERROR_LOG"], L["COMMAND_CREATE_OVERWRITE"]))
+                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_OVERWRITE"]))
                 end
             else
                 self:Print(
@@ -508,13 +508,13 @@ function CraftPresence:ChatCommand(input)
                 if customPlaceholders[query] then
                     customPlaceholders[query] = nil
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
-                    self:Print(strformat(L["COMMAND_REMOVE_REMOVED"], query))
+                    self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], query))
 
                     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
                         config_registry:NotifyChange(L["ADDON_NAME"])
                     end
                 else
-                    self:Print(strformat(L["ERROR_LOG"], L["COMMAND_REMOVE_NO_MATCH"]))
+                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
                 end
             else
                 self:Print(
@@ -546,7 +546,7 @@ function CraftPresence:ChatCommand(input)
                             end
                         else
                             self:Print(strformat(
-                                    L["ERROR_LOG"], strformat(
+                                    L["LOG_ERROR"], strformat(
                                             L["ERROR_COMMAND_UNKNOWN"], input
                                     )
                             ))
@@ -566,7 +566,7 @@ function CraftPresence:ChatCommand(input)
                 )
             end
         elseif self:StartsWith(input, "placeholders") then
-            local placeholderStr = L["PLACEHOLDERS_INTRO"]
+            local placeholderStr = L["PLACEHOLDERS_FOUND_INTRO"]
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
@@ -585,14 +585,14 @@ function CraftPresence:ChatCommand(input)
             if not foundAny then
                 placeholderStr = placeholderStr .. "\n " .. L["PLACEHOLDERS_FOUND_NONE"]
             end
-            placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
+            placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
             self:Print(placeholderStr)
         elseif self:StartsWith(input, "set") then
             local _, _, query = self:FindMatches(input, " (.*)", false)
-            LibStub("AceConfigCmd-3.0"):HandleCommand(L["CONFIG_COMMAND"], L["ADDON_NAME"], query or "")
+            LibStub("AceConfigCmd-3.0"):HandleCommand(L["COMMAND_CONFIG"], L["ADDON_NAME"], query or "")
         else
             self:Print(strformat(
-                    L["ERROR_LOG"], strformat(
+                    L["LOG_ERROR"], strformat(
                             L["ERROR_COMMAND_UNKNOWN"], input
                     )
             ))

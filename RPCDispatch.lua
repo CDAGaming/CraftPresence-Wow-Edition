@@ -16,7 +16,7 @@ local last_encoded = ""
 --- @return string @ lastEncodedMessage
 function CraftPresence:GetLastEncoded()
     return strformat(
-            L["VERBOSE_LOG"], strformat(
+            L["LOG_VERBOSE"], strformat(
                     L["VERBOSE_LAST_ENCODED"], self:Replace(last_encoded, "|", "||")
             )
     )
@@ -30,7 +30,7 @@ end
 function CraftPresence:CreateFrames(size)
     frame_count = floor(GetScreenWidth() / size)
     if self:GetFromDb("debugMode") then
-        self:Print(strformat(L["DEBUG_LOG"], strformat(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
+        self:Print(strformat(L["LOG_DEBUG"], strformat(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
     for i = 1, frame_count do
@@ -103,7 +103,7 @@ function CraftPresence:PaintSomething(text)
     if self:GetLength(text) >= max_bytes then
         if self:GetFromDb("debugMode") then
             self:Print(strformat(
-                    L["ERROR_LOG"], strformat(
+                    L["LOG_ERROR"], strformat(
                             L["ERROR_BYTE_OVERFLOW"], tostring(self:GetLength(text)), tostring(max_bytes)
                     )
             ))
@@ -174,38 +174,38 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         clientId = L["DEFAULT_CLIENT_ID"]
     end
     if self:IsNullOrEmpty(largeImageKey) then
-        largeImageKey = L["UNKNOWN_KEY"]
+        largeImageKey = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(largeImageText) then
-        largeImageText = L["UNKNOWN_KEY"]
+        largeImageText = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(smallImageKey) then
-        smallImageKey = L["UNKNOWN_KEY"]
+        smallImageKey = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(smallImageText) then
-        smallImageText = L["UNKNOWN_KEY"]
+        smallImageText = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(details) then
-        details = L["UNKNOWN_KEY"]
+        details = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(gameState) then
-        gameState = L["UNKNOWN_KEY"]
+        gameState = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(startTime) then
-        startTime = L["UNKNOWN_KEY"]
+        startTime = L["TYPE_SKIP"]
     end
     if self:IsNullOrEmpty(endTime) then
-        endTime = L["UNKNOWN_KEY"]
+        endTime = L["TYPE_SKIP"]
     end
     -- Additional Sanity Checks for Primary Button
     if self:IsNullOrEmpty(primaryButton) then
-        primaryButton = L["UNKNOWN_KEY"]
+        primaryButton = L["TYPE_SKIP"]
     else
         local button_data = self:Split(primaryButton, L["ARRAY_SPLIT_KEY"])
         primaryButton = ""
         for i, _ in pairs(button_data) do
             if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = L["UNKNOWN_KEY"]
+                button_data[i] = L["TYPE_SKIP"]
             end
             primaryButton = primaryButton .. button_data[i]
             if i ~= self:GetLength(button_data) then
@@ -215,13 +215,13 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
     end
     -- Additional Sanity Checks for Secondary Button
     if self:IsNullOrEmpty(secondaryButton) then
-        secondaryButton = L["UNKNOWN_KEY"]
+        secondaryButton = L["TYPE_SKIP"]
     else
         local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
         secondaryButton = ""
         for i, _ in pairs(button_data) do
             if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = L["UNKNOWN_KEY"]
+                button_data[i] = L["TYPE_SKIP"]
             end
             secondaryButton = secondaryButton .. button_data[i]
             if i ~= self:GetLength(button_data) then
@@ -230,7 +230,7 @@ function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, small
         end
     end
     return strformat(
-            L["RPC_EVENT_FORMAT"],
+            L["FORMAT_EVENT_RPC"],
             clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
             details, gameState, startTime, endTime, primaryButton, secondaryButton
     )
@@ -267,7 +267,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
         end
         if self:GetFromDb("debugMode") then
             self:Print(
-                    strformat(L["DEBUG_LOG"], strformat(
+                    strformat(L["LOG_DEBUG"], strformat(
                             L["DEBUG_SEND_ACTIVITY"], self:Replace(encoded, "|", "||")
                     ))
             )

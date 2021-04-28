@@ -491,7 +491,7 @@ function CraftPresence:ShowConfig()
         InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
     else
         CraftPresence:Print(strformat(
-                L["ERROR_LOG"], strformat(
+                L["LOG_ERROR"], strformat(
                         L["ERROR_FUNCTION_DISABLED"], "ShowConfig"
                 )
         ))

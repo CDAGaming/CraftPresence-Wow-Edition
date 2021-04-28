@@ -35,19 +35,19 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
     isDead = UnitIsDead(unit)
     isGhost = UnitIsGhost(unit)
     if isAfk then
-        playerStatus = L["AFK_LABEL"]
+        playerStatus = L["LABEL_AFK"]
     elseif isOnDnd then
-        playerStatus = L["DND_LABEL"]
+        playerStatus = L["LABEL_DND"]
     elseif isGhost then
-        playerStatus = L["GHOST_LABEL"]
+        playerStatus = L["LABEL_GHOST"]
     elseif isDead then
-        playerStatus = L["DEAD_LABEL"]
+        playerStatus = L["LABEL_DEAD"]
     end
     -- Parse Player Status
     if not self:IsNullOrEmpty(playerStatus) then
         playerPrefix = ("(" .. playerStatus .. ")") .. " "
     else
-        playerStatus = L["ONLINE_LABEL"]
+        playerStatus = L["LABEL_ONLINE"]
     end
 
     -- Return Data (and sync if needed)
@@ -213,7 +213,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         [setfmt("*lockout_total_encounters*", inkey)] = 0 -- Retail-Only
     }
     -- Version Dependent Data
-    local userData = playerPrefix .. playerName .. " - " .. (strformat(L["LEVEL_TAG_FORMAT"], playerLevel))
+    local userData = playerPrefix .. playerName .. " - " .. (strformat(L["FORMAT_LEVEL"], playerLevel))
     if buildData["toc_version"] >= compatData["5.0.0"] or isRebasedApi then
         -- Extra Character Data
         local titleName = UnitPVPName("player")

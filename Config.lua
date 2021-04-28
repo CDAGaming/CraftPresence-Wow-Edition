@@ -645,7 +645,7 @@ function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
         end
         CraftPresence:Print(
                 strformat(
-                        L["VERBOSE_LOG"], strformat(
+                        L["LOG_VERBOSE"], strformat(
                                 L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
                         )
                 )
@@ -656,7 +656,7 @@ end
 --- Prints a formatted message, meant to symbolize an invalid value
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintInvalidValue(logStyle)
-    CraftPresence:Print(strformat(L["ERROR_LOG"], logStyle))
+    CraftPresence:Print(strformat(L["LOG_ERROR"], logStyle))
 end
 
 --- Updates showMinimapIcon with the specified value
