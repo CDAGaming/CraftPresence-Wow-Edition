@@ -535,6 +535,7 @@ end
 ---
 --- @return boolean, string @ found_placeholders, placeholderStr
 function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_placeholders, placeholderStr)
+    placeholderTable = placeholderTable or {}
     found_placeholders = found_placeholders or false
     placeholderStr = placeholderStr or ""
     for key, value in pairs(placeholderTable) do
@@ -606,12 +607,13 @@ end
 
 --- Generates Config Table for a set of custom arguments
 ---
---- @param rootKey string The config key to retrieve placeholder data
+--- @param rootKey string The config key to retrieve placeholder data (Required)
 --- @param titleKey string The title key to display (Can be a function returning a string)
 --- @param commentKey string The comment key to display (Can be a function returning a string)
 ---
 --- @return table @ generatedData
 function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
+    if CraftPresence:IsNullOrEmpty(rootKey) then return {} end
     titleKey = titleKey or rootKey
     commentKey = commentKey or ""
     local found_count = 0
