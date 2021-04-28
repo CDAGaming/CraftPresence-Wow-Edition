@@ -332,28 +332,28 @@ end
 
 --- Retrieves the Return Value from a Dynamic Function
 ---
---- @param returnValue function The input (and output) for this event
---- @param expectedType string The expected type of this event
+--- @param value function The input (and output) for this event
+--- @param valueType string The expected type of this event
 --- @param limit number How many times to iterate until a different type
 ---
 --- @return string @ returnValue
-function CraftPresence:GetDynamicReturnValue(returnValue, expectedType, limit, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
-    if not self:IsNullOrEmpty(returnValue) and (self:IsNullOrEmpty(expectedType) or expectedType == "function") and loadstring then
-        if type(returnValue) == "string" then
-            returnValue = loadstring(returnValue)()
+function CraftPresence:GetDynamicReturnValue(value, valueType, limit, a1, a2, a3, a4, a5, a6, a7, a8, a9)
+    if not self:IsNullOrEmpty(value) and (self:IsNullOrEmpty(valueType) or valueType == "function") and loadstring then
+        if type(value) == "string" then
+            value = loadstring(value)()
         end
-        while type(returnValue) == "function" and limit > 0 do
-            returnValue = returnValue(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+        while type(value) == "function" and limit > 0 do
+            value = value(a1, a2, a3, a4, a5, a6, a7, a8, a9)
             limit = limit - 1
         end
     end
     -- Sanity checks
-    if type(returnValue) == "table" then
-        returnValue = self:SerializeTable(returnValue)
+    if type(value) == "table" then
+        value = self:SerializeTable(value)
     else
-        returnValue = tostring(returnValue)
+        value = tostring(value)
     end
-    return returnValue
+    return value
 end
 
 ----------------------------------

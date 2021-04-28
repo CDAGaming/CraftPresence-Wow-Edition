@@ -362,7 +362,7 @@ function CraftPresence:getOptionsTable()
                 end,
                 args = CraftPresence:GetPlaceholderArgs("buttons", strformat(
                         L["CATEGORY_TITLE_BUTTONS_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
-                        function(a1) return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], a1, (a1 == 1 and "") or "s") end
+                        function(a) return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], a, (a == 1 and "") or "s") end
                 )
             },
             customOptions = {
@@ -376,7 +376,7 @@ function CraftPresence:getOptionsTable()
                 end,
                 args = CraftPresence:GetPlaceholderArgs("customPlaceholders", strformat(
                         L["CATEGORY_TITLE_CUSTOM_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
-                        function(a1) return strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], a1, (a1 == 1 and "") or "s") end
+                        function(a) return strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], a, (a == 1 and "") or "s") end
                 )
             },
             extraOptions = {

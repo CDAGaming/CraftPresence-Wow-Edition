@@ -5,7 +5,7 @@ local config_registry = LibStub("AceConfigRegistry-3.0")
 
 -- Lua APIs
 local strformat, strlower = string.format, string.lower
-local loadstring, tostring, ipairs, pairs = loadstring, tostring, ipairs, pairs
+local tostring, ipairs, pairs = tostring, ipairs, pairs
 local type, max = type, math.max
 
 -- Critical Data (Do not remove)
@@ -160,7 +160,7 @@ function CraftPresence:OnInitialize()
             type = "launcher",
             text = L["ADDON_NAME"],
             icon = strformat("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
-            OnClick = function(clickedframe, button)
+            OnClick = function(_, _)
                 CraftPresence.ShowConfig()
             end,
             OnTooltipShow = function(tt)
@@ -537,7 +537,7 @@ function CraftPresence:ChatCommand(input)
                         -- Uncomment for single-use integration
                         -- integrationData["viragdevtool"] = true
                         -- integrationData["vdt"] = true
-                    elseif (lower_query == "reload" or lower_query == "rl" or lower_query == "reloadui") and ReloadUI then
+                    elseif (lower_query == "reload" or lower_query == "rl") and ReloadUI then
                         ReloadUI()
                     elseif (self:StartsWith(lower_query, "event")) then
                         -- Sub-Query Parsing
