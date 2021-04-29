@@ -180,30 +180,30 @@ function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
             local strValue
             if type(value) == "table" then
                 if set_config and tgetn(value) <= 2 then
-                    strValue = CraftPresence:GetFromDb(value[1], value[2])
+                    strValue = self:GetFromDb(value[1], value[2])
                 elseif not set_config then
-                    strValue = CraftPresence:SerializeTable(value)
+                    strValue = self:SerializeTable(value)
                 end
             else
                 if set_config then
-                    strValue = CraftPresence:GetFromDb(value)
+                    strValue = self:GetFromDb(value)
                 else
                     strValue = value
                 end
             end
 
             if strValue ~= nil then
-                local newValue = CraftPresence:SetFormat(
+                local newValue = self:SetFormat(
                         strValue, format_args[1], format_args[2], format_args[3], format_args[4], plain
                 )
                 if strValue ~= newValue then
                     if type(value) == "table" then
                         if set_config and tgetn(value) <= 2 then
-                            CraftPresence:SetToDb(value[1], value[2], newValue)
+                            self:SetToDb(value[1], value[2], newValue)
                         end
                     else
                         if set_config then
-                            CraftPresence:SetToDb(value, nil, newValue)
+                            self:SetToDb(value, nil, newValue)
                         end
                     end
                     adjusted_data[key] = {
@@ -278,7 +278,7 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
         tmp = tmp .. "{" .. (not skipnewlines and "\n" or "")
 
         for k, v in pairs(val) do
-            tmp = tmp .. CraftPresence:SerializeTable(
+            tmp = tmp .. self:SerializeTable(
                     v, k, skipnewlines, depth + 1
             ) .. "," .. (not skipnewlines and "\n" or "")
         end
@@ -490,12 +490,12 @@ end
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
     -- a bug can occur in blizzard's implementation of this call
-    if (CraftPresence:GetBuildInfo()["toc_version"] >= CraftPresence:GetCompatibilityInfo()["2.0.0"] or
-            CraftPresence:IsRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
-        InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(CraftPresence.optionsFrame)
+    if (self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or
+            self:IsRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     else
-        CraftPresence:Print(strformat(
+        self:Print(strformat(
                 L["LOG_ERROR"], strformat(
                         L["ERROR_FUNCTION_DISABLED"], "ShowConfig"
                 )

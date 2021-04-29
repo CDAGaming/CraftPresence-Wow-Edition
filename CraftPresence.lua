@@ -366,7 +366,7 @@ end
 --- Updates the minimap status with config data
 --- @param update_state boolean Whether or not to update the icon state
 function CraftPresence:UpdateMinimapState(update_state)
-    minimapState = { hide = not CraftPresence:GetFromDb("showMinimapIcon") }
+    minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
     if update_state then
         if icon then
             if minimapState["hide"] then
@@ -442,7 +442,7 @@ function CraftPresence:ChatCommand(input)
                 config_registry:NotifyChange(L["ADDON_NAME"])
             end
         elseif input == "minimap" then
-            CraftPresence:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
+            self:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "about" then
             self:PrintInitialData()
         elseif input == "status" then

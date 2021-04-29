@@ -89,8 +89,8 @@ local playerCovenant = L["TYPE_NONE"]
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
 function CraftPresence:ParseGameData(force_instance_change)
     force_instance_change = force_instance_change ~= nil and force_instance_change == true
-    local inkey = CraftPresence:GetFromDb("innerPlaceholderKey")
-    local outkey = CraftPresence:GetFromDb("globalPlaceholderKey")
+    local inkey = self:GetFromDb("innerPlaceholderKey")
+    local outkey = self:GetFromDb("globalPlaceholderKey")
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID
