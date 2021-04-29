@@ -22,6 +22,8 @@ L["LABEL_DEAD"] = "Dead"
 L["TYPE_UNKNOWN"] = "Unknown"
 L["TYPE_NONE"] = "None"
 L["TYPE_SKIP"] = "Skip"
+L["TYPE_ADDED"] = "Added"
+L["TYPE_MODIFY"] = "Modified"
 -- Internal Values (DNT)
 L["ARRAY_SPLIT_KEY"] = "=="
 L["DEFAULT_INNER_KEY"] = inkey
@@ -215,9 +217,9 @@ L["INTEGRATION_ALREADY_USED"] = setfmt("*Specified integration has already been 
 L["COMMAND_CLEAR_SUCCESS"] = "Clearing active frame data..."
 
 -- Command: /cp create
-L["COMMAND_CREATE_SUCCESS"] = setfmt("Added custom placeholder *%s|r with the following data: %s", GREEN, GREY)
-L["COMMAND_CREATE_OVERRIDE"] = "Specified arguments will replace other placeholders, please use the create:override cmd"
-L["COMMAND_CREATE_OVERWRITE"] = "Unable to use specified arguments (Would overwrite an inner/global placeholder)"
+L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom placeholder *%s|r with the following data: %s", GREEN, GREY)
+L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other placeholders, please use the create:modify cmd"
+L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with a protected placeholder)"
 
 -- Command: /cp remove
 L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed custom placeholder *%s|r", GREEN)

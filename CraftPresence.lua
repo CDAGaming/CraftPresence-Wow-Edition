@@ -457,7 +457,7 @@ function CraftPresence:ChatCommand(input)
             end
         elseif self:StartsWith(input, "create") then
             -- Query Parsing
-            local overrideKey = self:StartsWith(input, "create:override")
+            local canModify = self:StartsWith(input, "create:modify")
             local _, _, typeQuery = self:FindMatches(input, "::(.*)::", false)
             local _, _, query = self:FindMatches(input, " (.*)", false)
 
@@ -472,16 +472,20 @@ function CraftPresence:ChatCommand(input)
                 local customPlaceholders = self:GetFromDb("customPlaceholders")
                 local splitQuery = self:Split(query, " ")
                 splitQuery[2] = splitQuery[2] or ""
-                if customPlaceholders[splitQuery[1]] and not overrideKey then
-                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_OVERRIDE"]))
+                if customPlaceholders[splitQuery[1]] and not canModify then
+                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
                 elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
                     customPlaceholders[splitQuery[1]] = {
                         ["type"] = typeQuery,
                         ["data"] = splitQuery[2]
                     }
+                    local eventState = L["TYPE_ADDED"]
+                    if canModify then
+                        eventState = L["TYPE_MODIFY"]
+                    end
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
                     self:Print(strformat(
-                            L["COMMAND_CREATE_SUCCESS"], splitQuery[1], self:SerializeTable(
+                            L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], self:SerializeTable(
                                     customPlaceholders[splitQuery[1]]
                             )
                     ))
@@ -490,7 +494,7 @@ function CraftPresence:ChatCommand(input)
                         config_registry:NotifyChange(L["ADDON_NAME"])
                     end
                 else
-                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_OVERWRITE"]))
+                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_CONFLICT"]))
                 end
             else
                 self:Print(

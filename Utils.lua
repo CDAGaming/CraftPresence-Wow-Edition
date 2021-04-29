@@ -645,7 +645,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
                             if isValid then
                                 CraftPresence.db.profile[rootKey][key][innerKey] = newValue
                                 CraftPresence:PrintChangedValue(
-                                        ("(" .. rootKey .. " (" .. key .. ")" .. ", " .. innerKey .. ")"),
+                                        (rootKey .. " (" .. key .. ", " .. innerKey .. ")"),
                                         oldValue, newValue
                                 )
                             end
