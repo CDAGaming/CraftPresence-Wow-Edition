@@ -337,6 +337,11 @@ end
 function CraftPresence:GetDynamicReturnValue(value, valueType, limit, a1, a2, a3, a4, a5, a6, a7, a8, a9)
     if not self:IsNullOrEmpty(value) and (self:IsNullOrEmpty(valueType) or valueType == "function") and loadstring then
         if type(value) == "string" then
+            -- Edge-Case to allow non-return functions
+            local lowVal = strlower(value)
+            if not self:StartsWith(lowVal, "return ") and self:StartsWith(lowVal, "function") then
+                value = "return " .. value
+            end
             value = loadstring(value)()
         end
         while type(value) == "function" and limit > 0 do
