@@ -427,7 +427,7 @@ function CraftPresence:ChatCommand(input)
         elseif input == "about" then
             self:PrintInitialData()
         elseif input == "status" then
-            if self:GetFromDb("verboseMode") then
+            if self:GetFromDb("debugMode") then
                 self:Print(self:GetLastEncoded())
             else
                 self:Print(strformat(
