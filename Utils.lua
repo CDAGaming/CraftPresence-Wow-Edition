@@ -47,6 +47,19 @@ function CraftPresence:IsNullOrEmpty(obj)
     return CP_GlobalUtils:IsNullOrEmpty(obj)
 end
 
+--- Return the specified string or a fallback value if nil
+---
+--- @param str string The value to interpret
+--- @param default string The fallback value to interpret
+---
+--- @return string @ adjusted_str
+function CraftPresence:GetOrDefault(str, default)
+    if self:IsNullOrEmpty(str) then
+        str = (default or "")
+    end
+    return tostring(str)
+end
+
 --- Replaces the specified area of a string
 ---
 --- @param str string The input string to evaluate
@@ -172,7 +185,7 @@ end
 --- @param plain boolean Whether or not to forbid pattern matching filters
 --- @param set_config boolean Whether to parse and save the resulting values as config data
 ---
---- @return table @ adjusted_data
+--- @return table, table @ string_args, adjusted_data
 function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
     local adjusted_data = {}
     if type(format_args) == "table" and tgetn(format_args) <= 4 and type(string_args) == "table" then
@@ -200,10 +213,18 @@ function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
                     if type(value) == "table" then
                         if set_config and tgetn(value) <= 2 then
                             self:SetToDb(value[1], value[2], newValue)
+                        else
+                            self:Print(strformat(
+                                    L["LOG_ERROR"], strformat(
+                                            L["ERROR_COMMAND_UNKNOWN"], "SetFormats"
+                                    )
+                            ))
                         end
                     else
                         if set_config then
                             self:SetToDb(value, nil, newValue)
+                        else
+                            string_args[key] = newValue
                         end
                     end
                     adjusted_data[key] = {
@@ -214,7 +235,7 @@ function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
             end
         end
     end
-    return adjusted_data
+    return string_args, adjusted_data
 end
 
 --- Determines whether the specified value is within the specified range
