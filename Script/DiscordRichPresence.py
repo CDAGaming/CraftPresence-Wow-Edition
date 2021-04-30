@@ -18,6 +18,7 @@ process_version = "v1.3.0"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
+array_separator_key = "|"
 decoded = ''
 process_hwnd = None
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -126,7 +127,7 @@ def decode_read_data(read):
 
 
 def get_decoded_chunks(decoded):
-    return decoded.replace(event_key, '').split('|')
+    return decoded.replace(event_key, '').split(array_separator_key)
 
 
 def verify_read_data(decoded):
@@ -348,13 +349,13 @@ while True:
             buttonsData = []
             activity = {}
             # Asset Data Sync
-            if lines[1]:
+            if not null_or_empty(lines[1]):
                 assetsData["large_image"] = lines[1]
-                if lines[2]:
+                if not null_or_empty(lines[2]):
                     assetsData["large_text"] = lines[2]
-            if lines[3]:
+            if not null_or_empty(lines[3]):
                 assetsData["small_image"] = lines[3]
-                if lines[4]:
+                if not null_or_empty(lines[4]):
                     assetsData["small_text"] = lines[4]
             # Start Timer Data Setup
             if "generated" in lines[7]:
@@ -367,25 +368,25 @@ while True:
             elif "last" in lines[8]:
                 ninth_line = last_decoded[8] or round(time.time())
             # Timer Data Sync
-            if lines[7]:
+            if not null_or_empty(lines[7]):
                 timerData["start"] = lines[7]
                 last_start_timestamp = lines[7]
-                if lines[9]:
+                if not null_or_empty(lines[8]):
                     timerData["end"] = lines[8]
                     last_end_timestamp = lines[8]
             # Buttons Data Sync
-            if lines[9]:
+            if not null_or_empty(lines[9]):
                 primary_button_data = parse_button_data(lines[9])
                 if len(primary_button_data) == 2:
-                    buttonsData.append({"label": primary_button_data[0], "url": primary_button_data[1]})
-            if lines[10]:
+                    buttonsData.append({"label": primary_button_data[1], "url": primary_button_data[0]})
+            if not null_or_empty(lines[10]):
                 secondary_button_data = parse_button_data(lines[10])
                 if len(secondary_button_data) == 2:
-                    buttonsData.append({"label": secondary_button_data[0], "url": secondary_button_data[1]})
+                    buttonsData.append({"label": secondary_button_data[1], "url": secondary_button_data[0]})
             # Activity Data Sync
-            if lines[5]:
+            if not null_or_empty(lines[5]):
                 activity["details"] = lines[5]
-            if lines[6]:
+            if not null_or_empty(lines[6]):
                 activity["state"] = lines[6]
 
             activity["assets"] = assetsData
