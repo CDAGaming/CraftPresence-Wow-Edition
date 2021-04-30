@@ -322,9 +322,6 @@ while True:
         hasIdChanged = lines[0] != last_decoded[0]
 
         if hasIdChanged or lines != last_decoded:
-            # there has been an update, so send it to discord
-            last_decoded = lines
-
             if not rpc_obj or hasIdChanged:
                 if rpc_obj:
                     root_logger.info("The client id has been changed, reconnecting with new ID %s..." % lines[0])
@@ -359,14 +356,14 @@ while True:
                     assetsData["small_text"] = lines[4]
             # Start Timer Data Setup
             if "generated" in lines[7]:
-                eighth_line = round(time.time())
+                lines[7] = round(time.time())
             elif "last" in lines[7]:
-                eighth_line = last_decoded[7] or round(time.time())
+                lines[7] = last_decoded[7] or round(time.time())
             # End Timer Data Setup
             if "generated" in lines[8]:
-                ninth_line = round(time.time())
+                lines[8] = round(time.time())
             elif "last" in lines[8]:
-                ninth_line = last_decoded[8] or round(time.time())
+                lines[8] = last_decoded[8] or round(time.time())
             # Timer Data Sync
             if not null_or_empty(lines[7]):
                 timerData["start"] = lines[7]
@@ -378,11 +375,11 @@ while True:
             if not null_or_empty(lines[9]):
                 primary_button_data = parse_button_data(lines[9])
                 if len(primary_button_data) == 2:
-                    buttonsData.append({"label": primary_button_data[1], "url": primary_button_data[0]})
+                    buttonsData.append({"label": primary_button_data[0], "url": primary_button_data[1]})
             if not null_or_empty(lines[10]):
                 secondary_button_data = parse_button_data(lines[10])
                 if len(secondary_button_data) == 2:
-                    buttonsData.append({"label": secondary_button_data[1], "url": secondary_button_data[0]})
+                    buttonsData.append({"label": secondary_button_data[0], "url": secondary_button_data[1]})
             # Activity Data Sync
             if not null_or_empty(lines[5]):
                 activity["details"] = lines[5]
@@ -392,6 +389,7 @@ while True:
             activity["assets"] = assetsData
             activity["timestamps"] = timerData
             activity["buttons"] = buttonsData
+
             if activity != last_activity:
                 root_logger.info("Setting new activity: %s" % activity)
 
@@ -408,6 +406,7 @@ while True:
                         buttons=activity.get("buttons") or None
                     )
                     last_activity = activity
+                    last_decoded = lines
                 except Exception as exc:
                     root_logger.error('Looks like the connection to Discord was broken (%s). '
                                       'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
