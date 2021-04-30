@@ -17,7 +17,7 @@ local last_args = {}
 --- @return string @ lastEncodedMessage
 function CraftPresence:GetLastEncoded()
     local output = self:Replace(last_encoded, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
-    if not self:IsNullOrEmpty(last_args) then
+    if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(last_args) then
         output = self:SerializeTable(last_args)
     end
     return strformat(
@@ -168,15 +168,15 @@ end
 --- @return string, table @ eventString, args
 function CraftPresence:EncodeData(length, args)
     local eventString = L["EVENT_RPC_TAG"]
-    local seperator
+    local separator
     for key = 1, length do
         if self:IsWithinValue(key, 1, length, true) then
-            seperator = L["ARRAY_SEPARATOR_KEY"]
+            separator = L["ARRAY_SEPARATOR_KEY"]
         else
-            seperator = ""
+            separator = ""
         end
         args[key] = self:TrimString(self:GetOrDefault(args[key]))
-        eventString = eventString .. args[key] .. seperator
+        eventString = eventString .. args[key] .. separator
     end
     eventString = eventString .. L["EVENT_RPC_TAG"]
     return eventString, args
@@ -206,11 +206,15 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
     if (changed and not self:IsNullOrEmpty(encoded)) then
         if will_update then
             last_encoded = encoded
-            last_args = encodedArgs
+            if self:IsNullOrEmpty(msg) then
+                last_args = encodedArgs
+            else
+                last_args = {}
+            end
         end
         if self:GetFromDb("debugMode") then
             local output = self:Replace(encoded, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
-            if self:IsNullOrEmpty(msg) then
+            if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(encodedArgs) then
                 output = self:SerializeTable(encodedArgs)
             end
             self:Print(
