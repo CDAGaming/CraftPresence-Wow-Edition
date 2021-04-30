@@ -6,7 +6,7 @@ CraftPresence.registeredEvents = {}
 -- Lua APIs
 local strformat, strlower = string.format, string.lower
 local tostring, ipairs, pairs = tostring, ipairs, pairs
-local type, max = type, math.max
+local type, max, tinsert = type, math.max, table.insert
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -44,96 +44,74 @@ end
 ---
 --- @param force_instance_change boolean Whether to force an instance change (Default: false)
 ---
---- @return string @ newEncodedString
+--- @return string, table @ newEncodedString, args
 function CraftPresence:EncodeConfigData(force_instance_change)
-    -- Sync Variable Data
-    global_placeholders, inner_placeholders, time_conditions = self:SyncConditions(force_instance_change)
-    -- RPC Data syncing
-    local queued_details = self:GetFromDb("detailsMessage")
-    local queued_state = self:GetFromDb("gameStateMessage")
-    local queued_large_image_key = self:GetFromDb("largeImageKey")
-    local queued_large_image_text = self:GetFromDb("largeImageMessage")
-    local queued_small_image_key = self:GetFromDb("smallImageKey")
-    local queued_small_image_text = self:GetFromDb("smallImageMessage")
-    local queued_time_start = L["TYPE_SKIP"]
-    local queued_time_end = L["TYPE_SKIP"]
+    -- Primary Variable Data
     local split_key = L["ARRAY_SPLIT_KEY"]
+    global_placeholders, inner_placeholders, time_conditions = self:SyncConditions(force_instance_change)
+    -- Secondary Variable Data
     local buttons = self:GetFromDb("buttons")
-    local queued_primary_button = (
-            buttons["primaryButton"]["label"] .. split_key .. buttons["primaryButton"]["url"]
-    )
-    local queued_secondary_button = (
-            buttons["secondaryButton"]["label"] .. split_key .. buttons["secondaryButton"]["url"]
-    )
+    local rpcData = {
+        self:GetFromDb("clientId"),
+        self:GetFromDb("largeImageKey"),
+        self:GetFromDb("largeImageMessage"),
+        self:GetFromDb("smallImageKey"),
+        self:GetFromDb("smallImageMessage"),
+        self:GetFromDb("detailsMessage"),
+        self:GetFromDb("gameStateMessage")
+    }
     -- Global Placeholder Syncing
     for key, value in pairs(global_placeholders) do
-        queued_details = self:Replace(queued_details, key, value, true)
-        queued_state = self:Replace(queued_state, key, value, true)
-        queued_large_image_key = self:Replace(queued_large_image_key, key, value, true)
-        queued_large_image_text = self:Replace(queued_large_image_text, key, value, true)
-        queued_small_image_key = self:Replace(queued_small_image_key, key, value, true)
-        queued_small_image_text = self:Replace(queued_small_image_text, key, value, true)
-        queued_primary_button = self:Replace(queued_primary_button, key, value, true)
-        queued_secondary_button = self:Replace(queued_secondary_button, key, value, true)
+        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
     end
     -- Inner Placeholder Syncing
     for key, value in pairs(inner_placeholders) do
-        queued_details = self:Replace(queued_details, key, value, true)
-        queued_state = self:Replace(queued_state, key, value, true)
-        queued_large_image_key = self:Replace(queued_large_image_key, key, value, true)
-        queued_large_image_text = self:Replace(queued_large_image_text, key, value, true)
-        queued_small_image_key = self:Replace(queued_small_image_key, key, value, true)
-        queued_small_image_text = self:Replace(queued_small_image_text, key, value, true)
-        queued_primary_button = self:Replace(queued_primary_button, key, value, true)
-        queued_secondary_button = self:Replace(queued_secondary_button, key, value, true)
+        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
     end
     -- Custom Placeholder Syncing
     for key, value in pairs(custom_placeholders) do
         -- Sanity Checks
-        local returnType = value["type"] or "string"
-        local returnValue = value["data"] or ""
-        value = self:GetDynamicReturnValue(returnValue, returnType, 1, self)
+        value = self:GetDynamicReturnValue((value["data"] or ""), (value["type"] or "string"), 1, self)
         -- Main Parsing
-        queued_details = self:Replace(queued_details, key, value, true)
-        queued_state = self:Replace(queued_state, key, value, true)
-        queued_large_image_key = self:Replace(queued_large_image_key, key, value, true)
-        queued_large_image_text = self:Replace(queued_large_image_text, key, value, true)
-        queued_small_image_key = self:Replace(queued_small_image_key, key, value, true)
-        queued_small_image_text = self:Replace(queued_small_image_text, key, value, true)
-        queued_primary_button = self:Replace(queued_primary_button, key, value, true)
-        queued_secondary_button = self:Replace(queued_secondary_button, key, value, true)
+        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
     end
     -- Time Condition Syncing
+    local time_start = ""
+    local time_end = ""
     for timeKey, timeValue in pairs(time_conditions) do
         if timeValue then
             if (self:FindMatches(timeKey, "start", false)) then
                 if self:HasInstanceChanged() then
-                    queued_time_start = "generated"
+                    time_start = "generated"
                 else
-                    queued_time_start = "last"
+                    time_start = "last"
                 end
             elseif (self:FindMatches(timeKey, "end", false)) then
                 if self:HasInstanceChanged() then
-                    queued_time_end = "generated"
+                    time_end = "generated"
                 else
-                    queued_time_end = "last"
+                    time_end = "last"
                 end
             end
         end
     end
-    return self:EncodeData(
-            self:Replace(self:GetFromDb("clientId"), "%s+", " "),
-            self:Replace(strlower(queued_large_image_key), "%s+", "_"),
-            self:Replace(queued_large_image_text, "%s+", " "),
-            self:Replace(strlower(queued_small_image_key), "%s+", "_"),
-            self:Replace(queued_small_image_text, "%s+", " "),
-            self:Replace(queued_details, "%s+", " "),
-            self:Replace(queued_state, "%s+", " "),
-            self:Replace(queued_time_start, "%s+", " "),
-            self:Replace(queued_time_end, "%s+", " "),
-            self:Replace(queued_primary_button, "%s+", " "),
-            self:Replace(queued_secondary_button, "%s+", " ")
-    )
+    tinsert(rpcData, time_start)
+    tinsert(rpcData, time_end)
+
+    -- Additional Sanity Checks for Buttons
+    for key, value in pairs(buttons) do
+        local dataValue = ""
+        local dataSeparator = ""
+        for buttonKey, buttonValue in pairs(value) do
+            dataValue = dataValue .. dataSeparator .. buttonValue
+            if not self:IsNullOrEmpty(buttonValue) then
+                dataSeparator = split_key
+            end
+        end
+        tinsert(rpcData, dataValue)
+    end
+
+    return self:EncodeData(L["EVENT_RPC_LENGTH"], rpcData)
 end
 
 --- Instructions to be called when the addon is loaded
@@ -358,7 +336,8 @@ end
 function CraftPresence:OnDisable()
     -- Clean up Data before disabling
     self:Print(L["ADDON_CLOSE"])
-    self:PaintMessageWait(true, false, true, self:EncodeData(self:GetFromDb("clientId")))
+    local resetData = self:EncodeData(L["EVENT_RPC_LENGTH"], { self:GetFromDb("clientId") })
+    self:PaintMessageWait(true, false, true, resetData)
     if icon then
         icon:Hide(L["ADDON_NAME"])
     end

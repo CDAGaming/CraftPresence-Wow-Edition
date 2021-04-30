@@ -14,8 +14,7 @@ from logging.handlers import TimedRotatingFileHandler
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.2.3"
-unknown_key = "Skip"
+process_version = "v1.3.0"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -87,21 +86,7 @@ root_logger.info("==========================================================")
 
 # RPC Data
 rpc_obj = None
-last_first_line = None
-last_second_line = None
-last_third_line = None
-last_fourth_line = None
-last_fifth_line = None
-last_sixth_line = None
-last_seventh_line = None
-last_eighth_line = None
-last_ninth_line = None
-last_tenth_line = None
-last_eleventh_line = None
-
-last_start_timestamp = None
-last_end_timestamp = None
-
+last_decoded = [None] * event_length
 last_activity = {}
 
 # Import Third-Party Modules
@@ -179,7 +164,8 @@ def is_running(process_name):
     return False
 
 
-def interpret_offsets(left=0, top=0, right=0, bottom=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0,
+def interpret_offsets(left=0, top=0, right=0, bottom=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0,
+                      right_offset=0,
                       right_specific=0, bottom_offset=0, bottom_specific=0):
     if left_specific > 0:
         left = left_specific
@@ -206,7 +192,8 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
     # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
 
     # Calculate offsets and final width and height
-    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset, top_specific,
+    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset,
+                                                 top_specific,
                                                  right_offset, right_specific, bottom_offset, bottom_specific)
 
     width = right - left
@@ -305,9 +292,7 @@ def read_squares(hwnd):
     if not (verify_read_data(current_decoded)):
         return
 
-    first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line, tenth_line, eleventh_line = parts
-
-    return first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line, tenth_line, eleventh_line
+    return parts
 
 
 while True:
@@ -333,33 +318,22 @@ while True:
             time.sleep(config["scan_rate"])
             continue
 
-        first_line, second_line, third_line, fourth_line, fifth_line, sixth_line, seventh_line, eighth_line, ninth_line, tenth_line, eleventh_line = lines
-        hasIdChanged = first_line != last_first_line
+        hasIdChanged = lines[0] != last_decoded[0]
 
-        if hasIdChanged or second_line != last_second_line or third_line != last_third_line or fourth_line != last_fourth_line or fifth_line != last_fifth_line or sixth_line != last_sixth_line or seventh_line != last_seventh_line or eighth_line != last_eighth_line or ninth_line != last_ninth_line or tenth_line != last_tenth_line or eleventh_line != last_eleventh_line:
+        if hasIdChanged or lines != last_decoded:
             # there has been an update, so send it to discord
-            last_first_line = first_line
-            last_second_line = second_line
-            last_third_line = third_line
-            last_fourth_line = fourth_line
-            last_fifth_line = fifth_line
-            last_sixth_line = sixth_line
-            last_seventh_line = seventh_line
-            last_eighth_line = eighth_line
-            last_ninth_line = ninth_line
-            last_tenth_line = tenth_line
-            last_eleventh_line = eleventh_line
+            last_decoded = lines
 
             if not rpc_obj or hasIdChanged:
                 if rpc_obj:
-                    root_logger.info("The client id has been changed, reconnecting with new ID %s..." % first_line)
+                    root_logger.info("The client id has been changed, reconnecting with new ID %s..." % lines[0])
                     rpc_obj.close()
                 else:
-                    root_logger.info("Not connected to Discord, connecting to ID %s..." % first_line)
+                    root_logger.info("Not connected to Discord, connecting to ID %s..." % lines[0])
 
                 while True:
                     try:
-                        rpc_obj = Presence(client_id=first_line)
+                        rpc_obj = Presence(client_id=lines[0])
                         rpc_obj.connect()
                     except Exception as exc:
                         root_logger.error("Unable to connect to Discord (%s). It's "
@@ -374,45 +348,45 @@ while True:
             buttonsData = []
             activity = {}
             # Asset Data Sync
-            if not (unknown_key in second_line):
-                assetsData["large_image"] = second_line
-                if not (unknown_key in third_line):
-                    assetsData["large_text"] = third_line
-            if not (unknown_key in fourth_line):
-                assetsData["small_image"] = fourth_line
-                if not (unknown_key in fifth_line):
-                    assetsData["small_text"] = fifth_line
+            if lines[1]:
+                assetsData["large_image"] = lines[1]
+                if lines[2]:
+                    assetsData["large_text"] = lines[2]
+            if lines[3]:
+                assetsData["small_image"] = lines[3]
+                if lines[4]:
+                    assetsData["small_text"] = lines[4]
             # Start Timer Data Setup
-            if "generated" in eighth_line:
+            if "generated" in lines[7]:
                 eighth_line = round(time.time())
-            elif "last" in eighth_line:
-                eighth_line = last_start_timestamp or round(time.time())
+            elif "last" in lines[7]:
+                eighth_line = last_decoded[7] or round(time.time())
             # End Timer Data Setup
-            if "generated" in ninth_line:
+            if "generated" in lines[8]:
                 ninth_line = round(time.time())
-            elif "last" in ninth_line:
-                ninth_line = last_end_timestamp or round(time.time())
+            elif "last" in lines[8]:
+                ninth_line = last_decoded[8] or round(time.time())
             # Timer Data Sync
-            if not (unknown_key in str(eighth_line)):
-                timerData["start"] = eighth_line
-                last_start_timestamp = eighth_line
-                if not (unknown_key in str(ninth_line)):
-                    timerData["end"] = ninth_line
-                    last_end_timestamp = ninth_line
+            if lines[7]:
+                timerData["start"] = lines[7]
+                last_start_timestamp = lines[7]
+                if lines[9]:
+                    timerData["end"] = lines[8]
+                    last_end_timestamp = lines[8]
             # Buttons Data Sync
-            if not (unknown_key in str(tenth_line)):
-                primary_button_data = parse_button_data(tenth_line)
-                if primary_button_data[0]:
+            if lines[9]:
+                primary_button_data = parse_button_data(lines[9])
+                if len(primary_button_data) == 2:
                     buttonsData.append({"label": primary_button_data[0], "url": primary_button_data[1]})
-            if not (unknown_key in str(eleventh_line)):
-                secondary_button_data = parse_button_data(eleventh_line)
-                if secondary_button_data[0]:
+            if lines[10]:
+                secondary_button_data = parse_button_data(lines[10])
+                if len(secondary_button_data) == 2:
                     buttonsData.append({"label": secondary_button_data[0], "url": secondary_button_data[1]})
             # Activity Data Sync
-            if not (unknown_key in sixth_line):
-                activity["details"] = sixth_line
-            if not (unknown_key in seventh_line):
-                activity["state"] = seventh_line
+            if lines[5]:
+                activity["details"] = lines[5]
+            if lines[6]:
+                activity["state"] = lines[6]
 
             activity["assets"] = assetsData
             activity["timestamps"] = timerData
@@ -436,8 +410,7 @@ while True:
                 except Exception as exc:
                     root_logger.error('Looks like the connection to Discord was broken (%s). '
                                       'I will try to connect again in %s sec.' % (str(exc), config["refresh_rate"]))
-                    last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line, last_tenth_line, last_eleventh_line = None, None, None, None, None, None, None, None, None, None, None
-                    last_start_timestamp, last_end_timestamp = None, None
+                    last_decoded = [None] * event_length
                     last_activity = {}
                     rpc_obj = None
     elif not process_hwnd and rpc_obj:
@@ -445,7 +418,6 @@ while True:
         rpc_obj.close()
         rpc_obj = None
         # clear these so it gets re-read and resubmitted upon reconnection
-        last_first_line, last_second_line, last_third_line, last_fourth_line, last_fifth_line, last_sixth_line, last_seventh_line, last_eighth_line, last_ninth_line, last_tenth_line, last_eleventh_line = None, None, None, None, None, None, None, None, None, None, None
-        last_start_timestamp, last_end_timestamp = None, None
+        last_decoded = [None] * event_length
         last_activity = {}
     time.sleep(config["refresh_rate"])

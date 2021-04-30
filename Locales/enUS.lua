@@ -21,11 +21,12 @@ L["LABEL_GHOST"] = "Ghost"
 L["LABEL_DEAD"] = "Dead"
 L["TYPE_UNKNOWN"] = "Unknown"
 L["TYPE_NONE"] = "None"
-L["TYPE_SKIP"] = "Skip"
 L["TYPE_ADDED"] = "Added"
 L["TYPE_MODIFY"] = "Modified"
 -- Internal Values (DNT)
 L["ARRAY_SPLIT_KEY"] = "=="
+L["ARRAY_SEPARATOR_KEY"] = "|"
+L["ARRAY_SEPARATOR_KEY_ALT"] = "||"
 L["DEFAULT_INNER_KEY"] = inkey
 L["DEFAULT_GLOBAL_KEY"] = outkey
 L["ADDON_NAME"] = "CraftPresence"
@@ -34,7 +35,8 @@ L["ADDON_AFFIX"] = "cp"
 L["COMMAND_CONFIG"] = "cp set"
 L["COMMAND_CONFIG_ALT"] = "craftpresence set"
 L["FORMAT_LEVEL"] = "Level %s"
-L["FORMAT_EVENT_RPC"] = "$RPCEvent$%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s$RPCEvent$"
+L["EVENT_RPC_TAG"] = "$RPCEvent$"
+L["EVENT_RPC_LENGTH"] = 11
 
 -- Primary Logging Data
 L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)

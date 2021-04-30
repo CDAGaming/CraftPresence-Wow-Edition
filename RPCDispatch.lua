@@ -11,13 +11,18 @@ local L = CraftPresence.locale
 local frame_count = 0
 local frames = {}
 local last_encoded = ""
+local last_args = {}
 
 --- Retrieves the Last Sent Encoded Event Message
 --- @return string @ lastEncodedMessage
 function CraftPresence:GetLastEncoded()
+    local output = self:Replace(last_encoded, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
+    if not self:IsNullOrEmpty(last_args) then
+        output = self:SerializeTable(last_args)
+    end
     return strformat(
             L["LOG_VERBOSE"], strformat(
-                    L["VERBOSE_LAST_ENCODED"], self:Replace(last_encoded, "|", "||")
+                    L["VERBOSE_LAST_ENCODED"], output
             )
     )
 end
@@ -157,83 +162,24 @@ end
 
 --- Encodes varying pieces of RPC Tags into a valid RPC_EVENT
 ---
---- @param clientId string The client id for Rich Presence
---- @param largeImageKey string The large image key for Rich Presence
---- @param largeImageText string The text ascociated with the largeImageKey, if present
---- @param smallImageKey string The small image key for Rich Presence
---- @param smallImageText string The text ascociated with the smallImageKey, if present
---- @param details string The details message for Rich Presence
---- @param gameState string The game state message for Rich Presence
---- @param startTime string The starting timestamp for Rich Presence
---- @param endTime string The ending timestamp for Rich Presence (Requires startTime to display)
---- @param primaryButton string The primary button to attach to the Rich Presence
---- @param secondaryButton string The secondary button to attach to the Rich Presence
-function CraftPresence:EncodeData(clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
-                                  details, gameState, startTime, endTime, primaryButton, secondaryButton)
-    if self:IsNullOrEmpty(clientId) then
-        clientId = L["DEFAULT_CLIENT_ID"]
-    end
-    if self:IsNullOrEmpty(largeImageKey) then
-        largeImageKey = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(largeImageText) then
-        largeImageText = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(smallImageKey) then
-        smallImageKey = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(smallImageText) then
-        smallImageText = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(details) then
-        details = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(gameState) then
-        gameState = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(startTime) then
-        startTime = L["TYPE_SKIP"]
-    end
-    if self:IsNullOrEmpty(endTime) then
-        endTime = L["TYPE_SKIP"]
-    end
-    -- Additional Sanity Checks for Primary Button
-    if self:IsNullOrEmpty(primaryButton) then
-        primaryButton = L["TYPE_SKIP"]
-    else
-        local button_data = self:Split(primaryButton, L["ARRAY_SPLIT_KEY"])
-        primaryButton = ""
-        for i, _ in pairs(button_data) do
-            if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = L["TYPE_SKIP"]
-            end
-            primaryButton = primaryButton .. button_data[i]
-            if i ~= self:GetLength(button_data) then
-                primaryButton = primaryButton .. L["ARRAY_SPLIT_KEY"]
-            end
+--- @param length number The length the args must meet
+--- @param args table The arguments to interpret
+---
+--- @return string, table @ eventString, args
+function CraftPresence:EncodeData(length, args)
+    local eventString = L["EVENT_RPC_TAG"]
+    local seperator
+    for key = 1, length do
+        if self:IsWithinValue(key, 1, length, true) then
+            seperator = L["ARRAY_SEPARATOR_KEY"]
+        else
+            seperator = ""
         end
+        args[key] = self:TrimString(self:GetOrDefault(args[key]))
+        eventString = eventString .. args[key] .. seperator
     end
-    -- Additional Sanity Checks for Secondary Button
-    if self:IsNullOrEmpty(secondaryButton) then
-        secondaryButton = L["TYPE_SKIP"]
-    else
-        local button_data = self:Split(secondaryButton, L["ARRAY_SPLIT_KEY"])
-        secondaryButton = ""
-        for i, _ in pairs(button_data) do
-            if self:IsNullOrEmpty(button_data[i]) then
-                button_data[i] = L["TYPE_SKIP"]
-            end
-            secondaryButton = secondaryButton .. button_data[i]
-            if i ~= self:GetLength(button_data) then
-                secondaryButton = secondaryButton .. L["ARRAY_SPLIT_KEY"]
-            end
-        end
-    end
-    return strformat(
-            L["FORMAT_EVENT_RPC"],
-            clientId, largeImageKey, largeImageText, smallImageKey, smallImageText,
-            details, gameState, startTime, endTime, primaryButton, secondaryButton
-    )
+    eventString = eventString .. L["EVENT_RPC_TAG"]
+    return eventString, args
 end
 
 --- Sets all allocated frames to null for future allocation
@@ -254,21 +200,22 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
     local will_update = (update == nil or update == true) -- Default: True
     local will_clean = (clean == nil or clean == true) -- Default: True
     local will_instance_update = (instance_update ~= nil and instance_update == true) -- Default: False
-    local encoded
-    if msg ~= nil then
-        encoded = tostring(msg)
-    else
-        encoded = self:EncodeConfigData(will_instance_update)
-    end
+    local defaultEncoded, encodedArgs = self:EncodeConfigData(will_instance_update)
+    local encoded = self:GetOrDefault(msg, defaultEncoded)
     local changed = last_encoded ~= encoded or proceed
-    if (changed and encoded ~= nil) then
+    if (changed and not self:IsNullOrEmpty(encoded)) then
         if will_update then
             last_encoded = encoded
+            last_args = encodedArgs
         end
         if self:GetFromDb("debugMode") then
+            local output = self:Replace(encoded, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
+            if self:IsNullOrEmpty(msg) then
+                output = self:SerializeTable(encodedArgs)
+            end
             self:Print(
                     strformat(L["LOG_DEBUG"], strformat(
-                            L["DEBUG_SEND_ACTIVITY"], self:Replace(encoded, "|", "||")
+                            L["DEBUG_SEND_ACTIVITY"], output
                     ))
             )
         end
