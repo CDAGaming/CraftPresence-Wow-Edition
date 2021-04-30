@@ -14,8 +14,10 @@ from logging.handlers import TimedRotatingFileHandler
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.2.2"
+process_version = "v1.2.3"
 unknown_key = "Skip"
+event_key = "$RPCEvent$"
+event_length = 11
 array_split_key = "=="
 decoded = ''
 process_hwnd = None
@@ -139,18 +141,26 @@ def decode_read_data(read):
 
 
 def get_decoded_chunks(decoded):
-    return decoded.replace('$RPCEvent$', '').split('|')
+    return decoded.replace(event_key, '').split('|')
 
 
 def verify_read_data(decoded):
     parts = get_decoded_chunks(decoded)
-    return (len(parts) == 11 and decoded.endswith('$RPCEvent$') and decoded.startswith(
-        '$RPCEvent$') and decoded != "$RPCEvent$")
+    return (len(parts) == event_length and decoded.endswith(event_key) and decoded.startswith(
+        event_key) and decoded != event_key)
+
+
+def null_or_empty(data):
+    return not data or "" == data
+
+
+def get_or_default(data, default=""):
+    return data if not (null_or_empty(data)) else default
 
 
 def parse_button_data(line_data):
     button_data = str(line_data).split(array_split_key, 1)
-    button_data[0] = (button_data[0] if not ("" == button_data[1]) else "")
+    button_data[0] = get_or_default(button_data[0])
     return button_data
 
 
