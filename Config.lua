@@ -464,7 +464,9 @@ function CraftPresence:getOptionsTable()
                         set = function(_, value)
                             local oldValue = CraftPresence:GetFromDb("callbackDelay")
                             local isValid = (CraftPresence:IsWithinValue(
-                                    value, L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"], true
+                                    value,
+                                    L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"],
+                                    true, true
                             ))
                             if isValid then
                                 CraftPresence.db.profile.callbackDelay = value
@@ -488,7 +490,9 @@ function CraftPresence:getOptionsTable()
                         set = function(_, value)
                             local oldValue = CraftPresence:GetFromDb("frameClearDelay")
                             local isValid = (CraftPresence:IsWithinValue(
-                                    value, L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"], true
+                                    value,
+                                    L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"],
+                                    true, true
                             ))
                             if isValid then
                                 CraftPresence.db.profile.frameClearDelay = value
@@ -515,7 +519,9 @@ function CraftPresence:getOptionsTable()
                         set = function(_, value)
                             local oldValue = CraftPresence:GetFromDb("frameSize")
                             local isValid = (CraftPresence:IsWithinValue(
-                                    value, L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"], true
+                                    value,
+                                    L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"],
+                                    true, true
                             ))
                             if isValid then
                                 CraftPresence.db.profile.frameSize = value

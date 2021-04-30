@@ -222,16 +222,18 @@ end
 --- @param value number The specified value to interpret (Default: 0)
 --- @param min number The minimum the value is allowed to be (Default: value)
 --- @param max number The maximum the value is allowed to be (Default: min)
---- @param contains boolean Whether the range should include min and max (Default: false)
+--- @param contains_min boolean Whether the range should include the min value (Default: false)
+--- @param contains_max boolean Whether the range should include the max value (Default: false)
 --- @param check_sanity boolean Whether to sanity check the min and max values (Default: true)
 ---
 --- @return boolean @ isWithinValue
-function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
+function CraftPresence:IsWithinValue(value, min, max, contains_min, contains_max, check_sanity)
     -- Data checks
     value = value or 0
     min = min or value
     max = max or min
-    contains = (contains ~= nil and contains == true)
+    contains_min = (contains_min ~= nil and contains_min == true)
+    contains_max = (contains_max ~= nil and contains_max == true)
     check_sanity = (check_sanity == nil or check_sanity == true)
     -- Sanity checks
     if check_sanity then
@@ -249,8 +251,10 @@ function CraftPresence:IsWithinValue(value, min, max, contains, check_sanity)
         end
     end
     -- Contains Checks
-    if not contains then
+    if not contains_min then
         min = min + 1
+    end
+    if not contains_max then
         max = max - 1
     end
     return (value >= min and value <= max)
@@ -367,7 +371,7 @@ local timer_locked = false
 -- Compatibility Data
 local build_info, compatibility_info, flavor_info
 
---- Retrieves and Syncronizes App Build Info
+--- Retrieve and/or Synchronize App Build Info
 --- @return table @ build_info
 function CraftPresence:GetBuildInfo()
     if not build_info then
@@ -387,7 +391,7 @@ function CraftPresence:GetBuildInfo()
     return build_info
 end
 
---- Retrieves and Syncronizes Build Flavor Info
+--- Retrieve and/or Synchronize Build Flavor Info
 ---
 --- @return table @ flavor_info
 function CraftPresence:GetFlavorInfo()
@@ -402,8 +406,8 @@ function CraftPresence:GetFlavorInfo()
     return flavor_info
 end
 
---- Retrieves and Syncronizes App Compatibility Info
---- (Note some TOC version require extra filtering)
+--- Retrieve and/or Synchronize App Compatibility Info
+--- (Note that some TOC versions require extra filtering)
 ---
 --- @return table @ compatibility_info
 function CraftPresence:GetCompatibilityInfo()
@@ -425,25 +429,27 @@ function CraftPresence:GetCompatibilityInfo()
     return compatibility_info
 end
 
---- Compatibility Helper: Determine if Build is Vanilla Classic
+--- Determine if this build identifies as Vanilla Classic
 --- @return boolean @ is_classic_rebased
 function CraftPresence:IsClassicRebased()
-    return (
-            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["1.13.0"] and
-                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["2.0.0"]
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetCompatibilityInfo()["1.13.0"], self:GetCompatibilityInfo()["2.0.0"],
+            true, false
     )
 end
 
---- Compatibility Helper: Determine if Build is TBC Classic
+--- Determine if this build identifies as TBC Classic
 --- @return boolean @ is_tbc_rebased
 function CraftPresence:IsTBCRebased()
-    return (
-            self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.5.0"] and
-                    self:GetBuildInfo()["toc_version"] < self:GetCompatibilityInfo()["3.0.0"]
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetCompatibilityInfo()["2.5.0"], self:GetCompatibilityInfo()["3.0.0"],
+            true, false
     )
 end
 
---- Compatibility Helper: Determine if Build is a rebased api
+--- Determine if this build is using a rebased api
 --- @return boolean @ is_rebased_api
 function CraftPresence:IsRebasedApi()
     return self:IsClassicRebased() or self:IsTBCRebased()

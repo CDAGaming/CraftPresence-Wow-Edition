@@ -276,7 +276,9 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
         if will_clean then
             local delay = self:GetFromDb("frameClearDelay")
             if (self:IsWithinValue(
-                    delay, max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"], true
+                    delay,
+                    max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"],
+                    true, true
             )) then
                 self:After(delay, function()
                     self:CleanFrames()

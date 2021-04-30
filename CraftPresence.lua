@@ -338,8 +338,10 @@ function CraftPresence:DispatchUpdate(args)
                 -- the timer is locked if in a skip-style pipeline.
                 -- Otherwise, execute the next method normally.
                 local delay = self:GetFromDb("callbackDelay")
-                local min_delay = max(L["MINIMUM_CALLBACK_DELAY"], 1)
-                if self:IsWithinValue(delay, min_delay, L["MAXIMUM_CALLBACK_DELAY"], true) then
+                if (self:IsWithinValue(
+                        delay,
+                        max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"],
+                        true, true)) then
                     self:SetTimerLocked(true)
                     self:After(delay, function()
                         self:PaintMessageWait()
