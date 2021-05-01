@@ -19,25 +19,26 @@ local hasInstanceChanged = false
 --- @param unit string The unit name (Default: player)
 --- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
 --- @param isRebasedApi boolean Whether the client is on a rebased api
+--- @param prefixFormat string Optional argument to determine the format of playerPrefix
 ---
 --- @return string, string @ playerStatus, playerPrefix
-function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
+function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi, prefixFormat)
     unit = unit or "player"
     local playerStatus = ""
     local playerPrefix = ""
-    local isAfk, isOnDnd, isDead, isGhost
+    local isAway, isBusy, isDead, isGhost
     -- Ensure Version Compatibility
     if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or isRebasedApi then
-        isAfk = UnitIsAFK(unit)
-        isOnDnd = UnitIsDND(unit)
+        isAway = UnitIsAFK(unit)
+        isBusy = UnitIsDND(unit)
     end
-    -- Sync Player Name Tweaks (DND/AFK Data)
+    -- Sync Player Name Tweaks
     isDead = UnitIsDead(unit)
     isGhost = UnitIsGhost(unit)
-    if isAfk then
-        playerStatus = L["LABEL_AFK"]
-    elseif isOnDnd then
-        playerStatus = L["LABEL_DND"]
+    if isAway then
+        playerStatus = L["LABEL_AWAY"]
+    elseif isBusy then
+        playerStatus = L["LABEL_BUSY"]
     elseif isGhost then
         playerStatus = L["LABEL_GHOST"]
     elseif isDead then
@@ -45,7 +46,11 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi)
     end
     -- Parse Player Status
     if not self:IsNullOrEmpty(playerStatus) then
-        playerPrefix = ("(" .. playerStatus .. ")") .. " "
+        if not self:IsNullOrEmpty(prefixFormat) then
+            playerPrefix = strformat(prefixFormat, playerStatus)
+        else
+            playerPrefix = playerStatus
+        end
     else
         playerStatus = L["LABEL_ONLINE"]
     end
@@ -108,7 +113,9 @@ function CraftPresence:ParseGameData(force_instance_change)
     end
     -- Player Data
     local playerName = UnitName("player")
-    local playerStatus, playerPrefix = self:GetPlayerStatus("player", true, isRebasedApi)
+    local playerStatus, playerPrefix = self:GetPlayerStatus("player",
+            true, isRebasedApi, L["FORMAT_USER_PREFIX"]
+    )
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()

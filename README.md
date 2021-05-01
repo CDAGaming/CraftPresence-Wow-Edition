@@ -101,7 +101,7 @@ You can configure some of these placeholders throughout different areas of the g
 *   `@title_name@` - The currently active title for your character, or `@player_name@` if not applicable
 *   `@player_level@` - The player's current in-game level
 *   `@player_class@` - The player's current in-game class name
-*   `@player_status@` - The player's current in-game status (Support AFK, DND, and alive states)
+*   `@player_status@` - The player's current in-game status (Supports Away, Busy, and Dead/Alive states)
 *   `@player_alliance@` - (Preset) The player's current faction/covenant (Dependent on location and applicability)
 *   `@player_covenant@` - The player's current covenant name, or `None` if not applicable
 *   `@player_covenant_renown@` - The player's current covenant renown level, if applicable

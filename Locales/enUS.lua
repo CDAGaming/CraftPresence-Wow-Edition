@@ -15,8 +15,8 @@ local GOLD = '|cFFFFD700'
 
 -- Data Default Values (DNT)
 L["LABEL_ONLINE"] = "Online"
-L["LABEL_AFK"] = "AFK"
-L["LABEL_DND"] = "DND"
+L["LABEL_AFK"] = "Away"
+L["LABEL_DND"] = "Busy"
 L["LABEL_GHOST"] = "Ghost"
 L["LABEL_DEAD"] = "Dead"
 L["TYPE_UNKNOWN"] = "Unknown"
@@ -35,6 +35,7 @@ L["ADDON_AFFIX"] = "cp"
 L["COMMAND_CONFIG"] = "cp set"
 L["COMMAND_CONFIG_ALT"] = "craftpresence set"
 L["FORMAT_LEVEL"] = "Level %s"
+L["FORMAT_USER_PREFIX"] = "(%s) "
 L["EVENT_RPC_TAG"] = "$RPCEvent$"
 L["EVENT_RPC_LENGTH"] = 11
 
