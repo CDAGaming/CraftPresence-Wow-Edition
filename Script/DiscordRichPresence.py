@@ -4,17 +4,21 @@
 import json
 import logging
 import os
-import sys
-import time
 # Import Sub-Package Data
 from datetime import datetime
 from logging.handlers import TimedRotatingFileHandler
+from urllib.parse import urlparse
+
+# Import Extra Modules
+import sys
+import time
 
 # Internal Data (Do not touch)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.3.0"
+min_attributes = ('scheme', 'netloc')
+process_version = "v1.3.2"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -134,6 +138,12 @@ def verify_read_data(decoded):
     parts = get_decoded_chunks(decoded)
     return (len(parts) == event_length and decoded.endswith(event_key) and decoded.startswith(
         event_key) and decoded != event_key)
+
+
+def is_valid_url(url, qualifying=min_attributes):
+    tokens = urlparse(url)
+    return all([getattr(tokens, qualifying_attr)
+                for qualifying_attr in qualifying])
 
 
 def null_or_empty(data):
@@ -373,13 +383,17 @@ while True:
                     last_end_timestamp = lines[8]
             # Buttons Data Sync
             if not null_or_empty(lines[9]):
-                primary_button_data = parse_button_data(lines[9])
-                if len(primary_button_data) == 2:
-                    buttonsData.append({"label": primary_button_data[0], "url": primary_button_data[1]})
+                button_data = parse_button_data(lines[9])
+                if len(button_data) == 2:
+                    button_label = button_data[0] if (len(button_data[0]) <= 32) else button_data[1]
+                    button_url = button_data[1] if (button_data[1] != button_label) else button_data[0]
+                    buttonsData.append({"label": button_label, "url": button_url})
             if not null_or_empty(lines[10]):
-                secondary_button_data = parse_button_data(lines[10])
-                if len(secondary_button_data) == 2:
-                    buttonsData.append({"label": secondary_button_data[0], "url": secondary_button_data[1]})
+                button_data = parse_button_data(lines[10])
+                if len(button_data) == 2:
+                    button_label = button_data[0] if not (is_valid_url(button_data[0])) else button_data[1]
+                    button_url = button_data[1] if (button_data[1] != button_label) else button_data[0]
+                    buttonsData.append({"label": button_label, "url": button_url})
             # Activity Data Sync
             if not null_or_empty(lines[5]):
                 activity["details"] = lines[5]
