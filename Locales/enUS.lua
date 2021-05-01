@@ -15,8 +15,8 @@ local GOLD = '|cFFFFD700'
 
 -- Data Default Values (DNT)
 L["LABEL_ONLINE"] = "Online"
-L["LABEL_AFK"] = "Away"
-L["LABEL_DND"] = "Busy"
+L["LABEL_AWAY"] = "Away"
+L["LABEL_BUSY"] = "Busy"
 L["LABEL_GHOST"] = "Ghost"
 L["LABEL_DEAD"] = "Dead"
 L["TYPE_UNKNOWN"] = "Unknown"
