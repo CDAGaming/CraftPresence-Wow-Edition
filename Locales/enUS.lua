@@ -12,6 +12,7 @@ local GREEN = '|cFF00FF7F'
 local GREY = '|cfd9b9b9b'
 local RED = '|cFFFF6060'
 local GOLD = '|cFFFFD700'
+local PALE_CYAN = '|c33c9fcff'
 
 -- Data Default Values (DNT)
 L["LABEL_ONLINE"] = "Online"
@@ -259,4 +260,4 @@ L["ADDON_INFO_THREE"] = "Thanks to Attka and wowdim on Github for the original b
 L["ADDON_INFO_FOUR"] = "Special thanks to the-emerald/python-discord-rpc and Attk4/wow-discord-rich-presence"
 
 L["ADDON_TOOLTIP_THREE"] = "Click to access config data."
-L["ADDON_TOOLTIP_FIVE"] = "Toggle minimap button by typing |c33c9fcff/cp minimap|r"
+L["ADDON_TOOLTIP_FIVE"] = setfmt("Toggle minimap button by typing */cp minimap|r", PALE_CYAN)

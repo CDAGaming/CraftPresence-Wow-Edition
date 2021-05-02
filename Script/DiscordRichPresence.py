@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 import sys
 import time
 
-# Internal Data (Do not touch)
+# Internal Data (DNT)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')

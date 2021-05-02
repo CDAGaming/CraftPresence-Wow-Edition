@@ -1,3 +1,27 @@
+--[[
+MIT License
+
+Copyright (c) 2018 - 2021 CDAGaming (cstack2011@yahoo.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+--]]
+
 -- Lua APIs
 local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring;
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
@@ -9,9 +33,7 @@ local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
 
-----------------------------------
---LUA UTILITIES
-----------------------------------
+--[[ LUA UTILITIES ]]--
 
 local lastIndex = 0
 
@@ -383,9 +405,7 @@ function CraftPresence:GetDynamicReturnValue(value, valueType, limit, a1, a2, a3
     return value
 end
 
-----------------------------------
---API UTILITIES
-----------------------------------
+--[[ API UTILITIES ]]--
 
 local addonVersion = ""
 local timer_locked = false
@@ -530,9 +550,7 @@ function CraftPresence:ShowConfig()
     end
 end
 
-----------------------------------
---API GETTERS AND SETTERS
-----------------------------------
+--[[ API GETTERS AND SETTERS ]]--
 
 --- Print initial data and register events, depending on platform and config data
 function CraftPresence:PrintInitialData()
@@ -589,9 +607,7 @@ function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_plac
     return found_placeholders, placeholderStr
 end
 
-----------------------------------
---CONFIG GETTERS AND SETTERS
-----------------------------------
+--[[ CONFIG GETTERS AND SETTERS ]]--
 
 --- Retrieves Config Data based on the specified parameters
 ---
@@ -645,7 +661,9 @@ end
 ---
 --- @return table @ generatedData
 function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
-    if CraftPresence:IsNullOrEmpty(rootKey) then return {} end
+    if CraftPresence:IsNullOrEmpty(rootKey) then
+        return {}
+    end
     titleKey = titleKey or rootKey
     commentKey = commentKey or ""
     local found_count = 0
@@ -703,9 +721,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
     return table_args
 end
 
-----------------------------------
---QUEUE SYSTEM UTILITIES
-----------------------------------
+--[[ QUEUE SYSTEM UTILITIES ]]--
 
 local queued_data = { }
 local queue_frame

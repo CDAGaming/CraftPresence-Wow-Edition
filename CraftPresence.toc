@@ -8,8 +8,8 @@
 ## Version: @project-version@
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
-## OptionalDeps: Ace3
-## X-Embeds: Ace3
+## OptionalDeps: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
+## X-Embeds: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
 ## X-Credits: Attka
 ## X-Curse-Project-ID: 457334
 ## X-WoWI-ID: 25986

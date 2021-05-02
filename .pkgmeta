@@ -1,5 +1,4 @@
 package-as: CraftPresence
-wowi-convert-changelog: no
 
 embedded-libraries:
   - libstub
