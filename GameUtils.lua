@@ -270,9 +270,17 @@ function CraftPresence:ParseGameData(force_instance_change)
         if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
             difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
         end
+        -- Trim and Adjust User Data
+        local userInfo = userData
+        if not self:IsNullOrEmpty(specName) then
+            userInfo = (userInfo .. " " .. specName)
+        end
+        if not self:IsNullOrEmpty(playerClass) then
+            userInfo = (userInfo .. " " .. playerClass)
+        end
         -- Inner Placeholder Adjustments
         queued_inner_placeholders[setfmt("*title_name*", inkey)] = titleName
-        queued_inner_placeholders[setfmt("*player_info*", inkey)] = (userData .. " " .. specName .. " " .. playerClass)
+        queued_inner_placeholders[setfmt("*player_info*", inkey)] = userInfo
         queued_inner_placeholders[setfmt("*player_covenant_renown*", inkey)] = tostring(playerCovenantRenown)
         queued_inner_placeholders[setfmt("*player_spec_name*", inkey)] = specName
         queued_inner_placeholders[setfmt("*player_spec_role*", inkey)] = roleName
