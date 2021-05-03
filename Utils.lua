@@ -410,7 +410,7 @@ end
 local addonVersion = ""
 local timer_locked = false
 -- Compatibility Data
-local build_info, compatibility_info, flavor_info
+local build_info, compatibility_info, flavor_info, extra_build_info
 
 --- Retrieve and/or Synchronize App Build Info
 --- @return table @ build_info
@@ -470,6 +470,19 @@ function CraftPresence:GetCompatibilityInfo()
     return compatibility_info
 end
 
+--- Retrieve and/or Synchronize Extra Build Info
+--- (Note that some TOC versions require extra filtering)
+---
+--- @return table @ extra_build_info
+function CraftPresence:GetExtraBuildInfo()
+    if not extra_build_info then
+        extra_build_info = {
+            ["1.15.1"] = 11501 -- TurtleWoW 1.15.1 (Vanilla)
+        }
+    end
+    return extra_build_info
+end
+
 --- Determine if this build identifies as Vanilla Classic
 --- @return boolean @ is_classic_rebased
 function CraftPresence:IsClassicRebased()
@@ -477,7 +490,7 @@ function CraftPresence:IsClassicRebased()
             self:GetBuildInfo()["toc_version"],
             self:GetCompatibilityInfo()["1.13.0"], self:GetCompatibilityInfo()["2.0.0"],
             true, false
-    )
+    ) and not self:IsSpecialVersion()
 end
 
 --- Determine if this build identifies as TBC Classic
@@ -487,13 +500,19 @@ function CraftPresence:IsTBCRebased()
             self:GetBuildInfo()["toc_version"],
             self:GetCompatibilityInfo()["2.5.0"], self:GetCompatibilityInfo()["3.0.0"],
             true, false
-    )
+    ) and not self:IsSpecialVersion()
 end
 
 --- Determine if this build is using a rebased api
 --- @return boolean @ is_rebased_api
 function CraftPresence:IsRebasedApi()
     return self:IsClassicRebased() or self:IsTBCRebased()
+end
+
+--- Determine if this build is using a special/modified api
+--- @return any @ special_info
+function CraftPresence:IsSpecialVersion()
+    return self:GetExtraBuildInfo()[self:GetBuildInfo()["version"]]
 end
 
 --- Getter for CraftPresence:addonVersion
