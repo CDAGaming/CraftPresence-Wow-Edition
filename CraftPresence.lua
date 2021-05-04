@@ -29,7 +29,7 @@ CraftPresence.registeredEvents = {}
 
 -- Lua APIs
 local strformat, strlower = string.format, string.lower
-local tostring, ipairs, pairs = tostring, ipairs, pairs
+local tostring, pairs = tostring, pairs
 local type, max, tinsert = type, math.max, table.insert
 
 -- Addon APIs
@@ -230,7 +230,7 @@ function CraftPresence:AddTriggers(event, args)
     end
 
     if event ~= nil and args ~= nil then
-        for _, v in ipairs(args) do
+        for _, v in pairs(args) do
             local eventTag, eventBinding = tostring(v), tostring(event)
             CraftPresence.registeredEvents[eventTag] = eventBinding
             self:RegisterEvent(eventTag, eventBinding)
@@ -247,7 +247,7 @@ function CraftPresence:RemoveTriggers(args)
     end
 
     if args ~= nil then
-        for _, v in ipairs(args) do
+        for _, v in pairs(args) do
             local eventTag = tostring(v)
             CraftPresence.registeredEvents[eventTag] = nil
             self:UnregisterEvent(eventTag)
