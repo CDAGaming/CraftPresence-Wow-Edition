@@ -37,18 +37,28 @@ local frames = {}
 local last_encoded = ""
 local last_args = {}
 
---- Retrieves the Last Sent Encoded Event Message
---- @return string @ lastEncodedMessage
-function CraftPresence:GetLastEncoded()
-    local output = self:Replace(last_encoded, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
-    if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(last_args) then
-        output = self:SerializeTable(last_args)
+--- Convert an encoded RPCEvent message into a displayable format
+---
+--- @param str string The encoded string to evaluate (Default: last_encoded)
+--- @param format string The format to log the string as (Default: %s)
+--- @param level string The log level to log the string as (Default: %s)
+--- @param display boolean Whether or not to print the return value (Default: false)
+---
+--- @return string @ encoded_message
+function CraftPresence:GetEncodedMessage(str, format, level, display)
+    str = self:GetOrDefault(str, last_encoded)
+    format = self:GetOrDefault(format, "%s")
+    level = self:GetOrDefault(level, "%s")
+    display = self:GetOrDefault(display, false)
+    local output = self:Replace(str, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
+    if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(str) then
+        output = self:SerializeTable(str)
     end
-    return strformat(
-            L["LOG_VERBOSE"], strformat(
-                    L["VERBOSE_LAST_ENCODED"], output
-            )
-    )
+    local returnValue = strformat(level, strformat(format, output))
+    if display then
+        self:Print(returnValue)
+    end
+    return returnValue
 end
 
 --- Creates an array of frames with the specified size at the TOPLEFT of screen
@@ -191,8 +201,7 @@ end
 ---
 --- @return string, table @ eventString, args
 function CraftPresence:EncodeData(length, args)
-    local eventString = L["EVENT_RPC_TAG"]
-    local separator
+    local eventString, separator = L["EVENT_RPC_TAG"]
     for key = 1, length do
         if self:IsWithinValue(key, 1, length, true) then
             separator = L["ARRAY_SEPARATOR_KEY"]
@@ -213,22 +222,24 @@ function CraftPresence:CleanFrames()
     end
 end
 
---- Displays the currently encoded string as Frames, if changed or forced
+--- Displays the currently encoded string as Frames, depending on arguments
 ---
---- @param force boolean Whether or not to force an update regardless of changes
---- @param update boolean Whether to update last_encoded if proceeding
---- @param clean boolean Whether or not to clear frames after a period of time
+--- @param force boolean Whether or not to force an update regardless of changes (Default: false)
+--- @param update boolean Whether to update last_encoded if proceeding (Default: true)
+--- @param clean boolean Whether or not to clear frames after a period of time (Default: true)
 --- @param msg string Exact message to parse; Defaults to EncodeConfigData if non-present
+--- @param instance_update boolean Whether to force an instance change (Default: false)
 function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_update)
-    local proceed = (force ~= nil and force == true) -- Default: False
-    local will_update = (update == nil or update == true) -- Default: True
-    local will_clean = (clean == nil or clean == true) -- Default: True
-    local will_instance_update = (instance_update ~= nil and instance_update == true) -- Default: False
-    local defaultEncoded, encodedArgs = self:EncodeConfigData(will_instance_update)
+    force = self:GetOrDefault(force, false)
+    update = self:GetOrDefault(update, true)
+    clean = self:GetOrDefault(clean, true)
+    instance_update = self:GetOrDefault(instance_update, false)
+
+    local defaultEncoded, encodedArgs = self:EncodeConfigData(instance_update)
     local encoded = self:GetOrDefault(msg, defaultEncoded)
-    local changed = last_encoded ~= encoded or proceed
+    local changed = last_encoded ~= encoded or force
     if (changed and not self:IsNullOrEmpty(encoded)) then
-        if will_update then
+        if update then
             last_encoded = encoded
             if self:IsNullOrEmpty(msg) then
                 last_args = encodedArgs
@@ -236,19 +247,9 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
                 last_args = {}
             end
         end
-        if self:GetFromDb("debugMode") then
-            local output = self:Replace(encoded, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
-            if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(encodedArgs) then
-                output = self:SerializeTable(encodedArgs)
-            end
-            self:Print(
-                    strformat(L["LOG_DEBUG"], strformat(
-                            L["DEBUG_SEND_ACTIVITY"], output
-                    ))
-            )
-        end
+        self:GetEncodedMessage(encoded, L["DEBUG_SEND_ACTIVITY"], L["LOG_DEBUG"], self:GetFromDb("debugMode"))
         self:PaintSomething(encoded)
-        if will_clean then
+        if clean then
             local delay = self:GetFromDb("frameClearDelay")
             if (self:IsWithinValue(
                     delay,

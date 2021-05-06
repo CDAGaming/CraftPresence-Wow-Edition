@@ -69,17 +69,17 @@ function CraftPresence:IsNullOrEmpty(obj)
     return CP_GlobalUtils:IsNullOrEmpty(obj)
 end
 
---- Return the specified string or a fallback value if nil
+--- Return the specified object or a fallback value if nil
 ---
---- @param str string The value to interpret
---- @param default string The fallback value to interpret
+--- @param obj any The object to interpret
+--- @param default any The fallback value to interpret (Returns an empty string if default is nil)
 ---
---- @return string @ adjusted_str
-function CraftPresence:GetOrDefault(str, default)
-    if self:IsNullOrEmpty(str) then
-        str = (default or "")
+--- @return any @ adjusted_object
+function CraftPresence:GetOrDefault(obj, default)
+    if self:IsNullOrEmpty(obj) then
+        obj = (default or "")
     end
-    return tostring(str)
+    return obj
 end
 
 --- Replaces the specified area of a string
@@ -127,15 +127,15 @@ end
 ---
 --- @param str string The input string to evaluate
 --- @param pattern string The pattern to parse against
---- @param multiple boolean Whether or not to find all/the first match
---- @param index number The index to begin evaluation at
---- @param plain boolean Whether or not to forbid pattern matching filters
+--- @param multiple boolean Whether or not to find all/the first match (Default: true)
+--- @param index number The index to begin evaluation at (Default: 1)
+--- @param plain boolean Whether or not to forbid pattern matching filters (Defalt: false)
 ---
 --- @return any @ match_data
 function CraftPresence:FindMatches(str, pattern, multiple, index, plain)
-    multiple = multiple == nil or multiple == true
-    plain = plain ~= nil and plain == true
-    index = index or 1
+    multiple = self:GetOrDefault(multiple, true)
+    plain = self:GetOrDefault(plain, false)
+    index = self:GetOrDefault(index, 1)
     if not self:IsNullOrEmpty(str) then
         if multiple then
             if strgmatch then
@@ -272,12 +272,12 @@ end
 --- @return boolean @ isWithinValue
 function CraftPresence:IsWithinValue(value, min, max, contains_min, contains_max, check_sanity)
     -- Data checks
-    value = value or 0
-    min = min or value
-    max = max or min
-    contains_min = (contains_min ~= nil and contains_min == true)
-    contains_max = (contains_max ~= nil and contains_max == true)
-    check_sanity = (check_sanity == nil or check_sanity == true)
+    value = self:GetOrDefault(value, 0)
+    min = self:GetOrDefault(min, value)
+    max = self:GetOrDefault(max, min)
+    contains_min = self:GetOrDefault(contains_min, false)
+    contains_max = self:GetOrDefault(contains_max, false)
+    check_sanity = self:GetOrDefault(check_sanity, true)
     -- Sanity checks
     if check_sanity then
         if min > max then
@@ -307,13 +307,13 @@ end
 ---
 --- @param val any The table or object within the table
 --- @param name string The name of the object
---- @param skipnewlines boolean Whether or not new lines will be skipped
---- @param depth number Object depth to interpret within
+--- @param skipnewlines boolean Whether or not new lines will be skipped (Default: false)
+--- @param depth number Object depth to interpret within (Default: 0)
 ---
 --- @return string @ tableString
 function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
-    skipnewlines = skipnewlines or false
-    depth = depth or 0
+    skipnewlines = self:GetOrDefault(skipnewlines, false)
+    depth = self:GetOrDefault(depth, 0)
 
     local tmp = strrep(" ", depth)
 
@@ -354,9 +354,7 @@ end
 ---
 --- @return table @ outResults
 function CraftPresence:Split(str, inSplitPattern, multiple, plain, outResults)
-    if not outResults then
-        outResults = { }
-    end
+    outResults = self:GetOrDefault(outResults, {})
     if not self:IsNullOrEmpty(str) then
         local doContinue = true
         local theStart = 1
@@ -376,13 +374,16 @@ end
 
 --- Retrieves the Return Value from a Dynamic Function
 ---
---- @param value function The input (and output) for this event
---- @param valueType string The expected type of this event
---- @param limit number How many times to iterate until a different type
+--- @param value any The input (and output) for this event
+--- @param valueType string The expected type of this event (Default: type(value))
+--- @param limit number How many times to iterate until a different type (Default: 1)
 ---
 --- @return string @ returnValue
-function CraftPresence:GetDynamicReturnValue(value, valueType, limit, a1, a2, a3, a4, a5, a6, a7, a8, a9)
-    if not self:IsNullOrEmpty(value) and (self:IsNullOrEmpty(valueType) or valueType == "function") and loadstring then
+function CraftPresence:GetDynamicReturnValue(value, valueType, a1, a2, a3, a4, a5, a6, a7, a8, a9, limit)
+    value = self:GetOrDefault(value)
+    valueType = self:GetOrDefault(valueType, type(value))
+    limit = self:GetOrDefault(limit, 1)
+    if not self:IsNullOrEmpty(value) and valueType == "function" and loadstring then
         if type(value) == "string" then
             -- Edge-Case to allow non-return functions
             local lowVal = strlower(value)
@@ -407,7 +408,7 @@ end
 
 --[[ API UTILITIES ]]--
 
-local addonVersion = ""
+local fallbackVersion, fallbackTOC, addonVersion = "0.0.0", 00000
 local timer_locked = false
 -- Compatibility Data
 local build_info, compatibility_info, flavor_info, extra_build_info
@@ -416,10 +417,10 @@ local build_info, compatibility_info, flavor_info, extra_build_info
 --- @return table @ build_info
 function CraftPresence:GetBuildInfo()
     if not build_info then
-        local version, build, date, tocversion = "0.0.0", "0000", "Jan 1 1969", "00000"
+        local version, build, date, tocversion = fallbackVersion, "0000", "Jan 1 1969", fallbackTOC
         if GetBuildInfo then
             version, build, date, tocversion = GetBuildInfo()
-            tocversion = tocversion or self:VersionToBuild(version)
+            tocversion = tocversion or tonumber(self:VersionToBuild(version))
         end
 
         build_info = {
@@ -520,8 +521,12 @@ end
 function CraftPresence:GetVersion()
     if self:IsNullOrEmpty(addonVersion) then
         addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
+        if not self:ContainsDigit(addonVersion) then
+            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_BUILD_UNSUPPORTED"], addonVersion)))
+            addonVersion = "v" .. fallbackVersion
+        end
     end
-    return addonVersion
+    return self:GetOrDefault(addonVersion, fallbackVersion)
 end
 
 --- Getter for Addon Locale Data
@@ -530,13 +535,14 @@ function CraftPresence:GetLocale()
     return L
 end
 
---- Compatibility Helper: Convert a Version into a build number
+--- Convert a Version String into a build number
+---
+--- @param versionStr string The version string to evaluate (Default: fallbackVersion)
+---
 --- @return string @ buildVersion
 function CraftPresence:VersionToBuild(versionStr)
-    if self:IsNullOrEmpty(versionStr) then
-        return versionStr
-    end
-    local buildStr = ""
+    versionStr = self:GetOrDefault(versionStr, fallbackVersion)
+    local buildStr
     local splitData = self:Split(versionStr, ".", true, true)
     if splitData[1] and splitData[1] == versionStr then
         buildStr = splitData[1]
@@ -547,10 +553,9 @@ function CraftPresence:VersionToBuild(versionStr)
             else
                 buildStr = buildStr .. value
             end
-            buildStr = tonumber(buildStr)
         end
     end
-    return buildStr
+    return self:GetOrDefault(buildStr, fallbackTOC)
 end
 
 --- Display the addon's config frame
@@ -604,14 +609,14 @@ end
 ---
 --- @return boolean, string @ found_placeholders, placeholderStr
 function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_placeholders, placeholderStr)
-    placeholderTable = placeholderTable or {}
-    found_placeholders = found_placeholders or false
-    placeholderStr = placeholderStr or ""
+    placeholderTable = self:GetOrDefault(placeholderTable, {})
+    found_placeholders = self:GetOrDefault(found_placeholders, false)
+    placeholderStr = self:GetOrDefault(placeholderStr)
     for key, value in pairs(placeholderTable) do
         local strKey = tostring(key)
         local strValue = tostring(value)
         if type(value) == "table" then
-            strValue = self:GetDynamicReturnValue(value["data"] or value, value["type"] or type(value), 1, self)
+            strValue = self:GetDynamicReturnValue(value["data"] or value, value["type"], self)
         end
         if (query == nil or (
                 self:FindMatches(strlower(strKey), query, false, 1, true) or
@@ -687,7 +692,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
     commentKey = commentKey or ""
     local found_count = 0
 
-    titleKey = CraftPresence:GetDynamicReturnValue(titleKey, type(titleKey), 1, CraftPresence)
+    titleKey = CraftPresence:GetDynamicReturnValue(titleKey, type(titleKey), CraftPresence)
     local table_args = {
         titleHeader = {
             order = CraftPresence:GetNextIndex(), type = "header", name = titleKey
@@ -732,7 +737,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
         end
     end
 
-    commentKey = CraftPresence:GetDynamicReturnValue(commentKey, type(commentKey), 1, found_count)
+    commentKey = CraftPresence:GetDynamicReturnValue(commentKey, type(commentKey), found_count)
     table_args[CraftPresence:RandomString(8)] = {
         type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
         name = commentKey

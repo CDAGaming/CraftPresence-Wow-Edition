@@ -33,8 +33,7 @@ end
 
 --[[ GAME GETTERS AND SETTERS ]]--
 
-local lastPlayerStatus = ""
-local hasInstanceChanged = false
+local lastPlayerStatus, hasInstanceChanged
 
 --- Retrieves the Player Status for the specified unit
 ---
@@ -46,8 +45,7 @@ local hasInstanceChanged = false
 --- @return string, string @ playerStatus, playerPrefix
 function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi, prefixFormat)
     unit = unit or "player"
-    local playerStatus = ""
-    local playerPrefix = ""
+    local playerStatus, playerPrefix
     local isAway, isBusy, isDead, isGhost
     -- Ensure Version Compatibility
     if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or isRebasedApi then
@@ -87,13 +85,13 @@ end
 --- Retrieves whether the instance has recently changed
 --- @return boolean @ hasInstanceChanged
 function CraftPresence:HasInstanceChanged()
-    return hasInstanceChanged
+    return self:GetOrDefault(hasInstanceChanged, false)
 end
 
 --- Retrieves the Last Player Status, if any
 --- @return string @ lastPlayerStatus
 function CraftPresence:GetLastPlayerStatus()
-    return lastPlayerStatus
+    return self:GetOrDefault(lastPlayerStatus)
 end
 
 --[[ GAME UTILITIES ]]--
@@ -104,8 +102,7 @@ local compatData = CraftPresence:GetCompatibilityInfo()
 local isRebasedApi = CraftPresence:IsRebasedApi()
 
 local lastInstanceState, lastAreaName
-local playerAlliance = L["TYPE_NONE"]
-local playerCovenant = L["TYPE_NONE"]
+local playerAlliance, playerCovenant = L["TYPE_NONE"], L["TYPE_NONE"]
 
 --- Parses Game information to form placeholder information
 ---
@@ -113,7 +110,7 @@ local playerCovenant = L["TYPE_NONE"]
 ---
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
 function CraftPresence:ParseGameData(force_instance_change)
-    force_instance_change = force_instance_change ~= nil and force_instance_change == true
+    force_instance_change = self:GetOrDefault(force_instance_change, false)
     local inkey = self:GetFromDb("innerPlaceholderKey")
     local outkey = self:GetFromDb("globalPlaceholderKey")
     -- Variable Initialization
@@ -122,9 +119,6 @@ function CraftPresence:ParseGameData(force_instance_change)
     if buildData["toc_version"] >= compatData["2.5.0"] or isRebasedApi then
         name, instanceType, difficultyID, difficultyName, maxPlayers,
         dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
-    else
-        -- Fallback Data, as needed
-        name = ""
     end
     local difficultyInfo = difficultyName
     local lockoutData = {}
@@ -245,10 +239,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         -- Extra Character Data
         local titleName = UnitPVPName("player")
         local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-        local specId
-        local specName = ""
-        local roleName = ""
-        local specInfo
+        local specInfo, specId, specName, roleName
         if buildData["toc_version"] >= compatData["5.0.0"] then
             avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
             specInfo = GetSpecialization()

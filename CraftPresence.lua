@@ -95,13 +95,12 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     -- Custom Placeholder Syncing
     for key, value in pairs(custom_placeholders) do
         -- Sanity Checks
-        value = self:GetDynamicReturnValue((value["data"] or ""), (value["type"] or "string"), 1, self)
+        value = self:GetDynamicReturnValue(value["data"], value["type"], self)
         -- Main Parsing
         rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
     end
     -- Time Condition Syncing
-    local time_start = ""
-    local time_end = ""
+    local time_start, time_end
     for timeKey, timeValue in pairs(time_conditions) do
         if timeValue then
             if (self:FindMatches(timeKey, "start", false)) then
@@ -119,13 +118,12 @@ function CraftPresence:EncodeConfigData(force_instance_change)
             end
         end
     end
-    tinsert(rpcData, time_start)
-    tinsert(rpcData, time_end)
+    tinsert(rpcData, self:GetOrDefault(time_start))
+    tinsert(rpcData, self:GetOrDefault(time_end))
 
     -- Additional Sanity Checks for Buttons
     for key, value in pairs(buttons) do
-        local dataValue = ""
-        local dataSeparator = ""
+        local dataValue, dataSeparator = "", ""
         for buttonKey, buttonValue in pairs(value) do
             dataValue = dataValue .. dataSeparator .. buttonValue
             if not self:IsNullOrEmpty(buttonValue) then
@@ -454,7 +452,7 @@ function CraftPresence:ChatCommand(input)
             self:PrintInitialData()
         elseif input == "status" then
             if self:GetFromDb("debugMode") then
-                self:Print(self:GetLastEncoded())
+                self:GetEncodedMessage(nil, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)
             else
                 self:Print(strformat(
                         L["LOG_ERROR"], strformat(
