@@ -77,7 +77,11 @@ end
 --- @return any @ adjusted_object
 function CraftPresence:GetOrDefault(obj, default)
     if self:IsNullOrEmpty(obj) then
-        obj = (default or "")
+        if not self:IsNullOrEmpty(default) then
+            obj = default
+        else
+            obj = ""
+        end
     end
     return obj
 end

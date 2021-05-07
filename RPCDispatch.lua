@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local strformat, tostring = string.format, tostring
+local strformat, tostring, type = string.format, tostring, type
 local strbyte, strsub, pairs = string.byte, string.sub, pairs
 local max, floor = math.max, math.floor
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
@@ -39,20 +39,26 @@ local last_args = {}
 
 --- Convert an encoded RPCEvent message into a displayable format
 ---
---- @param str string The encoded string to evaluate (Default: last_encoded)
+--- @param obj table The encoded object to evaluate
+--- @param alt string The alternate form of obj, if needed
 --- @param format string The format to log the string as (Default: %s)
 --- @param level string The log level to log the string as (Default: %s)
 --- @param display boolean Whether or not to print the return value (Default: false)
 ---
 --- @return string @ encoded_message
-function CraftPresence:GetEncodedMessage(str, format, level, display)
-    str = self:GetOrDefault(str, last_encoded)
+function CraftPresence:GetEncodedMessage(obj, alt, format, level, display)
+    local defaultData = last_encoded
+    alt = self:GetOrDefault(alt, defaultData)
+    if type(obj) == "table" then
+        defaultData = last_args
+    end
+    obj = self:GetOrDefault(obj, defaultData)
     format = self:GetOrDefault(format, "%s")
     level = self:GetOrDefault(level, "%s")
     display = self:GetOrDefault(display, false)
-    local output = self:Replace(str, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
-    if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(str) then
-        output = self:SerializeTable(str)
+    local output = self:Replace((type(obj) == "string" and obj) or alt, L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"])
+    if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(obj) then
+        output = self:SerializeTable(obj)
     end
     local returnValue = strformat(level, strformat(format, output))
     if display then
@@ -238,16 +244,17 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_upda
     local defaultEncoded, encodedArgs = self:EncodeConfigData(instance_update)
     local encoded = self:GetOrDefault(msg, defaultEncoded)
     local changed = last_encoded ~= encoded or force
+    local useTable = self:IsNullOrEmpty(msg)
     if (changed and not self:IsNullOrEmpty(encoded)) then
         if update then
             last_encoded = encoded
-            if self:IsNullOrEmpty(msg) then
+            if useTable then
                 last_args = encodedArgs
             else
                 last_args = {}
             end
         end
-        self:GetEncodedMessage(encoded, L["DEBUG_SEND_ACTIVITY"], L["LOG_DEBUG"], self:GetFromDb("debugMode"))
+        self:GetEncodedMessage((useTable and encodedArgs), encoded, L["DEBUG_SEND_ACTIVITY"], L["LOG_DEBUG"], self:GetFromDb("debugMode"))
         self:PaintSomething(encoded)
         if clean then
             local delay = self:GetFromDb("frameClearDelay")

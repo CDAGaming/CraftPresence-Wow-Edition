@@ -73,6 +73,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi, prefixFormat)
         end
     else
         playerStatus = L["LABEL_ONLINE"]
+        playerPrefix = ""
     end
 
     -- Return Data (and sync if needed)
