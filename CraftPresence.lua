@@ -77,28 +77,13 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local buttons = self:GetFromDb("buttons")
     local rpcData = {
         self:GetFromDb("clientId"),
-        self:GetFromDb("largeImageKey"),
+        strlower(self:GetFromDb("largeImageKey")),
         self:GetFromDb("largeImageMessage"),
-        self:GetFromDb("smallImageKey"),
+        strlower(self:GetFromDb("smallImageKey")),
         self:GetFromDb("smallImageMessage"),
         self:GetFromDb("detailsMessage"),
         self:GetFromDb("gameStateMessage")
     }
-    -- Global Placeholder Syncing
-    for key, value in pairs(global_placeholders) do
-        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
-    end
-    -- Inner Placeholder Syncing
-    for key, value in pairs(inner_placeholders) do
-        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
-    end
-    -- Custom Placeholder Syncing
-    for key, value in pairs(custom_placeholders) do
-        -- Sanity Checks
-        value = self:GetDynamicReturnValue(value["data"], value["type"], self)
-        -- Main Parsing
-        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
-    end
     -- Time Condition Syncing
     local time_start, time_end
     for timeKey, timeValue in pairs(time_conditions) do
@@ -131,6 +116,22 @@ function CraftPresence:EncodeConfigData(force_instance_change)
             end
         end
         tinsert(rpcData, dataValue)
+    end
+
+    -- Global Placeholder Syncing
+    for key, value in pairs(global_placeholders) do
+        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
+    end
+    -- Inner Placeholder Syncing
+    for key, value in pairs(inner_placeholders) do
+        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
+    end
+    -- Custom Placeholder Syncing
+    for key, value in pairs(custom_placeholders) do
+        -- Sanity Checks
+        value = self:GetDynamicReturnValue(value["data"], value["type"], self)
+        -- Main Parsing
+        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
     end
 
     return self:EncodeData(L["EVENT_RPC_LENGTH"], rpcData)
