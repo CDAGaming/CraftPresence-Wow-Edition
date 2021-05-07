@@ -121,7 +121,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID = GetInstanceInfo()
     end
     local difficultyInfo = difficultyName
-    local lockoutData = {}
+    local lockoutData = self:GetCachedLockout()
     if buildData["toc_version"] >= compatData["6.0.0"] then
         lockoutData = self:GetCurrentLockoutData(true)
     end
