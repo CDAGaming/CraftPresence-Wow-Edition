@@ -214,7 +214,7 @@ function CraftPresence:EncodeData(length, args)
         else
             separator = ""
         end
-        args[key] = self:TrimString(self:GetOrDefault(args[key]))
+        args[key] = self:TrimString(self:GetCaseData(args[key]))
         eventString = eventString .. args[key] .. separator
     end
     eventString = eventString .. L["EVENT_RPC_TAG"]

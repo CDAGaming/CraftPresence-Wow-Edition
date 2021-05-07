@@ -189,6 +189,30 @@ function CraftPresence:FormatWord(str)
     return (strupper(strsub(str, 1, 1)) .. strsub(str, 2))
 end
 
+--- Return a lower/upper cased version of the specified string, depending on arguments
+---
+--- @param obj any A table (Format: string, casing) or string to evaluate
+---
+--- @return string @ adjusted_data
+function CraftPresence:GetCaseData(obj)
+    local value
+    if type(obj) == "table" then
+        local innerValue = obj
+        if self:GetLength(innerValue) == 2 then
+            value = self:GetOrDefault(innerValue[1])
+            local caseType = strlower(self:GetOrDefault(innerValue[2]))
+            if caseType == "lower" then
+                value = strlower(value)
+            elseif caseType == "upper" then
+                value = strupper(value)
+            end
+        end
+    else
+        value = self:GetOrDefault(obj)
+    end
+    return value
+end
+
 --- Replaces a String with the specified formatting
 ---
 --- @param str string The input string to evaluate
@@ -214,14 +238,18 @@ end
 --- @return table, table @ string_args, adjusted_data
 function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
     local adjusted_data = {}
-    if type(format_args) == "table" and tgetn(format_args) <= 4 and type(string_args) == "table" then
+    if type(format_args) == "table" and self:GetLength(format_args) <= 4 and type(string_args) == "table" then
         for key, value in pairs(string_args) do
             local strValue
             if type(value) == "table" then
-                if set_config and tgetn(value) <= 2 then
+                if set_config and self:GetLength(value) <= 2 then
                     strValue = self:GetFromDb(value[1], value[2])
                 elseif not set_config then
-                    strValue = self:SerializeTable(value)
+                    if self:GetLength(value) == 2 then
+                        strValue = self:GetCaseData(value)
+                    else
+                        strValue = self:SerializeTable(value)
+                    end
                 end
             else
                 if set_config then
@@ -237,14 +265,18 @@ function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
                 )
                 if strValue ~= newValue then
                     if type(value) == "table" then
-                        if set_config and tgetn(value) <= 2 then
+                        if set_config and self:GetLength(value) <= 2 then
                             self:SetToDb(value[1], value[2], newValue)
                         else
-                            self:Print(strformat(
-                                    L["LOG_ERROR"], strformat(
-                                            L["ERROR_COMMAND_UNKNOWN"], "SetFormats"
-                                    )
-                            ))
+                            if self:GetLength(value) == 2 then
+                                string_args[key] = self:GetCaseData({ newValue, value[2] })
+                            else
+                                self:Print(strformat(
+                                        L["LOG_ERROR"], strformat(
+                                                L["ERROR_COMMAND_UNKNOWN"], "SetFormats"
+                                        )
+                                ))
+                            end
                         end
                     else
                         if set_config then

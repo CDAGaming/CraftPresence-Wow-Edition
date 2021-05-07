@@ -77,9 +77,9 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     local buttons = self:GetFromDb("buttons")
     local rpcData = {
         self:GetFromDb("clientId"),
-        strlower(self:GetFromDb("largeImageKey")),
+        { self:GetFromDb("largeImageKey"), "lower" },
         self:GetFromDb("largeImageMessage"),
-        strlower(self:GetFromDb("smallImageKey")),
+        { self:GetFromDb("smallImageKey"), "lower" },
         self:GetFromDb("smallImageMessage"),
         self:GetFromDb("detailsMessage"),
         self:GetFromDb("gameStateMessage")
