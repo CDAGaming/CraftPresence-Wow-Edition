@@ -10,6 +10,7 @@ from logging.handlers import TimedRotatingFileHandler
 from urllib.parse import urlparse
 
 # Import Extra Modules
+import pywintypes
 import sys
 import time
 
@@ -18,7 +19,7 @@ is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
 min_attributes = ('scheme', 'netloc')
-process_version = "v1.3.2"
+process_version = "v1.3.3"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -199,8 +200,13 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
                     right_specific=0, bottom_offset=0, bottom_specific=0):
     # Change the line below depending on whether you want the whole window
     # or just the client area.
-    left, top, right, bottom = win32gui.GetClientRect(hwnd)
-    # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    try:
+        left, top, right, bottom = win32gui.GetClientRect(hwnd)
+        # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
+    except pywintypes.error:
+        # Fallback to specific offsets if GetClientRect fails
+        # Note: This is just a failsafe to prevent it from crashing
+        left, top, right, bottom = left_specific, top_specific, right_specific, bottom_specific
 
     # Calculate offsets and final width and height
     left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset,
