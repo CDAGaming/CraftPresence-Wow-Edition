@@ -10,7 +10,6 @@ from logging.handlers import TimedRotatingFileHandler
 from urllib.parse import urlparse
 
 # Import Extra Modules
-import pywintypes
 import sys
 import time
 
@@ -19,7 +18,7 @@ is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
 min_attributes = ('scheme', 'netloc')
-process_version = "v1.3.3"
+process_version = "v1.3.5"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -42,7 +41,7 @@ start_timestamp = datetime.now().strftime(log_format_style)
 f = open(dir_path + '/config.json')
 config = json.load(f)
 debug_mode = config["debug"]
-log_mode = config["log_mode"]
+log_modes = config["log_mode"]
 
 # Adjust log level depending on mode
 log_level = logging.INFO
@@ -61,12 +60,16 @@ try:
 except ModuleNotFoundError as err:
     pass
 # Setup handlers depending on config options
-if log_mode == "full" or log_mode == "v1" or log_mode == "console":
+if "full" in log_modes or "v1" in log_modes or "console" in log_modes:
     console_handler = logging.StreamHandler(stream=sys.stdout)
-    console_handler.setFormatter(color_formatter)
+    if ("full" in log_modes or "color" in log_modes) and "no-color" not in log_modes and "plain" not in log_modes:
+        console_handler.setFormatter(color_formatter)
+    else:
+        console_handler.setFormatter(log_formatter)
     console_handler.setLevel(log_level)
     root_logger.addHandler(console_handler)
-if log_mode == "full" or log_mode == "multiple_files" or log_mode == "files":
+
+if "full" in log_modes or "multiple_files" in log_modes or "files" in log_modes:
     if not os.path.exists(log_path):
         os.makedirs(log_path)
     staged_handler = TimedRotatingFileHandler(single_log_path, when="midnight", interval=1)
@@ -78,7 +81,7 @@ if log_mode == "full" or log_mode == "multiple_files" or log_mode == "files":
     staged_handler.setFormatter(log_formatter)
     staged_handler.setLevel(log_level)
     root_logger.addHandler(staged_handler)
-if log_mode == "v1" or log_mode == "single_file" or log_mode == "file":
+elif "v1" in log_modes or "single_file" in log_modes or "file" in log_modes:
     file_handler = logging.FileHandler(single_log_path, mode='w')
     file_handler.setFormatter(log_formatter)
     file_handler.setLevel(log_level)
@@ -101,6 +104,7 @@ try:
         from ctypes import windll
         import win32gui
         import win32ui
+        import pywintypes
     else:
         import psutil
     from PIL import Image, ImageGrab
