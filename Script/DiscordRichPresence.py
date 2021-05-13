@@ -125,10 +125,10 @@ def callback(hwnd, extra):
         process_hwnd = hwnd
 
 
-def decode_read_data(read):
+def decode_read_data(read, encoding='utf-8'):
     decoded = ""
     try:
-        decoded = bytes(read).decode('utf-8').rstrip('\0')
+        decoded = bytes(read).decode(encoding).rstrip('\0')
     except UnicodeDecodeError:
         return decoded
 
@@ -202,9 +202,9 @@ def interpret_offsets(left=0, top=0, right=0, bottom=0, left_offset=0, left_spec
 
 def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_offset=0, top_specific=0, right_offset=0,
                     right_specific=0, bottom_offset=0, bottom_specific=0):
-    # Change the line below depending on whether you want the whole window
-    # or just the client area.
     try:
+        # Change the line below depending on whether you want the whole window
+        # or just the client area.
         left, top, right, bottom = win32gui.GetClientRect(hwnd)
         # left, top, right, bottom = win32gui.GetWindowRect(hwnd)
     except pywintypes.error:
