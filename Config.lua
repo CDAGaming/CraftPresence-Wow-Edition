@@ -642,13 +642,9 @@ end
 --- @param oldValue any The old value of the config variable
 --- @param value any The new value of the config variable
 function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
+    oldValue = CraftPresence:GetOrDefault(oldValue, L["TYPE_NONE"])
+    value = CraftPresence:GetOrDefault(value, L["TYPE_NONE"])
     if oldValue ~= value and CraftPresence:CanLogChanges() then
-        if CraftPresence:IsNullOrEmpty(oldValue) then
-            oldValue = L["TYPE_NONE"]
-        end
-        if CraftPresence:IsNullOrEmpty(value) then
-            value = L["TYPE_NONE"]
-        end
         CraftPresence:Print(
                 strformat(
                         L["LOG_VERBOSE"], strformat(

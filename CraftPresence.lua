@@ -287,6 +287,8 @@ function CraftPresence:DispatchModernUpdate(event, arg1, arg2, arg3, arg4, arg5,
 end
 
 --- Prepares and Dispatches a new frame update, given the specified arguments
+---
+--- @param args table The arguments associated with the event execution
 function CraftPresence:DispatchUpdate(args)
     if type(args) ~= "table" then
         args = { args }
