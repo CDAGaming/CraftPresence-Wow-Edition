@@ -230,6 +230,10 @@ L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflic
 L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed custom placeholder *%s|r", GREEN)
 L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
 
+-- Integration: Event Modification
+L["COMMAND_EVENT_SUCCESS"] = setfmt("Successfully performed operation ^%s|r on *%s|r with binding *%s|r", GREEN, GREY)
+L["COMMAND_EVENT_NO_TRIGGER"] = setfmt("Unable to perform operation ^%s|r on *%s|r (Invalid trigger)", GREEN, GREY)
+
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."

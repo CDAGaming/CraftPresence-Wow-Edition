@@ -190,28 +190,28 @@ function CraftPresence:OnEnable()
     else
         registryEventName = "DispatchLegacyUpdate"
     end
-    self:AddTriggers(registryEventName,
+    self:ModifyTriggers(
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
               "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
               "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-              "UPDATE_INSTANCE_INFO" }
+              "UPDATE_INSTANCE_INFO" }, registryEventName, self:GetFromDb("debugMode")
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.0"] then
-        self:AddTriggers(registryEventName,
-                { "PLAYER_SPECIALIZATION_CHANGED" }
+        self:ModifyTriggers(
+                { "PLAYER_SPECIALIZATION_CHANGED" }, registryEventName, self:GetFromDb("debugMode")
         )
     end
     if buildData["toc_version"] >= compatData["6.0.0"] then
-        self:AddTriggers(registryEventName,
+        self:ModifyTriggers(
                 { "ACTIVE_TALENT_GROUP_CHANGED",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
-                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }
+                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, registryEventName, self:GetFromDb("debugMode")
         )
     end
     if buildData["toc_version"] >= compatData["8.0.0"] then
-        self:AddTriggers(registryEventName,
-                { "PLAYER_LEVEL_CHANGED" }
+        self:ModifyTriggers(
+                { "PLAYER_LEVEL_CHANGED" }, registryEventName, self:GetFromDb("debugMode")
         )
     end
     -- Create initial frames and initial rpc update
@@ -219,37 +219,55 @@ function CraftPresence:OnEnable()
     self:PaintMessageWait()
 end
 
---- Registers the specified event for the subsequent argument values
+--- Modifies the specified event using the subsequent argument values
 ---
---- @param event string The event tag to register with argument values
---- @param args table The events to bind to the event tag
-function CraftPresence:AddTriggers(event, args)
+--- By default, this function will append and remove from registeredEvents as a toggle function.
+--- The toggle behavior can be overriden via the forced_mode argument as well as what params are available.
+---
+--- Example: An append operation cannot occur without a trigger or if the key already exists in the table.
+--- A remove operation cannot occur unless registeredEvents contains the key.
+--- Both operations cannot occur unless args are specified, as either a string or a table
+---
+--- @param args table The event names to be interpreted with the eventTag (if any)
+--- @param trigger string The function name to register with argument values (Required for append operations)
+--- @param log_output boolean Whether to allow logging for this function (Default: False)
+--- @param mode string The modifier key to force a certain behavior of this function (Optional, can be "add" or "remove")
+function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
     if type(args) ~= "table" then
         args = { args }
     end
-
-    if event ~= nil and args ~= nil then
-        for _, v in pairs(args) do
-            local eventTag, eventBinding = tostring(v), tostring(event)
-            CraftPresence.registeredEvents[eventTag] = eventBinding
-            self:RegisterEvent(eventTag, eventBinding)
-        end
-    end
-end
-
---- Un-Registers the specified events
----
---- @param args table The events to unregister
-function CraftPresence:RemoveTriggers(args)
-    if type(args) ~= "table" then
-        args = { args }
-    end
+    log_output = self:GetOrDefault(log_output, false)
+    mode = strlower(self:GetOrDefault(mode))
 
     if args ~= nil then
-        for _, v in pairs(args) do
-            local eventTag = tostring(v)
-            CraftPresence.registeredEvents[eventTag] = nil
-            self:UnregisterEvent(eventTag)
+        for eventKey, eventName in pairs(args) do
+            if type(eventKey) == "string" then
+                eventName = eventKey
+            end
+
+            if mode ~= "remove" and not CraftPresence.registeredEvents[eventName] then
+                mode = "add"
+
+                if not self:IsNullOrEmpty(trigger) then
+                    CraftPresence.registeredEvents[eventName] = trigger
+                    self:RegisterEvent(eventName, trigger)
+                    if log_output then
+                        self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
+                    end
+                elseif log_output then
+                    self:Print(strformat(L["COMMAND_EVENT_NO_TRIGGER"], mode, eventName))
+                end
+            elseif mode ~= "add" then
+                mode = "remove"
+
+                CraftPresence.registeredEvents[eventName] = nil
+                self:UnregisterEvent(eventName)
+                if log_output then
+                    self:Print(strformat(
+                            L["COMMAND_EVENT_SUCCESS"], mode, eventName, self:GetOrDefault(trigger, L["TYPE_NONE"])
+                    ))
+                end
+            end
         end
     end
 end
@@ -366,7 +384,7 @@ function CraftPresence:OnDisable()
     if icon then
         icon:Hide(L["ADDON_NAME"])
     end
-    self:UnregisterAllEvents()
+    self:ModifyTriggers(CraftPresence.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
 end
 
 --- Updates the minimap status with config data
@@ -549,11 +567,7 @@ function CraftPresence:ChatCommand(input)
                         -- Sub-Query Parsing
                         local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
                         if eventQuery ~= nil then
-                            if CraftPresence.registeredEvents[eventQuery] then
-                                self:RemoveTriggers(eventQuery)
-                            else
-                                self:AddTriggers(registryEventName, eventQuery)
-                            end
+                            self:ModifyTriggers(eventQuery, registryEventName, self:GetFromDb("debugMode"))
                         else
                             self:Print(strformat(
                                     L["LOG_ERROR"], strformat(
