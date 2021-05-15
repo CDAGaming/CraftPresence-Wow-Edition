@@ -443,7 +443,9 @@ end
 
 --[[ API UTILITIES ]]--
 
-local fallbackVersion, fallbackTOC, addonVersion = "0.0.0", 00000
+local fallbackVersion, fallbackTOC = "0.0.0", 00000
+local fallbackVersionString = strformat("%s %s", L["ADDON_NAME"], fallbackVersion)
+local addonVersion, addonVersionString
 local timer_locked = false
 -- Compatibility Data
 local build_info, compatibility_info, flavor_info, extra_build_info
@@ -551,8 +553,8 @@ function CraftPresence:IsSpecialVersion()
     return self:GetExtraBuildInfo()[self:GetBuildInfo()["version"]]
 end
 
---- Getter for CraftPresence:addonVersion
---- @return string @ addonVersion
+--- Getter for CraftPresence:addonVersion and CraftPresence:addonVersionString
+--- @return string, string @ addonVersion, addonVersionString
 function CraftPresence:GetVersion()
     if self:IsNullOrEmpty(addonVersion) then
         addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
@@ -560,8 +562,16 @@ function CraftPresence:GetVersion()
             self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_BUILD_UNSUPPORTED"], addonVersion)))
             addonVersion = "v" .. fallbackVersion
         end
+        addonVersionString = strformat("%s %s", L["ADDON_NAME"], addonVersion)
     end
-    return self:GetOrDefault(addonVersion, fallbackVersion)
+    return self:GetOrDefault(addonVersion, fallbackVersion), self:GetOrDefault(addonVersionString, fallbackVersionString)
+end
+
+--- Helper function for getting CraftPresence:addonVersionString
+--- @return string @ addonVersionString
+function CraftPresence:GetVersionString()
+    local _, versionStr = self:GetVersion()
+    return versionStr
 end
 
 --- Getter for Addon Locale Data

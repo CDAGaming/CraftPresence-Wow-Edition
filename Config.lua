@@ -72,7 +72,7 @@ function CraftPresence:getOptionsTable()
 
     local opts = {
         type = "group", childGroups = "tab",
-        name = strformat("%s %s", L["ADDON_NAME"], self:GetVersion()),
+        name = self:GetVersionString(),
         get = function(info)
             return self.db.profile[info[self:GetLength(info)]]
         end,
