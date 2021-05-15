@@ -145,7 +145,7 @@ function CraftPresence:OnInitialize()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetSchemaDefaults())
-    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self:getOptionsTable(), {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
     -- Command Registration
@@ -165,7 +165,7 @@ function CraftPresence:OnInitialize()
             text = L["ADDON_NAME"],
             icon = strformat("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
             OnClick = function(_, _)
-                CraftPresence:ShowConfig()
+                self:ShowConfig()
             end,
             OnTooltipShow = function(tt)
                 tt:AddLine(L["ADDON_NAME"])
@@ -178,6 +178,9 @@ function CraftPresence:OnInitialize()
         self:UpdateMinimapState(false)
         icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
     end
+    -- Create initial frames and initial rpc update
+    self:CreateFrames(self:GetFromDb("frameSize"))
+    self:PaintMessageWait()
 end
 
 --- Instructions to be called when the addon is enabled
@@ -214,9 +217,6 @@ function CraftPresence:OnEnable()
                 { "PLAYER_LEVEL_CHANGED" }, registryEventName, self:GetFromDb("debugMode")
         )
     end
-    -- Create initial frames and initial rpc update
-    self:CreateFrames(self:GetFromDb("frameSize"))
-    self:PaintMessageWait()
 end
 
 --- Modifies the specified event using the subsequent argument values
@@ -245,11 +245,11 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
                 eventName = eventKey
             end
 
-            if mode ~= "remove" and not CraftPresence.registeredEvents[eventName] then
+            if mode ~= "remove" and not self.registeredEvents[eventName] then
                 mode = "add"
 
                 if not self:IsNullOrEmpty(trigger) then
-                    CraftPresence.registeredEvents[eventName] = trigger
+                    self.registeredEvents[eventName] = trigger
                     self:RegisterEvent(eventName, trigger)
                     if log_output then
                         self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
@@ -260,7 +260,7 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
             elseif mode ~= "add" then
                 mode = "remove"
 
-                CraftPresence.registeredEvents[eventName] = nil
+                self.registeredEvents[eventName] = nil
                 self:UnregisterEvent(eventName)
                 if log_output then
                     self:Print(strformat(
@@ -386,7 +386,7 @@ function CraftPresence:OnDisable()
     if icon then
         icon:Hide(L["ADDON_NAME"])
     end
-    self:ModifyTriggers(CraftPresence.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
+    self:ModifyTriggers(self.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
 end
 
 --- Updates the minimap status with config data

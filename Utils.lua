@@ -677,17 +677,17 @@ end
 ---
 --- @return any configValue
 function CraftPresence:GetFromDb(grp, key, reset)
-    local DB_DEFAULTS = CraftPresence:GetDefaults()
-    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
-        CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
+    local DB_DEFAULTS = self:GetDefaults()
+    if self.db.profile[grp] == nil or (reset and not key) then
+        self.db.profile[grp] = DB_DEFAULTS.profile[grp]
     end
     if not key then
-        return CraftPresence.db.profile[grp]
+        return self.db.profile[grp]
     end
-    if CraftPresence.db.profile[grp][key] == nil or reset then
-        CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
+    if self.db.profile[grp][key] == nil or reset then
+        self.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
     end
-    return CraftPresence.db.profile[grp][key]
+    return self.db.profile[grp][key]
 end
 
 --- Sets Config Data based on the specified parameters
@@ -699,17 +699,17 @@ end
 ---
 --- @return any configValue
 function CraftPresence:SetToDb(grp, key, newValue, reset)
-    local DB_DEFAULTS = CraftPresence:GetDefaults()
-    if CraftPresence.db.profile[grp] == nil or (reset and not key) then
-        CraftPresence.db.profile[grp] = DB_DEFAULTS.profile[grp]
+    local DB_DEFAULTS = self:GetDefaults()
+    if self.db.profile[grp] == nil or (reset and not key) then
+        self.db.profile[grp] = DB_DEFAULTS.profile[grp]
     end
     if not key then
-        CraftPresence.db.profile[grp] = newValue
+        self.db.profile[grp] = newValue
     else
-        if CraftPresence.db.profile[grp][key] == nil or reset then
-            CraftPresence.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
+        if self.db.profile[grp][key] == nil or reset then
+            self.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
         end
-        CraftPresence.db.profile[grp][key] = newValue
+        self.db.profile[grp][key] = newValue
     end
 end
 
@@ -721,40 +721,40 @@ end
 ---
 --- @return table @ generatedData
 function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
-    if CraftPresence:IsNullOrEmpty(rootKey) then
+    if self:IsNullOrEmpty(rootKey) then
         return {}
     end
-    titleKey = titleKey or rootKey
-    commentKey = commentKey or ""
+    titleKey = self:GetOrDefault(titleKey, rootKey)
+    commentKey = self:GetOrDefault(commentKey)
     local found_count = 0
 
-    titleKey = CraftPresence:GetDynamicReturnValue(titleKey, type(titleKey), CraftPresence)
+    titleKey = self:GetDynamicReturnValue(titleKey, type(titleKey), self)
     local table_args = {
         titleHeader = {
-            order = CraftPresence:GetNextIndex(), type = "header", name = titleKey
+            order = self:GetNextIndex(), type = "header", name = titleKey
         }
     }
-    local custom_placeholders = CraftPresence:GetFromDb(rootKey)
+    local custom_placeholders = self:GetFromDb(rootKey)
     if type(custom_placeholders) == "table" then
         for key, value in pairs(custom_placeholders) do
             local value_args = {}
             if type(value) == "table" then
                 for innerKey, _ in pairs(value) do
                     value_args[innerKey] = {
-                        type = "input", order = CraftPresence:GetNextIndex(), width = 3.0,
+                        type = "input", order = self:GetNextIndex(), width = 3.0,
                         multiline = (strlower(innerKey) == "data"),
-                        name = (L["TITLE_BUTTON_" .. strupper(innerKey)] or CraftPresence:FormatWord(innerKey)),
+                        name = (L["TITLE_BUTTON_" .. strupper(innerKey)] or self:FormatWord(innerKey)),
                         desc = (L["COMMENT_BUTTON_" .. strupper(innerKey)] or ""),
                         usage = (L["USAGE_BUTTON_" .. strupper(innerKey)] or ""),
                         get = function(_)
-                            return CraftPresence.db.profile[rootKey][key][innerKey]
+                            return self.db.profile[rootKey][key][innerKey]
                         end,
                         set = function(_, newValue)
-                            local oldValue = CraftPresence.db.profile[rootKey][key][innerKey]
+                            local oldValue = self.db.profile[rootKey][key][innerKey]
                             local isValid = (type(newValue) == "string")
                             if isValid then
-                                CraftPresence.db.profile[rootKey][key][innerKey] = newValue
-                                CraftPresence:PrintChangedValue(
+                                self.db.profile[rootKey][key][innerKey] = newValue
+                                self:PrintChangedValue(
                                         (rootKey .. " (" .. key .. ", " .. innerKey .. ")"),
                                         oldValue, newValue
                                 )
@@ -766,16 +766,16 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
             table_args[key] = {
                 name = (L["TITLE_" .. strupper(key)] or key),
                 desc = (L["COMMENT_" .. strupper(key)] or ""),
-                type = "group", order = CraftPresence:GetNextIndex(),
+                type = "group", order = self:GetNextIndex(),
                 args = value_args
             }
             found_count = found_count + 1
         end
     end
 
-    commentKey = CraftPresence:GetDynamicReturnValue(commentKey, type(commentKey), found_count)
-    table_args[CraftPresence:RandomString(8)] = {
-        type = "description", order = CraftPresence:GetNextIndex(), fontSize = "medium",
+    commentKey = self:GetDynamicReturnValue(commentKey, type(commentKey), found_count)
+    table_args[self:RandomString(8)] = {
+        type = "description", order = self:GetNextIndex(), fontSize = "medium",
         name = commentKey
     }
     return table_args
