@@ -201,7 +201,7 @@ L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"
-L["ADDON_INTRO"] = setfmt("CraftPresence ^%s|r Loaded.\n Use */cp|r or */craftpresence|r for commands.", GREEN, GREY)
+L["ADDON_INTRO"] = setfmt("%s Loaded.\n Use */cp|r or */craftpresence|r for commands.", GREEN, GREY)
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
@@ -257,6 +257,7 @@ L["USAGE_CMD_NOTE"] = setfmt("NOTE: All commands must be prefixed with either */
 L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented by *[syntax]|r.", GREEN, GREY)
 
 -- Frame Text Data
+L["ADDON_HEADER_VERSION"] = setfmt("%s *%s|r", PALE_CYAN)
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
 L["ADDON_INFO_ONE"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
