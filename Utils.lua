@@ -228,7 +228,6 @@ function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, p
 end
 
 --- Parses Multiple arguments through the SetFormat method
---- (INTERNAL USAGE ONLY)
 ---
 --- @param format_args table The format arguments to pass to each SetFormat call
 --- @param string_args table The strings to parse
@@ -596,9 +595,10 @@ end
 
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
-    -- a bug can occur in blizzard's implementation of this call
     if (self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or
             self:IsRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
+        -- a bug can occur in blizzard's implementation of this call
+        -- so it is called twice to workaround it
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     else
