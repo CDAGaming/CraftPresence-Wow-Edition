@@ -743,9 +743,9 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
                     value_args[innerKey] = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
                         multiline = (strlower(innerKey) == "data"),
-                        name = (L["TITLE_BUTTON_" .. strupper(innerKey)] or self:FormatWord(innerKey)),
-                        desc = (L["COMMENT_BUTTON_" .. strupper(innerKey)] or ""),
-                        usage = (L["USAGE_BUTTON_" .. strupper(innerKey)] or ""),
+                        name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], self:FormatWord(innerKey)),
+                        desc = self:GetOrDefault(L["COMMENT_BUTTON_" .. strupper(innerKey)]),
+                        usage = self:GetOrDefault(L["USAGE_BUTTON_" .. strupper(innerKey)]),
                         get = function(_)
                             return self.db.profile[rootKey][key][innerKey]
                         end,
@@ -764,8 +764,8 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
                 end
             end
             table_args[key] = {
-                name = (L["TITLE_" .. strupper(key)] or key),
-                desc = (L["COMMENT_" .. strupper(key)] or ""),
+                name = self:GetOrDefault(L["TITLE_" .. strupper(key)], key),
+                desc = self:GetOrDefault(L["COMMENT_" .. strupper(key)]),
                 type = "group", order = self:GetNextIndex(),
                 args = value_args
             }

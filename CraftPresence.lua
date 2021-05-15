@@ -497,7 +497,7 @@ function CraftPresence:ChatCommand(input)
             if query ~= nil then
                 local customPlaceholders = self:GetFromDb("customPlaceholders")
                 local splitQuery = self:Split(query, " ")
-                splitQuery[2] = splitQuery[2] or ""
+                splitQuery[2] = self:GetOrDefault(splitQuery[2])
                 if customPlaceholders[splitQuery[1]] and not canModify then
                     self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
                 elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
@@ -615,7 +615,7 @@ function CraftPresence:ChatCommand(input)
             self:Print(placeholderStr)
         elseif self:StartsWith(input, "set") then
             local _, _, query = self:FindMatches(input, " (.*)", false)
-            LibStub("AceConfigCmd-3.0"):HandleCommand(L["COMMAND_CONFIG"], L["ADDON_NAME"], query or "")
+            LibStub("AceConfigCmd-3.0"):HandleCommand(L["COMMAND_CONFIG"], L["ADDON_NAME"], self:GetOrDefault(query))
         else
             self:Print(strformat(
                     L["LOG_ERROR"], strformat(

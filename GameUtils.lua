@@ -44,7 +44,7 @@ local lastPlayerStatus, hasInstanceChanged
 ---
 --- @return string, string @ playerStatus, playerPrefix
 function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi, prefixFormat)
-    unit = unit or "player"
+    unit = self:GetOrDefault(unit, "player")
     local playerStatus, playerPrefix
     local isAway, isBusy, isDead, isGhost
     -- Ensure Version Compatibility
