@@ -163,12 +163,12 @@ function CraftPresence:OnInitialize()
         CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(L["ADDON_NAME"], {
             type = "launcher",
             text = L["ADDON_NAME"],
-            icon = strformat("Interface\\Addons\\%s\\images\\icon.blp", L["ADDON_NAME"]),
+            icon = strformat("Interface\\Addons\\%s\\Images\\icon.blp", L["ADDON_NAME"]),
             OnClick = function(_, _)
                 self:ShowConfig()
             end,
             OnTooltipShow = function(tt)
-                tt:AddLine(L["ADDON_NAME"])
+                tt:AddLine(self:GetVersionString())
                 tt:AddLine(" ")
                 tt:AddLine(L["ADDON_TOOLTIP_THREE"])
                 tt:AddLine(" ")
