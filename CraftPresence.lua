@@ -186,7 +186,7 @@ end
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
     -- Print any Initial Data
-    self:PrintInitialData()
+    self:PrintAddonInfo()
     -- Register Universal Events
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
         registryEventName = "DispatchModernUpdate"
@@ -470,7 +470,7 @@ function CraftPresence:ChatCommand(input)
         elseif input == "minimap" then
             self:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "about" then
-            self:PrintInitialData()
+            self:PrintAddonInfo()
         elseif input == "status" then
             if self:GetFromDb("debugMode") then
                 self:GetEncodedMessage(nil, nil, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)

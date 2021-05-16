@@ -622,9 +622,9 @@ end
 
 --[[ API GETTERS AND SETTERS ]]--
 
---- Print initial data and register events, depending on platform and config data
-function CraftPresence:PrintInitialData()
-    self:Print(strformat(L["ADDON_INTRO"], self:GetVersionString()))
+--- Print initial addon info, depending on platform and config data
+function CraftPresence:PrintAddonInfo()
+    self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetVersionString()))
     if self:GetFromDb("verboseMode") then
         self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
