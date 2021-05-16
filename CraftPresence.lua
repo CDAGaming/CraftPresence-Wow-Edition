@@ -197,7 +197,7 @@ function CraftPresence:OnEnable()
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
               "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
               "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-              "UPDATE_INSTANCE_INFO" }, registryEventName, self:GetFromDb("debugMode")
+            }, registryEventName, self:GetFromDb("debugMode")
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.0"] then
@@ -207,7 +207,7 @@ function CraftPresence:OnEnable()
     end
     if buildData["toc_version"] >= compatData["6.0.0"] then
         self:ModifyTriggers(
-                { "ACTIVE_TALENT_GROUP_CHANGED",
+                { "ACTIVE_TALENT_GROUP_CHANGED", "ENCOUNTER_END",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
                   "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, registryEventName, self:GetFromDb("debugMode")
         )
@@ -306,9 +306,7 @@ function CraftPresence:DispatchUpdate(args)
                                     false, isRebasedApi, L["FORMAT_USER_PREFIX"]
                             )
             ),
-            ["UPDATE_INSTANCE_INFO"] = (not IsInInstance() or
-                    lastEventName == eventName or
-                    buildData["toc_version"] < compatData["6.0.0"] or
+            ["ENCOUNTER_END"] = (not IsInInstance() or args[6] ~= 1 or
                     self:GetCachedLockout() == self:GetCurrentLockoutData(false)
             ),
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
