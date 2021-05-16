@@ -136,6 +136,7 @@ function CraftPresence:GetCurrentLockoutData(sync)
                 }
             end
         else
+            RequestRaidInfo()
             for index = 1, GetNumSavedInstances() do
                 local areaName, _, _, areaSc, locked, _, _, _, _, _, numStages, curProg, _ = GetSavedInstanceInfo(index)
                 if locked then
