@@ -471,7 +471,8 @@ function CraftPresence:ChatCommand(input)
             self:PrintAddonInfo()
         elseif input == "status" then
             if self:GetFromDb("debugMode") then
-                self:GetEncodedMessage(nil, nil, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)
+                local last_args, last_encoded = self:GetCachedEncodedData()
+                self:GetEncodedMessage(last_args, last_encoded, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)
             else
                 self:Print(strformat(
                         L["LOG_ERROR"], strformat(

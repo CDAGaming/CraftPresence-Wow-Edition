@@ -67,6 +67,12 @@ function CraftPresence:GetEncodedMessage(obj, alt, format, level, display)
     return returnValue
 end
 
+--- Helper function for getting last_args and last_encoded
+--- @return table, string @ last_args, last_encoded
+function CraftPresence:GetCachedEncodedData()
+    return last_args, last_encoded
+end
+
 --- Creates an array of frames with the specified size at the TOPLEFT of screen
 ---
 --- @param size number The width and height of the frames
