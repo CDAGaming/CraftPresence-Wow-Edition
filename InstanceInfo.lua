@@ -22,28 +22,30 @@ local cachedLockoutState = defaultLockoutData
 function CraftPresence:GenerateInstanceTable()
     local instTable = {}
 
-    local numTiers = EJ_GetNumTiers()
+    local numTiers = ((EJ_GetNumTiers and EJ_GetNumTiers()) or 0)
     local raid = false
 
     -- Run this twice, once for dungeons, once for raids
-    for _ = 1, 2 do
-        for t = 1, numTiers do
-            EJ_SelectTier(t)
-            local tierName = EJ_GetTierInfo(t)
-            local instanceIndex = 1
-            local id, _ = EJ_GetInstanceByIndex(instanceIndex, raid)
+    if numTiers > 0 then
+        for _ = 1, 2 do
+            for t = 1, numTiers do
+                EJ_SelectTier(t)
+                local tierName = EJ_GetTierInfo(t)
+                local instanceIndex = 1
+                local id, _ = EJ_GetInstanceByIndex(instanceIndex, raid)
 
-            while id do
-                if not (id == nil) then
-                    instTable[id] = tierName
+                while id do
+                    if not (id == nil) then
+                        instTable[id] = tierName
+                    end
+                    instanceIndex = instanceIndex + 1
+                    id, _ = EJ_GetInstanceByIndex(instanceIndex, raid)
                 end
-                instanceIndex = instanceIndex + 1
-                id, _ = EJ_GetInstanceByIndex(instanceIndex, raid)
             end
-        end
 
-        -- Flip state, do raids next round
-        raid = not raid
+            -- Flip state, do raids next round
+            raid = not raid
+        end
     end
 
     return instTable
@@ -115,7 +117,7 @@ function CraftPresence:GetCurrentLockoutData(sync)
     -- * Otherwise, Detect lockout data, if present
     if IsInInstance() then
         local instanceName, _, difficulty, difficultyName = GetInstanceInfo()
-        if C_Scenario.IsInScenario() then
+        if C_Scenario and C_Scenario.IsInScenario() then
             local _, _, steps = C_Scenario.GetStepInfo()
             if steps > 0 then
                 local completedSteps = 0
