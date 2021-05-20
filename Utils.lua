@@ -588,7 +588,7 @@ end
 --- @return string @ buildVersion
 function CraftPresence:VersionToBuild(versionStr)
     versionStr = self:GetOrDefault(versionStr, fallbackVersion)
-    local buildStr
+    local buildStr = ""
     local splitData = self:Split(versionStr, ".", true, true)
     if splitData[1] and splitData[1] == versionStr then
         buildStr = splitData[1]
