@@ -227,6 +227,16 @@ function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, p
     return CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
+--- Variable Argument Operation
+---
+--- @param n number The number of static args
+--- @param f function The function to trigger with args
+---
+--- @return any @ result
+function CraftPresence:vararg(n, f)
+    return CP_GlobalUtils:vararg(n, f)
+end
+
 --- Parses Multiple arguments through the SetFormat method
 ---
 --- @param format_args table The format arguments to pass to each SetFormat call

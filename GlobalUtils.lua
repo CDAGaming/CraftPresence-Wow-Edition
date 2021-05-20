@@ -27,8 +27,8 @@ CP_GlobalUtils = {}
 
 -- Lua APIs
 local _G = getfenv() or _G or {}
-local type, strsub, strfind, tgetn, assert = type, string.sub, string.find, table.getn, assert
-local tinsert, strchar, random, next = table.insert, string.char, math.random, next
+local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.find, table.getn, assert, table.concat
+local tinsert, strchar, random, next, loadstring = table.insert, string.char, math.random, next, loadstring
 
 --[[ COMPATIBILITY UTILITIES ]]--
 
@@ -171,6 +171,33 @@ function CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, 
     str = CP_GlobalUtils:Replace(str, pattern_one or "*", replacer_one or "", plain)
     str = CP_GlobalUtils:Replace(str, pattern_two or "%^", replacer_two or "", plain)
     return str
+end
+
+local supports_ellipsis = loadstring("return ...") ~= nil
+local template_args = supports_ellipsis and "{...}" or "arg"
+
+--- Variable Argument Operation
+---
+--- @param n number The number of static args
+--- @param f function The function to trigger with args
+---
+--- @return any @ result
+function CP_GlobalUtils:vararg(n, f)
+    local t = {}
+    local params = ""
+    if n > 0 then
+        for i = 1, n do t[ i ] = "_"..i end
+        params = tconcat(t, ", ", 1, n)
+        params = params .. ", "
+    end
+    local code = [[
+        return function( f )
+        return function( ]]..params..[[... )
+            return f( ]]..params..template_args..[[ )
+        end
+        end
+    ]]
+    return assert(loadstring(code, "=(vararg)"))()(f)
 end
 
 return CP_GlobalUtils

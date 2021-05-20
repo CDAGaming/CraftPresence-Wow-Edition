@@ -29,12 +29,13 @@ CraftPresence.registeredEvents = {}
 
 -- Lua APIs
 local strformat, strlower = string.format, string.lower
-local tostring, pairs = tostring, pairs
+local tostring, pairs, unpack = tostring, pairs, unpack
 local type, max, tinsert = type, math.max, table.insert
 
 -- Addon APIs
 local L = CraftPresence.locale
 local config_registry = LibStub("AceConfigRegistry-3.0")
+local CP_GlobalUtils = CP_GlobalUtils
 
 -- Critical Data (DNT)
 local CraftPresenceLDB, icon
@@ -280,11 +281,11 @@ function CraftPresence:DispatchLegacyUpdate()
 end
 
 --- Prepares and Dispatches a new frame update, given the specified arguments
-function CraftPresence:DispatchModernUpdate(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+CraftPresence.DispatchModernUpdate = CP_GlobalUtils:vararg(2, function(self, event, arg)
     self:DispatchUpdate({
-        event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
+        event, unpack(arg)
     })
-end
+end)
 
 --- Prepares and Dispatches a new frame update, given the specified arguments
 ---
