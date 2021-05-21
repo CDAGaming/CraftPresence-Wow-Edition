@@ -26,7 +26,7 @@ SOFTWARE.
 local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring;
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
-local strlen, strrep, tgetn, tinsert = string.len, string.rep, table.getn, table.insert
+local strlen, strrep, tgetn, tinsert, unpack = string.len, string.rep, table.getn, table.insert, unpack
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
 -- Addon APIs
@@ -452,13 +452,11 @@ end
 ---
 --- @param value any The input (and output) for this event
 --- @param valueType string The expected type of this event (Default: type(value))
---- @param limit number How many times to iterate until a different type (Default: 1)
 ---
 --- @return string @ returnValue
-function CraftPresence:GetDynamicReturnValue(value, valueType, a1, a2, a3, a4, a5, a6, a7, a8, a9, limit)
+CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, value, valueType, args)
     value = self:GetOrDefault(value)
     valueType = self:GetOrDefault(valueType, type(value))
-    limit = self:GetOrDefault(limit, 1)
     if not self:IsNullOrEmpty(value) and valueType == "function" and loadstring then
         if type(value) == "string" then
             -- Edge-Case to allow non-return functions
@@ -468,9 +466,8 @@ function CraftPresence:GetDynamicReturnValue(value, valueType, a1, a2, a3, a4, a
             end
             value = loadstring(value)()
         end
-        while type(value) == "function" and limit > 0 do
-            value = value(a1, a2, a3, a4, a5, a6, a7, a8, a9)
-            limit = limit - 1
+        while type(value) == "function" do
+            value = value(unpack(args))
         end
     end
     -- Sanity checks
@@ -480,7 +477,7 @@ function CraftPresence:GetDynamicReturnValue(value, valueType, a1, a2, a3, a4, a
         value = tostring(value)
     end
     return value
-end
+end)
 
 --[[ API UTILITIES ]]--
 
