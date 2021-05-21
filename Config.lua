@@ -68,6 +68,7 @@ local DB_DEFAULTS = {
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
 function CraftPresence:getOptionsTable()
+    local self = CraftPresence
     local profilesGroup = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 
     local opts = {
