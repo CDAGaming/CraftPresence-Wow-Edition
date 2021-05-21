@@ -179,6 +179,8 @@ function CraftPresence:OnInitialize()
         self:UpdateMinimapState(false)
         icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
     end
+    -- Print any Initial Data
+    self:PrintAddonInfo()
     -- Create initial frames and initial rpc update
     self:CreateFrames(self:GetFromDb("frameSize"))
     self:PaintMessageWait()
@@ -186,8 +188,6 @@ end
 
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Print any Initial Data
-    self:PrintAddonInfo()
     -- Register Universal Events
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
         registryEventCallback = "DispatchUpdate"
