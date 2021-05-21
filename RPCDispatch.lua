@@ -155,7 +155,7 @@ function CraftPresence:PaintSomething(text)
         if self:GetFromDb("debugMode") then
             self:Print(strformat(
                     L["LOG_ERROR"], strformat(
-                            L["ERROR_BYTE_OVERFLOW"], tostring(self:GetLength(text)), tostring(max_bytes)
+                            L["ERROR_BYTE_INSUFFICIENT"], tostring(self:GetLength(text)), tostring(max_bytes)
                     )
             ))
         end

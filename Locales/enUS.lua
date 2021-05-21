@@ -194,10 +194,10 @@ L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
 L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
-L["INFO_EVENT_SKIPPED"] = "Event Skipped => %s"
-L["INFO_EVENT_PROCESSING"] = "Event Processing => %s"
+L["INFO_EVENT_SKIPPED"] = setfmt("Event Skipped:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
+L["INFO_EVENT_PROCESSING"] = setfmt("Event Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
-L["ERROR_BYTE_OVERFLOW"] = "You're painting too many bytes (%s vs %s)"
+L["ERROR_BYTE_INSUFFICIENT"] = "You're painting an insufficient amount of bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"

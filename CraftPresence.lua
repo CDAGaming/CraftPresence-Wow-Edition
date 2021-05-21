@@ -39,7 +39,7 @@ local CP_GlobalUtils = CP_GlobalUtils
 
 -- Critical Data (DNT)
 local CraftPresenceLDB, icon
-local lastEventName, registryEventName
+local lastEventName, registryEventCallback
 local minimapState = { hide = false }
 -- Build and Integration Data
 local buildData = {}
@@ -190,32 +190,34 @@ function CraftPresence:OnEnable()
     self:PrintAddonInfo()
     -- Register Universal Events
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-        registryEventName = "DispatchModernUpdate"
+        registryEventCallback = "DispatchUpdate"
     else
-        registryEventName = "DispatchLegacyUpdate"
+        registryEventCallback = self:DispatchUpdate({
+            event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
+        })
     end
     self:ModifyTriggers(
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
               "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
               "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-            }, registryEventName, self:GetFromDb("debugMode")
+            }, registryEventCallback, self:GetFromDb("debugMode")
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.0"] then
         self:ModifyTriggers(
-                { "PLAYER_SPECIALIZATION_CHANGED" }, registryEventName, self:GetFromDb("debugMode")
+                { "PLAYER_SPECIALIZATION_CHANGED" }, registryEventCallback, self:GetFromDb("debugMode")
         )
     end
     if buildData["toc_version"] >= compatData["6.0.0"] then
         self:ModifyTriggers(
                 { "ACTIVE_TALENT_GROUP_CHANGED", "ENCOUNTER_END",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
-                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, registryEventName, self:GetFromDb("debugMode")
+                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, registryEventCallback, self:GetFromDb("debugMode")
         )
     end
     if buildData["toc_version"] >= compatData["8.0.0"] then
         self:ModifyTriggers(
-                { "PLAYER_LEVEL_CHANGED" }, registryEventName, self:GetFromDb("debugMode")
+                { "PLAYER_LEVEL_CHANGED" }, registryEventCallback, self:GetFromDb("debugMode")
         )
     end
 end
@@ -230,7 +232,7 @@ end
 --- Both operations cannot occur unless args are specified, as either a string or a table
 ---
 --- @param args table The event names to be interpreted with the eventTag (if any)
---- @param trigger string The function name to register with argument values (Required for append operations)
+--- @param trigger string The function name to register with argument values (Required for append operations, can be func)
 --- @param log_output boolean Whether to allow logging for this function (Default: False)
 --- @param mode string The modifier key to force a certain behavior of this function (Optional, can be "add" or "remove")
 function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
@@ -274,47 +276,29 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
 end
 
 --- Prepares and Dispatches a new frame update, given the specified arguments
-function CraftPresence:DispatchLegacyUpdate()
-    self:DispatchUpdate({
-        event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
-    })
-end
-
---- Prepares and Dispatches a new frame update, given the specified arguments
-CraftPresence.DispatchModernUpdate = CP_GlobalUtils:vararg(2, function(self, event, arg)
-    self:DispatchUpdate({
-        event, unpack(arg)
-    })
-end)
-
---- Prepares and Dispatches a new frame update, given the specified arguments
 ---
+--- @param eventName string The name of the event being executed
 --- @param args table The arguments associated with the event execution
-function CraftPresence:DispatchUpdate(args)
-    if type(args) ~= "table" then
-        args = { args }
-    end
-
+CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName, args)
     if args ~= nil then
         -- Ignore Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
-        local eventName = args[1]
         local ignore_event = false
         local ignore_event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (
-                    (args[2] ~= nil and args[2] ~= "player") or
+                    (args[1] ~= nil and args[1] ~= "player") or
                             self:GetLastPlayerStatus() == self:GetPlayerStatus("player",
                                     false, isRebasedApi, L["FORMAT_USER_PREFIX"]
                             )
             ),
-            ["ENCOUNTER_END"] = (not IsInInstance() or args[6] ~= 1 or
+            ["ENCOUNTER_END"] = (not IsInInstance() or args[5] ~= 1 or
                     self:GetCachedLockout() == self:GetCurrentLockoutData(false)
             ),
             ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
             ["PLAYER_LEVEL_UP"] = (lastEventName == "PLAYER_LEVEL_CHANGED"),
             ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP"),
-            ["ACTIVE_TALENT_GROUP_CHANGED"] = (args[2] == args[3]),
-            ["PLAYER_SPECIALIZATION_CHANGED"] = (args[2] ~= "player")
+            ["ACTIVE_TALENT_GROUP_CHANGED"] = (args[1] == args[2]),
+            ["PLAYER_SPECIALIZATION_CHANGED"] = (args[1] ~= "player")
         }
 
         for key, value in pairs(ignore_event_conditions) do
@@ -336,21 +320,20 @@ function CraftPresence:DispatchUpdate(args)
                 logPrefix = L["INFO_EVENT_SKIPPED"]
             end
             -- Logging is different depending on verbose/debug states
-            if self:GetFromDb("debugMode") then
-                if self:GetFromDb("verboseMode") then
-                    self:Print(strformat(
-                            L["LOG_VERBOSE"], strformat(
-                                    logPrefix, self:SerializeTable(args)
-                            )
-                    ))
-                else
-                    self:Print(strformat(
-                            L["LOG_DEBUG"], strformat(
-                                    logPrefix, eventName
-                            )
-                    ))
-                end
+            local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
+            local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or (isDebug and L["LOG_DEBUG"]) or nil
+            local logData = self:GetLength(args) > 0 and (
+                    (isVerbose and self:SerializeTable(args)) or
+                            (isDebug and "<...>")
+            ) or nil
+            if not self:IsNullOrEmpty(logTemplate) then
+                self:Print(strformat(
+                        logTemplate, strformat(
+                                logPrefix, eventName, self:GetOrDefault(logData, L["TYPE_NONE"])
+                        )
+                ))
             end
+
             -- If the timer is locked, exit the method at this stage
             -- Otherwise, proceed to frame processing
             if self:IsTimerLocked() then
@@ -374,7 +357,7 @@ function CraftPresence:DispatchUpdate(args)
             end
         end
     end
-end
+end)
 
 --- Instructions to be called when the addon is disabled
 function CraftPresence:OnDisable()
@@ -569,7 +552,7 @@ function CraftPresence:ChatCommand(input)
                         -- Sub-Query Parsing
                         local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
                         if eventQuery ~= nil then
-                            self:ModifyTriggers(eventQuery, registryEventName, self:GetFromDb("debugMode"))
+                            self:ModifyTriggers(eventQuery, registryEventCallback, self:GetFromDb("debugMode"))
                         else
                             self:Print(strformat(
                                     L["LOG_ERROR"], strformat(
