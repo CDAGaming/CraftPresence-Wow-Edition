@@ -166,14 +166,45 @@ end
 --- Determines whether the specified string starts with the specified pattern
 ---
 --- @param str string The input string to evaluate
---- @param start string The target string to locate at the first index
+--- @param expected string The expected string to locate
 ---
 --- @return boolean @ startsWith
-function CraftPresence:StartsWith(str, start)
+function CraftPresence:StartsWith(str, expected)
     if self:IsNullOrEmpty(str) then
         return false
     end
-    return strsub(str, 1, self:GetLength(start)) == start
+    return self:ContainsAt(str, expected, 1, self:GetLength(expected))
+end
+
+--- Determines whether the specified string ends with the specified pattern
+---
+--- @param str string The input string to evaluate
+--- @param expected string The expected string to locate
+---
+--- @return boolean @ endsWith
+function CraftPresence:EndsWith(str, expected)
+    if self:IsNullOrEmpty(str) then
+        return false
+    end
+    local start_len = (self:GetLength(str) - self:GetLength(expected)) + 1
+    return self:ContainsAt(str, expected, start_len, self:GetLength(str))
+end
+
+--- Determines whether the specified string includes the specified pattern at the given position
+---
+--- @param str string The input string to evaluate
+--- @param expected string The expected string to locate
+--- @param start_len number The beginning length to iterate at (Default: 1)
+--- @param end_len number The ending length to iterate at (Default: input string length)
+---
+--- @return boolean @ containsAt
+function CraftPresence:ContainsAt(str, expected, start_len, end_len)
+    if self:IsNullOrEmpty(str) then
+        return false
+    end
+    start_len = self:GetOrDefault(start_len, 1)
+    end_len = self:GetOrDefault(end_len, self:GetLength(str))
+    return strsub(str, start_len, end_len) == expected
 end
 
 --- Formats the following word to proper casing (Xxxx)
@@ -763,7 +794,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
                 for innerKey, _ in pairs(value) do
                     value_args[innerKey] = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
-                        multiline = (strlower(innerKey) == "data"),
+                        multiline = self:EndsWith(strlower(innerKey), "data"),
                         name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], self:FormatWord(innerKey)),
                         desc = self:GetOrDefault(L["COMMENT_BUTTON_" .. strupper(innerKey)]),
                         usage = self:GetOrDefault(L["USAGE_BUTTON_" .. strupper(innerKey)]),
