@@ -18,7 +18,7 @@ is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
 min_attributes = ('scheme', 'netloc')
-process_version = "v1.3.5"
+process_version = "v1.3.6"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -52,18 +52,18 @@ root_logger = logging.getLogger("DRPLogger")
 root_logger.setLevel(log_level)
 log_formatter = logging.Formatter(log_format, log_date_style)
 color_formatter = log_formatter
-# Import Optional Colored Formatter, if able
-try:
-    from colored_log import ColoredFormatter
-
-    color_formatter = ColoredFormatter(log_format, log_date_style)
-except ModuleNotFoundError as err:
-    pass
 # Setup handlers depending on config options
 if "full" in log_modes or "v1" in log_modes or "console" in log_modes:
     console_handler = logging.StreamHandler(stream=sys.stdout)
     if ("full" in log_modes or "color" in log_modes) and "no-color" not in log_modes and "plain" not in log_modes:
-        console_handler.setFormatter(color_formatter)
+        # Import Optional Colored Formatter, if able
+        try:
+            from colored_log import ColoredFormatter
+
+            color_formatter = ColoredFormatter(log_format, log_date_style)
+            console_handler.setFormatter(color_formatter)
+        except (ModuleNotFoundError, TypeError) as err:
+            pass
     else:
         console_handler.setFormatter(log_formatter)
     console_handler.setLevel(log_level)
@@ -327,10 +327,11 @@ while True:
         # if in DEBUG mode, squares are read, the image with the dot matrix is
         # shown and then the script quits.
         if process_hwnd:
-            root_logger.debug('DEBUG: reading squares. Is everything alright?')
+            root_logger.debug('DEBUG: Reading squares. Please check result image for verification...')
             read_squares(process_hwnd)
         else:
-            root_logger.debug("Launching in DEBUG mode but I couldn't find target process.")
+            root_logger.debug("DEBUG: Unable to locate target process.")
+        input("Press Enter to continue...")
         break
     elif process_hwnd:
         lines = read_squares(process_hwnd)

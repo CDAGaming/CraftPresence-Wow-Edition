@@ -466,7 +466,7 @@ function CraftPresence:ChatCommand(input)
             end
         elseif self:StartsWith(input, "create") then
             -- Query Parsing
-            local canModify = self:StartsWith(input, "create:modify")
+            local modifiable = self:StartsWith(input, "create:modify")
             local _, _, typeQuery = self:FindMatches(input, "::(.*)::", false)
             local _, _, query = self:FindMatches(input, " (.*)", false)
 
@@ -481,17 +481,14 @@ function CraftPresence:ChatCommand(input)
                 local customPlaceholders = self:GetFromDb("customPlaceholders")
                 local splitQuery = self:Split(query, " ")
                 splitQuery[2] = self:GetOrDefault(splitQuery[2])
-                if customPlaceholders[splitQuery[1]] and not canModify then
+                if customPlaceholders[splitQuery[1]] and not modifiable then
                     self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
                 elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
                     customPlaceholders[splitQuery[1]] = {
                         ["type"] = typeQuery,
                         ["data"] = splitQuery[2]
                     }
-                    local eventState = L["TYPE_ADDED"]
-                    if canModify then
-                        eventState = L["TYPE_MODIFY"]
-                    end
+                    local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
                     self:SetToDb("customPlaceholders", nil, customPlaceholders)
                     self:Print(strformat(
                             L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], self:SerializeTable(
