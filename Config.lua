@@ -3,6 +3,7 @@ local strformat, type, tostring = string.format, type, tostring
 
 -- Addon APIs
 local L = CraftPresence.locale
+local config_registry = LibStub("AceConfigRegistry-3.0")
 
 -- SCHEMA_DEFAULTS
 local SCHEMA_DEFAULTS = {
@@ -690,8 +691,13 @@ function CraftPresence:GetSchemaDefaults()
     return SCHEMA_DEFAULTS
 end
 
---- Resets the settings in the config to their defaults
-function CraftPresence:ResetDB()
+--- Resets all settings in the currently active config profile to their defaults
+---
+--- @param notify boolean Whether or not to fire NotifyChange after operation (Default: false)
+function CraftPresence:ResetProfile(notify)
     self:Print(L["INFO_RESET_CONFIG"])
     self.db:ResetProfile(false, true)
+    if notify then
+        config_registry:NotifyChange(L["ADDON_NAME"])
+    end
 end

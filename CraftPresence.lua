@@ -157,7 +157,7 @@ function CraftPresence:OnInitialize()
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
             self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
-            self.optionsFrame.default = self.ResetDB
+            self.optionsFrame.default = self.ResetProfile
         end
         -- Icon Registration
         icon = LibStub("LibDBIcon-1.0")
@@ -443,7 +443,7 @@ function CraftPresence:ChatCommand(input)
                 local _, _, sub_query = self:FindMatches(query, ",(.*)", false)
                 self:GetFromDb(query, sub_query, true)
             else
-                self:ResetDB()
+                self:ResetProfile(false)
             end
 
             if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
