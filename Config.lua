@@ -840,11 +840,16 @@ end
 
 --- Resets all settings in the currently active config profile to their defaults
 ---
---- @param notify boolean Whether or not to fire NotifyChange after operation (Default: false)
+--- @param notify boolean Whether or not to fire NotifyChange after operation (Default: true)
 function CraftPresence:ResetProfile(notify)
+    notify = self:GetOrDefault(notify, true)
+
     self:Print(L["INFO_RESET_CONFIG"])
     self.db:ResetProfile(false, true)
     if notify then
         config_registry:NotifyChange(L["ADDON_NAME"])
     end
+
+    -- Additional dynamic sync events
+    self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
 end
