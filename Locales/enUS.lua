@@ -63,6 +63,11 @@ L["CATEGORY_TITLE_CUSTOM_EXTENDED"] = "%s Placeholders"
 L["CATEGORY_COMMENT_CUSTOM"] = "Settings for customizing custom/dynamic placeholders"
 L["CATEGORY_COMMENT_CUSTOM_INFO"] = "%s custom placeholder%s found! (Use /cp create to add some)"
 
+L["CATEGORY_TITLE_EVENTS"] = "Events"
+L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "%s Events"
+L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to update data on"
+L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp integration event to add/remove events)"
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customizability options for addon display info"
 
@@ -178,6 +183,29 @@ L["USAGE_BUTTON_DATA"] = "<Your message here>"
 L["TITLE_BUTTON_TYPE"] = "Type"
 L["COMMENT_BUTTON_TYPE"] = "The type of the message for this custom placeholder"
 L["USAGE_BUTTON_TYPE"] = "<Your type reference here>"
+
+L["TITLE_BUTTON_ENABLED"] = "Enabled"
+L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used"
+
+L["TITLE_BUTTON_MINIMUMTOC"] = "Minimum TOC"
+L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with\n(Note: <=00000 == CurrentTOC)"
+L["USAGE_BUTTON_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
+
+L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
+L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with\n(Note: <=00000 == CurrentTOC)"
+L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
+
+L["TITLE_BUTTON_IGNORECALLBACK"] = "Ignore Callback"
+L["COMMENT_BUTTON_IGNORECALLBACK"] = "The function that, if any and true, will ignore this data in processing"
+L["USAGE_BUTTON_IGNORECALLBACK"] = "<A boolean function here>"
+
+L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
+L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called"
+L["USAGE_BUTTON_EVENTCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_REGISTERCALLBACK"] = "Register Callback"
+L["COMMENT_BUTTON_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered"
+L["USAGE_BUTTON_REGISTERCALLBACK"] = "<A boolean function here>"
 
 L["TITLE_GLOBAL_PLACEHOLDER_KEY"] = "Global Placeholder Key"
 L["COMMENT_GLOBAL_PLACEHOLDER_KEY"] = "The key to use to represent Global Placeholders"

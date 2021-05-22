@@ -62,7 +62,153 @@ local DB_DEFAULTS = {
         },
         customPlaceholders = {},
         innerPlaceholderKey = L["DEFAULT_INNER_KEY"],
-        globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"]
+        globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"],
+        events = {
+            ["PLAYER_LOGIN"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["PLAYER_LEVEL_UP"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["PLAYER_LEVEL_CHANGED"] = {
+                minimumTOC = "80000",
+                maximumTOC = "00000",
+                ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_LEVEL_UP' end"),
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["PLAYER_ALIVE"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_DEAD' end"),
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["PLAYER_DEAD"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["PLAYER_FLAGS_CHANGED"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = [[
+function (self, lastName, name, args)
+    return args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
+end
+                ]],
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["ZONE_CHANGED"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["ZONE_CHANGED_NEW_AREA"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["ZONE_CHANGED_INDOORS"] = {
+                minimumTOC = "00000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["PLAYER_SPECIALIZATION_CHANGED"] = {
+                minimumTOC = "50000",
+                maximumTOC = "00000",
+                ignoreCallback = "function (self, lastName, name, args) return args[1] ~= 'player' end",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["ACTIVE_TALENT_GROUP_CHANGED"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = "function (self, lastName, name, args) return args[1] == args[2] end",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["ENCOUNTER_END"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = [[
+function (self, lastName, name, args)
+    return (not IsInInstance() or args[5] ~= 1 or self:GetCachedLockout() == self:GetCurrentLockoutData(false))
+end
+                ]],
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["CHALLENGE_MODE_START"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["CHALLENGE_MODE_COMPLETED"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["CHALLENGE_MODE_RESET"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["SCENARIO_COMPLETED"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+            ["CRITERIA_COMPLETE"] = {
+                minimumTOC = "60000",
+                maximumTOC = "00000",
+                ignoreCallback = "",
+                registerCallback = "",
+                eventCallback = "defaultEventCallback",
+                enabled = true
+            },
+        }
     },
 }
 
@@ -381,6 +527,22 @@ function CraftPresence:getOptionsTable()
                         L["CATEGORY_TITLE_CUSTOM_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], count, (count == 1 and "") or "s")
+                        end
+                )
+            },
+            eventOptions = {
+                type = "group", order = self:GetNextIndex(),
+                name = L["CATEGORY_TITLE_EVENTS"], desc = L["CATEGORY_COMMENT_EVENTS"],
+                get = function(info)
+                    return self.db.profile[info[self:GetLength(info)]]
+                end,
+                set = function(info, value)
+                    self.db.profile[info[self:GetLength(info)]] = value
+                end,
+                args = self:GetPlaceholderArgs("events", strformat(
+                        L["CATEGORY_TITLE_EVENTS_EXTENDED"], L["CATEGORY_TITLE_EVENTS"]),
+                        function(count)
+                            return strformat(L["CATEGORY_COMMENT_EVENTS_INFO"], count, (count == 1 and "") or "s")
                         end
                 )
             },
