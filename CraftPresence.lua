@@ -192,9 +192,7 @@ function CraftPresence:OnEnable()
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
         registryEventCallback = "DispatchUpdate"
     else
-        registryEventCallback = self:DispatchUpdate({
-            event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9
-        })
+        registryEventCallback = "DispatchLegacyUpdate"
     end
     self:ModifyTriggers(
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
@@ -273,6 +271,11 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
             end
         end
     end
+end
+
+--- Prepares and Dispatches a new frame update, using prefilled global args
+function CraftPresence:DispatchLegacyUpdate()
+    self:DispatchUpdate(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
 end
 
 --- Prepares and Dispatches a new frame update, given the specified arguments
