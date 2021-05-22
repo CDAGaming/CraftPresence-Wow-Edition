@@ -495,7 +495,7 @@ function CraftPresence:GetBuildInfo()
         local version, build, date, tocversion = fallbackVersion, "0000", "Jan 1 1969", fallbackTOC
         if GetBuildInfo then
             version, build, date, tocversion = GetBuildInfo()
-            tocversion = tocversion or tonumber(self:VersionToBuild(version))
+            tocversion = tocversion or self:VersionToBuild(version)
         end
 
         build_info = {
@@ -623,7 +623,7 @@ end
 ---
 --- @param versionStr string The version string to evaluate (Default: fallbackVersion)
 ---
---- @return string @ buildVersion
+--- @return number @ buildVersion
 function CraftPresence:VersionToBuild(versionStr)
     versionStr = self:GetOrDefault(versionStr, fallbackVersion)
     local buildStr = ""
@@ -639,7 +639,7 @@ function CraftPresence:VersionToBuild(versionStr)
             end
         end
     end
-    return self:GetOrDefault(buildStr, fallbackTOC)
+    return self:GetOrDefault(tonumber(buildStr), fallbackTOC)
 end
 
 --- Display the addon's config frame
