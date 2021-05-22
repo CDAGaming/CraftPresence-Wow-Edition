@@ -150,9 +150,6 @@ function CraftPresence:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
-    -- Command Registration
-    self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
-    self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
@@ -177,14 +174,22 @@ function CraftPresence:OnInitialize()
                 tt:AddLine(L["ADDON_TOOLTIP_FIVE"])
             end
         })
-        self:UpdateMinimapState(false)
+        self:UpdateMinimapState(false, false)
         icon:Register(L["ADDON_NAME"], CraftPresenceLDB, minimapState)
     end
+end
+
+--- Instructions to be called when the addon is enabled
+function CraftPresence:OnEnable()
     -- Print any Initial Data
     self:PrintAddonInfo()
+    -- Command Registration
+    self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
+    self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
     -- Create initial frames and initial rpc update
     self:CreateFrames(self:GetFromDb("frameSize"))
     self:PaintMessageWait()
+    self:UpdateMinimapState(true, false)
     -- Register Universal Events
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
         self.defaultEventCallback = "DispatchUpdate"
@@ -194,9 +199,22 @@ function CraftPresence:OnInitialize()
     self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
 end
 
---- Instructions to be called when the addon is enabled
-function CraftPresence:OnEnable()
-    -- N/A
+--- Instructions to be called when the addon is disabled
+function CraftPresence:OnDisable()
+    -- Print Closing Message
+    self:Print(L["ADDON_CLOSE"])
+    -- Command Un-registration
+    self:UnregisterChatCommand(L["ADDON_ID"])
+    self:UnregisterChatCommand(L["ADDON_AFFIX"])
+    -- Reset RPC Data to Discord
+    local resetData = self:EncodeData(L["EVENT_RPC_LENGTH"], { self:GetFromDb("clientId") })
+    self:PaintMessageWait(true, false, true, resetData)
+    -- Hide Minimap Icon
+    if icon then
+        icon:Hide(L["ADDON_NAME"])
+    end
+    -- Un-register Events
+    self:ModifyTriggers(self.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
 end
 
 --- Sync the contents of registeredEvents with the specified event table
@@ -370,21 +388,12 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
     end
 end)
 
---- Instructions to be called when the addon is disabled
-function CraftPresence:OnDisable()
-    -- Clean up Data before disabling
-    self:Print(L["ADDON_CLOSE"])
-    local resetData = self:EncodeData(L["EVENT_RPC_LENGTH"], { self:GetFromDb("clientId") })
-    self:PaintMessageWait(true, false, true, resetData)
-    if icon then
-        icon:Hide(L["ADDON_NAME"])
-    end
-    self:ModifyTriggers(self.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
-end
-
 --- Updates the minimap status with config data
+---
 --- @param update_state boolean Whether or not to update the icon state
-function CraftPresence:UpdateMinimapState(update_state)
+--- @param log_output boolean TBD
+function CraftPresence:UpdateMinimapState(update_state, log_output)
+    log_output = self:GetOrDefault(log_output, true)
     minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
     if update_state then
         if icon then
@@ -393,7 +402,7 @@ function CraftPresence:UpdateMinimapState(update_state)
             else
                 icon:Show(L["ADDON_NAME"])
             end
-        else
+        elseif log_output then
             self:Print(strformat(
                     L["LOG_ERROR"], strformat(
                             L["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"
