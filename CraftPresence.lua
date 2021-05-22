@@ -569,7 +569,7 @@ function CraftPresence:ChatCommand(input)
                         -- Sub-Query Parsing
                         local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
                         if eventQuery ~= nil then
-                            self:ModifyTriggers(eventQuery, defaultEventCallback, self:GetFromDb("debugMode"))
+                            self:ModifyTriggers(eventQuery, self.defaultEventCallback, self:GetFromDb("debugMode"))
                         else
                             self:Print(strformat(
                                     L["LOG_ERROR"], strformat(

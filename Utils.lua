@@ -424,8 +424,8 @@ end
 ---
 --- @param str string The input string to interpret
 --- @param inSplitPattern string The pattern to split the string by
---- @param multiple boolean Whether to find multiple matches
---- @param plain boolean Whether or not to forbid pattern matching filters
+--- @param multiple boolean Whether to find multiple matches (Default: false)
+--- @param plain boolean Whether or not to forbid pattern matching filters (Default: false)
 --- @param outResults table The output result data (Can be predefined)
 ---
 --- @return table @ outResults
