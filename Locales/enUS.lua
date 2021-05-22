@@ -64,7 +64,7 @@ L["CATEGORY_COMMENT_CUSTOM"] = "Settings for customizing custom/dynamic placehol
 L["CATEGORY_COMMENT_CUSTOM_INFO"] = "%s custom placeholder%s found! (Use /cp create to add some)"
 
 L["CATEGORY_TITLE_EVENTS"] = "Events"
-L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "%s Events"
+L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registered Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to update data on"
 L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp integration event to add/remove events)"
 

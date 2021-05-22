@@ -522,10 +522,12 @@ function CraftPresence:getOptionsTable()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("events", strformat(
-                        L["CATEGORY_TITLE_EVENTS_EXTENDED"], L["CATEGORY_TITLE_EVENTS"]),
+                args = self:GetPlaceholderArgs("events", L["CATEGORY_TITLE_EVENTS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_EVENTS_INFO"], count, (count == 1 and "") or "s")
+                        end,
+                        function(root)
+                            root:SyncEvents(root:GetFromDb("events"), root:GetFromDb("debugMode"))
                         end
                 )
             },

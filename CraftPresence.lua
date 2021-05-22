@@ -222,8 +222,7 @@ end
 ---
 --- @param grp table The table of events to interpret (Should match that of self.db.profile.events)
 --- @param log_output boolean Whether to allow logging for this function (Default: False)
---- @param mode string The modifier key to force a certain behavior of this function (Optional, can be <add|remove|refresh>)
-function CraftPresence:SyncEvents(grp, log_output, mode)
+function CraftPresence:SyncEvents(grp, log_output)
     local currentTOC = buildData["toc_version"]
     grp = self:GetOrDefault(grp, {})
     log_output = self:GetOrDefault(log_output, false)
@@ -242,10 +241,12 @@ function CraftPresence:SyncEvents(grp, log_output, mode)
                         self:GetDynamicReturnValue(eventData["registerCallback"], "function", self) == "true"
         )
         canAccept = canAccept and self:IsWithinValue(currentTOC, minTOC, maxTOC, true, true, false)
+        local shouldEnable = eventData["enabled"] and canAccept
 
-        if canAccept then
-            self:ModifyTriggers(eventName, self:GetDynamicReturnValue(eventData["eventCallback"], "function", self), log_output, mode)
-        end
+        self:ModifyTriggers(
+                eventName, self:GetDynamicReturnValue(eventData["eventCallback"], "function", self),
+                log_output, (shouldEnable and "" or "remove")
+        )
     end
 end
 
@@ -278,13 +279,15 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
             if mode ~= "remove" and not self:IsNullOrEmpty(trigger) then
                 mode = (self.registeredEvents[eventName] and self.registeredEvents[eventName] ~= trigger) and "refresh" or "add"
 
-                self.registeredEvents[eventName] = trigger
                 if mode == "refresh" then
                     self:UnregisterEvent(eventName)
                 end
-                self:RegisterEvent(eventName, trigger)
-                if log_output then
-                    self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
+                if not self.registeredEvents[eventName] or self.registeredEvents[eventName] ~= trigger then
+                    self.registeredEvents[eventName] = trigger
+                    self:RegisterEvent(eventName, trigger)
+                    if log_output then
+                        self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
+                    end
                 end
             elseif mode ~= "add" and self.registeredEvents[eventName] then
                 mode = "remove"
