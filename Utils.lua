@@ -479,6 +479,18 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
     return value
 end)
 
+--- Return whether or not two tables are equivalent in elements and keys
+---
+--- @param t1 table The first table to iterate against
+--- @param t2 table The second table to iterate against
+---
+--- @return boolean @ tables_equal
+function CraftPresence:AreTablesEqual(t1, t2)
+    t1 = self:GetOrDefault(t1, {})
+    t2 = self:GetOrDefault(t2, {})
+    return self:SerializeTable(t1) == self:SerializeTable(t2)
+end
+
 --[[ API UTILITIES ]]--
 
 local fallbackVersion, fallbackTOC = "0.0.0", 00000

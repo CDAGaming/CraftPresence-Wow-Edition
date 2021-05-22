@@ -221,9 +221,10 @@ end
 --- (This is primarily a helper function towards ModifyTriggers, retrofitted to use an event table)
 ---
 --- @param grp table The table of events to interpret (Should match that of self.db.profile.events)
---- @param log_output boolean Whether to allow logging for this function (Default: False)
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
 function CraftPresence:SyncEvents(grp, log_output)
     local currentTOC = buildData["toc_version"]
+
     grp = self:GetOrDefault(grp, {})
     log_output = self:GetOrDefault(log_output, false)
     for eventName, eventData in pairs(grp) do
@@ -245,7 +246,7 @@ function CraftPresence:SyncEvents(grp, log_output)
 
         self:ModifyTriggers(
                 eventName, self:GetDynamicReturnValue(eventData["eventCallback"], "function", self),
-                log_output, (shouldEnable and "" or "remove")
+                log_output, (shouldEnable and "" or "remove"), eventData["ignoreCallback"]
         )
     end
 end
@@ -263,12 +264,18 @@ end
 --- @param trigger string The function name to register with argument values (Required for append operations, can be func)
 --- @param log_output boolean Whether to allow logging for this function (Default: False)
 --- @param mode string The modifier key to force a certain behavior of this function (Optional, can be <add|remove|refresh>)
-function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
+--- @param ignore_condition string The function, that if true, will ignore this event if it occurs (Optional)
+function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, ignore_condition)
     if type(args) ~= "table" then
         args = { args }
     end
     log_output = self:GetOrDefault(log_output, false)
     mode = strlower(self:GetOrDefault(mode))
+    ignore_condition = self:GetOrDefault(ignore_condition, "function(_,_,_,_) return false end")
+    local event_data = {
+        target = trigger,
+        ignore = ignore_condition
+    }
 
     if args ~= nil then
         for eventKey, eventName in pairs(args) do
@@ -277,13 +284,18 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
             end
 
             if mode ~= "remove" and not self:IsNullOrEmpty(trigger) then
-                mode = (self.registeredEvents[eventName] and self.registeredEvents[eventName] ~= trigger) and "refresh" or "add"
+                mode = (
+                        self.registeredEvents[eventName] and
+                                not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
+                ) and "refresh" or "add"
 
                 if mode == "refresh" then
                     self:UnregisterEvent(eventName)
                 end
-                if not self.registeredEvents[eventName] or self.registeredEvents[eventName] ~= trigger then
-                    self.registeredEvents[eventName] = trigger
+                if (not self.registeredEvents[eventName] or
+                        not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
+                ) then
+                    self.registeredEvents[eventName] = event_data
                     self:RegisterEvent(eventName, trigger)
                     if log_output then
                         self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
@@ -318,24 +330,13 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
         -- Ignore Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
         local ignore_event = false
-        local ignore_event_conditions = {
-            ["PLAYER_FLAGS_CHANGED"] = (
-                    (args[1] ~= "player") or
-                            self:GetLastPlayerStatus() == self:GetPlayerStatus()
-            ),
-            ["ENCOUNTER_END"] = (not IsInInstance() or args[5] ~= 1 or
-                    self:GetCachedLockout() == self:GetCurrentLockoutData(false)
-            ),
-            ["PLAYER_ALIVE"] = (lastEventName ~= "PLAYER_DEAD"),
-            ["PLAYER_LEVEL_UP"] = (lastEventName == "PLAYER_LEVEL_CHANGED"),
-            ["PLAYER_LEVEL_CHANGED"] = (lastEventName == "PLAYER_LEVEL_UP"),
-            ["ACTIVE_TALENT_GROUP_CHANGED"] = (args[1] == args[2]),
-            ["PLAYER_SPECIALIZATION_CHANGED"] = (args[1] ~= "player")
-        }
 
-        for key, value in pairs(ignore_event_conditions) do
-            if eventName == key and value then
-                ignore_event = true
+        for key, value in pairs(self.registeredEvents) do
+            if eventName == key then
+                ignore_event = (
+                        self:IsNullOrEmpty(value.ignore) or
+                                self:GetDynamicReturnValue(value.ignore, "function", self, lastEventName, eventName, args) == "true"
+                )
                 break
             end
         end
