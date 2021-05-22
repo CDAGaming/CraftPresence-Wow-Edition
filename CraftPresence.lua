@@ -39,7 +39,7 @@ local CP_GlobalUtils = CP_GlobalUtils
 
 -- Critical Data (DNT)
 local CraftPresenceLDB, icon
-local lastEventName, registryEventCallback
+local lastEventName, defaultEventCallback
 local minimapState = { hide = false }
 -- Build and Integration Data
 local buildData = {}
@@ -190,32 +190,32 @@ end
 function CraftPresence:OnEnable()
     -- Register Universal Events
     if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-        registryEventCallback = "DispatchUpdate"
+        defaultEventCallback = "DispatchUpdate"
     else
-        registryEventCallback = "DispatchLegacyUpdate"
+        defaultEventCallback = "DispatchLegacyUpdate"
     end
     self:ModifyTriggers(
             { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
               "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
               "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-            }, registryEventCallback, self:GetFromDb("debugMode")
+            }, defaultEventCallback, self:GetFromDb("debugMode")
     )
     -- Register Version-Specific Events
     if buildData["toc_version"] >= compatData["5.0.0"] then
         self:ModifyTriggers(
-                { "PLAYER_SPECIALIZATION_CHANGED" }, registryEventCallback, self:GetFromDb("debugMode")
+                { "PLAYER_SPECIALIZATION_CHANGED" }, defaultEventCallback, self:GetFromDb("debugMode")
         )
     end
     if buildData["toc_version"] >= compatData["6.0.0"] then
         self:ModifyTriggers(
                 { "ACTIVE_TALENT_GROUP_CHANGED", "ENCOUNTER_END",
                   "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
-                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, registryEventCallback, self:GetFromDb("debugMode")
+                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, defaultEventCallback, self:GetFromDb("debugMode")
         )
     end
     if buildData["toc_version"] >= compatData["8.0.0"] then
         self:ModifyTriggers(
-                { "PLAYER_LEVEL_CHANGED" }, registryEventCallback, self:GetFromDb("debugMode")
+                { "PLAYER_LEVEL_CHANGED" }, defaultEventCallback, self:GetFromDb("debugMode")
         )
     end
 end
@@ -289,10 +289,8 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
         local ignore_event = false
         local ignore_event_conditions = {
             ["PLAYER_FLAGS_CHANGED"] = (
-                    (args[1] ~= nil and args[1] ~= "player") or
-                            self:GetLastPlayerStatus() == self:GetPlayerStatus("player",
-                                    false, isRebasedApi, L["FORMAT_USER_PREFIX"]
-                            )
+                    (args[1] ~= "player") or
+                            self:GetLastPlayerStatus() == self:GetPlayerStatus()
             ),
             ["ENCOUNTER_END"] = (not IsInInstance() or args[5] ~= 1 or
                     self:GetCachedLockout() == self:GetCurrentLockoutData(false)
@@ -552,7 +550,7 @@ function CraftPresence:ChatCommand(input)
                         -- Sub-Query Parsing
                         local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
                         if eventQuery ~= nil then
-                            self:ModifyTriggers(eventQuery, registryEventCallback, self:GetFromDb("debugMode"))
+                            self:ModifyTriggers(eventQuery, defaultEventCallback, self:GetFromDb("debugMode"))
                         else
                             self:Print(strformat(
                                     L["LOG_ERROR"], strformat(

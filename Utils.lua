@@ -789,12 +789,11 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
             local value_args = {}
             if type(value) == "table" then
                 for innerKey, _ in pairs(value) do
+                    local valueType = (self:EndsWith(strlower(innerKey), "enabled") and "toggle") or "input"
                     value_args[innerKey] = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        multiline = self:EndsWith(strlower(innerKey), "data"),
+                        type = valueType, order = self:GetNextIndex(), width = 3.0,
                         name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], self:FormatWord(innerKey)),
                         desc = self:GetOrDefault(L["COMMENT_BUTTON_" .. strupper(innerKey)]),
-                        usage = self:GetOrDefault(L["USAGE_BUTTON_" .. strupper(innerKey)]),
                         get = function(_)
                             return self.db.profile[rootKey][key][innerKey]
                         end,
@@ -810,6 +809,17 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey)
                             end
                         end,
                     }
+                    -- Apply additional params
+                    if valueType == "input" then
+                        value_args[innerKey].multiline = (
+                                self:EndsWith(strlower(innerKey), "data") or
+                                        self:EndsWith(strlower(innerKey), "callback")
+                        )
+                        local value_usage = self:GetOrDefault(L["USAGE_BUTTON_" .. strupper(innerKey)])
+                        if not self:IsNullOrEmpty(value_usage) then
+                            value_args[innerKey].usage = value_usage
+                        end
+                    end
                 end
             end
             table_args[key] = {

@@ -38,17 +38,18 @@ local lastPlayerStatus, hasInstanceChanged
 --- Retrieves the Player Status for the specified unit
 ---
 --- @param unit string The unit name (Default: player)
---- @param sync boolean Whether to sync the resulting status to lastPlayerStatus
---- @param isRebasedApi boolean Whether the client is on a rebased api
---- @param prefixFormat string Optional argument to determine the format of playerPrefix
+--- @param sync boolean Whether to sync the resulting status to lastPlayerStatus (Default: false)
+--- @param prefixFormat string Optional argument to determine the prefix formatting (Default: L["FORMAT_USER_PREFIX"])
 ---
 --- @return string, string @ playerStatus, playerPrefix
-function CraftPresence:GetPlayerStatus(unit, sync, isRebasedApi, prefixFormat)
+function CraftPresence:GetPlayerStatus(unit, sync, prefixFormat)
     unit = self:GetOrDefault(unit, "player")
+    sync = self:GetOrDefault(sync, false)
+    prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
     local playerStatus, playerPrefix
     local isAway, isBusy, isDead, isGhost
     -- Ensure Version Compatibility
-    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or isRebasedApi then
+    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or self:IsRebasedApi() then
         isAway = UnitIsAFK(unit)
         isBusy = UnitIsDND(unit)
     end
@@ -128,9 +129,7 @@ function CraftPresence:ParseGameData(force_instance_change)
     end
     -- Player Data
     local playerName = UnitName("player")
-    local playerStatus, playerPrefix = self:GetPlayerStatus("player",
-            true, isRebasedApi, L["FORMAT_USER_PREFIX"]
-    )
+    local playerStatus, playerPrefix = self:GetPlayerStatus()
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
