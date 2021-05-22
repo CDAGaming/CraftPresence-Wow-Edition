@@ -26,6 +26,7 @@ SOFTWARE.
 CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 CraftPresence.registeredEvents = {}
+CraftPresence.defaultEventCallback = ""
 
 -- Lua APIs
 local strformat, strlower = string.format, string.lower
@@ -39,7 +40,7 @@ local CP_GlobalUtils = CP_GlobalUtils
 
 -- Critical Data (DNT)
 local CraftPresenceLDB, icon
-local lastEventName, defaultEventCallback
+local lastEventName
 local minimapState = { hide = false }
 -- Build and Integration Data
 local buildData = {}
@@ -184,39 +185,49 @@ function CraftPresence:OnInitialize()
     -- Create initial frames and initial rpc update
     self:CreateFrames(self:GetFromDb("frameSize"))
     self:PaintMessageWait()
+    -- Register Universal Events
+    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+        self.defaultEventCallback = "DispatchUpdate"
+    else
+        self.defaultEventCallback = "DispatchLegacyUpdate"
+    end
+    self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
 end
 
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Register Universal Events
-    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-        defaultEventCallback = "DispatchUpdate"
-    else
-        defaultEventCallback = "DispatchLegacyUpdate"
-    end
-    self:ModifyTriggers(
-            { "PLAYER_LOGIN", "PLAYER_LEVEL_UP",
-              "PLAYER_ALIVE", "PLAYER_DEAD", "PLAYER_FLAGS_CHANGED",
-              "ZONE_CHANGED", "ZONE_CHANGED_NEW_AREA", "ZONE_CHANGED_INDOORS",
-            }, defaultEventCallback, self:GetFromDb("debugMode")
-    )
-    -- Register Version-Specific Events
-    if buildData["toc_version"] >= compatData["5.0.0"] then
-        self:ModifyTriggers(
-                { "PLAYER_SPECIALIZATION_CHANGED" }, defaultEventCallback, self:GetFromDb("debugMode")
+    -- N/A
+end
+
+--- Sync the contents of registeredEvents with the specified event table
+--- (This is primarily a helper function towards ModifyTriggers, retrofitted to use an event table)
+---
+--- @param grp table The table of events to interpret (Should match that of self.db.profile.events)
+--- @param log_output boolean Whether to allow logging for this function (Default: False)
+--- @param mode string The modifier key to force a certain behavior of this function (Optional, can be <add|remove|refresh>)
+function CraftPresence:SyncEvents(grp, log_output, mode)
+    local currentTOC = buildData["toc_version"]
+    grp = self:GetOrDefault(grp, {})
+    log_output = self:GetOrDefault(log_output, false)
+    for eventName, eventData in pairs(grp) do
+        local minTOC = self:GetOrDefault(eventData["minimumTOC"], currentTOC)
+        if type(minTOC) ~= "number" then
+            minTOC = self:VersionToBuild(minTOC)
+        end
+        local maxTOC = self:GetOrDefault(eventData["maximumTOC"], currentTOC)
+        if type(maxTOC) ~= "number" then
+            maxTOC = self:VersionToBuild(maxTOC)
+        end
+
+        local canAccept = (
+                self:IsNullOrEmpty(eventData["registerCallback"]) or
+                        self:GetDynamicReturnValue(eventData["registerCallback"], "function", self) == "true"
         )
-    end
-    if buildData["toc_version"] >= compatData["6.0.0"] then
-        self:ModifyTriggers(
-                { "ACTIVE_TALENT_GROUP_CHANGED", "ENCOUNTER_END",
-                  "CHALLENGE_MODE_START", "CHALLENGE_MODE_COMPLETED", "CHALLENGE_MODE_RESET",
-                  "SCENARIO_COMPLETED", "CRITERIA_COMPLETE" }, defaultEventCallback, self:GetFromDb("debugMode")
-        )
-    end
-    if buildData["toc_version"] >= compatData["8.0.0"] then
-        self:ModifyTriggers(
-                { "PLAYER_LEVEL_CHANGED" }, defaultEventCallback, self:GetFromDb("debugMode")
-        )
+        canAccept = canAccept and self:IsWithinValue(currentTOC, minTOC, maxTOC, true, true, false)
+
+        if canAccept then
+            self:ModifyTriggers(eventName, self:GetDynamicReturnValue(eventData["eventCallback"], "function", self), log_output, mode)
+        end
     end
 end
 
@@ -232,7 +243,7 @@ end
 --- @param args table The event names to be interpreted with the eventTag (if any)
 --- @param trigger string The function name to register with argument values (Required for append operations, can be func)
 --- @param log_output boolean Whether to allow logging for this function (Default: False)
---- @param mode string The modifier key to force a certain behavior of this function (Optional, can be "add" or "remove")
+--- @param mode string The modifier key to force a certain behavior of this function (Optional, can be <add|remove|refresh>)
 function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
     if type(args) ~= "table" then
         args = { args }
@@ -246,19 +257,18 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode)
                 eventName = eventKey
             end
 
-            if mode ~= "remove" and not self.registeredEvents[eventName] then
-                mode = "add"
+            if mode ~= "remove" and not self:IsNullOrEmpty(trigger) then
+                mode = (self.registeredEvents[eventName] and self.registeredEvents[eventName] ~= trigger) and "refresh" or "add"
 
-                if not self:IsNullOrEmpty(trigger) then
-                    self.registeredEvents[eventName] = trigger
-                    self:RegisterEvent(eventName, trigger)
-                    if log_output then
-                        self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
-                    end
-                elseif log_output then
-                    self:Print(strformat(L["COMMAND_EVENT_NO_TRIGGER"], mode, eventName))
+                self.registeredEvents[eventName] = trigger
+                if mode == "refresh" then
+                    self:UnregisterEvent(eventName)
                 end
-            elseif mode ~= "add" then
+                self:RegisterEvent(eventName, trigger)
+                if log_output then
+                    self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
+                end
+            elseif mode ~= "add" and self.registeredEvents[eventName] then
                 mode = "remove"
 
                 self.registeredEvents[eventName] = nil
