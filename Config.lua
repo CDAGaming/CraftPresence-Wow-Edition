@@ -65,48 +65,42 @@ local DB_DEFAULTS = {
         globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"],
         events = {
             ["PLAYER_LOGIN"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["PLAYER_LEVEL_UP"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["PLAYER_LEVEL_CHANGED"] = {
-                minimumTOC = "80000",
-                maximumTOC = "00000",
+                minimumTOC = "80000", maximumTOC = "",
                 ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_LEVEL_UP' end"),
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["PLAYER_ALIVE"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_DEAD' end"),
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["PLAYER_DEAD"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["PLAYER_FLAGS_CHANGED"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = [[
 function (self, lastName, name, args)
     return args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
@@ -117,48 +111,42 @@ end
                 enabled = true
             },
             ["ZONE_CHANGED"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["ZONE_CHANGED_NEW_AREA"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["ZONE_CHANGED_INDOORS"] = {
-                minimumTOC = "00000",
-                maximumTOC = "00000",
+                minimumTOC = "", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["PLAYER_SPECIALIZATION_CHANGED"] = {
-                minimumTOC = "50000",
-                maximumTOC = "00000",
+                minimumTOC = "50000", maximumTOC = "",
                 ignoreCallback = "function (self, lastName, name, args) return args[1] ~= 'player' end",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["ACTIVE_TALENT_GROUP_CHANGED"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = "function (self, lastName, name, args) return args[1] == args[2] end",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["ENCOUNTER_END"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = [[
 function (self, lastName, name, args)
     return (not IsInInstance() or args[5] ~= 1 or self:GetCachedLockout() == self:GetCurrentLockoutData(false))
@@ -169,40 +157,35 @@ end
                 enabled = true
             },
             ["CHALLENGE_MODE_START"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["CHALLENGE_MODE_COMPLETED"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["CHALLENGE_MODE_RESET"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["SCENARIO_COMPLETED"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
                 enabled = true
             },
             ["CRITERIA_COMPLETE"] = {
-                minimumTOC = "60000",
-                maximumTOC = "00000",
+                minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = "",
                 registerCallback = "",
                 eventCallback = "defaultEventCallback",
