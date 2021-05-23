@@ -395,7 +395,7 @@ end)
 --- Updates the minimap status with config data
 ---
 --- @param update_state boolean Whether or not to update the icon state
---- @param log_output boolean TBD
+--- @param log_output boolean Whether to allow logging for this function (Default: true)
 function CraftPresence:UpdateMinimapState(update_state, log_output)
     log_output = self:GetOrDefault(log_output, true)
     minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
