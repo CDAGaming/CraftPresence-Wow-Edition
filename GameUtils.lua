@@ -129,7 +129,7 @@ function CraftPresence:ParseGameData(force_instance_change)
     end
     -- Player Data
     local playerName = UnitName("player")
-    local playerStatus, playerPrefix = self:GetPlayerStatus()
+    local playerStatus, playerPrefix = self:GetPlayerStatus("player", true)
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
