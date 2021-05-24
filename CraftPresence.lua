@@ -491,18 +491,6 @@ function CraftPresence:ChatCommand(input)
                     -- Integration Parsing
                     if (lower_query == "reload" or lower_query == "rl") and ReloadUI then
                         ReloadUI()
-                    elseif (self:StartsWith(lower_query, "event")) then
-                        -- Sub-Query Parsing
-                        local _, _, eventQuery = self:FindMatches(query, " (.*)", false)
-                        if eventQuery ~= nil then
-                            self:ModifyTriggers(eventQuery, self.defaultEventCallback, self:GetFromDb("debugMode"))
-                        else
-                            self:Print(strformat(
-                                    L["LOG_ERROR"], strformat(
-                                            L["ERROR_COMMAND_UNKNOWN"], input
-                                    )
-                            ))
-                        end
                     else
                         self:Print(L["INTEGRATION_NOT_FOUND"])
                     end
