@@ -142,7 +142,7 @@ L["TITLE_VERBOSE_MODE"] = "Verbose Mode"
 L["COMMENT_VERBOSE_MODE"] = "Toggles the display of detailed debugger logging."
 
 L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
-L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config. (Requires reload)"
+L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config."
 
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
 L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate in a skip or queue style"

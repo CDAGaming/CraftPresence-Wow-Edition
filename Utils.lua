@@ -499,7 +499,7 @@ end
 CraftPresence.CombineTables = CraftPresence:vararg(2, function(self, rootTable, args)
     for _, dynTable in pairs(args) do
         if type(dynTable) == "table" then
-            for k,v in pairs(dynTable) do
+            for k, v in pairs(dynTable) do
                 rootTable[k] = v
             end
         end
@@ -833,7 +833,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
                             local oldValue = self.db.profile[rootKey][key][innerKey]
                             local isValid = (
                                     (valueType == "toggle" and type(newValue) == "boolean") or
-                                    (type(newValue) == "string")
+                                            (type(newValue) == "string")
                             )
                             if isValid then
                                 self.db.profile[rootKey][key][innerKey] = newValue
