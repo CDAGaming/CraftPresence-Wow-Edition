@@ -284,22 +284,26 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, ignore_co
             end
 
             if mode ~= "remove" and not self:IsNullOrEmpty(trigger) then
-                mode = (
-                        self.registeredEvents[eventName] and
-                                not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
-                ) and "refresh" or "add"
+                if not self:IsNullOrEmpty(trigger) then
+                    mode = (
+                            self.registeredEvents[eventName] and
+                                    not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
+                    ) and "refresh" or "add"
 
-                if mode == "refresh" then
-                    self:UnregisterEvent(eventName)
-                end
-                if (not self.registeredEvents[eventName] or
-                        not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
-                ) then
-                    self.registeredEvents[eventName] = event_data
-                    self:RegisterEvent(eventName, trigger)
-                    if log_output then
-                        self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
+                    if mode == "refresh" then
+                        self:UnregisterEvent(eventName)
                     end
+                    if (not self.registeredEvents[eventName] or
+                            not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
+                    ) then
+                        self.registeredEvents[eventName] = event_data
+                        self:RegisterEvent(eventName, trigger)
+                        if log_output then
+                            self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
+                        end
+                    end
+                elseif log_output then
+                    self:Print(strformat(L["COMMAND_EVENT_NO_TRIGGER"], mode, eventName))
                 end
             elseif mode ~= "add" and self.registeredEvents[eventName] then
                 mode = "remove"
