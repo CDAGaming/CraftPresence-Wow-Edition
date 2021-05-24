@@ -45,7 +45,7 @@ local minimapState = { hide = false }
 -- Build and Integration Data
 local buildData = {}
 local compatData = {}
-local integrationData = {}
+local activeIntegrations = {}
 local isRebasedApi = false
 -- Storage Data
 local global_placeholders = {}
@@ -424,11 +424,9 @@ end
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
     if self:IsNullOrEmpty(input) or input == "help" or input == "?" then
-        self:Print(
-                strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
-                        L["USAGE_CMD_HELP"] .. "\n" ..
+        self:PrintUsageCommand(
+                L["USAGE_CMD_HELP"] .. "\n" ..
                         L["USAGE_CMD_CONFIG"] .. "\n" ..
-                        L["USAGE_CMD_TEST"] .. "\n" ..
                         L["USAGE_CMD_CLEAN"] .. "\n" ..
                         L["USAGE_CMD_UPDATE"] .. "\n" ..
                         L["USAGE_CMD_MINIMAP"] .. "\n" ..
@@ -436,33 +434,23 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_RESET"] .. "\n" ..
                         L["USAGE_CMD_SET"] .. "\n" ..
                         L["USAGE_CMD_INTEGRATION"] .. "\n" ..
-                        L["USAGE_CMD_CREATE"] .. "\n" ..
-                        L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
-                        strformat(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                        L["USAGE_CMD_NOTE_TWO"] .. "\n"
+                        L["USAGE_CMD_PLACEHOLDERS"]
         )
     else
-        if input == "test" then
-            if self:GetFromDb("debugMode") then
-                self:PaintMessageWait(true, false, false)
-            else
-                self:Print(strformat(
-                        L["LOG_ERROR"], strformat(
-                                L["ERROR_COMMAND_CONFIG"], L["TITLE_DEBUG_MODE"]
-                        )
-                ))
-            end
-        elseif input == "clean" or input == "clear" then
+        if input == "clean" or input == "clear" then
             self:Print(L["COMMAND_CLEAR_SUCCESS"])
             self:CleanFrames()
             self:SetTimerLocked(false)
         elseif self:StartsWith(input, "update") then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
+            local forceMode, testerMode = false, false
             if query ~= nil then
                 query = strlower(query)
+                forceMode = query == "force"
+                testerMode = self:GetFromDb("debugMode") and query == "test"
             end
-            self:PaintMessageWait(true, true, true, nil, (query == "force" or query == "true"))
+            self:PaintMessageWait(true, not testerMode, not testerMode, nil, forceMode)
         elseif input == "config" then
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then
@@ -492,81 +480,11 @@ function CraftPresence:ChatCommand(input)
                         )
                 ))
             end
-        elseif self:StartsWith(input, "create") then
-            -- Query Parsing
-            local modifiable = self:StartsWith(input, "create:modify")
-            local _, _, typeQuery = self:FindMatches(input, "::(.*)::", false)
-            local _, _, query = self:FindMatches(input, " (.*)", false)
-
-            -- Sanity Check Type
-            if typeQuery ~= nil then
-                _, _, query = self:FindMatches(input, ":: (.*)", false)
-            else
-                typeQuery = "string"
-            end
-            -- Main Parsing
-            if query ~= nil then
-                local customPlaceholders = self:GetFromDb("customPlaceholders")
-                local splitQuery = self:Split(query, " ")
-                splitQuery[2] = self:GetOrDefault(splitQuery[2])
-                if customPlaceholders[splitQuery[1]] and not modifiable then
-                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
-                elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
-                    customPlaceholders[splitQuery[1]] = {
-                        ["type"] = typeQuery,
-                        ["data"] = splitQuery[2]
-                    }
-                    local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
-                    self:SetToDb("customPlaceholders", nil, customPlaceholders)
-                    self:Print(strformat(
-                            L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], self:SerializeTable(
-                                    customPlaceholders[splitQuery[1]]
-                            )
-                    ))
-
-                    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-                        config_registry:NotifyChange(L["ADDON_NAME"])
-                    end
-                else
-                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_CONFLICT"]))
-                end
-            else
-                self:Print(
-                        strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
-                                L["USAGE_CMD_CREATE"] .. "\n" ..
-                                strformat(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                                L["USAGE_CMD_NOTE_TWO"] .. "\n"
-                )
-            end
-        elseif self:StartsWith(input, "remove") then
-            -- Query Parsing
-            local _, _, query = self:FindMatches(input, " (.*)", false)
-            if query ~= nil then
-                local customPlaceholders = self:GetFromDb("customPlaceholders")
-                if customPlaceholders[query] then
-                    customPlaceholders[query] = nil
-                    self:SetToDb("customPlaceholders", nil, customPlaceholders)
-                    self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], query))
-
-                    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-                        config_registry:NotifyChange(L["ADDON_NAME"])
-                    end
-                else
-                    self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
-                end
-            else
-                self:Print(
-                        strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
-                                L["USAGE_CMD_REMOVE"] .. "\n" ..
-                                strformat(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                                L["USAGE_CMD_NOTE_TWO"] .. "\n"
-                )
-            end
         elseif self:StartsWith(input, "integration") then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
-                if not integrationData[query] then
+                if not activeIntegrations[query] then
                     self:Print(strformat(L["INTEGRATION_QUERY"], query))
                     local lower_query = strlower(query)
 
@@ -592,35 +510,100 @@ function CraftPresence:ChatCommand(input)
                     self:Print(L["INTEGRATION_ALREADY_USED"])
                 end
             else
-                self:Print(
-                        strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
-                                L["USAGE_CMD_INTEGRATION"] .. "\n" ..
-                                strformat(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                                L["USAGE_CMD_NOTE_TWO"] .. "\n"
-                )
+                self:PrintUsageCommand(L["USAGE_CMD_INTEGRATION"])
             end
         elseif self:StartsWith(input, "placeholders") then
             local placeholderStr = L["PLACEHOLDERS_FOUND_INTRO"]
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
-            local foundAny = false
             if query ~= nil then
-                self:Print(strformat(L["PLACEHOLDERS_QUERY"], query))
-                query = strlower(query)
+                if self:StartsWith(query, "create") then
+                    -- Sub-Query Parsing
+                    local modifiable = self:StartsWith(query, "create:modify")
+                    local _, _, typeQuery = self:FindMatches(query, "::(.*)::", false)
+                    local _, _, sub_query = self:FindMatches(query, " (.*)", false)
+
+                    -- Sanity Check Type
+                    if typeQuery ~= nil then
+                        _, _, sub_query = self:FindMatches(query, ":: (.*)", false)
+                    else
+                        typeQuery = "string"
+                    end
+                    -- Main Parsing
+                    if sub_query ~= nil then
+                        local customPlaceholders = self:GetFromDb("customPlaceholders")
+                        local splitQuery = self:Split(sub_query, " ")
+                        splitQuery[2] = self:GetOrDefault(splitQuery[2])
+                        if customPlaceholders[splitQuery[1]] and not modifiable then
+                            self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
+                        elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
+                            customPlaceholders[splitQuery[1]] = {
+                                ["type"] = typeQuery,
+                                ["data"] = splitQuery[2]
+                            }
+                            local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
+                            self:SetToDb("customPlaceholders", nil, customPlaceholders)
+                            self:Print(strformat(
+                                    L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], self:SerializeTable(
+                                            customPlaceholders[splitQuery[1]]
+                                    )
+                            ))
+
+                            if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+                                config_registry:NotifyChange(L["ADDON_NAME"])
+                            end
+                        else
+                            self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_CONFLICT"]))
+                        end
+                    else
+                        self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                    end
+                elseif self:StartsWith(query, "remove") then
+                    -- Sub-Query Parsing
+                    local _, _, sub_query = self:FindMatches(query, " (.*)", false)
+                    if sub_query ~= nil then
+                        local customPlaceholders = self:GetFromDb("customPlaceholders")
+                        if customPlaceholders[sub_query] then
+                            customPlaceholders[sub_query] = nil
+                            self:SetToDb("customPlaceholders", nil, customPlaceholders)
+                            self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], sub_query))
+
+                            if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+                                config_registry:NotifyChange(L["ADDON_NAME"])
+                            end
+                        else
+                            self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
+                        end
+                    else
+                        self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                    end
+                elseif self:StartsWith(query, "list") then
+                    -- Sub-Query Parsing
+                    local _, _, sub_query = self:FindMatches(query, " (.*)", false)
+                    local foundAny = false
+                    if sub_query ~= nil then
+                        self:Print(strformat(L["PLACEHOLDERS_QUERY"], sub_query))
+                        sub_query = strlower(sub_query)
+                    end
+                    -- Global placeholder iteration to form placeholderString
+                    foundAny, placeholderStr = self:ParsePlaceholderTable(sub_query, global_placeholders, foundAny, placeholderStr)
+                    -- Inner placeholder iteration to form placeholderString
+                    foundAny, placeholderStr = self:ParsePlaceholderTable(sub_query, inner_placeholders, foundAny, placeholderStr)
+                    -- Custom placeholder iteration to form placeholderString
+                    foundAny, placeholderStr = self:ParsePlaceholderTable(sub_query, custom_placeholders, foundAny, placeholderStr)
+                    -- Final parsing of placeholderString before printing
+                    if not foundAny then
+                        placeholderStr = placeholderStr .. "\n " .. L["PLACEHOLDERS_FOUND_NONE"]
+                    end
+                    placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
+                    self:Print(placeholderStr)
+                else
+                    self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                end
+            else
+                self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
             end
-            -- Global placeholder iteration to form placeholderString
-            foundAny, placeholderStr = self:ParsePlaceholderTable(query, global_placeholders, foundAny, placeholderStr)
-            -- Inner placeholder iteration to form placeholderString
-            foundAny, placeholderStr = self:ParsePlaceholderTable(query, inner_placeholders, foundAny, placeholderStr)
-            -- Custom placeholder iteration to form placeholderString
-            foundAny, placeholderStr = self:ParsePlaceholderTable(query, custom_placeholders, foundAny, placeholderStr)
-            -- Final parsing of placeholderString before printing
-            if not foundAny then
-                placeholderStr = placeholderStr .. "\n " .. L["PLACEHOLDERS_FOUND_NONE"]
-            end
-            placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
-            self:Print(placeholderStr)
         elseif self:StartsWith(input, "set") then
             local _, _, query = self:FindMatches(input, " (.*)", false)
             LibStub("AceConfigCmd-3.0"):HandleCommand(L["COMMAND_CONFIG"], L["ADDON_NAME"], self:GetOrDefault(query))
@@ -632,4 +615,13 @@ function CraftPresence:ChatCommand(input)
             ))
         end
     end
+end
+
+function CraftPresence:PrintUsageCommand(usage)
+    self:Print(
+            strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+                    usage .. "\n" ..
+                    strformat(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                    L["USAGE_CMD_NOTE_TWO"] .. "\n"
+    )
 end
