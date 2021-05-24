@@ -234,12 +234,23 @@ L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
-L["PLACEHOLDERS_QUERY"] = setfmt("Searching for placeholders containing *%s|r...", GREY)
-L["PLACEHOLDERS_FOUND_INTRO"] = setfmt("Available Placeholders (*<key>|r => ^<value>|r):", GREEN, GREY)
-L["PLACEHOLDERS_FOUND_NONE"] = setfmt("*No placeholders found within specified parameters|r", RED)
-L["PLACEHOLDERS_FOUND_DATA"] = setfmt("*%s|r => ^%s|r", GREEN, GREY)
 L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),", GREEN, outkey)
 L["PLACEHOLDERS_NOTE_TWO"] = setfmt("while ones enclosed by *^|r are inner (Cannot have any other keys)", GREY, inkey)
+
+-- Dynamic Data - Access
+L["DATA_QUERY"] = setfmt("Searching for %s containing *%s|r...", GREY)
+L["DATA_FOUND_INTRO"] = setfmt("Available %s (*<key>|r => ^<value>|r):", GREEN, GREY)
+L["DATA_FOUND_NONE"] = setfmt("*No %s found within specified parameters|r", RED)
+L["DATA_FOUND_DATA"] = setfmt("*%s|r => ^%s|r", GREEN, GREY)
+
+-- Dynamic Data - Creation
+L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the following data: ^%s|r", GREEN, GREY)
+L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other data, please use the create:modify cmd"
+L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with a protected data)"
+
+-- Dynamic Data - Removal
+L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed key within ^%s|r => *%s|r", GREEN, GREY)
+L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
 
 -- Command: /cp integration
 L["INTEGRATION_QUERY"] = setfmt("Enabling integrations for *%s|r...", GREY)
@@ -248,15 +259,6 @@ L["INTEGRATION_ALREADY_USED"] = setfmt("*Specified integration has already been 
 
 -- Command: /cp clear|clean
 L["COMMAND_CLEAR_SUCCESS"] = "Clearing active frame data..."
-
--- Command: /cp create
-L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom placeholder *%s|r with the following data: %s", GREEN, GREY)
-L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other placeholders, please use the create:modify cmd"
-L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with a protected placeholder)"
-
--- Command: /cp remove
-L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed custom placeholder *%s|r", GREEN)
-L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
 
 -- Integration: Event Modification
 L["COMMAND_EVENT_SUCCESS"] = setfmt("Successfully performed operation ^%s|r on *%s|r with binding *%s|r", GREEN, GREY)
@@ -277,6 +279,7 @@ L["USAGE_CMD_RESET"] = setfmt(" */cp|r ^reset[:grp,key]|r  -  Reset options in t
 L["USAGE_CMD_SET"] = setfmt(" */cp|r ^set[:grp,key]|r  -  Set options in the *ConfigUI|r.", GREEN, GREY)
 L["USAGE_CMD_INTEGRATION"] = setfmt(" */cp|r ^integration[:query]|r  -  Enable integrations.", GREEN, GREY)
 L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders[create,remove,list][:query]|r  -  Access RPC placeholders.", GREEN, GREY)
+L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events[create,remove,list][:query]|r  -  Access Event Data.", GREEN, GREY)
 
 L["USAGE_CMD_NOTE"] = setfmt("NOTE: All commands must be prefixed with either */%s|r or */%s|r.", GREEN, GREY)
 L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented by *[syntax]|r.", GREEN, GREY)

@@ -29,7 +29,7 @@ CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
 
 -- Lua APIs
-local strformat, strlower = string.format, string.lower
+local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tostring, pairs, unpack = tostring, pairs, unpack
 local type, max, tinsert = type, math.max, table.insert
 
@@ -434,7 +434,8 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_RESET"] .. "\n" ..
                         L["USAGE_CMD_SET"] .. "\n" ..
                         L["USAGE_CMD_INTEGRATION"] .. "\n" ..
-                        L["USAGE_CMD_PLACEHOLDERS"]
+                        L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
+                        L["USAGE_CMD_EVENTS"]
         )
     else
         if input == "clean" or input == "clear" then
@@ -500,97 +501,135 @@ function CraftPresence:ChatCommand(input)
             else
                 self:PrintUsageCommand(L["USAGE_CMD_INTEGRATION"])
             end
-        elseif self:StartsWith(input, "placeholders") then
-            local placeholderStr = L["PLACEHOLDERS_FOUND_INTRO"]
+        elseif self:StartsWith(input, "placeholders") or self:StartsWith(input, "events") then
+            -- Parse tag name and table target
+            local tag_name, tag_table = "", ""
+            if self:StartsWith(input, "placeholders") then
+                tag_name, tag_table = "placeholders", "customPlaceholders"
+            elseif self:StartsWith(input, "events") then
+                tag_name, tag_table = "events", "events"
+            end
+            local resultStr = strformat(L["DATA_FOUND_INTRO"], tag_name)
             global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
-                if self:StartsWith(query, "create") then
+                if self:StartsWith(query, "create") or self:StartsWith(query, "add") then
                     -- Sub-Query Parsing
                     local modifiable = self:StartsWith(query, "create:modify")
-                    local _, _, typeQuery = self:FindMatches(query, "::(.*)::", false)
                     local _, _, sub_query = self:FindMatches(query, " (.*)", false)
 
-                    -- Sanity Check Type
-                    if typeQuery ~= nil then
-                        _, _, sub_query = self:FindMatches(query, ":: (.*)", false)
-                    else
-                        typeQuery = "string"
+                    -- Type Query Parsing (Dependent on tag name)
+                    local _, _, typeQuery
+                    if tag_name == "placeholders" then
+                        _, _, typeQuery = self:FindMatches(query, "::(.*)::", false)
+                        if typeQuery ~= nil then
+                            _, _, sub_query = self:FindMatches(query, ":: (.*)", false)
+                        end
                     end
+                    typeQuery = self:GetOrDefault(typeQuery, "string")
+
                     -- Main Parsing
                     if sub_query ~= nil then
-                        local customPlaceholders = self:GetFromDb("customPlaceholders")
+                        local tag_data = self:GetFromDb(tag_table)
                         local splitQuery = self:Split(sub_query, " ")
-                        splitQuery[2] = self:GetOrDefault(splitQuery[2])
-                        if customPlaceholders[splitQuery[1]] and not modifiable then
+                        if tag_data[splitQuery[1]] and not modifiable then
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
-                        elseif not (global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]) then
-                            customPlaceholders[splitQuery[1]] = {
-                                ["type"] = typeQuery,
-                                ["data"] = splitQuery[2]
-                            }
+                        elseif (
+                                tag_name ~= "placeholders" or not (
+                                        global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]
+                                )
+                        ) then
+                            if tag_name == "placeholders" then
+                                tag_data[splitQuery[1]] = {
+                                    ["type"] = typeQuery,
+                                    ["data"] = self:GetOrDefault(splitQuery[2])
+                                }
+                            elseif tag_name == "events" then
+                                -- Pre-Filled Data is supplied for events
+                                -- Primarily as 6 fields is way to long for any command
+                                tag_data[splitQuery[1]] = {
+                                    minimumTOC = "", maximumTOC = "",
+                                    ignoreCallback = "",
+                                    registerCallback = "",
+                                    eventCallback = "function(self) return self.defaultEventCallback end",
+                                    enabled = true
+                                }
+                            end
                             local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
-                            self:SetToDb("customPlaceholders", nil, customPlaceholders)
+                            self:SetToDb(tag_table, nil, tag_data)
                             self:Print(strformat(
-                                    L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], self:SerializeTable(
-                                            customPlaceholders[splitQuery[1]]
-                                    )
+                                    L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], tag_name,
+                                    self:SerializeTable(tag_data[splitQuery[1]])
                             ))
 
                             if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
                                 config_registry:NotifyChange(L["ADDON_NAME"])
                             end
+
+                            -- Additional events, dependent on tag name
+                            if tag_name == "events" then
+                                self:SyncEvents(tag_data, self:GetFromDb("debugMode"))
+                            end
                         else
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_CONFLICT"]))
                         end
                     else
-                        self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                        self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
                     end
                 elseif self:StartsWith(query, "remove") then
                     -- Sub-Query Parsing
                     local _, _, sub_query = self:FindMatches(query, " (.*)", false)
                     if sub_query ~= nil then
-                        local customPlaceholders = self:GetFromDb("customPlaceholders")
-                        if customPlaceholders[sub_query] then
-                            customPlaceholders[sub_query] = nil
-                            self:SetToDb("customPlaceholders", nil, customPlaceholders)
-                            self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], sub_query))
+                        local tag_data = self:GetFromDb(tag_table)
+                        if tag_data[sub_query] then
+                            tag_data[sub_query] = nil
+                            self:SetToDb(tag_table, nil, tag_data)
+                            self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, sub_query))
 
                             if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
                                 config_registry:NotifyChange(L["ADDON_NAME"])
+                            end
+
+                            -- Additional events, dependent on tag name
+                            if tag_name == "events" then
+                                self:SyncEvents(tag_data, self:GetFromDb("debugMode"))
                             end
                         else
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
                         end
                     else
-                        self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                        self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
                     end
                 elseif self:StartsWith(query, "list") then
                     -- Sub-Query Parsing
                     local _, _, sub_query = self:FindMatches(query, " (.*)", false)
                     local foundAny = false
                     if sub_query ~= nil then
-                        self:Print(strformat(L["PLACEHOLDERS_QUERY"], sub_query))
+                        self:Print(strformat(L["DATA_QUERY"], tag_name, sub_query))
                         sub_query = strlower(sub_query)
                     end
-                    -- Global placeholder iteration to form placeholderString
-                    foundAny, placeholderStr = self:ParsePlaceholderTable(sub_query, global_placeholders, foundAny, placeholderStr)
-                    -- Inner placeholder iteration to form placeholderString
-                    foundAny, placeholderStr = self:ParsePlaceholderTable(sub_query, inner_placeholders, foundAny, placeholderStr)
-                    -- Custom placeholder iteration to form placeholderString
-                    foundAny, placeholderStr = self:ParsePlaceholderTable(sub_query, custom_placeholders, foundAny, placeholderStr)
-                    -- Final parsing of placeholderString before printing
-                    if not foundAny then
-                        placeholderStr = placeholderStr .. "\n " .. L["PLACEHOLDERS_FOUND_NONE"]
+
+                    local tag_data = {}
+                    if tag_name == "placeholders" then
+                        tag_data = self:CombineTables(global_placeholders, inner_placeholders, custom_placeholders)
+                    elseif tag_name == "events" then
+                        tag_data = self:GetFromDb(tag_table)
                     end
-                    placeholderStr = placeholderStr .. "\n" .. L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
-                    self:Print(placeholderStr)
+                    -- Iterate through dataTable to form resultString
+                    foundAny, resultStr = self:ParseDynamicTable(tag_name, sub_query, tag_data, foundAny, resultStr)
+
+                    -- Final parsing of resultString before printing
+                    if not foundAny then
+                        resultStr = resultStr .. "\n " .. strformat(L["DATA_FOUND_NONE"], tag_name)
+                    end
+                    resultStr = resultStr .. "\n" .. L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
+                    self:Print(resultStr)
                 else
-                    self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                    self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
                 end
             else
-                self:PrintUsageCommand(L["USAGE_CMD_PLACEHOLDERS"])
+                self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
             end
         elseif self:StartsWith(input, "set") then
             local _, _, query = self:FindMatches(input, " (.*)", false)
@@ -605,7 +644,12 @@ function CraftPresence:ChatCommand(input)
     end
 end
 
+--- Displays the specified usage command in a help text format
+--- (INTERNAL USAGE ONLY)
+---
+--- @param usage string The usage command text
 function CraftPresence:PrintUsageCommand(usage)
+    usage = self:GetOrDefault(usage)
     self:Print(
             strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
                     usage .. "\n" ..

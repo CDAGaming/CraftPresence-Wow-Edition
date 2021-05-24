@@ -491,6 +491,22 @@ function CraftPresence:AreTablesEqual(t1, t2)
     return self:SerializeTable(t1) == self:SerializeTable(t2)
 end
 
+--- Return a combination of tables, depending on arguments
+---
+--- @param rootTable table The root table to combine data into
+---
+--- @return table @ combined_table
+CraftPresence.CombineTables = CraftPresence:vararg(2, function(self, rootTable, args)
+    for _, dynTable in pairs(args) do
+        if type(dynTable) == "table" then
+            for k,v in pairs(dynTable) do
+                rootTable[k] = v
+            end
+        end
+    end
+    return rootTable
+end)
+
 --[[ API UTILITIES ]]--
 
 local fallbackVersion, fallbackTOC = "0.0.0", 00000
@@ -696,20 +712,22 @@ function CraftPresence:IsTimerLocked()
     return timer_locked
 end
 
---- Parse a Placeholder Table with the specified filter for any matches
+--- Parse a Dynamic Table with the specified filter(s) for any matches
 --- (INTERNAL USAGE ONLY)
 ---
+--- @param tagName string The tag name that determines how data is processed in this method
 --- @param query string The query to filter the placeholderTable by
---- @param placeholderTable table The table to iterate through
---- @param found_placeholders boolean Output Value -- If any placeholders were found before or after
---- @param placeholderStr string Output Value -- The current placeholder result string
+--- @param dataTable table The table to iterate through
+--- @param found_data boolean Output Value -- If any placeholders were found before or after
+--- @param resultString string Output Value -- The current placeholder result string
 ---
---- @return boolean, string @ found_placeholders, placeholderStr
-function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_placeholders, placeholderStr)
-    placeholderTable = self:GetOrDefault(placeholderTable, {})
-    found_placeholders = self:GetOrDefault(found_placeholders, false)
-    placeholderStr = self:GetOrDefault(placeholderStr)
-    for key, value in pairs(placeholderTable) do
+--- @return boolean, string @ found_data, resultString
+function CraftPresence:ParseDynamicTable(tagName, query, dataTable, found_data, resultString)
+    tagName = self:GetOrDefault(tagName)
+    dataTable = self:GetOrDefault(dataTable, {})
+    found_data = self:GetOrDefault(found_data, false)
+    resultString = self:GetOrDefault(resultString)
+    for key, value in pairs(dataTable) do
         local strKey = tostring(key)
         local strValue = tostring(value)
         if type(value) == "table" then
@@ -719,13 +737,13 @@ function CraftPresence:ParsePlaceholderTable(query, placeholderTable, found_plac
                 self:FindMatches(strlower(strKey), query, false, 1, true) or
                         self:FindMatches(strlower(strValue), query, false, 1, true))
         ) then
-            found_placeholders = true
-            placeholderStr = placeholderStr .. "\n " .. (strformat(
-                    L["PLACEHOLDERS_FOUND_DATA"], strKey, strValue
+            found_data = true
+            resultString = resultString .. "\n " .. (strformat(
+                    L["DATA_FOUND_DATA"], strKey, strValue
             ))
         end
     end
-    return found_placeholders, placeholderStr
+    return found_data, resultString
 end
 
 --[[ CONFIG GETTERS AND SETTERS ]]--
