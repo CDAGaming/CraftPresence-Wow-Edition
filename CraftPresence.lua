@@ -30,8 +30,8 @@ CraftPresence.defaultEventCallback = ""
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
-local tostring, pairs, unpack = tostring, pairs, unpack
-local type, max, tinsert = type, math.max, table.insert
+local tostring, pairs, unpack, type, max = tostring, pairs, unpack, type, math.max
+local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -439,19 +439,17 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_EVENTS"]
         )
     else
-        local _, _, command = self:FindMatches(input, "(.*) ", false)
-        command = strlower((not self:IsNullOrEmpty(command) and command) or input)
+        local command_query = self:Split(input, " ", true, true)
+        local command = strlower(command_query[1])
 
         if command == "clean" or command == "clear" then
             self:Print(L["COMMAND_CLEAR_SUCCESS"])
             self:CleanFrames()
             self:SetTimerLocked(false)
         elseif command == "update" then
-            -- Query Parsing
-            local _, _, query = self:FindMatches(input, " (.*)", false)
             local forceMode, testerMode = false, false
-            if query ~= nil then
-                query = strlower(query)
+            if command_query[2] ~= nil then
+                local query = strlower(command_query[2])
                 forceMode = query == "force"
                 testerMode = self:GetFromDb("debugMode") and query == "test"
             end
@@ -459,11 +457,9 @@ function CraftPresence:ChatCommand(input)
         elseif command == "config" then
             self:ShowConfig()
         elseif command == "reset" then
-            local _, _, query = self:FindMatches(input, " (.*)", false)
-            local reset_single = (query ~= nil)
+            local reset_single = (command_query[2] ~= nil)
             if reset_single then
-                local _, _, sub_query = self:FindMatches(query, ",(.*)", false)
-                self:GetFromDb(query, sub_query, true)
+                self:GetFromDb(command_query[2], command_query[3], true)
             end
             self:UpdateProfile(true, not reset_single, "all")
         elseif command == "minimap" then
@@ -482,12 +478,10 @@ function CraftPresence:ChatCommand(input)
                 ))
             end
         elseif command == "integration" then
-            -- Query Parsing
-            local _, _, query = self:FindMatches(input, " (.*)", false)
-            if query ~= nil then
-                if not activeIntegrations[query] then
-                    self:Print(strformat(L["INTEGRATION_QUERY"], query))
-                    local lower_query = strlower(query)
+            if command_query[2] ~= nil then
+                if not activeIntegrations[command_query[2]] then
+                    self:Print(strformat(L["INTEGRATION_QUERY"], command_query[2]))
+                    local lower_query = strlower(command_query[2])
 
                     -- Integration Parsing
                     if (lower_query == "reload" or lower_query == "rl") and ReloadUI then
@@ -515,56 +509,43 @@ function CraftPresence:ChatCommand(input)
             end
             local resultStr = strformat(L["DATA_FOUND_INTRO"], tag_name)
 
-            -- Query Parsing
-            local _, _, query = self:FindMatches(input, " (.*)", false)
-            if query ~= nil then
-                if self:StartsWith(query, "create") or self:StartsWith(query, "add") then
+            if command_query[2] ~= nil then
+                local flag_query = self:Split(command_query[2], ":", false, true)
+                if flag_query[1] == "create" or flag_query[1] == "add" then
                     -- Sub-Query Parsing
-                    local modifiable = self:StartsWith(query, "create:modify")
-                    local _, _, sub_query = self:FindMatches(query, " (.*)", false)
-
-                    -- Type Query Parsing (Dependent on tag name)
-                    local _, _, typeQuery
-                    if tag_name == "placeholders" then
-                        _, _, typeQuery = self:FindMatches(query, "::(.*)::", false)
-                        if typeQuery ~= nil then
-                            _, _, sub_query = self:FindMatches(query, ":: (.*)", false)
-                        end
-                    end
-                    typeQuery = self:GetOrDefault(typeQuery, "string")
+                    local modifiable = flag_query[2] == "modify"
 
                     -- Main Parsing
-                    if sub_query ~= nil then
+                    if command_query[3] ~= nil then
                         local tag_data = self:GetFromDb(tag_table)
-                        local splitQuery = self:Split(sub_query, " ")
-                        if tag_data[splitQuery[1]] and not modifiable then
+                        if tag_data[command_query[3]] and not modifiable then
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
                         elseif (
                                 tag_name ~= "placeholders" or not (
-                                        global_placeholders[splitQuery[1]] or inner_placeholders[splitQuery[1]]
+                                        global_placeholders[command_query[3]] or inner_placeholders[command_query[3]]
                                 )
                         ) then
+                            -- Some Pre-Filled Data is supplied for these areas
+                            -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
-                                tag_data[splitQuery[1]] = {
-                                    ["type"] = typeQuery,
-                                    ["data"] = self:GetOrDefault(splitQuery[2])
+                                tag_data[command_query[3]] = {
+                                    ["type"] = self:GetOrDefault(command_query[4], "string"),
+                                    ["data"] = ""
                                 }
                             elseif tag_name == "events" then
-                                -- Some Pre-Filled Data is supplied for events
-                                -- Primarily as some fields are way to long for any command
-                                tag_data[splitQuery[1]] = {
-                                    minimumTOC = self:GetOrDefault(splitQuery[3]),
-                                    maximumTOC = self:GetOrDefault(splitQuery[4]),
+                                tag_data[command_query[3]] = {
+                                    minimumTOC = self:GetOrDefault(command_query[5]),
+                                    maximumTOC = self:GetOrDefault(command_query[6]),
                                     ignoreCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
-                                    enabled = (self:GetOrDefault(splitQuery[2], "true") == "true")
+                                    enabled = (self:GetOrDefault(command_query[4], "true") == "true")
                                 }
                             end
                             local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
                             self:SetToDb(tag_table, nil, tag_data)
                             self:Print(strformat(
-                                    L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], tag_name,
-                                    self:SerializeTable(tag_data[splitQuery[1]])
+                                    L["COMMAND_CREATE_SUCCESS"], eventState, command_query[3], tag_name,
+                                    self:SerializeTable(tag_data[command_query[3]])
                             ))
                             self:UpdateProfile(true, false, tag_name)
                         else
@@ -573,15 +554,13 @@ function CraftPresence:ChatCommand(input)
                     else
                         self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
                     end
-                elseif self:StartsWith(query, "remove") then
-                    -- Sub-Query Parsing
-                    local _, _, sub_query = self:FindMatches(query, " (.*)", false)
-                    if sub_query ~= nil then
+                elseif flag_query[1] == "remove" then
+                    if command_query[3] ~= nil then
                         local tag_data = self:GetFromDb(tag_table)
-                        if tag_data[sub_query] then
-                            tag_data[sub_query] = nil
+                        if tag_data[command_query[3]] then
+                            tag_data[command_query[3]] = nil
                             self:SetToDb(tag_table, nil, tag_data)
-                            self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, sub_query))
+                            self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, command_query[3]))
                             self:UpdateProfile(true, false, tag_name)
                         else
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
@@ -589,13 +568,10 @@ function CraftPresence:ChatCommand(input)
                     else
                         self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
                     end
-                elseif self:StartsWith(query, "list") then
-                    -- Sub-Query Parsing
-                    local _, _, sub_query = self:FindMatches(query, " (.*)", false)
+                elseif flag_query[1] == "list" then
                     local foundAny = false
-                    if sub_query ~= nil then
-                        self:Print(strformat(L["DATA_QUERY"], tag_name, sub_query))
-                        sub_query = strlower(sub_query)
+                    if command_query[3] ~= nil then
+                        self:Print(strformat(L["DATA_QUERY"], tag_name, command_query[3]))
                     end
 
                     local tag_data = {}
@@ -605,7 +581,7 @@ function CraftPresence:ChatCommand(input)
                         tag_data = self:GetFromDb(tag_table)
                     end
                     -- Iterate through dataTable to form resultString
-                    foundAny, resultStr = self:ParseDynamicTable(tag_name, sub_query, tag_data, foundAny, resultStr)
+                    foundAny, resultStr = self:ParseDynamicTable(tag_name, command_query[3], tag_data, foundAny, resultStr)
 
                     -- Final parsing of resultString before printing
                     if not foundAny then
@@ -620,8 +596,12 @@ function CraftPresence:ChatCommand(input)
                 self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
             end
         elseif command == "set" then
-            local _, _, query = self:FindMatches(input, " (.*)", false)
-            LibStub("AceConfigCmd-3.0"):HandleCommand(L["COMMAND_CONFIG"], L["ADDON_NAME"], self:GetOrDefault(query))
+            local query = command_query
+            tremove(query, 1)
+            LibStub("AceConfigCmd-3.0"):HandleCommand(
+                    L["COMMAND_CONFIG"], L["ADDON_NAME"], self:GetOrDefault(tconcat(query, " "))
+            )
+            self:UpdateProfile(true, false, "all")
         else
             self:Print(strformat(
                     L["LOG_ERROR"], strformat(
