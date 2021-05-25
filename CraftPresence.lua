@@ -213,7 +213,8 @@ function CraftPresence:OnDisable()
     if icon then
         icon:Hide(L["ADDON_NAME"])
     end
-    -- Un-register Events
+    -- Un-register all active events
+    -- Note: SyncEvents is not used here so that manually added events are also properly cleared
     self:ModifyTriggers(self.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
 end
 
@@ -501,16 +502,17 @@ function CraftPresence:ChatCommand(input)
             else
                 self:PrintUsageCommand(L["USAGE_CMD_INTEGRATION"])
             end
-        elseif self:StartsWith(input, "placeholders") or self:StartsWith(input, "events") then
-            -- Parse tag name and table target
+        elseif self:StartsWith(input, "placeholder") or self:StartsWith(input, "event") then
+            -- Parse tag name and table target from command input
             local tag_name, tag_table = "", ""
-            if self:StartsWith(input, "placeholders") then
+            if self:StartsWith(input, "placeholders") or self:StartsWith(input, "placeholder") then
                 tag_name, tag_table = "placeholders", "customPlaceholders"
-            elseif self:StartsWith(input, "events") then
+                global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
+            elseif self:StartsWith(input, "events") or self:StartsWith(input, "event") then
                 tag_name, tag_table = "events", "events"
             end
             local resultStr = strformat(L["DATA_FOUND_INTRO"], tag_name)
-            global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
+
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
@@ -546,14 +548,14 @@ function CraftPresence:ChatCommand(input)
                                     ["data"] = self:GetOrDefault(splitQuery[2])
                                 }
                             elseif tag_name == "events" then
-                                -- Pre-Filled Data is supplied for events
-                                -- Primarily as 6 fields is way to long for any command
+                                -- Some Pre-Filled Data is supplied for events
+                                -- Primarily as some fields are way to long for any command
                                 tag_data[splitQuery[1]] = {
-                                    minimumTOC = "", maximumTOC = "",
-                                    ignoreCallback = "",
-                                    registerCallback = "",
+                                    minimumTOC = self:GetOrDefault(splitQuery[3]),
+                                    maximumTOC = self:GetOrDefault(splitQuery[4]),
+                                    ignoreCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
-                                    enabled = true
+                                    enabled = (self:GetOrDefault(splitQuery[2], "true") == "true")
                                 }
                             end
                             local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
