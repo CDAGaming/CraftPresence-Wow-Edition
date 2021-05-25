@@ -188,11 +188,11 @@ L["TITLE_BUTTON_ENABLED"] = "Enabled"
 L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used"
 
 L["TITLE_BUTTON_MINIMUMTOC"] = "Minimum TOC"
-L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with\n(Note: <=00000 == CurrentTOC)"
+L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with\n(Default: CurrentTOC)"
 L["USAGE_BUTTON_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
 L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
-L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with\n(Note: <=00000 == CurrentTOC)"
+L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with\n(Default: CurrentTOC)"
 L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
 L["TITLE_BUTTON_IGNORECALLBACK"] = "Ignore Callback"
@@ -234,8 +234,12 @@ L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
-L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),", GREEN, outkey)
-L["PLACEHOLDERS_NOTE_TWO"] = setfmt("while ones enclosed by *^|r are inner (Cannot have any other keys)", GREY, inkey)
+L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),",
+        GREEN, outkey
+)
+L["PLACEHOLDERS_NOTE_TWO"] = setfmt("while ones enclosed by *^|r are inner (Cannot have any other keys)",
+        GREY, inkey
+)
 
 -- Dynamic Data - Access
 L["DATA_QUERY"] = setfmt("Searching for %s containing *%s|r...", GREY)
@@ -244,12 +248,16 @@ L["DATA_FOUND_NONE"] = setfmt("*No %s found within specified parameters|r", RED)
 L["DATA_FOUND_DATA"] = setfmt("*%s|r => ^%s|r", GREEN, GREY)
 
 -- Dynamic Data - Creation
-L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the following data: ^%s|r", GREEN, GREY)
+L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the following data: ^%s|r",
+        GREEN, GREY
+)
 L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other data, please use the create:modify cmd"
 L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with a protected data)"
 
 -- Dynamic Data - Removal
-L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed key within ^%s|r => *%s|r", GREEN, GREY)
+L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed key within ^%s|r => *%s|r",
+        GREEN, GREY
+)
 L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
 
 -- Command: /cp integration
@@ -261,28 +269,58 @@ L["INTEGRATION_ALREADY_USED"] = setfmt("*Specified integration has already been 
 L["COMMAND_CLEAR_SUCCESS"] = "Clearing active frame data..."
 
 -- Integration: Event Modification
-L["COMMAND_EVENT_SUCCESS"] = setfmt("Successfully performed operation ^%s|r on *%s|r with binding *%s|r", GREEN, GREY)
-L["COMMAND_EVENT_NO_TRIGGER"] = setfmt("Unable to perform operation ^%s|r on *%s|r (Invalid trigger)", GREEN, GREY)
+L["COMMAND_EVENT_SUCCESS"] = setfmt("Successfully performed operation ^%s|r on *%s|r with binding *%s|r",
+        GREEN, GREY
+)
+L["COMMAND_EVENT_NO_TRIGGER"] = setfmt("Unable to perform operation ^%s|r on *%s|r (Invalid trigger)",
+        GREEN, GREY
+)
 
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
 -- General Command Data
 L["USAGE_CMD_INTRO"] = setfmt("*%s|r Command Usage:", GREEN)
-L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.", GREEN, GREY)
-L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Displays the *ConfigUI|r.", GREEN, GREY)
-L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.", GREEN, GREY)
-L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [force,test]|r  -  Force or Debug an RPC update.", GREEN, GREY)
-L["USAGE_CMD_MINIMAP"] = setfmt(" */cp|r ^minimap|r  -  Toggles the minimap button.", GREEN, GREY)
-L["USAGE_CMD_STATUS"] = setfmt(" */cp|r ^status|r  -  Views the last sent RPC event.", GREEN, GREY)
-L["USAGE_CMD_RESET"] = setfmt(" */cp|r ^reset [grp,key]|r  -  Reset options in the *ConfigUI|r.", GREEN, GREY)
-L["USAGE_CMD_SET"] = setfmt(" */cp|r ^set [grp,key]|r  -  Set options in the *ConfigUI|r.", GREEN, GREY)
-L["USAGE_CMD_INTEGRATION"] = setfmt(" */cp|r ^integration [query]|r  -  Enable integrations.", GREEN, GREY)
-L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders [create,remove,list] [query]|r  -  Access RPC placeholders.", GREEN, GREY)
-L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Access Event Data.", GREEN, GREY)
+L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
+        GREEN, GREY
+)
+L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Displays the *ConfigUI|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",
+        GREEN, GREY
+)
+L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [force,test]|r  -  Force or Debug an RPC update.",
+        GREEN, GREY
+)
+L["USAGE_CMD_MINIMAP"] = setfmt(" */cp|r ^minimap|r  -  Toggles the minimap button.",
+        GREEN, GREY
+)
+L["USAGE_CMD_STATUS"] = setfmt(" */cp|r ^status|r  -  Views the last sent RPC event.",
+        GREEN, GREY
+)
+L["USAGE_CMD_RESET"] = setfmt(" */cp|r ^reset [grp,key]|r  -  Reset options in the *ConfigUI|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_SET"] = setfmt(" */cp|r ^set [grp,key]|r  -  Set options in the *ConfigUI|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_INTEGRATION"] = setfmt(" */cp|r ^integration [query]|r  -  Enable integrations.",
+        GREEN, GREY
+)
+L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders [create,remove,list][query]|r  -  Access placeholders.",
+        GREEN, GREY
+)
+L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Access Event Data.",
+        GREEN, GREY
+)
 
-L["USAGE_CMD_NOTE"] = setfmt("NOTE: All commands must be prefixed with either */%s|r or */%s|r.", GREEN, GREY)
-L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented by *[syntax]|r.", GREEN, GREY)
+L["USAGE_CMD_NOTE"] = setfmt("NOTE: All commands must be prefixed with either */%s|r or */%s|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented by *[syntax]|r.",
+        GREEN, GREY
+)
 
 -- Frame Text Data
 L["ADDON_HEADER_VERSION"] = setfmt("%s *%s|r", PALE_CYAN)

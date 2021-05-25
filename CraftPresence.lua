@@ -30,12 +30,11 @@ CraftPresence.defaultEventCallback = ""
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
-local tostring, pairs, unpack, type, max = tostring, pairs, unpack, type, math.max
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
+local pairs, type, max = pairs, type, math.max
 
 -- Addon APIs
 local L = CraftPresence.locale
-local config_registry = LibStub("AceConfigRegistry-3.0")
 local CP_GlobalUtils = CP_GlobalUtils
 
 -- Critical Data (DNT)
@@ -109,9 +108,9 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     tinsert(rpcData, self:GetOrDefault(time_end))
 
     -- Additional Sanity Checks for Buttons
-    for key, value in pairs(buttons) do
+    for _, value in pairs(buttons) do
         local dataValue, dataSeparator = "", ""
-        for buttonKey, buttonValue in pairs(value) do
+        for _, buttonValue in pairs(value) do
             dataValue = dataValue .. dataSeparator .. buttonValue
             if not self:IsNullOrEmpty(buttonValue) then
                 dataSeparator = split_key
@@ -262,9 +261,9 @@ end
 --- Both operations cannot occur unless args are specified, as either a string or a table
 ---
 --- @param args table The event names to be interpreted with the eventTag (if any)
---- @param trigger string The function name to register with argument values (Required for append operations, can be func)
---- @param log_output boolean Whether to allow logging for this function (Default: False)
---- @param mode string The modifier key to force a certain behavior of this function (Optional, can be <add|remove|refresh>)
+--- @param trigger string The function name to register with arguments (Required for append operations, can be func)
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
+--- @param mode string The modifier key to force the behavior of this function (Optional, can be <add|remove|refresh>)
 --- @param ignore_condition string The function, that if true, will ignore this event if it occurs (Optional)
 function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, ignore_condition)
     if type(args) ~= "table" then
@@ -340,7 +339,9 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
             if eventName == key then
                 ignore_event = (
                         self:IsNullOrEmpty(value.ignore) or
-                                self:GetDynamicReturnValue(value.ignore, "function", self, lastEventName, eventName, args) == "true"
+                                self:GetDynamicReturnValue(
+                                        value.ignore, "function", self, lastEventName, eventName, args
+                                ) == "true"
                 )
                 break
             end
@@ -581,7 +582,9 @@ function CraftPresence:ChatCommand(input)
                         tag_data = self:GetFromDb(tag_table)
                     end
                     -- Iterate through dataTable to form resultString
-                    foundAny, resultStr = self:ParseDynamicTable(tag_name, command_query[3], tag_data, foundAny, resultStr)
+                    foundAny, resultStr = self:ParseDynamicTable(
+                            tag_name, command_query[3], tag_data, foundAny, resultStr
+                    )
 
                     -- Final parsing of resultString before printing
                     if not foundAny then

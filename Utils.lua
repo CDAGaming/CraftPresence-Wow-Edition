@@ -631,7 +631,9 @@ function CraftPresence:GetVersion()
         end
         addonVersionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], addonVersion)
     end
-    return self:GetOrDefault(addonVersion, fallbackVersion), self:GetOrDefault(addonVersionString, fallbackVersionString)
+    return self:GetOrDefault(addonVersion,
+            fallbackVersion), self:GetOrDefault(addonVersionString,
+            fallbackVersionString)
 end
 
 --- Helper function for getting CraftPresence:addonVersionString

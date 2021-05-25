@@ -106,6 +106,7 @@ globals = {
 	"EJ_GetTierInfo",
 	"EJ_SelectTier",
 	"LibStub",
+	"CraftPresence",
 
 	-- events
 	"arg1",
@@ -156,5 +157,5 @@ globals = {
 	"IsInInstance",
 	"OptionsListButtonToggle_OnClick",
 	"ReloadUI",
-	"ViragDevTool_AddData",
+	"RequestRaidInfo",
 }

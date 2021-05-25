@@ -74,21 +74,21 @@ local DB_DEFAULTS = {
             },
             ["PLAYER_LEVEL_UP"] = {
                 minimumTOC = "", maximumTOC = "",
-                ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
+                ignoreCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_LEVEL_CHANGED"] = {
                 minimumTOC = "80000", maximumTOC = "",
-                ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_LEVEL_UP' end"),
+                ignoreCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_UP' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_ALIVE"] = {
                 minimumTOC = "", maximumTOC = "",
-                ignoreCallback = ("function (self, lastName, name, args) return lastName == 'PLAYER_DEAD' end"),
+                ignoreCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_DEAD' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
@@ -103,7 +103,7 @@ local DB_DEFAULTS = {
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "",
                 ignoreCallback = [[
-function (self, lastName, name, args)
+function (self, _, _, args)
     return args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
 end
                 ]],
@@ -134,14 +134,14 @@ end
             },
             ["PLAYER_SPECIALIZATION_CHANGED"] = {
                 minimumTOC = "50000", maximumTOC = "",
-                ignoreCallback = "function (self, lastName, name, args) return args[1] ~= 'player' end",
+                ignoreCallback = "function (_, _, _, args) return args[1] ~= 'player' end",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ACTIVE_TALENT_GROUP_CHANGED"] = {
                 minimumTOC = "60000", maximumTOC = "",
-                ignoreCallback = "function (self, lastName, name, args) return args[1] == args[2] end",
+                ignoreCallback = "function (_, _, _, args) return args[1] == args[2] end",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
@@ -149,7 +149,7 @@ end
             ["ENCOUNTER_END"] = {
                 minimumTOC = "60000", maximumTOC = "",
                 ignoreCallback = [[
-function (self, lastName, name, args)
+function (self, _, _, args)
     return (not IsInInstance() or args[5] ~= 1 or self:GetCachedLockout() == self:GetCurrentLockoutData(false))
 end
                 ]],
