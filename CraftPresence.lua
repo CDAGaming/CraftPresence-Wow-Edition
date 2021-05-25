@@ -155,7 +155,7 @@ function CraftPresence:OnInitialize()
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
             self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
-            self.optionsFrame.default = self.ResetProfile
+            self.optionsFrame.default = self.UpdateProfile
         end
         -- Icon Registration
         icon = LibStub("LibDBIcon-1.0")
@@ -457,16 +457,12 @@ function CraftPresence:ChatCommand(input)
             self:ShowConfig()
         elseif self:StartsWith(input, "reset") then
             local _, _, query = self:FindMatches(input, " (.*)", false)
-            if query ~= nil then
+            local reset_single = (query ~= nil)
+            if reset_single then
                 local _, _, sub_query = self:FindMatches(query, ",(.*)", false)
                 self:GetFromDb(query, sub_query, true)
-            else
-                self:ResetProfile(false)
             end
-
-            if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-                config_registry:NotifyChange(L["ADDON_NAME"])
-            end
+            self:UpdateProfile(true, not reset_single, "all")
         elseif input == "minimap" then
             self:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
         elseif input == "about" then
@@ -564,15 +560,7 @@ function CraftPresence:ChatCommand(input)
                                     L["COMMAND_CREATE_SUCCESS"], eventState, splitQuery[1], tag_name,
                                     self:SerializeTable(tag_data[splitQuery[1]])
                             ))
-
-                            if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-                                config_registry:NotifyChange(L["ADDON_NAME"])
-                            end
-
-                            -- Additional events, dependent on tag name
-                            if tag_name == "events" then
-                                self:SyncEvents(tag_data, self:GetFromDb("debugMode"))
-                            end
+                            self:UpdateProfile(true, false, tag_name)
                         else
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_CONFLICT"]))
                         end
@@ -588,15 +576,7 @@ function CraftPresence:ChatCommand(input)
                             tag_data[sub_query] = nil
                             self:SetToDb(tag_table, nil, tag_data)
                             self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, sub_query))
-
-                            if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-                                config_registry:NotifyChange(L["ADDON_NAME"])
-                            end
-
-                            -- Additional events, dependent on tag name
-                            if tag_name == "events" then
-                                self:SyncEvents(tag_data, self:GetFromDb("debugMode"))
-                            end
+                            self:UpdateProfile(true, false, tag_name)
                         else
                             self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
                         end

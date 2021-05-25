@@ -1,5 +1,6 @@
 -- Lua APIs
-local strformat, type, tostring = string.format, type, tostring
+local pairs, type, tostring = pairs, type, tostring
+local strformat, strlower = string.format, string.lower
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -838,18 +839,29 @@ function CraftPresence:GetSchemaDefaults()
     return SCHEMA_DEFAULTS
 end
 
---- Resets all settings in the currently active config profile to their defaults
+--- Modify the settings in the currently active config profile with the specified arguments
 ---
 --- @param notify boolean Whether or not to fire NotifyChange after operation (Default: true)
-function CraftPresence:ResetProfile(notify)
+--- @param reset boolean Whether or not to Reset this profile to it's defaults (Default: false)
+CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, reset, tags)
     notify = self:GetOrDefault(notify, true)
+    reset = self:GetOrDefault(reset, false)
 
-    self:Print(L["INFO_RESET_CONFIG"])
-    self.db:ResetProfile(false, true)
-    if notify then
-        config_registry:NotifyChange(L["ADDON_NAME"])
+    if reset then
+        self:Print(L["INFO_RESET_CONFIG"])
+        self.db:ResetProfile(false, true)
     end
 
     -- Additional dynamic sync events
-    self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
-end
+    for _, tagName in pairs(tags) do
+        tagName = strlower(tagName)
+
+        if tagName == "all" or tagName == "events" then
+            self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
+        end
+    end
+
+    if notify then
+        config_registry:NotifyChange(L["ADDON_NAME"])
+    end
+end)
