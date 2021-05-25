@@ -424,7 +424,7 @@ end
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
-    if self:IsNullOrEmpty(input) or input == "help" or input == "?" then
+    if self:IsNullOrEmpty(input) or (strlower(input) == "help" or strlower(input) == "?") then
         self:PrintUsageCommand(
                 L["USAGE_CMD_HELP"] .. "\n" ..
                         L["USAGE_CMD_CONFIG"] .. "\n" ..
@@ -439,11 +439,14 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_EVENTS"]
         )
     else
-        if input == "clean" or input == "clear" then
+        local _, _, command = self:FindMatches(input, "(.*) ", false)
+        command = strlower((not self:IsNullOrEmpty(command) and command) or input)
+
+        if command == "clean" or command == "clear" then
             self:Print(L["COMMAND_CLEAR_SUCCESS"])
             self:CleanFrames()
             self:SetTimerLocked(false)
-        elseif self:StartsWith(input, "update") then
+        elseif command == "update" then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
             local forceMode, testerMode = false, false
@@ -453,9 +456,9 @@ function CraftPresence:ChatCommand(input)
                 testerMode = self:GetFromDb("debugMode") and query == "test"
             end
             self:PaintMessageWait(true, not testerMode, not testerMode, nil, forceMode)
-        elseif input == "config" then
+        elseif command == "config" then
             self:ShowConfig()
-        elseif self:StartsWith(input, "reset") then
+        elseif command == "reset" then
             local _, _, query = self:FindMatches(input, " (.*)", false)
             local reset_single = (query ~= nil)
             if reset_single then
@@ -463,11 +466,11 @@ function CraftPresence:ChatCommand(input)
                 self:GetFromDb(query, sub_query, true)
             end
             self:UpdateProfile(true, not reset_single, "all")
-        elseif input == "minimap" then
+        elseif command == "minimap" then
             self:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
-        elseif input == "about" then
+        elseif command == "about" then
             self:PrintAddonInfo()
-        elseif input == "status" then
+        elseif command == "status" then
             if self:GetFromDb("debugMode") then
                 local last_args, last_encoded = self:GetCachedEncodedData()
                 self:GetEncodedMessage(last_args, last_encoded, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)
@@ -478,7 +481,7 @@ function CraftPresence:ChatCommand(input)
                         )
                 ))
             end
-        elseif self:StartsWith(input, "integration") then
+        elseif command == "integration" then
             -- Query Parsing
             local _, _, query = self:FindMatches(input, " (.*)", false)
             if query ~= nil then
@@ -498,13 +501,16 @@ function CraftPresence:ChatCommand(input)
             else
                 self:PrintUsageCommand(L["USAGE_CMD_INTEGRATION"])
             end
-        elseif self:StartsWith(input, "placeholder") or self:StartsWith(input, "event") then
+        elseif (
+                (command == "placeholders" or command == "placeholder") or
+                        (command == "events" or command == "event")
+        ) then
             -- Parse tag name and table target from command input
             local tag_name, tag_table = "", ""
-            if self:StartsWith(input, "placeholders") or self:StartsWith(input, "placeholder") then
+            if command == "placeholders" or command == "placeholder" then
                 tag_name, tag_table = "placeholders", "customPlaceholders"
                 global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
-            elseif self:StartsWith(input, "events") or self:StartsWith(input, "event") then
+            elseif command == "events" or command == "event" then
                 tag_name, tag_table = "events", "events"
             end
             local resultStr = strformat(L["DATA_FOUND_INTRO"], tag_name)
@@ -613,7 +619,7 @@ function CraftPresence:ChatCommand(input)
             else
                 self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
             end
-        elseif self:StartsWith(input, "set") then
+        elseif command == "set" then
             local _, _, query = self:FindMatches(input, " (.*)", false)
             LibStub("AceConfigCmd-3.0"):HandleCommand(L["COMMAND_CONFIG"], L["ADDON_NAME"], self:GetOrDefault(query))
         else
