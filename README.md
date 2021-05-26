@@ -10,13 +10,13 @@ Completely customize the way others see you play World of Warcraft via Discord's
 
 ## Author's Note
 *   At this time, the pixel-generation/reading that makes this possible has not been verified by Blizzard. An email and ticket have been put in to gain approval, though until this happens, use with caution.
-*   While a video is aditionally planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
+*   While a video is additionally planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
 
 ## Port Notes
 *   Please check [here](https://www.curseforge.com/minecraft/mc-mods/craftpresence) for the Minecraft Version of this addon
 
 ## Features
-In addition to having the ability to change your discord status from "Playing <x>",
+In addition to having the ability to change your discord status from "Playing *gameNameHere*",
 This mod offers plenty of customization options to specify entirely how others see you play.
 From having your current zone show up, to which instance your in, as well as which realm you're in, and far more.
 The customization possibilities are limitless, with the only real limit being how creative you customize your display.
@@ -42,7 +42,7 @@ As this addon uses a singular codebase, Addon code is loaded depending upon whic
 
 For example, this will mean that while the placeholders will remain the same, their contents may change depending on the version.
 
-Aditionally, while PTR and pre-release versions of the game should work fine, they are often untested until closer to release and may contain issues.
+Additionally, while PTR and pre-release versions of the game should work fine, they are often untested until closer to release and may contain issues.
 
 ## Commands
 CraftPresence currently offers the following Commands:
