@@ -65,6 +65,31 @@ local DB_DEFAULTS = {
         innerPlaceholderKey = L["DEFAULT_INNER_KEY"],
         globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"],
         events = {
+            ["CHAT_MSG_SYSTEM"] = {
+                minimumTOC = "", maximumTOC = "",
+                ignoreCallback = [[
+function (self, _, _, args)
+    local splitMessage = self:Split(args[1], ':', false, true)
+    local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
+    local isAfkStatus = args[1] == CLEARED_AFK or args[1] == MARKED_AFK or self:StartsWith(args[1], afkFormat[1])
+    local busyFormat = self:Split(MARKED_DND, ':', false, true)
+    local isBusyStatus = args[1] == CLEARED_DND or self:StartsWith(args[1], busyFormat[1])
+    if isAfkStatus then
+        self:SetCachedPlayerData('away', args[1] ~= CLEARED_AFK and isAfkStatus)
+        self:SetCachedPlayerData('reason', splitMessage[2])
+    elseif isBusyStatus then
+        self:SetCachedPlayerData('busy', args[1] ~= CLEARED_DND and isBusyStatus)
+        self:SetCachedPlayerData('reason', splitMessage[2])
+    else
+        self:SetCachedPlayerData('reason', '')
+    end
+    return not (isAfkStatus or isBusyStatus)
+end
+                ]],
+                registerCallback = "",
+                eventCallback = "function(self) return self.defaultEventCallback end",
+                enabled = true
+            },
             ["PLAYER_LOGIN"] = {
                 minimumTOC = "", maximumTOC = "",
                 ignoreCallback = "",
@@ -103,8 +128,8 @@ local DB_DEFAULTS = {
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "",
                 ignoreCallback = [[
-function (self, _, _, args)
-    return args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
+function (self, lastName, _, args)
+    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
 end
                 ]],
                 registerCallback = "",

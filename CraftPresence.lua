@@ -30,8 +30,15 @@ CraftPresence.defaultEventCallback = ""
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
-local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
+local tinsert, tremove, tconcat, tsetn = table.insert, table.remove, table.concat, table.setn
 local pairs, type, max = pairs, type, math.max
+local wipe = (table.wipe or function(table)
+    for k, _ in pairs(table) do
+        table[k] = nil
+    end
+    tsetn(table, 0)
+    return table
+end)
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -58,10 +65,10 @@ local time_conditions = {}
 ---
 --- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
 function CraftPresence:SyncConditions(force_instance_change)
-    global_placeholders = {}
-    inner_placeholders = {}
+    wipe(global_placeholders)
+    wipe(inner_placeholders)
+    wipe(time_conditions)
     custom_placeholders = self:GetFromDb("customPlaceholders")
-    time_conditions = {}
     return self:ParseGameData(force_instance_change)
 end
 
@@ -425,6 +432,7 @@ end
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
+    local command_query = self:Split(input, " ", true, true)
     if self:IsNullOrEmpty(input) or (strlower(input) == "help" or strlower(input) == "?") then
         self:PrintUsageCommand(
                 L["USAGE_CMD_HELP"] .. "\n" ..
@@ -440,7 +448,6 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_EVENTS"]
         )
     else
-        local command_query = self:Split(input, " ", true, true)
         local command = strlower(command_query[1])
 
         if command == "clean" or command == "clear" then
@@ -613,6 +620,7 @@ function CraftPresence:ChatCommand(input)
             ))
         end
     end
+    return command_query
 end
 
 --- Displays the specified usage command in a help text format

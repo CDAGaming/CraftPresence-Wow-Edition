@@ -104,7 +104,7 @@ end
 ---
 --- @return string @ trimmed_string
 function CraftPresence:TrimString(str)
-    if self:IsNullOrEmpty(str) then
+    if self:IsNullOrEmpty(str) or type(str) ~= "string" then
         return str
     end
     str = strgsub(str, "^%s+", "")
@@ -464,7 +464,12 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
             if not self:StartsWith(lowVal, "return ") and self:StartsWith(lowVal, "function") then
                 value = "return " .. value
             end
-            value = loadstring(value)()
+            local func, err = loadstring(value)
+            if not func then
+                self:PrintInvalidValue(err)
+            else
+                value = func
+            end
         end
         while type(value) == "function" do
             value = value(unpack(args))

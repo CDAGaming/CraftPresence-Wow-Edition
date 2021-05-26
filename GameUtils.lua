@@ -24,6 +24,14 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, pairs, tostring = string.format, pairs, tostring
+local tinsert, tconcat, tsetn = table.insert, table.concat, table.setn
+local wipe = (table.wipe or function(table)
+    for k, _ in pairs(table) do
+        table[k] = nil
+    end
+    tsetn(table, 0)
+    return table
+end)
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -34,37 +42,51 @@ end
 --[[ GAME GETTERS AND SETTERS ]]--
 
 local lastPlayerStatus, hasInstanceChanged
+local cachedPlayerData = {}
 
 --- Retrieves the Player Status for the specified unit
 ---
 --- @param unit string The unit name (Default: player)
 --- @param sync boolean Whether to sync the resulting status to lastPlayerStatus (Default: false)
+--- @param reset_queue boolean Optional argument to determine if the queued data should be reset (Default: false)
 --- @param prefixFormat string Optional argument to determine the prefix formatting (Default: L["FORMAT_USER_PREFIX"])
+--- @param forcedData table Optional argument for forcing certain player status data
 ---
---- @return string, string @ playerStatus, playerPrefix
-function CraftPresence:GetPlayerStatus(unit, sync, prefixFormat)
+--- @return string, string, table @ playerStatus, playerPrefix, cachedPlayerData
+function CraftPresence:GetPlayerStatus(unit, sync, reset_queue, prefixFormat, forcedData)
     unit = self:GetOrDefault(unit, "player")
     sync = self:GetOrDefault(sync, false)
+    reset_queue = self:GetOrDefault(reset_queue, false)
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
-    local playerStatus, playerPrefix
-    local isAway, isBusy, isDead, isGhost
-    -- Ensure Version Compatibility
-    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or self:IsRebasedApi() then
-        isAway = UnitIsAFK(unit)
-        isBusy = UnitIsDND(unit)
-    end
+    forcedData = self:GetOrDefault(forcedData, {
+        away = false,
+        busy = false,
+        dead = false,
+        ghost = false,
+        reason = ""
+    })
+
+    cachedPlayerData.away = self:GetOrDefault((UnitIsAFK and UnitIsAFK(unit)) or forcedData.away, cachedPlayerData.away)
+    cachedPlayerData.busy = self:GetOrDefault((UnitIsDND and UnitIsDND(unit)) or forcedData.busy, cachedPlayerData.busy)
+    cachedPlayerData.dead = self:GetOrDefault((UnitIsDead and UnitIsDead(unit)) or forcedData.dead, cachedPlayerData.dead)
+    cachedPlayerData.ghost = self:GetOrDefault((UnitIsGhost and UnitIsGhost(unit)) or forcedData.ghost, cachedPlayerData.ghost)
+
     -- Sync Player Name Tweaks
-    isDead = UnitIsDead(unit)
-    isGhost = UnitIsGhost(unit)
-    if isAway then
-        playerStatus = L["LABEL_AWAY"]
-    elseif isBusy then
-        playerStatus = L["LABEL_BUSY"]
-    elseif isGhost then
-        playerStatus = L["LABEL_GHOST"]
-    elseif isDead then
-        playerStatus = L["LABEL_DEAD"]
+    local playerData, playerStatus, playerPrefix = {}
+    if cachedPlayerData.away then
+        tinsert(playerData, L["LABEL_AWAY"])
     end
+    if cachedPlayerData.busy then
+        tinsert(playerData, L["LABEL_BUSY"])
+    end
+    if cachedPlayerData.ghost then
+        tinsert(playerData, L["LABEL_GHOST"])
+    end
+    if cachedPlayerData.dead then
+        tinsert(playerData, L["LABEL_DEAD"])
+    end
+    playerStatus = tconcat(playerData, ",")
+
     -- Parse Player Status
     if not self:IsNullOrEmpty(playerStatus) then
         if not self:IsNullOrEmpty(prefixFormat) then
@@ -75,13 +97,19 @@ function CraftPresence:GetPlayerStatus(unit, sync, prefixFormat)
     else
         playerStatus = L["LABEL_ONLINE"]
         playerPrefix = ""
+        cachedPlayerData.reason = ""
     end
 
     -- Return Data (and sync if needed)
     if sync then
         lastPlayerStatus = playerStatus
     end
-    return playerStatus, playerPrefix
+    if reset_queue then
+        wipe(cachedPlayerData)
+    else
+        cachedPlayerData.reason = self:GetOrDefault(forcedData.reason or cachedPlayerData.reason)
+    end
+    return playerStatus, playerPrefix, cachedPlayerData
 end
 
 --- Retrieves whether the instance has recently changed
@@ -94,6 +122,27 @@ end
 --- @return string @ lastPlayerStatus
 function CraftPresence:GetLastPlayerStatus()
     return self:GetOrDefault(lastPlayerStatus)
+end
+
+--- Retrieved the currently cached player data
+--- @return table @ cachedPlayerData
+function CraftPresence:GetCachedPlayerData()
+    return cachedPlayerData
+end
+
+--- Sets a key,value pair within cachedPlayerData, for later usage
+---
+--- @param key string The key to insert to the table
+--- @param value any The value to insert to the table
+---
+--- @return table @ cachedPlayerData
+function CraftPresence:SetCachedPlayerData(key, value)
+    if not (self:IsNullOrEmpty(key) or self:IsNullOrEmpty(value)) then
+        key = self:TrimString(key)
+        value = self:TrimString(value)
+        cachedPlayerData[key] = value
+    end
+    return cachedPlayerData
 end
 
 --[[ GAME UTILITIES ]]--
@@ -129,7 +178,7 @@ function CraftPresence:ParseGameData(force_instance_change)
     end
     -- Player Data
     local playerName = UnitName("player")
-    local playerStatus, playerPrefix = self:GetPlayerStatus("player", true)
+    local playerStatus, playerPrefix, playerData = self:GetPlayerStatus("player", true)
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
@@ -200,6 +249,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         [setfmt("*player_level*", inkey)] = playerLevel,
         [setfmt("*player_class*", inkey)] = playerClass,
         [setfmt("*player_status*", inkey)] = playerStatus,
+        [setfmt("*player_reason*", inkey)] = playerData.reason,
         [setfmt("*player_alliance*", inkey)] = playerAlliance,
         [setfmt("*player_covenant*", inkey)] = playerCovenant,
         [setfmt("*player_covenant_renown*", inkey)] = "0", -- Retail-Only
