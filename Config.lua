@@ -844,6 +844,7 @@ end
 --- @param notify boolean Whether or not to fire NotifyChange after operation (Default: true)
 --- @param reset boolean Whether or not to Reset this profile to it's defaults (Default: false)
 CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, reset, tags)
+    local canNotify = self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or self:IsRebasedApi()
     notify = self:GetOrDefault(notify, true)
     reset = self:GetOrDefault(reset, false)
 
@@ -861,7 +862,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         end
     end
 
-    if notify then
+    if notify and canNotify then
         config_registry:NotifyChange(L["ADDON_NAME"])
     end
 end)
