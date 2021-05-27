@@ -42,7 +42,13 @@ end
 --[[ GAME GETTERS AND SETTERS ]]--
 
 local lastPlayerStatus, hasInstanceChanged
-local cachedPlayerData = {}
+local cachedPlayerData = {
+    away = false,
+    busy = false,
+    dead = false,
+    ghost = false,
+    reason = ""
+}
 
 --- Retrieves the Player Status for the specified unit
 ---
@@ -58,12 +64,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, reset_queue, prefixFormat, fo
     sync = self:GetOrDefault(sync, false)
     reset_queue = self:GetOrDefault(reset_queue, false)
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
-    forcedData = self:GetOrDefault(forcedData, {
-        away = false,
-        busy = false,
-        dead = false,
-        ghost = false
-    })
+    forcedData = self:GetOrDefault(forcedData, {})
 
     cachedPlayerData.away = self:GetOrDefault((UnitIsAFK and UnitIsAFK(unit)) or forcedData.away, cachedPlayerData.away)
     cachedPlayerData.busy = self:GetOrDefault((UnitIsDND and UnitIsDND(unit)) or forcedData.busy, cachedPlayerData.busy)
@@ -80,8 +81,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, reset_queue, prefixFormat, fo
     end
     if cachedPlayerData.ghost then
         tinsert(playerData, L["LABEL_GHOST"])
-    end
-    if cachedPlayerData.dead then
+    elseif cachedPlayerData.dead then
         tinsert(playerData, L["LABEL_DEAD"])
     end
     playerStatus = tconcat(playerData, ",")

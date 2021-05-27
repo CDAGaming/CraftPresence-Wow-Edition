@@ -67,8 +67,7 @@ local DB_DEFAULTS = {
         events = {
             ["CHAT_MSG_SYSTEM"] = {
                 minimumTOC = "", maximumTOC = "",
-                ignoreCallback = [[
-function (self, _, _, args)
+                ignoreCallback = [[function (self, _, _, args)
     local splitMessage = self:Split(args[1], ':', false, true)
     local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
     local isAfkStatus = args[1] == CLEARED_AFK or args[1] == MARKED_AFK or self:StartsWith(args[1], afkFormat[1])
@@ -84,8 +83,7 @@ function (self, _, _, args)
         self:SetCachedPlayerData('reason', '')
     end
     return not (isAfkStatus or isBusyStatus)
-end
-                ]],
+end]],
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
@@ -127,11 +125,9 @@ end
             },
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "",
-                ignoreCallback = [[
-function (self, lastName, _, args)
+                ignoreCallback = [[function (self, lastName, _, args)
     return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
-end
-                ]],
+end]],
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
@@ -173,11 +169,9 @@ end
             },
             ["ENCOUNTER_END"] = {
                 minimumTOC = "60000", maximumTOC = "",
-                ignoreCallback = [[
-function (self, _, _, args)
+                ignoreCallback = [[function (self, _, _, args)
     return (not IsInInstance() or args[5] ~= 1 or self:GetCachedLockout() == self:GetCurrentLockoutData(false))
-end
-                ]],
+end]],
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
