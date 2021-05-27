@@ -834,6 +834,20 @@ function CraftPresence:PrintInvalidValue(logStyle)
     self:Print(strformat(L["LOG_ERROR"], logStyle))
 end
 
+--- Prints a formatted message, meant to symbolize an deprecated value
+--- @param oldFunc string The old/deprecated function
+--- @param newFunc string The new function to migrate to
+function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc)
+    if self:GetFromDb("verboseMode") then
+        self:Print(
+                strformat(L["LOG_WARNING"], strformat(L["ERROR_FUNCTION_DEPRECATED"],
+                        oldFunc, newFunc
+                ))
+        )
+        self:Print(strformat(L["LOG_WARNING"], L["ERROR_FUNCTION_REPLACE"]))
+    end
+end
+
 --- Updates showMinimapIcon with the specified value
 --- @param newValue boolean The new value to change showMinimapIcon to
 function CraftPresence:UpdateMinimapSetting(newValue)

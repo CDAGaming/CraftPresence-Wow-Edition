@@ -25,13 +25,6 @@ SOFTWARE.
 -- Lua APIs
 local strformat, pairs, tostring = string.format, pairs, tostring
 local tinsert, tconcat, tsetn = table.insert, table.concat, table.setn
-local wipe = (table.wipe or function(table)
-    for k, _ in pairs(table) do
-        table[k] = nil
-    end
-    tsetn(table, 0)
-    return table
-end)
 
 -- Addon APIs
 local L = CraftPresence.locale
