@@ -62,8 +62,7 @@ function CraftPresence:GetPlayerStatus(unit, sync, reset_queue, prefixFormat, fo
         away = false,
         busy = false,
         dead = false,
-        ghost = false,
-        reason = ""
+        ghost = false
     })
 
     cachedPlayerData.away = self:GetOrDefault((UnitIsAFK and UnitIsAFK(unit)) or forcedData.away, cachedPlayerData.away)
