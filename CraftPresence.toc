@@ -26,3 +26,5 @@ GameUtils.lua
 InstanceInfo.lua
 Config.lua
 RPCDispatch.lua
+
+Deprecated_Functions.lua

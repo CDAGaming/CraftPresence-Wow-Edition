@@ -74,13 +74,13 @@ local DB_DEFAULTS = {
     local busyFormat = self:Split(MARKED_DND, ':', false, true)
     local isBusyStatus = args[1] == CLEARED_DND or self:StartsWith(args[1], busyFormat[1])
     if isAfkStatus then
-        self:SetCachedPlayerData('away', args[1] ~= CLEARED_AFK and isAfkStatus)
-        self:SetCachedPlayerData('reason', splitMessage[2])
+        self:SetCachedUnitData('player', 'away', args[1] ~= CLEARED_AFK and isAfkStatus)
+        self:SetCachedUnitData('player', 'reason', splitMessage[2])
     elseif isBusyStatus then
-        self:SetCachedPlayerData('busy', args[1] ~= CLEARED_DND and isBusyStatus)
-        self:SetCachedPlayerData('reason', splitMessage[2])
+        self:SetCachedUnitData('player', 'busy', args[1] ~= CLEARED_DND and isBusyStatus)
+        self:SetCachedUnitData('player', 'reason', splitMessage[2])
     else
-        self:SetCachedPlayerData('reason', '')
+        self:SetCachedUnitData('player', 'reason', '')
     end
     return not (isAfkStatus or isBusyStatus)
 end]],
@@ -126,7 +126,7 @@ end]],
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "",
                 ignoreCallback = [[function (self, lastName, _, args)
-    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or self:GetLastPlayerStatus() == self:GetPlayerStatus()
+    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or self:GetUnitData().last_status == self:GetUnitStatus().status
 end]],
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",

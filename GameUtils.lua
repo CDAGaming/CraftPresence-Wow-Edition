@@ -41,68 +41,77 @@ end
 
 --[[ GAME GETTERS AND SETTERS ]]--
 
-local lastPlayerStatus, hasInstanceChanged
-local cachedPlayerData = {}
+local hasInstanceChanged
+local cachedUnitData = {}
 
 --- Retrieves the Player Status for the specified unit
 ---
---- @param unit string The unit name (Default: player)
---- @param sync boolean Whether to sync the resulting status to lastPlayerStatus (Default: false)
---- @param reset_queue boolean Optional argument to determine if the queued data should be reset (Default: false)
+--- @param unit string The unit to interpret (Default: player)
+--- @param refresh boolean Whether to sync the resulting status to unitData.last_status (Default: false)
+--- @param sync boolean Whether to sync the resulting status to cachedUnitData[unit] (Default: true)
 --- @param prefixFormat string Optional argument to determine the prefix formatting (Default: L["FORMAT_USER_PREFIX"])
---- @param forcedData table Optional argument for forcing certain player status data
+--- @param unitData table Optional argument for forcing certain unit status data
 ---
---- @return string, string, table @ playerStatus, playerPrefix, cachedPlayerData
-function CraftPresence:GetPlayerStatus(unit, sync, reset_queue, prefixFormat, forcedData)
+--- @return table @ unitData
+function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData)
     unit = self:GetOrDefault(unit, "player")
-    sync = self:GetOrDefault(sync, false)
-    reset_queue = self:GetOrDefault(reset_queue, false)
+    refresh = self:GetOrDefault(refresh, false)
+    sync = self:GetOrDefault(sync, true)
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
-    forcedData = self:GetOrDefault(forcedData, {})
+    unitData = self:GetOrDefault(unitData, {})
 
-    cachedPlayerData.away = self:GetOrDefault((UnitIsAFK and UnitIsAFK(unit)) or forcedData.away or cachedPlayerData.away, false)
-    cachedPlayerData.busy = self:GetOrDefault((UnitIsDND and UnitIsDND(unit)) or forcedData.busy or cachedPlayerData.busy, false)
-    cachedPlayerData.dead = self:GetOrDefault((UnitIsDead and UnitIsDead(unit)) or forcedData.dead or cachedPlayerData.dead, false)
-    cachedPlayerData.ghost = self:GetOrDefault((UnitIsGhost and UnitIsGhost(unit)) or forcedData.ghost or cachedPlayerData.ghost, false)
+    unitData.away = self:GetOrDefault(
+            unitData.away or (UnitIsAFK and UnitIsAFK(unit)) or
+                    (cachedUnitData[unit] and cachedUnitData[unit].away), false
+    )
+    unitData.busy = self:GetOrDefault(
+            unitData.busy or (UnitIsDND and UnitIsDND(unit)) or
+                    (cachedUnitData[unit] and cachedUnitData[unit].busy), false
+    )
+    unitData.dead = self:GetOrDefault(
+            unitData.dead or (UnitIsDead and UnitIsDead(unit)) or
+                    (cachedUnitData[unit] and cachedUnitData[unit].dead), false
+    )
+    unitData.ghost = self:GetOrDefault(
+            unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)) or
+                    (cachedUnitData[unit] and cachedUnitData[unit].ghost), false
+    )
+    unitData.reason = self:GetOrDefault(unitData.reason or
+            (cachedUnitData[unit] and cachedUnitData[unit].reason)
+    )
 
     -- Sync Player Name Tweaks
-    local playerData, playerStatus, playerPrefix = {}
-    if cachedPlayerData.away then
-        tinsert(playerData, L["LABEL_AWAY"])
+    local unitInfo = {}
+    if unitData.away then
+        tinsert(unitInfo, L["LABEL_AWAY"])
     end
-    if cachedPlayerData.busy then
-        tinsert(playerData, L["LABEL_BUSY"])
+    if unitData.busy then
+        tinsert(unitInfo, L["LABEL_BUSY"])
     end
-    if cachedPlayerData.ghost then
-        tinsert(playerData, L["LABEL_GHOST"])
-    elseif cachedPlayerData.dead then
-        tinsert(playerData, L["LABEL_DEAD"])
+    if unitData.ghost then
+        tinsert(unitInfo, L["LABEL_GHOST"])
+    elseif unitData.dead then
+        tinsert(unitInfo, L["LABEL_DEAD"])
     end
-    playerStatus = tconcat(playerData, ",")
+    unitData.status = tconcat(unitInfo, ",")
 
     -- Parse Player Status
-    if not self:IsNullOrEmpty(playerStatus) then
-        if not self:IsNullOrEmpty(prefixFormat) then
-            playerPrefix = strformat(prefixFormat, playerStatus)
-        else
-            playerPrefix = playerStatus
-        end
+    if not self:IsNullOrEmpty(unitData.status) then
+        unitData.prefix = strformat(prefixFormat, unitData.status)
     else
-        playerStatus = L["LABEL_ONLINE"]
-        playerPrefix = ""
-        cachedPlayerData.reason = ""
+        unitData.status = L["LABEL_ONLINE"]
+        unitData.prefix = ""
+        unitData.reason = ""
     end
 
     -- Return Data (and sync if needed)
+    if refresh then
+        unitData.last_status = unitData.status
+    end
     if sync then
-        lastPlayerStatus = playerStatus
+        cachedUnitData[unit] = unitData
     end
-    if reset_queue then
-        wipe(cachedPlayerData)
-    else
-        cachedPlayerData.reason = self:GetOrDefault(forcedData.reason or cachedPlayerData.reason)
-    end
-    return playerStatus, playerPrefix, cachedPlayerData
+    return unitData
 end
 
 --- Retrieves whether the instance has recently changed
@@ -111,31 +120,31 @@ function CraftPresence:HasInstanceChanged()
     return self:GetOrDefault(hasInstanceChanged, false)
 end
 
---- Retrieves the Last Player Status, if any
---- @return string @ lastPlayerStatus
-function CraftPresence:GetLastPlayerStatus()
-    return self:GetOrDefault(lastPlayerStatus)
-end
-
---- Retrieved the currently cached player data
---- @return table @ cachedPlayerData
-function CraftPresence:GetCachedPlayerData()
-    return cachedPlayerData
+--- Retrieves the Cached Unit Data of the specified unit, if any
+---
+--- @param unit string The unit to interpret
+---
+--- @return table @ unitData
+function CraftPresence:GetUnitData(unit)
+    unit = self:GetOrDefault(unit, "player")
+    return cachedUnitData[unit]
 end
 
 --- Sets a key,value pair within cachedPlayerData, for later usage
 ---
+--- @param unit string The unit to interpret
 --- @param key string The key to insert to the table
 --- @param value any The value to insert to the table
 ---
 --- @return table @ cachedPlayerData
-function CraftPresence:SetCachedPlayerData(key, value)
+function CraftPresence:SetCachedUnitData(unit, key, value)
+    unit = self:GetOrDefault(unit, "player")
     if not (self:IsNullOrEmpty(key) or self:IsNullOrEmpty(value)) then
         key = self:TrimString(key)
         value = self:TrimString(value)
-        cachedPlayerData[key] = value
+        cachedUnitData[unit][key] = value
     end
-    return cachedPlayerData
+    return cachedUnitData[unit]
 end
 
 --[[ GAME UTILITIES ]]--
@@ -171,7 +180,7 @@ function CraftPresence:ParseGameData(force_instance_change)
     end
     -- Player Data
     local playerName = UnitName("player")
-    local playerStatus, playerPrefix, playerData = self:GetPlayerStatus("player", true)
+    local playerData = self:GetUnitStatus("player", true)
     -- Extra Player Data
     local playerLevel = UnitLevel("player")
     local playerRealm = GetRealmName()
@@ -241,7 +250,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         [setfmt("*title_name*", inkey)] = playerName, -- Version-Dependent
         [setfmt("*player_level*", inkey)] = playerLevel,
         [setfmt("*player_class*", inkey)] = playerClass,
-        [setfmt("*player_status*", inkey)] = playerStatus,
+        [setfmt("*player_status*", inkey)] = playerData.status,
         [setfmt("*player_reason*", inkey)] = playerData.reason,
         [setfmt("*player_alliance*", inkey)] = playerAlliance,
         [setfmt("*player_covenant*", inkey)] = playerCovenant,
@@ -277,7 +286,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         [setfmt("*lockout_total_encounters*", inkey)] = 0 -- Retail-Only
     }
     -- Version Dependent Data
-    local userData = playerPrefix .. playerName .. " - " .. (strformat(L["FORMAT_LEVEL"], playerLevel))
+    local userData = playerData.prefix .. playerName .. " - " .. (strformat(L["FORMAT_LEVEL"], playerLevel))
     if buildData["toc_version"] >= compatData["5.0.0"] or isRebasedApi then
         -- Extra Character Data
         local titleName = UnitPVPName("player")
