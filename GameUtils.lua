@@ -42,13 +42,7 @@ end
 --[[ GAME GETTERS AND SETTERS ]]--
 
 local lastPlayerStatus, hasInstanceChanged
-local cachedPlayerData = {
-    away = false,
-    busy = false,
-    dead = false,
-    ghost = false,
-    reason = ""
-}
+local cachedPlayerData = {}
 
 --- Retrieves the Player Status for the specified unit
 ---
@@ -66,10 +60,10 @@ function CraftPresence:GetPlayerStatus(unit, sync, reset_queue, prefixFormat, fo
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
     forcedData = self:GetOrDefault(forcedData, {})
 
-    cachedPlayerData.away = self:GetOrDefault((UnitIsAFK and UnitIsAFK(unit)) or forcedData.away, cachedPlayerData.away)
-    cachedPlayerData.busy = self:GetOrDefault((UnitIsDND and UnitIsDND(unit)) or forcedData.busy, cachedPlayerData.busy)
-    cachedPlayerData.dead = self:GetOrDefault((UnitIsDead and UnitIsDead(unit)) or forcedData.dead, cachedPlayerData.dead)
-    cachedPlayerData.ghost = self:GetOrDefault((UnitIsGhost and UnitIsGhost(unit)) or forcedData.ghost, cachedPlayerData.ghost)
+    cachedPlayerData.away = self:GetOrDefault((UnitIsAFK and UnitIsAFK(unit)) or forcedData.away or cachedPlayerData.away, false)
+    cachedPlayerData.busy = self:GetOrDefault((UnitIsDND and UnitIsDND(unit)) or forcedData.busy or cachedPlayerData.busy, false)
+    cachedPlayerData.dead = self:GetOrDefault((UnitIsDead and UnitIsDead(unit)) or forcedData.dead or cachedPlayerData.dead, false)
+    cachedPlayerData.ghost = self:GetOrDefault((UnitIsGhost and UnitIsGhost(unit)) or forcedData.ghost or cachedPlayerData.ghost, false)
 
     -- Sync Player Name Tweaks
     local playerData, playerStatus, playerPrefix = {}
