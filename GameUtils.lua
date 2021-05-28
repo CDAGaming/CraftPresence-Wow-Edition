@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, pairs, tostring = string.format, pairs, tostring
-local tinsert, tconcat, tsetn = table.insert, table.concat, table.setn
+local tinsert, tconcat = table.insert, table.concat
 
 -- Addon APIs
 local L = CraftPresence.locale

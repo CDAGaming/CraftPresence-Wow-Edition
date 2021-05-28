@@ -30,8 +30,13 @@ CraftPresence.defaultEventCallback = ""
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
-local tinsert, tremove, tconcat, tsetn = table.insert, table.remove, table.concat, table.setn
+local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
 local pairs, type, max = pairs, type, math.max
+
+local tsetn = function(t,n)
+    setmetatable(t,{__len=function() return n end})
+end
+
 local wipe = (table.wipe or function(table)
     for k, _ in pairs(table) do
         table[k] = nil
