@@ -532,7 +532,7 @@ function CraftPresence:ChatCommand(input)
                     if command_query[3] ~= nil then
                         local tag_data = self:GetFromDb(tag_table)
                         if tag_data[command_query[3]] and not modifiable then
-                            self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_MODIFY"]))
+                            self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
                         elseif (
                                 tag_name ~= "placeholders" or not (
                                         global_placeholders[command_query[3]] or inner_placeholders[command_query[3]]
@@ -562,7 +562,7 @@ function CraftPresence:ChatCommand(input)
                             ))
                             self:UpdateProfile(true, false, tag_name)
                         else
-                            self:Print(strformat(L["LOG_ERROR"], L["COMMAND_CREATE_CONFLICT"]))
+                            self:PrintErrorMessage(L["COMMAND_CREATE_CONFLICT"])
                         end
                     else
                         self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
@@ -576,7 +576,7 @@ function CraftPresence:ChatCommand(input)
                             self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, command_query[3]))
                             self:UpdateProfile(true, false, tag_name)
                         else
-                            self:Print(strformat(L["LOG_ERROR"], L["COMMAND_REMOVE_NO_MATCH"]))
+                            self:PrintErrorMessage(L["COMMAND_REMOVE_NO_MATCH"])
                         end
                     else
                         self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])

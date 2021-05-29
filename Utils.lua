@@ -694,6 +694,26 @@ function CraftPresence:ShowConfig()
     end
 end
 
+--- Prints a formatted message, meant to symbolize an error message
+--- @param logStyle string The log format to follow
+function CraftPresence:PrintErrorMessage(logStyle)
+    self:Print(strformat(L["LOG_ERROR"], logStyle))
+end
+
+--- Prints a formatted message, meant to symbolize an deprecated value
+--- @param oldFunc string The old/deprecated function
+--- @param newFunc string The new function to migrate to
+function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc)
+    if self:GetFromDb("verboseMode") then
+        self:Print(
+                strformat(L["LOG_WARNING"], strformat(L["ERROR_FUNCTION_DEPRECATED"],
+                        oldFunc, newFunc
+                ))
+        )
+        self:Print(strformat(L["LOG_WARNING"], L["ERROR_FUNCTION_REPLACE"]))
+    end
+end
+
 --[[ API GETTERS AND SETTERS ]]--
 
 --- Print initial addon info, depending on platform and config data

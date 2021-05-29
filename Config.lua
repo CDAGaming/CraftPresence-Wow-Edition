@@ -260,7 +260,7 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.clientId = value
                                 self:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)
                             else
-                                self:PrintInvalidValue(L["ERROR_CLIENT_ID"])
+                                self:PrintErrorMessage(L["ERROR_CLIENT_ID"])
                             end
                         end,
                     },
@@ -645,7 +645,7 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.callbackDelay = value
                                 self:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
                             else
-                                self:PrintInvalidValue(
+                                self:PrintErrorMessage(
                                         strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
                                                 L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
                                 )
@@ -671,7 +671,7 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.frameClearDelay = value
                                 self:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                             else
-                                self:PrintInvalidValue(
+                                self:PrintErrorMessage(
                                         strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
                                                 L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
                                 )
@@ -700,7 +700,7 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.frameSize = value
                                 self:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
                             else
-                                self:PrintInvalidValue(
+                                self:PrintErrorMessage(
                                         strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
                                                 L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
                                 )
@@ -730,7 +730,7 @@ function CraftPresence:getOptionsTable()
                                 self:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
                                 self:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true, true)
                             else
-                                self:PrintInvalidValue(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
+                                self:PrintErrorMessage(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
                             end
                         end,
                     },
@@ -754,7 +754,7 @@ function CraftPresence:getOptionsTable()
                                 self:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
                                 self:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true, true)
                             else
-                                self:PrintInvalidValue(L["ERROR_INNER_PLACEHOLDER_KEY"])
+                                self:PrintErrorMessage(L["ERROR_INNER_PLACEHOLDER_KEY"])
                             end
                         end,
                     },
@@ -825,26 +825,6 @@ function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
                         )
                 )
         )
-    end
-end
-
---- Prints a formatted message, meant to symbolize an invalid value
---- @param logStyle string The log format to follow
-function CraftPresence:PrintInvalidValue(logStyle)
-    self:Print(strformat(L["LOG_ERROR"], logStyle))
-end
-
---- Prints a formatted message, meant to symbolize an deprecated value
---- @param oldFunc string The old/deprecated function
---- @param newFunc string The new function to migrate to
-function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc)
-    if self:GetFromDb("verboseMode") then
-        self:Print(
-                strformat(L["LOG_WARNING"], strformat(L["ERROR_FUNCTION_DEPRECATED"],
-                        oldFunc, newFunc
-                ))
-        )
-        self:Print(strformat(L["LOG_WARNING"], L["ERROR_FUNCTION_REPLACE"]))
     end
 end
 
