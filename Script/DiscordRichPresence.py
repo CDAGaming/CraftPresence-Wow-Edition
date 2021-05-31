@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+# Ensure correct python version is in use
+import sys
+
+required_version = 3
+if sys.version_info[0] < required_version:
+    raise Exception("Python " + str(required_version) + " or a more recent version is required."
+                                                        " (Using: " + str(sys.version_info[0]) + ")")
+
 # Import Packaged Modules
 import json
 import logging
@@ -10,7 +18,6 @@ from logging.handlers import TimedRotatingFileHandler
 from urllib.parse import urlparse
 
 # Import Extra Modules
-import sys
 import time
 
 # Internal Data (DNT)
@@ -18,7 +25,7 @@ is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
 min_attributes = ('scheme', 'netloc')
-process_version = "v1.3.6"
+process_version = "v1.3.7"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -89,6 +96,7 @@ elif "v1" in log_modes or "single_file" in log_modes or "file" in log_modes:
 
 # Initial Welcome Messages
 root_logger.info("========== DiscordRichPresence Service - " + process_version + " ==========")
+root_logger.info("System Info: \"" + sys.version + "\"")
 root_logger.info("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
 root_logger.info("Note: Please keep this script open while logging and sending Rich Presence updates.")
 root_logger.info("==========================================================")
