@@ -154,7 +154,7 @@ local playerAlliance, playerCovenant = L["TYPE_NONE"], L["TYPE_NONE"]
 ---
 --- @param force_instance_change boolean Whether to force an instance change (Default: false)
 ---
---- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
+--- @return table, table @ placeholders, conditionals
 function CraftPresence:ParseGameData(force_instance_change)
     force_instance_change = self:GetOrDefault(force_instance_change, false)
     local inkey = self:GetFromDb("innerPlaceholderKey")
@@ -228,8 +228,12 @@ function CraftPresence:ParseGameData(force_instance_change)
     else
         formatted_zone_info = (sub_name .. " - " .. zone_name)
     end
+
+    -- Placeholder Calculations
+    local newPlaceholders = {}
+
     -- Calculate Global Placeholders
-    local queued_global_placeholders = {
+    newPlaceholders.global = {
         [setfmt("*dungeon*", outkey)] = self:GetFromDb("dungeonPlaceholderMessage"),
         [setfmt("*raid*", outkey)] = self:GetFromDb("raidPlaceholderMessage"),
         [setfmt("*battleground*", outkey)] = self:GetFromDb("battlegroundPlaceholderMessage"),
@@ -237,7 +241,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         [setfmt("*default*", outkey)] = self:GetFromDb("defaultPlaceholderMessage")
     }
     -- Calculate Inner Placeholders
-    local queued_inner_placeholders = {
+    newPlaceholders.inner = {
         [setfmt("*player_info*", inkey)] = "", -- Version-Dependent
         [setfmt("*player_name*", inkey)] = playerName,
         [setfmt("*title_name*", inkey)] = playerName, -- Version-Dependent
@@ -315,73 +319,76 @@ function CraftPresence:ParseGameData(force_instance_change)
             userInfo = (userInfo .. " " .. playerClass)
         end
         -- Inner Placeholder Adjustments
-        queued_inner_placeholders[setfmt("*title_name*", inkey)] = titleName
-        queued_inner_placeholders[setfmt("*player_info*", inkey)] = userInfo
-        queued_inner_placeholders[setfmt("*player_covenant_renown*", inkey)] = tostring(playerCovenantRenown)
-        queued_inner_placeholders[setfmt("*player_spec_name*", inkey)] = specName
-        queued_inner_placeholders[setfmt("*player_spec_role*", inkey)] = roleName
-        queued_inner_placeholders[setfmt("*item_level*", inkey)] = strformat("%.2f", avgItemLevel or 0)
-        queued_inner_placeholders[setfmt("*item_level_equipped*", inkey)] = strformat("%.2f", avgItemLevelEquipped or 0)
-        queued_inner_placeholders[setfmt("*item_level_pvp*", inkey)] = strformat("%.2f", avgItemLevelPvp or 0)
-        queued_inner_placeholders[setfmt("*difficulty_info*", inkey)] = difficultyInfo
-        queued_inner_placeholders[setfmt("*active_keystone_level*", inkey)] = activeKeystoneData.formattedLevel
-        queued_inner_placeholders[setfmt("*active_keystone_affixes*", inkey)] = activeKeystoneData.formattedAffixes
-        queued_inner_placeholders[setfmt("*owned_keystone_level*", inkey)] = ownedKeystoneData.formattedLevel
-        queued_inner_placeholders[setfmt("*lockout_encounters*", inkey)] = lockoutData.formattedEncounterData
-        queued_inner_placeholders[setfmt("*lockout_current_encounters*", inkey)] = lockoutData.currentEncounters
-        queued_inner_placeholders[setfmt("*lockout_total_encounters*", inkey)] = lockoutData.totalEncounters
+        newPlaceholders.inner[setfmt("*title_name*", inkey)] = titleName
+        newPlaceholders.inner[setfmt("*player_info*", inkey)] = userInfo
+        newPlaceholders.inner[setfmt("*player_covenant_renown*", inkey)] = tostring(playerCovenantRenown)
+        newPlaceholders.inner[setfmt("*player_spec_name*", inkey)] = specName
+        newPlaceholders.inner[setfmt("*player_spec_role*", inkey)] = roleName
+        newPlaceholders.inner[setfmt("*item_level*", inkey)] = strformat("%.2f", avgItemLevel or 0)
+        newPlaceholders.inner[setfmt("*item_level_equipped*", inkey)] = strformat("%.2f", avgItemLevelEquipped or 0)
+        newPlaceholders.inner[setfmt("*item_level_pvp*", inkey)] = strformat("%.2f", avgItemLevelPvp or 0)
+        newPlaceholders.inner[setfmt("*difficulty_info*", inkey)] = difficultyInfo
+        newPlaceholders.inner[setfmt("*active_keystone_level*", inkey)] = activeKeystoneData.formattedLevel
+        newPlaceholders.inner[setfmt("*active_keystone_affixes*", inkey)] = activeKeystoneData.formattedAffixes
+        newPlaceholders.inner[setfmt("*owned_keystone_level*", inkey)] = ownedKeystoneData.formattedLevel
+        newPlaceholders.inner[setfmt("*lockout_encounters*", inkey)] = lockoutData.formattedEncounterData
+        newPlaceholders.inner[setfmt("*lockout_current_encounters*", inkey)] = lockoutData.currentEncounters
+        newPlaceholders.inner[setfmt("*lockout_total_encounters*", inkey)] = lockoutData.totalEncounters
     else
         -- Inner Placeholder Adjustments
-        queued_inner_placeholders[setfmt("*player_info*", inkey)] = (userData .. " " .. playerClass)
+        newPlaceholders.inner[setfmt("*player_info*", inkey)] = (userData .. " " .. playerClass)
     end
+
     -- Calculate limiting RPC conditions
     -- If the condition is true, the placeholder will be active
-    local queued_global_conditions = {
+    local newConditions = {}
+
+    newConditions.global = {
         [setfmt("*dungeon*", outkey)] = (
-                queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "party" and
+                newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "party" and
                         not self:FindMatches(name, "Garrison", false)
         ),
-        [setfmt("*raid*", outkey)] = (queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "raid"),
-        [setfmt("*battleground*", outkey)] = (queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "pvp"),
-        [setfmt("*arena*", outkey)] = (queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "arena")
+        [setfmt("*raid*", outkey)] = (newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "raid"),
+        [setfmt("*battleground*", outkey)] = (newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "pvp"),
+        [setfmt("*arena*", outkey)] = (newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "arena")
     }
-    local queued_inner_conditions = {
+    newConditions.inner = {
         [setfmt("*lockout_encounters*", inkey)] = (lockoutData ~= nil and
                 (lockoutData.currentEncounters or 0) > 0 and (lockoutData.totalEncounters or 0) > 0)
     }
-    local queued_extra_conditions = {
+    newConditions.extra = {
         ["torghast"] = (self:FindMatches(name, "Torghast", false) and
-                queued_inner_placeholders[setfmt("*instance_type*", inkey)] == "scenario")
+                newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "scenario")
     }
-    local queued_time_conditions = {
-        ["start"] = (queued_global_conditions[setfmt("*dungeon*", outkey)] or
-                queued_global_conditions[setfmt("*raid*", outkey)] or
-                queued_global_conditions[setfmt("*battleground*", outkey)] or
-                queued_global_conditions[setfmt("*arena*", outkey)]),
-        ["start:extra"] = (queued_extra_conditions["torghast"])
+    newConditions.time = {
+        ["start"] = (newConditions.global[setfmt("*dungeon*", outkey)] or
+                newConditions.global[setfmt("*raid*", outkey)] or
+                newConditions.global[setfmt("*battleground*", outkey)] or
+                newConditions.global[setfmt("*arena*", outkey)]),
+        ["start:extra"] = (newConditions.extra["torghast"])
     }
     -- If these placeholders are active, they will override the field they are in
-    local queued_override_placeholders = {
+    newPlaceholders.override = {
         -- N/A
     }
     -- Synchronize any Extra Conditionals
-    queued_global_conditions[setfmt("*default*", outkey)] = (not queued_time_conditions["start"])
+    newConditions.global[setfmt("*default*", outkey)] = (not newConditions.time["start"])
     for key, value in pairs(buildData) do
         local formattedKey = ("*" .. key .. "*")
-        queued_inner_placeholders[setfmt(formattedKey, inkey)] = value
+        newPlaceholders.inner[setfmt(formattedKey, inkey)] = value
     end
 
     -- Prepare the final list of global placeholders
-    for inKey, inValue in pairs(queued_global_placeholders) do
+    for inKey, inValue in pairs(newPlaceholders.global) do
         local output = self:TrimString(inValue)
         -- If the Placeholders contained in the messages is an overrider,
         -- we replace the rest of the output with just that placeholder.
         --
         -- Note: Only applies towards inner-placeholders with subject to change data
-        for _, overrideValue in pairs(queued_override_placeholders) do
+        for _, overrideValue in pairs(newPlaceholders.override) do
             if self:FindMatches(output, overrideValue, false) then
                 if (self:StartsWith(overrideValue, inkey) and
-                        (queued_inner_conditions[overrideValue] == nil or queued_inner_conditions[overrideValue])
+                        (newConditions.inner[overrideValue] == nil or newConditions.inner[overrideValue])
                 ) then
                     output = overrideValue
                     break
@@ -389,17 +396,17 @@ function CraftPresence:ParseGameData(force_instance_change)
             end
         end
 
-        if (queued_global_conditions[inKey] == nil or queued_global_conditions[inKey]) then
-            for key, value in pairs(queued_inner_placeholders) do
-                if (queued_inner_conditions[key] == nil or queued_inner_conditions[key]) then
+        if (newConditions.global[inKey] == nil or newConditions.global[inKey]) then
+            for key, value in pairs(newPlaceholders.inner) do
+                if (newConditions.inner[key] == nil or newConditions.inner[key]) then
                     output = self:Replace(output, key, value, true)
                 else
                     output = self:Replace(output, key, "", true)
                 end
             end
-            queued_global_placeholders[inKey] = self:TrimString(output)
+            newPlaceholders.global[inKey] = self:TrimString(output)
         else
-            queued_global_placeholders[inKey] = ""
+            newPlaceholders.global[inKey] = ""
         end
     end
     -- Update Instance Status before exiting method
@@ -407,5 +414,5 @@ function CraftPresence:ParseGameData(force_instance_change)
         lastInstanceState = instanceType
         lastAreaName = name
     end
-    return queued_global_placeholders, queued_inner_placeholders, queued_time_conditions
+    return newPlaceholders, newConditions
 end

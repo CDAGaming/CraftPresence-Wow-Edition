@@ -27,6 +27,8 @@ CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.
 CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
+CraftPresence.placeholders = {}
+CraftPresence.conditions = {}
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
@@ -58,22 +60,15 @@ local buildData = {}
 local compatData = {}
 local activeIntegrations = {}
 local isRebasedApi = false
--- Storage Data
-local global_placeholders = {}
-local inner_placeholders = {}
-local custom_placeholders = {}
-local time_conditions = {}
 
 --- Synchronize Conditional Data with Game Info
 ---
 --- @param force_instance_change boolean Whether to force an instance change (Default: false)
 ---
---- @return table, table, table @ global_placeholders, inner_placeholders, time_conditions
+--- @return table, table @ placeholders, conditionals
 function CraftPresence:SyncConditions(force_instance_change)
-    wipe(global_placeholders)
-    wipe(inner_placeholders)
-    wipe(time_conditions)
-    custom_placeholders = self:GetFromDb("customPlaceholders")
+    wipe(self.placeholders)
+    self.placeholders.custom = self:GetFromDb("customPlaceholders")
     return self:ParseGameData(force_instance_change)
 end
 
@@ -85,7 +80,7 @@ end
 function CraftPresence:EncodeConfigData(force_instance_change)
     -- Primary Variable Data
     local split_key = L["ARRAY_SPLIT_KEY"]
-    global_placeholders, inner_placeholders, time_conditions = self:SyncConditions(force_instance_change)
+    self.placeholders, self.conditions = self:SyncConditions(force_instance_change)
     -- Secondary Variable Data
     local buttons = self:GetFromDb("buttons")
     local rpcData = {
@@ -99,7 +94,7 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     }
     -- Time Condition Syncing
     local time_start, time_end
-    for timeKey, timeValue in pairs(time_conditions) do
+    for timeKey, timeValue in pairs(self.conditions["time"]) do
         if timeValue then
             if (self:FindMatches(timeKey, "start", false)) then
                 if self:HasInstanceChanged() then
@@ -131,20 +126,20 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         tinsert(rpcData, dataValue)
     end
 
-    -- Global Placeholder Syncing
-    for key, value in pairs(global_placeholders) do
-        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
-    end
-    -- Inner Placeholder Syncing
-    for key, value in pairs(inner_placeholders) do
-        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
-    end
-    -- Custom Placeholder Syncing
-    for key, value in pairs(custom_placeholders) do
-        -- Sanity Checks
-        value = self:GetDynamicReturnValue(value["data"], value["type"], self)
-        -- Main Parsing
-        rpcData = self:SetFormats({ value, nil, key, nil }, rpcData, true, false)
+    -- Placeholder Syncing
+    for key, value in pairs(self.placeholders) do
+        if type(value) == "table" then
+            for subKey, subValue in pairs(value) do
+                -- Sanity Checks
+                subValue = self:GetDynamicReturnValue(
+                        (type(subValue) == "table" and subValue["data"]) or subValue,
+                        (type(subValue) == "table" and subValue["type"]), self)
+                -- Main Parsing
+                rpcData = self:SetFormats({ subValue, nil, subKey, nil }, rpcData, true, false)
+            end
+        else
+            -- TODO: Either log an error here or duplicate code for uncategorized placeholders
+        end
     end
 
     return self:EncodeData(L["EVENT_RPC_LENGTH"], rpcData)
@@ -516,7 +511,7 @@ function CraftPresence:ChatCommand(input)
             local tag_name, tag_table = "", ""
             if command == "placeholders" or command == "placeholder" then
                 tag_name, tag_table = "placeholders", "customPlaceholders"
-                global_placeholders, inner_placeholders, time_conditions = self:SyncConditions()
+                self.placeholders, self.conditions = self:SyncConditions()
             elseif command == "events" or command == "event" then
                 tag_name, tag_table = "events", "events"
             end
@@ -535,7 +530,8 @@ function CraftPresence:ChatCommand(input)
                             self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
                         elseif (
                                 tag_name ~= "placeholders" or not (
-                                        global_placeholders[command_query[3]] or inner_placeholders[command_query[3]]
+                                        self.placeholders.global[command_query[3]] or
+                                                self.placeholders.inner[command_query[3]]
                                 )
                         ) then
                             -- Some Pre-Filled Data is supplied for these areas
@@ -589,7 +585,11 @@ function CraftPresence:ChatCommand(input)
 
                     local tag_data = {}
                     if tag_name == "placeholders" then
-                        tag_data = self:CombineTables(global_placeholders, inner_placeholders, custom_placeholders)
+                        tag_data = self:CombineTables(
+                                self.placeholders.global,
+                                self.placeholders.inner,
+                                self.placeholders.custom
+                        )
                     elseif tag_name == "events" then
                         tag_data = self:GetFromDb(tag_table)
                     end

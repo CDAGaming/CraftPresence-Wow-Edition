@@ -842,9 +842,9 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
             order = self:GetNextIndex(), type = "header", name = titleKey
         }
     }
-    local custom_placeholders = self:GetFromDb(rootKey)
-    if type(custom_placeholders) == "table" then
-        for key, value in pairs(custom_placeholders) do
+    local rootData = self:GetFromDb(rootKey)
+    if type(rootData) == "table" then
+        for key, value in pairs(rootData) do
             local value_args = {}
             if type(value) == "table" then
                 for innerKey, _ in pairs(value) do
