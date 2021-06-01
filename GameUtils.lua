@@ -69,17 +69,19 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
             unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)) or
                     (cachedUnitData[unit] and cachedUnitData[unit].ghost), false
     )
-    unitData.reason = self:GetOrDefault(unitData.reason or
-            (cachedUnitData[unit] and cachedUnitData[unit].reason)
-    )
 
     -- Sync Player Name Tweaks
     local unitInfo = {}
     if unitData.away then
         tinsert(unitInfo, L["LABEL_AWAY"])
-    end
-    if unitData.busy then
+        if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
+            cachedUnitData[unit].reason = DEFAULT_AFK_MESSAGE or ""
+        end
+    elseif unitData.busy then
         tinsert(unitInfo, L["LABEL_BUSY"])
+        if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
+            cachedUnitData[unit].reason = DEFAULT_DND_MESSAGE or ""
+        end
     end
     if unitData.ghost then
         tinsert(unitInfo, L["LABEL_GHOST"])
@@ -87,6 +89,9 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
         tinsert(unitInfo, L["LABEL_DEAD"])
     end
     unitData.status = tconcat(unitInfo, ",")
+    unitData.reason = self:GetOrDefault(unitData.reason or
+            (cachedUnitData[unit] and cachedUnitData[unit].reason)
+    )
 
     -- Parse Player Status
     if not self:IsNullOrEmpty(unitData.status) then
@@ -282,6 +287,8 @@ function CraftPresence:ParseGameData(force_instance_change)
         [setfmt("*lockout_current_encounters*", inkey)] = 0, -- Retail-Only
         [setfmt("*lockout_total_encounters*", inkey)] = 0 -- Retail-Only
     }
+    -- Calculate Custom Placeholders, as needed
+    newPlaceholders.custom = self.placeholders.custom
     -- Version Dependent Data
     local userData = playerData.prefix .. playerName .. " - " .. (strformat(L["FORMAT_LEVEL"], playerLevel))
     if buildData["toc_version"] >= compatData["5.0.0"] or isRebasedApi then
