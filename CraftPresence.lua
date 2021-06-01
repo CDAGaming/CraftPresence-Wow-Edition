@@ -95,7 +95,7 @@ function CraftPresence:EncodeConfigData(force_instance_change)
     }
     -- Time Condition Syncing
     local time_start, time_end
-    for timeKey, timeValue in pairs(self.conditions["time"]) do
+    for timeKey, timeValue in pairs(self.conditions.time) do
         if timeValue then
             if (self:FindMatches(timeKey, "start", false)) then
                 if self:HasInstanceChanged() then
