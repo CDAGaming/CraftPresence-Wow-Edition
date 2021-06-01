@@ -68,6 +68,7 @@ local isRebasedApi = false
 --- @return table, table @ placeholders, conditionals
 function CraftPresence:SyncConditions(force_instance_change)
     wipe(self.placeholders)
+    wipe(self.conditions)
     self.placeholders.custom = self:GetFromDb("customPlaceholders")
     return self:ParseGameData(force_instance_change)
 end
