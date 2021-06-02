@@ -584,19 +584,17 @@ function CraftPresence:ChatCommand(input)
                         self:Print(strformat(L["DATA_QUERY"], tag_name, command_query[3]))
                     end
 
-                    local tag_data = {}
+                    local tag_data, multi_table = {}, false
                     if tag_name == "placeholders" then
-                        tag_data = self:CombineTables(
-                                self.placeholders.global,
-                                self.placeholders.inner,
-                                self.placeholders.custom
-                        )
+                        tag_data = self.placeholders
+                        multi_table = true
                     elseif tag_name == "events" then
                         tag_data = self:GetFromDb(tag_table)
+                        multi_table = false
                     end
                     -- Iterate through dataTable to form resultString
                     foundAny, resultStr = self:ParseDynamicTable(
-                            tag_name, command_query[3], tag_data, foundAny, resultStr
+                            tag_name, command_query[3], tag_data, foundAny, resultStr, multi_table
                     )
 
                     -- Final parsing of resultString before printing

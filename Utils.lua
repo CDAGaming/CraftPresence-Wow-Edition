@@ -747,27 +747,34 @@ end
 --- @param dataTable table The table to iterate through
 --- @param found_data boolean Output Value -- If any placeholders were found before or after
 --- @param resultString string Output Value -- The current placeholder result string
+--- @param isMultiTable boolean Optional Value -- If dataTable is comprised of smaller tables (Depth of 1)
 ---
 --- @return boolean, string @ found_data, resultString
-function CraftPresence:ParseDynamicTable(tagName, query, dataTable, found_data, resultString)
+function CraftPresence:ParseDynamicTable(tagName, query, dataTable, found_data, resultString, isMultiTable)
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
     found_data = self:GetOrDefault(found_data, false)
     resultString = self:GetOrDefault(resultString)
+    isMultiTable = self:GetOrDefault(isMultiTable, false)
     for key, value in pairs(dataTable) do
-        local strKey = tostring(key)
-        local strValue = tostring(value)
-        if type(value) == "table" then
-            strValue = self:GetDynamicReturnValue(value["data"] or value, value["type"], self)
-        end
-        if (query == nil or (
-                self:FindMatches(strlower(strKey), query, false, 1, true) or
-                        self:FindMatches(strlower(strValue), query, false, 1, true))
-        ) then
-            found_data = true
-            resultString = resultString .. "\n " .. (strformat(
-                    L["DATA_FOUND_DATA"], strKey, strValue
-            ))
+        if isMultiTable and type(value) == "table" then
+            found_data, resultString = self:ParseDynamicTable(
+                    tagName, query, value, found_data, resultString, not isMultiTable
+            )
+        else
+            key = tostring(key)
+            value = self:GetDynamicReturnValue(
+                    (type(value) == "table" and value["data"]) or value,
+                    (type(value) == "table" and value["type"]), self)
+            if (query == nil or (
+                    self:FindMatches(strlower(key), query, false, 1, true) or
+                            self:FindMatches(strlower(value), query, false, 1, true))
+            ) then
+                found_data = true
+                resultString = resultString .. "\n " .. (strformat(
+                        L["DATA_FOUND_DATA"], key, value
+                ))
+            end
         end
     end
     return found_data, resultString
