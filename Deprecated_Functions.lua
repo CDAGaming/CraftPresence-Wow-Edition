@@ -29,7 +29,7 @@ local strformat = string.format
 local L = CraftPresence.locale
 
 --- Retrieves the Player Status for the specified unit
---- DEPRECATED: WILL BE REMOVED IN v1.5.0 (Use GetUnitStatus)
+--- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use GetUnitStatus)
 ---
 --- @param unit string The unit to interpret (Default: player)
 --- @param refresh boolean Whether to sync the resulting status to unitData.last_status (Default: false)
@@ -45,7 +45,7 @@ function CraftPresence:GetPlayerStatus(unit, refresh, sync, prefixFormat, unitDa
 end
 
 --- Retrieves the Last Status of the specified unit, if any
---- DEPRECATED: WILL BE REMOVED IN v1.5.0 (Use GetUnitData)
+--- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use GetUnitData)
 ---
 --- @param unit string The unit to interpret (Default: player)
 ---
@@ -57,7 +57,7 @@ function CraftPresence:GetLastPlayerStatus(unit)
 end
 
 --- Sets a key,value pair within cachedPlayerData, for later usage
---- DEPRECATED: WILL BE REMOVED IN v1.5.0 (Use SetCachedUnitData)
+--- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use SetCachedUnitData)
 ---
 --- @param key string The key to insert to the table
 --- @param value any The value to insert to the table
@@ -69,7 +69,7 @@ function CraftPresence:SetCachedPlayerData(key, value)
 end
 
 --- Sets a key,value pair within cachedPlayerData, for later usage
---- DEPRECATED: WILL BE REMOVED IN v1.5.0 (Use SetCachedUnitData)
+--- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use SetCachedUnitData)
 ---
 --- @param key string The key to insert to the table
 --- @param value any The value to insert to the table
