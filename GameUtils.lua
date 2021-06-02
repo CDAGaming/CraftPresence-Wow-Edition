@@ -54,20 +54,20 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     unitData = self:GetOrDefault(unitData, {})
 
     unitData.away = self:GetOrDefault(
-            unitData.away or (UnitIsAFK and UnitIsAFK(unit)) or
-                    (cachedUnitData[unit] and cachedUnitData[unit].away), false
+            unitData.away or (UnitIsAFK and UnitIsAFK(unit)),
+            (cachedUnitData[unit] and cachedUnitData[unit].away)
     )
     unitData.busy = self:GetOrDefault(
-            unitData.busy or (UnitIsDND and UnitIsDND(unit)) or
-                    (cachedUnitData[unit] and cachedUnitData[unit].busy), false
+            unitData.busy or (UnitIsDND and UnitIsDND(unit)),
+            (cachedUnitData[unit] and cachedUnitData[unit].busy)
     )
     unitData.dead = self:GetOrDefault(
-            unitData.dead or (UnitIsDead and UnitIsDead(unit)) or
-                    (cachedUnitData[unit] and cachedUnitData[unit].dead), false
+            unitData.dead or (UnitIsDead and UnitIsDead(unit)),
+            (cachedUnitData[unit] and cachedUnitData[unit].dead)
     )
     unitData.ghost = self:GetOrDefault(
-            unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)) or
-                    (cachedUnitData[unit] and cachedUnitData[unit].ghost), false
+            unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)),
+            (cachedUnitData[unit] and cachedUnitData[unit].ghost)
     )
 
     -- Sync Player Name Tweaks
