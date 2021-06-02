@@ -466,7 +466,11 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
             end
             local func, err = loadstring(value)
             if not func then
-                self:PrintInvalidValue(err)
+                local dataTable = {
+                    [L["TITLE_ATTEMPTED_FUNCTION"]] = value,
+                    [L["TITLE_FUNCTION_MESSAGE"]] = err
+                }
+                self:PrintInvalidValue(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
             else
                 value = func
             end
@@ -703,11 +707,17 @@ end
 --- Prints a formatted message, meant to symbolize an deprecated value
 --- @param oldFunc string The old/deprecated function
 --- @param newFunc string The new function to migrate to
-function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc)
+--- @param version string The version the deprecated function will be removed in
+function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
     if self:GetFromDb("verboseMode") then
+        local dataTable = {
+            [L["TITLE_ATTEMPTED_FUNCTION"]] = oldFunc,
+            [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
+            [L["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, L["TYPE_UNKNOWN"])
+        }
         self:Print(
                 strformat(L["LOG_WARNING"], strformat(L["ERROR_FUNCTION_DEPRECATED"],
-                        oldFunc, newFunc
+                        self:SerializeTable(dataTable)
                 ))
         )
         self:Print(strformat(L["LOG_WARNING"], L["ERROR_FUNCTION_REPLACE"]))

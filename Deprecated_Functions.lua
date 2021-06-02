@@ -39,7 +39,9 @@ local L = CraftPresence.locale
 ---
 --- @return string, string, table @ playerStatus, playerPrefix, cachedPlayerData
 function CraftPresence:GetPlayerStatus(unit, refresh, sync, prefixFormat, unitData)
-    self:PrintDeprecationWarning("GetPlayerStatus", "GetUnitStatus")
+    self:PrintDeprecationWarning(
+            "GetPlayerStatus", "GetUnitStatus", "v2.0.0"
+    )
     local unitData = self:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData)
     return unitData.status, unitData.prefix, unitData
 end
@@ -51,7 +53,9 @@ end
 ---
 --- @return string @ lastPlayerStatus
 function CraftPresence:GetLastPlayerStatus(unit)
-    self:PrintDeprecationWarning("GetLastPlayerStatus(unit)", "GetUnitData(unit).last_status")
+    self:PrintDeprecationWarning(
+            "GetLastPlayerStatus(unit)", "GetUnitData(unit).last_status", "v2.0.0"
+    )
     unit = self:GetOrDefault(unit, "player")
     return self:GetUnitData(unit).last_status
 end
@@ -64,7 +68,9 @@ end
 ---
 --- @return table @ cachedPlayerData
 function CraftPresence:SetCachedPlayerData(key, value)
-    self:PrintDeprecationWarning("SetCachedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)")
+    self:PrintDeprecationWarning(
+            "SetCachedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)", "v2.0.0"
+    )
     return self:SetCachedUnitData("player", key, value)
 end
 
@@ -76,6 +82,8 @@ end
 ---
 --- @return table @ cachedPlayerData
 function CraftPresence:SetQueuedPlayerData(key, value)
-    self:PrintDeprecationWarning("SetQueuedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)")
+    self:PrintDeprecationWarning(
+            "SetQueuedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)", "v2.0.0"
+    )
     return self:SetCachedUnitData("player", key, value)
 end

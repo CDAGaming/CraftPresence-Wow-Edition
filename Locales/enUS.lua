@@ -278,9 +278,17 @@ L["COMMAND_EVENT_NO_TRIGGER"] = setfmt("Unable to perform operation ^%s|r on *%s
 
 -- Config Error Standards
 L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
+
+-- Function Error Standards
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
-L["ERROR_FUNCTION_DEPRECATED"] = "This function (%s) has been marked as deprecated, please use the newer function (%s)"
-L["ERROR_FUNCTION_REPLACE"] = "To fix this issue, please adjust your config to use these newer events or do '/cp reset'"
+L["ERROR_FUNCTION_DEPRECATED"] = "The function your trying to use is marked as deprecated, with the following info: %s"
+L["ERROR_FUNCTION"] = "The function your trying to use has encountered an error, with the following info: %s"
+L["TITLE_ATTEMPTED_FUNCTION"] = "Attempted Function"
+L["TITLE_REPLACEMENT_FUNCTION"] = "Replacement Function"
+L["TITLE_REMOVAL_VERSION"] = "Removal Version"
+L["TITLE_FUNCTION_MESSAGE"] = "Message"
+L["ERROR_FUNCTION_REPLACE"] = "To fix this issue, please use the replacement function or do '/cp reset' if unsure"
+
 -- General Command Data
 L["USAGE_CMD_INTRO"] = setfmt("*%s|r Command Usage:", GREEN)
 L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
