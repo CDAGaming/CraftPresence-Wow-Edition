@@ -221,7 +221,7 @@ L["ERROR_INNER_PLACEHOLDER_KEY"] = "Checks failed for Inner Placeholder Key. Ple
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
-L["DEBUG_VALUE_CHANGED"] = "%s changed from %s to %s"
+L["DEBUG_VALUE_CHANGED"] = setfmt("*%s|r changed from ^%s|r to ^%s|r", GREEN, GREY)
 L["INFO_EVENT_SKIPPED"] = setfmt("Event Skipped:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_EVENT_PROCESSING"] = setfmt("Event Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
@@ -281,13 +281,19 @@ L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerica
 
 -- Function Error Standards
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
-L["ERROR_FUNCTION_DEPRECATED"] = "The function your trying to use is marked as deprecated, with the following info: %s"
-L["ERROR_FUNCTION"] = "The function your trying to use has encountered an error, with the following info: %s"
+L["ERROR_FUNCTION_DEPRECATED"] = setfmt("A function your using is marked as deprecated, with the following info: *%s|r",
+        GREY
+)
+L["ERROR_FUNCTION"] = setfmt("A function your using has encountered an error, with the following info: *%s|r",
+        GREY
+)
 L["TITLE_ATTEMPTED_FUNCTION"] = "Attempted Function"
 L["TITLE_REPLACEMENT_FUNCTION"] = "Replacement Function"
 L["TITLE_REMOVAL_VERSION"] = "Removal Version"
 L["TITLE_FUNCTION_MESSAGE"] = "Message"
-L["ERROR_FUNCTION_REPLACE"] = "To fix this issue, please use the replacement function or do '/cp reset' if unsure"
+L["ERROR_FUNCTION_REPLACE"] = setfmt("To fix this issue, please use the newer function or do */cp reset|r if unsure",
+        GREY
+)
 
 -- General Command Data
 L["USAGE_CMD_INTRO"] = setfmt("*%s|r Command Usage:", GREEN)
