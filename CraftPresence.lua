@@ -29,6 +29,7 @@ CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
 CraftPresence.conditions = {}
+CraftPresence.metaValue = "_"
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
@@ -129,17 +130,24 @@ function CraftPresence:EncodeConfigData(force_instance_change)
 
     -- Placeholder Syncing
     for key, value in pairs(self.placeholders) do
-        if type(value) == "table" then
+        -- Notes:
+        --  Only categorized placeholders are allowed, to maintain control
+        --  Keys beginning with certain characters are considered metadata values
+        if type(value) == "table" and not self:StartsWith(key, self.metaValue) then
+            local keyPrefix = self:GetOrDefault(self.placeholders[key][self.metaValue .. "prefix"])
             for subKey, subValue in pairs(value) do
-                -- Sanity Checks
-                subValue = self:GetDynamicReturnValue(
-                        (type(subValue) == "table" and subValue["data"]) or subValue,
-                        (type(subValue) == "table" and subValue["type"]), self)
-                -- Main Parsing
-                rpcData = self:SetFormats({ subValue, nil, subKey, nil }, rpcData, true, false)
+                if not self:StartsWith(subKey, self.metaValue) then
+                    -- Sanity Checks
+                    subKey = keyPrefix .. subKey .. keyPrefix
+                    subValue = self:GetDynamicReturnValue(
+                            (type(subValue) == "table" and subValue["data"]) or subValue,
+                            (type(subValue) == "table" and subValue["type"]), self)
+                    -- Main Parsing
+                    rpcData = self:SetFormats({ subValue, nil, subKey, nil },
+                            rpcData, true, false
+                    )
+                end
             end
-        else
-            -- TODO: Either log an error here or duplicate code for uncategorized placeholders
         end
     end
 
@@ -532,7 +540,8 @@ function CraftPresence:ChatCommand(input)
                         elseif (
                                 tag_name ~= "placeholders" or not (
                                         self.placeholders.global[command_query[3]] or
-                                                self.placeholders.inner[command_query[3]]
+                                                self.placeholders.inner[command_query[3]] or
+                                                self:StartsWith(command_query[3], self.metaValue)
                                 )
                         ) then
                             -- Some Pre-Filled Data is supplied for these areas

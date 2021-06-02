@@ -28,9 +28,6 @@ local tinsert, tconcat = table.insert, table.concat
 
 -- Addon APIs
 local L = CraftPresence.locale
-local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-end
 
 --[[ GAME GETTERS AND SETTERS ]]--
 
@@ -162,8 +159,6 @@ local playerAlliance, playerCovenant = L["TYPE_NONE"], L["TYPE_NONE"]
 --- @return table, table @ placeholders, conditionals
 function CraftPresence:ParseGameData(force_instance_change)
     force_instance_change = self:GetOrDefault(force_instance_change, false)
-    local inkey = self:GetFromDb("innerPlaceholderKey")
-    local outkey = self:GetFromDb("globalPlaceholderKey")
     -- Variable Initialization
     local name, instanceType, difficultyID, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceID, instanceGroupSize, LfgDungeonID
@@ -239,53 +234,55 @@ function CraftPresence:ParseGameData(force_instance_change)
 
     -- Calculate Global Placeholders
     newPlaceholders.global = {
-        [setfmt("*dungeon*", outkey)] = self:GetFromDb("dungeonPlaceholderMessage"),
-        [setfmt("*raid*", outkey)] = self:GetFromDb("raidPlaceholderMessage"),
-        [setfmt("*battleground*", outkey)] = self:GetFromDb("battlegroundPlaceholderMessage"),
-        [setfmt("*arena*", outkey)] = self:GetFromDb("arenaPlaceholderMessage"),
-        [setfmt("*default*", outkey)] = self:GetFromDb("defaultPlaceholderMessage")
+        [self.metaValue .. "prefix"] = self:GetFromDb("globalPlaceholderKey"),
+        ["dungeon"] = self:GetFromDb("dungeonPlaceholderMessage"),
+        ["raid"] = self:GetFromDb("raidPlaceholderMessage"),
+        ["battleground"] = self:GetFromDb("battlegroundPlaceholderMessage"),
+        ["arena"] = self:GetFromDb("arenaPlaceholderMessage"),
+        ["default"] = self:GetFromDb("defaultPlaceholderMessage")
     }
     -- Calculate Inner Placeholders
     newPlaceholders.inner = {
-        [setfmt("*player_info*", inkey)] = "", -- Version-Dependent
-        [setfmt("*player_name*", inkey)] = playerName,
-        [setfmt("*title_name*", inkey)] = playerName, -- Version-Dependent
-        [setfmt("*player_level*", inkey)] = playerLevel,
-        [setfmt("*player_class*", inkey)] = playerClass,
-        [setfmt("*player_status*", inkey)] = playerData.status,
-        [setfmt("*player_reason*", inkey)] = playerData.reason,
-        [setfmt("*player_alliance*", inkey)] = playerAlliance,
-        [setfmt("*player_covenant*", inkey)] = playerCovenant,
-        [setfmt("*player_covenant_renown*", inkey)] = "0", -- Retail-Only
-        [setfmt("*player_faction*", inkey)] = localizedFaction,
-        [setfmt("*player_spec_name*", inkey)] = "", -- Retail-Only
-        [setfmt("*player_spec_role*", inkey)] = "", -- Retail-Only
-        [setfmt("*item_level*", inkey)] = "0", -- Retail-Only
-        [setfmt("*item_level_equipped*", inkey)] = "0", -- Retail-Only
-        [setfmt("*item_level_pvp*", inkey)] = "0", -- Retail-Only
-        [setfmt("*realm_info*", inkey)] = (playerRegion .. " - " .. playerRealm),
-        [setfmt("*player_region*", inkey)] = playerRegion,
-        [setfmt("*player_realm*", inkey)] = playerRealm,
-        [setfmt("*zone_info*", inkey)] = formatted_zone_info,
-        [setfmt("*zone_name*", inkey)] = zone_name,
-        [setfmt("*sub_zone_name*", inkey)] = sub_name,
-        [setfmt("*difficulty_name*", inkey)] = difficultyName,
-        [setfmt("*difficulty_info*", inkey)] = difficultyInfo, -- Retail-Effected
-        [setfmt("*active_keystone_level*", inkey)] = "", -- Retail-Only
-        [setfmt("*active_keystone_affixes*", inkey)] = "", -- Retail-Only
-        [setfmt("*owned_keystone_level*", inkey)] = "", -- Retail-Only
-        [setfmt("*instance_type*", inkey)] = instanceType,
-        [setfmt("*localized_name*", inkey)] = name,
-        [setfmt("*instance_difficulty*", inkey)] = tostring(difficultyID),
-        [setfmt("*max_players*", inkey)] = tostring(maxPlayers),
-        [setfmt("*dynamic_difficulty*", inkey)] = tostring(dynamicDifficulty),
-        [setfmt("*is_dynamic*", inkey)] = tostring(isDynamic),
-        [setfmt("*instance_id*", inkey)] = tostring(instanceID),
-        [setfmt("*instance_group_size*", inkey)] = tostring(instanceGroupSize),
-        [setfmt("*lfg_dungeon_id*", inkey)] = tostring(LfgDungeonID),
-        [setfmt("*lockout_encounters*", inkey)] = "", -- Retail-Only
-        [setfmt("*lockout_current_encounters*", inkey)] = 0, -- Retail-Only
-        [setfmt("*lockout_total_encounters*", inkey)] = 0 -- Retail-Only
+        [self.metaValue .. "prefix"] = self:GetFromDb("innerPlaceholderKey"),
+        ["player_info"] = "", -- Version-Dependent
+        ["player_name"] = playerName,
+        ["title_name"] = playerName, -- Version-Dependent
+        ["player_level"] = playerLevel,
+        ["player_class"] = playerClass,
+        ["player_status"] = playerData.status,
+        ["player_reason"] = playerData.reason,
+        ["player_alliance"] = playerAlliance,
+        ["player_covenant"] = playerCovenant,
+        ["player_covenant_renown"] = "0", -- Retail-Only
+        ["player_faction"] = localizedFaction,
+        ["player_spec_name"] = "", -- Retail-Only
+        ["player_spec_role"] = "", -- Retail-Only
+        ["item_level"] = "0", -- Retail-Only
+        ["item_level_equipped"] = "0", -- Retail-Only
+        ["item_level_pvp"] = "0", -- Retail-Only
+        ["realm_info"] = (playerRegion .. " - " .. playerRealm),
+        ["player_region"] = playerRegion,
+        ["player_realm"] = playerRealm,
+        ["zone_info"] = formatted_zone_info,
+        ["zone_name"] = zone_name,
+        ["sub_zone_name"] = sub_name,
+        ["difficulty_name"] = difficultyName,
+        ["difficulty_info"] = difficultyInfo, -- Retail-Effected
+        ["active_keystone_level"] = "", -- Retail-Only
+        ["active_keystone_affixes"] = "", -- Retail-Only
+        ["owned_keystone_level"] = "", -- Retail-Only
+        ["instance_type"] = instanceType,
+        ["localized_name"] = name,
+        ["instance_difficulty"] = tostring(difficultyID),
+        ["max_players"] = tostring(maxPlayers),
+        ["dynamic_difficulty"] = tostring(dynamicDifficulty),
+        ["is_dynamic"] = tostring(isDynamic),
+        ["instance_id"] = tostring(instanceID),
+        ["instance_group_size"] = tostring(instanceGroupSize),
+        ["lfg_dungeon_id"] = tostring(LfgDungeonID),
+        ["lockout_encounters"] = "", -- Retail-Only
+        ["lockout_current_encounters"] = 0, -- Retail-Only
+        ["lockout_total_encounters"] = 0 -- Retail-Only
     }
     -- Calculate Custom Placeholders, as needed
     newPlaceholders.custom = self.placeholders.custom
@@ -326,24 +323,24 @@ function CraftPresence:ParseGameData(force_instance_change)
             userInfo = (userInfo .. " " .. playerClass)
         end
         -- Inner Placeholder Adjustments
-        newPlaceholders.inner[setfmt("*title_name*", inkey)] = titleName
-        newPlaceholders.inner[setfmt("*player_info*", inkey)] = userInfo
-        newPlaceholders.inner[setfmt("*player_covenant_renown*", inkey)] = tostring(playerCovenantRenown)
-        newPlaceholders.inner[setfmt("*player_spec_name*", inkey)] = specName
-        newPlaceholders.inner[setfmt("*player_spec_role*", inkey)] = roleName
-        newPlaceholders.inner[setfmt("*item_level*", inkey)] = strformat("%.2f", avgItemLevel or 0)
-        newPlaceholders.inner[setfmt("*item_level_equipped*", inkey)] = strformat("%.2f", avgItemLevelEquipped or 0)
-        newPlaceholders.inner[setfmt("*item_level_pvp*", inkey)] = strformat("%.2f", avgItemLevelPvp or 0)
-        newPlaceholders.inner[setfmt("*difficulty_info*", inkey)] = difficultyInfo
-        newPlaceholders.inner[setfmt("*active_keystone_level*", inkey)] = activeKeystoneData.formattedLevel
-        newPlaceholders.inner[setfmt("*active_keystone_affixes*", inkey)] = activeKeystoneData.formattedAffixes
-        newPlaceholders.inner[setfmt("*owned_keystone_level*", inkey)] = ownedKeystoneData.formattedLevel
-        newPlaceholders.inner[setfmt("*lockout_encounters*", inkey)] = lockoutData.formattedEncounterData
-        newPlaceholders.inner[setfmt("*lockout_current_encounters*", inkey)] = lockoutData.currentEncounters
-        newPlaceholders.inner[setfmt("*lockout_total_encounters*", inkey)] = lockoutData.totalEncounters
+        newPlaceholders.inner["title_name"] = titleName
+        newPlaceholders.inner["player_info"] = userInfo
+        newPlaceholders.inner["player_covenant_renown"] = tostring(playerCovenantRenown)
+        newPlaceholders.inner["player_spec_name"] = specName
+        newPlaceholders.inner["player_spec_role"] = roleName
+        newPlaceholders.inner["item_level"] = strformat("%.2f", avgItemLevel or 0)
+        newPlaceholders.inner["item_level_equipped"] = strformat("%.2f", avgItemLevelEquipped or 0)
+        newPlaceholders.inner["item_level_pvp"] = strformat("%.2f", avgItemLevelPvp or 0)
+        newPlaceholders.inner["difficulty_info"] = difficultyInfo
+        newPlaceholders.inner["active_keystone_level"] = activeKeystoneData.formattedLevel
+        newPlaceholders.inner["active_keystone_affixes"] = activeKeystoneData.formattedAffixes
+        newPlaceholders.inner["owned_keystone_level"] = ownedKeystoneData.formattedLevel
+        newPlaceholders.inner["lockout_encounters"] = lockoutData.formattedEncounterData
+        newPlaceholders.inner["lockout_current_encounters"] = lockoutData.currentEncounters
+        newPlaceholders.inner["lockout_total_encounters"] = lockoutData.totalEncounters
     else
         -- Inner Placeholder Adjustments
-        newPlaceholders.inner[setfmt("*player_info*", inkey)] = (userData .. " " .. playerClass)
+        newPlaceholders.inner["player_info"] = (userData .. " " .. playerClass)
     end
 
     -- Calculate limiting RPC conditions
@@ -351,27 +348,27 @@ function CraftPresence:ParseGameData(force_instance_change)
     local newConditions = {}
 
     newConditions.global = {
-        [setfmt("*dungeon*", outkey)] = (
-                newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "party" and
+        ["dungeon"] = (
+                newPlaceholders.inner["instance_type"] == "party" and
                         not self:FindMatches(name, "Garrison", false)
         ),
-        [setfmt("*raid*", outkey)] = (newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "raid"),
-        [setfmt("*battleground*", outkey)] = (newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "pvp"),
-        [setfmt("*arena*", outkey)] = (newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "arena")
+        ["raid"] = (newPlaceholders.inner["instance_type"] == "raid"),
+        ["battleground"] = (newPlaceholders.inner["instance_type"] == "pvp"),
+        ["arena"] = (newPlaceholders.inner["instance_type"] == "arena")
     }
     newConditions.inner = {
-        [setfmt("*lockout_encounters*", inkey)] = (lockoutData ~= nil and
+        ["lockout_encounters"] = (lockoutData ~= nil and
                 (lockoutData.currentEncounters or 0) > 0 and (lockoutData.totalEncounters or 0) > 0)
     }
     newConditions.extra = {
         ["torghast"] = (self:FindMatches(name, "Torghast", false) and
-                newPlaceholders.inner[setfmt("*instance_type*", inkey)] == "scenario")
+                newPlaceholders.inner["instance_type"] == "scenario")
     }
     newConditions.time = {
-        ["start"] = (newConditions.global[setfmt("*dungeon*", outkey)] or
-                newConditions.global[setfmt("*raid*", outkey)] or
-                newConditions.global[setfmt("*battleground*", outkey)] or
-                newConditions.global[setfmt("*arena*", outkey)]),
+        ["start"] = (newConditions.global["dungeon"] or
+                newConditions.global["raid"] or
+                newConditions.global["battleground"] or
+                newConditions.global["arena"]),
         ["start:extra"] = (newConditions.extra["torghast"])
     }
     -- If these placeholders are active, they will override the field they are in
@@ -379,41 +376,50 @@ function CraftPresence:ParseGameData(force_instance_change)
         -- N/A
     }
     -- Synchronize any Extra Conditionals
-    newConditions.global[setfmt("*default*", outkey)] = (not newConditions.time["start"])
+    newConditions.global["default"] = (not newConditions.time["start"])
     for key, value in pairs(buildData) do
-        local formattedKey = ("*" .. key .. "*")
-        newPlaceholders.inner[setfmt(formattedKey, inkey)] = value
+        newPlaceholders.inner[key] = value
     end
 
     -- Prepare the final list of global placeholders
     for inKey, inValue in pairs(newPlaceholders.global) do
-        local output = self:TrimString(inValue)
-        -- If the Placeholders contained in the messages is an overrider,
-        -- we replace the rest of the output with just that placeholder.
-        --
-        -- Note: Only applies towards inner-placeholders with subject to change data
-        for _, overrideValue in pairs(newPlaceholders.override) do
-            if self:FindMatches(output, overrideValue, false) then
-                if (self:StartsWith(overrideValue, inkey) and
-                        (newConditions.inner[overrideValue] == nil or newConditions.inner[overrideValue])
-                ) then
-                    output = overrideValue
-                    break
+        if not self:StartsWith(inKey, self.metaValue) then
+            local output = self:TrimString(inValue)
+            -- If the Placeholders contained in the messages is an overrider,
+            -- we replace the rest of the output with just that placeholder.
+            --
+            -- Note: Only applies towards inner-placeholders with subject to change data
+            for _, overrideValue in pairs(newPlaceholders.override) do
+                if self:FindMatches(output, overrideValue, false) then
+                    if (self:StartsWith(overrideValue, newPlaceholders.inner[self.metaValue .. "prefix"]) and
+                            (newConditions.inner[overrideValue] == nil or newConditions.inner[overrideValue])
+                    ) then
+                        output = overrideValue
+                        break
+                    end
                 end
             end
-        end
 
-        if (newConditions.global[inKey] == nil or newConditions.global[inKey]) then
-            for key, value in pairs(newPlaceholders.inner) do
-                if (newConditions.inner[key] == nil or newConditions.inner[key]) then
-                    output = self:Replace(output, key, value, true)
-                else
-                    output = self:Replace(output, key, "", true)
+            -- If the conditions for the global placeholder are nil or true,
+            -- and the inner placeholder conditions are also satisfied,
+            -- we replace the placeholder key with the inner placeholder result.
+            --
+            -- If the global placeholder condition is false, it's result will be nulled instead.
+            if (newConditions.global[inKey] == nil or newConditions.global[inKey]) then
+                local keyPrefix = self:GetOrDefault(newPlaceholders.inner[self.metaValue .. "prefix"])
+                for key, value in pairs(newPlaceholders.inner) do
+                    if (not self:StartsWith(key, self.metaValue) and
+                            (newConditions.inner[key] == nil or newConditions.inner[key])
+                    ) then
+                        output = self:Replace(output, (keyPrefix .. key .. keyPrefix), value, true)
+                    else
+                        output = self:Replace(output, (keyPrefix .. key .. keyPrefix), "", true)
+                    end
                 end
+                newPlaceholders.global[inKey] = self:TrimString(output)
+            else
+                newPlaceholders.global[inKey] = ""
             end
-            newPlaceholders.global[inKey] = self:TrimString(output)
-        else
-            newPlaceholders.global[inKey] = ""
         end
     end
     -- Update Instance Status before exiting method

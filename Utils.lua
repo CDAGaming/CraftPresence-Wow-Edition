@@ -745,24 +745,26 @@ end
 --- @param tagName string The tag name that determines how data is processed in this method
 --- @param query string The query to filter the placeholderTable by
 --- @param dataTable table The table to iterate through
---- @param found_data boolean Output Value -- If any placeholders were found before or after
+--- @param foundData boolean Output Value -- If any placeholders were found before or after
 --- @param resultString string Output Value -- The current placeholder result string
 --- @param isMultiTable boolean Optional Value -- If dataTable is comprised of smaller tables (Depth of 1)
+--- @param prefix string Optional Value -- The string to append to the start and ending of table keys
 ---
 --- @return boolean, string @ found_data, resultString
-function CraftPresence:ParseDynamicTable(tagName, query, dataTable, found_data, resultString, isMultiTable)
+function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable, prefix)
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
-    found_data = self:GetOrDefault(found_data, false)
+    foundData = self:GetOrDefault(foundData, false)
     resultString = self:GetOrDefault(resultString)
     isMultiTable = self:GetOrDefault(isMultiTable, false)
+    prefix = self:GetOrDefault(dataTable[self.metaValue .. "prefix"])
     for key, value in pairs(dataTable) do
         if isMultiTable and type(value) == "table" then
-            found_data, resultString = self:ParseDynamicTable(
-                    tagName, query, value, found_data, resultString, not isMultiTable
+            foundData, resultString = self:ParseDynamicTable(
+                    tagName, query, value, foundData, resultString, not isMultiTable
             )
-        else
-            key = tostring(key)
+        elseif not self:StartsWith(key, self.metaValue) then
+            key = prefix .. tostring(key) .. prefix
             value = self:GetDynamicReturnValue(
                     (type(value) == "table" and value["data"]) or value,
                     (type(value) == "table" and value["type"]), self)
@@ -770,14 +772,14 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, found_data, 
                     self:FindMatches(strlower(key), query, false, 1, true) or
                             self:FindMatches(strlower(value), query, false, 1, true))
             ) then
-                found_data = true
+                foundData = true
                 resultString = resultString .. "\n " .. (strformat(
                         L["DATA_FOUND_DATA"], key, value
                 ))
             end
         end
     end
-    return found_data, resultString
+    return foundData, resultString
 end
 
 --[[ CONFIG GETTERS AND SETTERS ]]--
