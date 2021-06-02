@@ -126,7 +126,8 @@ end]],
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "",
                 ignoreCallback = [[function (self, lastName, _, args)
-    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or self:GetUnitData().last_status == self:GetUnitStatus().status
+    local unitData = self:GetUnitData()
+    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or unitData.last_status == unitData.status
 end]],
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",

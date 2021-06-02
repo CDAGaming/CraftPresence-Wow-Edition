@@ -385,13 +385,14 @@ function CraftPresence:ParseGameData(force_instance_change)
     for inKey, inValue in pairs(newPlaceholders.global) do
         if not self:StartsWith(inKey, self.metaValue) then
             local output = self:TrimString(inValue)
+            local innerKeyPrefix = self:GetOrDefault(newPlaceholders.inner[self.metaValue .. "prefix"])
             -- If the Placeholders contained in the messages is an overrider,
             -- we replace the rest of the output with just that placeholder.
             --
             -- Note: Only applies towards inner-placeholders with subject to change data
             for _, overrideValue in pairs(newPlaceholders.override) do
                 if self:FindMatches(output, overrideValue, false) then
-                    if (self:StartsWith(overrideValue, newPlaceholders.inner[self.metaValue .. "prefix"]) and
+                    if (self:StartsWith(overrideValue, innerKeyPrefix) and
                             (newConditions.inner[overrideValue] == nil or newConditions.inner[overrideValue])
                     ) then
                         output = overrideValue
@@ -406,14 +407,13 @@ function CraftPresence:ParseGameData(force_instance_change)
             --
             -- If the global placeholder condition is false, it's result will be nulled instead.
             if (newConditions.global[inKey] == nil or newConditions.global[inKey]) then
-                local keyPrefix = self:GetOrDefault(newPlaceholders.inner[self.metaValue .. "prefix"])
                 for key, value in pairs(newPlaceholders.inner) do
                     if (not self:StartsWith(key, self.metaValue) and
                             (newConditions.inner[key] == nil or newConditions.inner[key])
                     ) then
-                        output = self:Replace(output, (keyPrefix .. key .. keyPrefix), value, true)
+                        output = self:Replace(output, (innerKeyPrefix .. key .. innerKeyPrefix), value, true)
                     else
-                        output = self:Replace(output, (keyPrefix .. key .. keyPrefix), "", true)
+                        output = self:Replace(output, (innerKeyPrefix .. key .. innerKeyPrefix), "", true)
                     end
                 end
                 newPlaceholders.global[inKey] = self:TrimString(output)

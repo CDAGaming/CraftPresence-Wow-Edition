@@ -158,4 +158,6 @@ globals = {
 	"OptionsListButtonToggle_OnClick",
 	"ReloadUI",
 	"RequestRaidInfo",
+	"DEFAULT_AFK_MESSAGE",
+	"DEFAULT_DND_MESSAGE",
 }

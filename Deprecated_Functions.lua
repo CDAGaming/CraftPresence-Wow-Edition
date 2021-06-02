@@ -22,12 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 
--- Lua APIs
-local strformat = string.format
-
--- Addon APIs
-local L = CraftPresence.locale
-
 --- Retrieves the Player Status for the specified unit
 --- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use GetUnitStatus)
 ---
@@ -42,8 +36,8 @@ function CraftPresence:GetPlayerStatus(unit, refresh, sync, prefixFormat, unitDa
     self:PrintDeprecationWarning(
             "GetPlayerStatus", "GetUnitStatus", "v2.0.0"
     )
-    local unitData = self:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData)
-    return unitData.status, unitData.prefix, unitData
+    local unitInfo = self:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData)
+    return unitInfo.status, unitInfo.prefix, unitInfo
 end
 
 --- Retrieves the Last Status of the specified unit, if any

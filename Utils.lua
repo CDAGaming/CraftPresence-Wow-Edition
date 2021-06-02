@@ -762,12 +762,14 @@ end
 ---
 --- @return boolean, string @ found_data, resultString
 function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable, prefix)
+    local defaultPrefix = self:GetOrDefault(dataTable[self.metaValue .. "prefix"])
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
     foundData = self:GetOrDefault(foundData, false)
     resultString = self:GetOrDefault(resultString)
     isMultiTable = self:GetOrDefault(isMultiTable, false)
-    prefix = self:GetOrDefault(dataTable[self.metaValue .. "prefix"])
+    prefix = self:GetOrDefault(prefix, defaultPrefix)
+
     for key, value in pairs(dataTable) do
         if isMultiTable and type(value) == "table" then
             foundData, resultString = self:ParseDynamicTable(
