@@ -393,7 +393,7 @@ function CraftPresence:ParseGameData(force_instance_change)
             for _, overrideValue in pairs(newPlaceholders.override) do
                 if self:FindMatches(output, overrideValue, false) then
                     if (self:StartsWith(overrideValue, innerKeyPrefix) and
-                            (newConditions.inner[overrideValue] == nil or newConditions.inner[overrideValue])
+                            (self:GetOrDefault(newConditions.inner[overrideValue], true))
                     ) then
                         output = overrideValue
                         break
@@ -406,10 +406,10 @@ function CraftPresence:ParseGameData(force_instance_change)
             -- we replace the placeholder key with the inner placeholder result.
             --
             -- If the global placeholder condition is false, it's result will be nulled instead.
-            if (newConditions.global[inKey] == nil or newConditions.global[inKey]) then
+            if (self:GetOrDefault(newConditions.global[inKey], true)) then
                 for key, value in pairs(newPlaceholders.inner) do
                     if (not self:StartsWith(key, self.metaValue) and
-                            (newConditions.inner[key] == nil or newConditions.inner[key])
+                            (self:GetOrDefault(newConditions.inner[key], true))
                     ) then
                         output = self:Replace(output, (innerKeyPrefix .. key .. innerKeyPrefix), value, true)
                     else

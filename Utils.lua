@@ -780,7 +780,7 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, r
             value = self:GetDynamicReturnValue(
                     (type(value) == "table" and value["data"]) or value,
                     (type(value) == "table" and value["type"]), self)
-            if (query == nil or (
+            if (self:IsNullOrEmpty(query) or (
                     self:FindMatches(strlower(key), query, false, 1, true) or
                             self:FindMatches(strlower(value), query, false, 1, true))
             ) then
