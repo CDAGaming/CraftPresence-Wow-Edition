@@ -72,12 +72,12 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     if unitData.away then
         tinsert(unitInfo, L["LABEL_AWAY"])
         if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
-            cachedUnitData[unit].reason = DEFAULT_AFK_MESSAGE or ""
+            cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_AFK_MESSAGE)
         end
     elseif unitData.busy then
         tinsert(unitInfo, L["LABEL_BUSY"])
         if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
-            cachedUnitData[unit].reason = DEFAULT_DND_MESSAGE or ""
+            cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_DND_MESSAGE)
         end
     end
     if unitData.ghost then
