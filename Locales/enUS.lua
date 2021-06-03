@@ -95,15 +95,17 @@ L["COMMENT_LARGE_IMAGE_KEY"] = "The image key to be displayed as the Large Image
 L["USAGE_LARGE_IMAGE_KEY"] = "<Your message here>"
 L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
 
-L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
-L["COMMENT_LARGE_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Large Image area of the RPC."
-L["USAGE_LARGE_IMAGE_MESSAGE"] = "<Your message here>"
-L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
-
 L["TITLE_SMALL_IMAGE_KEY"] = "Small Image Key"
 L["COMMENT_SMALL_IMAGE_KEY"] = "The image key to be displayed as the Small Image of the RPC."
 L["USAGE_SMALL_IMAGE_KEY"] = "<Your message here>"
 L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
+
+L["ERROR_IMAGE_KEY"] = "Sanity Checks failed for Image Key. Please enter a string <= 32 characters long."
+
+L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
+L["COMMENT_LARGE_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Large Image area of the RPC."
+L["USAGE_LARGE_IMAGE_MESSAGE"] = "<Your message here>"
+L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
 
 L["TITLE_SMALL_IMAGE_MESSAGE"] = "Small Image Message"
 L["COMMENT_SMALL_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Small Image area of the RPC."

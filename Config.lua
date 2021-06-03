@@ -309,7 +309,7 @@ function CraftPresence:getOptionsTable()
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     largeImageKey = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
                         name = L["TITLE_LARGE_IMAGE_KEY"],
                         desc = L["COMMENT_LARGE_IMAGE_KEY"],
                         usage = L["USAGE_LARGE_IMAGE_KEY"],
@@ -318,10 +318,31 @@ function CraftPresence:getOptionsTable()
                         end,
                         set = function(_, value)
                             local oldValue = self:GetFromDb("largeImageKey")
-                            local isValid = (type(value) == "string")
+                            local isValid = (type(value) == "string") and self:GetLength(value) == 32
                             if isValid then
                                 self.db.profile.largeImageKey = value
                                 self:PrintChangedValue(L["TITLE_LARGE_IMAGE_KEY"], oldValue, value)
+                            else
+                                self:PrintErrorMessage(L["ERROR_IMAGE_KEY"])
+                            end
+                        end,
+                    },
+                    smallImageKey = {
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
+                        name = L["TITLE_SMALL_IMAGE_KEY"],
+                        desc = L["COMMENT_SMALL_IMAGE_KEY"],
+                        usage = L["USAGE_SMALL_IMAGE_KEY"],
+                        get = function(_)
+                            return self:GetFromDb("smallImageKey")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetFromDb("smallImageKey")
+                            local isValid = (type(value) == "string") and self:GetLength(value) == 32
+                            if isValid then
+                                self.db.profile.smallImageKey = value
+                                self:PrintChangedValue(L["TITLE_SMALL_IMAGE_KEY"], oldValue, value)
+                            else
+                                self:PrintErrorMessage(L["ERROR_IMAGE_KEY"])
                             end
                         end,
                     },
@@ -348,26 +369,6 @@ function CraftPresence:getOptionsTable()
                     blank5 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
-                    smallImageKey = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_SMALL_IMAGE_KEY"],
-                        desc = L["COMMENT_SMALL_IMAGE_KEY"],
-                        usage = L["USAGE_SMALL_IMAGE_KEY"],
-                        get = function(_)
-                            return self:GetFromDb("smallImageKey")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("smallImageKey")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.smallImageKey = value
-                                self:PrintChangedValue(L["TITLE_SMALL_IMAGE_KEY"], oldValue, value)
-                            end
-                        end,
-                    },
-                    blank6 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
                     smallImageMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
                         name = L["TITLE_SMALL_IMAGE_MESSAGE"],
@@ -385,7 +386,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank7 = {
+                    blank6 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                 }
