@@ -65,6 +65,7 @@ local DB_DEFAULTS = {
         customPlaceholders = {},
         innerPlaceholderKey = L["DEFAULT_INNER_KEY"],
         globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"],
+        tableMetaKey = L["DEFAULT_META_KEY"],
         events = {
             ["CHAT_MSG_SYSTEM"] = {
                 minimumTOC = "", maximumTOC = "",
@@ -319,7 +320,7 @@ function CraftPresence:getOptionsTable()
                         end,
                         set = function(_, value)
                             local oldValue = self:GetFromDb("largeImageKey")
-                            local isValid = (type(value) == "string") and self:GetLength(value) == 32
+                            local isValid = (type(value) == "string") and self:GetLength(value) <= 32
                             if isValid then
                                 self.db.profile.largeImageKey = value
                                 self:PrintChangedValue(L["TITLE_LARGE_IMAGE_KEY"], oldValue, value)
@@ -338,7 +339,7 @@ function CraftPresence:getOptionsTable()
                         end,
                         set = function(_, value)
                             local oldValue = self:GetFromDb("smallImageKey")
-                            local isValid = (type(value) == "string") and self:GetLength(value) == 32
+                            local isValid = (type(value) == "string") and self:GetLength(value) <= 32
                             if isValid then
                                 self.db.profile.smallImageKey = value
                                 self:PrintChangedValue(L["TITLE_SMALL_IMAGE_KEY"], oldValue, value)
@@ -733,7 +734,7 @@ function CraftPresence:getOptionsTable()
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     globalPlaceholderKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.0,
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
                         name = L["TITLE_GLOBAL_PLACEHOLDER_KEY"],
                         desc = L["COMMENT_GLOBAL_PLACEHOLDER_KEY"],
                         usage = L["USAGE_GLOBAL_PLACEHOLDER_KEY"],
@@ -757,7 +758,7 @@ function CraftPresence:getOptionsTable()
                         end,
                     },
                     innerPlaceholderKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.0,
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
                         name = L["TITLE_INNER_PLACEHOLDER_KEY"],
                         desc = L["COMMENT_INNER_PLACEHOLDER_KEY"],
                         usage = L["USAGE_INNER_PLACEHOLDER_KEY"],
@@ -781,6 +782,36 @@ function CraftPresence:getOptionsTable()
                         end,
                     },
                     blank6 = {
+                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                    },
+                    tableMetaKey = {
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
+                        name = L["TITLE_TABLE_META_KEY"],
+                        desc = L["COMMENT_TABLE_META_KEY"],
+                        usage = L["USAGE_TABLE_META_KEY"],
+                        get = function(_)
+                            return self:GetFromDb("tableMetaKey")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetFromDb("tableMetaKey")
+                            local isValid = (
+                                    type(value) == "string" and
+                                            self:GetLength(value) == 1 and
+                                            not BLOCKED_CHARACTERS[value]
+                            )
+                            if (isValid and
+                                    (value ~= self.db.profile.globalPlaceholderKey) and
+                                    (value ~= self.db.profile.innerPlaceholderKey)
+                            ) then
+                                self.db.profile.tableMetaKey = value
+                                self.metaValue = value
+                                self:PrintChangedValue(L["TITLE_TABLE_META_KEY"], oldValue, value)
+                            else
+                                self:PrintErrorMessage(L["ERROR_TABLE_META_KEY"])
+                            end
+                        end,
+                    },
+                    blank7 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                 }

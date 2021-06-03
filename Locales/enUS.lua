@@ -30,6 +30,7 @@ L["ARRAY_SEPARATOR_KEY"] = "|"
 L["ARRAY_SEPARATOR_KEY_ALT"] = "||"
 L["DEFAULT_INNER_KEY"] = inkey
 L["DEFAULT_GLOBAL_KEY"] = outkey
+L["DEFAULT_META_KEY"] = "_"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
@@ -221,6 +222,11 @@ L["TITLE_INNER_PLACEHOLDER_KEY"] = "Inner Placeholder Key"
 L["COMMENT_INNER_PLACEHOLDER_KEY"] = "The key to use to represent Inner Placeholders"
 L["USAGE_INNER_PLACEHOLDER_KEY"] = "<Valid 1-digit character here>"
 L["ERROR_INNER_PLACEHOLDER_KEY"] = "Checks failed for Inner Placeholder Key. Please enter a valid 1-digit character."
+
+L["TITLE_TABLE_META_KEY"] = "Table Metadata Key"
+L["COMMENT_TABLE_META_KEY"] = "The key to use to represent Metadata Keys in Tables (Such as placeholders/conditionals)"
+L["USAGE_TABLE_META_KEY"] = "<Valid 1-digit character here>"
+L["ERROR_TABLE_META_KEY"] = "Checks failed for Table Metadata Key. Please enter a valid 1-digit character."
 
 -- Logging Data
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"

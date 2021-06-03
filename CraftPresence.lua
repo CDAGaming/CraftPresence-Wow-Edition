@@ -29,7 +29,6 @@ CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
 CraftPresence.conditions = {}
-CraftPresence.metaValue = "_"
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
@@ -198,10 +197,11 @@ end
 
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Print any Initial Data, if allowed
+    -- Print and set any Initial Data, if allowed
     if self:GetFromDb("showWelcomeMessage") then
         self:PrintAddonInfo()
     end
+    self.metaValue = self:GetFromDb("tableMetaKey")
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
