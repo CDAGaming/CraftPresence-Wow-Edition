@@ -198,8 +198,10 @@ end
 
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
-    -- Print any Initial Data
-    self:PrintAddonInfo()
+    -- Print any Initial Data, if allowed
+    if self:GetFromDb("showWelcomeMessage") then
+        self:PrintAddonInfo()
+    end
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")

@@ -149,6 +149,9 @@ L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used 
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
 L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate in a skip or queue style"
 
+L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
+L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
 L["MINIMUM_CALLBACK_DELAY"] = 0

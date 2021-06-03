@@ -48,6 +48,7 @@ local DB_DEFAULTS = {
         verboseMode = false,
         showMinimapIcon = true,
         queuedPipeline = false,
+        showWelcomeMessage = true,
         callbackDelay = 2,
         frameSize = 6,
         frameClearDelay = 10,
@@ -595,7 +596,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank2 = {
+                    blank1 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     showMinimapIcon = {
@@ -625,7 +626,26 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank4 = {
+                    blank2 = {
+                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                    },
+                    showWelcomeMessage = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = L["TITLE_SHOW_WELCOME_MESSAGE"],
+                        desc = L["COMMENT_SHOW_WELCOME_MESSAGE"],
+                        get = function(_)
+                            return self:GetFromDb("showWelcomeMessage")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetFromDb("showWelcomeMessage")
+                            local isValid = (type(value) == "boolean")
+                            if isValid then
+                                self.db.profile.showWelcomeMessage = value
+                                self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
+                            end
+                        end,
+                    },
+                    blank3 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     callbackDelay = {
@@ -680,7 +700,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank6 = {
+                    blank4 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     frameSize = {
@@ -709,7 +729,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank7 = {
+                    blank5 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     globalPlaceholderKey = {
@@ -760,7 +780,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank8 = {
+                    blank6 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                 }
