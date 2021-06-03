@@ -263,7 +263,7 @@ L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the fol
         GREEN, GREY
 )
 L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other data, please use the create:modify cmd"
-L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with a protected data)"
+L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with protected data)"
 
 -- Dynamic Data - Removal
 L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed key within ^%s|r => *%s|r",
