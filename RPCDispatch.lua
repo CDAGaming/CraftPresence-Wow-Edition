@@ -222,7 +222,11 @@ CraftPresence.ConcatTable = CraftPresence:vararg(3, function(self, appendTag, sp
     for key, value in pairs(args) do
         args[key] = self:TrimString(self:GetCaseData(value))
     end
-    return (appendTag .. tconcat(args, splitTag) .. appendTag), args
+    local combinedString, resultString = tconcat(args, splitTag), ""
+    if combinedString ~= splitTag then
+        resultString = (appendTag .. combinedString .. appendTag)
+    end
+    return resultString, args
 end)
 
 --- Sets all allocated frames to null for future allocation
