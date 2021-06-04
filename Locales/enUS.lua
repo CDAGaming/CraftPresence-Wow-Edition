@@ -79,7 +79,9 @@ L["TITLE_CLIENT_ID"] = "Client ID"
 L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles"
 L["USAGE_CLIENT_ID"] = "<18-digit numerical id here>"
 L["DEFAULT_CLIENT_ID"] = "805124430774272000"
-L["ERROR_CLIENT_ID"] = "Sanity Checks failed for Client ID. Please enter a 18-digit numerical value."
+L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit|r numerical value.",
+        GREEN, GREY
+)
 
 L["TITLE_GAME_STATE_MESSAGE"] = "Game State Message"
 L["COMMENT_GAME_STATE_MESSAGE"] = "The message to be displayed in the Game State area of the RPC."
@@ -101,7 +103,9 @@ L["COMMENT_SMALL_IMAGE_KEY"] = "The image key to be displayed as the Small Image
 L["USAGE_SMALL_IMAGE_KEY"] = "<Your message here>"
 L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
 
-L["ERROR_IMAGE_KEY"] = "Sanity Checks failed for Image Key. Please enter a string <= 32 characters long."
+L["ERROR_IMAGE_KEY"] = setfmt("Sanity Checks failed for *Image Key|r. Please enter a string ^<= 32|r letters long.",
+        GREEN, GREY
+)
 
 L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
 L["COMMENT_LARGE_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Large Image area of the RPC."
@@ -288,7 +292,12 @@ L["COMMAND_EVENT_NO_TRIGGER"] = setfmt("Unable to perform operation ^%s|r on *%s
 )
 
 -- Config Error Standards
-L["ERROR_RANGE_DEFAULT"] = "Sanity Checks failed for %s. Please enter a numerical value between %s and %s."
+L["ERROR_RANGE_DEFAULT"] = setfmt("Sanity Checks failed for *%s|r. Please enter a number between ^%s|r and ^%s|r.",
+        GREEN, GREY
+)
+L["ERROR_STRING_DEFAULT"] = setfmt("Sanity Checks failed for *%s|r. Please enter a valid string.",
+        GREEN, GREY
+)
 
 -- Function Error Standards
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."

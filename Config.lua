@@ -518,6 +518,15 @@ function CraftPresence:getOptionsTable()
                         L["CATEGORY_TITLE_BUTTONS_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], count, (count == 1 and "") or "s")
+                        end,
+                        nil,
+                        function(self, newValue)
+                            return not self:FindMatches(newValue, L["ARRAY_SPLIT_KEY"], false)
+                        end,
+                        function(self, fieldName, _, _)
+                            self:PrintErrorMessage(
+                                    strformat(L["ERROR_STRING_DEFAULT"], fieldName)
+                            )
                         end
                 )
             },

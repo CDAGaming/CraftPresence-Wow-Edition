@@ -847,15 +847,19 @@ end
 --- @param titleKey string The title key to display (Can be a function returning a string)
 --- @param commentKey string The comment key to display (Can be a function returning a string)
 --- @param changedCallback function The callback to trigger when a value is changed (Optional)
+--- @param validCallback function The callback to trigger to determine if the new value is valid (Optional)
+--- @param errorCallback function The callback to trigger if an error was encountered in changing the value (Optional)
 ---
 --- @return table @ generatedData
-function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changedCallback)
+function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changedCallback, validCallback, errorCallback)
     if self:IsNullOrEmpty(rootKey) then
         return {}
     end
     titleKey = self:GetOrDefault(titleKey, rootKey)
     commentKey = self:GetOrDefault(commentKey)
     changedCallback = self:GetOrDefault(changedCallback)
+    validCallback = self:GetOrDefault(validCallback, true)
+    errorCallback = self:GetOrDefault(errorCallback)
     local found_count = 0
 
     titleKey = self:GetDynamicReturnValue(titleKey, type(titleKey), self)
@@ -883,16 +887,16 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
                             local isValid = (
                                     (valueType == "toggle" and type(newValue) == "boolean") or
                                             (type(newValue) == "string")
-                            )
+                            ) and (type(validCallback) ~= "function" or validCallback(self, newValue) == true)
+                            local fieldName = (rootKey .. " (" .. key .. ", " .. innerKey .. ")")
                             if isValid then
                                 self.db.profile[rootKey][key][innerKey] = newValue
-                                self:PrintChangedValue(
-                                        (rootKey .. " (" .. key .. ", " .. innerKey .. ")"),
-                                        oldValue, newValue
-                                )
+                                self:PrintChangedValue(fieldName, oldValue, newValue)
                                 if not self:IsNullOrEmpty(changedCallback) and type(changedCallback) == "function" then
-                                    changedCallback(self)
+                                    changedCallback(self, fieldName, oldValue, newValue)
                                 end
+                            elseif not self:IsNullOrEmpty(errorCallback) and type(errorCallback) == "function" then
+                                errorCallback(self, fieldName, oldValue, newValue)
                             end
                         end,
                     }
