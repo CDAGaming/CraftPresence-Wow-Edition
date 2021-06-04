@@ -119,14 +119,10 @@ function CraftPresence:EncodeConfigData(force_instance_change)
 
     -- Additional Sanity Checks for Buttons
     for _, value in pairs(buttons) do
-        local dataValue, dataSeparator = "", ""
-        for _, buttonValue in pairs(value) do
-            dataValue = dataValue .. dataSeparator .. buttonValue
-            if not self:IsNullOrEmpty(buttonValue) then
-                dataSeparator = split_key
-            end
+        if type(value) == "table" and value.label and value.url then
+            local dataValue = self:ConcatTable(nil, split_key, value.label, value.url)
+            tinsert(rpcData, dataValue)
         end
-        tinsert(rpcData, dataValue)
     end
 
     -- Placeholder Syncing
