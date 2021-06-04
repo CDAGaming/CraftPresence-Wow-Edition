@@ -152,7 +152,7 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         end
     end
 
-    return self:EncodeData(L["EVENT_RPC_LENGTH"], unpack(rpcData))
+    return self:ConcatTable(L["EVENT_RPC_TAG"], L["ARRAY_SEPARATOR_KEY"], unpack(rpcData))
 end
 
 --- Instructions to be called when the addon is loaded
@@ -226,7 +226,7 @@ function CraftPresence:OnDisable()
     self:UnregisterChatCommand(L["ADDON_ID"])
     self:UnregisterChatCommand(L["ADDON_AFFIX"])
     -- Reset RPC Data to Discord
-    local resetData = self:EncodeData(L["EVENT_RPC_LENGTH"], self:GetFromDb("clientId"))
+    local resetData = self:ConcatTable(L["EVENT_RPC_TAG"], L["ARRAY_SEPARATOR_KEY"], self:GetFromDb("clientId"))
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
     if icon then

@@ -23,8 +23,8 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local strformat, tostring, type = string.format, tostring, type
-local strbyte, strsub = string.byte, string.sub
+local strformat, tostring, type, pairs = string.format, tostring, type, pairs
+local strbyte, strsub, tconcat = string.byte, string.sub, table.concat
 local max, floor = math.max, math.floor
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
 
@@ -209,27 +209,20 @@ function CraftPresence:PaintSomething(text)
     end
 end
 
---- Encodes varying pieces of RPC Tags into a valid RPC_EVENT
+--- Concatenates the specified arguments with the specified parameters
 ---
---- @param length number The length the args must meet
+--- @param appendTag string The string to append to the front and back of the result string
+--- @param splitTag string The string to split each element in args by
 --- @param args any The arguments to interpret
 ---
---- @return string, table @ eventString, args
-CraftPresence.EncodeData = CraftPresence:vararg(2, function(self, length, args)
-    local eventString, separator = L["EVENT_RPC_TAG"]
-    if type(length) == "number" and self:GetLength(args) == length then
-        for key = 1, length do
-            if self:IsWithinValue(key, 1, length, true) then
-                separator = L["ARRAY_SEPARATOR_KEY"]
-            else
-                separator = ""
-            end
-            args[key] = self:TrimString(self:GetCaseData(args[key]))
-            eventString = eventString .. args[key] .. separator
-        end
-        eventString = eventString .. L["EVENT_RPC_TAG"]
+--- @return string, table @ resultString, args
+CraftPresence.ConcatTable = CraftPresence:vararg(3, function(self, appendTag, splitTag, args)
+    appendTag = self:GetOrDefault(appendTag)
+    splitTag = self:GetOrDefault(splitTag, ",")
+    for key, value in pairs(args) do
+        args[key] = self:TrimString(self:GetCaseData(value))
     end
-    return eventString, args
+    return (appendTag .. tconcat(args, splitTag) .. appendTag), args
 end)
 
 --- Sets all allocated frames to null for future allocation

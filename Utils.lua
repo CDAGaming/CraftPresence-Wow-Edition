@@ -938,7 +938,7 @@ local queue_frame
 --- @param func function The function to perform when delay expires
 --- @param args any The arguments, if any, to use with the function
 CraftPresence.After = CraftPresence:vararg(3, function(self, seconds, func, args)
-    if type(seconds) == "number" and number >= 1 and type(func) == "function" then
+    if type(seconds) == "number" and seconds >= 1 and type(func) == "function" then
         local f = function()
             func(unpack(args))
         end
