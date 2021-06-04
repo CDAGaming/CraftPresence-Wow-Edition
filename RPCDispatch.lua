@@ -212,23 +212,25 @@ end
 --- Encodes varying pieces of RPC Tags into a valid RPC_EVENT
 ---
 --- @param length number The length the args must meet
---- @param args table The arguments to interpret
+--- @param args any The arguments to interpret
 ---
 --- @return string, table @ eventString, args
-function CraftPresence:EncodeData(length, args)
+CraftPresence.EncodeData = CraftPresence:vararg(2, function(self, length, args)
     local eventString, separator = L["EVENT_RPC_TAG"]
-    for key = 1, length do
-        if self:IsWithinValue(key, 1, length, true) then
-            separator = L["ARRAY_SEPARATOR_KEY"]
-        else
-            separator = ""
+    if type(length) == "number" and self:GetLength(args) == length then
+        for key = 1, length do
+            if self:IsWithinValue(key, 1, length, true) then
+                separator = L["ARRAY_SEPARATOR_KEY"]
+            else
+                separator = ""
+            end
+            args[key] = self:TrimString(self:GetCaseData(args[key]))
+            eventString = eventString .. args[key] .. separator
         end
-        args[key] = self:TrimString(self:GetCaseData(args[key]))
-        eventString = eventString .. args[key] .. separator
+        eventString = eventString .. L["EVENT_RPC_TAG"]
     end
-    eventString = eventString .. L["EVENT_RPC_TAG"]
     return eventString, args
-end
+end)
 
 --- Sets all allocated frames to null for future allocation
 function CraftPresence:CleanFrames()

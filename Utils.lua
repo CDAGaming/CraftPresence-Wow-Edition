@@ -51,13 +51,13 @@ function CraftPresence:ResetIndex()
     lastIndex = 0;
 end
 
---- Generates a random string of numbers
+--- Generates a random string of numbers with the specified length
 ---
---- @param length number The length of the resulting number
+--- @param length number The length of the resulting number (Default: 9)
 ---
 --- @return number @ random_string
 function CraftPresence:RandomString(length)
-    return CP_GlobalUtils:RandomString(length)
+    return CP_GlobalUtils:RandomString(self:GetOrDefault(length, 9))
 end
 
 --- Determines if the specified object is null or empty
@@ -701,7 +701,7 @@ end
 --- Prints a formatted message, meant to symbolize an error message
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintErrorMessage(logStyle)
-    self:Print(strformat(L["LOG_ERROR"], logStyle))
+    self:Print(strformat(L["LOG_ERROR"], self:GetOrDefault(logStyle, L["TYPE_UNKNOWN"])))
 end
 
 --- Prints a formatted message, meant to symbolize an deprecated value
@@ -711,7 +711,7 @@ end
 function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
     if self:GetFromDb("verboseMode") then
         local dataTable = {
-            [L["TITLE_ATTEMPTED_FUNCTION"]] = oldFunc,
+            [L["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, L["TYPE_NONE"]),
             [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
             [L["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, L["TYPE_UNKNOWN"])
         }
@@ -762,12 +762,13 @@ end
 ---
 --- @return boolean, string @ found_data, resultString
 function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable, prefix)
-    local defaultPrefix = self:GetOrDefault(dataTable[self.metaValue .. "prefix"])
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
     foundData = self:GetOrDefault(foundData, false)
     resultString = self:GetOrDefault(resultString)
     isMultiTable = self:GetOrDefault(isMultiTable, false)
+
+    local defaultPrefix = self:GetOrDefault(dataTable[self.metaValue .. "prefix"])
     prefix = self:GetOrDefault(prefix, defaultPrefix)
 
     for key, value in pairs(dataTable) do
@@ -933,20 +934,19 @@ local queue_frame
 
 --- Schedules a function to occur after the specified delay
 ---
---- @param seconds number The delay in seconds until task execution
+--- @param seconds number The delay in seconds until task execution (Minimum: 1)
 --- @param func function The function to perform when delay expires
 --- @param args any The arguments, if any, to use with the function
-function CraftPresence:After(seconds, func, args)
-    if type(args) ~= "table" then
-        args = { args }
-    end
-    local f = function()
-        func(args)
-    end
+CraftPresence.After = CraftPresence:vararg(3, function(self, seconds, func, args)
+    if type(seconds) == "number" and number >= 1 and type(func) == "function" then
+        local f = function()
+            func(unpack(args))
+        end
 
-    self:SetupQueueSystem()
-    queued_data[f] = GetTime() + seconds
-end
+        self:SetupQueueSystem()
+        queued_data[f] = GetTime() + seconds
+    end
+end)
 
 --- Initializes Queue Systems
 function CraftPresence:SetupQueueSystem()

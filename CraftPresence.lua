@@ -33,7 +33,7 @@ CraftPresence.conditions = {}
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
-local pairs, type, max = pairs, type, math.max
+local pairs, type, max, unpack = pairs, type, math.max, unpack
 
 local tsetn = function(t, n)
     setmetatable(t, { __len = function()
@@ -152,7 +152,7 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         end
     end
 
-    return self:EncodeData(L["EVENT_RPC_LENGTH"], rpcData)
+    return self:EncodeData(L["EVENT_RPC_LENGTH"], unpack(rpcData))
 end
 
 --- Instructions to be called when the addon is loaded
@@ -226,7 +226,7 @@ function CraftPresence:OnDisable()
     self:UnregisterChatCommand(L["ADDON_ID"])
     self:UnregisterChatCommand(L["ADDON_AFFIX"])
     -- Reset RPC Data to Discord
-    local resetData = self:EncodeData(L["EVENT_RPC_LENGTH"], { self:GetFromDb("clientId") })
+    local resetData = self:EncodeData(L["EVENT_RPC_LENGTH"], self:GetFromDb("clientId"))
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
     if icon then
@@ -350,6 +350,7 @@ end
 --- @param eventName string The name of the event being executed
 --- @param args table The arguments associated with the event execution
 CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName, args)
+    eventName = self:GetOrDefault(eventName, L["TYPE_UNKNOWN"])
     if args ~= nil then
         -- Ignore Event Conditional Setup
         -- Format: [EVENT_NAME] = ignore_event_condition
