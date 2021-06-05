@@ -36,3 +36,5 @@ script/__pycache__/
 luacheck.exe
 
 *.log
+
+Script/config.json

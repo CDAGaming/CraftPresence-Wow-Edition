@@ -25,7 +25,7 @@ is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
 min_attributes = ('scheme', 'netloc')
-process_version = "v1.3.7"
+process_version = "v1.4.0"
 event_key = "$RPCEvent$"
 event_length = 11
 array_split_key = "=="
@@ -45,8 +45,15 @@ log_date_style = "%m/%d/%Y %I:%M:%S %p"
 log_format_style = "%Y-%m-%d_%H-%M-%S"
 start_timestamp = datetime.now().strftime(log_format_style)
 # Config Data
-f = open(dir_path + '/config.json')
-config = json.load(f)
+defaultSettings = open(dir_path + '/defaults.json')
+userSettings = defaultSettings
+config = json.load(userSettings)
+try:
+    userSettings = open(dir_path + '/config.json')
+    config.update(json.load(userSettings))
+    print("Applying user-defined settings...")
+except FileNotFoundError:
+    print("No user-defined settings found, using defaults...")
 debug_mode = config["debug"]
 log_modes = config["log_mode"]
 
