@@ -86,6 +86,27 @@ function CraftPresence:GetOrDefault(obj, default)
     return obj
 end
 
+--- Returns arguments from the specified table between the specified range
+---
+--- @param data table The table to interpret
+--- @param from number The index at which to begin storing for return (Required)
+--- @param to number The index at which to stop storing for return (Default: data:length)
+---
+--- @return table @ resultData
+function CraftPresence:GetArgsInRange(data, from, to)
+    local resultData = {}
+    from = self:GetOrDefault(from, 0)
+    if type(data) == "table" then
+        to = self:GetOrDefault(to, self:GetLength(data))
+        for k,v in pairs(data) do
+            if self:IsWithinValue(k, from, to, true, true) then
+                tinsert(resultData, v)
+            end
+        end
+    end
+    return resultData
+end
+
 --- Replaces the specified area of a string
 ---
 --- @param str string The input string to evaluate

@@ -547,9 +547,10 @@ function CraftPresence:ChatCommand(input)
                             -- Some Pre-Filled Data is supplied for these areas
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
+                                local postArgs = self:GetArgsInRange(command_query, 5)
                                 tag_data[command_query[3]] = {
                                     ["type"] = self:GetOrDefault(command_query[4], "string"),
-                                    ["data"] = ""
+                                    ["data"] = self:ConcatTable(nil, " ", unpack(postArgs))
                                 }
                             elseif tag_name == "events" then
                                 tag_data[command_query[3]] = {
