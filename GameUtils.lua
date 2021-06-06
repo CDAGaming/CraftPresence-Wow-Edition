@@ -285,8 +285,9 @@ function CraftPresence:ParseGameData(force_instance_change)
         ["lockout_total_encounters"] = 0 -- Retail-Only
     }
     -- Calculate Custom Placeholders, as needed
-    newPlaceholders.custom = self.placeholders.custom
-    -- Version Dependent Data
+    newPlaceholders.custom = self:GetFromDb("customPlaceholders")
+
+    -- Apply any Version Dependent Data
     local userData = playerData.prefix .. playerName .. " - " .. (strformat(L["FORMAT_LEVEL"], playerLevel))
     if buildData["toc_version"] >= compatData["5.0.0"] or isRebasedApi then
         -- Extra Character Data
@@ -297,8 +298,11 @@ function CraftPresence:ParseGameData(force_instance_change)
             avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
             specInfo = GetSpecialization()
         end
+
         -- Hotfix: Prevent a null-case with Spec Info
-        -- (Only happens if events fire too quickly for into to populate, or if you don't have a spec learned/available)
+        --
+        -- This only happens if events fire too quickly for into to populate,
+        -- or if you don't have a spec learned or available.
         if specInfo ~= nil then
             specId, specName = GetSpecializationInfo(GetSpecialization())
             if specId ~= nil then
@@ -307,6 +311,7 @@ function CraftPresence:ParseGameData(force_instance_change)
                 specName = L["TYPE_NONE"]
             end
         end
+
         -- Keystone Data
         local ownedKeystoneData = self:GetOwnedKeystone()
         local activeKeystoneData = self:GetActiveKeystone()
@@ -314,6 +319,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
             difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
         end
+
         -- Trim and Adjust User Data
         local userInfo = userData
         if not self:IsNullOrEmpty(specName) then
@@ -322,6 +328,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         if not self:IsNullOrEmpty(playerClass) then
             userInfo = (userInfo .. " " .. playerClass)
         end
+
         -- Inner Placeholder Adjustments
         newPlaceholders.inner["title_name"] = titleName
         newPlaceholders.inner["player_info"] = userInfo
@@ -343,8 +350,10 @@ function CraftPresence:ParseGameData(force_instance_change)
         newPlaceholders.inner["player_info"] = (userData .. " " .. playerClass)
     end
 
-    -- Calculate limiting RPC conditions
-    -- If the condition is true, the placeholder will be active
+    -- Calculate any limiting RPC conditions
+    --
+    -- If the condition is true, the targeted placeholder will be active,
+    -- otherwise it'll appear as an empty string.
     local newConditions = {}
 
     newConditions.global = {
@@ -371,10 +380,13 @@ function CraftPresence:ParseGameData(force_instance_change)
                 newConditions.global["arena"]),
         ["start:extra"] = (newConditions.extra["torghast"])
     }
+
+    -- Specify any override-type placeholders
     -- If these placeholders are active, they will override the field they are in
     newPlaceholders.override = {
         -- N/A
     }
+
     -- Synchronize any Extra Conditionals
     newConditions.global["default"] = (not newConditions.time["start"])
     for key, value in pairs(buildData) do
@@ -422,6 +434,7 @@ function CraftPresence:ParseGameData(force_instance_change)
             end
         end
     end
+
     -- Update Instance Status before exiting method
     if hasInstanceChanged then
         lastInstanceState = instanceType
