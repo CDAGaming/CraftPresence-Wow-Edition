@@ -491,7 +491,7 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
                     [L["TITLE_ATTEMPTED_FUNCTION"]] = value,
                     [L["TITLE_FUNCTION_MESSAGE"]] = err
                 }
-                self:PrintInvalidValue(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
+                self:PrintErrorMessage(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
             else
                 value = func
             end

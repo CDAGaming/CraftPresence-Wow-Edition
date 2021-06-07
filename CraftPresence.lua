@@ -578,10 +578,16 @@ function CraftPresence:ChatCommand(input)
                     if command_query[3] ~= nil then
                         local tag_data = self:GetFromDb(tag_table)
                         if tag_data[command_query[3]] then
+                            local includeTag = true
+                            if tag_name == "events" then
+                                tag_data[command_query[3]].enabled = false
+                                self:SyncEvents(tag_data, self:GetFromDb("debugMode"))
+                                includeTag = false
+                            end
                             tag_data[command_query[3]] = nil
                             self:SetToDb(tag_table, nil, tag_data)
                             self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, command_query[3]))
-                            self:UpdateProfile(true, false, tag_name)
+                            self:UpdateProfile(true, false, (includeTag and tag_name or nil))
                         else
                             self:PrintErrorMessage(L["COMMAND_REMOVE_NO_MATCH"])
                         end
