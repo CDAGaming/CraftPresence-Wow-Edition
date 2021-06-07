@@ -209,7 +209,7 @@ end
 --- Concatenates the specified arguments with the specified parameters
 ---
 --- @param appendTag string The string to append to the front and back of the result string
---- @param splitTag string The string to split each element in args by
+--- @param splitTag string The string to split each element in args by (Default: ',')
 --- @param args any The arguments to interpret
 ---
 --- @return string, table @ resultString, args
