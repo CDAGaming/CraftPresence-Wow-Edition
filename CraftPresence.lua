@@ -429,11 +429,7 @@ function CraftPresence:UpdateMinimapState(update_state, log_output)
                 icon:Show(L["ADDON_NAME"])
             end
         elseif log_output then
-            self:Print(strformat(
-                    L["LOG_ERROR"], strformat(
-                            L["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"
-                    )
-            ))
+            self:PrintErrorMessage(strformat(L["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"))
         end
     end
 end
@@ -488,11 +484,7 @@ function CraftPresence:ChatCommand(input)
                 local last_args, last_encoded = self:GetCachedEncodedData()
                 self:GetEncodedMessage(last_args, last_encoded, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)
             else
-                self:Print(strformat(
-                        L["LOG_ERROR"], strformat(
-                                L["ERROR_COMMAND_CONFIG"], L["TITLE_DEBUG_MODE"]
-                        )
-                ))
+                self:PrintErrorMessage(strformat(L["ERROR_COMMAND_CONFIG"], L["TITLE_DEBUG_MODE"]))
             end
         elseif command == "integration" then
             if command_query[2] ~= nil then
@@ -633,11 +625,7 @@ function CraftPresence:ChatCommand(input)
             )
             self:UpdateProfile(true, false, "all")
         else
-            self:Print(strformat(
-                    L["LOG_ERROR"], strformat(
-                            L["ERROR_COMMAND_UNKNOWN"], input
-                    )
-            ))
+            self:PrintErrorMessage(strformat(L["ERROR_COMMAND_UNKNOWN"], input))
         end
     end
     return command_query

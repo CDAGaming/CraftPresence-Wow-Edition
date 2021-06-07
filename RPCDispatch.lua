@@ -150,17 +150,14 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
     frame.texture:SetAllPoints(frame)
 end
 
---- Converts an array of text into bytes represented in RGB for Frame rendering
+--- Converts an array of text into bytes represented in RGB for frame rendering
 --- @param text string The text to be interpreted and converted
 function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
-    if self:GetLength(text) >= max_bytes then
+    local text_length = self:GetLength(text)
+    if text_length >= max_bytes then
         if self:GetFromDb("debugMode") then
-            self:Print(strformat(
-                    L["LOG_ERROR"], strformat(
-                            L["ERROR_BYTE_INSUFFICIENT"], tostring(self:GetLength(text)), tostring(max_bytes)
-                    )
-            ))
+            self:PrintErrorMessage(strformat(L["ERROR_BYTE_INSUFFICIENT"], tostring(text_length), tostring(max_bytes)))
         end
         return
     end

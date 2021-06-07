@@ -98,7 +98,7 @@ function CraftPresence:GetArgsInRange(data, from, to)
     from = self:GetOrDefault(from, 0)
     if type(data) == "table" then
         to = self:GetOrDefault(to, self:GetLength(data))
-        for k,v in pairs(data) do
+        for k, v in pairs(data) do
             if self:IsWithinValue(k, from, to, true, true) then
                 tinsert(resultData, v)
             end
@@ -332,11 +332,7 @@ function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
                             if self:GetLength(value) == 2 then
                                 string_args[key] = self:GetCaseData({ newValue, value[2] })
                             else
-                                self:Print(strformat(
-                                        L["LOG_ERROR"], strformat(
-                                                L["ERROR_COMMAND_UNKNOWN"], "SetFormats"
-                                        )
-                                ))
+                                self:PrintErrorMessage(strformat(L["ERROR_COMMAND_UNKNOWN"], "SetFormats"))
                             end
                         end
                     else
@@ -711,18 +707,18 @@ function CraftPresence:ShowConfig()
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
         InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
     else
-        self:Print(strformat(
-                L["LOG_ERROR"], strformat(
-                        L["ERROR_FUNCTION_DISABLED"], "ShowConfig"
-                )
-        ))
+        self:PrintErrorMessage(strformat(L["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
     end
 end
+
+--[[ LOGGING DATA ]]--
 
 --- Prints a formatted message, meant to symbolize an error message
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintErrorMessage(logStyle)
-    self:Print(strformat(L["LOG_ERROR"], self:GetOrDefault(logStyle, L["TYPE_UNKNOWN"])))
+    if not self:IsNullOrEmpty(logStyle) then
+        self:Print(strformat(L["LOG_ERROR"], logStyle))
+    end
 end
 
 --- Prints a formatted message, meant to symbolize an deprecated value
