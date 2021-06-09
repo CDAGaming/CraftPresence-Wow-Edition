@@ -206,7 +206,7 @@ L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use th
 L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
 L["TITLE_BUTTON_PROCESSCALLBACK"] = "Process Callback"
-L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that is called before the event is called in the addon"
+L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon"
 L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A boolean function here, with return format: [ignore_event,log_output]>"
 
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
@@ -240,6 +240,7 @@ L["DEBUG_VALUE_CHANGED"] = setfmt("*%s|r changed from ^%s|r to ^%s|r", GREEN, GR
 L["INFO_EVENT_SKIPPED"] = setfmt("Event Skipped:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_EVENT_PROCESSING"] = setfmt("Event Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
+L["INFO_OUTDATED_CONFIG"] = setfmt("Outdated Config Detected! Migrating from Schema *v%s|r to *v%s|r...", GREEN)
 L["ERROR_BYTE_INSUFFICIENT"] = "You're painting an insufficient amount of bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"

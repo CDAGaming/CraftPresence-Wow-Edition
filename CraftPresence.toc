@@ -9,6 +9,7 @@
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
 ## OptionalDeps: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
+## X-Schema-ID: 1
 ## X-Embeds: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
 ## X-Credits: Attka
 ## X-Curse-Project-ID: 457334
@@ -22,9 +23,11 @@ Locales\Locales.xml
 
 CraftPresence.lua
 Utils.lua
+
+Migration_Functions.lua
+Deprecated_Functions.lua
+
 GameUtils.lua
 InstanceInfo.lua
 Config.lua
 RPCDispatch.lua
-
-Deprecated_Functions.lua

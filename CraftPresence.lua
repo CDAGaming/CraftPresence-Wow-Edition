@@ -59,6 +59,7 @@ local CraftPresenceLDB, icon
 local lastEventName
 local minimapState = { hide = false }
 -- Build and Integration Data
+local addOnData = {}
 local buildData = {}
 local compatData = {}
 local activeIntegrations = {}
@@ -154,6 +155,7 @@ end
 --- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
     -- Main Initialization
+    addOnData = self:GetAddOnInfo()
     buildData = self:GetBuildInfo()
     compatData = self:GetCompatibilityInfo()
     isRebasedApi = self:IsRebasedApi()
@@ -162,6 +164,7 @@ function CraftPresence:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
+    self:EnsureCompatibility(self:GetFromDb("schema"), addOnData["schema"])
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
@@ -179,7 +182,7 @@ function CraftPresence:OnInitialize()
                 self:ShowConfig()
             end,
             OnTooltipShow = function(tt)
-                tt:AddLine(self:GetVersionString())
+                tt:AddLine(addOnData["versionString"])
                 tt:AddLine(" ")
                 tt:AddLine(L["ADDON_TOOLTIP_THREE"])
                 tt:AddLine(" ")

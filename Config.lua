@@ -32,6 +32,7 @@ local BLOCKED_CHARACTERS = {}
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
     profile = {
+        schema = 0,
         clientId = L["DEFAULT_CLIENT_ID"],
         gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
         detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
@@ -226,7 +227,7 @@ function CraftPresence:getOptionsTable()
 
     local opts = {
         type = "group", childGroups = "tab",
-        name = self:GetVersionString(),
+        name = self:GetAddOnInfo()["versionString"],
         get = function(info)
             return self.db.profile[info[self:GetLength(info)]]
         end,
@@ -934,6 +935,9 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
 
         if tagName == "all" or tagName == "events" then
             self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
+        end
+        if tagName == "all" or tagName == "compat" then
+            self:EnsureCompatibility(self:GetFromDb("schema"), self:GetAddOnInfo()["schema"])
         end
     end
 

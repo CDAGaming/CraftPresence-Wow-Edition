@@ -547,12 +547,10 @@ end)
 
 --[[ API UTILITIES ]]--
 
-local fallbackVersion, fallbackTOC = "0.0.0", 00000
-local fallbackVersionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], fallbackVersion)
-local addonVersion, addonVersionString
+local fallbackVersion, fallbackTOC, fallbackSchema = "0.0.0", 00000, "1"
 local timer_locked = false
 -- Compatibility Data
-local build_info, compatibility_info, flavor_info, extra_build_info
+local addon_info, build_info, compatibility_info, flavor_info, extra_build_info
 
 --- Retrieve and/or Synchronize App Build Info
 --- @return table @ build_info
@@ -572,6 +570,31 @@ function CraftPresence:GetBuildInfo()
         }
     end
     return build_info
+end
+
+--- Retrieve and/or Synchronize Addon Metadata
+--- @return table @ addon_info
+function CraftPresence:GetAddOnInfo()
+    if not addon_info then
+        local version, versionString, schema
+        if GetAddOnMetadata then
+            version = GetAddOnMetadata(L["ADDON_NAME"], "Version")
+            schema = GetAddOnMetadata(L["ADDON_NAME"], "X-Schema-ID")
+        end
+
+        if not self:ContainsDigit(version) then
+            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_BUILD_UNSUPPORTED"], version)))
+            version = "v" .. fallbackVersion
+        end
+        versionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], version)
+
+        addon_info = {
+            ["version"] = version,
+            ["versionString"] = versionString,
+            ["schema"] = tonumber(schema)
+        }
+    end
+    return addon_info
 end
 
 --- Retrieve and/or Synchronize Build Flavor Info
@@ -658,29 +681,6 @@ function CraftPresence:IsSpecialVersion()
     return self:GetExtraBuildInfo()[self:GetBuildInfo()["version"]]
 end
 
---- Getter for CraftPresence:addonVersion and CraftPresence:addonVersionString
---- @return string, string @ addonVersion, addonVersionString
-function CraftPresence:GetVersion()
-    if self:IsNullOrEmpty(addonVersion) then
-        addonVersion = GetAddOnMetadata(L["ADDON_NAME"], "Version")
-        if not self:ContainsDigit(addonVersion) then
-            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_BUILD_UNSUPPORTED"], addonVersion)))
-            addonVersion = "v" .. fallbackVersion
-        end
-        addonVersionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], addonVersion)
-    end
-    return self:GetOrDefault(addonVersion,
-            fallbackVersion), self:GetOrDefault(addonVersionString,
-            fallbackVersionString)
-end
-
---- Helper function for getting CraftPresence:addonVersionString
---- @return string @ addonVersionString
-function CraftPresence:GetVersionString()
-    local _, versionStr = self:GetVersion()
-    return versionStr
-end
-
 --- Getter for Addon Locale Data
 --- @return table @ localeData
 function CraftPresence:GetLocale()
@@ -757,7 +757,7 @@ end
 
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
-    self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetVersionString()))
+    self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
     if self:GetFromDb("verboseMode") then
         self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
