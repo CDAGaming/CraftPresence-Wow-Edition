@@ -52,8 +52,8 @@ function CraftPresence:EnsureCompatibility(from, to, log_output)
             local events = self:GetFromDb("events")
             for k,v in pairs(events) do
                 if type(v) == "table" and not self:IsNullOrEmpty(v.ignoreCallback) then
-                    events[k][v].processCallback = events[k][v].ignoreCallback
-                    events[k][v].ignoreCallback = nil
+                    events[k].processCallback = events[k].ignoreCallback
+                    events[k].ignoreCallback = nil
                 end
             end
             self:SetToDb("events", nil, events)

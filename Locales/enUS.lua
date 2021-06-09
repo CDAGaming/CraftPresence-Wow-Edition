@@ -46,6 +46,7 @@ L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)
 L["LOG_VERBOSE"] = setfmt("*[Verbose]|r %s", GREY)
 L["LOG_ERROR"] = setfmt("*[Error]|r %s", RED)
 L["LOG_WARNING"] = setfmt("*[Warning]|r %s", GOLD)
+L["LOG_INFO"] = "[Info] %s"
 
 -- Config Category Data
 L["CATEGORY_TITLE_GENERAL"] = "General"

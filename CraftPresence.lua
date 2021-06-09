@@ -352,7 +352,7 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
         for key, value in pairs(self.registeredEvents) do
             if eventName == key then
                 if not self:IsNullOrEmpty(value.processCallback) then
-                    local ignore_event, log_output = self:GetDynamicReturnValue(
+                    ignore_event, log_output = self:GetDynamicReturnValue(
                             value.processCallback, "function", self, lastEventName, eventName, args
                     )
                     ignore_event = self:GetOrDefault(tostring(ignore_event) == "true", false)
@@ -375,15 +375,16 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
             end
             -- Logging is different depending on verbose/debug states
             local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
-            local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or (isDebug and L["LOG_DEBUG"]) or nil
+            local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or
+                    (isDebug and L["LOG_DEBUG"]) or
+                    (log_output and L["LOG_INFO"]) or nil
             local logData = self:GetLength(args) > 0 and (
-                    (isVerbose and self:SerializeTable(args)) or
-                            (isDebug and "<...>")
-            ) or nil
+                    (isVerbose and self:SerializeTable(args)) or "<...>"
+            ) or L["TYPE_NONE"]
             if not self:IsNullOrEmpty(logTemplate) and log_output then
                 self:Print(strformat(
                         logTemplate, strformat(
-                                logPrefix, eventName, self:GetOrDefault(logData, L["TYPE_NONE"])
+                                logPrefix, eventName, self:GetOrDefault(logData, L["TYPE_UNKNOWN"])
                         )
                 ))
             end
