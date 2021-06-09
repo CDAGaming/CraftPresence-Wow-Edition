@@ -136,12 +136,12 @@ function CraftPresence:EncodeConfigData(force_instance_change)
             for subKey, subValue in pairs(value) do
                 if not self:StartsWith(subKey, self.metaValue) then
                     -- Sanity Checks
-                    subKey = keyPrefix .. subKey .. keyPrefix
-                    subValue = self:GetDynamicReturnValue(
+                    local newKey = keyPrefix .. subKey .. keyPrefix
+                    local newValue = self:GetDynamicReturnValue(
                             (type(subValue) == "table" and subValue["data"]) or subValue,
                             (type(subValue) == "table" and subValue["type"]), self)
                     -- Main Parsing
-                    rpcData = self:SetFormats({ subValue, nil, subKey, nil },
+                    rpcData = self:SetFormats({ newValue, nil, newKey, nil },
                             rpcData, true, false
                     )
                 end
@@ -347,7 +347,8 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
     if args ~= nil then
         -- Process Callback Event Data
         -- Format: ignore_event, log_output
-        local ignore_event, log_output = false, true
+        local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
+        local ignore_event, log_output = false, (isVerbose or isDebug)
 
         for key, value in pairs(self.registeredEvents) do
             if eventName == key then
@@ -374,7 +375,6 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
                 logPrefix = L["INFO_EVENT_SKIPPED"]
             end
             -- Logging is different depending on verbose/debug states
-            local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
             local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or
                     (isDebug and L["LOG_DEBUG"]) or
                     (log_output and L["LOG_INFO"]) or nil

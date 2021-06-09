@@ -806,17 +806,17 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, r
                     tagName, query, value, foundData, resultString, not isMultiTable
             )
         elseif not self:StartsWith(key, self.metaValue) then
-            key = prefix .. tostring(key) .. prefix
-            value = self:GetDynamicReturnValue(
+            local newKey = prefix .. tostring(key) .. prefix
+            local newValue = self:GetDynamicReturnValue(
                     (type(value) == "table" and value["data"]) or value,
                     (type(value) == "table" and value["type"]), self)
             if (self:IsNullOrEmpty(query) or (
-                    self:FindMatches(strlower(key), query, false, 1, true) or
-                            self:FindMatches(strlower(value), query, false, 1, true))
+                    self:FindMatches(strlower(newKey), query, false, 1, true) or
+                            self:FindMatches(strlower(newValue), query, false, 1, true))
             ) then
                 foundData = true
                 resultString = resultString .. "\n " .. (strformat(
-                        L["DATA_FOUND_DATA"], key, value
+                        L["DATA_FOUND_DATA"], newKey, newValue
                 ))
             end
         end
