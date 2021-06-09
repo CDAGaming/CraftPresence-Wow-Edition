@@ -205,9 +205,9 @@ L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
 L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with\n(Default: CurrentTOC)"
 L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
-L["TITLE_BUTTON_IGNORECALLBACK"] = "Ignore Callback"
-L["COMMENT_BUTTON_IGNORECALLBACK"] = "The function that, if any and true, will ignore this data in processing"
-L["USAGE_BUTTON_IGNORECALLBACK"] = "<A boolean function here>"
+L["TITLE_BUTTON_PROCESSCALLBACK"] = "Process Callback"
+L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that is called before the event is called in the addon"
+L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A boolean function here, with return format: [ignore_event,log_output]>"
 
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
 L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called"

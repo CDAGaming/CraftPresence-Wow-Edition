@@ -465,44 +465,51 @@ function CraftPresence:Split(str, inSplitPattern, multiple, plain, outResults)
     return outResults
 end
 
---- Retrieves the Return Value from a Dynamic Function
+--- Retrieves the Return Value(s) from a Dynamic Function
 ---
 --- @param value any The input (and output) for this event
 --- @param valueType string The expected type of this event (Default: type(value))
 ---
---- @return string @ returnValue
+--- @return any @ returnData
 CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, value, valueType, args)
     value = self:GetOrDefault(value)
     valueType = self:GetOrDefault(valueType, type(value))
-    if not self:IsNullOrEmpty(value) and valueType == "function" and loadstring then
-        if type(value) == "string" then
-            -- Edge-Case to allow non-return functions
-            local lowVal = strlower(value)
-            if not self:StartsWith(lowVal, "return ") and self:StartsWith(lowVal, "function") then
-                value = "return " .. value
-            end
-            local func, err = loadstring(value)
-            if not func then
-                local dataTable = {
-                    [L["TITLE_ATTEMPTED_FUNCTION"]] = value,
-                    [L["TITLE_FUNCTION_MESSAGE"]] = err
-                }
-                self:PrintErrorMessage(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
-            else
-                value = func
-            end
+
+    if not self:IsNullOrEmpty(value) then
+        -- The value is converted to a table from here onwards
+        -- in order to support multiple return values
+        if type(value) ~= "table" then
+            value = { value }
         end
-        while type(value) == "function" do
-            value = value(unpack(args))
+
+        if valueType == "function" and loadstring then
+            if type(value[1]) == "string" then
+                -- Edge-Case to allow non-return functions
+                local lowVal = strlower(value[1])
+                if not self:StartsWith(lowVal, "return ") and self:StartsWith(lowVal, "function") then
+                    value[1] = "return " .. value[1]
+                end
+                local func, err = loadstring(value[1])
+                if not func then
+                    local dataTable = {
+                        [L["TITLE_ATTEMPTED_FUNCTION"]] = value[1],
+                        [L["TITLE_FUNCTION_MESSAGE"]] = err
+                    }
+                    self:PrintErrorMessage(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
+                else
+                    value[1] = func
+                end
+            end
+            while type(value[1]) == "function" do
+                value = { value[1](unpack(args)) }
+            end
         end
     end
-    -- Sanity checks
     if type(value) == "table" then
-        value = self:SerializeTable(value)
+        return unpack(value)
     else
-        value = tostring(value)
+        return value
     end
-    return value
 end)
 
 --- Return whether or not two tables are equivalent in elements and keys

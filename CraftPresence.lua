@@ -34,6 +34,7 @@ CraftPresence.conditions = {}
 local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
 local pairs, type, max, unpack = pairs, type, math.max, unpack
+local tostring = tostring
 
 local tsetn = function(t, n)
     setmetatable(t, { __len = function()
@@ -261,7 +262,7 @@ function CraftPresence:SyncEvents(grp, log_output)
 
         self:ModifyTriggers(
                 eventName, self:GetDynamicReturnValue(eventData["eventCallback"], "function", self),
-                log_output, (shouldEnable and "" or "remove"), eventData["ignoreCallback"]
+                log_output, (shouldEnable and "" or "remove"), eventData["processCallback"]
         )
     end
 end
@@ -279,17 +280,17 @@ end
 --- @param trigger string The function name to register with arguments (Required for append operations, can be func)
 --- @param log_output boolean Whether to allow logging for this function (Default: false)
 --- @param mode string The modifier key to force the behavior of this function (Optional, can be <add|remove|refresh>)
---- @param ignore_condition string The function, that if true, will ignore this event if it occurs (Optional)
-function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, ignore_condition)
+--- @param process_callback string The boolean pre-event function. Return Format: [ignore_event,log_output] (Optional)
+function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, process_callback)
     if type(args) ~= "table" then
         args = { args }
     end
     log_output = self:GetOrDefault(log_output, false)
     mode = strlower(self:GetOrDefault(mode))
-    ignore_condition = self:GetOrDefault(ignore_condition, "function(_,_,_,_) return false end")
+    process_callback = self:GetOrDefault(process_callback, "function(_,_,_,_) return false,true end")
     local event_data = {
         target = trigger,
-        ignore = ignore_condition
+        process = process_callback
     }
 
     if args ~= nil then
@@ -347,18 +348,19 @@ end
 CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName, args)
     eventName = self:GetOrDefault(eventName, L["TYPE_UNKNOWN"])
     if args ~= nil then
-        -- Ignore Event Conditional Setup
-        -- Format: [EVENT_NAME] = ignore_event_condition
-        local ignore_event = false
+        -- Process Callback Event Data
+        -- Format: ignore_event, log_output
+        local ignore_event, log_output = false, true
 
         for key, value in pairs(self.registeredEvents) do
             if eventName == key then
-                ignore_event = (
-                        self:IsNullOrEmpty(value.ignore) or
-                                self:GetDynamicReturnValue(
-                                        value.ignore, "function", self, lastEventName, eventName, args
-                                ) == "true"
-                )
+                if not self:IsNullOrEmpty(value.process) then
+                    local ignore_event, log_output = self:GetDynamicReturnValue(
+                            value.process, "function", self, lastEventName, eventName, args
+                    )
+                    ignore_event = self:GetOrDefault(tostring(ignore_event) == "true", false)
+                    log_output = self:GetOrDefault(tostring(log_output) == "true", true)
+                end
                 break
             end
         end
@@ -381,7 +383,7 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
                     (isVerbose and self:SerializeTable(args)) or
                             (isDebug and "<...>")
             ) or nil
-            if not self:IsNullOrEmpty(logTemplate) then
+            if not self:IsNullOrEmpty(logTemplate) and log_output then
                 self:Print(strformat(
                         logTemplate, strformat(
                                 logPrefix, eventName, self:GetOrDefault(logData, L["TYPE_NONE"])
@@ -548,7 +550,7 @@ function CraftPresence:ChatCommand(input)
                                 tag_data[command_query[3]] = {
                                     minimumTOC = self:GetOrDefault(command_query[5]),
                                     maximumTOC = self:GetOrDefault(command_query[6]),
-                                    ignoreCallback = "", registerCallback = "",
+                                    processCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
                                     enabled = (self:GetOrDefault(command_query[4], "true") == "true")
                                 }

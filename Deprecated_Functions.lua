@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 --- Retrieves the Player Status for the specified unit
---- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use GetUnitStatus)
+--- DEPRECATED: WILL BE REMOVED IN v1.7.0 (Use GetUnitStatus)
 ---
 --- @param unit string The unit to interpret (Default: player)
 --- @param refresh boolean Whether to sync the resulting status to unitData.last_status (Default: false)
@@ -34,28 +34,28 @@ SOFTWARE.
 --- @return string, string, table @ playerStatus, playerPrefix, cachedPlayerData
 function CraftPresence:GetPlayerStatus(unit, refresh, sync, prefixFormat, unitData)
     self:PrintDeprecationWarning(
-            "GetPlayerStatus", "GetUnitStatus", "v2.0.0"
+            "GetPlayerStatus", "GetUnitStatus", "v1.7.0"
     )
     local unitInfo = self:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData)
     return unitInfo.status, unitInfo.prefix, unitInfo
 end
 
 --- Retrieves the Last Status of the specified unit, if any
---- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use GetUnitData)
+--- DEPRECATED: WILL BE REMOVED IN v1.7.0 (Use GetUnitData)
 ---
 --- @param unit string The unit to interpret (Default: player)
 ---
 --- @return string @ lastPlayerStatus
 function CraftPresence:GetLastPlayerStatus(unit)
     self:PrintDeprecationWarning(
-            "GetLastPlayerStatus(unit)", "GetUnitData(unit).last_status", "v2.0.0"
+            "GetLastPlayerStatus(unit)", "GetUnitData(unit).last_status", "v1.7.0"
     )
     unit = self:GetOrDefault(unit, "player")
     return self:GetUnitData(unit).last_status
 end
 
 --- Sets a key,value pair within cachedPlayerData, for later usage
---- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use SetCachedUnitData)
+--- DEPRECATED: WILL BE REMOVED IN v1.7.0 (Use SetCachedUnitData)
 ---
 --- @param key string The key to insert to the table
 --- @param value any The value to insert to the table
@@ -63,13 +63,13 @@ end
 --- @return table @ cachedPlayerData
 function CraftPresence:SetCachedPlayerData(key, value)
     self:PrintDeprecationWarning(
-            "SetCachedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)", "v2.0.0"
+            "SetCachedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)", "v1.7.0"
     )
     return self:SetCachedUnitData("player", key, value)
 end
 
 --- Sets a key,value pair within cachedPlayerData, for later usage
---- DEPRECATED: WILL BE REMOVED IN v2.0.0 (Use SetCachedUnitData)
+--- DEPRECATED: WILL BE REMOVED IN v1.7.0 (Use SetCachedUnitData)
 ---
 --- @param key string The key to insert to the table
 --- @param value any The value to insert to the table
@@ -77,7 +77,7 @@ end
 --- @return table @ cachedPlayerData
 function CraftPresence:SetQueuedPlayerData(key, value)
     self:PrintDeprecationWarning(
-            "SetQueuedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)", "v2.0.0"
+            "SetQueuedPlayerData(key,value)", "SetCachedUnitData(unit,key,value)", "v1.7.0"
     )
     return self:SetCachedUnitData("player", key, value)
 end
