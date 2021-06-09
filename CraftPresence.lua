@@ -230,7 +230,7 @@ function CraftPresence:OnDisable()
     end
     -- Un-register all active events
     -- Note: SyncEvents is not used here so that manually added events are also properly cleared
-    self:ModifyTriggers(self.registeredEvents, nil, self:GetFromDb("debugMode"), "remove")
+    self:ModifyTriggers(self.registeredEvents, nil, "remove", self:GetFromDb("debugMode"))
 end
 
 --- Sync the contents of registeredEvents with the specified event table
@@ -260,10 +260,7 @@ function CraftPresence:SyncEvents(grp, log_output)
         canAccept = canAccept and self:IsWithinValue(currentTOC, minTOC, maxTOC, true, true, false)
         local shouldEnable = eventData["enabled"] and canAccept
 
-        self:ModifyTriggers(
-                eventName, self:GetDynamicReturnValue(eventData["eventCallback"], "function", self),
-                log_output, (shouldEnable and "" or "remove"), eventData["processCallback"]
-        )
+        self:ModifyTriggers(eventName, eventData, (shouldEnable and "" or "remove"), log_output)
     end
 end
 
@@ -277,21 +274,18 @@ end
 --- Both operations cannot occur unless args are specified, as either a string or a table
 ---
 --- @param args table The event names to be interpreted with the eventTag (if any)
---- @param trigger string The function name to register with arguments (Required for append operations, can be func)
---- @param log_output boolean Whether to allow logging for this function (Default: false)
+--- @param data table The event data to be attached to args (If any)
 --- @param mode string The modifier key to force the behavior of this function (Optional, can be <add|remove|refresh>)
---- @param process_callback string The boolean pre-event function. Return Format: [ignore_event,log_output] (Optional)
-function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, process_callback)
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
+function CraftPresence:ModifyTriggers(args, data, mode, log_output)
     if type(args) ~= "table" then
         args = { args }
     end
     log_output = self:GetOrDefault(log_output, false)
     mode = strlower(self:GetOrDefault(mode))
-    process_callback = self:GetOrDefault(process_callback, "function(_,_,_,_) return false,true end")
-    local event_data = {
-        target = trigger,
-        process = process_callback
-    }
+    data = self:GetOrDefault(data, {})
+
+    local trigger = self:GetDynamicReturnValue(data.eventCallback, "function", self)
 
     if args ~= nil then
         for eventKey, eventName in pairs(args) do
@@ -303,16 +297,16 @@ function CraftPresence:ModifyTriggers(args, trigger, log_output, mode, process_c
                 if not self:IsNullOrEmpty(trigger) then
                     mode = (
                             self.registeredEvents[eventName] and
-                                    not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
+                                    not self:AreTablesEqual(self.registeredEvents[eventName], data)
                     ) and "refresh" or "add"
 
                     if mode == "refresh" then
                         self:UnregisterEvent(eventName)
                     end
                     if (not self.registeredEvents[eventName] or
-                            not self:AreTablesEqual(self.registeredEvents[eventName], event_data)
+                            not self:AreTablesEqual(self.registeredEvents[eventName], data)
                     ) then
-                        self.registeredEvents[eventName] = event_data
+                        self.registeredEvents[eventName] = data
                         self:RegisterEvent(eventName, trigger)
                         if log_output then
                             self:Print(strformat(L["COMMAND_EVENT_SUCCESS"], mode, eventName, trigger))
@@ -354,9 +348,9 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
 
         for key, value in pairs(self.registeredEvents) do
             if eventName == key then
-                if not self:IsNullOrEmpty(value.process) then
+                if not self:IsNullOrEmpty(value.processCallback) then
                     local ignore_event, log_output = self:GetDynamicReturnValue(
-                            value.process, "function", self, lastEventName, eventName, args
+                            value.processCallback, "function", self, lastEventName, eventName, args
                     )
                     ignore_event = self:GetOrDefault(tostring(ignore_event) == "true", false)
                     log_output = self:GetOrDefault(tostring(log_output) == "true", true)

@@ -476,13 +476,13 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
     valueType = self:GetOrDefault(valueType, type(value))
 
     if not self:IsNullOrEmpty(value) then
-        -- The value is converted to a table from here onwards
-        -- in order to support multiple return values
-        if type(value) ~= "table" then
-            value = { value }
-        end
-
         if valueType == "function" and loadstring then
+            -- The value is converted to a table from here onwards
+            -- in order to support multiple return values
+            if type(value) ~= "table" then
+                value = { value }
+            end
+
             if type(value[1]) == "string" then
                 -- Edge-Case to allow non-return functions
                 local lowVal = strlower(value[1])
@@ -503,13 +503,18 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
             while type(value[1]) == "function" do
                 value = { value[1](unpack(args)) }
             end
+
+            return unpack(value)
+        else
+            -- Sanity checks
+            if type(value) == "table" then
+                value = self:SerializeTable(value)
+            else
+                value = tostring(value)
+            end
         end
     end
-    if type(value) == "table" then
-        return unpack(value)
-    else
-        return value
-    end
+    return value
 end)
 
 --- Return whether or not two tables are equivalent in elements and keys
