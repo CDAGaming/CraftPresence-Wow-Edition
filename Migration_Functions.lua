@@ -47,12 +47,12 @@ function CraftPresence:EnsureCompatibility(from, to, log_output)
 
         if self:IsWithinValue(from, 0, 1, true, true) then
             -- Schema Changes (v0 -> v1):
-            --  events[k][v].ignoreCallback has been renamed to events[k][v].processCallback
+            --  events[k].ignoreCallback has been renamed to events[k].processCallback
             --  We want to rename this accordingly to prevent losing data
             local events = self:GetFromDb("events")
             for k, v in pairs(events) do
                 if type(v) == "table" and v.ignoreCallback ~= nil then
-                    events[k].processCallback = events[k].ignoreCallback
+                    events[k].processCallback = v.ignoreCallback
                     events[k].ignoreCallback = nil
                 end
             end
