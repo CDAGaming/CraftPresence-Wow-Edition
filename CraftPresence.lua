@@ -22,14 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 
--- Initial Addon Initializers (DNT)
-CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
-CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
-CraftPresence.registeredEvents = {}
-CraftPresence.defaultEventCallback = ""
-CraftPresence.placeholders = {}
-CraftPresence.conditions = {}
-
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
@@ -51,6 +43,15 @@ local wipe = (table.wipe or function(table)
 end)
 
 -- Addon APIs
+local LibStub = LibStub
+
+CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
+CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
+CraftPresence.registeredEvents = {}
+CraftPresence.defaultEventCallback = ""
+CraftPresence.placeholders = {}
+CraftPresence.conditions = {}
+
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
 

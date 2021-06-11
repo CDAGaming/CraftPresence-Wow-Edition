@@ -22,13 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 --]]
 
--- Global Namespace for function definitions before loading
-CP_GlobalUtils = {}
-
 -- Lua APIs
 local _G = getfenv() or _G or {}
 local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.find, table.getn, assert, table.concat
 local tinsert, strchar, random, next, loadstring = table.insert, string.char, math.random, next, loadstring
+
+-- Addon APIs
+CP_GlobalUtils = {}
 
 --[[ COMPATIBILITY UTILITIES ]]--
 
