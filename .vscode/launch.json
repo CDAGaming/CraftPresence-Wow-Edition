@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch RPC",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/Script/DiscordRichPresence.py",
+            "console": "integratedTerminal"
+        }
+    ]
+}

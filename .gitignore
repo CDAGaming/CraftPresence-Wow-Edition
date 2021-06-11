@@ -26,15 +26,9 @@ classes/
 .floo
 .flooignore
 
-logs/
-
-CraftPresence/.vscode/
-.vscode/
-
-script/__pycache__/
-
 luacheck.exe
 
 *.log
 
+Script/__pycache__/
 Script/config.json
