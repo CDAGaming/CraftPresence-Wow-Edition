@@ -230,6 +230,7 @@ end
 ---     table @ activeAffixes,
 ---     boolean @ wasCharged,
 ---     number @ level,
+---     number @ rating,
 ---     string @ formattedLevel,
 ---     string @ formattedAffixes
 --- }
@@ -241,13 +242,17 @@ function CraftPresence:GetActiveKeystone()
         dungeon = nil,
         activeAffixes = nil,
         wasCharged = false,
-        level = 0,
+        level = 0, rating = 0,
         formattedLevel = "",
         formattedAffixes = formattedKeyAffixes
     }
 
     if C_ChallengeMode ~= nil then
         local mapID = C_ChallengeMode.GetActiveChallengeMapID()
+
+        if C_ChallengeMode.GetOverallDungeonScore then
+            keystoneInfo.rating = C_ChallengeMode.GetOverallDungeonScore()
+        end
 
         if mapID then
             local activeKeyLevel, activeAffixIDs, wasActiveKeyCharged = C_ChallengeMode.GetActiveKeystoneInfo()
@@ -259,14 +264,12 @@ function CraftPresence:GetActiveKeystone()
                 end
             end
 
-            keystoneInfo = {
-                dungeon = keystoneDungeon,
-                activeAffixes = activeAffixIDs,
-                wasCharged = wasActiveKeyCharged,
-                level = activeKeyLevel,
-                formattedLevel = ("+" .. activeKeyLevel),
-                formattedAffixes = formattedKeyAffixes
-            }
+            keystoneInfo.dungeon = keystoneDungeon
+            keystoneInfo.activeAffixes = activeAffixIDs
+            keystoneInfo.wasCharged = wasActiveKeyCharged
+            keystoneInfo.level = activeKeyLevel
+            keystoneInfo.formattedLevel = ("+" .. activeKeyLevel)
+            keystoneInfo.formattedAffixes = formattedKeyAffixes
         end
     end
 
