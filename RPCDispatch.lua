@@ -231,6 +231,7 @@ function CraftPresence:CleanFrames()
     for i = 1, frame_count do
         self:PaintFrame(frames[i], 0, 0, 0, 0)
     end
+    CraftPresence.canUseExternals = true
 end
 
 --- Displays the currently encoded string as Frames, depending on arguments
