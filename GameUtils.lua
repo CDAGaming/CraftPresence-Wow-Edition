@@ -341,6 +341,7 @@ function CraftPresence:ParseGameData(force_instance_change)
         newPlaceholders.inner["difficulty_info"] = difficultyInfo
         newPlaceholders.inner["active_keystone_level"] = activeKeystoneData.formattedLevel
         newPlaceholders.inner["active_keystone_rating"] = tostring(activeKeystoneData.rating)
+        newPlaceholders.inner["external_keystone_rating"] = tostring(activeKeystoneData.external_rating)
         newPlaceholders.inner["active_keystone_affixes"] = activeKeystoneData.formattedAffixes
         newPlaceholders.inner["owned_keystone_level"] = ownedKeystoneData.formattedLevel
         newPlaceholders.inner["lockout_encounters"] = lockoutData.formattedEncounterData

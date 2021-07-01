@@ -25,6 +25,9 @@ SOFTWARE.
 -- Lua APIs
 local pairs = pairs
 
+-- Addon APIs
+local RaiderIO = RaiderIO
+
 -- Lockout Data Storage
 local InstanceTable
 local defaultLockoutData = {
@@ -231,6 +234,7 @@ end
 ---     boolean @ wasCharged,
 ---     number @ level,
 ---     number @ rating,
+---     number @ external_rating,
 ---     string @ formattedLevel,
 ---     string @ formattedAffixes
 --- }
@@ -242,14 +246,20 @@ function CraftPresence:GetActiveKeystone()
         dungeon = nil,
         activeAffixes = nil,
         wasCharged = false,
-        level = 0, rating = 0,
+        level = 0, rating = -1, external_rating = 0,
         formattedLevel = "",
         formattedAffixes = formattedKeyAffixes
     }
 
+    -- External Rating Calculations (Done in  pre-processing)
+    if RaiderIO then
+        keystoneInfo.external_rating = RaiderIO.GetProfile("player").mythicKeystoneProfile.currentScore
+    end
+
     if C_ChallengeMode ~= nil then
         local mapID = C_ChallengeMode.GetActiveChallengeMapID()
 
+        -- Primary Rating Calculation
         if C_ChallengeMode.GetOverallDungeonScore then
             keystoneInfo.rating = C_ChallengeMode.GetOverallDungeonScore()
         end
@@ -271,6 +281,12 @@ function CraftPresence:GetActiveKeystone()
             keystoneInfo.formattedLevel = ("+" .. activeKeyLevel)
             keystoneInfo.formattedAffixes = formattedKeyAffixes
         end
+    end
+
+    -- Post-Function Sanity Checks
+    if keystoneInfo.rating < 0 then
+        -- Use the external rating, if applicable
+        keystoneInfo.rating = keystoneInfo.external_rating
     end
 
     return keystoneInfo

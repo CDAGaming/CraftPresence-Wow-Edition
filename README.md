@@ -118,6 +118,8 @@ You can configure some of these placeholders throughout different areas of the g
 *   `@difficulty_name@` - The player's current difficulty level (Applicable while in a valid instance)
 *   `@difficulty_info@` - (Preset) The player's current difficulty info, formatted with keystone and difficulty data as applicable
 *   `@active_keystone_level@` - The player's currently active keystone level, if applicable
+*   `@active_keystone_rating@` - The player's current Mythic Plus Rating, if applicable (Uses Blizzard's APIs)
+*   `@external_keystone_rating@` - The fallback placeholder for `@active_keystone_rating@`, if applicable (Uses Addon APIs)
 *   `@active_keystone_affixes@` - The player's currently active keystone affix names, if applicable
 *   `@owned_keystone_level@` - The player's currently owned keystone level, if applicable
 *   `@instance_type@` - The player's current in-game instance type, or `none` if not applicable

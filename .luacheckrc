@@ -107,6 +107,7 @@ globals = {
 	"EJ_SelectTier",
 	"LibStub",
 	"CraftPresence",
+	"RaiderIO",
 
 	-- events
 	"arg1",
