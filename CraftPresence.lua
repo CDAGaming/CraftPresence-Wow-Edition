@@ -51,7 +51,9 @@ CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
 CraftPresence.conditions = {}
+
 CraftPresence.canUseExternals = false
+CraftPresence.externalCache = {}
 
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils

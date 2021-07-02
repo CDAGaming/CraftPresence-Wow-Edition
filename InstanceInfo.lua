@@ -24,6 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local pairs, max = pairs, math.max
+local strlower = string.lower
 
 -- Lockout Data Storage
 local InstanceTable
@@ -126,6 +127,7 @@ end
 ---     string @ difficulty,
 ---     number @ difficultyId,
 ---     number @ currentEncounters,
+---     number @ totalEncounters,
 ---     string @ formattedEncounterData
 --- }
 ---
@@ -243,16 +245,15 @@ function CraftPresence:GetActiveKeystone()
         dungeon = nil,
         activeAffixes = nil,
         wasCharged = false,
-        level = 0, rating = -1, external_rating = -1,
+        level = 0, rating = -1, external_rating = nil,
         formattedLevel = "",
         formattedAffixes = formattedKeyAffixes
     }
 
     -- External Rating Calculations (Done in pre-processing)
-    if self.canUseExternals then
-        if RaiderIO then
-            keystoneInfo.external_rating = RaiderIO.GetProfile("player").mythicKeystoneProfile.currentScore
-        end
+    local io_info = self:GetExternalInfo("rio")
+    if io_info ~= nil and io_info.mythicKeystoneProfile ~= nil then
+        keystoneInfo.external_rating = io_info.mythicKeystoneProfile.currentScore
     end
 
     if C_ChallengeMode ~= nil then
@@ -283,6 +284,7 @@ function CraftPresence:GetActiveKeystone()
     end
 
     -- Post-Function Sanity Checks
+    keystoneInfo.external_rating = self:GetOrDefault(keystoneInfo.external_rating, keystoneInfo.rating)
     keystoneInfo.external_rating = max(keystoneInfo.external_rating, 0)
     if keystoneInfo.rating < 0 then
         -- Use the external rating, if applicable
@@ -300,4 +302,27 @@ end
 --- @return table @ cachedLockoutState
 function CraftPresence:GetCachedLockout()
     return cachedLockoutState
+end
+
+--- Retrieves Information from a supported external api
+---
+--- @param key string The key identifier to retrieve from externalCache
+--- @param can_modify boolean Whether the value can be appended into the externalCache (Optional)
+--- @param can_use_externals boolean Whether externals can be safely accessed at this time (Optional)
+---
+--- @return any @ externalValue
+function CraftPresence:GetExternalInfo(key, can_modify, can_use_externals)
+    can_modify = self:GetOrDefault(can_modify, self.externalCache[key] == nil)
+    can_use_externals = self:GetOrDefault(can_use_externals, self.canUseExternals)
+    key = strlower(self:GetOrDefault(key))
+
+    if can_modify then
+        if can_use_externals then
+            if (key == "raiderio" or key == "rio") and RaiderIO then
+                self.externalCache[key] = RaiderIO.GetProfile("player")
+            end
+        end
+    end
+
+    return self.externalCache[key]
 end
