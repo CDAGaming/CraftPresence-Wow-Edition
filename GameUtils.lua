@@ -190,7 +190,10 @@ function CraftPresence:ParseGameData(force_instance_change)
     -- Covenant and Faction Setup
     -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
     -- Then use the Faction as the Alliance; otherwise setup Covenant Data
-    local _, localizedFaction = UnitFactionGroup("player")
+    local englishFaction, localizedFaction = UnitFactionGroup("player")
+    englishFaction = self:GetOrDefault(englishFaction, L["TYPE_NONE"])
+    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
+
     local playerCovenantId = 0
     local playerCovenantData
     local playerCovenantRenown = 0
@@ -269,6 +272,8 @@ function CraftPresence:ParseGameData(force_instance_change)
         ["difficulty_name"] = difficultyName,
         ["difficulty_info"] = difficultyInfo, -- Retail-Effected
         ["active_keystone_level"] = "", -- Retail-Only
+        ["active_keystone_rating"] = "", -- Retail-Only
+        ["external_keystone_rating"] = "", -- Retail-Only
         ["active_keystone_affixes"] = "", -- Retail-Only
         ["owned_keystone_level"] = "", -- Retail-Only
         ["instance_type"] = instanceType,
