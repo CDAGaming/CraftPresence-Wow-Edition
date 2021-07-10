@@ -853,8 +853,6 @@ end
 --- @param key string The config key to retrieve
 --- @param newValue any The new config value to set
 --- @param reset boolean Whether to reset this property value
----
---- @return any configValue
 function CraftPresence:SetToDb(grp, key, newValue, reset)
     local DB_DEFAULTS = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
