@@ -240,14 +240,12 @@ end
 --- @param update boolean Whether to update last_encoded if proceeding (Default: true)
 --- @param clean boolean Whether or not to clear frames after a period of time (Default: true)
 --- @param msg string Exact message to parse; Defaults to EncodeConfigData if non-present
---- @param instance_update boolean Whether to force an instance change (Default: false)
-function CraftPresence:PaintMessageWait(force, update, clean, msg, instance_update)
+function CraftPresence:PaintMessageWait(force, update, clean, msg)
     force = self:GetOrDefault(force, false)
     update = self:GetOrDefault(update, true)
     clean = self:GetOrDefault(clean, true)
-    instance_update = self:GetOrDefault(instance_update, false)
 
-    local defaultEncoded, encodedArgs = self:EncodeConfigData(instance_update)
+    local defaultEncoded, encodedArgs = self:EncodeConfigData()
     local encoded = self:GetOrDefault(msg, defaultEncoded)
     local changed = last_encoded ~= encoded or force
     local useTable = self:IsNullOrEmpty(msg)

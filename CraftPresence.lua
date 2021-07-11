@@ -42,6 +42,24 @@ local wipe = (table.wipe or function(table)
     return table
 end)
 
+local function copyTable(src, dest)
+    if type(dest) ~= "table" then
+        dest = {}
+    else
+        wipe(dest)
+    end
+    if type(src) == "table" then
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                -- try to index the key first so that the metatable creates the defaults, if set, and use that table
+                v = copyTable(v, dest[k])
+            end
+            dest[k] = v
+        end
+    end
+    return dest
+end
+
 -- Addon APIs
 local LibStub = LibStub
 
@@ -50,7 +68,10 @@ CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
-CraftPresence.conditions = {}
+CraftPresence.buttons = {}
+
+CraftPresence.time_start = ""
+CraftPresence.time_end = ""
 
 CraftPresence.canUseExternals = false
 CraftPresence.externalCache = {}
@@ -69,28 +90,14 @@ local compatData = {}
 local activeIntegrations = {}
 local isRebasedApi = false
 
---- Synchronize Conditional Data with Game Info
----
---- @param force_instance_change boolean Whether to force an instance change (Default: false)
----
---- @return table, table @ placeholders, conditionals
-function CraftPresence:SyncConditions(force_instance_change)
-    wipe(self.placeholders)
-    wipe(self.conditions)
-    return self:ParseGameData(force_instance_change)
-end
-
 --- Creates and encodes a new RPC event from placeholder and conditional data
 ---
---- @param force_instance_change boolean Whether to force an instance change (Default: false)
----
 --- @return string, table @ newEncodedString, args
-function CraftPresence:EncodeConfigData(force_instance_change)
+function CraftPresence:EncodeConfigData()
     -- Primary Variable Data
     local split_key = L["ARRAY_SPLIT_KEY"]
-    self.placeholders, self.conditions = self:SyncConditions(force_instance_change)
+    local currentTOC = buildData["toc_version"]
     -- Secondary Variable Data
-    local buttons = self:GetFromDb("buttons")
     local rpcData = {
         self:GetFromDb("clientId"),
         { self:GetFromDb("largeImageKey"), "lower" },
@@ -100,59 +107,108 @@ function CraftPresence:EncodeConfigData(force_instance_change)
         self:GetFromDb("detailsMessage"),
         self:GetFromDb("gameStateMessage")
     }
-    -- Time Condition Syncing
-    local time_start, time_end
-    for timeKey, timeValue in pairs(self.conditions.time) do
-        if timeValue then
-            if (self:FindMatches(timeKey, "start", false)) then
-                if self:HasInstanceChanged() then
-                    time_start = "generated"
-                else
-                    time_start = "last"
-                end
-            elseif (self:FindMatches(timeKey, "end", false)) then
-                if self:HasInstanceChanged() then
-                    time_end = "generated"
-                else
-                    time_end = "last"
-                end
-            end
-        end
-    end
-    tinsert(rpcData, self:GetOrDefault(time_start))
-    tinsert(rpcData, self:GetOrDefault(time_end))
 
-    -- Additional Sanity Checks for Buttons
-    for _, value in pairs(buttons) do
-        if type(value) == "table" and value.label and value.url then
-            local dataValue = self:ConcatTable(nil, split_key, value.label, value.url)
-            tinsert(rpcData, dataValue)
-        end
-    end
+    -- Time Condition Syncing
+    self.time_start, self.time_end = "", ""
 
     -- Placeholder Syncing
+    copyTable(self:GetFromDb("placeholders"), self.placeholders)
+    copyTable(self:GetFromDb("buttons"), self.buttons)
     for key, value in pairs(self.placeholders) do
-        -- Notes:
-        --  Only categorized placeholders are allowed, to maintain control
-        --  Keys beginning with certain characters are considered metadata values
-        if type(value) == "table" and not self:StartsWith(key, self.metaValue) then
-            local keyPrefix = self:GetOrDefault(self.placeholders[key][self.metaValue .. "prefix"])
-            for subKey, subValue in pairs(value) do
-                if not self:StartsWith(subKey, self.metaValue) then
-                    -- Sanity Checks
-                    local newKey = keyPrefix .. subKey .. keyPrefix
-                    local newValue = self:GetDynamicReturnValue(
-                            (type(subValue) == "table" and subValue["data"]) or subValue,
-                            (type(subValue) == "table" and subValue["type"]), self)
-                    -- Main Parsing
-                    rpcData = self:SetFormats({ newValue, nil, newKey, nil },
-                            rpcData, true, false
-                    )
+        if type(value) == "table" then
+            -- Sanity Checks
+            local keyPrefix = self:GetOrDefault(value.prefix)
+            local newKey = keyPrefix .. key .. keyPrefix
+
+            local minTOC = self:GetOrDefault(value.minimumTOC, currentTOC)
+            if type(minTOC) ~= "number" then
+                minTOC = self:VersionToBuild(minTOC)
+            end
+            local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
+            if type(maxTOC) ~= "number" then
+                maxTOC = self:VersionToBuild(maxTOC)
+            end
+
+            local canAccept = (
+                    self:IsNullOrEmpty(value.registerCallback) or
+                            tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+            )
+            canAccept = canAccept and (
+                    self:IsWithinValue(
+                            currentTOC, minTOC, maxTOC, true, true, false
+                    ) or (value.allowRebasedApi and self:IsRebasedApi())
+            )
+
+            local shouldEnable = value.enabled and canAccept
+            local newValue, tagValue = "", ""
+
+            if shouldEnable then
+                newValue = self:GetDynamicReturnValue(value.processCallback, value.processType, self)
+                tagValue = self:GetDynamicReturnValue(value.tagCallback, value.tagType, self)
+            end
+
+            -- Main Parsing into valid RPC data
+            -- (A secondary placeholder scan is done here to ensure proper replacement, due to unpredictable ordering)
+            for subKey, subValue in pairs(self.placeholders) do
+                local replacement = self:Replace(subValue.processCallback, newKey, self:GetOrDefault(newValue), true)
+                if subValue.processCallback ~= replacement then
+                    self.placeholders[subKey].processCallback = replacement
+                    if subKey == key then
+                        newValue = self:GetDynamicReturnValue(replacement, value.processType, self)
+                    end
+                end
+
+                -- Sync Button Info
+                -- Additional Sanity Checks for Buttons
+                for buttonKey, buttonValue in pairs(self.buttons) do
+                    if type(buttonValue) == "table" and buttonValue.label and buttonValue.url then
+                        local dataValue = self:GetOrDefault(
+                                buttonValue.result, self:ConcatTable(nil, split_key, buttonValue.label, buttonValue.url)
+                        )
+                        self.buttons[buttonKey].result = self:Replace(dataValue, newKey, self:GetOrDefault(newValue), true)
+                    end
+                end
+            end
+
+            rpcData = self:SetFormats({ newValue, nil, newKey, nil },
+                    rpcData, true, false
+            )
+
+            if not self:IsNullOrEmpty(tagValue) then
+                if self:FindMatches(tagValue, "time", false) then
+                    if self:FindMatches(tagValue, "time:start", false) then
+                        if self:HasInstanceChanged() then
+                            self.time_start = "generated"
+                        else
+                            self.time_start = "last"
+                        end
+                    elseif self:FindMatches(tagValue, "time:end", false) then
+                        if self:HasInstanceChanged() then
+                            self.time_end = "generated"
+                        else
+                            self.time_end = "last"
+                        end
+                    end
                 end
             end
         end
     end
 
+    -- Sync Time Condition Data
+    tinsert(rpcData, self:GetOrDefault(self.time_start))
+    tinsert(rpcData, self:GetOrDefault(self.time_end))
+
+    -- Additional Sanity Checks for Buttons
+    for _, value in pairs(self.buttons) do
+        if type(value) == "table" and value.result then
+            tinsert(rpcData, value.result)
+        end
+    end
+
+    -- Update Instance Status before exiting method
+    if self:HasInstanceChanged() then
+        self:SetInstanceChanged(false)
+    end
     return self:ConcatTable(L["EVENT_RPC_TAG"], L["ARRAY_SEPARATOR_KEY"], unpack(rpcData))
 end
 
@@ -204,7 +260,6 @@ function CraftPresence:OnEnable()
     if self:GetFromDb("showWelcomeMessage") then
         self:PrintAddonInfo()
     end
-    self.metaValue = self:GetFromDb("tableMetaKey")
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
@@ -251,21 +306,25 @@ function CraftPresence:SyncEvents(grp, log_output)
     grp = self:GetOrDefault(grp, {})
     log_output = self:GetOrDefault(log_output, false)
     for eventName, eventData in pairs(grp) do
-        local minTOC = self:GetOrDefault(eventData["minimumTOC"], currentTOC)
+        local minTOC = self:GetOrDefault(eventData.minimumTOC, currentTOC)
         if type(minTOC) ~= "number" then
             minTOC = self:VersionToBuild(minTOC)
         end
-        local maxTOC = self:GetOrDefault(eventData["maximumTOC"], currentTOC)
+        local maxTOC = self:GetOrDefault(eventData.minimumTOC, currentTOC)
         if type(maxTOC) ~= "number" then
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
         local canAccept = (
-                self:IsNullOrEmpty(eventData["registerCallback"]) or
-                        self:GetDynamicReturnValue(eventData["registerCallback"], "function", self) == "true"
+                self:IsNullOrEmpty(eventData.registerCallback) or
+                        tostring(self:GetDynamicReturnValue(eventData.registerCallback, "function", self)) == "true"
         )
-        canAccept = canAccept and self:IsWithinValue(currentTOC, minTOC, maxTOC, true, true, false)
-        local shouldEnable = eventData["enabled"] and canAccept
+        canAccept = canAccept and (
+                self:IsWithinValue(
+                        currentTOC, minTOC, maxTOC, true, true, false
+                ) or (eventData.allowRebasedApi and self:IsRebasedApi())
+        )
+        local shouldEnable = eventData.enabled and canAccept
 
         self:ModifyTriggers(eventName, eventData, (shouldEnable and "" or "remove"), log_output)
     end
@@ -515,8 +574,7 @@ function CraftPresence:ChatCommand(input)
             -- Parse tag name and table target from command input
             local tag_name, tag_table = "", ""
             if command == "placeholders" or command == "placeholder" then
-                tag_name, tag_table = "placeholders", "customPlaceholders"
-                self.placeholders, self.conditions = self:SyncConditions()
+                tag_name, tag_table = "placeholders", "placeholders"
             elseif command == "events" or command == "event" then
                 tag_name, tag_table = "events", "events"
             end
@@ -535,23 +593,25 @@ function CraftPresence:ChatCommand(input)
                             self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
                         elseif (
                                 tag_name ~= "placeholders" or not (
-                                        self.placeholders.global[command_query[3]] or
-                                                self.placeholders.inner[command_query[3]] or
-                                                self:StartsWith(command_query[3], self.metaValue)
+                                        self.placeholders[command_query[3]]
                                 )
                         ) then
                             -- Some Pre-Filled Data is supplied for these areas
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
-                                local postArgs = self:GetArgsInRange(command_query, 5)
                                 tag_data[command_query[3]] = {
-                                    ["type"] = self:GetOrDefault(command_query[4], "string"),
-                                    ["data"] = self:ConcatTable(nil, " ", unpack(postArgs))
+                                    minimumTOC = self:GetOrDefault(command_query[5]),
+                                    maximumTOC = self:GetOrDefault(command_query[6]),
+                                    allowRebasedApi = (self:GetOrDefault(command_query[7], "true") == "true"),
+                                    processCallback = "", processType = "string", registerCallback = "",
+                                    tags = self:GetOrDefault(command_query[8]), prefix = "",
+                                    enabled = (self:GetOrDefault(command_query[4], "true") == "true")
                                 }
                             elseif tag_name == "events" then
                                 tag_data[command_query[3]] = {
                                     minimumTOC = self:GetOrDefault(command_query[5]),
                                     maximumTOC = self:GetOrDefault(command_query[6]),
+                                    allowRebasedApi = (self:GetOrDefault(command_query[7], "true") == "true"),
                                     processCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
                                     enabled = (self:GetOrDefault(command_query[4], "true") == "true")
@@ -596,17 +656,20 @@ function CraftPresence:ChatCommand(input)
                         self:Print(strformat(L["DATA_QUERY"], tag_name, command_query[3]))
                     end
 
-                    local tag_data, multi_table = {}, false
+                    local tag_data, visible_data, multi_table = {}, {}, false
                     if tag_name == "placeholders" then
                         tag_data = self.placeholders
-                        multi_table = true
+                        visible_data = {
+                            "processCallback", "processType"
+                        }
+                        multi_table = false
                     elseif tag_name == "events" then
                         tag_data = self:GetFromDb(tag_table)
                         multi_table = false
                     end
                     -- Iterate through dataTable to form resultString
                     foundAny, resultStr = self:ParseDynamicTable(
-                            tag_name, command_query[3], tag_data, foundAny, resultStr, multi_table
+                            tag_name, command_query[3], tag_data, foundAny, resultStr, multi_table, visible_data
                     )
 
                     -- Final parsing of resultString before printing

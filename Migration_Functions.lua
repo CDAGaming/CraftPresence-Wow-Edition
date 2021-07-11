@@ -52,12 +52,120 @@ function CraftPresence:EnsureCompatibility(from, to, log_output)
             local events = self:GetFromDb("events")
             for k, v in pairs(events) do
                 if type(v) == "table" and v.ignoreCallback ~= nil then
-                    events[k].processCallback = v.ignoreCallback
-                    events[k].ignoreCallback = nil
+                    v.processCallback = v.ignoreCallback
+                    v.ignoreCallback = nil
                 end
+                events[k] = v
             end
             self:SetToDb("events", nil, events)
+            from = 1
         end
+
+        if self:IsWithinValue(from, 1, 2, true, true) then
+            -- Schema Changes (v1 -> v2):
+            --   Table renamed from customPlaceholders to placeholders
+            --   The data field is renamed to processCallback
+            --   The type field is renamed to processType
+            --   Added multiple new fields for placeholders and events to allow better configurability
+            local placeholders = self:GetFromDb("customPlaceholders")
+            if placeholders ~= nil then
+                for k, v in pairs(placeholders) do
+                    if type(v) == "table" then
+                        v.processCallback = self:GetOrDefault(v.processCallback)
+                        v.processType = self:GetOrDefault(v.processType, "string")
+                        if v.data ~= nil then
+                            v.processCallback = v.data
+                            v.data = nil
+                        end
+                        if v.type ~= nil then
+                            v.processType = v.type
+                            v.type = nil
+                        end
+                        v.enabled = self:GetOrDefault(v.enabled, true)
+                        v.prefix = self:GetOrDefault(v.prefix)
+                        v.tagCallback = self:GetOrDefault(v.tagCallback)
+                        v.tagType = self:GetOrDefault(v.tagType, "string")
+                        v.minimumTOC = self:GetOrDefault(v.minimumTOC)
+                        v.maximumTOC = self:GetOrDefault(v.maximumTOC)
+                        v.registerCallback = self:GetOrDefault(v.registerCallback)
+                    end
+                    placeholders[k] = v
+                end
+
+                placeholders = self:CombineTables(
+                        self:GetDefaults().profile.placeholders, placeholders
+                )
+
+                local old_global_prefix = self:GetOrDefault(self:GetFromDb("globalPlaceholderKey"))
+                local old_inner_prefix = self:GetOrDefault(self:GetFromDb("innerPlaceholderKey"))
+                if self:GetFromDb("defaultPlaceholderMessage") ~= nil then
+                    placeholders["default"].prefix = old_global_prefix
+                    placeholders["default"].processType = "string"
+                    placeholders["default"].processCallback = self:GetFromDb("defaultPlaceholderMessage")
+                    self:SetToDb("defaultPlaceholderMessage", nil, nil)
+                end
+                if self:GetFromDb("arenaPlaceholderMessage") ~= nil then
+                    placeholders["arena"].prefix = old_global_prefix
+                    placeholders["arena"].processType = "string"
+                    placeholders["arena"].processCallback = self:GetFromDb("arenaPlaceholderMessage")
+                    self:SetToDb("arenaPlaceholderMessage", nil, nil)
+                end
+                if self:GetFromDb("battlegroundPlaceholderMessage") ~= nil then
+                    placeholders["battleground"].prefix = old_global_prefix
+                    placeholders["battleground"].processType = "string"
+                    placeholders["battleground"].processCallback = self:GetFromDb("battlegroundPlaceholderMessage")
+                    self:SetToDb("battlegroundPlaceholderMessage", nil, nil)
+                end
+                if self:GetFromDb("raidPlaceholderMessage") ~= nil then
+                    placeholders["raid"].prefix = old_global_prefix
+                    placeholders["raid"].processType = "string"
+                    placeholders["raid"].processCallback = self:GetFromDb("raidPlaceholderMessage")
+                    self:SetToDb("raidPlaceholderMessage", nil, nil)
+                end
+                if self:GetFromDb("dungeonPlaceholderMessage") ~= nil then
+                    placeholders["dungeon"].prefix = old_global_prefix
+                    placeholders["dungeon"].processType = "string"
+                    placeholders["dungeon"].processCallback = self:GetFromDb("dungeonPlaceholderMessage")
+                    self:SetToDb("dungeonPlaceholderMessage", nil, nil)
+                end
+
+                for k, v in pairs(placeholders) do
+                    if v.prefix == L["DEFAULT_INNER_KEY"] then
+                        placeholders[k].prefix = old_inner_prefix
+                    end
+                end
+
+                self:SetToDb("placeholders", nil, placeholders)
+                self:SetToDb("customPlaceholders", nil, nil)
+            end
+            from = 2
+        end
+
+        if self:IsWithinValue(from, 2, 3, true, true) then
+            -- Schema Changes (v2 -> v3):
+            --   Adds allowRebasedApi flag for events and placeholders
+            local data = self:GetFromDb("placeholders")
+            local default = self:GetDefaults().profile.placeholders
+            for k, _ in pairs(data) do
+                data[k].allowRebasedApi = self:GetOrDefault(
+                        data[k].allowRebasedApi,
+                        self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
+                )
+            end
+            self:SetToDb("placeholders", nil, data)
+
+            data = self:GetFromDb("events")
+            default = self:GetDefaults().profile.events
+            for k, _ in pairs(data) do
+                data[k].allowRebasedApi = self:GetOrDefault(
+                        data[k].allowRebasedApi,
+                        self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
+                )
+            end
+            self:SetToDb("events", nil, data)
+            from = 3
+        end
+
         self:SetToDb("schema", nil, to)
     end
 end

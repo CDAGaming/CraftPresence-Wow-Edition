@@ -42,19 +42,6 @@ local SCHEMA_DEFAULTS = {
     },
 }
 
--- PLACEHOLDER_AREAS
-local PLACEHOLDER_AREAS = {
-    "gameStateMessage", "detailsMessage",
-    "largeImageKey", "largeImageMessage",
-    "smallImageKey", "smallImageMessage",
-    "dungeonPlaceholderMessage", "raidPlaceholderMessage",
-    "battlegroundPlaceholderMessage", "arenaPlaceholderMessage",
-    "defaultPlaceholderMessage"
-}
-
--- BLOCKED_CHARACTERS
-local BLOCKED_CHARACTERS = {}
-
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
     profile = {
@@ -66,11 +53,6 @@ local DB_DEFAULTS = {
         largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
         smallImageKey = L["DEFAULT_SMALL_IMAGE_KEY"],
         smallImageMessage = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
-        dungeonPlaceholderMessage = L["DEFAULT_DUNGEON_MESSAGE"],
-        raidPlaceholderMessage = L["DEFAULT_RAID_MESSAGE"],
-        battlegroundPlaceholderMessage = L["DEFAULT_BATTLEGROUND_MESSAGE"],
-        arenaPlaceholderMessage = L["DEFAULT_ARENA_MESSAGE"],
-        defaultPlaceholderMessage = L["DEFAULT_FALLBACK_MESSAGE"],
         debugMode = false,
         verboseMode = false,
         showMinimapIcon = true,
@@ -89,13 +71,693 @@ local DB_DEFAULTS = {
                 url = ""
             }
         },
-        customPlaceholders = {},
-        innerPlaceholderKey = L["DEFAULT_INNER_KEY"],
-        globalPlaceholderKey = L["DEFAULT_GLOBAL_KEY"],
-        tableMetaKey = L["DEFAULT_META_KEY"],
+        placeholders = {
+            ["default"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = L["DEFAULT_FALLBACK_MESSAGE"],
+                processType = "string",
+                registerCallback = [[function (self)
+    return GetInstanceInfo == nil or select(2, GetInstanceInfo()) == 'none' or (
+        self:IsNullOrEmpty(select(2, GetInstanceInfo()))
+    )
+end]],
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+            },
+            ["arena"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = L["DEFAULT_ARENA_MESSAGE"],
+                processType = "string",
+                registerCallback = [[function (self)
+    return select(2, GetInstanceInfo()) == 'arena'
+end]],
+                tagCallback = "time:start",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+            },
+            ["battleground"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = L["DEFAULT_BATTLEGROUND_MESSAGE"],
+                processType = "string",
+                registerCallback = [[function (self)
+    return select(2, GetInstanceInfo()) == 'pvp'
+end]],
+                tagCallback = "time:start",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+            },
+            ["raid"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = L["DEFAULT_RAID_MESSAGE"],
+                processType = "string",
+                registerCallback = [[function (self)
+    return select(2, GetInstanceInfo()) == 'raid'
+end]],
+                tagCallback = "time:start",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+            },
+            ["dungeon"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = L["DEFAULT_DUNGEON_MESSAGE"],
+                processType = "string",
+                registerCallback = [[function (self)
+    return select(2, GetInstanceInfo()) == 'party' and (
+        not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
+    )
+end]],
+                tagCallback = "time:start",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+            },
+            ["scenario"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = L["DEFAULT_SCENARIO_MESSAGE"],
+                processType = "string",
+                registerCallback = [[function (self)
+    return select(2, GetInstanceInfo()) == 'scenario'
+end]],
+                tagCallback = "time:start",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+            },
+            ["player_name"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return UnitName('player')
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["title_name"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return UnitPVPName('player')
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_level"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return UnitLevel('player')
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_realm"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return GetRealmName()
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_region"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local realmData = { "US", "KR", "EU", "TW", "CH" }
+    local playerRegionId = 1
+    if GetCurrentRegion then
+        playerRegionId = GetCurrentRegion()
+    end
+    return realmData[playerRegionId]
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_class"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return UnitClass('player')
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_status"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetUnitStatus("player", true).status
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_reason"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetUnitStatus("player", true).reason
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["difficulty_info"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local difficultyInfo = select(4, GetInstanceInfo())
+    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["5.0.0"] or self:IsRebasedApi() then
+        -- Keystone Data
+        local activeKeystoneData = self:GetActiveKeystone()
+        if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
+            difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
+        end
+    end
+    return difficultyInfo
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_faction"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local englishFaction, localizedFaction = UnitFactionGroup('player')
+    englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
+    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
+    return localizedFaction
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_alliance"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    -- Covenant and Faction Setup
+    -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
+    -- Then use the Faction as the Alliance; otherwise use Covenant Data
+    local name = select(1, GetInstanceInfo())
+    local englishFaction, localizedFaction = UnitFactionGroup('player')
+    englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
+    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
+    local playerCovenantId, playerCovenantData = 0
+    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['9.0.0'] then
+        playerCovenantId = C_Covenants.GetActiveCovenantID()
+        playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
+    end
+    -- Covenant and/or Faction data is only updated if the instance is changed
+    if (playerCovenantId == 0 or not (
+            (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
+                    (self:FindMatches(name, 'Torghast', false, 1, false)) or
+                    (self:FindMatches(self:GetCurrentInstanceTier(), 'Shadowlands', false, 1, false))
+    )) then
+        return localizedFaction
+    else
+        return playerCovenantData.name
+    end
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_covenant"] = {
+                minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
+                processCallback = [[function (self)
+    local covenantId = C_Covenants.GetActiveCovenantID()
+    if covenantId == 0 then
+        return self.locale['TYPE_NONE']
+    else
+        return C_Covenants.GetCovenantData(covenantId).name
+    end
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_info"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    -- Player Data
+    local playerName = UnitName('player')
+    local playerData = self:GetUnitStatus('player', true)
+    -- Extra Player Data
+    local playerLevel = UnitLevel('player')
+    local playerClass = UnitClass('player')
+    local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], playerLevel))
+    -- Version-Specific Info
+    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()['5.0.0'] or self:IsRebasedApi() then
+        local specInfo, specId, specName, roleName = GetSpecialization()
+        --
+        -- Hotfix: Prevent a null-case with Spec Info
+        --
+        -- This only happens if events fire too quickly for into to populate,
+        -- or if you don't have a spec learned or available.
+        if specInfo ~= nil then
+            specId, specName = GetSpecializationInfo(GetSpecialization())
+            if specId ~= nil then
+                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+            else
+                specName = self.locale["TYPE_NONE"]
+            end
+        end
+        --
+        -- Trim and Adjust User Data
+        if not self:IsNullOrEmpty(specName) then
+            userInfo = (userInfo .. ' ' .. specName)
+        end
+    end
+    -- Final Parsing
+    if not self:IsNullOrEmpty(playerClass) then
+            userInfo = (userInfo .. ' ' .. playerClass)
+    end
+    return userInfo
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_spec_name"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = false,
+                processCallback = [[function (self)
+    local specInfo, specId, specName, roleName = GetSpecialization()
+    --
+    -- Hotfix: Prevent a null-case with Spec Info
+    --
+    -- This only happens if events fire too quickly for into to populate,
+    -- or if you don't have a spec learned or available.
+    if specInfo ~= nil then
+        specId, specName = GetSpecializationInfo(GetSpecialization())
+        if specId ~= nil then
+            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        else
+            specName = self.locale["TYPE_NONE"]
+        end
+    end
+    return specName
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_spec_role"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = false,
+                processCallback = [[function (self)
+    local specInfo, specId, specName, roleName = GetSpecialization()
+    --
+    -- Hotfix: Prevent a null-case with Spec Info
+    --
+    -- This only happens if events fire too quickly for into to populate,
+    -- or if you don't have a spec learned or available.
+    if specInfo ~= nil then
+        specId, specName = GetSpecializationInfo(GetSpecialization())
+        if specId ~= nil then
+            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        else
+            specName = self.locale["TYPE_NONE"]
+        end
+    end
+    return roleName
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["realm_info"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    -- Get Player Info
+    local realmData = { "US", "KR", "EU", "TW", "CH" }
+    local playerRealm = GetRealmName()
+    local playerRegionId = 1
+    if GetCurrentRegion then
+        playerRegionId = GetCurrentRegion()
+    end
+    local playerRegion = realmData[playerRegionId]
+    return (playerRegion .. ' - ' .. playerRealm)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["player_covenant_renown"] = {
+                minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
+                processCallback = [[function (self)
+    return tostring(C_CovenantSanctumUI.GetRenownLevel())
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["localized_name"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return select(1, GetInstanceInfo())
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["instance_type"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return select(2, GetInstanceInfo())
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["instance_difficulty"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(3, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["difficulty_name"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return select(4, GetInstanceInfo())
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["max_players"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(5, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["dynamic_difficulty"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(6, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["is_dynamic"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(7, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["instance_id"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(8, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["instance_group_size"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(9, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["lfg_dungeon_id"] = {
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(select(10, GetInstanceInfo()))
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["zone_name"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return GetRealZoneText()
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["zone_name"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetOrDefault(GetRealZoneText(), self.locale['TYPE_UNKNOWN'])
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["sub_zone_name"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetOrDefault(GetSubZoneText(), self.locale["TYPE_UNKNOWN"])
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["zone_info"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    -- Zone Data
+    local formatted_zone_info
+    local zone_name = GetRealZoneText()
+    local sub_name = GetSubZoneText()
+    -- Null-Case to ensure Zone Name always equals something
+    if self:IsNullOrEmpty(zone_name) then
+        zone_name = self.locale['TYPE_UNKNOWN']
+    end
+    -- Format the zone info based on zone data
+    if self:IsNullOrEmpty(sub_name) then
+        formatted_zone_info = zone_name
+        sub_name = self.locale['TYPE_UNKNOWN']
+    else
+        formatted_zone_info = (sub_name .. ' - ' .. zone_name)
+    end
+    return formatted_zone_info
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["item_level"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
+    if GetAverageItemLevel then
+        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    end
+    return string.format("%.2f", avgItemLevel or 0)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["item_level_equipped"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
+    if GetAverageItemLevel then
+        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    end
+    return string.format("%.2f", avgItemLevelEquipped or 0)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["item_level_pvp"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
+    if GetAverageItemLevel then
+        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    end
+    return string.format("%.2f", avgItemLevelPvp or 0)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["active_keystone_level"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetActiveKeystone().formattedLevel
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["active_keystone_rating"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(self:GetActiveKeystone().rating)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["active_keystone_affixes"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetActiveKeystone().formattedAffixes
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["external_keystone_rating"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(self:GetActiveKeystone().external_rating)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["owned_keystone_level"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return self:GetOwnedKeystone().formattedLevel
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["lockout_encounters"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local lockoutData = self:GetCachedLockout()
+    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['6.0.0'] then
+        lockoutData = self:GetCurrentLockoutData(true)
+    end
+    return lockoutData.formattedEncounterData
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["lockout_current_encounters"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local lockoutData = self:GetCachedLockout()
+    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['6.0.0'] then
+        lockoutData = self:GetCurrentLockoutData(true)
+    end
+    return lockoutData.currentEncounters
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["lockout_total_encounters"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local lockoutData = self:GetCachedLockout()
+    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['6.0.0'] then
+        lockoutData = self:GetCurrentLockoutData(true)
+    end
+    return lockoutData.totalEncounters
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+        },
         events = {
             ["CHAT_MSG_SYSTEM"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, _, _, args)
     local splitMessage = self:Split(args[1], ':', false, true)
     local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
@@ -118,42 +780,42 @@ end]],
                 enabled = true
             },
             ["PLAYER_LOGIN"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_LEVEL_UP"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_LEVEL_CHANGED"] = {
-                minimumTOC = "80000", maximumTOC = "",
+                minimumTOC = "80000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_UP' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_ALIVE"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_DEAD' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_DEAD"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_FLAGS_CHANGED"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, lastName, _, args)
     local unitData = self:GetUnitData()
     return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or unitData.last_status == unitData.status
@@ -163,42 +825,42 @@ end]],
                 enabled = true
             },
             ["ZONE_CHANGED"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ZONE_CHANGED_NEW_AREA"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ZONE_CHANGED_INDOORS"] = {
-                minimumTOC = "", maximumTOC = "",
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_SPECIALIZATION_CHANGED"] = {
-                minimumTOC = "50000", maximumTOC = "",
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "function (_, _, _, args) return args[1] ~= 'player' end",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ACTIVE_TALENT_GROUP_CHANGED"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "function (_, _, _, args) return args[1] == args[2] end",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ENCOUNTER_END"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = [[function (self, _, _, args)
     return (not IsInInstance() or args[5] ~= 1 or self:GetCachedLockout() == self:GetCurrentLockoutData(false))
 end]],
@@ -207,35 +869,35 @@ end]],
                 enabled = true
             },
             ["CHALLENGE_MODE_START"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CHALLENGE_MODE_COMPLETED"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CHALLENGE_MODE_RESET"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["SCENARIO_COMPLETED"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CRITERIA_COMPLETE"] = {
-                minimumTOC = "60000", maximumTOC = "",
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
@@ -420,118 +1082,6 @@ function CraftPresence:getOptionsTable()
                     },
                 }
             },
-            placeholderOptions = {
-                type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_PLACEHOLDERS"], desc = L["CATEGORY_COMMENT_PLACEHOLDERS"],
-                get = function(info)
-                    return self.db.profile[info[self:GetLength(info)]]
-                end,
-                set = function(info, value)
-                    self.db.profile[info[self:GetLength(info)]] = value
-                end,
-                args = {
-                    dungeonPlaceholderMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_DUNGEON_MESSAGE"],
-                        desc = L["COMMENT_DUNGEON_MESSAGE"],
-                        usage = L["USAGE_DUNGEON_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("dungeonPlaceholderMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("dungeonPlaceholderMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.dungeonPlaceholderMessage = value
-                                self:PrintChangedValue(L["TITLE_DUNGEON_MESSAGE"], oldValue, value)
-                            end
-                        end,
-                    },
-                    blank1 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                    raidPlaceholderMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_RAID_MESSAGE"],
-                        desc = L["COMMENT_RAID_MESSAGE"],
-                        usage = L["USAGE_RAID_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("raidPlaceholderMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("raidPlaceholderMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.raidPlaceholderMessage = value
-                                self:PrintChangedValue(L["TITLE_RAID_MESSAGE"], oldValue, value)
-                            end
-                        end,
-                    },
-                    blank2 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                    battlegroundPlaceholderMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_BATTLEGROUND_MESSAGE"],
-                        desc = L["COMMENT_BATTLEGROUND_MESSAGE"],
-                        usage = L["USAGE_BATTLEGROUND_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("battlegroundPlaceholderMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("battlegroundPlaceholderMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.battlegroundPlaceholderMessage = value
-                                self:PrintChangedValue(L["TITLE_BATTLEGROUND_MESSAGE"], oldValue, value)
-                            end
-                        end,
-                    },
-                    blank3 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                    arenaPlaceholderMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_ARENA_MESSAGE"],
-                        desc = L["COMMENT_ARENA_MESSAGE"],
-                        usage = L["USAGE_ARENA_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("arenaPlaceholderMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("arenaPlaceholderMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.arenaPlaceholderMessage = value
-                                self:PrintChangedValue(L["TITLE_ARENA_MESSAGE"], oldValue, value)
-                            end
-                        end,
-                    },
-                    blank4 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                    defaultPlaceholderMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_FALLBACK_MESSAGE"],
-                        desc = L["COMMENT_FALLBACK_MESSAGE"],
-                        usage = L["USAGE_FALLBACK_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("defaultPlaceholderMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("defaultPlaceholderMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.defaultPlaceholderMessage = value
-                                self:PrintChangedValue(L["TITLE_FALLBACK_MESSAGE"], oldValue, value)
-                            end
-                        end,
-                    },
-                    blank5 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                }
-            },
             buttonOptions = {
                 type = "group", order = self:GetNextIndex(),
                 name = L["CATEGORY_TITLE_BUTTONS"], desc = L["CATEGORY_COMMENT_BUTTONS"],
@@ -541,8 +1091,7 @@ function CraftPresence:getOptionsTable()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("buttons", strformat(
-                        L["CATEGORY_TITLE_BUTTONS_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
+                args = self:GetPlaceholderArgs("buttons", L["CATEGORY_TITLE_BUTTONS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], count, (count == 1 and "") or "s")
                         end,
@@ -557,19 +1106,18 @@ function CraftPresence:getOptionsTable()
                         end
                 )
             },
-            customOptions = {
+            placeholderOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_CUSTOM"], desc = L["CATEGORY_COMMENT_CUSTOM"],
+                name = L["CATEGORY_TITLE_PLACEHOLDERS"], desc = L["CATEGORY_COMMENT_PLACEHOLDERS"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("customPlaceholders", strformat(
-                        L["CATEGORY_TITLE_CUSTOM_EXTENDED"], L["CATEGORY_TITLE_CUSTOM"]),
+                args = self:GetPlaceholderArgs("placeholders", L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_CUSTOM_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"], count, (count == 1 and "") or "s")
                         end
                 )
             },
@@ -767,87 +1315,6 @@ function CraftPresence:getOptionsTable()
                         end,
                     },
                     blank5 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                    globalPlaceholderKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_GLOBAL_PLACEHOLDER_KEY"],
-                        desc = L["COMMENT_GLOBAL_PLACEHOLDER_KEY"],
-                        usage = L["USAGE_GLOBAL_PLACEHOLDER_KEY"],
-                        get = function(_)
-                            return self:GetFromDb("globalPlaceholderKey")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("globalPlaceholderKey")
-                            local isValid = (
-                                    type(value) == "string" and
-                                            self:GetLength(value) == 1 and
-                                            not BLOCKED_CHARACTERS[value]
-                            )
-                            if isValid and (value ~= self.db.profile.innerPlaceholderKey) then
-                                self.db.profile.globalPlaceholderKey = value
-                                self:PrintChangedValue(L["TITLE_GLOBAL_PLACEHOLDER_KEY"], oldValue, value)
-                                self:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true, true)
-                            else
-                                self:PrintErrorMessage(L["ERROR_GLOBAL_PLACEHOLDER_KEY"])
-                            end
-                        end,
-                    },
-                    innerPlaceholderKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_INNER_PLACEHOLDER_KEY"],
-                        desc = L["COMMENT_INNER_PLACEHOLDER_KEY"],
-                        usage = L["USAGE_INNER_PLACEHOLDER_KEY"],
-                        get = function(_)
-                            return self:GetFromDb("innerPlaceholderKey")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("innerPlaceholderKey")
-                            local isValid = (
-                                    type(value) == "string" and
-                                            self:GetLength(value) == 1 and
-                                            not BLOCKED_CHARACTERS[value]
-                            )
-                            if isValid and (value ~= self.db.profile.globalPlaceholderKey) then
-                                self.db.profile.innerPlaceholderKey = value
-                                self:PrintChangedValue(L["TITLE_INNER_PLACEHOLDER_KEY"], oldValue, value)
-                                self:SetFormats({ value, nil, oldValue, nil }, PLACEHOLDER_AREAS, true, true)
-                            else
-                                self:PrintErrorMessage(L["ERROR_INNER_PLACEHOLDER_KEY"])
-                            end
-                        end,
-                    },
-                    blank6 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
-                    tableMetaKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_TABLE_META_KEY"],
-                        desc = L["COMMENT_TABLE_META_KEY"],
-                        usage = L["USAGE_TABLE_META_KEY"],
-                        get = function(_)
-                            return self:GetFromDb("tableMetaKey")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("tableMetaKey")
-                            local isValid = (
-                                    type(value) == "string" and
-                                            self:GetLength(value) == 1 and
-                                            not BLOCKED_CHARACTERS[value]
-                            )
-                            if (isValid and
-                                    (value ~= self.db.profile.globalPlaceholderKey) and
-                                    (value ~= self.db.profile.innerPlaceholderKey)
-                            ) then
-                                self.db.profile.tableMetaKey = value
-                                self.metaValue = value
-                                self:PrintChangedValue(L["TITLE_TABLE_META_KEY"], oldValue, value)
-                            else
-                                self:PrintErrorMessage(L["ERROR_TABLE_META_KEY"])
-                            end
-                        end,
-                    },
-                    blank7 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                 }

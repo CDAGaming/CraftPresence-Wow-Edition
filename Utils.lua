@@ -547,7 +547,7 @@ end)
 
 --[[ API UTILITIES ]]--
 
-local fallbackVersion, fallbackTOC, fallbackSchema = "0.0.0", 00000, "1"
+local fallbackVersion, fallbackTOC = "0.0.0", 00000
 local timer_locked = false
 -- Compatibility Data
 local addon_info, build_info, compatibility_info, flavor_info, extra_build_info
@@ -787,29 +787,28 @@ end
 --- @param foundData boolean Output Value -- If any placeholders were found before or after
 --- @param resultString string Output Value -- The current placeholder result string
 --- @param isMultiTable boolean Optional Value -- If dataTable is comprised of smaller tables (Depth of 1)
---- @param prefix string Optional Value -- The string to append to the start and ending of table keys
+--- @param visibleData table Optional Value -- Determines whether some keys can be dynamically parsed
 ---
 --- @return boolean, string @ found_data, resultString
-function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable, prefix)
+function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable, visibleData)
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
+    visibleData = self:GetOrDefault(visibleData, {})
     foundData = self:GetOrDefault(foundData, false)
     resultString = self:GetOrDefault(resultString)
     isMultiTable = self:GetOrDefault(isMultiTable, false)
 
-    local defaultPrefix = self:GetOrDefault(dataTable[self.metaValue .. "prefix"])
-    prefix = self:GetOrDefault(prefix, defaultPrefix)
-
     for key, value in pairs(dataTable) do
         if isMultiTable and type(value) == "table" then
             foundData, resultString = self:ParseDynamicTable(
-                    tagName, query, value, foundData, resultString, not isMultiTable
+                    tagName, query, value, foundData, resultString, not isMultiTable, visibleData
             )
-        elseif not self:StartsWith(key, self.metaValue) then
+        else
+            local prefix = self:GetOrDefault(type(value) == "table" and value.prefix)
             local newKey = prefix .. tostring(key) .. prefix
             local newValue = self:GetDynamicReturnValue(
-                    (type(value) == "table" and value["data"]) or value,
-                    (type(value) == "table" and value["type"]), self)
+                    (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[1]]) or value,
+                    (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]), self)
             if (self:IsNullOrEmpty(query) or (
                     self:FindMatches(strlower(newKey), query, false, 1, true) or
                             self:FindMatches(strlower(newValue), query, false, 1, true))
@@ -901,7 +900,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
             local value_args = {}
             if type(value) == "table" then
                 for innerKey, _ in pairs(value) do
-                    local valueType = (self:EndsWith(strlower(innerKey), "enabled") and "toggle") or "input"
+                    local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
                         name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], self:FormatWord(innerKey)),
@@ -956,6 +955,16 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
         name = commentKey
     }
     return table_args
+end
+
+--- Retrieve whether or not the specified key is a toggleable tag
+---
+--- @param key string The key to interpret
+---
+--- @return boolean @ isToggleTag
+function CraftPresence:IsToggleTag(key)
+    key = strlower(self:GetOrDefault(key))
+    return self:EndsWith(key, "enabled") or self:FindMatches(key, "allow", false, 1, true)
 end
 
 --[[ QUEUE SYSTEM UTILITIES ]]--

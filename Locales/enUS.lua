@@ -56,7 +56,6 @@ L["ARRAY_SEPARATOR_KEY"] = "|"
 L["ARRAY_SEPARATOR_KEY_ALT"] = "||"
 L["DEFAULT_INNER_KEY"] = inkey
 L["DEFAULT_GLOBAL_KEY"] = outkey
-L["DEFAULT_META_KEY"] = "_"
 L["ADDON_NAME"] = "CraftPresence"
 L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
@@ -78,18 +77,15 @@ L["LOG_INFO"] = "[Info] %s"
 L["CATEGORY_TITLE_GENERAL"] = "General"
 L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info"
 
-L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
-L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
-
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
-L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "%s Buttons"
+L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Custom Buttons"
 L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data"
 L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 
-L["CATEGORY_TITLE_CUSTOM"] = "Custom"
-L["CATEGORY_TITLE_CUSTOM_EXTENDED"] = "%s Placeholders"
-L["CATEGORY_COMMENT_CUSTOM"] = "Settings for customizing custom/dynamic placeholders"
-L["CATEGORY_COMMENT_CUSTOM_INFO"] = "%s custom placeholder%s found! (Use /cp placeholders for more info)"
+L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
+L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"
+L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)"
 
 L["CATEGORY_TITLE_EVENTS"] = "Events"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registered Events"
@@ -144,31 +140,6 @@ L["COMMENT_SMALL_IMAGE_MESSAGE"] = "The message to be displayed when hovering ov
 L["USAGE_SMALL_IMAGE_MESSAGE"] = "<Your message here>"
 L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
 
-L["TITLE_DUNGEON_MESSAGE"] = "Dungeon Placeholder Message"
-L["COMMENT_DUNGEON_MESSAGE"] = setfmt("The message to show as the *dungeon* placeholder.", outkey)
-L["USAGE_DUNGEON_MESSAGE"] = "<Your message here>"
-L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
-
-L["TITLE_RAID_MESSAGE"] = "Raid Placeholder Message"
-L["COMMENT_RAID_MESSAGE"] = setfmt("The message to show as the *raid* placeholder.", outkey)
-L["USAGE_RAID_MESSAGE"] = "<Your message here>"
-L["DEFAULT_RAID_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", inkey)
-
-L["TITLE_BATTLEGROUND_MESSAGE"] = "Battleground Placeholder Message"
-L["COMMENT_BATTLEGROUND_MESSAGE"] = setfmt("The message to show as the *battleground* placeholder.", outkey)
-L["USAGE_BATTLEGROUND_MESSAGE"] = "<Your message here>"
-L["DEFAULT_BATTLEGROUND_MESSAGE"] = setfmt("*zone_name* - In Battleground", inkey)
-
-L["TITLE_ARENA_MESSAGE"] = "Arena Placeholder Message"
-L["COMMENT_ARENA_MESSAGE"] = setfmt("The message to show as the *arena* placeholder.", outkey)
-L["USAGE_ARENA_MESSAGE"] = "<Your message here>"
-L["DEFAULT_ARENA_MESSAGE"] = setfmt("*zone_name* - In Arena", inkey)
-
-L["TITLE_FALLBACK_MESSAGE"] = "Default Placeholder Message"
-L["COMMENT_FALLBACK_MESSAGE"] = setfmt("The message to show as the *default* placeholder.", outkey)
-L["USAGE_FALLBACK_MESSAGE"] = "<Your message here>"
-L["DEFAULT_FALLBACK_MESSAGE"] = setfmt("*zone_info*", inkey)
-
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
 
@@ -214,11 +185,11 @@ L["COMMENT_BUTTON_URL"] = "The message to show as the url."
 L["USAGE_BUTTON_URL"] = "<Your message here>"
 
 L["TITLE_BUTTON_DATA"] = "Data"
-L["COMMENT_BUTTON_DATA"] = "The message to show for this custom placeholder"
+L["COMMENT_BUTTON_DATA"] = "The message to show for this placeholder"
 L["USAGE_BUTTON_DATA"] = "<Your message here>"
 
 L["TITLE_BUTTON_TYPE"] = "Type"
-L["COMMENT_BUTTON_TYPE"] = "The type of the message for this custom placeholder"
+L["COMMENT_BUTTON_TYPE"] = "The type of the message for this placeholder"
 L["USAGE_BUTTON_TYPE"] = "<Your type reference here>"
 
 L["TITLE_BUTTON_ENABLED"] = "Enabled"
@@ -232,9 +203,16 @@ L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
 L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with\n(Default: CurrentTOC)"
 L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
+L["TITLE_BUTTON_ALLOWREBASEDAPI"] = "Allow Rebased API"
+L["COMMENT_BUTTON_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions\n(Default: false)"
+
 L["TITLE_BUTTON_PROCESSCALLBACK"] = "Process Callback"
 L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon"
-L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A boolean function here, with return format: [ignore_event,log_output]>"
+L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_PROCESSTYPE"] = "Process Type"
+L["COMMENT_BUTTON_PROCESSTYPE"] = "The type name to be used for the Process Callback\n(Default: string)"
+L["USAGE_BUTTON_PROCESSTYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
 L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called"
@@ -244,20 +222,25 @@ L["TITLE_BUTTON_REGISTERCALLBACK"] = "Register Callback"
 L["COMMENT_BUTTON_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered"
 L["USAGE_BUTTON_REGISTERCALLBACK"] = "<A boolean function here>"
 
-L["TITLE_GLOBAL_PLACEHOLDER_KEY"] = "Global Placeholder Key"
-L["COMMENT_GLOBAL_PLACEHOLDER_KEY"] = "The key to use to represent Global Placeholders"
-L["USAGE_GLOBAL_PLACEHOLDER_KEY"] = "<Valid 1-digit character here>"
-L["ERROR_GLOBAL_PLACEHOLDER_KEY"] = "Checks failed for Global Placeholder Key. Please enter a valid 1-digit character."
+L["TITLE_BUTTON_TAGCALLBACK"] = "Tag Callback"
+L["COMMENT_BUTTON_TAGCALLBACK"] = "The function that, if any, will allow the data to have conditionals"
+L["USAGE_BUTTON_TAGCALLBACK"] = "<A string or string function here>"
 
-L["TITLE_INNER_PLACEHOLDER_KEY"] = "Inner Placeholder Key"
-L["COMMENT_INNER_PLACEHOLDER_KEY"] = "The key to use to represent Inner Placeholders"
-L["USAGE_INNER_PLACEHOLDER_KEY"] = "<Valid 1-digit character here>"
-L["ERROR_INNER_PLACEHOLDER_KEY"] = "Checks failed for Inner Placeholder Key. Please enter a valid 1-digit character."
+L["TITLE_BUTTON_TAGTYPE"] = "Tag Type"
+L["COMMENT_BUTTON_TAGTYPE"] = "The type name to be used for the Tag Callback\n(Default: string)"
+L["USAGE_BUTTON_TAGTYPE"] = "<Your message here>"
 
-L["TITLE_TABLE_META_KEY"] = "Table Metadata Key"
-L["COMMENT_TABLE_META_KEY"] = "The key to use to represent Metadata Keys in Tables (Such as placeholders/conditionals)"
-L["USAGE_TABLE_META_KEY"] = "<Valid 1-digit character here>"
-L["ERROR_TABLE_META_KEY"] = "Checks failed for Table Metadata Key. Please enter a valid 1-digit character."
+L["TITLE_BUTTON_PREFIX"] = "Prefix"
+L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data\n(Default: None)"
+L["USAGE_BUTTON_PREFIX"] = "<Your message here>"
+
+-- Global Placeholder Defaults
+L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
+L["DEFAULT_RAID_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", inkey)
+L["DEFAULT_SCENARIO_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Scenario *lockout_encounters*", inkey)
+L["DEFAULT_BATTLEGROUND_MESSAGE"] = setfmt("*zone_name* - In Battleground", inkey)
+L["DEFAULT_ARENA_MESSAGE"] = setfmt("*zone_name* - In Arena", inkey)
+L["DEFAULT_FALLBACK_MESSAGE"] = setfmt("*zone_info*", inkey)
 
 -- Logging Data
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
