@@ -656,20 +656,75 @@ function CraftPresence:ChatCommand(input)
                         self:Print(strformat(L["DATA_QUERY"], tag_name, command_query[3]))
                     end
 
-                    local tag_data, visible_data, multi_table = {}, {}, false
+                    local tag_data, visible_data, multi_table, enable_callback = {}, {}, false, nil
                     if tag_name == "placeholders" then
                         tag_data = self.placeholders
                         visible_data = {
                             "processCallback", "processType"
                         }
                         multi_table = false
+                        enable_callback = function (_, value)
+                            local shouldEnable = false
+                            if type(value) == "table" then
+                                local currentTOC = buildData["toc_version"]
+                                local minTOC = self:GetOrDefault(value.minimumTOC, currentTOC)
+                                if type(minTOC) ~= "number" then
+                                    minTOC = self:VersionToBuild(minTOC)
+                                end
+                                local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
+                                if type(maxTOC) ~= "number" then
+                                    maxTOC = self:VersionToBuild(maxTOC)
+                                end
+
+                                local canAccept = (
+                                        self:IsNullOrEmpty(value.registerCallback) or
+                                                tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+                                )
+                                canAccept = canAccept and (
+                                        self:IsWithinValue(
+                                                currentTOC, minTOC, maxTOC, true, true, false
+                                        ) or (value.allowRebasedApi and self:IsRebasedApi())
+                                )
+
+                                shouldEnable = value.enabled and canAccept
+                            end
+                            return shouldEnable
+                        end
                     elseif tag_name == "events" then
                         tag_data = self:GetFromDb(tag_table)
                         multi_table = false
+                        enable_callback = function (_, value)
+                            local shouldEnable = false
+                            if type(value) == "table" then
+                                local currentTOC = buildData["toc_version"]
+                                local minTOC = self:GetOrDefault(value.minimumTOC, currentTOC)
+                                if type(minTOC) ~= "number" then
+                                    minTOC = self:VersionToBuild(minTOC)
+                                end
+                                local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
+                                if type(maxTOC) ~= "number" then
+                                    maxTOC = self:VersionToBuild(maxTOC)
+                                end
+
+                                local canAccept = (
+                                        self:IsNullOrEmpty(value.registerCallback) or
+                                                tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+                                )
+                                canAccept = canAccept and (
+                                        self:IsWithinValue(
+                                                currentTOC, minTOC, maxTOC, true, true, false
+                                        ) or (value.allowRebasedApi and self:IsRebasedApi())
+                                )
+
+                                shouldEnable = value.enabled and canAccept
+                            end
+                            return shouldEnable
+                        end
                     end
                     -- Iterate through dataTable to form resultString
                     foundAny, resultStr = self:ParseDynamicTable(
-                            tag_name, command_query[3], tag_data, foundAny, resultStr, multi_table, visible_data
+                            tag_name, command_query[3], tag_data, foundAny,
+                            resultStr, multi_table, visible_data, enable_callback
                     )
 
                     -- Final parsing of resultString before printing

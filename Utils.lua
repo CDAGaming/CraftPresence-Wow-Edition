@@ -788,9 +788,11 @@ end
 --- @param resultString string Output Value -- The current placeholder result string
 --- @param isMultiTable boolean Optional Value -- If dataTable is comprised of smaller tables (Depth of 1)
 --- @param visibleData table Optional Value -- Determines whether some keys can be dynamically parsed
+--- @param enableCallback function Optional Value -- Used in value tables to determine whether dynamic returns are allowed
 ---
 --- @return boolean, string @ found_data, resultString
-function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable, visibleData)
+function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable,
+                                         visibleData, enableCallback)
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
     visibleData = self:GetOrDefault(visibleData, {})
@@ -801,22 +803,26 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, r
     for key, value in pairs(dataTable) do
         if isMultiTable and type(value) == "table" then
             foundData, resultString = self:ParseDynamicTable(
-                    tagName, query, value, foundData, resultString, not isMultiTable, visibleData
+                    tagName, query, value, foundData,
+                    resultString, not isMultiTable, visibleData, enableCallback
             )
         else
-            local prefix = self:GetOrDefault(type(value) == "table" and value.prefix)
-            local newKey = prefix .. tostring(key) .. prefix
-            local newValue = self:GetDynamicReturnValue(
-                    (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[1]]) or value,
-                    (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]), self)
-            if (self:IsNullOrEmpty(query) or (
-                    self:FindMatches(strlower(newKey), query, false, 1, true) or
-                            self:FindMatches(strlower(newValue), query, false, 1, true))
-            ) then
-                foundData = true
-                resultString = resultString .. "\n " .. (strformat(
-                        L["DATA_FOUND_DATA"], newKey, newValue
-                ))
+            local can_process = self:GetOrDefault(enableCallback ~= nil and enableCallback(key, value), true)
+            if can_process then
+                local prefix = self:GetOrDefault(type(value) == "table" and value.prefix)
+                local newKey = prefix .. tostring(key) .. prefix
+                local newValue = self:GetDynamicReturnValue(
+                        (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[1]]) or value,
+                        (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]), self)
+                if (self:IsNullOrEmpty(query) or (
+                        self:FindMatches(strlower(newKey), query, false, 1, true) or
+                                self:FindMatches(strlower(newValue), query, false, 1, true))
+                ) then
+                    foundData = true
+                    resultString = resultString .. "\n " .. (strformat(
+                            L["DATA_FOUND_DATA"], newKey, newValue
+                    ))
+                end
             end
         end
     end
