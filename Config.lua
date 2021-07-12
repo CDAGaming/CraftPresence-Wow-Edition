@@ -1399,6 +1399,7 @@ end
 --- Retrieves the default settings for the config menu
 --- @return table @ DB_DEFAULTS
 function CraftPresence:GetDefaults()
+    DB_DEFAULTS.profile.schema = self:GetAddOnInfo()["schema"]
     return DB_DEFAULTS
 end
 
@@ -1436,5 +1437,11 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
 
     if notify and canNotify then
         config_registry:NotifyChange(L["ADDON_NAME"])
+    end
+
+    if reset then
+        return self:GetDefaults()
+    else
+        return nil
     end
 end)
