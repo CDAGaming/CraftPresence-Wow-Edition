@@ -92,9 +92,13 @@ local isRebasedApi = false
 
 --- Creates and encodes a new RPC event from placeholder and conditional data
 ---
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
+---
 --- @return string, table @ newEncodedString, args
-function CraftPresence:EncodeConfigData()
+function CraftPresence:EncodeConfigData(log_output)
     -- Primary Variable Data
+    log_output = self:GetOrDefault(log_output, false)
+    local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
     local split_key = L["ARRAY_SPLIT_KEY"]
     local currentTOC = buildData["toc_version"]
     -- Secondary Variable Data
@@ -143,6 +147,22 @@ function CraftPresence:EncodeConfigData()
             local newValue, tagValue = "", ""
 
             if shouldEnable then
+                -- Print logging info if needed, before processing
+                local logPrefix = L["INFO_PLACEHOLDER_PROCESSING"]
+                -- Logging is different depending on verbose/debug states
+                local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or
+                        (isDebug and L["LOG_DEBUG"]) or
+                        (log_output and L["LOG_INFO"]) or nil
+                local logData = not self:IsNullOrEmpty(value.processCallback) and (
+                        (isVerbose and value.processCallback) or "<...>"
+                ) or L["TYPE_NONE"]
+                if not self:IsNullOrEmpty(logTemplate) and log_output then
+                    self:Print(strformat(
+                            logTemplate, strformat(
+                                    logPrefix, newKey, self:GetOrDefault(logData, L["TYPE_UNKNOWN"])
+                            )
+                    ))
+                end
                 newValue = self:GetDynamicReturnValue(value.processCallback, value.processType, self)
                 tagValue = self:GetDynamicReturnValue(value.tagCallback, value.tagType, self)
             end

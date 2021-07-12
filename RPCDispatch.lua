@@ -245,7 +245,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
     update = self:GetOrDefault(update, true)
     clean = self:GetOrDefault(clean, true)
 
-    local defaultEncoded, encodedArgs = self:EncodeConfigData()
+    local defaultEncoded, encodedArgs = self:EncodeConfigData(self:GetFromDb("debugMode"))
     local encoded = self:GetOrDefault(msg, defaultEncoded)
     local changed = last_encoded ~= encoded or force
     local useTable = self:IsNullOrEmpty(msg)
