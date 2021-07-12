@@ -220,7 +220,7 @@ function CraftPresence:OnInitialize()
     compatData = self:GetCompatibilityInfo()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
-    self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetSchemaDefaults())
+    self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetDefaults())
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
@@ -230,7 +230,9 @@ function CraftPresence:OnInitialize()
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
             self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
-            self.optionsFrame.default = self.UpdateProfile
+            self.optionsFrame.default = function()
+                self:UpdateProfile(true, true, "all")
+            end
         end
         -- Icon Registration
         icon = LibStub("LibDBIcon-1.0")

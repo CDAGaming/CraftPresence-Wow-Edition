@@ -791,8 +791,8 @@ end
 --- @param enableCallback function Optional Value -- Used in value tables to determine whether dynamic returns are allowed
 ---
 --- @return boolean, string @ found_data, resultString
-function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData, resultString, isMultiTable,
-                                         visibleData, enableCallback)
+function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
+                                         resultString, isMultiTable, visibleData, enableCallback)
     tagName = self:GetOrDefault(tagName)
     dataTable = self:GetOrDefault(dataTable, {})
     visibleData = self:GetOrDefault(visibleData, {})

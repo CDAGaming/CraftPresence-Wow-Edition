@@ -32,16 +32,6 @@ local LibStub = LibStub
 local L = CraftPresence.locale
 local config_registry = LibStub("AceConfigRegistry-3.0")
 
--- SCHEMA_DEFAULTS
-local SCHEMA_DEFAULTS = {
-    global = {
-        Characters = {
-            ['*'] = {
-            },
-        },
-    },
-}
-
 -- DB_DEFAULTS
 local DB_DEFAULTS = {
     profile = {
@@ -1403,16 +1393,13 @@ function CraftPresence:GetDefaults()
     return DB_DEFAULTS
 end
 
---- Retrieves the default schema settings for the config menu
---- @return table @ SCHEMA_DEFAULTS
-function CraftPresence:GetSchemaDefaults()
-    return SCHEMA_DEFAULTS
-end
-
 --- Modify the settings in the currently active config profile with the specified arguments
 ---
 --- @param notify boolean Whether or not to fire NotifyChange after operation (Default: true)
 --- @param reset boolean Whether or not to Reset this profile to it's defaults (Default: false)
+--- @param tags table Optional Value depicting data sets to refresh, if supported
+---
+--- @return table @ profile
 CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, reset, tags)
     local canNotify = self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or self:IsRebasedApi()
     notify = self:GetOrDefault(notify, true)
@@ -1442,6 +1429,6 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     if reset then
         return self:GetDefaults()
     else
-        return nil
+        return self.db.profile
     end
 end)
