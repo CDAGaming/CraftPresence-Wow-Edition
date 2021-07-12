@@ -229,12 +229,10 @@ end]],
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     local difficultyInfo = select(4, GetInstanceInfo())
-    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["5.0.0"] or self:IsRebasedApi() then
-        -- Keystone Data
-        local activeKeystoneData = self:GetActiveKeystone()
-        if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
-            difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
-        end
+    -- Keystone Data
+    local activeKeystoneData = self:GetActiveKeystone()
+    if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
+        difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
     end
     return difficultyInfo
 end]],
@@ -269,7 +267,7 @@ end]],
     englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
     localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
     local playerCovenantId, playerCovenantData = 0
-    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['9.0.0'] then
+    if C_Covenants ~= nil then
         playerCovenantId = C_Covenants.GetActiveCovenantID()
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
     end
@@ -508,7 +506,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_id"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return tostring(select(8, GetInstanceInfo()))
 end]],
@@ -519,7 +517,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_group_size"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "50400", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return tostring(select(9, GetInstanceInfo()))
 end]],
@@ -530,7 +528,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["lfg_dungeon_id"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "80000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return tostring(select(10, GetInstanceInfo()))
 end]],
