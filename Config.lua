@@ -326,8 +326,8 @@ end]],
     local playerLevel = UnitLevel('player')
     local playerClass = UnitClass('player')
     local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], playerLevel))
-    -- Version-Specific Info
-    if self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()['5.0.0'] or self:IsRebasedApi() then
+    -- Specialization Info
+    if GetSpecialization then
         local specInfo, specId, specName, roleName = GetSpecialization()
         --
         -- Hotfix: Prevent a null-case with Spec Info
@@ -335,7 +335,7 @@ end]],
         -- This only happens if events fire too quickly for into to populate,
         -- or if you don't have a spec learned or available.
         if specInfo ~= nil then
-            specId, specName = GetSpecializationInfo(GetSpecialization())
+            specId, specName = GetSpecializationInfo(specInfo)
             if specId ~= nil then
                 roleName = self:FormatWord(GetSpecializationRoleByID(specId))
             else
