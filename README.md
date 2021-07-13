@@ -9,8 +9,7 @@ Completely customize the way others see you play World of Warcraft via Discord's
 [![CurseForge-Availability](http://cf.way2muchnoise.eu/versions/craftpresence.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 
 ## Author's Note
-*   At this time, the pixel-generation/reading that makes this possible has not been verified by Blizzard. An email and ticket have been put in to gain approval, though until this happens, use with caution.
-*   While a video is additionally planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
+*   While a video is planned for how to set this up, more info on how to install can be found [here](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft-%7C-Minified)
 
 ## Port Notes
 *   Please check [here](https://www.curseforge.com/minecraft/mc-mods/craftpresence) for the Minecraft Version of this addon
@@ -38,7 +37,7 @@ CraftPresence will detect and adjust its abilities towards the following version
 | Vanilla Classic (1.13.x) | OK     | Any      | N/A             |
 | Vanilla (Under 1.12.x)   | OK     | Any      | v0.7.8 or above |
 
-As this addon uses a singular codebase, Addon code is loaded depending upon which version you are loading it within.
+As this addon uses a singular codebase, different segments of code trigger depending on which version you are loading it within.
 
 For example, this will mean that while the placeholders will remain the same, their contents may change depending on the version.
 
