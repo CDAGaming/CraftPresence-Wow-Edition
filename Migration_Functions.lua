@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local pairs, type = pairs, type
-local strformat = string.format
+local strformat, min = string.format, math.min
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -32,20 +32,22 @@ local L = CraftPresence.locale
 --- Ensure Config Compatibility with the specified schema
 --- (Only forwards-compatibility is supported here)
 ---
---- @param from number The current/former schema number (Default: 0)
---- @param to number The new schema number to convert this config against (Default: addOnInfo["schema"]
+--- NOTE: current should be equal to target by end of method.
+---
+--- @param current number The current/former schema number (Default: 0)
+--- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"]
 --- @param log_output boolean Whether to allow logging for this function (Default: true)
-function CraftPresence:EnsureCompatibility(from, to, log_output)
-    from = self:GetOrDefault(from, 0)
-    to = self:GetOrDefault(to, self:GetAddOnInfo()["schema"])
+function CraftPresence:EnsureCompatibility(current, target, log_output)
+    current = self:GetOrDefault(current, 0)
+    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
     log_output = self:GetOrDefault(log_output, true)
 
-    if from < to then
+    if current < target then
         if log_output then
-            self:Print(strformat(L["INFO_OUTDATED_CONFIG"], from, to))
+            self:Print(strformat(L["INFO_OUTDATED_CONFIG"], current, target))
         end
 
-        if self:IsWithinValue(from, 0, 1, true, true) then
+        if self:IsWithinValue(current, 0, 1, true, true) then
             -- Schema Changes (v0 -> v1):
             --  events[k].ignoreCallback has been renamed to events[k].processCallback
             --  We want to rename this accordingly to prevent losing data
@@ -58,10 +60,10 @@ function CraftPresence:EnsureCompatibility(from, to, log_output)
                 events[k] = v
             end
             self:SetToDb("events", nil, events)
-            from = 1
+            current = 1
         end
 
-        if self:IsWithinValue(from, 1, 2, true, true) then
+        if self:IsWithinValue(current, 1, 2, true, true) then
             -- Schema Changes (v1 -> v2):
             --   Table renamed from customPlaceholders to placeholders
             --   The data field is renamed to processCallback
@@ -138,10 +140,10 @@ function CraftPresence:EnsureCompatibility(from, to, log_output)
                 self:SetToDb("placeholders", nil, placeholders)
                 self:SetToDb("customPlaceholders", nil, nil)
             end
-            from = 2
+            current = 2
         end
 
-        if self:IsWithinValue(from, 2, 3, true, true) then
+        if self:IsWithinValue(current, 2, 3, true, true) then
             -- Schema Changes (v2 -> v3):
             --   Adds allowRebasedApi flag for events and placeholders
             local data = self:GetFromDb("placeholders")
@@ -163,9 +165,9 @@ function CraftPresence:EnsureCompatibility(from, to, log_output)
                 )
             end
             self:SetToDb("events", nil, data)
-            from = 3
+            current = 3
         end
 
-        self:SetToDb("schema", nil, to)
+        self:SetToDb("schema", nil, min(current, target))
     end
 end

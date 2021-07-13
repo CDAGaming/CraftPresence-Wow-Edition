@@ -788,7 +788,7 @@ end
 --- @param resultString string Output Value -- The current placeholder result string
 --- @param isMultiTable boolean Optional Value -- If dataTable is comprised of smaller tables (Depth of 1)
 --- @param visibleData table Optional Value -- Determines whether some keys can be dynamically parsed
---- @param enableCallback function Optional Value -- Used in value tables to determine whether dynamic returns are allowed
+--- @param enableCallback function Optional Value -- Used in value tables to determine if dynamic returns are allowed
 ---
 --- @return boolean, string @ found_data, resultString
 function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
@@ -812,8 +812,12 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
                 local prefix = self:GetOrDefault(type(value) == "table" and value.prefix)
                 local newKey = prefix .. tostring(key) .. prefix
                 local newValue = self:GetDynamicReturnValue(
-                        (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[1]]) or value,
-                        (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]), self)
+                        (
+                                type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[1]]
+                        ) or value,
+                        (
+                                type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]
+                        ), self)
                 if (self:IsNullOrEmpty(query) or (
                         self:FindMatches(strlower(newKey), query, false, 1, true) or
                                 self:FindMatches(strlower(newValue), query, false, 1, true))

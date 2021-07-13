@@ -311,9 +311,9 @@ end]],
     local playerName = UnitName('player')
     local playerData = self:GetUnitStatus('player', true)
     -- Extra Player Data
-    local playerLevel = UnitLevel('player')
-    local playerClass = UnitClass('player')
-    local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], playerLevel))
+    local unitLevel = UnitLevel('player')
+    local unitClass = UnitClass('player')
+    local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
     -- Specialization Info
     if GetSpecialization then
         local specInfo, specId, specName, roleName = GetSpecialization()
@@ -337,8 +337,8 @@ end]],
         end
     end
     -- Final Parsing
-    if not self:IsNullOrEmpty(playerClass) then
-            userInfo = (userInfo .. ' ' .. playerClass)
+    if not self:IsNullOrEmpty(unitClass) then
+            userInfo = (userInfo .. ' ' .. unitClass)
     end
     return userInfo
 end]],
@@ -541,17 +541,6 @@ end]],
             ["zone_name"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
-    return GetRealZoneText()
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
-            },
-            ["zone_name"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
     return self:GetOrDefault(GetRealZoneText(), self.locale['TYPE_UNKNOWN'])
 end]],
                 processType = "function",
@@ -741,7 +730,7 @@ end]],
                 tagCallback = "",
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
-            },
+            }
         },
         events = {
             ["CHAT_MSG_SYSTEM"] = {
@@ -898,7 +887,6 @@ end]],
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
 function CraftPresence:getOptionsTable()
-    local self = CraftPresence
     local profilesGroup = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 
     local opts = {

@@ -185,7 +185,9 @@ function CraftPresence:EncodeConfigData(log_output)
                         local dataValue = self:GetOrDefault(
                                 buttonValue.result, self:ConcatTable(nil, split_key, buttonValue.label, buttonValue.url)
                         )
-                        self.buttons[buttonKey].result = self:Replace(dataValue, newKey, self:GetOrDefault(newValue), true)
+                        self.buttons[buttonKey].result = self:Replace(
+                                dataValue, newKey, self:GetOrDefault(newValue), true
+                        )
                     end
                 end
             end
@@ -241,7 +243,7 @@ function CraftPresence:OnInitialize()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetDefaults())
-    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self:getOptionsTable(), {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
     self:EnsureCompatibility(self:GetFromDb("schema"), addOnData["schema"])
@@ -700,7 +702,9 @@ function CraftPresence:ChatCommand(input)
 
                                 local canAccept = (
                                         self:IsNullOrEmpty(value.registerCallback) or
-                                                tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+                                                tostring(self:GetDynamicReturnValue(
+                                                        value.registerCallback, "function", self
+                                                )) == "true"
                                 )
                                 canAccept = canAccept and (
                                         self:IsWithinValue(
@@ -730,7 +734,9 @@ function CraftPresence:ChatCommand(input)
 
                                 local canAccept = (
                                         self:IsNullOrEmpty(value.registerCallback) or
-                                                tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+                                                tostring(self:GetDynamicReturnValue(
+                                                        value.registerCallback, "function", self
+                                                )) == "true"
                                 )
                                 canAccept = canAccept and (
                                         self:IsWithinValue(
