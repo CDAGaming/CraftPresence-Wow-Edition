@@ -687,46 +687,43 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["lockout_encounters"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = [[function (self)
-    local lockoutData = self:GetCachedLockout()
-    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['6.0.0'] then
-        lockoutData = self:GetCurrentLockoutData(true)
-    end
-    return lockoutData.formattedEncounterData
+    return self:GetCurrentLockoutData(true).formattedEncounterData
 end]],
                 processType = "function",
-                registerCallback = "",
+                registerCallback = [[function (self)
+    local lockoutData = self:GetCurrentLockoutData(true)
+    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
+end]],
                 tagCallback = "",
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["lockout_current_encounters"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = [[function (self)
-    local lockoutData = self:GetCachedLockout()
-    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['6.0.0'] then
-        lockoutData = self:GetCurrentLockoutData(true)
-    end
-    return lockoutData.currentEncounters
+    return self:GetCurrentLockoutData(true).currentEncounters
 end]],
                 processType = "function",
-                registerCallback = "",
+                registerCallback = [[function (self)
+    local lockoutData = self:GetCurrentLockoutData(true)
+    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
+end]],
                 tagCallback = "",
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["lockout_total_encounters"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                 processCallback = [[function (self)
-    local lockoutData = self:GetCachedLockout()
-    if self:GetBuildInfo()['toc_version'] >= self:GetCompatibilityInfo()['6.0.0'] then
-        lockoutData = self:GetCurrentLockoutData(true)
-    end
-    return lockoutData.totalEncounters
+    return self:GetCurrentLockoutData(true).totalEncounters
 end]],
                 processType = "function",
-                registerCallback = "",
+                registerCallback = [[function (self)
+    local lockoutData = self:GetCurrentLockoutData(true)
+    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
+end]],
                 tagCallback = "",
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
