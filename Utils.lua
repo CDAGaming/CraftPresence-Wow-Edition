@@ -253,8 +253,11 @@ function CraftPresence:GetCaseData(obj)
         if self:GetLength(innerValue) == 2 then
             value = self:GetOrDefault(innerValue[1])
             local caseType = strlower(self:GetOrDefault(innerValue[2]))
-            if caseType == "lower" then
+            if caseType == "lower" or caseType == "icon" then
                 value = strlower(value)
+                if caseType == "icon" then
+                    value = self:Replace(value, "%s+", "_")
+                end
             elseif caseType == "upper" then
                 value = strupper(value)
             end
