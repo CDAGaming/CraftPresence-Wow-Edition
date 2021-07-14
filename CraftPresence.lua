@@ -112,9 +112,6 @@ function CraftPresence:EncodeConfigData(log_output)
         self:GetFromDb("gameStateMessage")
     }
 
-    -- Time Condition Syncing
-    self.time_start, self.time_end = "", ""
-
     -- Placeholder Syncing
     copyTable(self:GetFromDb("placeholders"), self.placeholders)
     copyTable(self:GetFromDb("buttons"), self.buttons)
@@ -216,9 +213,10 @@ function CraftPresence:EncodeConfigData(log_output)
         end
     end
 
-    -- Sync Time Condition Data
+    -- Sync then reset time condition data
     tinsert(rpcData, self:GetOrDefault(self.time_start))
     tinsert(rpcData, self:GetOrDefault(self.time_end))
+    self.time_start, self.time_end = "", ""
 
     -- Additional Sanity Checks for Buttons
     for _, value in pairs(self.buttons) do
