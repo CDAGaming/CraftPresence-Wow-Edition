@@ -642,17 +642,6 @@ end]],
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
-            ["active_keystone_rating"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(self:GetActiveKeystone().rating)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
-            },
             ["active_keystone_affixes"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
@@ -664,10 +653,32 @@ end]],
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
+            ["active_keystone_rating"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(self:GetActiveKeystone().rating)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
             ["external_keystone_rating"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return tostring(self:GetActiveKeystone().external_rating)
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["internal_keystone_rating"] = {
+                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    return tostring(self:GetActiveKeystone().internal_rating)
 end]],
                 processType = "function",
                 registerCallback = "",

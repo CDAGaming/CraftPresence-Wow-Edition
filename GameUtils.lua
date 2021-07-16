@@ -99,7 +99,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
         unitData.reason = ""
     end
 
-    -- Return Data (and sync if needed)
+    -- Return Data (Syncing if needed)
     if refresh then
         unitData.last_status = unitData.status
     end

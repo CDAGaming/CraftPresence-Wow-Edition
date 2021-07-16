@@ -245,7 +245,7 @@ function CraftPresence:GetActiveKeystone()
         dungeon = nil,
         activeAffixes = nil,
         wasCharged = false,
-        level = 0, rating = -1, external_rating = nil,
+        level = 0, rating = nil, internal_rating = nil, external_rating = nil,
         formattedLevel = "",
         formattedAffixes = formattedKeyAffixes
     }
@@ -261,7 +261,7 @@ function CraftPresence:GetActiveKeystone()
 
         -- Primary Rating Calculation
         if C_ChallengeMode.GetOverallDungeonScore then
-            keystoneInfo.rating = C_ChallengeMode.GetOverallDungeonScore()
+            keystoneInfo.internal_rating = C_ChallengeMode.GetOverallDungeonScore()
         end
 
         if mapID then
@@ -284,12 +284,9 @@ function CraftPresence:GetActiveKeystone()
     end
 
     -- Post-Function Sanity Checks
-    keystoneInfo.external_rating = self:GetOrDefault(keystoneInfo.external_rating, keystoneInfo.rating)
-    keystoneInfo.external_rating = max(keystoneInfo.external_rating, 0)
-    if keystoneInfo.rating < 0 then
-        -- Use the external rating, if applicable
-        keystoneInfo.rating = keystoneInfo.external_rating
-    end
+    keystoneInfo.internal_rating = self:GetOrDefault(keystoneInfo.internal_rating, 0)
+    keystoneInfo.external_rating = self:GetOrDefault(keystoneInfo.external_rating, keystoneInfo.internal_rating)
+    keystoneInfo.rating = max(keystoneInfo.external_rating, keystoneInfo.internal_rating)
 
     return keystoneInfo
 end
