@@ -36,7 +36,8 @@ def load_config(path=current_path, default_path='/defaults.json', user_path='/co
         print("Applying user-defined settings...")
     except FileNotFoundError:
         print("No user-defined settings found, using defaults...")
-    finally:
+        return default_settings
+    else:
         return config
 
 
@@ -74,7 +75,7 @@ def setup_logging(config=None, debug_mode=False):
 
                 color_formatter = ColoredFormatter(log_format, log_date_style)
                 console_handler.setFormatter(color_formatter)
-            except (ModuleNotFoundError, TypeError) as err:
+            except (ModuleNotFoundError, TypeError):
                 pass
         else:
             console_handler.setFormatter(log_formatter)
@@ -111,7 +112,6 @@ def main(debug_mode=False):
     event_length = 11
     array_split_key = "=="
     array_separator_key = "|"
-    decoded = ''
     process_hwnd = None
 
     # RPC Data
@@ -198,10 +198,8 @@ def main(debug_mode=False):
                 # Timer Data Sync
                 if not null_or_empty(lines[7]):
                     timer_data["start"] = lines[7]
-                    last_start_timestamp = lines[7]
                     if not null_or_empty(lines[8]):
                         timer_data["end"] = lines[8]
-                        last_end_timestamp = lines[8]
                 # Buttons Data Sync
                 if not null_or_empty(lines[9]):
                     button_data = parse_button_data(lines[9], array_split_key)
