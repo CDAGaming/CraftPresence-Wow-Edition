@@ -19,6 +19,7 @@ is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
 process_version = "v1.5.2"
+process_hwnd = None
 current_path = os.path.dirname(os.path.realpath(__file__))
 help_url = "https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft"
 
@@ -104,6 +105,7 @@ def setup_logging(config=None, debug_mode=False):
 
 
 def callback(hwnd, extra):
+    global process_hwnd
     if (win32gui.GetWindowText(hwnd) == config["process_name"] and
             win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
         process_hwnd = hwnd
@@ -113,6 +115,8 @@ def main(debug_mode=False):
     """
     Main entrypoint (Should only be run when used as a script, and not when imported).
     """
+    # Global Definitions
+    global process_hwnd
     # Primary Variables
     event_key = "$RPCEvent$"
     event_length = 11
@@ -180,7 +184,7 @@ def main(debug_mode=False):
 
                 timer_data = {}
                 asset_data = {}
-                button_data = []
+                button_info = []
                 activity = {}
                 # Asset Data Sync
                 if not null_or_empty(lines[1]):
@@ -212,13 +216,13 @@ def main(debug_mode=False):
                     if len(button_data) == 2:
                         button_label = button_data[0] if (len(button_data[0]) <= 32) else button_data[1]
                         button_url = button_data[1] if (button_data[1] != button_label) else button_data[0]
-                        button_data.append({"label": button_label, "url": button_url})
+                        button_info.append({"label": button_label, "url": button_url})
                 if not null_or_empty(lines[10]):
                     button_data = parse_button_data(lines[10], array_split_key)
                     if len(button_data) == 2:
                         button_label = button_data[0] if not (is_valid_url(button_data[0])) else button_data[1]
                         button_url = button_data[1] if (button_data[1] != button_label) else button_data[0]
-                        button_data.append({"label": button_label, "url": button_url})
+                        button_info.append({"label": button_label, "url": button_url})
                 # Activity Data Sync
                 if not null_or_empty(lines[5]):
                     activity["details"] = lines[5]
@@ -227,7 +231,7 @@ def main(debug_mode=False):
 
                 activity["assets"] = asset_data
                 activity["timestamps"] = timer_data
-                activity["buttons"] = button_data
+                activity["buttons"] = button_info
 
                 if activity != last_activity:
                     root_logger.info("Setting new activity: %s" % activity)
@@ -465,7 +469,7 @@ def read_squares(hwnd, event_length=0, event_key='', array_separator_key='', deb
             read.append(b)
 
             current_decoded = decode_read_data(read)
-            if verify_read_data(current_decoded, event_length, event_key):
+            if verify_read_data(current_decoded, event_length, event_key, array_separator_key):
                 break
             else:
                 waiting_for_null = True
@@ -477,7 +481,7 @@ def read_squares(hwnd, event_length=0, event_key='', array_separator_key='', deb
         return
 
     # sanity check
-    if not (verify_read_data(current_decoded, event_length, event_key)):
+    if not (verify_read_data(current_decoded, event_length, event_key, array_separator_key)):
         return
 
     return parts
