@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.5.0"
+process_version = "v1.5.2"
 current_path = os.path.dirname(os.path.realpath(__file__))
 help_url = "https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft"
 
@@ -36,7 +36,7 @@ def load_config(path=current_path, default_path='/defaults.json', user_path='/co
         print("Applying user-defined settings...")
     except FileNotFoundError:
         print("No user-defined settings found, using defaults...")
-        return default_settings
+        return config
     else:
         return config
 
