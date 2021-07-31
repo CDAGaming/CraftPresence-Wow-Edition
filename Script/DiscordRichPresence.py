@@ -103,6 +103,12 @@ def setup_logging(config=None, debug_mode=False):
     return root_logger
 
 
+def callback(hwnd, extra):
+    if (win32gui.GetWindowText(hwnd) == config["process_name"] and
+            win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
+        process_hwnd = hwnd
+
+
 def main(debug_mode=False):
     """
     Main entrypoint (Should only be run when used as a script, and not when imported).
@@ -505,12 +511,6 @@ except ModuleNotFoundError as err:
     exit(1)
 else:
     if __name__ == '__main__':
-        def callback(hwnd, extra):
-            if (win32gui.GetWindowText(hwnd) == config["process_name"] and
-                    win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
-                process_hwnd = hwnd
-
-
         # Main Entrypoint Execution
         config = load_config()
         root_logger = setup_logging(config, config["debug"])
