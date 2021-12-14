@@ -606,11 +606,12 @@ end
 function CraftPresence:GetFlavorInfo()
     if not flavor_info then
         flavor_info = {
-            ["retail"] = 90100, -- Latest Retail
+            ["retail"] = 90105, -- Latest Retail
             ["classic"] = 20502, -- Latest Classic
-            ["classic_era"] = 11307, -- Latest Classic Era
-            ["ptr"] = 90105, -- Latest Retail PTR
-            ["classic_ptr"] = 20502 -- Latest Classic PTR
+            ["classic_era"] = 11401, -- Latest Classic Era
+            ["ptr"] = 90200, -- Latest Retail PTR
+            ["classic_ptr"] = 20502, -- Latest Classic PTR
+            ["classic_era_ptr"] = 11401 -- Latest Classic Era PTR
         }
     end
     return flavor_info
@@ -632,6 +633,7 @@ function CraftPresence:GetCompatibilityInfo()
             ["3.0.0"] = 30000, -- WOTLK 3.0.0
             ["2.5.0"] = 20500, -- TBC Classic 2.5.0
             ["2.0.0"] = 20000, -- TBC 2.0.0
+            ["1.14.0"] = 11400, -- Vanilla Classic 1.14.0
             ["1.13.0"] = 11300, -- Vanilla Classic 1.13.0
             ["1.12.1"] = 11201 -- Vanilla 1.12.1
         }
