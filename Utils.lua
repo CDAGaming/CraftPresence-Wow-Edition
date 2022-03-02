@@ -1,7 +1,7 @@
 --[[
 MIT License
 
-Copyright (c) 2018 - 2021 CDAGaming (cstack2011@yahoo.com)
+Copyright (c) 2018 - 2022 CDAGaming (cstack2011@yahoo.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -606,12 +606,12 @@ end
 function CraftPresence:GetFlavorInfo()
     if not flavor_info then
         flavor_info = {
-            ["retail"] = 90105, -- Latest Retail
-            ["classic"] = 20502, -- Latest Classic
-            ["classic_era"] = 11401, -- Latest Classic Era
+            ["retail"] = 90200, -- Latest Retail
+            ["classic"] = 20503, -- Latest Classic
+            ["classic_era"] = 11402, -- Latest Classic Era
             ["ptr"] = 90200, -- Latest Retail PTR
-            ["classic_ptr"] = 20502, -- Latest Classic PTR
-            ["classic_era_ptr"] = 11401 -- Latest Classic Era PTR
+            ["classic_ptr"] = 20503, -- Latest Classic PTR
+            ["classic_era_ptr"] = 11402 -- Latest Classic Era PTR
         }
     end
     return flavor_info
