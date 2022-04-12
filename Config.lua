@@ -230,6 +230,22 @@ end]],
                 tagType = "string",
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
+            ["player_icon"] = {
+                minimumTOC = "11100", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local genderData = { "Unknown", "Male", "Female" }
+    local playerGenderId = 1
+    if UnitSex then
+        playerGenderId = UnitSex('player')
+    end
+    return self:GetCaseData(UnitRace('player') .. "_" .. genderData[playerRegionId], "icon")
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
             ["player_status"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)

@@ -101,6 +101,7 @@ You can configure some of these placeholders throughout different areas of the g
 *   `@player_class@` - The player's current in-game class name
 *   `@player_race@` - The player's current in-game race name
 *   `@player_gender@` - The player's current in-game gender name
+*   `@player_icon@` - (Preset) The player's current in-game personality icon, using both `@player_race@` and `@player_gender@` (Format: `race_gender`)
 *   `@player_status@` - The player's current in-game status (Supports Away, Busy, and Dead/Alive states)
 *   `@player_reason@` - The player's current in-game reason message (Related to AFK/Busy messages, if set)
 *   `@player_alliance@` - The player's current faction (Dependent on location, expansion content, and applicability)
@@ -122,7 +123,7 @@ You can configure some of these placeholders throughout different areas of the g
 *   `@difficulty_info@` - (Preset) The player's current difficulty info, formatted with keystone and difficulty data as applicable
 *   `@active_keystone_level@` - The player's currently active keystone level, if applicable
 *   `@active_keystone_rating@` - The player's current Mythic Plus Rating, if applicable
-*   `@internal_keystone_rating@` - The primary placeholder for `@active_keystone_rating@`, if applicable (Uses Wow APIs)
+*   `@internal_keystone_rating@` - The primary placeholder for `@active_keystone_rating@`, if applicable (Uses Blizzard APIs)
 *   `@external_keystone_rating@` - The fallback placeholder for `@active_keystone_rating@`, if applicable (Uses 3rd Party Addon APIs)
 *   `@active_keystone_affixes@` - The player's currently active keystone affix names, if applicable
 *   `@owned_keystone_level@` - The player's currently owned keystone level, if applicable
