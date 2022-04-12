@@ -238,7 +238,7 @@ end]],
     if UnitSex then
         playerGenderId = UnitSex('player')
     end
-    return self:GetCaseData(UnitRace('player') .. "_" .. genderData[playerRegionId], "icon")
+    return self:GetCaseData({UnitRace('player') .. "_" .. genderData[playerRegionId], "icon"})
 end]],
                 processType = "function",
                 registerCallback = "",
