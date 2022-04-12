@@ -80,7 +80,8 @@ These placeholders can be added within the `General Settings` menu within the Co
 
 As these placeholders are global, they can be set in any of the RPC fields within `Presence Settings` and customized at a deeper level via usage of the inner-placeholders.
 
-*   `#dungeon#` - The message to generate whilst in a scenario instance. (See `Placeholders::Dungeon Placeholder Message` for more info)
+*   `#scenario#` - The message to generate whilst in a scenario instance. (See `Placeholders::Scenario Placeholder Message` for more info)
+*   `#dungeon#` - The message to generate whilst in a dungeon instance. (See `Placeholders::Dungeon Placeholder Message` for more info)
 *   `#raid#` - The message to generate whilst in a raid instance. (See `Placeholders::Raid Placeholder Message` for more info)
 *   `#battleground#` - The message to generate whilst in a battleground instance. (See `Placeholders::Battleground Placeholder Message` for sub-placeholders)
 *   `#arena#` - The message to generate whilst in an arena instance. (See `Placeholders::Arena Placeholder Message` for sub-placeholders)
@@ -98,8 +99,11 @@ You can configure some of these placeholders throughout different areas of the g
 *   `@title_name@` - The currently active title for your character, or `@player_name@` if not applicable
 *   `@player_level@` - The player's current in-game level
 *   `@player_class@` - The player's current in-game class name
+*   `@player_race@` - The player's current in-game race name
+*   `@player_gender@` - The player's current in-game gender name
 *   `@player_status@` - The player's current in-game status (Supports Away, Busy, and Dead/Alive states)
-*   `@player_alliance@` - (Preset) The player's current faction/covenant (Dependent on location and applicability)
+*   `@player_reason@` - The player's current in-game reason message (Related to AFK/Busy messages, if set)
+*   `@player_alliance@` - The player's current faction (Dependent on location, expansion content, and applicability)
 *   `@player_covenant@` - The player's current covenant name, or `None` if not applicable
 *   `@player_covenant_renown@` - The player's current covenant renown level, if applicable
 *   `@player_faction@` - The player's current faction name
@@ -117,8 +121,9 @@ You can configure some of these placeholders throughout different areas of the g
 *   `@difficulty_name@` - The player's current difficulty level (Applicable while in a valid instance)
 *   `@difficulty_info@` - (Preset) The player's current difficulty info, formatted with keystone and difficulty data as applicable
 *   `@active_keystone_level@` - The player's currently active keystone level, if applicable
-*   `@active_keystone_rating@` - The player's current Mythic Plus Rating, if applicable (Uses Blizzard's APIs)
-*   `@external_keystone_rating@` - The fallback placeholder for `@active_keystone_rating@`, if applicable (Uses Addon APIs)
+*   `@active_keystone_rating@` - The player's current Mythic Plus Rating, if applicable
+*   `@internal_keystone_rating@` - The primary placeholder for `@active_keystone_rating@`, if applicable (Uses Wow APIs)
+*   `@external_keystone_rating@` - The fallback placeholder for `@active_keystone_rating@`, if applicable (Uses 3rd Party Addon APIs)
 *   `@active_keystone_affixes@` - The player's currently active keystone affix names, if applicable
 *   `@owned_keystone_level@` - The player's currently owned keystone level, if applicable
 *   `@instance_type@` - The player's current in-game instance type, or `none` if not applicable
