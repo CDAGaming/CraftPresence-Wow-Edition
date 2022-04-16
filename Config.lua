@@ -168,7 +168,11 @@ end]],
             ["player_realm"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
-    return GetRealmName()
+    local playerRealm = self.locale['TYPE_UNKNOWN']
+    if GetRealmName then
+        playerRealm = GetRealmName()
+    end
+    return playerRealm
 end]],
                 processType = "function",
                 registerCallback = "",
@@ -310,7 +314,7 @@ end]],
     englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
     localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
     local playerCovenantId, playerCovenantData = 0
-    if C_Covenants ~= nil then
+    if C_Covenants then
         playerCovenantId = C_Covenants.GetActiveCovenantID()
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
     end
@@ -357,7 +361,7 @@ end]],
     local unitLevel = UnitLevel('player')
     local unitClass = UnitClass('player')
     local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
-    -- Specialization Info
+    -- Specialization Info (5.0.4 and above)
     if GetSpecialization then
         local specInfo, specId, specName, roleName = GetSpecialization()
         --
@@ -446,8 +450,11 @@ end]],
                 processCallback = [[function (self)
     -- Get Player Info
     local realmData = { "US", "KR", "EU", "TW", "CH" }
-    local playerRealm = GetRealmName()
+    local playerRealm = self.locale['TYPE_UNKNOWN']
     local playerRegionId = 1
+    if GetRealmName then
+        playerRealm = GetRealmName()
+    end
     if GetCurrentRegion then
         playerRegionId = GetCurrentRegion()
     end
