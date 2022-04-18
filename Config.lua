@@ -75,7 +75,7 @@ local DB_DEFAULTS = {
                 inactive = ""
             },
             ["ghost"] = {
-                active = L["DEFAULT_LABEL_DEAD"],
+                active = L["DEFAULT_LABEL_GHOST"],
                 inactive = ""
             },
             ["in_combat"] = {
