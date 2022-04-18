@@ -41,16 +41,11 @@ local GOLD = '|cFFFFD700'
 local PALE_CYAN = '|c33c9fcff'
 
 -- Data Default Values (DNT)
-L["LABEL_ONLINE"] = "Online"
-L["LABEL_AWAY"] = "Away"
-L["LABEL_BUSY"] = "Busy"
-L["LABEL_GHOST"] = "Ghost"
-L["LABEL_DEAD"] = "Dead"
-L["LABEL_COMBAT"] = "In Combat"
-L["TYPE_UNKNOWN"] = "Unknown"
-L["TYPE_NONE"] = "None"
-L["TYPE_ADDED"] = "Added"
-L["TYPE_MODIFY"] = "Modified"
+L["DEFAULT_LABEL_AWAY"] = "Away"
+L["DEFAULT_LABEL_BUSY"] = "Busy"
+L["DEFAULT_LABEL_DEAD"] = "Dead"
+L["DEFAULT_LABEL_GHOST"] = "Ghost"
+L["DEFAULT_LABEL_COMBAT"] = "In Combat"
 -- Internal Values (DNT)
 L["ARRAY_SPLIT_KEY"] = "=="
 L["ARRAY_SEPARATOR_KEY"] = "|"
@@ -66,6 +61,13 @@ L["FORMAT_LEVEL"] = "Level %s"
 L["FORMAT_USER_PREFIX"] = "(%s) "
 L["EVENT_RPC_TAG"] = "$RPCEvent$"
 L["EVENT_RPC_LENGTH"] = 11
+L["TYPE_UNKNOWN"] = "Unknown"
+L["TYPE_NONE"] = "None"
+L["TYPE_ADDED"] = "Added"
+L["TYPE_MODIFY"] = "Modified"
+L["STATUS_TRUE"] = "active"
+L["STATUS_FALSE"] = "inactive"
+L["STATUS_ONLINE"] = "Online"
 
 -- Primary Logging Data
 L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)
@@ -82,6 +84,11 @@ L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Custom Buttons"
 L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data"
 L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
+
+L["CATEGORY_TITLE_LABELS"] = "Labels"
+L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Custom Labels"
+L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)"
+L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found!"
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"

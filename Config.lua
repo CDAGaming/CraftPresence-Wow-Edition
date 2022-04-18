@@ -61,6 +61,28 @@ local DB_DEFAULTS = {
                 url = ""
             }
         },
+        labels = {
+            ["away"] = {
+                active = L["DEFAULT_LABEL_AWAY"],
+                inactive = ""
+            },
+            ["busy"] = {
+                active = L["DEFAULT_LABEL_BUSY"],
+                inactive = ""
+            },
+            ["dead"] = {
+                active = L["DEFAULT_LABEL_DEAD"],
+                inactive = ""
+            },
+            ["ghost"] = {
+                active = L["DEFAULT_LABEL_DEAD"],
+                inactive = ""
+            },
+            ["in_combat"] = {
+                active = L["DEFAULT_LABEL_COMBAT"],
+                inactive = ""
+            }
+        },
         placeholders = {
             ["default"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -849,6 +871,20 @@ end]],
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
+            ["PLAYER_REGEN_ENABLED"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = "",
+                registerCallback = "",
+                eventCallback = "function(self) return self.defaultEventCallback end",
+                enabled = true
+            },
+            ["PLAYER_REGEN_DISABLED"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = "",
+                registerCallback = "",
+                eventCallback = "function(self) return self.defaultEventCallback end",
+                enabled = true
+            },
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, lastName, _, args)
@@ -1137,6 +1173,21 @@ function CraftPresence:getOptionsTable()
                             self:PrintErrorMessage(
                                     strformat(L["ERROR_STRING_DEFAULT"], fieldName)
                             )
+                        end
+                )
+            },
+            labelOptions = {
+                type = "group", order = self:GetNextIndex(),
+                name = L["CATEGORY_TITLE_LABELS"], desc = L["CATEGORY_COMMENT_LABELS"],
+                get = function(info)
+                    return self.db.profile[info[self:GetLength(info)]]
+                end,
+                set = function(info, value)
+                    self.db.profile[info[self:GetLength(info)]] = value
+                end,
+                args = self:GetPlaceholderArgs("labels", L["CATEGORY_TITLE_LABELS_EXTENDED"],
+                        function(count)
+                            return strformat(L["CATEGORY_COMMENT_LABELS_INFO"], count, (count == 1 and "") or "s")
                         end
                 )
             },

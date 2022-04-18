@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local strformat = string.format
+local strformat, strupper, tostring = string.format, string.upper, tostring
 local tinsert, tconcat = table.insert, table.concat
 
 -- Addon APIs
@@ -50,46 +50,64 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
     unitData = self:GetOrDefault(unitData, {})
 
+    local unitInfo = {}
+    local unitString = ""
+    local labelData = self:GetFromDb("labels")
+
     unitData.away = self:GetOrDefault(
             unitData.away or (UnitIsAFK and UnitIsAFK(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].away) or false
     )
+    unitString = self:GetOrDefault(labelData["away"][L["STATUS_"..strupper(tostring(unitData.away))]])
+    if not self:IsNullOrEmpty(unitString) then
+        tinsert(unitInfo, unitString)
+    end
+
     unitData.busy = self:GetOrDefault(
             unitData.busy or (UnitIsDND and UnitIsDND(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].busy) or false
     )
+    unitString = self:GetOrDefault(labelData["busy"][L["STATUS_"..strupper(tostring(unitData.busy))]])
+    if not self:IsNullOrEmpty(unitString) then
+        tinsert(unitInfo, unitString)
+    end
+
     unitData.dead = self:GetOrDefault(
             unitData.dead or (UnitIsDead and UnitIsDead(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].dead) or false
     )
+    unitString = self:GetOrDefault(labelData["dead"][L["STATUS_"..strupper(tostring(unitData.dead))]])
+    if not self:IsNullOrEmpty(unitString) then
+        tinsert(unitInfo, unitString)
+    end
+
     unitData.ghost = self:GetOrDefault(
             unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].ghost) or false
     )
+    unitString = self:GetOrDefault(labelData["ghost"][L["STATUS_"..strupper(tostring(unitData.ghost))]])
+    if not self:IsNullOrEmpty(unitString) then
+        tinsert(unitInfo, unitString)
+    end
+
     unitData.in_combat = self:GetOrDefault(
             unitData.in_combat or (UnitAffectingCombat and UnitAffectingCombat(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].in_combat) or false
     )
+    unitString = self:GetOrDefault(labelData["in_combat"][L["STATUS_"..strupper(tostring(unitData.in_combat))]])
+    if not self:IsNullOrEmpty(unitString) then
+        tinsert(unitInfo, unitString)
+    end
 
     -- Sync Player Name Tweaks
-    local unitInfo = {}
     if unitData.away then
-        tinsert(unitInfo, L["LABEL_AWAY"])
         if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
             cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_AFK_MESSAGE)
         end
     elseif unitData.busy then
-        tinsert(unitInfo, L["LABEL_BUSY"])
         if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
             cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_DND_MESSAGE)
         end
-    end
-    if unitData.ghost then
-        tinsert(unitInfo, L["LABEL_GHOST"])
-    elseif unitData.dead then
-        tinsert(unitInfo, L["LABEL_DEAD"])
-    elseif unitData.in_combat then
-        tinsert(unitInfo, L["LABEL_COMBAT"])
     end
     unitData.status = tconcat(unitInfo, ",")
     unitData.reason = self:GetOrDefault(unitData.reason or
@@ -100,7 +118,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     if not self:IsNullOrEmpty(unitData.status) then
         unitData.prefix = strformat(prefixFormat, unitData.status)
     else
-        unitData.status = L["LABEL_ONLINE"]
+        unitData.status = L["STATUS_ONLINE"]
         unitData.prefix = ""
         unitData.reason = ""
     end
