@@ -66,6 +66,10 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
             unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].ghost) or false
     )
+    unitData.in_combat = self:GetOrDefault(
+            unitData.in_combat or (UnitAffectingCombat and UnitAffectingCombat(unit)),
+            (cachedUnitData[unit] and cachedUnitData[unit].in_combat) or false
+    )
 
     -- Sync Player Name Tweaks
     local unitInfo = {}
@@ -84,6 +88,8 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
         tinsert(unitInfo, L["LABEL_GHOST"])
     elseif unitData.dead then
         tinsert(unitInfo, L["LABEL_DEAD"])
+    elseif unitData.in_combat then
+        tinsert(unitInfo, L["LABEL_COMBAT"])
     end
     unitData.status = tconcat(unitInfo, ",")
     unitData.reason = self:GetOrDefault(unitData.reason or
