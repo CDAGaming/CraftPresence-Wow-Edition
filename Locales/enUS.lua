@@ -110,7 +110,7 @@ L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please ent
 L["TITLE_GAME_STATE_MESSAGE"] = "Game State Message"
 L["COMMENT_GAME_STATE_MESSAGE"] = "The message to be displayed in the Game State area of the RPC."
 L["USAGE_GAME_STATE_MESSAGE"] = "<Your message here>"
-L["DEFAULT_GAME_STATE_MESSAGE"] = setfmt("*dungeon**raid**battleground**arena**default*", outkey)
+L["DEFAULT_GAME_STATE_MESSAGE"] = setfmt("*scenario**dungeon**raid**battleground**arena**default*", outkey)
 
 L["TITLE_DETAILS_MESSAGE"] = "Details Message"
 L["COMMENT_DETAILS_MESSAGE"] = "The message to be displayed in the Details area of the RPC."
