@@ -264,7 +264,7 @@ end]],
     if UnitSex then
         playerGenderId = UnitSex('player')
     end
-    return self:GetCaseData({UnitRace('player') .. "_" .. genderData[playerGenderId], "icon"})
+    return self:FormatAsIcon(UnitRace('player') .. "_" .. genderData[playerGenderId])
 end]],
                 processType = "function",
                 registerCallback = "",

@@ -241,7 +241,31 @@ function CraftPresence:FormatWord(str)
     return (strupper(strsub(str, 1, 1)) .. strsub(str, 2))
 end
 
---- Return a lower/upper cased version of the specified string, depending on arguments
+--- Formats the following word to proper icon casing
+--- (Helper Function for GetCaseData for ease-of-access)
+---
+--- @param str string The input string to evaluate
+---
+--- @return string @ formattedString
+function CraftPresence:FormatAsIcon(str)
+    return self:FormatWithCasing(str, "icon")
+end
+
+--- Formats the following word to the specified casing
+--- (Helper Function for GetCaseData for ease-of-access)
+---
+--- @param str string The input string to evaluate
+--- @param casing string The specified casing to use (lower/upper/icon)
+---
+--- @return string @ formattedString
+function CraftPresence:FormatWithCasing(str, casing)
+    if self:IsNullOrEmpty(casing) then
+        return str
+    end
+    return self:GetCaseData({str, casing})
+end
+
+--- Return a modified version of the specified string, depending on arguments
 ---
 --- @param obj any A table (Format: string, casing) or string to evaluate
 ---
