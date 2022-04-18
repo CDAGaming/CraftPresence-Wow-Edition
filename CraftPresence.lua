@@ -104,9 +104,9 @@ function CraftPresence:EncodeConfigData(log_output)
     -- Secondary Variable Data
     local rpcData = {
         self:GetFromDb("clientId"),
-        { self:GetFromDb("largeImageKey"), "icon" },
+        self:FormatAsIcon(self:GetFromDb("largeImageKey")),
         self:GetFromDb("largeImageMessage"),
-        { self:GetFromDb("smallImageKey"), "icon" },
+        self:FormatAsIcon(self:GetFromDb("smallImageKey")),
         self:GetFromDb("smallImageMessage"),
         self:GetFromDb("detailsMessage"),
         self:GetFromDb("gameStateMessage")
