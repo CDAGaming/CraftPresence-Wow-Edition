@@ -631,11 +631,11 @@ function CraftPresence:GetFlavorInfo()
     if not flavor_info then
         flavor_info = {
             ["retail"] = 90200, -- Latest Retail
-            ["classic"] = 20503, -- Latest Classic
-            ["classic_era"] = 11402, -- Latest Classic Era
-            ["ptr"] = 90200, -- Latest Retail PTR
-            ["classic_ptr"] = 20503, -- Latest Classic PTR
-            ["classic_era_ptr"] = 11402 -- Latest Classic Era PTR
+            ["classic"] = 20504, -- Latest Classic
+            ["classic_era"] = 11403, -- Latest Classic Era
+            ["ptr"] = 90205, -- Latest Retail PTR
+            ["classic_ptr"] = 20504, -- Latest Classic PTR
+            ["classic_era_ptr"] = 11403 -- Latest Classic Era PTR
         }
     end
     return flavor_info
@@ -648,17 +648,19 @@ end
 function CraftPresence:GetCompatibilityInfo()
     if not compatibility_info then
         compatibility_info = {
+            ["10.0.0"] = 100000, -- Dragonflight 10.0.0
             ["9.0.0"] = 90000, -- Shadowlands 9.0.0
             ["8.0.0"] = 80000, -- BFA 8.0.0
             ["7.0.0"] = 70000, -- Legion 7.0.0
             ["6.0.0"] = 60000, -- WOD 6.0.0
             ["5.0.0"] = 50000, -- MOP 5.0.0
             ["4.0.0"] = 40000, -- CATA 4.0.0
+            ["3.4.0"] = 30400, -- WOTLK Classic 3.4.0
             ["3.0.0"] = 30000, -- WOTLK 3.0.0
             ["2.5.0"] = 20500, -- TBC Classic 2.5.0
             ["2.0.0"] = 20000, -- TBC 2.0.0
-            ["1.14.0"] = 11400, -- Vanilla Classic 1.14.0
-            ["1.13.0"] = 11300, -- Vanilla Classic 1.13.0
+            ["1.14.0"] = 11400, -- Vanilla Classic (SOM) 1.14.0
+            ["1.13.0"] = 11300, -- Vanilla Classic (Original) 1.13.0
             ["1.12.1"] = 11201 -- Vanilla 1.12.1
         }
     end

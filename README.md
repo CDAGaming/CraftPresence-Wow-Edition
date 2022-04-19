@@ -23,19 +23,21 @@ The customization possibilities are limitless, with the only real limit being ho
 ### Client Support
 CraftPresence will detect and adjust its abilities towards the following versions:
 
-| Version                  | Status | Download | Notes           |
-|--------------------------|--------|----------|-----------------|
-| Shadowlands (9.x)        | OK     | Any      | N/A             |
-| BFA (8.x)                | OK     | Any      | N/A             |
-| Legion (7.x)             | OK     | Any      | v0.5.4 or above |
-| WOD (6.x)                | OK     | Any      | v0.5.4 or above |
-| MOP (5.x)                | OK     | Any      | v0.5.4 or above |
-| Cataclysm (4.x)          | OK     | Any      | v0.5.4 or above |
-| WOTLK (3.x)              | OK     | Any      | v0.5.4 or above |
-| TBC Classic (2.5.x)      | OK     | Any      | N/A             |
-| TBC (2.0.x - 2.4.x)      | OK     | Any      | v0.5.4 or above |
-| Vanilla Classic (1.13.x) | OK     | Any      | N/A             |
-| Vanilla (Under 1.12.x)   | OK     | Any      | v0.7.8 or above |
+| Version                           | Status | Download | Notes           |
+|-----------------------------------|--------|----------|-----------------|
+| Dragonflight (10.x)               | TBD    | TBD      | TBD             |
+| Shadowlands (9.x)                 | OK     | Any      | N/A             |
+| BFA (8.x)                         | OK     | Any      | N/A             |
+| Legion (7.x)                      | OK     | Any      | v0.5.4 or above |
+| WOD (6.x)                         | OK     | Any      | v0.5.4 or above |
+| MOP (5.x)                         | OK     | Any      | v0.5.4 or above |
+| Cataclysm (4.x)                   | OK     | Any      | v0.5.4 or above |
+| WOTLK Classic (3.4.x)             | TBD    | TBD      | TBD             |
+| WOTLK (3.0.x - 3.3.x)             | OK     | Any      | v0.5.4 or above |
+| TBC Classic (2.5.x)               | OK     | Any      | N/A             |
+| TBC (2.0.x - 2.4.x)               | OK     | Any      | v0.5.4 or above |
+| Vanilla Classic (1.13.x - 1.14.x) | OK     | Any      | N/A             |
+| Vanilla (1.12.x and below)        | OK     | Any      | v0.7.8 or above |
 
 As this addon uses a singular codebase, different segments of code trigger depending on which version you are loading it within.
 
