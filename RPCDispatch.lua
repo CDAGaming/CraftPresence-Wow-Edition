@@ -39,9 +39,9 @@ local last_encoded = ""
 local last_args = {}
 local render_warnings, last_render_warnings = "", ""
 local render_settings = {
-    ["contrast"] = "50",
-    ["brightness"] = "50",
-    ["gamma"] = { "1", "1.0" }
+    ["contrast"] = 50,
+    ["brightness"] = 50,
+    ["gamma"] = 1.0
 }
 
 --- Convert an encoded RPCEvent message into a displayable format
@@ -96,14 +96,14 @@ function CraftPresence:AssertRenderSettings()
             local is_correct = false
             for _, innerValue in pairs(value) do
                 if not is_correct then
-                    is_correct = self:GetGameVariable(key) == innerValue
+                    is_correct = self:GetGameVariable(key, type(innerValue)) == innerValue
                 end
             end
 
             if not is_correct then
                 tinsert(error_info, strformat(L["FORMAT_SETTING"], key, tconcat(value, " or ")))
             end
-        elseif self:GetGameVariable(key) ~= value then
+        elseif self:GetGameVariable(key, type(value)) ~= value then
             tinsert(error_info, strformat(L["FORMAT_SETTING"], key, value))
         end
     end

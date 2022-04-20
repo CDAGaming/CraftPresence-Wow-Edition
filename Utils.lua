@@ -627,15 +627,25 @@ end
 --- Retrieve the specified Game Variable
 ---
 --- @param str string The specified variable name
+--- @param result_type string The expected type of the CVar (Default: string)
 ---
---- @return string @ variable_info
-function CraftPresence:GetGameVariable(str)
+--- @return any @ variable_info
+function CraftPresence:GetGameVariable(str, result_type)
+    result_type = strlower(self:GetOrDefault(result_type, "string"))
+
+    local result
     if C_CVar then
-        return C_CVar.GetCVar(str)
+        result = C_CVar.GetCVar(str)
     elseif GetCVar then
-        return GetCVar(str)
+        result = GetCVar(str)
     end
-    return ""
+
+    -- Type Conversion
+    if result_type == "number" then
+        return tonumber(result)
+    else
+        return result
+    end
 end
 
 --- Retrieve and/or Synchronize Build Flavor Info
