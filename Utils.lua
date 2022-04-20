@@ -628,10 +628,12 @@ end
 ---
 --- @param str string The specified variable name
 --- @param result_type string The expected type of the CVar (Default: string)
+--- @param fallback string If defined, use this value if the CVar does not exist
 ---
 --- @return any @ variable_info
-function CraftPresence:GetGameVariable(str, result_type)
+function CraftPresence:GetGameVariable(str, result_type, fallback)
     result_type = strlower(self:GetOrDefault(result_type, "string"))
+    fallback = self:GetOrDefault(fallback)
 
     local result
     if C_CVar then
@@ -639,6 +641,7 @@ function CraftPresence:GetGameVariable(str, result_type)
     elseif GetCVar then
         result = GetCVar(str)
     end
+    result = self:GetOrDefault(result, fallback)
 
     -- Type Conversion
     if result_type == "number" then

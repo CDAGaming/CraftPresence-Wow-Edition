@@ -96,14 +96,14 @@ function CraftPresence:AssertRenderSettings()
             local is_correct = false
             for _, innerValue in pairs(value) do
                 if not is_correct then
-                    is_correct = self:GetGameVariable(key, type(innerValue)) == innerValue
+                    is_correct = self:GetGameVariable(key, type(innerValue), innerValue) == innerValue
                 end
             end
 
             if not is_correct then
                 tinsert(error_info, strformat(L["FORMAT_SETTING"], key, tconcat(value, " or ")))
             end
-        elseif self:GetGameVariable(key, type(value)) ~= value then
+        elseif self:GetGameVariable(key, type(value), value) ~= value then
             tinsert(error_info, strformat(L["FORMAT_SETTING"], key, value))
         end
     end
