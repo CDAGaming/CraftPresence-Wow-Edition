@@ -1002,6 +1002,10 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
                             value_args[innerKey].usage = value_usage
                         end
                     end
+                    local value_default = self:GetOrDefault(L["DEFAULT_BUTTON_" .. strupper(innerKey)])
+                    if not self:IsNullOrEmpty(value_default) then
+                        value_args[innerKey].default = value_default
+                    end
                 end
             end
             table_args[key] = {

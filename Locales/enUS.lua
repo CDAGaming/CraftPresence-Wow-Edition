@@ -169,16 +169,19 @@ L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger.\n(This doesn't effect /cp update)"
 L["MINIMUM_CALLBACK_DELAY"] = 0
 L["MAXIMUM_CALLBACK_DELAY"] = 30
+L["DEFAULT_CALLBACK_DELAY"] = 2
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
 L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after non-debug events before drawn frames are cleared."
 L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
+L["DEFAULT_FRAME_CLEAR_DELAY"] = 10
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
 L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at\n(Should equal the script's pixel_size property)"
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
+L["DEFAULT_FRAME_SIZE"] = 6
 
 L["TITLE_PRIMARYBUTTON"] = "Primary Button"
 L["COMMENT_PRIMARYBUTTON"] = "The data to show for the Primary Button area of the Rich Presence."
@@ -206,15 +209,18 @@ L["TITLE_BUTTON_ENABLED"] = "Enabled"
 L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used."
 
 L["TITLE_BUTTON_MINIMUMTOC"] = "Minimum TOC"
-L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with.\n(Default: CurrentTOC)"
+L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with."
 L["USAGE_BUTTON_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
+L["DEFAULT_BUTTON_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
 
 L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
-L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with.\n(Default: CurrentTOC)"
+L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with."
 L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
+L["DEFAULT_BUTTON_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
 
 L["TITLE_BUTTON_ALLOWREBASEDAPI"] = "Allow Rebased API"
-L["COMMENT_BUTTON_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions.\n(Default: false)"
+L["COMMENT_BUTTON_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions."
+L["DEFAULT_BUTTON_ALLOWREBASEDAPI"] = "false"
 
 L["TITLE_BUTTON_PROCESSCALLBACK"] = "Process Callback"
 L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon."
@@ -241,7 +247,7 @@ L["COMMENT_BUTTON_TAGTYPE"] = "The expected type the Tag Callback should identif
 L["USAGE_BUTTON_TAGTYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_PREFIX"] = "Prefix"
-L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data.\n(Default: None)"
+L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data."
 L["USAGE_BUTTON_PREFIX"] = "<Your message here>"
 
 -- Global Placeholder Defaults
