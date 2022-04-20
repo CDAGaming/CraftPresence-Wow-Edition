@@ -24,7 +24,8 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
-local strbyte, strsub, tconcat = string.byte, string.sub, table.concat
+local tinsert, tconcat, tgetn = table.insert, table.concat, table.getn
+local strbyte, strsub = string.byte, string.sub
 local max, floor = math.max, math.floor
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
 
@@ -36,6 +37,12 @@ local frame_count = 0
 local frames = {}
 local last_encoded = ""
 local last_args = {}
+local render_warnings, last_render_warnings = "", ""
+local render_settings = {
+    ["contrast"] = "50",
+    ["brightness"] = "50",
+    ["gamma"] = { "1", "1.0" }
+}
 
 --- Convert an encoded RPCEvent message into a displayable format
 ---
@@ -76,6 +83,41 @@ function CraftPresence:GetCachedEncodedData()
     return last_args, last_encoded
 end
 
+--- Determine if there are any conflicting render settings for RPC Event Generation
+--- @return boolean @ are_settings_valid
+function CraftPresence:AssertRenderSettings()
+    -- Clear Prior Data
+    last_render_warnings = render_warnings
+    render_warnings = ""
+
+    local error_info = {}
+    for key, value in pairs(render_settings) do
+        if type(value) == "table" then
+            local is_correct = false
+            for _, innerValue in pairs(value) do
+                if not is_correct then
+                    is_correct = self:GetGameVariable(key) == innerValue
+                end
+            end
+
+            if not is_correct then
+                tinsert(error_info, strformat(L["FORMAT_SETTING"], key, tconcat(value, " or ")))
+            end
+        elseif self:GetGameVariable(key) ~= value then
+            tinsert(error_info, strformat(L["FORMAT_SETTING"], key, value))
+        end
+    end
+
+    if tgetn(error_info) > 0 then
+        render_warnings = self:SerializeTable(error_info)
+        if self:GetFromDb("verboseMode") or last_render_warnings ~= render_warnings then
+            self:Print(strformat(L["LOG_WARNING"], L["WARNING_EVENT_RENDERING_ONE"]))
+            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings)))
+        end
+    end
+    return self:IsNullOrEmpty(render_warnings)
+end
+
 --- Creates an array of frames with the specified size at the TOPLEFT of screen
 ---
 --- @param size number The width and height of the frames
@@ -110,6 +152,7 @@ function CraftPresence:CreateFrames(size)
 end
 
 --- Colors and Paints the specified frame to the specified RGB color
+--- (INTERNAL USAGE ONLY -- Use PaintMessageWait)
 ---
 --- @param frame Frame The specified frame to adjust
 --- @param r number The red color value to apply to frame
@@ -151,6 +194,8 @@ function CraftPresence:PaintFrame(frame, r, g, b, force)
 end
 
 --- Converts an array of text into bytes represented in RGB for frame rendering
+--- (INTERNAL USAGE ONLY -- Use PaintMessageWait)
+---
 --- @param text string The text to be interpreted and converted
 function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
@@ -247,7 +292,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
 
     local defaultEncoded, encodedArgs = self:EncodeConfigData(self:GetFromDb("debugMode"))
     local encoded = self:GetOrDefault(msg, defaultEncoded)
-    local changed = last_encoded ~= encoded or force
+    local changed = (last_encoded ~= encoded and self:AssertRenderSettings()) or force
     local useTable = self:IsNullOrEmpty(msg)
     if (changed and not self:IsNullOrEmpty(encoded)) then
         if update then
@@ -281,7 +326,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
             end
         end
     else
-        -- If encoded data has not changed, we will release the timer immediatly
+        -- If encoded data has not changed, we will release the timer immediately
         -- if we are running within a non-queued pipeline
         self:SetTimerLocked(false)
     end

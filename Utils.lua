@@ -624,6 +624,20 @@ function CraftPresence:GetAddOnInfo()
     return addon_info
 end
 
+--- Retrieve the specified Game Variable
+---
+--- @param str string The specified variable name
+---
+--- @return string @ variable_info
+function CraftPresence:GetGameVariable(str)
+    if C_CVar then
+        return C_CVar.GetCVar(str)
+    elseif GetCVar then
+        return GetCVar(str)
+    end
+    return ""
+end
+
 --- Retrieve and/or Synchronize Build Flavor Info
 ---
 --- @return table @ flavor_info
