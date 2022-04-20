@@ -996,7 +996,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
                         value_args[innerKey].multiline = (
                                 self:EndsWith(strlower(innerKey), "data") or
                                         self:EndsWith(strlower(innerKey), "callback")
-                        )
+                        ) and L["TYPE_MULTILINE_LENGTH"] or false
                         local value_usage = self:GetOrDefault(L["USAGE_BUTTON_" .. strupper(innerKey)])
                         if not self:IsNullOrEmpty(value_usage) then
                             value_args[innerKey].usage = value_usage

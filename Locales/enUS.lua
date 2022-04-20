@@ -62,6 +62,7 @@ L["FORMAT_SETTING"] = "%s (Should be %s)"
 L["FORMAT_USER_PREFIX"] = "(%s) "
 L["EVENT_RPC_TAG"] = "$RPCEvent$"
 L["EVENT_RPC_LENGTH"] = 11
+L["TYPE_MULTILINE_LENGTH"] = 12
 L["TYPE_UNKNOWN"] = "Unknown"
 L["TYPE_NONE"] = "None"
 L["TYPE_ADDED"] = "Added"
