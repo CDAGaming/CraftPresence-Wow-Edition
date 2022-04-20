@@ -80,36 +80,36 @@ L["LOG_INFO"] = "[Info] %s"
 
 -- Config Category Data
 L["CATEGORY_TITLE_GENERAL"] = "General"
-L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info"
+L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info."
 
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Custom Buttons"
-L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data"
+L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data."
 L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Custom Labels"
-L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)"
+L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)."
 L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found!"
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"
-L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data"
-L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)"
+L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data."
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)."
 
 L["CATEGORY_TITLE_EVENTS"] = "Events"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registered Events"
-L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to update data on"
-L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)"
+L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
+L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)."
 
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
-L["CATEGORY_COMMENT_EXTRA"] = "Extra customizability options for addon display info"
+L["CATEGORY_COMMENT_EXTRA"] = "Extra customization options for addon display info."
 
 L["CATEGORY_TITLE_ABOUT"] = "About"
-L["CATEGORY_COMMENT_ABOUT"] = "About this addon"
+L["CATEGORY_COMMENT_ABOUT"] = "View information about this addon."
 -- Config Variable Data
 L["TITLE_CLIENT_ID"] = "Client ID"
-L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles"
+L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles."
 L["USAGE_CLIENT_ID"] = "<18-digit numerical id here>"
 L["DEFAULT_CLIENT_ID"] = "805124430774272000"
 L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit|r numerical value.",
@@ -160,31 +160,31 @@ L["TITLE_SHOW_MINIMAP_ICON"] = "Show Minimap Icon"
 L["COMMENT_SHOW_MINIMAP_ICON"] = "Toggles the display of the minimap icon, used to access the config."
 
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
-L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate in a skip or queue style"
+L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate in a skip or queue style."
 
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
-L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger (Doesn't effect /cp update)"
+L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger.\n(This doesn't effect /cp update)"
 L["MINIMUM_CALLBACK_DELAY"] = 0
 L["MAXIMUM_CALLBACK_DELAY"] = 30
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
-L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after events before drawn frames are cleared (Doesn't effect debug states)"
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after non-debug events before drawn frames are cleared."
 L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at (Should equal the script's config_size property)"
+L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at\n(Should equal the script's pixel_size property)"
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 
 L["TITLE_PRIMARYBUTTON"] = "Primary Button"
-L["COMMENT_PRIMARYBUTTON"] = "The data to show for the Primary Button area of the RPC"
+L["COMMENT_PRIMARYBUTTON"] = "The data to show for the Primary Button area of the Rich Presence."
 
 L["TITLE_SECONDARYBUTTON"] = "Secondary Button"
-L["COMMENT_SECONDARYBUTTON"] = "The data to show for the Secondary Button area of the RPC"
+L["COMMENT_SECONDARYBUTTON"] = "The data to show for the Secondary Button area of the Rich Presence."
 
 L["TITLE_BUTTON_LABEL"] = "Label"
 L["COMMENT_BUTTON_LABEL"] = "The message to show as the label."
@@ -194,54 +194,54 @@ L["TITLE_BUTTON_URL"] = "Url"
 L["COMMENT_BUTTON_URL"] = "The message to show as the url."
 L["USAGE_BUTTON_URL"] = "<Your message here>"
 
-L["TITLE_BUTTON_DATA"] = "Data"
-L["COMMENT_BUTTON_DATA"] = "The message to show for this placeholder"
-L["USAGE_BUTTON_DATA"] = "<Your message here>"
+L["TITLE_BUTTON_ACTIVE"] = "Active State Message"
+L["COMMENT_BUTTON_ACTIVE"] = "The message to display when this state is active."
+L["USAGE_BUTTON_ACTIVE"] = "<Your message here>"
 
-L["TITLE_BUTTON_TYPE"] = "Type"
-L["COMMENT_BUTTON_TYPE"] = "The type of the message for this placeholder"
-L["USAGE_BUTTON_TYPE"] = "<Your type reference here>"
+L["TITLE_BUTTON_INACTIVE"] = "Inactive State Message"
+L["COMMENT_BUTTON_INACTIVE"] = "The message to display when this state is inactive."
+L["USAGE_BUTTON_INACTIVE"] = "<Your message here>"
 
 L["TITLE_BUTTON_ENABLED"] = "Enabled"
-L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used"
+L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used."
 
 L["TITLE_BUTTON_MINIMUMTOC"] = "Minimum TOC"
-L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with\n(Default: CurrentTOC)"
+L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with.\n(Default: CurrentTOC)"
 L["USAGE_BUTTON_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
 L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
-L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with\n(Default: CurrentTOC)"
+L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with.\n(Default: CurrentTOC)"
 L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
 
 L["TITLE_BUTTON_ALLOWREBASEDAPI"] = "Allow Rebased API"
-L["COMMENT_BUTTON_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions\n(Default: false)"
+L["COMMENT_BUTTON_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions.\n(Default: false)"
 
 L["TITLE_BUTTON_PROCESSCALLBACK"] = "Process Callback"
-L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon"
+L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon."
 L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_PROCESSTYPE"] = "Process Type"
-L["COMMENT_BUTTON_PROCESSTYPE"] = "The type name to be used for the Process Callback\n(Default: string)"
+L["COMMENT_BUTTON_PROCESSTYPE"] = "The expected type the Process Callback should identify as.\n(Can be: function,string)"
 L["USAGE_BUTTON_PROCESSTYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
-L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called"
+L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called."
 L["USAGE_BUTTON_EVENTCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_REGISTERCALLBACK"] = "Register Callback"
-L["COMMENT_BUTTON_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered"
+L["COMMENT_BUTTON_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered."
 L["USAGE_BUTTON_REGISTERCALLBACK"] = "<A boolean function here>"
 
 L["TITLE_BUTTON_TAGCALLBACK"] = "Tag Callback"
-L["COMMENT_BUTTON_TAGCALLBACK"] = "The function that, if any, will allow the data to have conditionals"
+L["COMMENT_BUTTON_TAGCALLBACK"] = "The function that, if any, will allow the data to have conditionals."
 L["USAGE_BUTTON_TAGCALLBACK"] = "<A string or string function here>"
 
 L["TITLE_BUTTON_TAGTYPE"] = "Tag Type"
-L["COMMENT_BUTTON_TAGTYPE"] = "The type name to be used for the Tag Callback\n(Default: string)"
+L["COMMENT_BUTTON_TAGTYPE"] = "The expected type the Tag Callback should identify as.\n(Can be: function,string)"
 L["USAGE_BUTTON_TAGTYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_PREFIX"] = "Prefix"
-L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data\n(Default: None)"
+L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data.\n(Default: None)"
 L["USAGE_BUTTON_PREFIX"] = "<Your message here>"
 
 -- Global Placeholder Defaults
@@ -266,7 +266,7 @@ L["ERROR_BYTE_INSUFFICIENT"] = "You're painting an insufficient amount of bytes 
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"
-L["WARNING_EVENT_RENDERING_ONE"] = "Some of your Game Settings may interfere with RPC Event Generation"
+L["WARNING_EVENT_RENDERING_ONE"] = "Some of your Game Settings may interfere with Rich Presence Event Generation"
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
 L["ADDON_LOAD_INFO"] = setfmt("%s Loaded.\n Use */cp|r or */craftpresence|r for commands.", GREEN, GREY)
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
@@ -350,13 +350,13 @@ L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Displays the *ConfigUI|r."
 L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",
         GREEN, GREY
 )
-L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [force,test]|r  -  Force or Debug an RPC update.",
+L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [force,debug]|r  -  Force or Debug a Rich Presence update.",
         GREEN, GREY
 )
 L["USAGE_CMD_MINIMAP"] = setfmt(" */cp|r ^minimap|r  -  Toggles the minimap button.",
         GREEN, GREY
 )
-L["USAGE_CMD_STATUS"] = setfmt(" */cp|r ^status|r  -  Views the last sent RPC event.",
+L["USAGE_CMD_STATUS"] = setfmt(" */cp|r ^status|r  -  Views the last sent Rich Presence event.",
         GREEN, GREY
 )
 L["USAGE_CMD_RESET"] = setfmt(" */cp|r ^reset [grp,key]|r  -  Reset options in the *ConfigUI|r.",
@@ -371,7 +371,7 @@ L["USAGE_CMD_INTEGRATION"] = setfmt(" */cp|r ^integration [query]|r  -  Enable i
 L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders [create,remove,list][query]|r  -  Access placeholders.",
         GREEN, GREY
 )
-L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Access Event Data.",
+L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Access events.",
         GREEN, GREY
 )
 

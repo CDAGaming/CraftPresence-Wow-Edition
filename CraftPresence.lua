@@ -549,7 +549,7 @@ function CraftPresence:ChatCommand(input)
             if command_query[2] ~= nil then
                 local query = strlower(command_query[2])
                 forceMode = query == "force"
-                testerMode = self:GetFromDb("debugMode") and query == "test"
+                testerMode = self:GetFromDb("debugMode") and query == "debug"
             end
             self:PaintMessageWait(true, not testerMode, not testerMode, nil, forceMode)
         elseif command == "config" then
