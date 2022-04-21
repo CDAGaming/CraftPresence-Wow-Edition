@@ -101,6 +101,7 @@ function CraftPresence:EncodeConfigData(log_output)
     local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
     local split_key = L["ARRAY_SPLIT_KEY"]
     local currentTOC = buildData["toc_version"]
+    local fallbackTOC = buildData["fallback_toc_version"]
     -- Secondary Variable Data
     local rpcData = {
         self:GetFromDb("clientId"),
@@ -121,7 +122,7 @@ function CraftPresence:EncodeConfigData(log_output)
             local keyPrefix = self:GetOrDefault(value.prefix)
             local newKey = keyPrefix .. key .. keyPrefix
 
-            local minTOC = self:GetOrDefault(value.minimumTOC, currentTOC)
+            local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
             if type(minTOC) ~= "number" then
                 minTOC = self:VersionToBuild(minTOC)
             end
@@ -324,15 +325,16 @@ end
 --- @param log_output boolean Whether to allow logging for this function (Default: false)
 function CraftPresence:SyncEvents(grp, log_output)
     local currentTOC = buildData["toc_version"]
+    local fallbackTOC = buildData["fallback_toc_version"]
 
     grp = self:GetOrDefault(grp, {})
     log_output = self:GetOrDefault(log_output, false)
     for eventName, eventData in pairs(grp) do
-        local minTOC = self:GetOrDefault(eventData.minimumTOC, currentTOC)
+        local minTOC = self:GetOrDefault(eventData.minimumTOC, fallbackTOC)
         if type(minTOC) ~= "number" then
             minTOC = self:VersionToBuild(minTOC)
         end
-        local maxTOC = self:GetOrDefault(eventData.minimumTOC, currentTOC)
+        local maxTOC = self:GetOrDefault(eventData.maximumTOC, currentTOC)
         if type(maxTOC) ~= "number" then
             maxTOC = self:VersionToBuild(maxTOC)
         end
@@ -689,7 +691,8 @@ function CraftPresence:ChatCommand(input)
                             local shouldEnable = false
                             if type(value) == "table" then
                                 local currentTOC = buildData["toc_version"]
-                                local minTOC = self:GetOrDefault(value.minimumTOC, currentTOC)
+                                local fallbackTOC = buildData["fallback_toc_version"]
+                                local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
                                 if type(minTOC) ~= "number" then
                                     minTOC = self:VersionToBuild(minTOC)
                                 end
@@ -721,7 +724,8 @@ function CraftPresence:ChatCommand(input)
                             local shouldEnable = false
                             if type(value) == "table" then
                                 local currentTOC = buildData["toc_version"]
-                                local minTOC = self:GetOrDefault(value.minimumTOC, currentTOC)
+                                local fallbackTOC = buildData["fallback_toc_version"]
+                                local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
                                 if type(minTOC) ~= "number" then
                                     minTOC = self:VersionToBuild(minTOC)
                                 end

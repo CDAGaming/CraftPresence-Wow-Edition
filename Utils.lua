@@ -591,9 +591,11 @@ function CraftPresence:GetBuildInfo()
 
         build_info = {
             ["version"] = version,
+            ["fallback_version"] = fallbackVersion,
             ["build"] = build,
             ["date"] = date,
-            ["toc_version"] = tocversion
+            ["toc_version"] = tocversion,
+            ["fallback_toc_version"] = fallbackTOC
         }
     end
     return build_info
