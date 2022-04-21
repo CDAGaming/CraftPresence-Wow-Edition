@@ -100,8 +100,6 @@ function CraftPresence:EncodeConfigData(log_output)
     log_output = self:GetOrDefault(log_output, false)
     local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
     local split_key = L["ARRAY_SPLIT_KEY"]
-    local currentTOC = buildData["toc_version"]
-    local fallbackTOC = buildData["fallback_toc_version"]
     -- Secondary Variable Data
     local rpcData = {
         self:GetFromDb("clientId"),
@@ -121,30 +119,9 @@ function CraftPresence:EncodeConfigData(log_output)
             -- Sanity Checks
             local keyPrefix = self:GetOrDefault(value.prefix)
             local newKey = keyPrefix .. key .. keyPrefix
-
-            local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
-            if type(minTOC) ~= "number" then
-                minTOC = self:VersionToBuild(minTOC)
-            end
-            local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
-            if type(maxTOC) ~= "number" then
-                maxTOC = self:VersionToBuild(maxTOC)
-            end
-
-            local canAccept = (
-                    self:IsNullOrEmpty(value.registerCallback) or
-                            tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
-            )
-            canAccept = canAccept and (
-                    self:IsWithinValue(
-                            currentTOC, minTOC, maxTOC, true, true, false
-                    ) or (value.allowRebasedApi and self:IsRebasedApi())
-            )
-
-            local shouldEnable = value.enabled and canAccept
             local newValue, tagValue = "", ""
 
-            if shouldEnable then
+            if self:ShouldProcessData(value) then
                 -- Print logging info if needed, before processing
                 local logPrefix = L["INFO_PLACEHOLDER_PROCESSING"]
                 -- Logging is different depending on verbose/debug states
@@ -324,40 +301,53 @@ end
 --- @param grp table The table of events to interpret (Should match that of self.db.profile.events)
 --- @param log_output boolean Whether to allow logging for this function (Default: false)
 function CraftPresence:SyncEvents(grp, log_output)
-    local currentTOC = buildData["toc_version"]
-    local fallbackTOC = buildData["fallback_toc_version"]
-
     grp = self:GetOrDefault(grp, {})
     log_output = self:GetOrDefault(log_output, false)
     for eventName, eventData in pairs(grp) do
-        local minTOC = self:GetOrDefault(eventData.minimumTOC, fallbackTOC)
+        local shouldEnable = self:ShouldProcessData(eventData)
+        self:ModifyTriggers(eventName, eventData, (shouldEnable and "" or "remove"), log_output)
+    end
+end
+
+--- Interprets the contents of a dynamic data table to ensure validity and obtain enable level
+---
+--- @param value table The data table to interpret
+---
+--- @return boolean @ shouldEnable
+function CraftPresence:ShouldProcessData(value)
+    local currentTOC = buildData["toc_version"]
+    local fallbackTOC = buildData["fallback_toc_version"]
+    local shouldEnable = false
+
+    value = self:GetOrDefault(value, {})
+    if type(value) == "table" then
+        local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
         if type(minTOC) ~= "number" then
             minTOC = self:VersionToBuild(minTOC)
         end
-        local maxTOC = self:GetOrDefault(eventData.maximumTOC, currentTOC)
+        local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
         if type(maxTOC) ~= "number" then
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
         local canAccept = (
-                self:IsNullOrEmpty(eventData.registerCallback) or
-                        tostring(self:GetDynamicReturnValue(eventData.registerCallback, "function", self)) == "true"
+                self:IsNullOrEmpty(value.registerCallback) or
+                        tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
         )
         canAccept = canAccept and (
                 self:IsWithinValue(
                         currentTOC, minTOC, maxTOC, true, true, false
-                ) or (eventData.allowRebasedApi and self:IsRebasedApi())
+                ) or (value.allowRebasedApi and self:IsRebasedApi())
         )
-        local shouldEnable = eventData.enabled and canAccept
-
-        self:ModifyTriggers(eventName, eventData, (shouldEnable and "" or "remove"), log_output)
+        shouldEnable = value.enabled and canAccept
     end
+    return shouldEnable
 end
 
 --- Modifies the specified event using the subsequent argument values
 ---
 --- By default, this function will append and remove from registeredEvents as a toggle function.
---- The toggle behavior can be overriden via the forced_mode argument as well as what params are available.
+--- The toggle behavior can be replaced via the forced_mode argument as well as what params are available.
 ---
 --- Example: An append operation cannot occur without a trigger or if the key already exists in the table.
 --- A remove operation cannot occur unless registeredEvents contains the key.
@@ -682,73 +672,17 @@ function CraftPresence:ChatCommand(input)
 
                     local tag_data, visible_data, multi_table, enable_callback = {}, {}, false, nil
                     if tag_name == "placeholders" then
-                        tag_data = self.placeholders
+                        tag_data = self:GetFromDb(tag_table)
                         visible_data = {
                             "processCallback", "processType"
                         }
-                        multi_table = false
                         enable_callback = function (_, value)
-                            local shouldEnable = false
-                            if type(value) == "table" then
-                                local currentTOC = buildData["toc_version"]
-                                local fallbackTOC = buildData["fallback_toc_version"]
-                                local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
-                                if type(minTOC) ~= "number" then
-                                    minTOC = self:VersionToBuild(minTOC)
-                                end
-                                local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
-                                if type(maxTOC) ~= "number" then
-                                    maxTOC = self:VersionToBuild(maxTOC)
-                                end
-
-                                local canAccept = (
-                                        self:IsNullOrEmpty(value.registerCallback) or
-                                                tostring(self:GetDynamicReturnValue(
-                                                        value.registerCallback, "function", self
-                                                )) == "true"
-                                )
-                                canAccept = canAccept and (
-                                        self:IsWithinValue(
-                                                currentTOC, minTOC, maxTOC, true, true, false
-                                        ) or (value.allowRebasedApi and self:IsRebasedApi())
-                                )
-
-                                shouldEnable = value.enabled and canAccept
-                            end
-                            return shouldEnable
+                            return self:ShouldProcessData(value)
                         end
                     elseif tag_name == "events" then
                         tag_data = self:GetFromDb(tag_table)
-                        multi_table = false
                         enable_callback = function (_, value)
-                            local shouldEnable = false
-                            if type(value) == "table" then
-                                local currentTOC = buildData["toc_version"]
-                                local fallbackTOC = buildData["fallback_toc_version"]
-                                local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
-                                if type(minTOC) ~= "number" then
-                                    minTOC = self:VersionToBuild(minTOC)
-                                end
-                                local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
-                                if type(maxTOC) ~= "number" then
-                                    maxTOC = self:VersionToBuild(maxTOC)
-                                end
-
-                                local canAccept = (
-                                        self:IsNullOrEmpty(value.registerCallback) or
-                                                tostring(self:GetDynamicReturnValue(
-                                                        value.registerCallback, "function", self
-                                                )) == "true"
-                                )
-                                canAccept = canAccept and (
-                                        self:IsWithinValue(
-                                                currentTOC, minTOC, maxTOC, true, true, false
-                                        ) or (value.allowRebasedApi and self:IsRebasedApi())
-                                )
-
-                                shouldEnable = value.enabled and canAccept
-                            end
-                            return shouldEnable
+                            return self:ShouldProcessData(value)
                         end
                     end
                     -- Iterate through dataTable to form resultString
