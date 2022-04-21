@@ -598,16 +598,16 @@ function CraftPresence:ChatCommand(input)
                 local flag_query = self:Split(command_query[2], ":", false, true)
                 if flag_query[1] == "create" or flag_query[1] == "add" then
                     -- Sub-Query Parsing
-                    local modifiable = flag_query[2] == "modify"
+                    local modify_mode = flag_query[2] == "modify"
 
                     -- Main Parsing
                     if command_query[3] ~= nil then
                         local tag_data = self:GetFromDb(tag_table)
-                        if tag_data[command_query[3]] and not modifiable then
+                        if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
                         elseif (
                                 tag_name ~= "placeholders" or not (
-                                        self.placeholders[command_query[3]]
+                                        tag_data[command_query[3]]
                                 )
                         ) then
                             -- Some Pre-Filled Data is supplied for these areas
@@ -631,7 +631,7 @@ function CraftPresence:ChatCommand(input)
                                     enabled = (self:GetOrDefault(command_query[4], "true") == "true")
                                 }
                             end
-                            local eventState = (modifiable and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
+                            local eventState = (modify_mode and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
                             self:SetToDb(tag_table, nil, tag_data)
                             self:Print(strformat(
                                     L["COMMAND_CREATE_SUCCESS"], eventState, command_query[3], tag_name,
