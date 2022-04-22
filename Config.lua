@@ -1005,8 +1005,9 @@ function CraftPresence:getOptionsTable()
                 args = {
                     clientId = {
                         type = "input", order = self:GetNextIndex(), width = 1.25,
-                        name = L["TITLE_CLIENT_ID"], desc = L["COMMENT_CLIENT_ID"],
-                        usage = L["USAGE_CLIENT_ID"], default = L["DEFAULT_CLIENT_ID"],
+                        name = L["TITLE_CLIENT_ID"],
+                        desc = self:GetConfigComment("CLIENT_ID"),
+                        usage = L["USAGE_CLIENT_ID"],
                         get = function(_)
                             return self:GetFromDb("clientId")
                         end,
@@ -1030,8 +1031,9 @@ function CraftPresence:getOptionsTable()
                     },
                     gameStateMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_GAME_STATE_MESSAGE"], desc = L["COMMENT_GAME_STATE_MESSAGE"],
-                        usage = L["USAGE_GAME_STATE_MESSAGE"], default = L["DEFAULT_GAME_STATE_MESSAGE"],
+                        name = L["TITLE_GAME_STATE_MESSAGE"],
+                        desc = self:GetConfigComment("GAME_STATE_MESSAGE"),
+                        usage = L["USAGE_GAME_STATE_MESSAGE"],
                         get = function(_)
                             return self:GetFromDb("gameStateMessage")
                         end,
@@ -1049,8 +1051,9 @@ function CraftPresence:getOptionsTable()
                     },
                     detailsMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_DETAILS_MESSAGE"], desc = L["COMMENT_DETAILS_MESSAGE"],
-                        usage = L["USAGE_DETAILS_MESSAGE"], default = L["DEFAULT_DETAILS_MESSAGE"],
+                        name = L["TITLE_DETAILS_MESSAGE"],
+                        desc = self:GetConfigComment("DETAILS_MESSAGE"),
+                        usage = L["USAGE_DETAILS_MESSAGE"],
                         get = function(_)
                             return self:GetFromDb("detailsMessage")
                         end,
@@ -1068,8 +1071,9 @@ function CraftPresence:getOptionsTable()
                     },
                     largeImageKey = {
                         type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_LARGE_IMAGE_KEY"], desc = L["COMMENT_LARGE_IMAGE_KEY"],
-                        usage = L["USAGE_LARGE_IMAGE_KEY"], default = L["DEFAULT_LARGE_IMAGE_KEY"],
+                        name = L["TITLE_LARGE_IMAGE_KEY"],
+                        desc = self:GetConfigComment("LARGE_IMAGE_KEY"),
+                        usage = L["USAGE_LARGE_IMAGE_KEY"],
                         get = function(_)
                             return self:GetFromDb("largeImageKey")
                         end,
@@ -1086,8 +1090,9 @@ function CraftPresence:getOptionsTable()
                     },
                     smallImageKey = {
                         type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_SMALL_IMAGE_KEY"], desc = L["COMMENT_SMALL_IMAGE_KEY"],
-                        usage = L["USAGE_SMALL_IMAGE_KEY"], default = L["DEFAULT_SMALL_IMAGE_KEY"],
+                        name = L["TITLE_SMALL_IMAGE_KEY"],
+                        desc = self:GetConfigComment("SMALL_IMAGE_KEY"),
+                        usage = L["USAGE_SMALL_IMAGE_KEY"],
                         get = function(_)
                             return self:GetFromDb("smallImageKey")
                         end,
@@ -1107,8 +1112,9 @@ function CraftPresence:getOptionsTable()
                     },
                     largeImageMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_LARGE_IMAGE_MESSAGE"], desc = L["COMMENT_LARGE_IMAGE_MESSAGE"],
-                        usage = L["USAGE_LARGE_IMAGE_MESSAGE"], default = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
+                        name = L["TITLE_LARGE_IMAGE_MESSAGE"],
+                        desc = self:GetConfigComment("LARGE_IMAGE_MESSAGE"),
+                        usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
                         get = function(_)
                             return self:GetFromDb("largeImageMessage")
                         end,
@@ -1126,8 +1132,9 @@ function CraftPresence:getOptionsTable()
                     },
                     smallImageMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_SMALL_IMAGE_MESSAGE"], desc = L["COMMENT_SMALL_IMAGE_MESSAGE"],
-                        usage = L["USAGE_SMALL_IMAGE_MESSAGE"], default = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
+                        name = L["TITLE_SMALL_IMAGE_MESSAGE"],
+                        desc = self:GetConfigComment("SMALL_IMAGE_MESSAGE"),
+                        usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
                         get = function(_)
                             return self:GetFromDb("smallImageMessage")
                         end,
@@ -1229,7 +1236,8 @@ function CraftPresence:getOptionsTable()
                 args = {
                     debugMode = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_DEBUG_MODE"], desc = L["COMMENT_DEBUG_MODE"],
+                        name = L["TITLE_DEBUG_MODE"],
+                        desc = self:GetConfigComment("DEBUG_MODE"),
                         get = function(_)
                             return self:GetFromDb("debugMode")
                         end,
@@ -1244,7 +1252,8 @@ function CraftPresence:getOptionsTable()
                     },
                     verboseMode = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_VERBOSE_MODE"], desc = L["COMMENT_VERBOSE_MODE"],
+                        name = L["TITLE_VERBOSE_MODE"],
+                        desc = self:GetConfigComment("VERBOSE_MODE"),
                         get = function(_)
                             return self:GetFromDb("verboseMode")
                         end,
@@ -1262,7 +1271,8 @@ function CraftPresence:getOptionsTable()
                     },
                     showMinimapIcon = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_SHOW_MINIMAP_ICON"], desc = L["COMMENT_SHOW_MINIMAP_ICON"],
+                        name = L["TITLE_SHOW_MINIMAP_ICON"],
+                        desc = self:GetConfigComment("SHOW_MINIMAP_ICON"),
                         get = function(_)
                             return self:GetFromDb("showMinimapIcon")
                         end,
@@ -1272,7 +1282,8 @@ function CraftPresence:getOptionsTable()
                     },
                     queuedPipeline = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_QUEUED_PIPELINE"], desc = L["COMMENT_QUEUED_PIPELINE"],
+                        name = L["TITLE_QUEUED_PIPELINE"],
+                        desc = self:GetConfigComment("QUEUED_PIPELINE"),
                         get = function(_)
                             return self:GetFromDb("queuedPipeline")
                         end,
@@ -1290,7 +1301,8 @@ function CraftPresence:getOptionsTable()
                     },
                     showWelcomeMessage = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_SHOW_WELCOME_MESSAGE"], desc = L["COMMENT_SHOW_WELCOME_MESSAGE"],
+                        name = L["TITLE_SHOW_WELCOME_MESSAGE"],
+                        desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE"),
                         get = function(_)
                             return self:GetFromDb("showWelcomeMessage")
                         end,
@@ -1309,8 +1321,8 @@ function CraftPresence:getOptionsTable()
                     callbackDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
-                        name = L["TITLE_CALLBACK_DELAY"], desc = L["COMMENT_CALLBACK_DELAY"],
-                        default = L["DEFAULT_CALLBACK_DELAY"],
+                        name = L["TITLE_CALLBACK_DELAY"],
+                        desc = self:GetConfigComment("CALLBACK_DELAY"),
                         get = function(_)
                             return self:GetFromDb("callbackDelay")
                         end,
@@ -1335,8 +1347,8 @@ function CraftPresence:getOptionsTable()
                     frameClearDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_FRAME_CLEAR_DELAY"], max = L["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
-                        name = L["TITLE_FRAME_CLEAR_DELAY"], desc = L["COMMENT_FRAME_CLEAR_DELAY"],
-                        default = L["DEFAULT_FRAME_CLEAR_DELAY"],
+                        name = L["TITLE_FRAME_CLEAR_DELAY"],
+                        desc = self:GetConfigComment("FRAME_CLEAR_DELAY"),
                         get = function(_)
                             return self:GetFromDb("frameClearDelay")
                         end,
@@ -1364,8 +1376,8 @@ function CraftPresence:getOptionsTable()
                     frameSize = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
-                        name = L["TITLE_FRAME_SIZE"], desc = L["COMMENT_FRAME_SIZE"],
-                        default = L["DEFAULT_FRAME_SIZE"],
+                        name = L["TITLE_FRAME_SIZE"],
+                        desc = self:GetConfigComment("FRAME_SIZE"),
                         get = function(_)
                             return self:GetFromDb("frameSize")
                         end,

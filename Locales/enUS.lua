@@ -59,6 +59,7 @@ L["COMMAND_CONFIG"] = "cp set"
 L["COMMAND_CONFIG_ALT"] = "craftpresence set"
 L["FORMAT_LEVEL"] = "Level %s"
 L["FORMAT_SETTING"] = "%s (Should be %s)"
+L["FORMAT_COMMENT"] = setfmt("%s|r\n*Default: %s", GREEN)
 L["FORMAT_USER_PREFIX"] = "(%s) "
 L["EVENT_RPC_TAG"] = "$RPCEvent$"
 L["EVENT_RPC_LENGTH"] = 11

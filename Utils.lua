@@ -265,6 +265,29 @@ function CraftPresence:FormatWithCasing(str, casing)
     return self:GetCaseData({str, casing})
 end
 
+--- Formats the following config comment to include its default value (If present)
+---
+--- @param str string The input string to evaluate
+---
+--- @return string @ formattedString
+function CraftPresence:GetConfigComment(str)
+    if self:IsNullOrEmpty(str) then
+        return str
+    end
+    str = strupper(str)
+    local value_comment = self:GetOrDefault(L["COMMENT_" .. str])
+    if not self:IsNullOrEmpty(value_comment) then
+        local value_default = self:GetOrDefault(L["DEFAULT_" .. str])
+        if not self:IsNullOrEmpty(value_default) then
+            return strformat(L["FORMAT_COMMENT"], value_comment, value_default)
+        else
+            return value_comment
+        end
+    else
+        return ""
+    end
+end
+
 --- Return a modified version of the specified string, depending on arguments
 ---
 --- @param obj any A table (Format: string, casing) or string to evaluate
@@ -974,7 +997,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
                         name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], self:FormatWord(innerKey)),
-                        desc = self:GetOrDefault(L["COMMENT_BUTTON_" .. strupper(innerKey)]),
+                        desc = self:GetConfigComment("BUTTON_" .. strupper(innerKey)),
                         get = function(_)
                             return self.db.profile[rootKey][key][innerKey]
                         end,
@@ -1007,15 +1030,11 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
                             value_args[innerKey].usage = value_usage
                         end
                     end
-                    local value_default = self:GetOrDefault(L["DEFAULT_BUTTON_" .. strupper(innerKey)])
-                    if not self:IsNullOrEmpty(value_default) then
-                        value_args[innerKey].default = value_default
-                    end
                 end
             end
             table_args[key] = {
                 name = self:GetOrDefault(L["TITLE_" .. strupper(key)], key),
-                desc = self:GetOrDefault(L["COMMENT_" .. strupper(key)]),
+                desc = self:GetConfigComment(strupper(key)),
                 type = "group", order = self:GetNextIndex(),
                 args = value_args
             }
