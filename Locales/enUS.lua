@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local LibStub = LibStub
-local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true, true)
+local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true, "raw")
 
 -- Addon APIs
 local CP_GlobalUtils = CP_GlobalUtils
