@@ -241,7 +241,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["player_gender"] = {
-                minimumTOC = "11100", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     local genderData = { "Unknown", "Male", "Female" }
     local playerGenderId = 1
@@ -257,14 +257,20 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["player_icon"] = {
-                minimumTOC = "11100", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     local genderData = { "Unknown", "Male", "Female" }
     local playerGenderId = 1
+    local fallback = genderData[playerGenderId]
+    local playerRace, playerGender = fallback, fallback
     if UnitSex then
         playerGenderId = UnitSex('player')
+        playerGender = genderData[playerGenderId]
     end
-    return self:FormatAsIcon(UnitRace('player') .. "_" .. genderData[playerGenderId])
+    if UnitRace then
+        playerRace = UnitRace('player')
+    end
+    return self:FormatAsIcon(playerRace .. "_" .. playerGender)
 end]],
                 processType = "function",
                 registerCallback = "",
@@ -537,6 +543,27 @@ end]],
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return select(4, GetInstanceInfo())
+end]],
+                processType = "function",
+                registerCallback = "",
+                tagCallback = "",
+                tagType = "string",
+                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+            },
+            ["current_players"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self)
+    local current = 0
+    if GetNumGroupMembers then
+        current = GetNumGroupMembers()
+    else
+        if UnitInParty("player") and GetNumPartyMembers then
+            current = GetNumPartyMembers()
+        elseif UnitInRaid("player") and GetNumRaidMembers then
+            current = GetNumRaidMembers()
+        end
+    end
+    return tostring(current)
 end]],
                 processType = "function",
                 registerCallback = "",
@@ -930,11 +957,30 @@ end]],
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
+            ["GROUP_JOINED"] = {
+                minimumTOC = "50100", maximumTOC = "", allowRebasedApi = true,
+                processCallback = "",
+                registerCallback = "",
+                eventCallback = "function(self) return self.defaultEventCallback end",
+                enabled = true
+            },
+            ["GROUP_LEFT"] = {
+                minimumTOC = "50100", maximumTOC = "", allowRebasedApi = true,
+                processCallback = "",
+                registerCallback = "",
+                eventCallback = "function(self) return self.defaultEventCallback end",
+                enabled = true
+            },
+            ["ENCOUNTER_START"] = {
+                minimumTOC = "50402", maximumTOC = "", allowRebasedApi = true,
+                processCallback = "",
+                registerCallback = "",
+                eventCallback = "function(self) return self.defaultEventCallback end",
+                enabled = true
+            },
             ["ENCOUNTER_END"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self, _, _, args)
-    return (not IsInInstance() or args[5] ~= 1 or self:GetCachedLockout() == self:GetCurrentLockoutData(false))
-end]],
+                minimumTOC = "50402", maximumTOC = "", allowRebasedApi = false,
+                processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
