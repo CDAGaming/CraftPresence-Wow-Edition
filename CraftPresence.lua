@@ -672,7 +672,7 @@ function CraftPresence:ChatCommand(input)
 
                     local tag_data, visible_data, multi_table, enable_callback = {}, {}, false, nil
                     if tag_name == "placeholders" then
-                        tag_data = self:GetFromDb(tag_table)
+                        tag_data = self.placeholders
                         visible_data = {
                             "processCallback", "processType"
                         }
