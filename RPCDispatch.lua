@@ -39,9 +39,21 @@ local last_encoded = ""
 local last_args = {}
 local render_warnings, last_render_warnings = "", ""
 local render_settings = {
-    ["contrast"] = 50,
-    ["brightness"] = 50,
-    ["gamma"] = 1.0
+    ["contrast"] = {
+        value = 50,
+        minimumTOC = "80000", maximumTOC = "",
+        allowRebasedApi = true
+    },
+    ["brightness"] = {
+        value = 50,
+        minimumTOC = "80000", maximumTOC = "",
+        allowRebasedApi = true
+    },
+    ["gamma"] = {
+        value = 1.0,
+        minimumTOC = "10000", maximumTOC = "",
+        allowRebasedApi = true
+    }
 }
 
 --- Convert an encoded RPCEvent message into a displayable format
@@ -90,21 +102,46 @@ function CraftPresence:AssertRenderSettings()
     last_render_warnings = render_warnings
     render_warnings = ""
 
+    local buildData = self:GetBuildInfo()
+    local currentTOC = buildData["toc_version"]
+    local fallbackTOC = buildData["fallback_toc_version"]
+
     local error_info = {}
-    for key, value in pairs(render_settings) do
-        if type(value) == "table" then
+    for key, data in pairs(render_settings) do
+        if type(data) == "table" then
             local is_correct = false
-            for _, innerValue in pairs(value) do
+
+            local minTOC = self:GetOrDefault(data.minimumTOC, fallbackTOC)
+            if type(minTOC) ~= "number" then
+                minTOC = self:VersionToBuild(minTOC)
+            end
+            local maxTOC = self:GetOrDefault(data.maximumTOC, currentTOC)
+            if type(maxTOC) ~= "number" then
+                maxTOC = self:VersionToBuild(maxTOC)
+            end
+            local canAccept = (
+                self:IsWithinValue(
+                        currentTOC, minTOC, maxTOC, true, true, false
+                ) or (data.allowRebasedApi and self:IsRebasedApi())
+            )
+
+            if canAccept then
+                if type(data.value) == "table" then
+                    for _, innerValue in pairs(data.value) do
+                        if not is_correct then
+                            is_correct = self:GetGameVariable(key, type(innerValue), innerValue) == innerValue
+                        end
+                    end
+                else
+                    is_correct = self:GetGameVariable(key, type(data.value), data.value) == data.value
+                end
+
                 if not is_correct then
-                    is_correct = self:GetGameVariable(key, type(innerValue), innerValue) == innerValue
+                    tinsert(error_info, strformat(L["FORMAT_SETTING"], key, data.value))
                 end
             end
-
-            if not is_correct then
-                tinsert(error_info, strformat(L["FORMAT_SETTING"], key, tconcat(value, " or ")))
-            end
-        elseif self:GetGameVariable(key, type(value), value) ~= value then
-            tinsert(error_info, strformat(L["FORMAT_SETTING"], key, value))
+        elseif self:GetGameVariable(key, type(data), data) ~= data then
+            tinsert(error_info, strformat(L["FORMAT_SETTING"], key, data))
         end
     end
 
