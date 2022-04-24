@@ -166,7 +166,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["title_name"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return UnitPVPName('player')
 end]],
@@ -424,7 +424,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["player_spec_name"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                 processCallback = [[function (self)
     local specInfo, specId, specName, roleName = GetSpecialization()
     --
@@ -449,7 +449,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["player_spec_role"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                 processCallback = [[function (self)
     local specInfo, specId, specName, roleName = GetSpecialization()
     --
@@ -605,7 +605,7 @@ end]],
                 enabled = true, prefix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_id"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     return tostring(select(8, GetInstanceInfo()))
 end]],
@@ -841,7 +841,7 @@ end]],
         },
         events = {
             ["CHAT_MSG_SYSTEM"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, _, _, args)
     local splitMessage = self:Split(args[1], ':', false, true)
     local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
@@ -864,56 +864,56 @@ end]],
                 enabled = true
             },
             ["PLAYER_LOGIN"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10800", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_LEVEL_UP"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_LEVEL_CHANGED"] = {
-                minimumTOC = "80000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "80001", maximumTOC = "", allowRebasedApi = false,
                 processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_UP' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_ALIVE"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_DEAD' end"),
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_DEAD"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_REGEN_ENABLED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_REGEN_DISABLED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_FLAGS_CHANGED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, lastName, _, args)
     local unitData = self:GetUnitData()
     return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or unitData.last_status == unitData.status
@@ -923,35 +923,35 @@ end]],
                 enabled = true
             },
             ["ZONE_CHANGED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "20001", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ZONE_CHANGED_NEW_AREA"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "20001", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ZONE_CHANGED_INDOORS"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "20003", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["PLAYER_SPECIALIZATION_CHANGED"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "function (_, _, _, args) return args[1] ~= 'player' end",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ACTIVE_TALENT_GROUP_CHANGED"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "function (_, _, _, args) return args[1] == args[2] end",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
@@ -979,42 +979,42 @@ end]],
                 enabled = true
             },
             ["ENCOUNTER_END"] = {
-                minimumTOC = "50402", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "50402", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CHALLENGE_MODE_START"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "60002", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CHALLENGE_MODE_COMPLETED"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CHALLENGE_MODE_RESET"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "60002", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["SCENARIO_COMPLETED"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "60002", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["CRITERIA_COMPLETE"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
+                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
