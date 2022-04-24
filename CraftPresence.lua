@@ -670,7 +670,7 @@ function CraftPresence:ChatCommand(input)
                         self:Print(strformat(L["DATA_QUERY"], tag_name, command_query[3]))
                     end
 
-                    local tag_data, visible_data, multi_table, enable_callback = {}, {}, false, nil
+                    local tag_data, visible_data, multi_table, enable_callback, notes = {}, {}, false, nil, ""
                     if tag_name == "placeholders" then
                         tag_data = self.placeholders
                         visible_data = {
@@ -679,8 +679,12 @@ function CraftPresence:ChatCommand(input)
                         enable_callback = function (_, value)
                             return self:ShouldProcessData(value)
                         end
+                        notes = L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
                     elseif tag_name == "events" then
                         tag_data = self:GetFromDb(tag_table)
+                        visible_data = {
+                            "enabled"
+                        }
                         enable_callback = function (_, value)
                             return self:ShouldProcessData(value)
                         end
@@ -695,7 +699,7 @@ function CraftPresence:ChatCommand(input)
                     if not foundAny then
                         resultStr = resultStr .. "\n " .. strformat(L["DATA_FOUND_NONE"], tag_name)
                     end
-                    resultStr = resultStr .. "\n" .. L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
+                    resultStr = resultStr .. "\n" .. notes
                     self:Print(resultStr)
                 else
                     self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])

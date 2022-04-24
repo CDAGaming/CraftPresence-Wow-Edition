@@ -896,11 +896,13 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
                 local newKey = prefix .. tostring(key) .. prefix
                 local newValue = self:GetDynamicReturnValue(
                         (
-                                type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[1]]
+                                type(value) == "table" and self:GetLength(visibleData) >= 1 and value[visibleData[1]]
                         ) or value,
                         (
                                 type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]
                         ), self)
+                -- Assert value_type as string
+                newValue = tostring(newValue)
                 if (self:IsNullOrEmpty(query) or (
                         self:FindMatches(strlower(newKey), query, false, 1, true) or
                                 self:FindMatches(strlower(newValue), query, false, 1, true))
