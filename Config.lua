@@ -923,21 +923,21 @@ end]],
                 enabled = true
             },
             ["ZONE_CHANGED"] = {
-                minimumTOC = "20001", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ZONE_CHANGED_NEW_AREA"] = {
-                minimumTOC = "20001", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
                 enabled = true
             },
             ["ZONE_CHANGED_INDOORS"] = {
-                minimumTOC = "20003", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "10000", maximumTOC = "", allowRebasedApi = true,
                 processCallback = "",
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
