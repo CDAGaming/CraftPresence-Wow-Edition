@@ -273,7 +273,7 @@ function CraftPresence:OnEnable()
     else
         self.defaultEventCallback = "DispatchLegacyUpdate"
     end
-    self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
+    self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("verboseMode"))
 end
 
 --- Instructions to be called when the addon is disabled
@@ -292,7 +292,7 @@ function CraftPresence:OnDisable()
     end
     -- Un-register all active events
     -- Note: SyncEvents is not used here so that manually added events are also properly cleared
-    self:ModifyTriggers(self.registeredEvents, nil, "remove", self:GetFromDb("debugMode"))
+    self:ModifyTriggers(self.registeredEvents, nil, "remove", self:GetFromDb("verboseMode"))
 end
 
 --- Sync the contents of registeredEvents with the specified event table
@@ -651,7 +651,7 @@ function CraftPresence:ChatCommand(input)
                             local includeTag = true
                             if tag_name == "events" then
                                 tag_data[command_query[3]].enabled = false
-                                self:SyncEvents(tag_data, self:GetFromDb("debugMode"))
+                                self:SyncEvents(tag_data, self:GetFromDb("verboseMode"))
                                 includeTag = false
                             end
                             tag_data[command_query[3]] = nil
