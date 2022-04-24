@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
-local tinsert, tconcat, tgetn = table.insert, table.concat, table.getn
+local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
 local max, floor = math.max, math.floor
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
@@ -145,7 +145,7 @@ function CraftPresence:AssertRenderSettings()
         end
     end
 
-    if tgetn(error_info) > 0 then
+    if self:GetLength(error_info) > 0 then
         render_warnings = self:SerializeTable(error_info)
         if self:GetFromDb("verboseMode") or last_render_warnings ~= render_warnings then
             self:Print(strformat(L["LOG_WARNING"], L["WARNING_EVENT_RENDERING_ONE"]))

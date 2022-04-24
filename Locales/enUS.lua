@@ -357,7 +357,7 @@ L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Displays the *ConfigUI|r."
 L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",
         GREEN, GREY
 )
-L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [force,debug]|r  -  Force or Debug a Rich Presence update.",
+L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [debug]|r  -  Force or Debug a Rich Presence update.",
         GREEN, GREY
 )
 L["USAGE_CMD_MINIMAP"] = setfmt(" */cp|r ^minimap|r  -  Toggles the minimap button.",
@@ -382,7 +382,7 @@ L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  
         GREEN, GREY
 )
 
-L["USAGE_CMD_NOTE"] = setfmt("NOTE: All commands must be prefixed with either */%s|r or */%s|r.",
+L["USAGE_CMD_NOTE_ONE"] = setfmt("NOTE: All commands must be prefixed with either */%s|r or */%s|r.",
         GREEN, GREY
 )
 L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented by *[syntax]|r.",

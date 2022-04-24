@@ -358,7 +358,7 @@ L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Zeigt die  *ConfigUI|r an.
 L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Setzt die Addon-Frames zurück.",
         GREEN, GREY
 )
-L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [force,debug]|r  -  Forciere oder debugge Rich-Presence-Updates.",
+L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [debug]|r  -  Forciere oder debugge Rich-Presence-Updates.",
         GREEN, GREY
 )
 L["USAGE_CMD_MINIMAP"] = setfmt(" */cp|r ^minimap|r  -  Schaltet das Minimap Symbol um.",
@@ -383,7 +383,7 @@ L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  
         GREEN, GREY
 )
 
-L["USAGE_CMD_NOTE"] = setfmt("NOTE: Alle Befehle müssen mit  */%s|r oder */%s|r beginnen.",
+L["USAGE_CMD_NOTE_ONE"] = setfmt("NOTE: Alle Befehle müssen mit  */%s|r oder */%s|r beginnen.",
         GREEN, GREY
 )
 L["USAGE_CMD_NOTE_TWO"] = setfmt("Optionale Parameter werden mit der Syntax *[syntax]|r dargestellt.",

@@ -537,13 +537,12 @@ function CraftPresence:ChatCommand(input)
             self:CleanFrames()
             self:SetTimerLocked(false)
         elseif command == "update" then
-            local forceMode, testerMode = false, false
+            local testerMode = false, false
             if command_query[2] ~= nil then
                 local query = strlower(command_query[2])
-                forceMode = query == "force"
                 testerMode = self:GetFromDb("debugMode") and query == "debug"
             end
-            self:PaintMessageWait(true, not testerMode, not testerMode, nil, forceMode)
+            self:PaintMessageWait(true, not testerMode, not testerMode, nil)
         elseif command == "config" then
             self:ShowConfig()
         elseif command == "reset" then
@@ -730,7 +729,7 @@ function CraftPresence:PrintUsageCommand(usage)
     self:Print(
             strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
                     usage .. "\n" ..
-                    strformat(L["USAGE_CMD_NOTE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                    strformat(L["USAGE_CMD_NOTE_ONE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
                     L["USAGE_CMD_NOTE_TWO"] .. "\n"
     )
 end
