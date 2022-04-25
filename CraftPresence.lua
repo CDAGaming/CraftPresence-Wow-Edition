@@ -537,7 +537,7 @@ function CraftPresence:ChatCommand(input)
             self:CleanFrames()
             self:SetTimerLocked(false)
         elseif command == "update" then
-            local testerMode = false, false
+            local testerMode = false
             if command_query[2] ~= nil then
                 local query = strlower(command_query[2])
                 testerMode = self:GetFromDb("debugMode") and query == "debug"
