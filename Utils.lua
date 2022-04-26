@@ -752,10 +752,20 @@ function CraftPresence:IsTBCRebased()
     ) and not self:IsSpecialVersion()
 end
 
+--- Determine if this build identifies as Wrath Classic
+--- @return boolean @ is_wrath_rebased
+function CraftPresence:IsWrathRebased()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetCompatibilityInfo()["3.4.0"], self:GetCompatibilityInfo()["4.0.0"],
+            true, false
+    ) and not self:IsSpecialVersion()
+end
+
 --- Determine if this build is using a rebased api
 --- @return boolean @ is_rebased_api
 function CraftPresence:IsRebasedApi()
-    return self:IsClassicRebased() or self:IsTBCRebased()
+    return self:IsClassicRebased() or self:IsTBCRebased() or self:IsWrathRebased()
 end
 
 --- Determine if this build is using a special/modified api
