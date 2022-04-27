@@ -98,8 +98,6 @@ local isRebasedApi = false
 function CraftPresence:EncodeConfigData(log_output)
     -- Primary Variable Data
     log_output = self:GetOrDefault(log_output, false)
-    local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
-    local split_key = L["ARRAY_SPLIT_KEY"]
     -- Secondary Variable Data
     local rpcData = {
         self:GetFromDb("clientId"),
@@ -112,96 +110,7 @@ function CraftPresence:EncodeConfigData(log_output)
     }
 
     -- Placeholder Syncing
-    copyTable(self:GetFromDb("placeholders"), self.placeholders)
-    copyTable(self:GetFromDb("buttons"), self.buttons)
-    for key, value in pairs(self.placeholders) do
-        if type(value) == "table" then
-            -- Sanity Checks
-            local keyPrefix = self:GetOrDefault(value.prefix)
-            local newKey = keyPrefix .. key .. keyPrefix
-            local newValue, tagValue = "", ""
-
-            if self:ShouldProcessData(value) then
-                -- Print logging info if needed, before processing
-                local logPrefix = L["INFO_PLACEHOLDER_PROCESSING"]
-                -- Logging is different depending on verbose/debug states
-                local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or
-                        (isDebug and L["LOG_DEBUG"]) or
-                        (log_output and L["LOG_INFO"]) or nil
-                local logData = not self:IsNullOrEmpty(value.processCallback) and (
-                        (isVerbose and value.processCallback) or "<...>"
-                ) or L["TYPE_NONE"]
-                if not self:IsNullOrEmpty(logTemplate) and log_output then
-                    self:Print(strformat(
-                            logTemplate, strformat(
-                                    logPrefix, newKey, self:GetOrDefault(logData, L["TYPE_UNKNOWN"])
-                            )
-                    ))
-                end
-                newValue = self:GetDynamicReturnValue(value.processCallback, value.processType, self)
-                tagValue = self:GetDynamicReturnValue(value.tagCallback, value.tagType, self)
-            end
-
-            -- Main Parsing into valid RPC data
-            -- (A secondary placeholder scan is done here to ensure proper replacement, due to unpredictable ordering)
-            for subKey, subValue in pairs(self.placeholders) do
-                local replacement = self:Replace(subValue.processCallback, newKey, self:GetOrDefault(newValue), true)
-                if subValue.processCallback ~= replacement then
-                    self.placeholders[subKey].processCallback = replacement
-                    if subKey == key then
-                        newValue = self:GetDynamicReturnValue(replacement, value.processType, self)
-                    end
-                end
-
-                -- Sync Button Info
-                -- Additional Sanity Checks for Buttons
-                for buttonKey, buttonValue in pairs(self.buttons) do
-                    if type(buttonValue) == "table" and buttonValue.label and buttonValue.url then
-                        local dataValue = self:GetOrDefault(
-                                buttonValue.result, self:ConcatTable(nil, split_key, buttonValue.label, buttonValue.url)
-                        )
-                        self.buttons[buttonKey].result = self:Replace(
-                                dataValue, newKey, self:GetOrDefault(newValue), true
-                        )
-                    end
-                end
-            end
-
-            rpcData = self:SetFormats({ newValue, nil, newKey, nil },
-                    rpcData, true, false
-            )
-
-            if not self:IsNullOrEmpty(tagValue) then
-                if self:FindMatches(tagValue, "time", false) then
-                    if self:FindMatches(tagValue, "time:start", false) then
-                        if self:HasInstanceChanged() then
-                            self.time_start = "generated"
-                        else
-                            self.time_start = "last"
-                        end
-                    elseif self:FindMatches(tagValue, "time:end", false) then
-                        if self:HasInstanceChanged() then
-                            self.time_end = "generated"
-                        else
-                            self.time_end = "last"
-                        end
-                    end
-                end
-            end
-        end
-    end
-
-    -- Sync then reset time condition data
-    tinsert(rpcData, self:GetOrDefault(self.time_start))
-    tinsert(rpcData, self:GetOrDefault(self.time_end))
-    self.time_start, self.time_end = "", ""
-
-    -- Additional Sanity Checks for Buttons
-    for _, value in pairs(self.buttons) do
-        if type(value) == "table" and value.result then
-            tinsert(rpcData, value.result)
-        end
-    end
+    rpcData = self:RefreshDynamicData(log_output, rpcData)
 
     -- Update Instance Status before exiting method
     if self:HasInstanceChanged() then
@@ -342,6 +251,115 @@ function CraftPresence:ShouldProcessData(value)
         shouldEnable = value.enabled and canAccept
     end
     return shouldEnable
+end
+
+--- Sync the contents of dynamic data for readable usage
+---
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
+--- @param data table If supplied, do a sequential replace of applicable data
+---
+--- @return table @ newTableData
+function CraftPresence:RefreshDynamicData(log_output, data)
+    local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
+    copyTable(self:GetFromDb("placeholders"), self.placeholders)
+    copyTable(self:GetFromDb("buttons"), self.buttons)
+    for key, value in pairs(self.placeholders) do
+        if type(value) == "table" then
+            -- Sanity Checks
+            local keyPrefix = self:GetOrDefault(value.prefix)
+            local newKey = keyPrefix .. key .. keyPrefix
+            local newValue, tagValue = "", ""
+
+            if self:ShouldProcessData(value) then
+                -- Print logging info if needed, before processing
+                local logPrefix = L["INFO_PLACEHOLDER_PROCESSING"]
+                -- Logging is different depending on verbose/debug states
+                local logTemplate = (isVerbose and L["LOG_VERBOSE"]) or
+                        (isDebug and L["LOG_DEBUG"]) or
+                        (log_output and L["LOG_INFO"]) or nil
+                local logData = not self:IsNullOrEmpty(value.processCallback) and (
+                        (isVerbose and value.processCallback) or "<...>"
+                ) or L["TYPE_NONE"]
+                if not self:IsNullOrEmpty(logTemplate) and log_output then
+                    self:Print(strformat(
+                            logTemplate, strformat(
+                                    logPrefix, newKey, self:GetOrDefault(logData, L["TYPE_UNKNOWN"])
+                            )
+                    ))
+                end
+                newValue = self:GetDynamicReturnValue(value.processCallback, value.processType, self)
+                tagValue = self:GetDynamicReturnValue(value.tagCallback, value.tagType, self)
+            end
+
+            -- Main Parsing into valid RPC data
+            -- (A secondary placeholder scan is done here to ensure proper replacement, due to unpredictable ordering)
+            for subKey, subValue in pairs(self.placeholders) do
+                local replacement = self:Replace(subValue.processCallback, newKey, self:GetOrDefault(newValue), true)
+                if subValue.processCallback ~= replacement then
+                    self.placeholders[subKey].processCallback = replacement
+                    if subKey == key then
+                        newValue = self:GetDynamicReturnValue(replacement, value.processType, self)
+                    end
+                end
+
+                -- Sync Button Info
+                -- Additional Sanity Checks for Buttons
+                for buttonKey, buttonValue in pairs(self.buttons) do
+                    if type(buttonValue) == "table" and buttonValue.label and buttonValue.url then
+                        local dataValue = self:GetOrDefault(
+                                buttonValue.result, self:ConcatTable(
+                                    nil, L["ARRAY_SPLIT_KEY"],
+                                    buttonValue.label, buttonValue.url
+                                )
+                        )
+                        self.buttons[buttonKey].result = self:Replace(
+                                dataValue, newKey, self:GetOrDefault(newValue), true
+                        )
+                    end
+                end
+            end
+
+            if data ~= nil then
+                data = self:SetFormats({ newValue, nil, newKey, nil },
+                    data, true, false
+                )
+
+                -- Time Condition Data Setup
+                if not self:IsNullOrEmpty(tagValue) then
+                    if self:FindMatches(tagValue, "time", false) then
+                        if self:FindMatches(tagValue, "time:start", false) then
+                            if self:HasInstanceChanged() then
+                                self.time_start = "generated"
+                            else
+                                self.time_start = "last"
+                            end
+                        elseif self:FindMatches(tagValue, "time:end", false) then
+                            if self:HasInstanceChanged() then
+                                self.time_end = "generated"
+                            else
+                                self.time_end = "last"
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+    if data ~= nil then
+        -- Sync then reset time condition data
+        tinsert(data, self:GetOrDefault(self.time_start))
+        tinsert(data, self:GetOrDefault(self.time_end))
+        self.time_start, self.time_end = "", ""
+
+        -- Additional Sanity Checks for Buttons
+        for _, value in pairs(self.buttons) do
+            if type(value) == "table" and value.result then
+                tinsert(data, value.result)
+            end
+        end
+    end
+    return data
 end
 
 --- Modifies the specified event using the subsequent argument values
@@ -671,6 +689,8 @@ function CraftPresence:ChatCommand(input)
 
                     local tag_data, visible_data, multi_table, enable_callback, notes = {}, {}, false, nil, ""
                     if tag_name == "placeholders" then
+                        -- Ensure Placeholders are synced
+                        self:RefreshDynamicData(self:GetFromDb("verboseMode"))
                         tag_data = self.placeholders
                         visible_data = {
                             "processCallback", "processType"

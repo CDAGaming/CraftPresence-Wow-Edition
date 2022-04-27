@@ -1566,6 +1566,9 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         if tagName == "all" or tagName == "events" then
             self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
         end
+        if tagName == "all" or tagName == "placeholders" or tagName == "buttons" then
+            self:RefreshDynamicData(self:GetFromDb("debugMode"))
+        end
         if tagName == "all" or tagName == "compat" then
             self:EnsureCompatibility(self:GetFromDb("schema"), self:GetAddOnInfo()["schema"])
         end
