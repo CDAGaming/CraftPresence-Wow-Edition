@@ -1548,10 +1548,15 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     local canNotify = self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or self:IsRebasedApi()
     notify = self:GetOrDefault(notify, true)
     reset = self:GetOrDefault(reset, false)
+    tags = self:GetOrDefault(tags, {})
 
     if reset then
         self:Print(L["INFO_RESET_CONFIG"])
         self.db:ResetProfile(false, true)
+    end
+
+    if type(tags) ~= "table" then
+        tags = { tags }
     end
 
     -- Additional dynamic sync events
