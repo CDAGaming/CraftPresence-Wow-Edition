@@ -110,7 +110,7 @@ function CraftPresence:EncodeConfigData(log_output)
     }
 
     -- Placeholder Syncing
-    rpcData = self:RefreshDynamicData(log_output, rpcData)
+    rpcData = self:SyncDynamicData(log_output, rpcData)
 
     -- Update Instance Status before exiting method
     if self:HasInstanceChanged() then
@@ -258,8 +258,8 @@ end
 --- @param log_output boolean Whether to allow logging for this function (Default: false)
 --- @param data table If supplied, do a sequential replace of applicable data
 ---
---- @return table @ newTableData
-function CraftPresence:RefreshDynamicData(log_output, data)
+--- @return table @ data_table
+function CraftPresence:SyncDynamicData(log_output, data)
     local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
     copyTable(self:GetFromDb("placeholders"), self.placeholders)
     copyTable(self:GetFromDb("buttons"), self.buttons)
@@ -631,8 +631,8 @@ function CraftPresence:ChatCommand(input)
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = self:GetOrDefault(command_query[4], buildData["toc_version"]),
-                                    maximumTOC = self:GetOrDefault(command_query[5], buildData["toc_version"]),
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
                                     allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", processType = "string", registerCallback = "",
                                     tagCallback = "", tagType = "string", prefix = "@",
@@ -640,8 +640,8 @@ function CraftPresence:ChatCommand(input)
                                 }
                             elseif tag_name == "events" then
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = self:GetOrDefault(command_query[4], buildData["toc_version"]),
-                                    maximumTOC = self:GetOrDefault(command_query[5], buildData["toc_version"]),
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
                                     allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
@@ -690,7 +690,7 @@ function CraftPresence:ChatCommand(input)
                     local tag_data, visible_data, multi_table, enable_callback, notes = {}, {}, false, nil, ""
                     if tag_name == "placeholders" then
                         -- Ensure Placeholders are synced
-                        self:RefreshDynamicData(self:GetFromDb("verboseMode"))
+                        self:SyncDynamicData(self:GetFromDb("verboseMode"))
                         tag_data = self.placeholders
                         visible_data = {
                             "processCallback", "processType"
@@ -738,18 +738,4 @@ function CraftPresence:ChatCommand(input)
         end
     end
     return command_query
-end
-
---- Displays the specified usage command in a help text format
---- (INTERNAL USAGE ONLY)
----
---- @param usage string The usage command text
-function CraftPresence:PrintUsageCommand(usage)
-    usage = self:GetOrDefault(usage)
-    self:Print(
-            strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
-                    usage .. "\n" ..
-                    strformat(L["USAGE_CMD_NOTE_ONE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                    L["USAGE_CMD_NOTE_TWO"] .. "\n"
-    )
 end

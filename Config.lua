@@ -1564,10 +1564,10 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         tagName = strlower(tagName)
 
         if tagName == "all" or tagName == "events" then
-            self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("debugMode"))
+            self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("verboseMode"))
         end
         if tagName == "all" or tagName == "placeholders" or tagName == "buttons" then
-            self:RefreshDynamicData(self:GetFromDb("debugMode"))
+            self:SyncDynamicData(self:GetFromDb("verboseMode"))
         end
         if tagName == "all" or tagName == "compat" then
             self:EnsureCompatibility(self:GetFromDb("schema"), self:GetAddOnInfo()["schema"])

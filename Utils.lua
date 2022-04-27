@@ -846,8 +846,6 @@ function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
     end
 end
 
---[[ API GETTERS AND SETTERS ]]--
-
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
     self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
@@ -855,6 +853,22 @@ function CraftPresence:PrintAddonInfo()
         self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
 end
+
+--- Displays the specified usage command in a help text format
+--- (INTERNAL USAGE ONLY)
+---
+--- @param usage string The usage command text
+function CraftPresence:PrintUsageCommand(usage)
+    usage = self:GetOrDefault(usage)
+    self:Print(
+            strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+                    usage .. "\n" ..
+                    strformat(L["USAGE_CMD_NOTE_ONE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
+                    L["USAGE_CMD_NOTE_TWO"] .. "\n"
+    )
+end
+
+--[[ API GETTERS AND SETTERS ]]--
 
 --- Sets whether or not the timer is locked
 --- @param newValue boolean New variable value
