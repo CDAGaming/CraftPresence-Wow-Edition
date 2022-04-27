@@ -613,21 +613,21 @@ function CraftPresence:ChatCommand(input)
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = self:GetOrDefault(command_query[5]),
-                                    maximumTOC = self:GetOrDefault(command_query[6]),
-                                    allowRebasedApi = (self:GetOrDefault(command_query[7], "true") == "true"),
+                                    minimumTOC = self:GetOrDefault(command_query[4], buildData["toc_version"]),
+                                    maximumTOC = self:GetOrDefault(command_query[5], buildData["toc_version"]),
+                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", processType = "string", registerCallback = "",
-                                    tags = self:GetOrDefault(command_query[8]), prefix = "",
-                                    enabled = (self:GetOrDefault(command_query[4], "true") == "true")
+                                    tagCallback = "", tagType = "string", prefix = "@",
+                                    enabled = true
                                 }
                             elseif tag_name == "events" then
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = self:GetOrDefault(command_query[5]),
-                                    maximumTOC = self:GetOrDefault(command_query[6]),
-                                    allowRebasedApi = (self:GetOrDefault(command_query[7], "true") == "true"),
+                                    minimumTOC = self:GetOrDefault(command_query[4], buildData["toc_version"]),
+                                    maximumTOC = self:GetOrDefault(command_query[5], buildData["toc_version"]),
+                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
-                                    enabled = (self:GetOrDefault(command_query[4], "true") == "true")
+                                    enabled = true
                                 }
                             end
                             local eventState = (modify_mode and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
