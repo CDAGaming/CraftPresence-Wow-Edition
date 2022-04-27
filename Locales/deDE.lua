@@ -383,6 +383,20 @@ L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  
         GREEN, GREY
 )
 
+L["USAGE_CMD_CREATE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_CREATE_EVENTS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
+        GREEN, GREY
+)
+
+L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^<name>|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_REMOVE_EVENTS"] = setfmt(" *Query:|r %s ^<name>|r.",
+        GREEN, GREY
+)
+
 L["USAGE_CMD_NOTE_ONE"] = setfmt("NOTE: Alle Befehle müssen mit  */%s|r oder */%s|r beginnen.",
         GREEN, GREY
 )

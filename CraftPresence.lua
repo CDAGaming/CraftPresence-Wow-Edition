@@ -659,7 +659,7 @@ function CraftPresence:ChatCommand(input)
                             self:PrintErrorMessage(L["COMMAND_CREATE_CONFLICT"])
                         end
                     else
-                        self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
+                        self:PrintQueryCommand(tag_name, flag_query[1])
                     end
                 elseif flag_query[1] == "remove" then
                     if command_query[3] ~= nil then
@@ -679,7 +679,7 @@ function CraftPresence:ChatCommand(input)
                             self:PrintErrorMessage(L["COMMAND_REMOVE_NO_MATCH"])
                         end
                     else
-                        self:PrintUsageCommand(L["USAGE_CMD_" .. strupper(tag_name)])
+                        self:PrintQueryCommand(tag_name, flag_query[1])
                     end
                 elseif flag_query[1] == "list" then
                     local foundAny = false
