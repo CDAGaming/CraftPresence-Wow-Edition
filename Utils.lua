@@ -861,7 +861,7 @@ end
 function CraftPresence:PrintUsageCommand(usage)
     usage = self:GetOrDefault(usage)
     self:Print(
-            strformat(L["USAGE_CMD_INTRO"], L["ADDON_NAME"]) .. "\n" ..
+            L["USAGE_CMD_INTRO"] .. "\n" ..
                     usage .. "\n" ..
                     strformat(L["USAGE_CMD_NOTE_ONE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
                     L["USAGE_CMD_NOTE_TWO"] .. "\n"

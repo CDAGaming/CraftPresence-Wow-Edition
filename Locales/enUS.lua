@@ -347,7 +347,7 @@ L["ERROR_FUNCTION_REPLACE"] = setfmt("To fix this issue, please use the newer fu
 )
 
 -- General Command Data
-L["USAGE_CMD_INTRO"] = setfmt("*%s|r Command Usage:", GREEN)
+L["USAGE_CMD_INTRO"] = "Command Usage =>"
 L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
         GREEN, GREY
 )
