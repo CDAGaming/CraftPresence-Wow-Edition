@@ -1027,6 +1027,9 @@ end]],
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
 function CraftPresence:getOptionsTable()
+    -- It is necesary to have this value, as calling it with self implied
+    -- Causes NotifyChange to fail from time to time
+    local self = CraftPresence
     local profilesGroup = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 
     local opts = {
