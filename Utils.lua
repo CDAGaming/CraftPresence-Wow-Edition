@@ -868,6 +868,22 @@ function CraftPresence:PrintUsageCommand(usage)
     )
 end
 
+--- Displays the specified usage command in a help text format
+--- (INTERNAL USAGE ONLY)
+---
+--- @param root_name string The root command name
+--- @param query_tag string The sub-argument to the root name, representing what we want a query from
+function CraftPresence:PrintQueryCommand(root_name, query_tag)
+    local usageText = L["USAGE_CMD_" .. strupper(root_name)]
+    if not self:IsNullOrEmpty(query_tag) then
+        local localeQuery = "USAGE_CMD_" .. strupper(query_tag) .. "_" .. strupper(root_name)
+        if not self:IsNullOrEmpty(L[localeQuery]) then
+            usageText = usageText .. "\n" .. strformat(L[localeQuery], strlower(query_tag))
+        end
+    end
+    self:PrintUsageCommand(usageText)
+end
+
 --[[ API GETTERS AND SETTERS ]]--
 
 --- Sets whether or not the timer is locked
