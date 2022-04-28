@@ -1580,7 +1580,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         if tagName == "all" or tagName == "events" then
             self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("verboseMode"))
         end
-        if tagName == "all" or tagName == "placeholders" or tagName == "buttons" then
+        if tagName == "all" or tagName == "placeholders" or tagName == "buttons" or tagName == "labels" then
             self:SyncDynamicData(self:GetFromDb("verboseMode"))
         end
         if tagName == "all" or tagName == "compat" then
