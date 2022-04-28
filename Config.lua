@@ -52,35 +52,49 @@ local DB_DEFAULTS = {
         frameSize = L["DEFAULT_FRAME_SIZE"],
         frameClearDelay = L["DEFAULT_FRAME_CLEAR_DELAY"],
         buttons = {
-            primaryButton = {
-                label = "",
-                url = ""
+            ["primaryButton"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                labelCallback = "", urlCallback = "",
+                labelType = "string", urlType = "string",
+                enabled = true
             },
-            secondaryButton = {
-                label = "",
-                url = ""
+            ["secondaryButton"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                labelCallback = "", urlCallback = "",
+                labelType = "string", urlType = "string",
+                enabled = true
             }
         },
         labels = {
             ["away"] = {
-                active = L["DEFAULT_LABEL_AWAY"],
-                inactive = ""
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                activeCallback = L["DEFAULT_LABEL_AWAY"], inactiveCallback = "",
+                activeType = "string", inactiveType = "string",
+                enabled = true
             },
             ["busy"] = {
-                active = L["DEFAULT_LABEL_BUSY"],
-                inactive = ""
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                activeCallback = L["DEFAULT_LABEL_BUSY"], inactiveCallback = "",
+                activeType = "string", inactiveType = "string",
+                enabled = true
             },
             ["dead"] = {
-                active = L["DEFAULT_LABEL_DEAD"],
-                inactive = ""
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                activeCallback = L["DEFAULT_LABEL_DEAD"], inactiveCallback = "",
+                activeType = "string", inactiveType = "string",
+                enabled = true
             },
             ["ghost"] = {
-                active = L["DEFAULT_LABEL_GHOST"],
-                inactive = ""
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                activeCallback = L["DEFAULT_LABEL_GHOST"], inactiveCallback = "",
+                labelType = "string", urlType = "string",
+                enabled = true
             },
             ["in_combat"] = {
-                active = L["DEFAULT_LABEL_COMBAT"],
-                inactive = ""
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                activeCallback = L["DEFAULT_LABEL_COMBAT"], inactiveCallback = "",
+                activeType = "string", inactiveType = "string",
+                enabled = true
             }
         },
         placeholders = {

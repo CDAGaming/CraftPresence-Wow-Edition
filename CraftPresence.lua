@@ -306,29 +306,30 @@ function CraftPresence:SyncDynamicData(log_output, data)
 
                 -- Sync Button Info
                 for buttonKey, buttonValue in pairs(self.buttons) do
-                    if type(buttonValue) == "table" and buttonValue.label and buttonValue.url then
-                        local dataValue = self:GetOrDefault(
-                                buttonValue.result, self:ConcatTable(
-                                    nil, L["ARRAY_SPLIT_KEY"],
-                                    buttonValue.label, buttonValue.url
-                                )
-                        )
-                        self.buttons[buttonKey].result = self:Replace(
-                                dataValue, newKey, self:GetOrDefault(newValue), true
-                        )
+                    if self:ShouldProcessData(buttonValue) then
+                        local labelData = self:Replace(buttonValue.labelCallback, newKey, self:GetOrDefault(newValue), true)
+                        buttonValue.label = self:GetDynamicReturnValue(labelData, buttonValue.labelType, self)
+                        local urlData = self:Replace(buttonValue.urlCallback, newKey, self:GetOrDefault(newValue), true)
+                        buttonValue.url = self:GetDynamicReturnValue(urlData, buttonValue.urlType, self)
                     end
+                    buttonValue.result = self:GetOrDefault(
+                            buttonValue.result, self:ConcatTable(
+                                nil, L["ARRAY_SPLIT_KEY"],
+                                self:GetOrDefault(buttonValue.label), self:GetOrDefault(buttonValue.url)
+                            )
+                    )
+                    self.buttons[buttonKey] = buttonValue
                 end
 
                 -- Sync Label Info
                 for labelKey, labelValue in pairs(self.labels) do
-                    if type(labelValue) == "table" and labelValue.active and labelValue.inactive then
-                        self.labels[labelKey].active = self:Replace(
-                                labelValue.active, newKey, self:GetOrDefault(newValue), true
-                        )
-                        self.labels[labelKey].inactive = self:Replace(
-                                labelValue.inactive, newKey, self:GetOrDefault(newValue), true
-                        )
+                    if self:ShouldProcessData(labelValue) then
+                        local activeData = self:Replace(labelValue.activeCallback, newKey, self:GetOrDefault(newValue), true)
+                        labelValue.active = self:GetDynamicReturnValue(activeData, labelValue.activeType, self)
+                        local inactiveData = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
+                        labelValue.inactive = self:GetDynamicReturnValue(inactiveData, labelValue.inactiveType, self)
                     end
+                    self.labels[labelKey] = labelValue
                 end
             end
 

@@ -168,6 +168,63 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
             current = 3
         end
 
+        if self:IsWithinValue(current, 3, 4, true, true) then
+            -- Schema Changes (v3 -> v4):
+            --   buttons:label,url renamed to buttons:labelCallback,urlCallback
+            --   labels:active,inactive renamed to labels:activeCallback,inactiveCallback
+            local buttonData = self:GetFromDb("buttons")
+            if buttonData ~= nil then
+                for k,v in pairs(buttonData) do
+                    if type(v) == "table" then
+                        v.labelCallback = self:GetOrDefault(v.labelCallback)
+                        v.labelType = self:GetOrDefault(v.labelType, "string")
+                        v.urlCallback = self:GetOrDefault(v.urlCallback)
+                        v.urlType = self:GetOrDefault(v.urlType, "string")
+                        if v.label ~= nil then
+                            v.labelCallback = v.label
+                            v.label = nil
+                        end
+                        if v.url ~= nil then
+                            v.urlCallback = v.url
+                            v.url = nil
+                        end
+                        v.enabled = self:GetOrDefault(v.enabled, true)
+                        v.minimumTOC = self:GetOrDefault(v.minimumTOC)
+                        v.maximumTOC = self:GetOrDefault(v.maximumTOC)
+                        v.allowRebasedApi = self:GetOrDefault(v.allowRebasedApi, true)
+                    end
+                    buttonData[k] = v
+                end
+                self:SetToDb("buttons", nil, buttonData)
+            end
+            local labelData = self:GetFromDb("labels")
+            if labelData ~= nil then
+                for k,v in pairs(labelData) do
+                    if type(v) == "table" then
+                        v.activeCallback = self:GetOrDefault(v.activeCallback)
+                        v.activeType = self:GetOrDefault(v.activeType, "string")
+                        v.inactiveCallback = self:GetOrDefault(v.inactiveCallback)
+                        v.inactiveType = self:GetOrDefault(v.inactiveType, "string")
+                        if v.active ~= nil then
+                            v.activeCallback = v.active
+                            v.active = nil
+                        end
+                        if v.inactive ~= nil then
+                            v.inactiveCallback = v.inactive
+                            v.inactive = nil
+                        end
+                        v.enabled = self:GetOrDefault(v.enabled, true)
+                        v.minimumTOC = self:GetOrDefault(v.minimumTOC)
+                        v.maximumTOC = self:GetOrDefault(v.maximumTOC)
+                        v.allowRebasedApi = self:GetOrDefault(v.allowRebasedApi, true)
+                    end
+                    labelData[k] = v
+                end
+                self:SetToDb("labels", nil, labelData)
+            end
+            current = 4
+        end
+
         self:SetToDb("schema", nil, min(current, target))
     end
 end

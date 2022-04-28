@@ -9,7 +9,7 @@
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
 ## OptionalDeps: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
-## X-Schema-ID: 3
+## X-Schema-ID: 4
 ## X-Embeds: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
 ## X-Credits: Attka
 ## X-Curse-Project-ID: 457334
