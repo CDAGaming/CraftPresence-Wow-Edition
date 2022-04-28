@@ -231,6 +231,38 @@ L["TITLE_BUTTON_PROCESSTYPE"] = "Process Type"
 L["COMMENT_BUTTON_PROCESSTYPE"] = "The expected type the Process Callback should identify as.\n(Can be: function,string)"
 L["USAGE_BUTTON_PROCESSTYPE"] = "<Your message here>"
 
+L["TITLE_BUTTON_ACTIVECALLBACK"] = "Active Callback"
+L["COMMENT_BUTTON_ACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is active."
+L["USAGE_BUTTON_ACTIVECALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_ACTIVETYPE"] = "Active Type"
+L["COMMENT_BUTTON_ACTIVETYPE"] = "The expected type the Active Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_ACTIVETYPE"] = "<Your message here>"
+
+L["TITLE_BUTTON_INACTIVECALLBACK"] = "Inactive Callback"
+L["COMMENT_BUTTON_INACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is inactive."
+L["USAGE_BUTTON_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_INACTIVETYPE"] = "Inactive Type"
+L["COMMENT_BUTTON_INACTIVETYPE"] = "The expected type the Inctive Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_INACTIVETYPE"] = "<Your message here>"
+
+L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
+L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."
+L["USAGE_BUTTON_LABELCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_LABELTYPE"] = "Label Type"
+L["COMMENT_BUTTON_LABELTYPE"] = "The expected type the Label Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_LABELTYPE"] = "<Your message here>"
+
+L["TITLE_BUTTON_URLCALLBACK"] = "URL Callback"
+L["COMMENT_BUTTON_URLCALLBACK"] = "The function that, if any, is what will be attached as the url for the state."
+L["USAGE_BUTTON_URLCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_URLTYPE"] = "URL Type"
+L["COMMENT_BUTTON_URLTYPE"] = "The expected type the URL Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_URLTYPE"] = "<Your message here>"
+
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
 L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called."
 L["USAGE_BUTTON_EVENTCALLBACK"] = "<A function or string reference to a function here>"
