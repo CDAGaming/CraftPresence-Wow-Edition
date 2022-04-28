@@ -169,5 +169,6 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
         end
 
         self:SetToDb("schema", nil, min(current, target))
+        self:UpdateProfile(true, false, "all")
     end
 end
