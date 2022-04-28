@@ -87,7 +87,7 @@ local DB_DEFAULTS = {
             ["ghost"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 activeCallback = L["DEFAULT_LABEL_GHOST"], inactiveCallback = "",
-                labelType = "string", urlType = "string",
+                activeType = "string", inactiveType = "string",
                 enabled = true
             },
             ["in_combat"] = {
