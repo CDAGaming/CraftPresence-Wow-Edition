@@ -1533,7 +1533,6 @@ end
 --- Retrieves the default settings for the config menu
 --- @return table @ DB_DEFAULTS
 function CraftPresence:GetDefaults()
-    DB_DEFAULTS.profile.schema = self:GetAddOnInfo()["schema"]
     return DB_DEFAULTS
 end
 
@@ -1553,6 +1552,8 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     if reset then
         self:Print(L["INFO_RESET_CONFIG"])
         self.db:ResetProfile(false, true)
+        -- Assign Mandatory Values
+        self.db.profile.schema = self:GetAddOnInfo()["schema"]
     end
 
     if type(tags) ~= "table" then
@@ -1568,9 +1569,6 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         end
         if tagName == "all" or tagName == "placeholders" or tagName == "buttons" or tagName == "labels" then
             self:SyncDynamicData(self:GetFromDb("verboseMode"))
-        end
-        if tagName == "all" or tagName == "compat" then
-            self:EnsureCompatibility(self:GetFromDb("schema"), self:GetAddOnInfo()["schema"])
         end
     end
 
