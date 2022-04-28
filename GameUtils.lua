@@ -52,13 +52,12 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
 
     local unitInfo = {}
     local unitString = ""
-    local labelData = self:GetFromDb("labels")
 
     unitData.away = self:GetOrDefault(
             unitData.away or (UnitIsAFK and UnitIsAFK(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].away) or false
     )
-    unitString = self:GetOrDefault(labelData["away"][L["STATUS_"..strupper(tostring(unitData.away))]])
+    unitString = self:GetOrDefault(self.labels["away"][L["STATUS_"..strupper(tostring(unitData.away))]])
     if not self:IsNullOrEmpty(unitString) then
         tinsert(unitInfo, unitString)
     end
@@ -67,7 +66,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
             unitData.busy or (UnitIsDND and UnitIsDND(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].busy) or false
     )
-    unitString = self:GetOrDefault(labelData["busy"][L["STATUS_"..strupper(tostring(unitData.busy))]])
+    unitString = self:GetOrDefault(self.labels["busy"][L["STATUS_"..strupper(tostring(unitData.busy))]])
     if not self:IsNullOrEmpty(unitString) then
         tinsert(unitInfo, unitString)
     end
@@ -76,7 +75,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
             unitData.dead or (UnitIsDead and UnitIsDead(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].dead) or false
     )
-    unitString = self:GetOrDefault(labelData["dead"][L["STATUS_"..strupper(tostring(unitData.dead))]])
+    unitString = self:GetOrDefault(self.labels["dead"][L["STATUS_"..strupper(tostring(unitData.dead))]])
     if not self:IsNullOrEmpty(unitString) then
         tinsert(unitInfo, unitString)
     end
@@ -85,7 +84,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
             unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].ghost) or false
     )
-    unitString = self:GetOrDefault(labelData["ghost"][L["STATUS_"..strupper(tostring(unitData.ghost))]])
+    unitString = self:GetOrDefault(self.labels["ghost"][L["STATUS_"..strupper(tostring(unitData.ghost))]])
     if not self:IsNullOrEmpty(unitString) then
         tinsert(unitInfo, unitString)
     end
@@ -94,7 +93,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
             unitData.in_combat or (UnitAffectingCombat and UnitAffectingCombat(unit)),
             (cachedUnitData[unit] and cachedUnitData[unit].in_combat) or false
     )
-    unitString = self:GetOrDefault(labelData["in_combat"][L["STATUS_"..strupper(tostring(unitData.in_combat))]])
+    unitString = self:GetOrDefault(self.labels["in_combat"][L["STATUS_"..strupper(tostring(unitData.in_combat))]])
     if not self:IsNullOrEmpty(unitString) then
         tinsert(unitInfo, unitString)
     end

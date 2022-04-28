@@ -69,6 +69,7 @@ CraftPresence.registeredEvents = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
 CraftPresence.buttons = {}
+CraftPresence.labels = {}
 
 CraftPresence.time_start = ""
 CraftPresence.time_end = ""
@@ -263,6 +264,7 @@ function CraftPresence:SyncDynamicData(log_output, data)
     local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
     copyTable(self:GetFromDb("placeholders"), self.placeholders)
     copyTable(self:GetFromDb("buttons"), self.buttons)
+    copyTable(self:GetFromDb("labels"), self.labels)
     for key, value in pairs(self.placeholders) do
         if type(value) == "table" then
             -- Sanity Checks
@@ -303,7 +305,6 @@ function CraftPresence:SyncDynamicData(log_output, data)
                 end
 
                 -- Sync Button Info
-                -- Additional Sanity Checks for Buttons
                 for buttonKey, buttonValue in pairs(self.buttons) do
                     if type(buttonValue) == "table" and buttonValue.label and buttonValue.url then
                         local dataValue = self:GetOrDefault(
@@ -314,6 +315,18 @@ function CraftPresence:SyncDynamicData(log_output, data)
                         )
                         self.buttons[buttonKey].result = self:Replace(
                                 dataValue, newKey, self:GetOrDefault(newValue), true
+                        )
+                    end
+                end
+
+                -- Sync Label Info
+                for labelKey, labelValue in pairs(self.labels) do
+                    if type(labelValue) == "table" and labelValue.active and labelValue.inactive then
+                        self.labels[labelKey].active = self:Replace(
+                                labelValue.active, newKey, self:GetOrDefault(newValue), true
+                        )
+                        self.labels[labelKey].inactive = self:Replace(
+                                labelValue.inactive, newKey, self:GetOrDefault(newValue), true
                         )
                     end
                 end
