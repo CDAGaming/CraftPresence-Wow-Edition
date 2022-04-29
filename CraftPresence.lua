@@ -135,6 +135,7 @@ function CraftPresence:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
+    self.config:SetDefaultSize(L["ADDON_NAME"], 858, 660)
     self:EnsureCompatibility(self:GetFromDb("schema"), addOnData["schema"])
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
