@@ -1230,7 +1230,7 @@ function CraftPresence:getOptionsTable()
                         end,
                         nil,
                         function(self, newValue)
-                            return not self:FindMatches(newValue, L["ARRAY_SPLIT_KEY"], false)
+                            return not self:FindMatches(tostring(newValue), L["ARRAY_SPLIT_KEY"], false)
                         end,
                         function(self, fieldName, _, _)
                             self:PrintErrorMessage(
