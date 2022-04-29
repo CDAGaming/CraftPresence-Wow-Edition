@@ -307,34 +307,33 @@ function CraftPresence:SyncDynamicData(log_output, data)
                         newValue = self:GetDynamicReturnValue(replacement, value.processType, self)
                     end
                 end
+            end
 
-                -- Sync Button Info
-                for buttonKey, buttonValue in pairs(self.buttons) do
-                    if self:ShouldProcessData(buttonValue) then
-                        local labelData = self:Replace(buttonValue.labelCallback, newKey, self:GetOrDefault(newValue), true)
-                        buttonValue.label = self:GetDynamicReturnValue(labelData, buttonValue.labelType, self)
-                        local urlData = self:Replace(buttonValue.urlCallback, newKey, self:GetOrDefault(newValue), true)
-                        buttonValue.url = self:GetDynamicReturnValue(urlData, buttonValue.urlType, self)
-                    end
-                    buttonValue.result = self:GetOrDefault(
-                            buttonValue.result, self:ConcatTable(
-                                nil, L["ARRAY_SPLIT_KEY"],
-                                self:GetOrDefault(buttonValue.label), self:GetOrDefault(buttonValue.url)
-                            )
+            -- Sync Button Info
+            for buttonKey, buttonValue in pairs(self.buttons) do
+                if self:ShouldProcessData(buttonValue) then
+                    buttonValue.labelCallback = self:Replace(buttonValue.labelCallback, newKey, self:GetOrDefault(newValue), true)
+                    buttonValue.label = self:GetDynamicReturnValue(buttonValue.labelCallback, buttonValue.labelType, self)
+                    buttonValue.urlCallback = self:Replace(buttonValue.urlCallback, newKey, self:GetOrDefault(newValue), true)
+                    buttonValue.url = self:GetDynamicReturnValue(buttonValue.urlCallback, buttonValue.urlType, self)
+                    buttonValue.result = self:ConcatTable(
+                            nil, L["ARRAY_SPLIT_KEY"],
+                            self:GetOrDefault(buttonValue.label), self:GetOrDefault(buttonValue.url)
                     )
-                    self.buttons[buttonKey] = buttonValue
                 end
+                buttonValue.result = self:GetOrDefault(buttonValue.result)
+                self.buttons[buttonKey] = buttonValue
+            end
 
-                -- Sync Label Info
-                for labelKey, labelValue in pairs(self.labels) do
-                    if self:ShouldProcessData(labelValue) then
-                        local activeData = self:Replace(labelValue.activeCallback, newKey, self:GetOrDefault(newValue), true)
-                        labelValue.active = self:GetDynamicReturnValue(activeData, labelValue.activeType, self)
-                        local inactiveData = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
-                        labelValue.inactive = self:GetDynamicReturnValue(inactiveData, labelValue.inactiveType, self)
-                    end
-                    self.labels[labelKey] = labelValue
+            -- Sync Label Info
+            for labelKey, labelValue in pairs(self.labels) do
+                if self:ShouldProcessData(labelValue) then
+                    labelValue.activeCallback = self:Replace(labelValue.activeCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.active = self:GetDynamicReturnValue(labelValue.activeCallback, labelValue.activeType, self)
+                    labelValue.inactiveCallback = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.inactive = self:GetDynamicReturnValue(labelValue.inactiveCallback, labelValue.inactiveType, self)
                 end
+                self.labels[labelKey] = labelValue
             end
 
             if data ~= nil then
@@ -371,6 +370,7 @@ function CraftPresence:SyncDynamicData(log_output, data)
         self.time_start, self.time_end = "", ""
 
         -- Additional Sanity Checks for Buttons
+        self:Print("Buttons: " .. self:SerializeTable(self.buttons))
         for _, value in pairs(self.buttons) do
             if type(value) == "table" and value.result then
                 tinsert(data, value.result)
