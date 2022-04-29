@@ -370,7 +370,6 @@ function CraftPresence:SyncDynamicData(log_output, data)
         self.time_start, self.time_end = "", ""
 
         -- Additional Sanity Checks for Buttons
-        self:Print("Buttons: " .. self:SerializeTable(self.buttons))
         for _, value in pairs(self.buttons) do
             if type(value) == "table" and value.result then
                 tinsert(data, value.result)
