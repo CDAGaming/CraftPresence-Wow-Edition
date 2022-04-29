@@ -805,12 +805,15 @@ end
 
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
-    if (self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or
-            self:IsRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
-        -- a bug can occur in blizzard's implementation of this call
-        -- so it is called twice to workaround it
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+    if self.config then
+        if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame then
+            -- a bug can occur in blizzard's implementation of this call
+            -- so it is called twice to workaround it
+            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        else
+            self.config:Open(L["ADDON_NAME"])
+        end
     else
         self:PrintErrorMessage(strformat(L["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
     end
@@ -1031,10 +1034,12 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
     }
     local rootData = self:GetFromDb(rootKey)
     if type(rootData) == "table" then
-        for key, value in pairs(rootData) do
+        for k,v in pairs(rootData) do
+            local key,value = k,v
             local value_args = {}
             if type(value) == "table" then
-                for innerKey, _ in pairs(value) do
+                for ik, _ in pairs(value) do
+                    local innerKey = ik
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,

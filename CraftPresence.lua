@@ -77,6 +77,9 @@ CraftPresence.time_end = ""
 CraftPresence.canUseExternals = false
 CraftPresence.externalCache = {}
 
+-- Addon Dependencies
+CraftPresence.config = LibStub("AceConfigDialog-3.0")
+
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
 
@@ -137,7 +140,7 @@ function CraftPresence:OnInitialize()
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-            self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
+            self.optionsFrame = self.config:AddToBlizOptions(L["ADDON_NAME"])
             self.optionsFrame.default = function()
                 self:UpdateProfile(true, true, "all")
             end
