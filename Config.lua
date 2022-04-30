@@ -1481,6 +1481,11 @@ function CraftPresence:getOptionsTable()
                             if isValid then
                                 self.db.profile.callbackDelay = value
                                 self:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
+                                if value <= 0 then
+                                    self:PrintWarningMessage(
+                                            strformat(L["WARNING_VALUE_UNSAFE"], L["TITLE_CALLBACK_DELAY"])
+                                    )
+                                end
                             else
                                 self:PrintErrorMessage(
                                         strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
@@ -1507,6 +1512,11 @@ function CraftPresence:getOptionsTable()
                             if isValid then
                                 self.db.profile.frameClearDelay = value
                                 self:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
+                                if value <= 0 then
+                                    self:PrintWarningMessage(
+                                            strformat(L["WARNING_VALUE_UNSAFE"], L["TITLE_FRAME_CLEAR_DELAY"])
+                                    )
+                                end
                             else
                                 self:PrintErrorMessage(
                                         strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
@@ -1536,6 +1546,11 @@ function CraftPresence:getOptionsTable()
                             if isValid then
                                 self.db.profile.frameSize = value
                                 self:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
+                                if value <= 0 then
+                                    self:PrintWarningMessage(
+                                            strformat(L["WARNING_VALUE_UNSAFE"], L["TITLE_FRAME_SIZE"])
+                                    )
+                                end
                             else
                                 self:PrintErrorMessage(
                                         strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],

@@ -369,6 +369,11 @@ L["ERROR_STRING_DEFAULT"] = setfmt("Sanity Checks failed for *%s|r. Please enter
         GREEN, GREY
 )
 
+-- Config Warning Standards
+L["WARNING_VALUE_UNSAFE"] = setfmt("The value selected for *%s|r can cause malformed behavior in some cases.",
+        GREEN
+)
+
 -- Function Error Standards
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
 L["ERROR_FUNCTION_DEPRECATED"] = setfmt("A function your using is marked as deprecated, with the following info: *%s|r",
