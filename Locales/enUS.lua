@@ -167,13 +167,13 @@ L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
-L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger.\n(This doesn't effect /cp update)"
+L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
 L["MAXIMUM_CALLBACK_DELAY"] = 30
 L["DEFAULT_CALLBACK_DELAY"] = 2
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
-L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after non-debug events before drawn frames are cleared."
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay (seconds) after non-debug events before drawn frames are cleared."
 L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 10

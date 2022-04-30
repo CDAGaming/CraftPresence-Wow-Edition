@@ -167,14 +167,14 @@ L["COMMENT_QUEUED_PIPELINE"] = "Schaltet die Ereignis-Pipeline zwischen \"skip\"
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Zeige Willkommensnachricht"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Schaltet die initiale Nachricht beim Anmelden ein/aus."
 
-L["TITLE_CALLBACK_DELAY"] = "Verzögerung des RPC-Callback"
-L["COMMENT_CALLBACK_DELAY"] = "Eine Verzögerung nach einem Ereignis, bevor ein RPC-Callback eingeleitet wird.\n(Hat keine Auswirkungen auf /cp update)"
+L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
+L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
 L["MAXIMUM_CALLBACK_DELAY"] = 30
 L["DEFAULT_CALLBACK_DELAY"] = 2
 
-L["TITLE_FRAME_CLEAR_DELAY"] = "Verzögerung des Frame-Clear"
-L["COMMENT_FRAME_CLEAR_DELAY"] = "Eine Verzögerung nach einem Ereignis, bevor der Frame geleert wird.\n(Hat keine Auswirkungen auf /cp update)"
+L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay (seconds) after non-debug events before drawn frames are cleared."
 L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 10
