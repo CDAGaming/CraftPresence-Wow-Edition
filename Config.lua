@@ -71,8 +71,10 @@ local DB_DEFAULTS = {
                 activeCallback = L["DEFAULT_LABEL_AWAY"], inactiveCallback = "",
                 activeType = "string", inactiveType = "string",
                 stateCallback = [[function (self)
-    return (UnitIsAFK and UnitIsAFK('player')) or
+    return self:GetOrDefault(
+        (UnitIsAFK and UnitIsAFK('player')),
         (self:GetUnitData('player').away) or false
+    )
 end]],
                 enabled = true
             },
@@ -81,8 +83,10 @@ end]],
                 activeCallback = L["DEFAULT_LABEL_BUSY"], inactiveCallback = "",
                 activeType = "string", inactiveType = "string",
                 stateCallback = [[function (self)
-    return (UnitIsDND and UnitIsDND('player')) or
+    return self:GetOrDefault(
+        (UnitIsDND and UnitIsDND('player')),
         (self:GetUnitData('player').busy) or false
+    )
 end]],
                 enabled = true
             },
@@ -91,8 +95,10 @@ end]],
                 activeCallback = L["DEFAULT_LABEL_DEAD"], inactiveCallback = "",
                 activeType = "string", inactiveType = "string",
                 stateCallback = [[function (self)
-    return (UnitIsDead and UnitIsDead('player')) or
+    return self:GetOrDefault(
+        (UnitIsDead and UnitIsDead('player')),
         (self:GetUnitData('player').dead) or false
+    )
 end]],
                 enabled = true
             },
@@ -101,8 +107,10 @@ end]],
                 activeCallback = L["DEFAULT_LABEL_GHOST"], inactiveCallback = "",
                 activeType = "string", inactiveType = "string",
                 stateCallback = [[function (self)
-    return (UnitIsGhost and UnitIsGhost('player')) or
+    return self:GetOrDefault(
+        (UnitIsGhost and UnitIsGhost('player')),
         (self:GetUnitData('player').ghost) or false
+    )
 end]],
                 enabled = true
             },
@@ -111,8 +119,10 @@ end]],
                 activeCallback = L["DEFAULT_LABEL_COMBAT"], inactiveCallback = "",
                 activeType = "string", inactiveType = "string",
                 stateCallback = [[function (self)
-    return (UnitAffectingCombat and UnitAffectingCombat('player')) or
+    return self:GetOrDefault(
+        (UnitAffectingCombat and UnitAffectingCombat('player')),
         (self:GetUnitData('player').in_combat) or false
+    )
 end]],
                 enabled = true
             }
