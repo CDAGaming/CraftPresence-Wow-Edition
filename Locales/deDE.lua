@@ -339,7 +339,6 @@ L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the fol
         GREEN, GREY
 )
 L["COMMAND_CREATE_MODIFY"] = "Die angegebenen Parameter überschreiben bestehende Daten, verwende bitte den create:modify Befehl."
-L["COMMAND_CREATE_CONFLICT"] = "Die angegebenen Parameter können nicht angewendet werden (Überschneidung mit geschützten Daten)."
 
 -- Dynamic Data - Removal
 L["COMMAND_REMOVE_SUCCESS"] = setfmt("Entfernt: ^%s|r => *%s|r",

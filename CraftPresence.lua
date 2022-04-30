@@ -646,11 +646,7 @@ function CraftPresence:ChatCommand(input)
                         local tag_data = self:GetFromDb(tag_table)
                         if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
-                        elseif (
-                                tag_name ~= "placeholders" or not (
-                                        tag_data[command_query[3]]
-                                )
-                        ) then
+                        else
                             -- Some Pre-Filled Data is supplied for these areas
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
@@ -690,8 +686,6 @@ function CraftPresence:ChatCommand(input)
                                     self:SerializeTable(tag_data[command_query[3]])
                             ))
                             self:UpdateProfile(true, false, tag_name)
-                        else
-                            self:PrintErrorMessage(L["COMMAND_CREATE_CONFLICT"])
                         end
                     else
                         self:PrintQueryCommand(tag_name, flag_query[1])
