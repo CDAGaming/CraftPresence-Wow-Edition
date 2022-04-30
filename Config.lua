@@ -125,6 +125,18 @@ end]],
     )
 end]],
                 enabled = true
+            },
+            ["online"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                activeCallback = "", inactiveCallback = "",
+                activeType = "string", inactiveType = "string",
+                stateCallback = [[function (self)
+    return self:GetOrDefault(
+        (UnitIsConnected and UnitIsConnected('player')),
+        (self:GetUnitData('player').online) or false
+    )
+end]],
+                enabled = true
             }
         },
         placeholders = {

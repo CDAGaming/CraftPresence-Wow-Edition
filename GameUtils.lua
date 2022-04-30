@@ -83,7 +83,7 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     if not self:IsNullOrEmpty(unitData.status) then
         unitData.prefix = strformat(prefixFormat, unitData.status)
     else
-        unitData.status = L["STATUS_ONLINE"]
+        unitData.status = L["TYPE_UNKNOWN"]
         unitData.prefix = ""
         unitData.reason = ""
     end

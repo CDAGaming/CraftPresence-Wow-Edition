@@ -71,7 +71,6 @@ L["TYPE_ADDED"] = "Hinzugefügt"
 L["TYPE_MODIFY"] = "Bearbeitet"
 L["STATUS_TRUE"] = "aktiv"
 L["STATUS_FALSE"] = "inaktiv"
-L["STATUS_ONLINE"] = "Online"
 
 -- Primary Logging Data
 L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)
