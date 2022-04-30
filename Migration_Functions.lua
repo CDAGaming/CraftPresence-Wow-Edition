@@ -168,10 +168,12 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
             current = 3
         end
 
-        if self:IsWithinValue(current, 3, 4, true, true) then
+        if self:IsWithinValue(current, 3, 4.1, true, true) then
             -- Schema Changes (v3 -> v4):
             --   buttons:label,url renamed to buttons:labelCallback,urlCallback
             --   labels:active,inactive renamed to labels:activeCallback,inactiveCallback
+            -- Schema Changes (v4 -> v4.1):
+            --   Added stateCallback field for `labels` (Ported from `GetUnitStatus`)
             local buttonData = self:GetFromDb("buttons")
             if buttonData ~= nil then
                 for k,v in pairs(buttonData) do
@@ -198,6 +200,7 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                 self:SetToDb("buttons", nil, buttonData)
             end
             local labelData = self:GetFromDb("labels")
+            local defaultLabels = self:GetDefaults().profile.labels
             if labelData ~= nil then
                 for k,v in pairs(labelData) do
                     if type(v) == "table" then
@@ -213,6 +216,10 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                             v.inactiveCallback = v.inactive
                             v.inactive = nil
                         end
+                        v.stateCallback = self:GetOrDefault(
+                                v.stateCallback,
+                                self:GetOrDefault(defaultLabels[k] and defaultLabels[k].stateCallback)
+                        )
                         v.enabled = self:GetOrDefault(v.enabled, true)
                         v.minimumTOC = self:GetOrDefault(v.minimumTOC)
                         v.maximumTOC = self:GetOrDefault(v.maximumTOC)
@@ -222,7 +229,7 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                 end
                 self:SetToDb("labels", nil, labelData)
             end
-            current = 4
+            current = 4.1
         end
 
         self:SetToDb("schema", nil, min(current, target))

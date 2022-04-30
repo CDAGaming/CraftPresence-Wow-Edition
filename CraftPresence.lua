@@ -227,11 +227,11 @@ end
 ---
 --- @param value table The data table to interpret
 ---
---- @return boolean @ shouldEnable
+--- @return boolean, boolean @ shouldEnable, shouldRegister
 function CraftPresence:ShouldProcessData(value)
     local currentTOC = buildData["toc_version"]
     local fallbackTOC = buildData["fallback_toc_version"]
-    local shouldEnable = false
+    local shouldEnable, shouldRegister = false, false
 
     value = self:GetOrDefault(value, {})
     if type(value) == "table" then
@@ -244,18 +244,18 @@ function CraftPresence:ShouldProcessData(value)
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
-        local canAccept = (
+        shouldRegister = (
                 self:IsNullOrEmpty(value.registerCallback) or
                         tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
         )
-        canAccept = canAccept and (
+        local canAccept = shouldRegister and (
                 self:IsWithinValue(
                         currentTOC, minTOC, maxTOC, true, true, false
                 ) or (value.allowRebasedApi and self:IsRebasedApi())
         )
         shouldEnable = value.enabled and canAccept
     end
-    return shouldEnable
+    return shouldEnable, shouldRegister
 end
 
 --- Sync the contents of dynamic data for readable usage
@@ -332,6 +332,8 @@ function CraftPresence:SyncDynamicData(log_output, data)
                     labelValue.active = self:GetDynamicReturnValue(labelValue.activeCallback, labelValue.activeType, self)
                     labelValue.inactiveCallback = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
                     labelValue.inactive = self:GetDynamicReturnValue(labelValue.inactiveCallback, labelValue.inactiveType, self)
+                    labelValue.stateCallback = self:Replace(labelValue.stateCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.state = tostring(self:GetDynamicReturnValue(labelValue.stateCallback, "function", self)) == "true"
                 end
                 self.labels[labelKey] = labelValue
             end

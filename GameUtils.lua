@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, strupper, tostring = string.format, string.upper, tostring
-local tinsert, tconcat = table.insert, table.concat
+local tinsert, tconcat, pairs = table.insert, table.concat, pairs
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -48,57 +48,23 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     refresh = self:GetOrDefault(refresh, false)
     sync = self:GetOrDefault(sync, true)
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
-    unitData = self:GetOrDefault(unitData, {})
+    unitData = self:GetOrDefault(unitData, cachedUnitData[unit] or {})
 
     local unitInfo = {}
     local unitString = ""
 
-    unitData.away = self:GetOrDefault(
-            unitData.away or (UnitIsAFK and UnitIsAFK(unit)),
-            (cachedUnitData[unit] and cachedUnitData[unit].away) or false
-    )
-    unitString = self:GetOrDefault(self.labels["away"][L["STATUS_"..strupper(tostring(unitData.away))]])
-    if not self:IsNullOrEmpty(unitString) then
-        tinsert(unitInfo, unitString)
-    end
-
-    unitData.busy = self:GetOrDefault(
-            unitData.busy or (UnitIsDND and UnitIsDND(unit)),
-            (cachedUnitData[unit] and cachedUnitData[unit].busy) or false
-    )
-    unitString = self:GetOrDefault(self.labels["busy"][L["STATUS_"..strupper(tostring(unitData.busy))]])
-    if not self:IsNullOrEmpty(unitString) then
-        tinsert(unitInfo, unitString)
-    end
-
-    unitData.dead = self:GetOrDefault(
-            unitData.dead or (UnitIsDead and UnitIsDead(unit)),
-            (cachedUnitData[unit] and cachedUnitData[unit].dead) or false
-    )
-    unitString = self:GetOrDefault(self.labels["dead"][L["STATUS_"..strupper(tostring(unitData.dead))]])
-    if not self:IsNullOrEmpty(unitString) then
-        tinsert(unitInfo, unitString)
-    end
-
-    unitData.ghost = self:GetOrDefault(
-            unitData.ghost or (UnitIsGhost and UnitIsGhost(unit)),
-            (cachedUnitData[unit] and cachedUnitData[unit].ghost) or false
-    )
-    unitString = self:GetOrDefault(self.labels["ghost"][L["STATUS_"..strupper(tostring(unitData.ghost))]])
-    if not self:IsNullOrEmpty(unitString) then
-        tinsert(unitInfo, unitString)
-    end
-
-    unitData.in_combat = self:GetOrDefault(
-            unitData.in_combat or (UnitAffectingCombat and UnitAffectingCombat(unit)),
-            (cachedUnitData[unit] and cachedUnitData[unit].in_combat) or false
-    )
-    unitString = self:GetOrDefault(self.labels["in_combat"][L["STATUS_"..strupper(tostring(unitData.in_combat))]])
-    if not self:IsNullOrEmpty(unitString) then
-        tinsert(unitInfo, unitString)
+    for key,value in pairs(self.labels) do
+        if self:ShouldProcessData(value) then
+            unitData[key] = value.state
+            unitString = value[L["STATUS_"..strupper(tostring(value.state))]]
+            if not self:IsNullOrEmpty(unitString) then
+                tinsert(unitInfo, unitString)
+            end
+        end
     end
 
     -- Sync Player Name Tweaks
+    -- (Also applies fallback data if needed)
     if unitData.away then
         if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
             cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_AFK_MESSAGE)
@@ -165,7 +131,7 @@ end
 --- @return table @ unitData
 function CraftPresence:GetUnitData(unit)
     unit = self:GetOrDefault(unit, "player")
-    return cachedUnitData[unit]
+    return cachedUnitData[unit] or {}
 end
 
 --- Sets a key,value pair within cachedPlayerData, for later usage
