@@ -169,14 +169,14 @@ L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initiali
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
-L["MAXIMUM_CALLBACK_DELAY"] = 30
-L["DEFAULT_CALLBACK_DELAY"] = 2
+L["MAXIMUM_CALLBACK_DELAY"] = 5
+L["DEFAULT_CALLBACK_DELAY"] = 1
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
 L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay (seconds) after non-debug events before drawn frames are cleared."
-L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
+L["MINIMUM_FRAME_CLEAR_DELAY"] = 3
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
-L["DEFAULT_FRAME_CLEAR_DELAY"] = 10
+L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
 L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at\n(Should equal the script's pixel_size property)"
