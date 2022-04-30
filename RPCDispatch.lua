@@ -148,8 +148,8 @@ function CraftPresence:AssertRenderSettings()
     if self:GetLength(error_info) > 0 then
         render_warnings = self:SerializeTable(error_info)
         if self:GetFromDb("verboseMode") or last_render_warnings ~= render_warnings then
-            self:Print(strformat(L["LOG_WARNING"], L["WARNING_EVENT_RENDERING_ONE"]))
-            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings)))
+            self:PrintWarningMessage(L["WARNING_EVENT_RENDERING_ONE"])
+            self:PrintWarningMessage(strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings))
         end
     end
     return self:IsNullOrEmpty(render_warnings)

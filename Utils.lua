@@ -635,7 +635,7 @@ function CraftPresence:GetAddOnInfo()
         end
 
         if not self:ContainsDigit(version) then
-            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_BUILD_UNSUPPORTED"], version)))
+            self:PrintWarningMessage(strformat(L["WARNING_BUILD_UNSUPPORTED"], version))
             version = "v" .. fallbackVersion
         end
         versionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], version)
@@ -829,6 +829,14 @@ function CraftPresence:PrintErrorMessage(logStyle)
     end
 end
 
+--- Prints a formatted message, meant to symbolize a warning message
+--- @param logStyle string The log format to follow
+function CraftPresence:PrintWarningMessage(logStyle)
+    if not self:IsNullOrEmpty(logStyle) then
+        self:Print(strformat(L["LOG_WARNING"], logStyle))
+    end
+end
+
 --- Prints a formatted message, meant to symbolize an deprecated value
 --- @param oldFunc string The old/deprecated function
 --- @param newFunc string The new function to migrate to
@@ -840,12 +848,10 @@ function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
             [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
             [L["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, L["TYPE_UNKNOWN"])
         }
-        self:Print(
-                strformat(L["LOG_WARNING"], strformat(L["ERROR_FUNCTION_DEPRECATED"],
-                        self:SerializeTable(dataTable)
-                ))
+        self:PrintWarningMessage(
+                strformat(L["ERROR_FUNCTION_DEPRECATED"], self:SerializeTable(dataTable))
         )
-        self:Print(strformat(L["LOG_WARNING"], L["ERROR_FUNCTION_REPLACE"]))
+        self:PrintWarningMessage(L["ERROR_FUNCTION_REPLACE"])
     end
 end
 
