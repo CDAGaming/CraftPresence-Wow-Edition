@@ -284,8 +284,12 @@ L["COMMENT_BUTTON_TAGTYPE"] = "The expected type the Tag Callback should identif
 L["USAGE_BUTTON_TAGTYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_PREFIX"] = "Prefix"
-L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data."
+L["COMMENT_BUTTON_PREFIX"] = "The prefix to be used for this data."
 L["USAGE_BUTTON_PREFIX"] = "<Your message here>"
+
+L["TITLE_BUTTON_SUFFIX"] = "Suffix"
+L["COMMENT_BUTTON_SUFFIX"] = "The suffix to be used for this data."
+L["USAGE_BUTTON_SUFFIX"] = "<Your message here>"
 
 -- Global Placeholder Defaults
 L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)

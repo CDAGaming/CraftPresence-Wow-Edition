@@ -129,7 +129,8 @@ end]],
 end]],
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
             },
             ["arena"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -140,7 +141,8 @@ end]],
 end]],
                 tagCallback = "time:start",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
             },
             ["battleground"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -151,7 +153,8 @@ end]],
 end]],
                 tagCallback = "time:start",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
             },
             ["raid"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -162,7 +165,8 @@ end]],
 end]],
                 tagCallback = "time:start",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
             },
             ["dungeon"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -175,7 +179,8 @@ end]],
 end]],
                 tagCallback = "time:start",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
             },
             ["scenario"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -186,7 +191,8 @@ end]],
 end]],
                 tagCallback = "time:start",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_GLOBAL_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
             },
             ["player_name"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -197,7 +203,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["title_name"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -208,7 +215,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_level"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -219,7 +227,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_realm"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -234,7 +243,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_region"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -250,7 +260,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_class"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -261,7 +272,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_race"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -272,7 +284,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_gender"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -288,7 +301,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_icon"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -310,7 +324,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_status"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -321,7 +336,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_reason"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -332,7 +348,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["difficulty_info"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -349,7 +366,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_faction"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -363,7 +381,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_alliance"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -395,7 +414,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_covenant"] = {
                 minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
@@ -411,7 +431,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_info"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -455,7 +476,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_spec_name"] = {
                 minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
@@ -480,7 +502,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_spec_role"] = {
                 minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
@@ -505,7 +528,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["realm_info"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -527,7 +551,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_covenant_renown"] = {
                 minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
@@ -538,7 +563,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["localized_name"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -549,7 +575,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_type"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -560,7 +587,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_difficulty"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -571,7 +599,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["difficulty_name"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -582,7 +611,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["current_players"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -603,7 +633,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["max_players"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -614,7 +645,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["dynamic_difficulty"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -625,7 +657,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["is_dynamic"] = {
                 minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -636,7 +669,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_id"] = {
                 minimumTOC = "50004", maximumTOC = "", allowRebasedApi = true,
@@ -647,7 +681,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["instance_group_size"] = {
                 minimumTOC = "50400", maximumTOC = "", allowRebasedApi = true,
@@ -658,7 +693,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["lfg_dungeon_id"] = {
                 minimumTOC = "80000", maximumTOC = "", allowRebasedApi = true,
@@ -669,7 +705,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["zone_name"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -680,7 +717,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["sub_zone_name"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -691,7 +729,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["zone_info"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -717,7 +756,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["item_level"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -732,7 +772,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["item_level_equipped"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -747,7 +788,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["item_level_pvp"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -762,7 +804,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["active_keystone_level"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -773,7 +816,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["active_keystone_affixes"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -784,7 +828,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["active_keystone_rating"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -795,7 +840,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["external_keystone_rating"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -806,7 +852,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["internal_keystone_rating"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -817,7 +864,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["owned_keystone_level"] = {
                 minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -828,7 +876,8 @@ end]],
                 registerCallback = "",
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["lockout_encounters"] = {
                 minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -842,7 +891,8 @@ end]],
 end]],
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["lockout_current_encounters"] = {
                 minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -856,7 +906,8 @@ end]],
 end]],
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["lockout_total_encounters"] = {
                 minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -870,7 +921,8 @@ end]],
 end]],
                 tagCallback = "",
                 tagType = "string",
-                enabled = true, prefix = L["DEFAULT_INNER_KEY"]
+                enabled = true,
+                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             }
         },
         events = {

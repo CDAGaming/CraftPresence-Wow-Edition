@@ -273,7 +273,8 @@ function CraftPresence:SyncDynamicData(log_output, data)
         if type(value) == "table" then
             -- Sanity Checks
             local keyPrefix = self:GetOrDefault(value.prefix)
-            local newKey = keyPrefix .. key .. keyPrefix
+            local keySuffix = self:GetOrDefault(value.suffix)
+            local newKey = keyPrefix .. key .. keySuffix
             local newValue, tagValue = "", ""
 
             if self:ShouldProcessData(value) then
@@ -654,7 +655,8 @@ function CraftPresence:ChatCommand(input)
                                     maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
                                     allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", processType = "string", registerCallback = "",
-                                    tagCallback = "", tagType = "string", prefix = "@",
+                                    tagCallback = "", tagType = "string",
+                                    prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"],
                                     enabled = true
                                 }
                             elseif tag_name == "events" then

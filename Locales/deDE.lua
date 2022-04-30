@@ -284,9 +284,13 @@ L["TITLE_BUTTON_TAGTYPE"] = "Tag Type"
 L["COMMENT_BUTTON_TAGTYPE"] = "Der erwartete Typ des Tag-Callbacks. Entweder \"function\" oder \"string\"."
 L["USAGE_BUTTON_TAGTYPE"] = "<function|string>"
 
-L["TITLE_BUTTON_PREFIX"] = "Prefix & Suffix"
-L["COMMENT_BUTTON_PREFIX"] = "Prefix und Suffix für diese Daten."
+L["TITLE_BUTTON_PREFIX"] = "Prefix"
+L["COMMENT_BUTTON_PREFIX"] = "Prefix für diese Daten."
 L["USAGE_BUTTON_PREFIX"] = "<Dein Text hier>"
+
+L["TITLE_BUTTON_SUFFIX"] = "Suffix"
+L["COMMENT_BUTTON_SUFFIX"] = "Suffix für diese Daten."
+L["USAGE_BUTTON_SUFFIX"] = "<Dein Text hier>"
 
 -- Global Placeholder Defaults
 L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)

@@ -173,7 +173,8 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
             --   buttons:label,url renamed to buttons:labelCallback,urlCallback
             --   labels:active,inactive renamed to labels:activeCallback,inactiveCallback
             -- Schema Changes (v4 -> v4.1):
-            --   Added stateCallback field for `labels` (Ported from `GetUnitStatus`)
+            --   Added `stateCallback` field for `labels` (Ported from `GetUnitStatus`)
+            --   Added `suffix` field for `placeholders` (Defaults to what your `prefix` is to preserve data)
             local buttonData = self:GetFromDb("buttons")
             if buttonData ~= nil then
                 for k,v in pairs(buttonData) do
@@ -228,6 +229,19 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                     labelData[k] = v
                 end
                 self:SetToDb("labels", nil, labelData)
+            end
+            local placeholderData = self:GetFromDb("placeholders")
+            if placeholderData ~= nil then
+                for k,v in pairs(placeholderData) do
+                    if type(v) == "table" then
+                        v.suffix = self:GetOrDefault(
+                                v.suffix,
+                                self:GetOrDefault(v.prefix)
+                        )
+                    end
+                    placeholderData[k] = v
+                end
+                self:SetToDb("placeholders", nil, placeholderData)
             end
             current = 4.1
         end

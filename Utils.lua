@@ -936,7 +936,8 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
             local can_process = self:GetOrDefault(enableCallback ~= nil and enableCallback(key, value), true)
             if can_process then
                 local prefix = self:GetOrDefault(type(value) == "table" and value.prefix)
-                local newKey = prefix .. tostring(key) .. prefix
+                local suffix = self:GetOrDefault(type(value) == "table" and value.suffix)
+                local newKey = prefix .. tostring(key) .. suffix
                 local newValue = self:GetDynamicReturnValue(
                         (
                                 type(value) == "table" and self:GetLength(visibleData) >= 1 and value[visibleData[1]]
