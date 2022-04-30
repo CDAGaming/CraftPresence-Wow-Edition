@@ -422,6 +422,9 @@ L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders [create,remove,list]
 L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Verwalte die Ereignisse..",
         GREEN, GREY
 )
+L["USAGE_CMD_LABELS"] = setfmt(" */cp|r ^labels [create,remove,list][query]|r  -  Access player labels.",
+        GREEN, GREY
+)
 
 L["USAGE_CMD_CREATE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
@@ -429,11 +432,17 @@ L["USAGE_CMD_CREATE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^[name,minVersion,max
 L["USAGE_CMD_CREATE_EVENTS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
 )
+L["USAGE_CMD_CREATE_LABELS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
+        GREEN, GREY
+)
 
 L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^<name>|r.",
         GREEN, GREY
 )
 L["USAGE_CMD_REMOVE_EVENTS"] = setfmt(" *Query:|r %s ^<name>|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_REMOVE_LABELS"] = setfmt(" *Query:|r %s ^<name>|r.",
         GREEN, GREY
 )
 

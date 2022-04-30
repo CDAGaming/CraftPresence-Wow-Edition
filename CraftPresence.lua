@@ -565,7 +565,8 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_SET"] .. "\n" ..
                         L["USAGE_CMD_INTEGRATION"] .. "\n" ..
                         L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
-                        L["USAGE_CMD_EVENTS"]
+                        L["USAGE_CMD_EVENTS"] .. "\n" ..
+                        L["USAGE_CMD_LABELS"]
         )
     else
         local command = strlower(command_query[1])
@@ -620,7 +621,8 @@ function CraftPresence:ChatCommand(input)
             end
         elseif (
                 (command == "placeholders" or command == "placeholder") or
-                        (command == "events" or command == "event")
+                        (command == "events" or command == "event") or
+                        (command == "labels" or command == "label")
         ) then
             -- Parse tag name and table target from command input
             local tag_name, tag_table = "", ""
@@ -628,6 +630,8 @@ function CraftPresence:ChatCommand(input)
                 tag_name, tag_table = "placeholders", "placeholders"
             elseif command == "events" or command == "event" then
                 tag_name, tag_table = "events", "events"
+            elseif command == "labels" or command == "label" then
+                tag_name, tag_table = "labels", "labels"
             end
             local resultStr = strformat(L["DATA_FOUND_INTRO"], tag_name)
 
@@ -666,6 +670,16 @@ function CraftPresence:ChatCommand(input)
                                     allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", registerCallback = "",
                                     eventCallback = "function(self) return self.defaultEventCallback end",
+                                    enabled = true
+                                }
+                            elseif tag_name == "labels" then
+                                tag_data[command_query[3]] = {
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
+                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
+                                    activeCallback = "", inactiveCallback = "",
+                                    activeType = "string", inactiveType = "string",
+                                    stateCallback = "",
                                     enabled = true
                                 }
                             end
@@ -724,6 +738,16 @@ function CraftPresence:ChatCommand(input)
                         tag_data = self:GetFromDb(tag_table)
                         visible_data = {
                             "enabled"
+                        }
+                        enable_callback = function (_, value)
+                            return self:ShouldProcessData(value)
+                        end
+                    elseif tag_name == "labels" then
+                        -- Ensure Labels are synced
+                        self:SyncDynamicData(self:GetFromDb("verboseMode"))
+                        tag_data = self.labels
+                        visible_data = {
+                            "activeCallback", "activeType"
                         }
                         enable_callback = function (_, value)
                             return self:ShouldProcessData(value)
