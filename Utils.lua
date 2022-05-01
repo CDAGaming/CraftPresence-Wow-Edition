@@ -635,7 +635,7 @@ function CraftPresence:GetAddOnInfo()
         end
 
         if not self:ContainsDigit(version) then
-            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_BUILD_UNSUPPORTED"], version)))
+            self:PrintWarningMessage(strformat(L["WARNING_BUILD_UNSUPPORTED"], version))
             version = "v" .. fallbackVersion
         end
         versionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], version)
@@ -805,12 +805,15 @@ end
 
 --- Display the addon's config frame
 function CraftPresence:ShowConfig()
-    if (self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or
-            self:IsRebasedApi()) and InterfaceOptionsFrame_OpenToCategory then
-        -- a bug can occur in blizzard's implementation of this call
-        -- so it is called twice to workaround it
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-        InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+    if self.config then
+        if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame then
+            -- a bug can occur in blizzard's implementation of this call
+            -- so it is called twice to workaround it
+            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+        else
+            self.config:Open(L["ADDON_NAME"])
+        end
     else
         self:PrintErrorMessage(strformat(L["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
     end
@@ -826,6 +829,24 @@ function CraftPresence:PrintErrorMessage(logStyle)
     end
 end
 
+--- Prints a formatted message, meant to symbolize a warning message
+--- @param logStyle string The log format to follow
+function CraftPresence:PrintWarningMessage(logStyle)
+    if not self:IsNullOrEmpty(logStyle) then
+        self:Print(strformat(L["LOG_WARNING"], logStyle))
+    end
+end
+
+--- Prints a formatted message, meant to symbolize a migration message
+--- @param current number The current/former schema number (Default: 0)
+--- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"])
+function CraftPresence:PrintMigrationMessage(current, target)
+    current = self:GetOrDefault(current, 0)
+    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
+    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
+    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_TWO"], L["TITLE_OPTIONAL_MIGRATIONS"]))
+end
+
 --- Prints a formatted message, meant to symbolize an deprecated value
 --- @param oldFunc string The old/deprecated function
 --- @param newFunc string The new function to migrate to
@@ -837,12 +858,10 @@ function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
             [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
             [L["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, L["TYPE_UNKNOWN"])
         }
-        self:Print(
-                strformat(L["LOG_WARNING"], strformat(L["ERROR_FUNCTION_DEPRECATED"],
-                        self:SerializeTable(dataTable)
-                ))
+        self:PrintWarningMessage(
+                strformat(L["ERROR_FUNCTION_DEPRECATED"], self:SerializeTable(dataTable))
         )
-        self:Print(strformat(L["LOG_WARNING"], L["ERROR_FUNCTION_REPLACE"]))
+        self:PrintWarningMessage(L["ERROR_FUNCTION_REPLACE"])
     end
 end
 
@@ -933,7 +952,8 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
             local can_process = self:GetOrDefault(enableCallback ~= nil and enableCallback(key, value), true)
             if can_process then
                 local prefix = self:GetOrDefault(type(value) == "table" and value.prefix)
-                local newKey = prefix .. tostring(key) .. prefix
+                local suffix = self:GetOrDefault(type(value) == "table" and value.suffix)
+                local newKey = prefix .. tostring(key) .. suffix
                 local newValue = self:GetDynamicReturnValue(
                         (
                                 type(value) == "table" and self:GetLength(visibleData) >= 1 and value[visibleData[1]]
@@ -1031,10 +1051,12 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
     }
     local rootData = self:GetFromDb(rootKey)
     if type(rootData) == "table" then
-        for key, value in pairs(rootData) do
+        for k,v in pairs(rootData) do
+            local key,value = k,v
             local value_args = {}
             if type(value) == "table" then
-                for innerKey, _ in pairs(value) do
+                for ik, _ in pairs(value) do
+                    local innerKey = ik
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,

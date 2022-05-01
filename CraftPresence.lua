@@ -77,6 +77,9 @@ CraftPresence.time_end = ""
 CraftPresence.canUseExternals = false
 CraftPresence.externalCache = {}
 
+-- Addon Dependencies
+CraftPresence.config = LibStub("AceConfigDialog-3.0")
+
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
 
@@ -132,12 +135,16 @@ function CraftPresence:OnInitialize()
     LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
-    self:EnsureCompatibility(self:GetFromDb("schema"), addOnData["schema"])
+    self.config:SetDefaultSize(L["ADDON_NAME"], 858, 660)
+    self:EnsureCompatibility(
+            self:GetFromDb("schema"), addOnData["schema"], false,
+            self:GetFromDb("optionalMigrations")
+    )
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-            self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions(L["ADDON_NAME"])
+            self.optionsFrame = self.config:AddToBlizOptions(L["ADDON_NAME"])
             self.optionsFrame.default = function()
                 self:UpdateProfile(true, true, "all")
             end
@@ -221,37 +228,37 @@ end
 
 --- Interprets the contents of a dynamic data table to ensure validity and obtain enable level
 ---
---- @param value table The data table to interpret
+--- @param data table The data table to interpret
 ---
---- @return boolean @ shouldEnable
-function CraftPresence:ShouldProcessData(value)
+--- @return boolean, boolean @ shouldEnable, shouldRegister
+function CraftPresence:ShouldProcessData(data)
     local currentTOC = buildData["toc_version"]
     local fallbackTOC = buildData["fallback_toc_version"]
-    local shouldEnable = false
+    local shouldEnable, shouldRegister = false, false
 
-    value = self:GetOrDefault(value, {})
-    if type(value) == "table" then
-        local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
+    data = self:GetOrDefault(data, {})
+    if type(data) == "table" then
+        local minTOC = self:GetOrDefault(data.minimumTOC, fallbackTOC)
         if type(minTOC) ~= "number" then
             minTOC = self:VersionToBuild(minTOC)
         end
-        local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
+        local maxTOC = self:GetOrDefault(data.maximumTOC, currentTOC)
         if type(maxTOC) ~= "number" then
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
-        local canAccept = (
-                self:IsNullOrEmpty(value.registerCallback) or
-                        tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+        shouldRegister = (
+                self:IsNullOrEmpty(data.registerCallback) or
+                        tostring(self:GetDynamicReturnValue(data.registerCallback, "function", self)) == "true"
         )
-        canAccept = canAccept and (
+        local canAccept = shouldRegister and (
                 self:IsWithinValue(
                         currentTOC, minTOC, maxTOC, true, true, false
-                ) or (value.allowRebasedApi and self:IsRebasedApi())
+                ) or (data.allowRebasedApi and self:IsRebasedApi())
         )
-        shouldEnable = value.enabled and canAccept
+        shouldEnable = data.enabled and canAccept
     end
-    return shouldEnable
+    return shouldEnable, shouldRegister
 end
 
 --- Sync the contents of dynamic data for readable usage
@@ -269,7 +276,8 @@ function CraftPresence:SyncDynamicData(log_output, data)
         if type(value) == "table" then
             -- Sanity Checks
             local keyPrefix = self:GetOrDefault(value.prefix)
-            local newKey = keyPrefix .. key .. keyPrefix
+            local keySuffix = self:GetOrDefault(value.suffix)
+            local newKey = keyPrefix .. key .. keySuffix
             local newValue, tagValue = "", ""
 
             if self:ShouldProcessData(value) then
@@ -303,33 +311,35 @@ function CraftPresence:SyncDynamicData(log_output, data)
                         newValue = self:GetDynamicReturnValue(replacement, value.processType, self)
                     end
                 end
+            end
 
-                -- Sync Button Info
-                for buttonKey, buttonValue in pairs(self.buttons) do
-                    if type(buttonValue) == "table" and buttonValue.label and buttonValue.url then
-                        local dataValue = self:GetOrDefault(
-                                buttonValue.result, self:ConcatTable(
-                                    nil, L["ARRAY_SPLIT_KEY"],
-                                    buttonValue.label, buttonValue.url
-                                )
-                        )
-                        self.buttons[buttonKey].result = self:Replace(
-                                dataValue, newKey, self:GetOrDefault(newValue), true
-                        )
-                    end
+            -- Sync Button Info
+            for buttonKey, buttonValue in pairs(self.buttons) do
+                if self:ShouldProcessData(buttonValue) then
+                    buttonValue.labelCallback = self:Replace(buttonValue.labelCallback, newKey, self:GetOrDefault(newValue), true)
+                    buttonValue.label = self:GetDynamicReturnValue(buttonValue.labelCallback, buttonValue.labelType, self)
+                    buttonValue.urlCallback = self:Replace(buttonValue.urlCallback, newKey, self:GetOrDefault(newValue), true)
+                    buttonValue.url = self:GetDynamicReturnValue(buttonValue.urlCallback, buttonValue.urlType, self)
+                    buttonValue.result = self:ConcatTable(
+                            nil, L["ARRAY_SPLIT_KEY"],
+                            self:GetOrDefault(buttonValue.label), self:GetOrDefault(buttonValue.url)
+                    )
                 end
+                buttonValue.result = self:GetOrDefault(buttonValue.result)
+                self.buttons[buttonKey] = buttonValue
+            end
 
-                -- Sync Label Info
-                for labelKey, labelValue in pairs(self.labels) do
-                    if type(labelValue) == "table" and labelValue.active and labelValue.inactive then
-                        self.labels[labelKey].active = self:Replace(
-                                labelValue.active, newKey, self:GetOrDefault(newValue), true
-                        )
-                        self.labels[labelKey].inactive = self:Replace(
-                                labelValue.inactive, newKey, self:GetOrDefault(newValue), true
-                        )
-                    end
+            -- Sync Label Info
+            for labelKey, labelValue in pairs(self.labels) do
+                if self:ShouldProcessData(labelValue) then
+                    labelValue.activeCallback = self:Replace(labelValue.activeCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.active = self:GetDynamicReturnValue(labelValue.activeCallback, labelValue.activeType, self)
+                    labelValue.inactiveCallback = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.inactive = self:GetDynamicReturnValue(labelValue.inactiveCallback, labelValue.inactiveType, self)
+                    labelValue.stateCallback = self:Replace(labelValue.stateCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.state = tostring(self:GetDynamicReturnValue(labelValue.stateCallback, "function", self)) == "true"
                 end
+                self.labels[labelKey] = labelValue
             end
 
             if data ~= nil then
@@ -558,7 +568,8 @@ function CraftPresence:ChatCommand(input)
                         L["USAGE_CMD_SET"] .. "\n" ..
                         L["USAGE_CMD_INTEGRATION"] .. "\n" ..
                         L["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
-                        L["USAGE_CMD_EVENTS"]
+                        L["USAGE_CMD_EVENTS"] .. "\n" ..
+                        L["USAGE_CMD_LABELS"]
         )
     else
         local command = strlower(command_query[1])
@@ -575,7 +586,14 @@ function CraftPresence:ChatCommand(input)
             end
             self:PaintMessageWait(true, not testerMode, not testerMode, nil)
         elseif command == "config" then
-            self:ShowConfig()
+            if command_query[2] ~= nil and strlower(command_query[2]) == "migrate" then
+                self:EnsureCompatibility(
+                        self:GetFromDb("schema"), addOnData["schema"], true,
+                        self:GetFromDb("optionalMigrations")
+                )
+            else
+                self:ShowConfig()
+            end
         elseif command == "reset" then
             local reset_single = (command_query[2] ~= nil)
             if reset_single then
@@ -613,7 +631,8 @@ function CraftPresence:ChatCommand(input)
             end
         elseif (
                 (command == "placeholders" or command == "placeholder") or
-                        (command == "events" or command == "event")
+                        (command == "events" or command == "event") or
+                        (command == "labels" or command == "label")
         ) then
             -- Parse tag name and table target from command input
             local tag_name, tag_table = "", ""
@@ -621,6 +640,8 @@ function CraftPresence:ChatCommand(input)
                 tag_name, tag_table = "placeholders", "placeholders"
             elseif command == "events" or command == "event" then
                 tag_name, tag_table = "events", "events"
+            elseif command == "labels" or command == "label" then
+                tag_name, tag_table = "labels", "labels"
             end
             local resultStr = strformat(L["DATA_FOUND_INTRO"], tag_name)
 
@@ -635,11 +656,7 @@ function CraftPresence:ChatCommand(input)
                         local tag_data = self:GetFromDb(tag_table)
                         if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
-                        elseif (
-                                tag_name ~= "placeholders" or not (
-                                        tag_data[command_query[3]]
-                                )
-                        ) then
+                        else
                             -- Some Pre-Filled Data is supplied for these areas
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
@@ -648,7 +665,8 @@ function CraftPresence:ChatCommand(input)
                                     maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
                                     allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
                                     processCallback = "", processType = "string", registerCallback = "",
-                                    tagCallback = "", tagType = "string", prefix = "@",
+                                    tagCallback = "", tagType = "string",
+                                    prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"],
                                     enabled = true
                                 }
                             elseif tag_name == "events" then
@@ -660,6 +678,16 @@ function CraftPresence:ChatCommand(input)
                                     eventCallback = "function(self) return self.defaultEventCallback end",
                                     enabled = true
                                 }
+                            elseif tag_name == "labels" then
+                                tag_data[command_query[3]] = {
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
+                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
+                                    activeCallback = "", inactiveCallback = "",
+                                    activeType = "string", inactiveType = "string",
+                                    stateCallback = "",
+                                    enabled = true
+                                }
                             end
                             local eventState = (modify_mode and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
                             self:SetToDb(tag_table, nil, tag_data)
@@ -668,8 +696,6 @@ function CraftPresence:ChatCommand(input)
                                     self:SerializeTable(tag_data[command_query[3]])
                             ))
                             self:UpdateProfile(true, false, tag_name)
-                        else
-                            self:PrintErrorMessage(L["COMMAND_CREATE_CONFLICT"])
                         end
                     else
                         self:PrintQueryCommand(tag_name, flag_query[1])
@@ -716,6 +742,16 @@ function CraftPresence:ChatCommand(input)
                         tag_data = self:GetFromDb(tag_table)
                         visible_data = {
                             "enabled"
+                        }
+                        enable_callback = function (_, value)
+                            return self:ShouldProcessData(value)
+                        end
+                    elseif tag_name == "labels" then
+                        -- Ensure Labels are synced
+                        self:SyncDynamicData(self:GetFromDb("verboseMode"))
+                        tag_data = self.labels
+                        visible_data = {
+                            "activeCallback", "activeType"
                         }
                         enable_callback = function (_, value)
                             return self:ShouldProcessData(value)

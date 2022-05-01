@@ -70,7 +70,6 @@ L["TYPE_ADDED"] = "Added"
 L["TYPE_MODIFY"] = "Modified"
 L["STATUS_TRUE"] = "active"
 L["STATUS_FALSE"] = "inactive"
-L["STATUS_ONLINE"] = "Online"
 
 -- Primary Logging Data
 L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)
@@ -166,17 +165,20 @@ L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate 
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
+L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
+L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
-L["COMMENT_CALLBACK_DELAY"] = "The delay after events before RPC updates trigger.\n(This doesn't effect /cp update)"
+L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
-L["MAXIMUM_CALLBACK_DELAY"] = 30
-L["DEFAULT_CALLBACK_DELAY"] = 2
+L["MAXIMUM_CALLBACK_DELAY"] = 5
+L["DEFAULT_CALLBACK_DELAY"] = 1
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
-L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay after non-debug events before drawn frames are cleared."
-L["MINIMUM_FRAME_CLEAR_DELAY"] = 5
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay (seconds) after non-debug events before drawn frames are cleared."
+L["MINIMUM_FRAME_CLEAR_DELAY"] = 3
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
-L["DEFAULT_FRAME_CLEAR_DELAY"] = 10
+L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
 L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at\n(Should equal the script's pixel_size property)"
@@ -231,6 +233,38 @@ L["TITLE_BUTTON_PROCESSTYPE"] = "Process Type"
 L["COMMENT_BUTTON_PROCESSTYPE"] = "The expected type the Process Callback should identify as.\n(Can be: function,string)"
 L["USAGE_BUTTON_PROCESSTYPE"] = "<Your message here>"
 
+L["TITLE_BUTTON_ACTIVECALLBACK"] = "Active Callback"
+L["COMMENT_BUTTON_ACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is active."
+L["USAGE_BUTTON_ACTIVECALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_ACTIVETYPE"] = "Active Type"
+L["COMMENT_BUTTON_ACTIVETYPE"] = "The expected type the Active Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_ACTIVETYPE"] = "<Your message here>"
+
+L["TITLE_BUTTON_INACTIVECALLBACK"] = "Inactive Callback"
+L["COMMENT_BUTTON_INACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is inactive."
+L["USAGE_BUTTON_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_INACTIVETYPE"] = "Inactive Type"
+L["COMMENT_BUTTON_INACTIVETYPE"] = "The expected type the Inctive Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_INACTIVETYPE"] = "<Your message here>"
+
+L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
+L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."
+L["USAGE_BUTTON_LABELCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_LABELTYPE"] = "Label Type"
+L["COMMENT_BUTTON_LABELTYPE"] = "The expected type the Label Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_LABELTYPE"] = "<Your message here>"
+
+L["TITLE_BUTTON_URLCALLBACK"] = "URL Callback"
+L["COMMENT_BUTTON_URLCALLBACK"] = "The function that, if any, is what will be attached as the url for the state."
+L["USAGE_BUTTON_URLCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_URLTYPE"] = "URL Type"
+L["COMMENT_BUTTON_URLTYPE"] = "The expected type the URL Callback should identify as.\n(Can be: function,string)"
+L["USAGE_BUTTON_URLTYPE"] = "<Your message here>"
+
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
 L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called."
 L["USAGE_BUTTON_EVENTCALLBACK"] = "<A function or string reference to a function here>"
@@ -238,6 +272,10 @@ L["USAGE_BUTTON_EVENTCALLBACK"] = "<A function or string reference to a function
 L["TITLE_BUTTON_REGISTERCALLBACK"] = "Register Callback"
 L["COMMENT_BUTTON_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered."
 L["USAGE_BUTTON_REGISTERCALLBACK"] = "<A boolean function here>"
+
+L["TITLE_BUTTON_STATECALLBACK"] = "State Callback"
+L["COMMENT_BUTTON_STATECALLBACK"] = "The function that, if any, defines if the data should be considered active or not."
+L["USAGE_BUTTON_STATECALLBACK"] = "<A boolean function here>"
 
 L["TITLE_BUTTON_TAGCALLBACK"] = "Tag Callback"
 L["COMMENT_BUTTON_TAGCALLBACK"] = "The function that, if any, will allow the data to have conditionals."
@@ -248,8 +286,12 @@ L["COMMENT_BUTTON_TAGTYPE"] = "The expected type the Tag Callback should identif
 L["USAGE_BUTTON_TAGTYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_PREFIX"] = "Prefix"
-L["COMMENT_BUTTON_PREFIX"] = "The prefix and suffix to be used for this data."
+L["COMMENT_BUTTON_PREFIX"] = "The prefix to be used for this data."
 L["USAGE_BUTTON_PREFIX"] = "<Your message here>"
+
+L["TITLE_BUTTON_SUFFIX"] = "Suffix"
+L["COMMENT_BUTTON_SUFFIX"] = "The suffix to be used for this data."
+L["USAGE_BUTTON_SUFFIX"] = "<Your message here>"
 
 -- Global Placeholder Defaults
 L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
@@ -269,6 +311,12 @@ L["INFO_EVENT_PROCESSING"] = setfmt("Event Processing:\n Name: *%s|r\n Data: ^%s
 L["INFO_PLACEHOLDER_PROCESSING"] = setfmt("Placeholder Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["INFO_OUTDATED_CONFIG"] = setfmt("Outdated Config Detected!\n Migrating from Schema *v%s|r to *v%s|r...", GREEN)
+L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicable for Schema *v%s|r to *v%s|r!",
+        GREEN
+)
+L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = setfmt("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
+        GREEN, GREY
+)
 L["ERROR_BYTE_INSUFFICIENT"] = "You're painting an insufficient amount of bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
@@ -298,7 +346,6 @@ L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the fol
         GREEN, GREY
 )
 L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other data, please use the create:modify cmd"
-L["COMMAND_CREATE_CONFLICT"] = "Unable to use specified arguments (Would conflict with protected data)"
 
 -- Dynamic Data - Removal
 L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed key within ^%s|r => *%s|r",
@@ -330,6 +377,11 @@ L["ERROR_STRING_DEFAULT"] = setfmt("Sanity Checks failed for *%s|r. Please enter
         GREEN, GREY
 )
 
+-- Config Warning Standards
+L["WARNING_VALUE_UNSAFE"] = setfmt("The value selected for *%s|r can cause malformed behavior in some cases.",
+        GREEN
+)
+
 -- Function Error Standards
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
 L["ERROR_FUNCTION_DEPRECATED"] = setfmt("A function your using is marked as deprecated, with the following info: *%s|r",
@@ -351,7 +403,7 @@ L["USAGE_CMD_INTRO"] = "Command Usage =>"
 L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
         GREEN, GREY
 )
-L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Displays the *ConfigUI|r.",
+L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config [migrate]|r  -  Displays/Migrates the *ConfigUI|r.",
         GREEN, GREY
 )
 L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",
@@ -381,6 +433,9 @@ L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders [create,remove,list]
 L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Access events.",
         GREEN, GREY
 )
+L["USAGE_CMD_LABELS"] = setfmt(" */cp|r ^labels [create,remove,list][query]|r  -  Access player labels.",
+        GREEN, GREY
+)
 
 L["USAGE_CMD_CREATE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
@@ -388,11 +443,17 @@ L["USAGE_CMD_CREATE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^[name,minVersion,max
 L["USAGE_CMD_CREATE_EVENTS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
 )
+L["USAGE_CMD_CREATE_LABELS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
+        GREEN, GREY
+)
 
 L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^<name>|r.",
         GREEN, GREY
 )
 L["USAGE_CMD_REMOVE_EVENTS"] = setfmt(" *Query:|r %s ^<name>|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_REMOVE_LABELS"] = setfmt(" *Query:|r %s ^<name>|r.",
         GREEN, GREY
 )
 

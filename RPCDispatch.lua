@@ -42,17 +42,20 @@ local render_settings = {
     ["contrast"] = {
         value = 50,
         minimumTOC = "80000", maximumTOC = "",
-        allowRebasedApi = true
+        allowRebasedApi = true,
+        enabled = true
     },
     ["brightness"] = {
         value = 50,
         minimumTOC = "80000", maximumTOC = "",
-        allowRebasedApi = true
+        allowRebasedApi = true,
+        enabled = true
     },
     ["gamma"] = {
         value = 1.0,
-        minimumTOC = "10000", maximumTOC = "",
-        allowRebasedApi = true
+        minimumTOC = "", maximumTOC = "",
+        allowRebasedApi = true,
+        enabled = true
     }
 }
 
@@ -111,21 +114,7 @@ function CraftPresence:AssertRenderSettings()
         if type(data) == "table" then
             local is_correct = false
 
-            local minTOC = self:GetOrDefault(data.minimumTOC, fallbackTOC)
-            if type(minTOC) ~= "number" then
-                minTOC = self:VersionToBuild(minTOC)
-            end
-            local maxTOC = self:GetOrDefault(data.maximumTOC, currentTOC)
-            if type(maxTOC) ~= "number" then
-                maxTOC = self:VersionToBuild(maxTOC)
-            end
-            local canAccept = (
-                self:IsWithinValue(
-                        currentTOC, minTOC, maxTOC, true, true, false
-                ) or (data.allowRebasedApi and self:IsRebasedApi())
-            )
-
-            if canAccept then
+            if self:ShouldProcessData(data) then
                 if type(data.value) == "table" then
                     for _, innerValue in pairs(data.value) do
                         if not is_correct then
@@ -148,8 +137,8 @@ function CraftPresence:AssertRenderSettings()
     if self:GetLength(error_info) > 0 then
         render_warnings = self:SerializeTable(error_info)
         if self:GetFromDb("verboseMode") or last_render_warnings ~= render_warnings then
-            self:Print(strformat(L["LOG_WARNING"], L["WARNING_EVENT_RENDERING_ONE"]))
-            self:Print(strformat(L["LOG_WARNING"], strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings)))
+            self:PrintWarningMessage(L["WARNING_EVENT_RENDERING_ONE"])
+            self:PrintWarningMessage(strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings))
         end
     end
     return self:IsNullOrEmpty(render_warnings)

@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.5.2"
+process_version = "v1.5.3"
 process_hwnd = None
 current_path = os.path.dirname(os.path.realpath(__file__))
 help_url = "https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft"
@@ -175,10 +175,14 @@ def main(debug_mode=False):
                             rpc_obj = Presence(client_id=lines[0])
                             rpc_obj.connect()
                         except Exception as exc:
-                            root_logger.error("Unable to connect to Discord (%s). It's "
-                                              'probably not running. I will try again in %s '
+                            root_logger.error("Unable to connect to Discord (%s)."
+                                              'Discarding event and relaunching in %s '
                                               'sec.' % (str(exc), config["refresh_rate"]))
                             time.sleep(config["refresh_rate"])
+                            last_decoded = [None] * event_length
+                            last_activity = {}
+                            rpc_obj = None
+                            break
                         else:
                             break
 
@@ -257,13 +261,13 @@ def main(debug_mode=False):
                         last_activity = {}
                         rpc_obj = None
         elif not process_hwnd and rpc_obj:
-            root_logger.info('Target process is no longer active, disconnecting')
+            root_logger.info('Target process is no longer active, disconnecting...')
             rpc_obj.close()
             rpc_obj = None
             # clear these so it gets re-read and resubmitted upon reconnection
             last_decoded = [None] * event_length
             last_activity = {}
-        time.sleep(config["refresh_rate"])
+        time.sleep(config["scan_rate"])
 
 
 def decode_read_data(read: list, encoding='utf-8'):
