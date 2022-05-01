@@ -225,35 +225,35 @@ end
 
 --- Interprets the contents of a dynamic data table to ensure validity and obtain enable level
 ---
---- @param value table The data table to interpret
+--- @param data table The data table to interpret
 ---
 --- @return boolean, boolean @ shouldEnable, shouldRegister
-function CraftPresence:ShouldProcessData(value)
+function CraftPresence:ShouldProcessData(data)
     local currentTOC = buildData["toc_version"]
     local fallbackTOC = buildData["fallback_toc_version"]
     local shouldEnable, shouldRegister = false, false
 
-    value = self:GetOrDefault(value, {})
-    if type(value) == "table" then
-        local minTOC = self:GetOrDefault(value.minimumTOC, fallbackTOC)
+    data = self:GetOrDefault(data, {})
+    if type(data) == "table" then
+        local minTOC = self:GetOrDefault(data.minimumTOC, fallbackTOC)
         if type(minTOC) ~= "number" then
             minTOC = self:VersionToBuild(minTOC)
         end
-        local maxTOC = self:GetOrDefault(value.maximumTOC, currentTOC)
+        local maxTOC = self:GetOrDefault(data.maximumTOC, currentTOC)
         if type(maxTOC) ~= "number" then
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
         shouldRegister = (
-                self:IsNullOrEmpty(value.registerCallback) or
-                        tostring(self:GetDynamicReturnValue(value.registerCallback, "function", self)) == "true"
+                self:IsNullOrEmpty(data.registerCallback) or
+                        tostring(self:GetDynamicReturnValue(data.registerCallback, "function", self)) == "true"
         )
         local canAccept = shouldRegister and (
                 self:IsWithinValue(
                         currentTOC, minTOC, maxTOC, true, true, false
-                ) or (value.allowRebasedApi and self:IsRebasedApi())
+                ) or (data.allowRebasedApi and self:IsRebasedApi())
         )
-        shouldEnable = value.enabled and canAccept
+        shouldEnable = data.enabled and canAccept
     end
     return shouldEnable, shouldRegister
 end
