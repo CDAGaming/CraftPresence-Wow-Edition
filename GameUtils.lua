@@ -64,16 +64,6 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     end
 
     -- Sync Player Name Tweaks
-    -- (Also applies fallback data if needed)
-    if unitData.away then
-        if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
-            cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_AFK_MESSAGE)
-        end
-    elseif unitData.busy then
-        if cachedUnitData[unit] and self:IsNullOrEmpty(cachedUnitData[unit].reason) then
-            cachedUnitData[unit].reason = self:GetOrDefault(DEFAULT_DND_MESSAGE)
-        end
-    end
     unitData.status = tconcat(unitInfo, ",")
     unitData.reason = self:GetOrDefault(unitData.reason or
             (cachedUnitData[unit] and cachedUnitData[unit].reason)

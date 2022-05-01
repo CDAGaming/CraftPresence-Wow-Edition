@@ -958,10 +958,10 @@ end]],
     local isBusyStatus = args[1] == CLEARED_DND or self:StartsWith(args[1], busyFormat[1])
     if isAfkStatus then
         self:SetCachedUnitData('player', 'away', args[1] ~= CLEARED_AFK and isAfkStatus)
-        self:SetCachedUnitData('player', 'reason', splitMessage[2])
+        self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_AFK_MESSAGE))
     elseif isBusyStatus then
         self:SetCachedUnitData('player', 'busy', args[1] ~= CLEARED_DND and isBusyStatus)
-        self:SetCachedUnitData('player', 'reason', splitMessage[2])
+        self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_DND_MESSAGE))
     else
         self:SetCachedUnitData('player', 'reason', '')
     end
