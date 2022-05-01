@@ -424,6 +424,7 @@ end]],
     -- Covenant and/or Faction data is only updated if the instance is changed
     if (playerCovenantId == 0 or not (
             (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
+                    (self:FindMatches(name, 'Zereth Mortis', false, 1, false)) or
                     (self:FindMatches(name, 'Torghast', false, 1, false)) or
                     (self:FindMatches(self:GetCurrentInstanceTier(), 'Shadowlands', false, 1, false))
     )) then
