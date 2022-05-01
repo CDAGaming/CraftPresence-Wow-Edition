@@ -165,6 +165,9 @@ L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate 
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
+L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
+L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
@@ -308,6 +311,12 @@ L["INFO_EVENT_PROCESSING"] = setfmt("Event Processing:\n Name: *%s|r\n Data: ^%s
 L["INFO_PLACEHOLDER_PROCESSING"] = setfmt("Placeholder Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["INFO_OUTDATED_CONFIG"] = setfmt("Outdated Config Detected!\n Migrating from Schema *v%s|r to *v%s|r...", GREEN)
+L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicable for Schema *v%s|r to *v%s|r!",
+        GREEN
+)
+L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = setfmt("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
+        GREEN, GREY
+)
 L["ERROR_BYTE_INSUFFICIENT"] = "You're painting an insufficient amount of bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
@@ -394,7 +403,7 @@ L["USAGE_CMD_INTRO"] = "Command Usage =>"
 L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
         GREEN, GREY
 )
-L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Displays the *ConfigUI|r.",
+L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config [migrate]|r  -  Displays/Migrates the *ConfigUI|r.",
         GREEN, GREY
 )
 L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",

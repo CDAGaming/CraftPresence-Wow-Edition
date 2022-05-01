@@ -136,7 +136,10 @@ function CraftPresence:OnInitialize()
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
     self.config:SetDefaultSize(L["ADDON_NAME"], 858, 660)
-    self:EnsureCompatibility(self:GetFromDb("schema"), addOnData["schema"])
+    self:EnsureCompatibility(
+            self:GetFromDb("schema"), addOnData["schema"], false,
+            self:GetFromDb("optionalMigrations")
+    )
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
@@ -583,7 +586,14 @@ function CraftPresence:ChatCommand(input)
             end
             self:PaintMessageWait(true, not testerMode, not testerMode, nil)
         elseif command == "config" then
-            self:ShowConfig()
+            if command_query[2] ~= nil and strlower(command_query[2]) == "migrate" then
+                self:EnsureCompatibility(
+                        self:GetFromDb("schema"), addOnData["schema"], true,
+                        self:GetFromDb("optionalMigrations")
+                )
+            else
+                self:ShowConfig()
+            end
         elseif command == "reset" then
             local reset_single = (command_query[2] ~= nil)
             if reset_single then

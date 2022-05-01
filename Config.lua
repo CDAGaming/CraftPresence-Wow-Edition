@@ -48,6 +48,7 @@ local DB_DEFAULTS = {
         showMinimapIcon = true,
         queuedPipeline = false,
         showWelcomeMessage = true,
+        optionalMigrations = false,
         callbackDelay = L["DEFAULT_CALLBACK_DELAY"],
         frameSize = L["DEFAULT_FRAME_SIZE"],
         frameClearDelay = L["DEFAULT_FRAME_CLEAR_DELAY"],
@@ -1470,6 +1471,22 @@ function CraftPresence:getOptionsTable()
                             if isValid then
                                 self.db.profile.showWelcomeMessage = value
                                 self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
+                            end
+                        end,
+                    },
+                    optionalMigrations = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = L["TITLE_OPTIONAL_MIGRATIONS"],
+                        desc = self:GetConfigComment("OPTIONAL_MIGRATIONS"),
+                        get = function(_)
+                            return self:GetFromDb("optionalMigrations")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetFromDb("optionalMigrations")
+                            local isValid = (type(value) == "boolean")
+                            if isValid then
+                                self.db.profile.optionalMigrations = value
+                                self:PrintChangedValue(L["TITLE_OPTIONAL_MIGRATIONS"], oldValue, value)
                             end
                         end,
                     },

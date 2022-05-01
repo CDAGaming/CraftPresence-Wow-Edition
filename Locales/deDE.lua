@@ -166,6 +166,9 @@ L["COMMENT_QUEUED_PIPELINE"] = "Schaltet die Ereignis-Pipeline zwischen \"skip\"
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Zeige Willkommensnachricht"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Schaltet die initiale Nachricht beim Anmelden ein/aus."
 
+L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
+L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
@@ -309,6 +312,12 @@ L["INFO_EVENT_PROCESSING"] = setfmt("Verarbeite Ereignis:\n Name: *%s|r\n Daten:
 L["INFO_PLACEHOLDER_PROCESSING"] = setfmt("Verarbeite Platzhalter:\n Name: *%s|r\n Daten: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Setze Konfiguration zurück..."
 L["INFO_OUTDATED_CONFIG"] = setfmt("Veraltete Konfiguration erkannt!\n Migriere von Schema *v%s|r zu *v%s|r...", GREEN)
+L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicable for Schema *v%s|r to *v%s|r!",
+        GREEN
+)
+L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = setfmt("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
+        GREEN, GREY
+)
 L["ERROR_BYTE_INSUFFICIENT"] = "Das Addon schreibt eine falsche Anzahl an Bytes (%s vs %s)"
 L["ERROR_COMMAND_CONFIG"] = "Dir fehlt eine bestimmte Konfiguration um diesen Befehl ausführen zu können. (Aktiviere %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unbekannter Befehl! (Input: %s)"
@@ -395,7 +404,7 @@ L["USAGE_CMD_INTRO"] = "Benutzung =>"
 L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Zeigt dieses hilfreiche Menü an.",
         GREEN, GREY
 )
-L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config|r  -  Zeigt die  *ConfigUI|r an.",
+L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config [migrate]|r  -  Displays/Migrates the *ConfigUI|r.",
         GREEN, GREY
 )
 L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Setzt die Addon-Frames zurück.",

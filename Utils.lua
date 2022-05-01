@@ -837,6 +837,16 @@ function CraftPresence:PrintWarningMessage(logStyle)
     end
 end
 
+--- Prints a formatted message, meant to symbolize a migration message
+--- @param current number The current/former schema number (Default: 0)
+--- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"])
+function CraftPresence:PrintMigrationMessage(current, target)
+    current = self:GetOrDefault(current, 0)
+    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
+    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
+    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_TWO"], L["TITLE_OPTIONAL_MIGRATIONS"]))
+end
+
 --- Prints a formatted message, meant to symbolize an deprecated value
 --- @param oldFunc string The old/deprecated function
 --- @param newFunc string The new function to migrate to

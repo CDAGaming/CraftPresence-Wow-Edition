@@ -34,18 +34,28 @@ local L = CraftPresence.locale
 ---
 --- NOTE: current should be equal to target by end of method.
 ---
+--- NOTE: A non-destructive and destructive passthrough is available with this method.
+---       while non-destructive will avoid resetting/modifying current user data,
+---       a destructive pass through ensures that new default settings are also passed through,
+---       even if it means resetting that config field.
+---
 --- @param current number The current/former schema number (Default: 0)
---- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"]
+--- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"])
+--- @param force boolean Whether to ignore the initial check between current and target (Default: false)
+--- @param can_modify boolean Whether to allow modifying/resetting config data (Default: false)
 --- @param log_output boolean Whether to allow logging for this function (Default: true)
-function CraftPresence:EnsureCompatibility(current, target, log_output)
+function CraftPresence:EnsureCompatibility(current, target, force, can_modify, log_output)
     current = self:GetOrDefault(current, 0)
     target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
+    force = self:GetOrDefault(force, false)
+    can_modify = self:GetOrDefault(can_modify, false)
     log_output = self:GetOrDefault(log_output, true)
 
-    if current < target then
+    if force or current < target then
         if log_output then
             self:Print(strformat(L["INFO_OUTDATED_CONFIG"], current, target))
         end
+        local defaults = self:GetDefaults().profile
 
         if self:IsWithinValue(current, 0, 1, true, true) then
             -- Schema Changes (v0 -> v1):
@@ -95,7 +105,7 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                 end
 
                 placeholders = self:CombineTables(
-                        self:GetDefaults().profile.placeholders, placeholders
+                        defaults.placeholders, placeholders
                 )
 
                 local old_global_prefix = self:GetOrDefault(self:GetFromDb("globalPlaceholderKey"))
@@ -147,7 +157,7 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
             -- Schema Changes (v2 -> v3):
             --   Adds allowRebasedApi flag for events and placeholders
             local data = self:GetFromDb("placeholders")
-            local default = self:GetDefaults().profile.placeholders
+            local default = defaults.placeholders
             for k, _ in pairs(data) do
                 data[k].allowRebasedApi = self:GetOrDefault(
                         data[k].allowRebasedApi,
@@ -157,7 +167,7 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
             self:SetToDb("placeholders", nil, data)
 
             data = self:GetFromDb("events")
-            default = self:GetDefaults().profile.events
+            default = defaults.events
             for k, _ in pairs(data) do
                 data[k].allowRebasedApi = self:GetOrDefault(
                         data[k].allowRebasedApi,
@@ -175,6 +185,13 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
             -- Schema Changes (v4 -> v4.1):
             --   Added `stateCallback` field for `labels` (Ported from `GetUnitStatus`)
             --   Added `suffix` field for `placeholders` (Defaults to what your `prefix` is to preserve data)
+            --
+            -- Destructive Changes (v3 -> v4.1):
+            --   `events.CHAT_MSG_SYSTEM`:
+            --      - Added a GetOrDefault call to `processCallback` to ensure fallback to `DEFAULT_XXX_MESSAGE`
+            --   `placeholders.player_alliance`
+            --      - `minimumTOC` flag removed, was previously marked as supporting rebased/3.2.0 or above
+            --      - Added a nil check for the name in `processCallback` to allow TBC and Vanilla Wow client support
             local buttonData = self:GetFromDb("buttons")
             if buttonData ~= nil then
                 for k,v in pairs(buttonData) do
@@ -201,7 +218,7 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                 self:SetToDb("buttons", nil, buttonData)
             end
             local labelData = self:GetFromDb("labels")
-            local defaultLabels = self:GetDefaults().profile.labels
+            local defaultLabels = defaults.labels
             if labelData ~= nil then
                 for k,v in pairs(labelData) do
                     if type(v) == "table" then
@@ -242,6 +259,13 @@ function CraftPresence:EnsureCompatibility(current, target, log_output)
                     placeholderData[k] = v
                 end
                 self:SetToDb("placeholders", nil, placeholderData)
+            end
+
+            if can_modify then
+                self.db.profile.events["CHAT_MSG_SYSTEM"] = defaults.events["CHAT_MSG_SYSTEM"]
+                self.db.profile.placeholders["player_alliance"] = defaults.placeholders["player_alliance"]
+            elseif log_output then
+                self:PrintMigrationMessage(current, target)
             end
             current = 4.1
         end
