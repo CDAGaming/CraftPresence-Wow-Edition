@@ -407,12 +407,12 @@ end]],
                 prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
             },
             ["player_alliance"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
     -- Covenant and Faction Setup
     -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
     -- Then use the Faction as the Alliance; otherwise use Covenant Data
-    local name = select(1, GetInstanceInfo())
+    local name = GetInstanceInfo and select(1, GetInstanceInfo()) or nil
     local englishFaction, localizedFaction = UnitFactionGroup('player')
     englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
     localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
@@ -422,7 +422,7 @@ end]],
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
     end
     -- Covenant and/or Faction data is only updated if the instance is changed
-    if (playerCovenantId == 0 or not (
+    if (playerCovenantId == 0 or name == nil or not (
             (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
                     (self:FindMatches(name, 'Zereth Mortis', false, 1, false)) or
                     (self:FindMatches(name, 'Torghast', false, 1, false)) or
