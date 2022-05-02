@@ -344,7 +344,7 @@ function CraftPresence:SyncDynamicData(log_output, data)
 
             if data ~= nil then
                 data = self:SetFormats({ newValue, nil, newKey, nil },
-                    data, true, false
+                        data, true, false
                 )
 
                 -- Time Condition Data Setup
@@ -734,7 +734,7 @@ function CraftPresence:ChatCommand(input)
                         visible_data = {
                             "processCallback", "processType"
                         }
-                        enable_callback = function (_, value)
+                        enable_callback = function(_, value)
                             return self:ShouldProcessData(value)
                         end
                         notes = L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
@@ -743,7 +743,7 @@ function CraftPresence:ChatCommand(input)
                         visible_data = {
                             "enabled"
                         }
-                        enable_callback = function (_, value)
+                        enable_callback = function(_, value)
                             return self:ShouldProcessData(value)
                         end
                     elseif tag_name == "labels" then
@@ -753,7 +753,7 @@ function CraftPresence:ChatCommand(input)
                         visible_data = {
                             "activeCallback", "activeType"
                         }
-                        enable_callback = function (_, value)
+                        enable_callback = function(_, value)
                             return self:ShouldProcessData(value)
                         end
                     end

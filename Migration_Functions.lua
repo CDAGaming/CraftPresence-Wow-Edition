@@ -194,7 +194,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             --      - Added a nil check for the name in `processCallback` to allow TBC and Vanilla Wow client support
             local buttonData = self:GetFromDb("buttons")
             if buttonData ~= nil then
-                for k,v in pairs(buttonData) do
+                for k, v in pairs(buttonData) do
                     if type(v) == "table" then
                         v.labelCallback = self:GetOrDefault(v.labelCallback)
                         v.labelType = self:GetOrDefault(v.labelType, "string")
@@ -220,7 +220,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             local labelData = self:GetFromDb("labels")
             local defaultLabels = defaults.labels
             if labelData ~= nil then
-                for k,v in pairs(labelData) do
+                for k, v in pairs(labelData) do
                     if type(v) == "table" then
                         v.activeCallback = self:GetOrDefault(v.activeCallback)
                         v.activeType = self:GetOrDefault(v.activeType, "string")
@@ -249,7 +249,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             end
             local placeholderData = self:GetFromDb("placeholders")
             if placeholderData ~= nil then
-                for k,v in pairs(placeholderData) do
+                for k, v in pairs(placeholderData) do
                     if type(v) == "table" then
                         v.suffix = self:GetOrDefault(
                                 v.suffix,

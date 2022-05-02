@@ -53,10 +53,10 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
     local unitInfo = {}
     local unitString = ""
 
-    for key,value in pairs(self.labels) do
+    for key, value in pairs(self.labels) do
         if self:ShouldProcessData(value) then
             unitData[key] = value.state
-            unitString = value[L["STATUS_"..strupper(tostring(value.state))]]
+            unitString = value[L["STATUS_" .. strupper(tostring(value.state))]]
             if not self:IsNullOrEmpty(unitString) then
                 tinsert(unitInfo, unitString)
             end

@@ -262,7 +262,7 @@ function CraftPresence:FormatWithCasing(str, casing)
     if self:IsNullOrEmpty(casing) then
         return str
     end
-    return self:GetCaseData({str, casing})
+    return self:GetCaseData({ str, casing })
 end
 
 --- Formats the following config comment to include its default value (If present)
@@ -1051,8 +1051,8 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
     }
     local rootData = self:GetFromDb(rootKey)
     if type(rootData) == "table" then
-        for k,v in pairs(rootData) do
-            local key,value = k,v
+        for k, v in pairs(rootData) do
+            local key, value = k, v
             local value_args = {}
             if type(value) == "table" then
                 for ik, _ in pairs(value) do
