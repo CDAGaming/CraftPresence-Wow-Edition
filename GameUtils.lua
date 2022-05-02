@@ -109,8 +109,9 @@ end
 
 --- Sets whether the instance has (or should be marked as) recently changed
 ---
---- @param value boolean Whether the instance should be marked as changed
+--- @param value boolean Whether the instance should be marked as changed (Required)
 function CraftPresence:SetInstanceChanged(value)
+    if self:IsNullOrEmpty(value) then return end
     hasInstanceChanged = value
 end
 

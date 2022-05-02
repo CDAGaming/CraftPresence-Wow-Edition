@@ -228,16 +228,16 @@ end
 
 --- Interprets the contents of a dynamic data table to ensure validity and obtain enable level
 ---
---- @param data table The data table to interpret
+--- @param data table The data table to interpret (Required)
 ---
 --- @return boolean, boolean @ shouldEnable, shouldRegister
 function CraftPresence:ShouldProcessData(data)
-    local currentTOC = buildData["toc_version"]
-    local fallbackTOC = buildData["fallback_toc_version"]
     local shouldEnable, shouldRegister = false, false
 
-    data = self:GetOrDefault(data, {})
     if type(data) == "table" then
+        local currentTOC = buildData["toc_version"]
+        local fallbackTOC = buildData["fallback_toc_version"]
+
         local minTOC = self:GetOrDefault(data.minimumTOC, fallbackTOC)
         if type(minTOC) ~= "number" then
             minTOC = self:VersionToBuild(minTOC)

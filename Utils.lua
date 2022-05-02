@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring;
+local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strlen, strrep, tgetn, tinsert, unpack = string.len, string.rep, table.getn, table.insert, unpack
@@ -42,13 +42,16 @@ local lastIndex = 0
 --- @return number @ lastIndex
 function CraftPresence:GetNextIndex()
     lastIndex = lastIndex + 1
-    return lastIndex;
+    return lastIndex
 end
 
 --- Resets the Button Index to 0
---- Normally used when closing a screen and no longer using the allocated Id's
+--- Normally used before closing/opening a screen and/or no longer using the allocated Id's
+---
+--- @return number @ lastIndex
 function CraftPresence:ResetIndex()
-    lastIndex = 0;
+    lastIndex = 0
+    return lastIndex
 end
 
 --- Generates a random string of numbers with the specified length
@@ -244,22 +247,25 @@ end
 --- Formats the following word to proper icon casing
 --- (Helper Function for GetCaseData for ease-of-access)
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 ---
 --- @return string @ formattedString
 function CraftPresence:FormatAsIcon(str)
+    if self:IsNullOrEmpty(str) then
+        return str
+    end
     return self:FormatWithCasing(str, "icon")
 end
 
 --- Formats the following word to the specified casing
 --- (Helper Function for GetCaseData for ease-of-access)
 ---
---- @param str string The input string to evaluate
---- @param casing string The specified casing to use (lower/upper/icon)
+--- @param str string The input string to evaluate (Required)
+--- @param casing string The specified casing to use (lower/upper/icon) (Required)
 ---
 --- @return string @ formattedString
 function CraftPresence:FormatWithCasing(str, casing)
-    if self:IsNullOrEmpty(casing) then
+    if self:IsNullOrEmpty(str) or self:IsNullOrEmpty(casing) then
         return str
     end
     return self:GetCaseData({ str, casing })
@@ -290,23 +296,26 @@ end
 
 --- Return a modified version of the specified string, depending on arguments
 ---
---- @param obj any A table (Format: string, casing) or string to evaluate
+--- @param obj any A table (Format: string, casing) or string to evaluate (Required)
 ---
 --- @return string @ adjusted_data
 function CraftPresence:GetCaseData(obj)
+    if self:IsNullOrEmpty(obj) then return obj end
     local value
     if type(obj) == "table" then
         local innerValue = obj
-        if self:GetLength(innerValue) == 2 then
+        if self:GetLength(innerValue) >= 1 then
             value = self:GetOrDefault(innerValue[1])
-            local caseType = strlower(self:GetOrDefault(innerValue[2]))
-            if caseType == "lower" or caseType == "icon" then
-                value = strlower(value)
-                if caseType == "icon" then
-                    value = self:Replace(value, "%s+", "_")
+            if self:GetLength(innerValue) >= 2 then
+                local caseType = strlower(self:GetOrDefault(innerValue[2]))
+                if caseType == "lower" or caseType == "icon" then
+                    value = strlower(value)
+                    if caseType == "icon" then
+                        value = self:Replace(value, "%s+", "_")
+                    end
+                elseif caseType == "upper" then
+                    value = strupper(value)
                 end
-            elseif caseType == "upper" then
-                value = strupper(value)
             end
         end
     else
@@ -651,12 +660,13 @@ end
 
 --- Retrieve the specified Game Variable
 ---
---- @param str string The specified variable name
+--- @param str string The specified variable name (Required)
 --- @param result_type string The expected type of the CVar (Default: string)
 --- @param fallback string If defined, use this value if the CVar does not exist
 ---
 --- @return any @ variable_info
 function CraftPresence:GetGameVariable(str, result_type, fallback)
+    if self:IsNullOrEmpty(str) then return str end
     result_type = strlower(self:GetOrDefault(result_type, "string"))
     fallback = self:GetOrDefault(fallback)
 
@@ -804,6 +814,7 @@ function CraftPresence:VersionToBuild(versionStr)
 end
 
 --- Display the addon's config frame
+--- @return any @ frame_object
 function CraftPresence:ShowConfig()
     if self.config then
         if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame then
@@ -811,6 +822,7 @@ function CraftPresence:ShowConfig()
             -- so it is called twice to workaround it
             InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
             InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+            return self.optionsFrame
         else
             self.config:Open(L["ADDON_NAME"])
         end
@@ -876,9 +888,9 @@ end
 --- Displays the specified usage command in a help text format
 --- (INTERNAL USAGE ONLY)
 ---
---- @param usage string The usage command text
+--- @param usage string The usage command text (Required)
 function CraftPresence:PrintUsageCommand(usage)
-    usage = self:GetOrDefault(usage)
+    if self:IsNullOrEmpty(usage) then return end
     self:Print(
             L["USAGE_CMD_INTRO"] .. "\n" ..
                     usage .. "\n" ..
@@ -890,9 +902,10 @@ end
 --- Displays the specified usage command in a help text format
 --- (INTERNAL USAGE ONLY)
 ---
---- @param root_name string The root command name
+--- @param root_name string The root command name (Required)
 --- @param query_tag string The sub-argument to the root name, representing what we want a query from
 function CraftPresence:PrintQueryCommand(root_name, query_tag)
+    if self:IsNullOrEmpty(root_name) then return end
     local usageText = L["USAGE_CMD_" .. strupper(root_name)]
     if not self:IsNullOrEmpty(query_tag) then
         local localeQuery = "USAGE_CMD_" .. strupper(query_tag) .. "_" .. strupper(root_name)
@@ -906,8 +919,9 @@ end
 --[[ API GETTERS AND SETTERS ]]--
 
 --- Sets whether or not the timer is locked
---- @param newValue boolean New variable value
+--- @param newValue boolean New variable value (Required)
 function CraftPresence:SetTimerLocked(newValue)
+    if self:IsNullOrEmpty(newValue) then return end
     -- This method only executes if we are operating in a non-queue pipeline
     if not self:GetFromDb("queuedPipeline") then
         timer_locked = newValue
@@ -982,12 +996,13 @@ end
 
 --- Retrieves Config Data based on the specified parameters
 ---
---- @param grp string The config group to retrieve
---- @param key string The config key to retrieve
+--- @param grp string The config group to retrieve (Required)
+--- @param key string The config key to retrieve (Optional)
 --- @param reset boolean Whether to reset this property value
 ---
 --- @return any configValue
 function CraftPresence:GetFromDb(grp, key, reset)
+    if self:IsNullOrEmpty(grp) then return nil end
     local DB_DEFAULTS = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
         self.db.profile[grp] = DB_DEFAULTS.profile[grp]
@@ -1003,11 +1018,12 @@ end
 
 --- Sets Config Data based on the specified parameters
 ---
---- @param grp string The config group to retrieve
---- @param key string The config key to retrieve
---- @param newValue any The new config value to set
+--- @param grp string The config group to retrieve (Required)
+--- @param key string The config key to retrieve (Optional)
+--- @param newValue any The new config value to set (Leave Empty to reset value)
 --- @param reset boolean Whether to reset this property value
 function CraftPresence:SetToDb(grp, key, newValue, reset)
+    if self:IsNullOrEmpty(grp) then return end
     local DB_DEFAULTS = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
         self.db.profile[grp] = DB_DEFAULTS.profile[grp]
@@ -1121,7 +1137,9 @@ end
 --- @return boolean @ isToggleTag
 function CraftPresence:IsToggleTag(key)
     key = strlower(self:GetOrDefault(key))
-    return self:EndsWith(key, "enabled") or self:FindMatches(key, "allow", false, 1, true)
+    return self:EndsWith(key, "enabled") or (
+            self:FindMatches(key, "allow", false, 1, true) and true or false
+    )
 end
 
 --[[ QUEUE SYSTEM UTILITIES ]]--
@@ -1146,6 +1164,7 @@ CraftPresence.After = CraftPresence:vararg(3, function(self, seconds, func, args
 end)
 
 --- Initializes Queue Systems
+--- @return any @ frame_object
 function CraftPresence:SetupQueueSystem()
     if not queue_frame then
         queue_frame = CreateFrame("Frame", nil, UIParent)
@@ -1154,11 +1173,12 @@ function CraftPresence:SetupQueueSystem()
             if queued_data ~= nil then
                 for key, value in pairs(queued_data) do
                     if elapsed_time > value then
-                        key();
-                        queued_data[key] = nil;
+                        key()
+                        queued_data[key] = nil
                     end
                 end
             end
         end)
     end
+    return queue_frame
 end

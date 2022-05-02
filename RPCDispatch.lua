@@ -146,10 +146,11 @@ end
 
 --- Creates an array of frames with the specified size at the TOPLEFT of screen
 ---
---- @param size number The width and height of the frames
+--- @param size number The width and height of the frames (Required)
 ---
 --- @return table @ frames
 function CraftPresence:CreateFrames(size)
+    if not size then return end
     frame_count = floor(GetScreenWidth() / size)
     if self:GetFromDb("debugMode") then
         self:Print(strformat(L["LOG_DEBUG"], strformat(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
@@ -180,12 +181,13 @@ end
 --- Colors and Paints the specified frame to the specified RGB color
 --- (INTERNAL USAGE ONLY -- Use PaintMessageWait)
 ---
---- @param frame Frame The specified frame to adjust
+--- @param frame Frame The specified frame to adjust (Required)
 --- @param r number The red color value to apply to frame
 --- @param g number The green color value to apply to frame
 --- @param b number The blue color value to apply to frame
 --- @param force number Force index (Sets alpha to 1 if rgb ~= 0 and force ~= 0 and force ~= nil))
 function CraftPresence:PaintFrame(frame, r, g, b, force)
+    if frame == nil then return end
     -- set pixel to black if they are null
     if r == nil then
         r = 0
@@ -222,8 +224,9 @@ end
 --- Converts an array of text into bytes represented in RGB for frame rendering
 --- (INTERNAL USAGE ONLY -- Use PaintMessageWait)
 ---
---- @param text string The text to be interpreted and converted
+--- @param text string The text to be interpreted and converted (Required)
 function CraftPresence:PaintSomething(text)
+    if self:IsNullOrEmpty(text) then return end
     local max_bytes = (frame_count - 1) * 3
     local text_length = self:GetLength(text)
     if text_length >= max_bytes then

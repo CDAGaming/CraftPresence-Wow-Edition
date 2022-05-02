@@ -1142,6 +1142,9 @@ function CraftPresence:getOptionsTable()
     local self = CraftPresence
     local profilesGroup = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 
+    -- Ensure Ordering is Correct, by resetting the index before generating the options
+    self:ResetIndex()
+
     local opts = {
         type = "group", childGroups = "tab",
         name = self:GetAddOnInfo()["versionString"],
@@ -1630,6 +1633,8 @@ function CraftPresence:getOptionsTable()
             },
         },
     }
+    -- We also reset the index after optionsTable generation
+    -- to ensure everything is cleaned up nice and tidy
     self:ResetIndex()
     return opts
 end
