@@ -124,7 +124,7 @@ end
 
 --- Trims a String of leading and duplicate spaces
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 ---
 --- @return string @ trimmed_string
 function CraftPresence:TrimString(str)
@@ -189,43 +189,37 @@ end
 
 --- Determines whether the specified string starts with the specified pattern
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 --- @param expected string The expected string to locate
 ---
 --- @return boolean @ startsWith
 function CraftPresence:StartsWith(str, expected)
-    if self:IsNullOrEmpty(str) then
-        return false
-    end
+    if self:IsNullOrEmpty(str) then return false end
     return self:ContainsAt(str, expected, 1, self:GetLength(expected))
 end
 
 --- Determines whether the specified string ends with the specified pattern
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 --- @param expected string The expected string to locate
 ---
 --- @return boolean @ endsWith
 function CraftPresence:EndsWith(str, expected)
-    if self:IsNullOrEmpty(str) then
-        return false
-    end
+    if self:IsNullOrEmpty(str) then return false end
     local start_len = (self:GetLength(str) - self:GetLength(expected)) + 1
     return self:ContainsAt(str, expected, start_len, self:GetLength(str))
 end
 
 --- Determines whether the specified string includes the specified pattern at the given position
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 --- @param expected string The expected string to locate
 --- @param start_len number The beginning length to iterate at (Default: 1)
 --- @param end_len number The ending length to iterate at (Default: input string length)
 ---
 --- @return boolean @ containsAt
 function CraftPresence:ContainsAt(str, expected, start_len, end_len)
-    if self:IsNullOrEmpty(str) then
-        return false
-    end
+    if self:IsNullOrEmpty(str) then return false end
     start_len = self:GetOrDefault(start_len, 1)
     end_len = self:GetOrDefault(end_len, self:GetLength(str))
     return strsub(str, start_len, end_len) == expected
@@ -233,13 +227,11 @@ end
 
 --- Formats the following word to proper casing (Xxxx)
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 ---
 --- @return string @ formattedString
 function CraftPresence:FormatWord(str)
-    if self:IsNullOrEmpty(str) then
-        return str
-    end
+    if self:IsNullOrEmpty(str) then return str end
     str = strlower(str)
     return (strupper(strsub(str, 1, 1)) .. strsub(str, 2))
 end
@@ -251,9 +243,7 @@ end
 ---
 --- @return string @ formattedString
 function CraftPresence:FormatAsIcon(str)
-    if self:IsNullOrEmpty(str) then
-        return str
-    end
+    if self:IsNullOrEmpty(str) then return str end
     return self:FormatWithCasing(str, "icon")
 end
 
@@ -271,15 +261,13 @@ function CraftPresence:FormatWithCasing(str, casing)
     return self:GetCaseData({ str, casing })
 end
 
---- Formats the following config comment to include its default value (If present)
+--- Formats the following config comment to include its default value, if present
 ---
---- @param str string The input string to evaluate
+--- @param str string The input string to evaluate (Required)
 ---
 --- @return string @ formattedString
 function CraftPresence:GetConfigComment(str)
-    if self:IsNullOrEmpty(str) then
-        return str
-    end
+    if self:IsNullOrEmpty(str) then return str end
     str = strupper(str)
     local value_comment = self:GetOrDefault(L["COMMENT_" .. str])
     if not self:IsNullOrEmpty(value_comment) then
