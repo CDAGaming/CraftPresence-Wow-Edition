@@ -106,11 +106,11 @@ function CraftPresence:EncodeConfigData(log_output)
     local rpcData = {
         self:GetFromDb("clientId"),
         { self:GetFromDb("largeImageKey"), "icon" },
-        self:GetFromDb("largeImageMessage"),
+        { self:GetFromDb("largeImageMessage"), "no-dupes" },
         { self:GetFromDb("smallImageKey"), "icon" },
-        self:GetFromDb("smallImageMessage"),
-        self:GetFromDb("detailsMessage"),
-        self:GetFromDb("gameStateMessage")
+        { self:GetFromDb("smallImageMessage"), "no-dupes" },
+        { self:GetFromDb("detailsMessage"), "no-dupes" },
+        { self:GetFromDb("gameStateMessage"), "no-dupes" }
     }
 
     -- Placeholder Syncing
@@ -378,7 +378,7 @@ function CraftPresence:SyncDynamicData(log_output, data)
         -- Additional Sanity Checks for Buttons
         for _, value in pairs(self.buttons) do
             if type(value) == "table" and value.result then
-                tinsert(data, value.result)
+                tinsert(data, self:GetCaseData({ value.result, "no-dupes" }))
             end
         end
     end

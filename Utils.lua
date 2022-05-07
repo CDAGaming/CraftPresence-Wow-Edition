@@ -23,10 +23,10 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local type, pairs, tonumber, loadstring = type, pairs, tonumber, loadstring
+local type, pairs, tonumber, loadstring, unpack = type, pairs, tonumber, loadstring, unpack
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
-local strlen, strrep, tgetn, tinsert, unpack = string.len, string.rep, table.getn, table.insert, unpack
+local strlen, strrep, tgetn, tinsert, tconcat = string.len, string.rep, table.getn, table.insert, table.concat
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
 -- Addon APIs
@@ -295,14 +295,19 @@ function CraftPresence:GetCaseData(obj)
         if self:GetLength(innerValue) >= 1 then
             value = self:GetOrDefault(innerValue[1])
             if self:GetLength(innerValue) >= 2 then
-                local caseType = strlower(self:GetOrDefault(innerValue[2]))
-                if caseType == "lower" or caseType == "icon" then
-                    value = strlower(value)
-                    if caseType == "icon" then
-                        value = self:Replace(value, "%s+", "_")
+                local command_query = self:Split(innerValue[2], ",", true, true)
+                for k,v in pairs(command_query) do
+                    local caseType = strlower(self:GetOrDefault(v))
+                    if caseType == "lower" or caseType == "icon" then
+                        value = strlower(value)
+                        if caseType == "icon" then
+                            value = self:Replace(value, "%s+", "_")
+                        end
+                    elseif caseType == "upper" then
+                        value = strupper(value)
+                    elseif caseType == "no-dupes" then
+                        value = self:RemoveDuplicateWords(value)
                     end
-                elseif caseType == "upper" then
-                    value = strupper(value)
                 end
             end
         end
@@ -510,6 +515,36 @@ function CraftPresence:Split(str, inSplitPattern, multiple, plain, outResults)
         tinsert(outResults, strsub(str, theStart))
     end
     return outResults
+end
+
+--- Removes duplicate words from a string
+---
+--- @param data any A table of string-elements or a string to interpret
+--- @param seperator string The separator to split and concat the resulting string by
+---
+--- @return string @ output
+function CraftPresence:RemoveDuplicateWords(data, seperator)
+    data = self:GetOrDefault(data, {})
+    seperator = self:GetOrDefault(seperator, " ")
+    -- Ensure the type is initially a table consisting of strings
+    if type(data) ~= "table" then
+        if type(data) == "string" then
+            data = self:Split(data, seperator, true, true)
+        else
+            return data
+        end
+    elseif self:GetLength(data) > 0 then
+        return data
+    end
+
+    local output = {}
+    for i,v in pairs(data) do
+        if data[i-1] ~= v then
+            tinsert(output,v)
+        end
+    end
+
+    return self:GetOrDefault(tconcat(output, seperator))
 end
 
 --- Retrieves the Return Value(s) from a Dynamic Function
