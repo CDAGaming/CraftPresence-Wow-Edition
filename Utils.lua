@@ -718,7 +718,9 @@ function CraftPresence:GetFlavorInfo()
             ["retail"] = 90200, -- Latest Retail
             ["classic"] = 20504, -- Latest Classic
             ["classic_era"] = 11403, -- Latest Classic Era
+            ["classic_beta"] = 30400, -- Latest Classic Beta
             ["ptr"] = 90205, -- Latest Retail PTR
+            ["beta"] = 100000, -- Latest Retail Beta
             ["classic_ptr"] = 20504, -- Latest Classic PTR
             ["classic_era_ptr"] = 11403 -- Latest Classic Era PTR
         }
