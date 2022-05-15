@@ -52,7 +52,7 @@ jobs:
         with:
           args: -g retail
 
-      # Release - Wow Classic
+      # Release - Vanilla Classic
       - name: Package and release for Classic
         uses: BigWigsMods/packager@master
         with:
@@ -63,3 +63,9 @@ jobs:
         uses: BigWigsMods/packager@master
         with:
           args: -g bcc
+
+      # Release - Wrath Classic
+      # - name: Package and release for Wrath Classic
+      #   uses: BigWigsMods/packager@master
+      #   with:
+      #     args: -g wrath
