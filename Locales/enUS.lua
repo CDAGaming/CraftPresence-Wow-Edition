@@ -90,7 +90,7 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Custom Labels"
 L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found!"
+L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found! (Use /cp labels for more info)."
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"

@@ -91,7 +91,7 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s benutzerdefinierte Button%s gefunden!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Benutzerdefinierte Label"
 L["CATEGORY_COMMENT_LABELS"] = "Einstellungen für benutzerdefinierte Status (bspw. Im Kampf, AFK, o.ä.)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = "%s Label gefunden!"
+L["CATEGORY_COMMENT_LABELS_INFO"] = "%s Label gefunden! (/cp labels im Chat für mehr Informationen)."
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Platzhalter"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Benutzerdefinierte Platzhalter"
