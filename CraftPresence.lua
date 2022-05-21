@@ -80,6 +80,9 @@ CraftPresence.externalCache = {}
 -- Addon Dependencies
 CraftPresence.config = LibStub("AceConfigDialog-3.0")
 
+-- Analytical Dependencies
+CraftPresence.WagoAnalytics = nil
+
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
 
@@ -140,6 +143,8 @@ function CraftPresence:OnInitialize()
             self:GetFromDb("schema"), addOnData["schema"], false,
             self:GetFromDb("optionalMigrations")
     )
+    -- Analytics Initialization, if allowed
+    self:InitializeAnalytics()
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration

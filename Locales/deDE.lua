@@ -169,6 +169,9 @@ L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Schaltet die initiale Nachricht beim Anmeld
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
 
+L["TITLE_ALLOW_ANALYTICS"] = "Allow Analytics"
+L["COMMENT_ALLOW_ANALYTICS"] = "Toggles whether to allow 3rd-party analytics.\n(Requires Reload)"
+
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0

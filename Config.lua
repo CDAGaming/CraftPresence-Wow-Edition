@@ -49,6 +49,7 @@ local DB_DEFAULTS = {
         queuedPipeline = false,
         showWelcomeMessage = true,
         optionalMigrations = false,
+        allowAnalytics = false,
         callbackDelay = L["DEFAULT_CALLBACK_DELAY"],
         frameSize = L["DEFAULT_FRAME_SIZE"],
         frameClearDelay = L["DEFAULT_FRAME_CLEAR_DELAY"],
@@ -1496,6 +1497,25 @@ function CraftPresence:getOptionsTable()
                     blank3 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
+                    allowAnalytics = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = L["TITLE_ALLOW_ANALYTICS"],
+                        desc = self:GetConfigComment("ALLOW_ANALYTICS"),
+                        get = function(_)
+                            return self:GetFromDb("allowAnalytics")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetFromDb("allowAnalytics")
+                            local isValid = (type(value) == "boolean")
+                            if isValid then
+                                self.db.profile.allowAnalytics = value
+                                self:PrintChangedValue(L["TITLE_ALLOW_ANALYTICS"], oldValue, value, true)
+                            end
+                        end,
+                    },
+                    blank4 = {
+                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                    },
                     callbackDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
@@ -1558,7 +1578,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank4 = {
+                    blank5 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     frameSize = {
@@ -1592,7 +1612,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank5 = {
+                    blank6 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                 }
@@ -1645,22 +1665,35 @@ function CraftPresence:CanLogChanges()
     return self:GetFromDb("verboseMode")
 end
 
+--- Retrieves whether or not collecting analytics data is allowed
+--- @return boolean @ areAnalyticsAllowed
+function CraftPresence:AreAnalyticsAllowed()
+    return self:GetFromDb("allowAnalytics")
+end
+
 --- Prints change data, if possible, using the specified parameters
 ---
 --- @param fieldName string The config name the change belongs to
 --- @param oldValue any The old value of the config variable
 --- @param value any The new value of the config variable
-function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
+--- @param ignoreMetrics boolean Whether or not to ignore metric submission, even if allowed to otherwise
+function CraftPresence:PrintChangedValue(fieldName, oldValue, value, ignoreMetrics)
     oldValue = self:GetOrDefault(oldValue, L["TYPE_NONE"])
     value = self:GetOrDefault(value, L["TYPE_NONE"])
-    if oldValue ~= value and self:CanLogChanges() then
-        self:Print(
-                strformat(
-                        L["LOG_VERBOSE"], strformat(
-                                L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
-                        )
-                )
-        )
+    ignoreMetrics = self:GetOrDefault(ignoreMetrics, false)
+    if oldValue ~= value then
+        if self:CanLogChanges() then
+            self:Print(
+                    strformat(
+                            L["LOG_VERBOSE"], strformat(
+                                    L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
+                            )
+                    )
+            )
+        end
+        if self:CanUseAnalytics() and not ignoreMetrics then
+            self:LogChangedValue(fieldName, oldValue, value)
+        end
     end
 end
 
