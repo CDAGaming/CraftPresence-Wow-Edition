@@ -230,9 +230,7 @@ function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     local text_length = self:GetLength(text)
     if text_length >= max_bytes then
-        if self:GetFromDb("debugMode") then
-            self:PrintErrorMessage(strformat(L["ERROR_BYTE_INSUFFICIENT"], tostring(text_length), tostring(max_bytes)))
-        end
+        self:PrintErrorMessage(strformat(L["ERROR_MESSAGE_OVERFLOW"], tostring(text_length), tostring(max_bytes)))
         return
     end
 

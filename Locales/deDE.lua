@@ -318,7 +318,7 @@ L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicab
 L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = setfmt("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
         GREEN, GREY
 )
-L["ERROR_BYTE_INSUFFICIENT"] = "Das Addon schreibt eine falsche Anzahl an Bytes (%s vs %s)"
+L["ERROR_MESSAGE_OVERFLOW"] = "An RPC message cannot be processed due to exceeding the maximum bytes allowed (%s/%s)"
 L["ERROR_COMMAND_CONFIG"] = "Dir fehlt eine bestimmte Konfiguration um diesen Befehl ausführen zu können. (Aktiviere %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unbekannter Befehl! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "Du nutzt eine nicht unterstützte Version von CraftPresence (%s)! (Ignoriere dies, wenn Du die Variante von GitLab verwendest)"

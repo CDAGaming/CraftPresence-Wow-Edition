@@ -317,7 +317,7 @@ L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicab
 L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = setfmt("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
         GREEN, GREY
 )
-L["ERROR_BYTE_INSUFFICIENT"] = "You're painting an insufficient amount of bytes (%s vs %s)"
+L["ERROR_MESSAGE_OVERFLOW"] = "An RPC message cannot be processed due to exceeding the maximum bytes allowed (%s/%s)"
 L["ERROR_COMMAND_CONFIG"] = "You are missing the required config option to access this command (Enable %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"
