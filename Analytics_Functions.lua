@@ -31,7 +31,7 @@ local LibStub = LibStub
 local L = CraftPresence.locale
 
 function CraftPresence:CanUseAnalytics()
-    return self:AreAnalyticsAllowed() and (self:IsClassicBuild() or self:IsRetailBuild())
+    return self:AreAnalyticsAllowed()-- and (self:IsClassicBuild() or self:IsRetailBuild())
 end
 
 function CraftPresence:InitializeAnalytics()
