@@ -718,11 +718,12 @@ function CraftPresence:GetFlavorInfo()
             ["retail"] = 90200, -- Latest Retail
             ["classic"] = 20504, -- Latest Classic
             ["classic_era"] = 11403, -- Latest Classic Era
-            ["classic_beta"] = 30400, -- Latest Classic Beta
             ["ptr"] = 90205, -- Latest Retail PTR
             ["beta"] = 100000, -- Latest Retail Beta
             ["classic_ptr"] = 20504, -- Latest Classic PTR
-            ["classic_era_ptr"] = 11403 -- Latest Classic Era PTR
+            ["classic_beta"] = 30400, -- Latest Classic Beta
+            ["classic_era_ptr"] = 11403, -- Latest Classic Era PTR
+            ["classic_era_beta"] = 11403 -- Latest Classic Era Beta
         }
     end
     return flavor_info
@@ -859,6 +860,38 @@ end
 --- @return boolean @ is_classic_build
 function CraftPresence:IsClassicBuild()
     return self:IsClassicLiveBuild() or self:IsClassicPTRBuild() or self:IsClassicBetaBuild()
+end
+
+--- Determine if this build identifies as the Classic Era Live Build of the Game
+--- @return boolean @ is_classic_era_live_build
+function CraftPresence:IsClassicEraLiveBuild()
+    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["classic_era"]
+end
+
+--- Determine if this build identifies as the Classic Era PTR Build of the Game
+--- @return boolean @ is_classic_era_ptr_build
+function CraftPresence:IsClassicEraPTRBuild()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetFlavorInfo()["classic_era"], self:GetFlavorInfo()["classic_era_ptr"],
+            false, true
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as the Classic Era Beta Build of the Game
+--- @return boolean @ is_classic_era_beta_build
+function CraftPresence:IsClassicEraBetaBuild()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetFlavorInfo()["classic_era_ptr"], self:GetFlavorInfo()["classic_era_beta"],
+            false, true
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as a Classic Era Build of the Game
+--- @return boolean @ is_classic_era_build
+function CraftPresence:IsClassicEraBuild()
+    return self:IsClassicEraLiveBuild() or self:IsClassicEraPTRBuild() or self:IsClassicEraBetaBuild()
 end
 
 --- Determine if this build is using a rebased api
