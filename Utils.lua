@@ -797,6 +797,70 @@ function CraftPresence:IsWrathRebased()
     ) and not self:IsSpecialVersion()
 end
 
+--- Determine if this build identifies as the Retail Live Build of the Game
+--- @return boolean @ is_retail_live_build
+function CraftPresence:IsRetailLiveBuild()
+    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["retail"]
+end
+
+--- Determine if this build identifies as the Retail PTR Build of the Game
+--- @return boolean @ is_retail_ptr_build
+function CraftPresence:IsRetailPTRBuild()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetFlavorInfo()["retail"], self:GetFlavorInfo()["ptr"],
+            false, true
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as the Retail Beta Build of the Game
+--- @return boolean @ is_retail_beta_build
+function CraftPresence:IsRetailBetaBuild()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetFlavorInfo()["ptr"], self:GetFlavorInfo()["beta"],
+            false, true
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as a Retail Build of the Game
+--- @return boolean @ is_retail_build
+function CraftPresence:IsRetailBuild()
+    return self:IsRetailLiveBuild() or self:IsRetailPTRBuild() or self:IsRetailBetaBuild()
+end
+
+--- Determine if this build identifies as the Classic Live Build of the Game
+--- @return boolean @ is_classic_live_build
+function CraftPresence:IsClassicLiveBuild()
+    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["classic"]
+end
+
+--- Determine if this build identifies as the Classic PTR Build of the Game
+--- @return boolean @ is_classic_ptr_build
+function CraftPresence:IsClassicPTRBuild()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetFlavorInfo()["classic"], self:GetFlavorInfo()["classic_ptr"],
+            false, true
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as the Classic Beta Build of the Game
+--- @return boolean @ is_classic_beta_build
+function CraftPresence:IsClassicBetaBuild()
+    return self:IsWithinValue(
+            self:GetBuildInfo()["toc_version"],
+            self:GetFlavorInfo()["classic_ptr"], self:GetFlavorInfo()["classic_beta"],
+            false, true
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as a Classic Build of the Game
+--- @return boolean @ is_classic_build
+function CraftPresence:IsClassicBuild()
+    return self:IsClassicLiveBuild() or self:IsClassicPTRBuild() or self:IsClassicBetaBuild()
+end
+
 --- Determine if this build is using a rebased api
 --- @return boolean @ is_rebased_api
 function CraftPresence:IsRebasedApi()
