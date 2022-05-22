@@ -102,6 +102,11 @@ L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registered Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
 L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)."
 
+L["CATEGORY_TITLE_METRICS"] = "Metrics"
+L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
+L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
+L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)."
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customization options for addon display info."
 
@@ -167,9 +172,6 @@ L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initiali
 
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
-
-L["TITLE_ALLOW_ANALYTICS"] = "Allow Analytics"
-L["COMMENT_ALLOW_ANALYTICS"] = "Toggles whether to allow 3rd-party analytics.\n(Requires Reload)"
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."

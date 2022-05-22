@@ -23,20 +23,20 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local type = type
+local type, pairs = type, pairs
 
--- Addon APIs
-local LibStub = LibStub
-
-local L = CraftPresence.locale
-
-function CraftPresence:CanUseAnalytics()
-    return self:AreAnalyticsAllowed() and (self:IsClassicBuild() or self:IsClassicEraBuild() or self:IsRetailBuild())
-end
-
-function CraftPresence:InitializeAnalytics()
-    if not self:CanUseAnalytics() then return end
-    self.WagoAnalytics = LibStub("WagoAnalytics"):Register(GetAddOnMetadata(L["ADDON_NAME"], "X-Wago-ID"))
+--- Analyze the list of metric engines specified, interpreting those that should be processed
+---
+--- @param metric_engines table The table of metric engines to interpret
+function CraftPresence:InitializeAnalytics(metric_engines)
+    metric_engines = self:GetOrDefault(metric_engines, {})
+    for key, data in pairs(metric_engines) do
+        if self:ShouldProcessData(data) then
+            -- If enabled, execute the engine's stateCallback then add it to the registered list
+            self:GetDynamicReturnValue(data.stateCallback, "function", self)
+            self.registeredMetrics[key] = data
+        end
+    end
 end
 
 --- Logs changed data, if possible and allowed, using the specified parameters
@@ -45,11 +45,8 @@ end
 --- @param oldValue any The old value of the config variable
 --- @param value any The new value of the config variable
 function CraftPresence:LogChangedValue(fieldName, oldValue, value)
-    if not self:CanUseAnalytics() then return end
-    if type(value) == "boolean" then
-        if self.WagoAnalytics then self.WagoAnalytics:Switch(fieldName, value) end
-    end
-    if type(value) == "number" then
-        if self.WagoAnalytics then self.WagoAnalytics:SetCounter(fieldName, value) end
+    for key, data in pairs(self.registeredMetrics) do
+        -- Execute the processCallback for each registered engine
+        self:GetDynamicReturnValue(data.processCallback, "function", self, fieldName, oldValue, value)
     end
 end

@@ -103,6 +103,11 @@ L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registrierte Ereignisse"
 L["CATEGORY_COMMENT_EVENTS"] = "Einstellungen für benutzerdefinierte Ereignisse, auf dessen Auslösen die Rich Presence aktualisiert wird."
 L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s Ereigniss(e) gefunden! (/cp events im Chat für mehr Informationen)."
 
+L["CATEGORY_TITLE_METRICS"] = "Metrics"
+L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
+L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
+L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)."
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Zusätzliche Einstellungen"
 
@@ -168,9 +173,6 @@ L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Schaltet die initiale Nachricht beim Anmeld
 
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
-
-L["TITLE_ALLOW_ANALYTICS"] = "Allow Analytics"
-L["COMMENT_ALLOW_ANALYTICS"] = "Toggles whether to allow 3rd-party analytics.\n(Requires Reload)"
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."

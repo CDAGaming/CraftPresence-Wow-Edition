@@ -66,6 +66,7 @@ local LibStub = LibStub
 CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 CraftPresence.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
 CraftPresence.registeredEvents = {}
+CraftPresence.registeredMetrics = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
 CraftPresence.buttons = {}
@@ -79,9 +80,6 @@ CraftPresence.externalCache = {}
 
 -- Addon Dependencies
 CraftPresence.config = LibStub("AceConfigDialog-3.0")
-
--- Analytical Dependencies
-CraftPresence.WagoAnalytics = nil
 
 local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
@@ -143,8 +141,9 @@ function CraftPresence:OnInitialize()
             self:GetFromDb("schema"), addOnData["schema"], false,
             self:GetFromDb("optionalMigrations")
     )
-    -- Analytics Initialization, if allowed
-    self:InitializeAnalytics()
+    -- Analytics Initialization
+    self:InitializeAnalytics(self:GetFromDb("metrics"))
+    self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration

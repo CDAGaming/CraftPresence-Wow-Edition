@@ -49,7 +49,6 @@ local DB_DEFAULTS = {
         queuedPipeline = false,
         showWelcomeMessage = true,
         optionalMigrations = false,
-        allowAnalytics = false,
         callbackDelay = L["DEFAULT_CALLBACK_DELAY"],
         frameSize = L["DEFAULT_FRAME_SIZE"],
         frameClearDelay = L["DEFAULT_FRAME_CLEAR_DELAY"],
@@ -65,6 +64,24 @@ local DB_DEFAULTS = {
                 labelCallback = "", urlCallback = "",
                 labelType = "string", urlType = "string",
                 enabled = true
+            }
+        },
+        metrics = {
+            ["WagoAnalytics"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self, fieldName, oldValue, value)
+    if not self.WagoAnalytics then return end
+    if type(value) == "boolean" then
+        self.WagoAnalytics:Switch(fieldName, value) end
+    end
+    if type(value) == "number" then
+        self.WagoAnalytics:SetCounter(fieldName, value) end
+    end
+end]],
+                stateCallback = [[function (self)
+    self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
+end]],
+                enabled = false
             }
         },
         labels = {
@@ -1387,6 +1404,21 @@ function CraftPresence:getOptionsTable()
                         end
                 )
             },
+            metricsOptions = {
+                type = "group", order = self:GetNextIndex(),
+                name = L["CATEGORY_TITLE_METRICS"], desc = L["CATEGORY_COMMENT_METRICS"],
+                get = function(info)
+                    return self.db.profile[info[self:GetLength(info)]]
+                end,
+                set = function(info, value)
+                    self.db.profile[info[self:GetLength(info)]] = value
+                end,
+                args = self:GetPlaceholderArgs("metrics", L["CATEGORY_TITLE_METRICS_EXTENDED"],
+                        function(count)
+                            return strformat(L["CATEGORY_COMMENT_METRICS_INFO"], count, (count == 1 and "") or "s")
+                        end
+                )
+            },
             extraOptions = {
                 type = "group", order = self:GetNextIndex(),
                 name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
@@ -1497,25 +1529,6 @@ function CraftPresence:getOptionsTable()
                     blank3 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
-                    allowAnalytics = {
-                        type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_ALLOW_ANALYTICS"],
-                        desc = self:GetConfigComment("ALLOW_ANALYTICS"),
-                        get = function(_)
-                            return self:GetFromDb("allowAnalytics")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("allowAnalytics")
-                            local isValid = (type(value) == "boolean")
-                            if isValid then
-                                self.db.profile.allowAnalytics = value
-                                self:PrintChangedValue(L["TITLE_ALLOW_ANALYTICS"], oldValue, value, true)
-                            end
-                        end,
-                    },
-                    blank4 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
                     callbackDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
@@ -1578,7 +1591,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank5 = {
+                    blank4 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                     frameSize = {
@@ -1612,7 +1625,7 @@ function CraftPresence:getOptionsTable()
                             end
                         end,
                     },
-                    blank6 = {
+                    blank5 = {
                         type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
                     },
                 }
@@ -1665,12 +1678,6 @@ function CraftPresence:CanLogChanges()
     return self:GetFromDb("verboseMode")
 end
 
---- Retrieves whether or not collecting analytics data is allowed
---- @return boolean @ areAnalyticsAllowed
-function CraftPresence:AreAnalyticsAllowed()
-    return self:GetFromDb("allowAnalytics")
-end
-
 --- Prints change data, if possible, using the specified parameters
 ---
 --- @param fieldName string The config name the change belongs to
@@ -1691,7 +1698,7 @@ function CraftPresence:PrintChangedValue(fieldName, oldValue, value, ignoreMetri
                     )
             )
         end
-        if self:CanUseAnalytics() and not ignoreMetrics then
+        if not ignoreMetrics then
             self:LogChangedValue(fieldName, oldValue, value)
         end
     end
