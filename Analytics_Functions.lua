@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local type, pairs = type, pairs
+local pairs = pairs
 
 --- Analyze the list of metric engines specified, interpreting those that should be processed
 ---
