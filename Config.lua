@@ -71,11 +71,11 @@ local DB_DEFAULTS = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, fieldName, oldValue, value)
     if not self.WagoAnalytics then return end
-    if type(value) == "boolean" then
-        self.WagoAnalytics:Switch(fieldName, value) end
+    if type(value) == 'boolean' then
+        self.WagoAnalytics:Switch(fieldName, value)
     end
-    if type(value) == "number" then
-        self.WagoAnalytics:SetCounter(fieldName, value) end
+    if type(value) == 'number' then
+        self.WagoAnalytics:SetCounter(fieldName, value)
     end
 end]],
                 stateCallback = [[function (self)
