@@ -31,13 +31,12 @@ local LibStub = LibStub
 local L = CraftPresence.locale
 
 function CraftPresence:CanUseAnalytics()
-    return self:AreAnalyticsAllowed()-- and (self:IsClassicBuild() or self:IsRetailBuild())
+    return self:AreAnalyticsAllowed() and (self:IsClassicBuild() or self:IsClassicEraBuild() or self:IsRetailBuild())
 end
 
 function CraftPresence:InitializeAnalytics()
     if not self:CanUseAnalytics() then return end
     self.WagoAnalytics = LibStub("WagoAnalytics"):Register(GetAddOnMetadata(L["ADDON_NAME"], "X-Wago-ID"))
-    self:Print("Added")
 end
 
 --- Logs changed data, if possible and allowed, using the specified parameters
