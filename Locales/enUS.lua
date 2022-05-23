@@ -25,6 +25,7 @@ SOFTWARE.
 -- Lua APIs
 local LibStub = LibStub
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true, "raw")
+if not L then return end
 
 -- Addon APIs
 local CP_GlobalUtils = CP_GlobalUtils
@@ -59,7 +60,7 @@ L["COMMAND_CONFIG"] = "cp set"
 L["COMMAND_CONFIG_ALT"] = "craftpresence set"
 L["FORMAT_LEVEL"] = "Level %s"
 L["FORMAT_SETTING"] = "%s (Should be %s)"
-L["FORMAT_COMMENT"] = setfmt("%s|r\n*Default: %s", GREEN)
+L["FORMAT_COMMENT"] = setfmt("%s|r\n\n*Default:|r %s", GREEN)
 L["FORMAT_USER_PREFIX"] = "(%s) "
 L["EVENT_RPC_TAG"] = "$RPCEvent$"
 L["EVENT_RPC_LENGTH"] = 11
@@ -98,7 +99,7 @@ L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data.
 L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)."
 
 L["CATEGORY_TITLE_EVENTS"] = "Events"
-L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registered Events"
+L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Available Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
 L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)."
 
@@ -174,13 +175,13 @@ L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
-L["COMMENT_CALLBACK_DELAY"] = "The delay (seconds) after event firing before non-forced RPC updates trigger."
+L["COMMENT_CALLBACK_DELAY"] = "The delay (in seconds) after event firing before non-forced RPC updates trigger."
 L["MINIMUM_CALLBACK_DELAY"] = 0
 L["MAXIMUM_CALLBACK_DELAY"] = 5
 L["DEFAULT_CALLBACK_DELAY"] = 1
 
 L["TITLE_FRAME_CLEAR_DELAY"] = "Frame Clear Delay"
-L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay (seconds) after non-debug events before drawn frames are cleared."
+L["COMMENT_FRAME_CLEAR_DELAY"] = "The delay (in seconds) after non-debug events before drawn frames are cleared."
 L["MINIMUM_FRAME_CLEAR_DELAY"] = 3
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
