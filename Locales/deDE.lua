@@ -103,6 +103,11 @@ L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registrierte Ereignisse"
 L["CATEGORY_COMMENT_EVENTS"] = "Einstellungen für benutzerdefinierte Ereignisse, auf dessen Auslösen die Rich Presence aktualisiert wird."
 L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s Ereigniss(e) gefunden! (/cp events im Chat für mehr Informationen)."
 
+L["CATEGORY_TITLE_METRICS"] = "Metrics"
+L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
+L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
+L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)."
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Zusätzliche Einstellungen"
 

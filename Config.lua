@@ -66,6 +66,24 @@ local DB_DEFAULTS = {
                 enabled = true
             }
         },
+        metrics = {
+            ["WagoAnalytics"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                processCallback = [[function (self, fieldName, oldValue, value)
+    if not self.WagoAnalytics then return end
+    if type(value) == 'boolean' then
+        self.WagoAnalytics:Switch(fieldName, value)
+    end
+    if type(value) == 'number' then
+        self.WagoAnalytics:SetCounter(fieldName, value)
+    end
+end]],
+                stateCallback = [[function (self)
+    self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
+end]],
+                enabled = false
+            }
+        },
         labels = {
             ["away"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -1386,6 +1404,21 @@ function CraftPresence:getOptionsTable()
                         end
                 )
             },
+            metricsOptions = {
+                type = "group", order = self:GetNextIndex(),
+                name = L["CATEGORY_TITLE_METRICS"], desc = L["CATEGORY_COMMENT_METRICS"],
+                get = function(info)
+                    return self.db.profile[info[self:GetLength(info)]]
+                end,
+                set = function(info, value)
+                    self.db.profile[info[self:GetLength(info)]] = value
+                end,
+                args = self:GetPlaceholderArgs("metrics", L["CATEGORY_TITLE_METRICS_EXTENDED"],
+                        function(count)
+                            return strformat(L["CATEGORY_COMMENT_METRICS_INFO"], count, (count == 1 and "") or "s")
+                        end
+                )
+            },
             extraOptions = {
                 type = "group", order = self:GetNextIndex(),
                 name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
@@ -1650,17 +1683,24 @@ end
 --- @param fieldName string The config name the change belongs to
 --- @param oldValue any The old value of the config variable
 --- @param value any The new value of the config variable
-function CraftPresence:PrintChangedValue(fieldName, oldValue, value)
+--- @param ignoreMetrics boolean Whether or not to ignore metric submission, even if allowed to otherwise
+function CraftPresence:PrintChangedValue(fieldName, oldValue, value, ignoreMetrics)
     oldValue = self:GetOrDefault(oldValue, L["TYPE_NONE"])
     value = self:GetOrDefault(value, L["TYPE_NONE"])
-    if oldValue ~= value and self:CanLogChanges() then
-        self:Print(
-                strformat(
-                        L["LOG_VERBOSE"], strformat(
-                                L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
-                        )
-                )
-        )
+    ignoreMetrics = self:GetOrDefault(ignoreMetrics, false)
+    if oldValue ~= value then
+        if self:CanLogChanges() then
+            self:Print(
+                    strformat(
+                            L["LOG_VERBOSE"], strformat(
+                                    L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
+                            )
+                    )
+            )
+        end
+        if not ignoreMetrics then
+            self:LogChangedValue(fieldName, oldValue, value)
+        end
     end
 end
 

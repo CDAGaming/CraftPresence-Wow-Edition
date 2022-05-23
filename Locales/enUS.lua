@@ -102,6 +102,11 @@ L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Registered Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
 L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)."
 
+L["CATEGORY_TITLE_METRICS"] = "Metrics"
+L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
+L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
+L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)."
+
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customization options for addon display info."
 

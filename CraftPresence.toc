@@ -9,7 +9,7 @@
 ## Version: @project-version@
 ## Notes: Completely customize the way others see you play in Discord!
 ## SavedVariables: CraftPresenceDB
-## OptionalDeps: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
+## OptionalDeps: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3, WagoAnalytics
 ## X-Schema-ID: 4.1
 ## X-Embeds: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
 ## X-Credits: Attka
@@ -25,6 +25,7 @@ Locales\Locales.xml
 CraftPresence.lua
 Utils.lua
 
+Analytics_Functions.lua
 Migration_Functions.lua
 Deprecated_Functions.lua
 
