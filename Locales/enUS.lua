@@ -172,7 +172,11 @@ L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
-L["COMMENT_OPTIONAL_MIGRATIONS"] = "Toggles whether to allow optional config migrations.\n(May reset other config values)"
+L["COMMENT_OPTIONAL_MIGRATIONS"] = setfmt([[Toggles whether to allow optional config migrations.
+
+*Warning:|r These types of migrations may reset certain config values.]],
+        GOLD
+)
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
 L["COMMENT_CALLBACK_DELAY"] = "The delay (in seconds) after event firing before non-forced RPC updates trigger."
@@ -187,7 +191,11 @@ L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_SIZE"] = "The size that each frame should render at\n(Should equal the script's pixel_size property)"
+L["COMMENT_FRAME_SIZE"] = setfmt([[The size that each event frame pixel should be rendered at.
+
+*Note:|r This value should be equal to the python script's ^pixel_size|r property.]],
+        GOLD, GREEN
+)
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 L["DEFAULT_FRAME_SIZE"] = 6
@@ -236,40 +244,50 @@ L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called befo
 L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_PROCESSTYPE"] = "Process Type"
-L["COMMENT_BUTTON_PROCESSTYPE"] = "The expected type the Process Callback should identify as.\n(Can be: function,string)"
-L["USAGE_BUTTON_PROCESSTYPE"] = "<Your message here>"
+L["COMMENT_BUTTON_PROCESSTYPE"] = setfmt("The variable type the *Process Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_PROCESSTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_ACTIVECALLBACK"] = "Active Callback"
 L["COMMENT_BUTTON_ACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is active."
 L["USAGE_BUTTON_ACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_ACTIVETYPE"] = "Active Type"
-L["COMMENT_BUTTON_ACTIVETYPE"] = "The expected type the Active Callback should identify as.\n(Can be: function,string)"
-L["USAGE_BUTTON_ACTIVETYPE"] = "<Your message here>"
+L["COMMENT_BUTTON_ACTIVETYPE"] = setfmt("The variable type the *Active Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_ACTIVETYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_INACTIVECALLBACK"] = "Inactive Callback"
 L["COMMENT_BUTTON_INACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is inactive."
 L["USAGE_BUTTON_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_INACTIVETYPE"] = "Inactive Type"
-L["COMMENT_BUTTON_INACTIVETYPE"] = "The expected type the Inactive Callback should identify as.\n(Can be: function,string)"
-L["USAGE_BUTTON_INACTIVETYPE"] = "<Your message here>"
+L["COMMENT_BUTTON_INACTIVETYPE"] = setfmt("The variable type the *Inactive Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_INACTIVETYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
 L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."
 L["USAGE_BUTTON_LABELCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_LABELTYPE"] = "Label Type"
-L["COMMENT_BUTTON_LABELTYPE"] = "The expected type the Label Callback should identify as.\n(Can be: function,string)"
-L["USAGE_BUTTON_LABELTYPE"] = "<Your message here>"
+L["COMMENT_BUTTON_LABELTYPE"] = setfmt("The variable type the *Label Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_LABELTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_URLCALLBACK"] = "URL Callback"
 L["COMMENT_BUTTON_URLCALLBACK"] = "The function that, if any, is what will be attached as the url for the state."
 L["USAGE_BUTTON_URLCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_URLTYPE"] = "URL Type"
-L["COMMENT_BUTTON_URLTYPE"] = "The expected type the URL Callback should identify as.\n(Can be: function,string)"
-L["USAGE_BUTTON_URLTYPE"] = "<Your message here>"
+L["COMMENT_BUTTON_URLTYPE"] = setfmt("The variable type the *URL Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_URLTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
 L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called."
@@ -288,8 +306,10 @@ L["COMMENT_BUTTON_TAGCALLBACK"] = "The function that, if any, will allow the dat
 L["USAGE_BUTTON_TAGCALLBACK"] = "<A string or string function here>"
 
 L["TITLE_BUTTON_TAGTYPE"] = "Tag Type"
-L["COMMENT_BUTTON_TAGTYPE"] = "The expected type the Tag Callback should identify as.\n(Can be: function,string)"
-L["USAGE_BUTTON_TAGTYPE"] = "<Your message here>"
+L["COMMENT_BUTTON_TAGTYPE"] = setfmt("The variable type the *Tag Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_TAGTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_PREFIX"] = "Prefix"
 L["COMMENT_BUTTON_PREFIX"] = "The prefix to be used for this data."
