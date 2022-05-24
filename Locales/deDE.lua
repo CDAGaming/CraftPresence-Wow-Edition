@@ -252,7 +252,7 @@ L["COMMENT_BUTTON_INACTIVECALLBACK"] = "The function that, if any, is what will 
 L["USAGE_BUTTON_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_BUTTON_INACTIVETYPE"] = "Inactive Type"
-L["COMMENT_BUTTON_INACTIVETYPE"] = "The expected type the Inctive Callback should identify as.\n(Can be: function,string)"
+L["COMMENT_BUTTON_INACTIVETYPE"] = "The expected type the Inactive Callback should identify as.\n(Can be: function,string)"
 L["USAGE_BUTTON_INACTIVETYPE"] = "<Your message here>"
 
 L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
