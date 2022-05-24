@@ -22,6 +22,8 @@ GlobalUtils.lua
 Libraries\Libraries.xml
 Locales\Locales.xml
 
+Libraries\WagoAnalytics\Shim.lua
+
 CraftPresence.lua
 Utils.lua
 
