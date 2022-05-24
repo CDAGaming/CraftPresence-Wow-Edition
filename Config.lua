@@ -79,9 +79,7 @@ local DB_DEFAULTS = {
     end
 end]],
                 stateCallback = [[function (self)
-    local wago = LibStub('WagoAnalytics')
-    if not wago then return end
-    self.WagoAnalytics = wago:Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
+    self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
 end]],
                 enabled = false
             }
