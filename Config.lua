@@ -1635,32 +1635,16 @@ function CraftPresence:getOptionsTable()
                 type = "group", order = self:GetNextIndex(),
                 name = L["CATEGORY_TITLE_ABOUT"], desc = L["CATEGORY_COMMENT_ABOUT"],
                 args = {
-                    generalText1 = {
+                    summary = {
                         type = "description", order = self:GetNextIndex(), width = "full", fontSize = "medium",
-                        name = L["ADDON_INFO_ONE"],
+                        name = L["ADDON_SUMMARY"],
                     },
-                    thanksHeader = {
+                    creditsHeader = {
                         order = self:GetNextIndex(), type = "header", name = L["ADDON_HEADER_CREDITS"]
                     },
-                    generalText2 = {
+                    description = {
                         type = "description", order = self:GetNextIndex(), fontSize = "medium",
-                        name = L["ADDON_INFO_TWO"]
-                    },
-                    blank1 = {
-                        type = "description", order = self:GetNextIndex(),
-                        fontSize = "small", name = "", width = "full"
-                    },
-                    generalText3 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "medium",
-                        name = L["ADDON_INFO_THREE"]
-                    },
-                    blank2 = {
-                        type = "description", order = self:GetNextIndex(),
-                        fontSize = "small", name = "", width = "full"
-                    },
-                    generalText4 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "medium",
-                        name = L["ADDON_INFO_FOUR"]
+                        name = L["ADDON_DESCRIPTION"]
                     }
                 }
             },

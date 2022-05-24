@@ -494,10 +494,14 @@ L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented
 L["ADDON_HEADER_VERSION"] = setfmt("%s *%s|r", PALE_CYAN)
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
-L["ADDON_INFO_ONE"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
-L["ADDON_INFO_TWO"] = "Created by CDAGaming (https://gitlab.com/CDAGaming)"
-L["ADDON_INFO_THREE"] = "Thanks to Attka and wowdim on Github for the original base project, that makes this possible."
-L["ADDON_INFO_FOUR"] = "Special thanks to the-emerald/python-discord-rpc and Attk4/wow-discord-rich-presence"
+L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
+L["ADDON_DESCRIPTION"] = setfmt([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)
+
+Thanks to *Attka|r and *wowdim|r on Github for the original base project, that makes this possible.
+
+Special thanks to *the-emerald/python-discord-rpc|r and *Attk4/wow-discord-rich-presence|r]],
+        GREEN
+)
 
 L["ADDON_TOOLTIP_THREE"] = "Click to access config data."
 L["ADDON_TOOLTIP_FIVE"] = setfmt("Toggle minimap button by typing */cp minimap|r", PALE_CYAN)
