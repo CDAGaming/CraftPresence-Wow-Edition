@@ -1,6 +1,3 @@
 [submodule "Libraries/Ace3"]
 	path = Libraries/Ace3
 	url = https://gitlab.com/CDAGaming/ace3.git
-[submodule "Libraries/WagoAnalytics"]
-	path = Libraries/WagoAnalytics
-	url = https://github.com/wagoio/WagoAnalyticsShim.git
