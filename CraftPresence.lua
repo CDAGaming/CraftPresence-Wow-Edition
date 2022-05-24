@@ -133,7 +133,7 @@ function CraftPresence:OnInitialize()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
     self.db = LibStub("AceDB-3.0"):New(L["ADDON_NAME"] .. "DB", self:GetDefaults())
-    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.getOptionsTable, {
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(L["ADDON_NAME"], self.GetOptions, {
         (L["COMMAND_CONFIG"]), (L["COMMAND_CONFIG_ALT"])
     })
     self.config:SetDefaultSize(L["ADDON_NAME"], 858, 660)

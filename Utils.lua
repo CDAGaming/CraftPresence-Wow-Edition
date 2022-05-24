@@ -1125,15 +1125,15 @@ end
 --- @return any configValue
 function CraftPresence:GetFromDb(grp, key, reset)
     if self:IsNullOrEmpty(grp) then return nil end
-    local DB_DEFAULTS = self:GetDefaults()
+    local defaults = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
-        self.db.profile[grp] = DB_DEFAULTS.profile[grp]
+        self.db.profile[grp] = defaults.profile[grp]
     end
     if not key then
         return self.db.profile[grp]
     end
     if self.db.profile[grp][key] == nil or reset then
-        self.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
+        self.db.profile[grp][key] = defaults.profile[grp][key]
     end
     return self.db.profile[grp][key]
 end
@@ -1146,15 +1146,15 @@ end
 --- @param reset boolean Whether to reset this property value
 function CraftPresence:SetToDb(grp, key, newValue, reset)
     if self:IsNullOrEmpty(grp) then return end
-    local DB_DEFAULTS = self:GetDefaults()
+    local defaults = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
-        self.db.profile[grp] = DB_DEFAULTS.profile[grp]
+        self.db.profile[grp] = defaults.profile[grp]
     end
     if not key then
         self.db.profile[grp] = newValue
     else
         if self.db.profile[grp][key] == nil or reset then
-            self.db.profile[grp][key] = DB_DEFAULTS.profile[grp][key]
+            self.db.profile[grp][key] = defaults.profile[grp][key]
         end
         self.db.profile[grp][key] = newValue
     end

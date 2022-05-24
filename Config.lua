@@ -32,1129 +32,9 @@ local LibStub = LibStub
 local L = CraftPresence.locale
 local config_registry = LibStub("AceConfigRegistry-3.0")
 
--- DB_DEFAULTS
-local DB_DEFAULTS = {
-    profile = {
-        schema = 0,
-        clientId = L["DEFAULT_CLIENT_ID"],
-        gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
-        detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
-        largeImageKey = L["DEFAULT_LARGE_IMAGE_KEY"],
-        largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
-        smallImageKey = L["DEFAULT_SMALL_IMAGE_KEY"],
-        smallImageMessage = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
-        debugMode = false,
-        verboseMode = false,
-        showMinimapIcon = true,
-        queuedPipeline = false,
-        showWelcomeMessage = true,
-        optionalMigrations = false,
-        callbackDelay = L["DEFAULT_CALLBACK_DELAY"],
-        frameSize = L["DEFAULT_FRAME_SIZE"],
-        frameClearDelay = L["DEFAULT_FRAME_CLEAR_DELAY"],
-        buttons = {
-            ["primaryButton"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                labelCallback = "", urlCallback = "",
-                labelType = "string", urlType = "string",
-                enabled = true
-            },
-            ["secondaryButton"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                labelCallback = "", urlCallback = "",
-                labelType = "string", urlType = "string",
-                enabled = true
-            }
-        },
-        metrics = {
-            ["WagoAnalytics"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self, fieldName, oldValue, value)
-    if not self.WagoAnalytics then return end
-    if type(value) == 'boolean' then
-        self.WagoAnalytics:Switch(fieldName, value)
-    end
-    if type(value) == 'number' then
-        self.WagoAnalytics:SetCounter(fieldName, value)
-    end
-end]],
-                stateCallback = [[function (self)
-    self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
-end]],
-                enabled = false
-            }
-        },
-        labels = {
-            ["away"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                activeCallback = L["DEFAULT_LABEL_AWAY"], inactiveCallback = "",
-                activeType = "string", inactiveType = "string",
-                stateCallback = [[function (self)
-    return self:GetOrDefault(
-        (UnitIsAFK and UnitIsAFK('player')),
-        (self:GetUnitData('player').away) or false
-    )
-end]],
-                enabled = true
-            },
-            ["busy"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                activeCallback = L["DEFAULT_LABEL_BUSY"], inactiveCallback = "",
-                activeType = "string", inactiveType = "string",
-                stateCallback = [[function (self)
-    return self:GetOrDefault(
-        (UnitIsDND and UnitIsDND('player')),
-        (self:GetUnitData('player').busy) or false
-    )
-end]],
-                enabled = true
-            },
-            ["dead"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                activeCallback = L["DEFAULT_LABEL_DEAD"], inactiveCallback = "",
-                activeType = "string", inactiveType = "string",
-                stateCallback = [[function (self)
-    return self:GetOrDefault(
-        (UnitIsDead and UnitIsDead('player')),
-        (self:GetUnitData('player').dead) or false
-    )
-end]],
-                enabled = true
-            },
-            ["ghost"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                activeCallback = L["DEFAULT_LABEL_GHOST"], inactiveCallback = "",
-                activeType = "string", inactiveType = "string",
-                stateCallback = [[function (self)
-    return self:GetOrDefault(
-        (UnitIsGhost and UnitIsGhost('player')),
-        (self:GetUnitData('player').ghost) or false
-    )
-end]],
-                enabled = true
-            },
-            ["in_combat"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                activeCallback = L["DEFAULT_LABEL_COMBAT"], inactiveCallback = "",
-                activeType = "string", inactiveType = "string",
-                stateCallback = [[function (self)
-    return self:GetOrDefault(
-        (UnitAffectingCombat and UnitAffectingCombat('player')),
-        (self:GetUnitData('player').in_combat) or false
-    )
-end]],
-                enabled = true
-            },
-            ["online"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                activeCallback = "", inactiveCallback = "",
-                activeType = "string", inactiveType = "string",
-                stateCallback = [[function (self)
-    return self:GetOrDefault(
-        (UnitIsConnected and UnitIsConnected('player')),
-        (self:GetUnitData('player').online) or false
-    )
-end]],
-                enabled = true
-            }
-        },
-        placeholders = {
-            ["default"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = L["DEFAULT_FALLBACK_MESSAGE"],
-                processType = "string",
-                registerCallback = [[function (self)
-    return GetInstanceInfo == nil or select(2, GetInstanceInfo()) == 'none' or (
-        self:IsNullOrEmpty(select(2, GetInstanceInfo()))
-    )
-end]],
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
-            },
-            ["arena"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = L["DEFAULT_ARENA_MESSAGE"],
-                processType = "string",
-                registerCallback = [[function (self)
-    return select(2, GetInstanceInfo()) == 'arena'
-end]],
-                tagCallback = "time:start",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
-            },
-            ["battleground"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = L["DEFAULT_BATTLEGROUND_MESSAGE"],
-                processType = "string",
-                registerCallback = [[function (self)
-    return select(2, GetInstanceInfo()) == 'pvp'
-end]],
-                tagCallback = "time:start",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
-            },
-            ["raid"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = L["DEFAULT_RAID_MESSAGE"],
-                processType = "string",
-                registerCallback = [[function (self)
-    return select(2, GetInstanceInfo()) == 'raid'
-end]],
-                tagCallback = "time:start",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
-            },
-            ["dungeon"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = L["DEFAULT_DUNGEON_MESSAGE"],
-                processType = "string",
-                registerCallback = [[function (self)
-    return select(2, GetInstanceInfo()) == 'party' and (
-        not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
-    )
-end]],
-                tagCallback = "time:start",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
-            },
-            ["scenario"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = L["DEFAULT_SCENARIO_MESSAGE"],
-                processType = "string",
-                registerCallback = [[function (self)
-    return select(2, GetInstanceInfo()) == 'scenario'
-end]],
-                tagCallback = "time:start",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
-            },
-            ["player_name"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return UnitName('player')
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["title_name"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return UnitPVPName('player')
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_level"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return UnitLevel('player')
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_realm"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local playerRealm = self.locale['TYPE_UNKNOWN']
-    if GetRealmName then
-        playerRealm = GetRealmName()
-    end
-    return playerRealm
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_region"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local realmData = { "US", "KR", "EU", "TW", "CH" }
-    local playerRegionId = 1
-    if GetCurrentRegion then
-        playerRegionId = GetCurrentRegion()
-    end
-    return realmData[playerRegionId]
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_class"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return UnitClass('player')
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_race"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return UnitRace('player')
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_gender"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local genderData = { "Unknown", "Male", "Female" }
-    local playerGenderId = 1
-    if UnitSex then
-        playerGenderId = UnitSex('player')
-    end
-    return genderData[playerGenderId]
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_icon"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local genderData = { "Unknown", "Male", "Female" }
-    local playerGenderId = 1
-    local fallback = genderData[playerGenderId]
-    local playerRace, playerGender = fallback, fallback
-    if UnitSex then
-        playerGenderId = UnitSex('player')
-        playerGender = genderData[playerGenderId]
-    end
-    if UnitRace then
-        playerRace = UnitRace('player')
-    end
-    return self:FormatAsIcon(playerRace .. "_" .. playerGender)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_status"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetUnitStatus("player", true).status
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_reason"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetUnitStatus("player", true).reason
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["difficulty_info"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local difficultyInfo = select(4, GetInstanceInfo())
-    -- Keystone Data
-    local activeKeystoneData = self:GetActiveKeystone()
-    if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
-        difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
-    end
-    return difficultyInfo
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_faction"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local englishFaction, localizedFaction = UnitFactionGroup('player')
-    englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
-    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
-    return localizedFaction
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_alliance"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    -- Covenant and Faction Setup
-    -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
-    -- Then use the Faction as the Alliance; otherwise use Covenant Data
-    local name = GetInstanceInfo and select(1, GetInstanceInfo()) or nil
-    local englishFaction, localizedFaction = UnitFactionGroup('player')
-    englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
-    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
-    local playerCovenantId, playerCovenantData = 0
-    if C_Covenants then
-        playerCovenantId = C_Covenants.GetActiveCovenantID()
-        playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
-    end
-    -- Covenant and/or Faction data is only updated if the instance is changed
-    if (playerCovenantId == 0 or name == nil or not (
-            (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
-                    (self:FindMatches(name, 'Zereth Mortis', false, 1, false)) or
-                    (self:FindMatches(name, 'Torghast', false, 1, false)) or
-                    (self:FindMatches(self:GetCurrentInstanceTier(), 'Shadowlands', false, 1, false))
-    )) then
-        return localizedFaction
-    else
-        return playerCovenantData.name
-    end
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_covenant"] = {
-                minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    local covenantId = C_Covenants.GetActiveCovenantID()
-    if covenantId == 0 then
-        return self.locale['TYPE_NONE']
-    else
-        return C_Covenants.GetCovenantData(covenantId).name
-    end
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_info"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    -- Player Data
-    local playerName = UnitName('player')
-    local playerData = self:GetUnitStatus('player', true)
-    -- Extra Player Data
-    local unitLevel = UnitLevel('player')
-    local unitClass = UnitClass('player')
-    local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
-    -- Specialization Info (5.0.4 and above)
-    if GetSpecialization then
-        local specInfo, specId, specName, roleName = GetSpecialization()
-        --
-        -- Hotfix: Prevent a null-case with Spec Info
-        --
-        -- This only happens if events fire too quickly for into to populate,
-        -- or if you don't have a spec learned or available.
-        if specInfo ~= nil then
-            specId, specName = GetSpecializationInfo(specInfo)
-            if specId ~= nil then
-                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-            else
-                specName = self.locale["TYPE_NONE"]
-            end
-        end
-        --
-        -- Trim and Adjust User Data
-        if not self:IsNullOrEmpty(specName) then
-            userInfo = (userInfo .. ' ' .. specName)
-        end
-    end
-    -- Final Parsing
-    if not self:IsNullOrEmpty(unitClass) then
-            userInfo = (userInfo .. ' ' .. unitClass)
-    end
-    return userInfo
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_spec_name"] = {
-                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    local specInfo, specId, specName, roleName = GetSpecialization()
-    --
-    -- Hotfix: Prevent a null-case with Spec Info
-    --
-    -- This only happens if events fire too quickly for into to populate,
-    -- or if you don't have a spec learned or available.
-    if specInfo ~= nil then
-        specId, specName = GetSpecializationInfo(GetSpecialization())
-        if specId ~= nil then
-            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-        else
-            specName = self.locale["TYPE_NONE"]
-        end
-    end
-    return specName
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_spec_role"] = {
-                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    local specInfo, specId, specName, roleName = GetSpecialization()
-    --
-    -- Hotfix: Prevent a null-case with Spec Info
-    --
-    -- This only happens if events fire too quickly for into to populate,
-    -- or if you don't have a spec learned or available.
-    if specInfo ~= nil then
-        specId, specName = GetSpecializationInfo(GetSpecialization())
-        if specId ~= nil then
-            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-        else
-            specName = self.locale["TYPE_NONE"]
-        end
-    end
-    return roleName
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["realm_info"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    -- Get Player Info
-    local realmData = { "US", "KR", "EU", "TW", "CH" }
-    local playerRealm = self.locale['TYPE_UNKNOWN']
-    local playerRegionId = 1
-    if GetRealmName then
-        playerRealm = GetRealmName()
-    end
-    if GetCurrentRegion then
-        playerRegionId = GetCurrentRegion()
-    end
-    local playerRegion = realmData[playerRegionId]
-    return (playerRegion .. ' - ' .. playerRealm)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["player_covenant_renown"] = {
-                minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    return tostring(C_CovenantSanctumUI.GetRenownLevel())
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["localized_name"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return select(1, GetInstanceInfo())
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["instance_type"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return select(2, GetInstanceInfo())
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["instance_difficulty"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(3, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["difficulty_name"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return select(4, GetInstanceInfo())
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["current_players"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local current = 0
-    if GetNumGroupMembers then
-        current = GetNumGroupMembers()
-    else
-        if UnitInParty("player") and GetNumPartyMembers then
-            current = GetNumPartyMembers()
-        elseif UnitInRaid("player") and GetNumRaidMembers then
-            current = GetNumRaidMembers()
-        end
-    end
-    return tostring(current)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["max_players"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(5, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["dynamic_difficulty"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(6, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["is_dynamic"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(7, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["instance_id"] = {
-                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(8, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["instance_group_size"] = {
-                minimumTOC = "50400", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(9, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["lfg_dungeon_id"] = {
-                minimumTOC = "80000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(select(10, GetInstanceInfo()))
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["zone_name"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetOrDefault(GetRealZoneText(), self.locale['TYPE_UNKNOWN'])
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["sub_zone_name"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetOrDefault(GetSubZoneText(), self.locale["TYPE_UNKNOWN"])
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["zone_info"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    -- Zone Data
-    local formatted_zone_info
-    local zone_name = GetRealZoneText()
-    local sub_name = GetSubZoneText()
-    -- Null-Case to ensure Zone Name always equals something
-    if self:IsNullOrEmpty(zone_name) then
-        zone_name = self.locale['TYPE_UNKNOWN']
-    end
-    -- Format the zone info based on zone data
-    if self:IsNullOrEmpty(sub_name) then
-        formatted_zone_info = zone_name
-        sub_name = self.locale['TYPE_UNKNOWN']
-    else
-        formatted_zone_info = (sub_name .. ' - ' .. zone_name)
-    end
-    return formatted_zone_info
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["item_level"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-    if GetAverageItemLevel then
-        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-    end
-    return string.format("%.2f", avgItemLevel or 0)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["item_level_equipped"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-    if GetAverageItemLevel then
-        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-    end
-    return string.format("%.2f", avgItemLevelEquipped or 0)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["item_level_pvp"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-    if GetAverageItemLevel then
-        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-    end
-    return string.format("%.2f", avgItemLevelPvp or 0)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["active_keystone_level"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetActiveKeystone().formattedLevel
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["active_keystone_affixes"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetActiveKeystone().formattedAffixes
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["active_keystone_rating"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(self:GetActiveKeystone().rating)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["external_keystone_rating"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(self:GetActiveKeystone().external_rating)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["internal_keystone_rating"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return tostring(self:GetActiveKeystone().internal_rating)
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["owned_keystone_level"] = {
-                minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self)
-    return self:GetOwnedKeystone().formattedLevel
-end]],
-                processType = "function",
-                registerCallback = "",
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["lockout_encounters"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    return self:GetCurrentLockoutData(true).formattedEncounterData
-end]],
-                processType = "function",
-                registerCallback = [[function (self)
-    local lockoutData = self:GetCurrentLockoutData(true)
-    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
-end]],
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["lockout_current_encounters"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    return self:GetCurrentLockoutData(true).currentEncounters
-end]],
-                processType = "function",
-                registerCallback = [[function (self)
-    local lockoutData = self:GetCurrentLockoutData(true)
-    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
-end]],
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            },
-            ["lockout_total_encounters"] = {
-                minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
-                processCallback = [[function (self)
-    return self:GetCurrentLockoutData(true).totalEncounters
-end]],
-                processType = "function",
-                registerCallback = [[function (self)
-    local lockoutData = self:GetCurrentLockoutData(true)
-    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
-end]],
-                tagCallback = "",
-                tagType = "string",
-                enabled = true,
-                prefix = L["DEFAULT_INNER_KEY"], suffix = L["DEFAULT_INNER_KEY"]
-            }
-        },
-        events = {
-            ["CHAT_MSG_SYSTEM"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self, _, _, args)
-    local splitMessage = self:Split(args[1], ':', false, true)
-    local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
-    local isAfkStatus = args[1] == CLEARED_AFK or args[1] == MARKED_AFK or self:StartsWith(args[1], afkFormat[1])
-    local busyFormat = self:Split(MARKED_DND, ':', false, true)
-    local isBusyStatus = args[1] == CLEARED_DND or self:StartsWith(args[1], busyFormat[1])
-    if isAfkStatus then
-        self:SetCachedUnitData('player', 'away', args[1] ~= CLEARED_AFK and isAfkStatus)
-        self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_AFK_MESSAGE))
-    elseif isBusyStatus then
-        self:SetCachedUnitData('player', 'busy', args[1] ~= CLEARED_DND and isBusyStatus)
-        self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_DND_MESSAGE))
-    else
-        self:SetCachedUnitData('player', 'reason', '')
-    end
-    return not (isAfkStatus or isBusyStatus)
-end]],
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_LOGIN"] = {
-                minimumTOC = "10800", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_LEVEL_UP"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_CHANGED' end"),
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_LEVEL_CHANGED"] = {
-                minimumTOC = "80001", maximumTOC = "", allowRebasedApi = false,
-                processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_LEVEL_UP' end"),
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_ALIVE"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = ("function (_, lastName, _, _) return lastName == 'PLAYER_DEAD' end"),
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_DEAD"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_REGEN_ENABLED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_REGEN_DISABLED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_FLAGS_CHANGED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = [[function (self, lastName, _, args)
-    local unitData = self:GetUnitData()
-    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or unitData.last_status == unitData.status
-end]],
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["ZONE_CHANGED"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["ZONE_CHANGED_NEW_AREA"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["ZONE_CHANGED_INDOORS"] = {
-                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["PLAYER_SPECIALIZATION_CHANGED"] = {
-                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "function (_, _, _, args) return args[1] ~= 'player' end",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["ACTIVE_TALENT_GROUP_CHANGED"] = {
-                minimumTOC = "30200", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "function (_, _, _, args) return args[1] == args[2] end",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["GROUP_JOINED"] = {
-                minimumTOC = "50100", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["GROUP_LEFT"] = {
-                minimumTOC = "50100", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["ENCOUNTER_START"] = {
-                minimumTOC = "50402", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["ENCOUNTER_END"] = {
-                minimumTOC = "50402", maximumTOC = "", allowRebasedApi = true,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["CHALLENGE_MODE_START"] = {
-                minimumTOC = "60002", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["CHALLENGE_MODE_COMPLETED"] = {
-                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["CHALLENGE_MODE_RESET"] = {
-                minimumTOC = "60002", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["SCENARIO_COMPLETED"] = {
-                minimumTOC = "60002", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-            ["CRITERIA_COMPLETE"] = {
-                minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
-                processCallback = "",
-                registerCallback = "",
-                eventCallback = "function(self) return self.defaultEventCallback end",
-                enabled = true
-            },
-        }
-    },
-}
-
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
-function CraftPresence:getOptionsTable()
+function CraftPresence:GetOptions()
     -- It is necesary to have this value, as calling it with self implied
     -- Causes NotifyChange to fail from time to time
     local self = CraftPresence
@@ -1204,10 +84,10 @@ function CraftPresence:getOptionsTable()
                             else
                                 self:PrintErrorMessage(L["ERROR_CLIENT_ID"])
                             end
-                        end,
+                        end
                     },
                     blank1 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     gameStateMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
@@ -1224,10 +104,10 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.gameStateMessage = value
                                 self:PrintChangedValue(L["TITLE_GAME_STATE_MESSAGE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     blank2 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     detailsMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
@@ -1244,10 +124,10 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.detailsMessage = value
                                 self:PrintChangedValue(L["TITLE_DETAILS_MESSAGE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     blank3 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     largeImageKey = {
                         type = "input", order = self:GetNextIndex(), width = 1.50,
@@ -1266,7 +146,7 @@ function CraftPresence:getOptionsTable()
                             else
                                 self:PrintErrorMessage(L["ERROR_IMAGE_KEY"])
                             end
-                        end,
+                        end
                     },
                     smallImageKey = {
                         type = "input", order = self:GetNextIndex(), width = 1.50,
@@ -1285,10 +165,10 @@ function CraftPresence:getOptionsTable()
                             else
                                 self:PrintErrorMessage(L["ERROR_IMAGE_KEY"])
                             end
-                        end,
+                        end
                     },
                     blank4 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     largeImageMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
@@ -1305,10 +185,10 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.largeImageMessage = value
                                 self:PrintChangedValue(L["TITLE_LARGE_IMAGE_MESSAGE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     blank5 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     smallImageMessage = {
                         type = "input", order = self:GetNextIndex(), width = 3.0,
@@ -1325,11 +205,8 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.smallImageMessage = value
                                 self:PrintChangedValue(L["TITLE_SMALL_IMAGE_MESSAGE"], oldValue, value)
                             end
-                        end,
-                    },
-                    blank6 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
+                        end
+                    }
                 }
             },
             buttonOptions = {
@@ -1443,7 +320,7 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.debugMode = value
                                 self:PrintChangedValue(L["TITLE_DEBUG_MODE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     verboseMode = {
                         type = "toggle", order = self:GetNextIndex(),
@@ -1459,10 +336,10 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.verboseMode = value
                                 self:PrintChangedValue(L["TITLE_VERBOSE_MODE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     blank1 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     showMinimapIcon = {
                         type = "toggle", order = self:GetNextIndex(),
@@ -1473,7 +350,7 @@ function CraftPresence:getOptionsTable()
                         end,
                         set = function(_, value)
                             self:UpdateMinimapSetting(value)
-                        end,
+                        end
                     },
                     queuedPipeline = {
                         type = "toggle", order = self:GetNextIndex(),
@@ -1489,10 +366,10 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.queuedPipeline = value
                                 self:PrintChangedValue(L["TITLE_QUEUED_PIPELINE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     blank2 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     showWelcomeMessage = {
                         type = "toggle", order = self:GetNextIndex(),
@@ -1508,7 +385,7 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.showWelcomeMessage = value
                                 self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     optionalMigrations = {
                         type = "toggle", order = self:GetNextIndex(),
@@ -1524,10 +401,10 @@ function CraftPresence:getOptionsTable()
                                 self.db.profile.optionalMigrations = value
                                 self:PrintChangedValue(L["TITLE_OPTIONAL_MIGRATIONS"], oldValue, value)
                             end
-                        end,
+                        end
                     },
                     blank3 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     callbackDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
@@ -1558,7 +435,7 @@ function CraftPresence:getOptionsTable()
                                                 L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
                                 )
                             end
-                        end,
+                        end
                     },
                     frameClearDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
@@ -1589,10 +466,10 @@ function CraftPresence:getOptionsTable()
                                                 L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
                                 )
                             end
-                        end,
+                        end
                     },
                     blank4 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
+                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     frameSize = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
@@ -1623,11 +500,8 @@ function CraftPresence:getOptionsTable()
                                                 L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
                                 )
                             end
-                        end,
-                    },
-                    blank5 = {
-                        type = "description", order = self:GetNextIndex(), fontSize = "small", name = " "
-                    },
+                        end
+                    }
                 }
             },
             profiles = profilesGroup,
@@ -1650,8 +524,8 @@ function CraftPresence:getOptionsTable()
             },
         },
     }
-    -- We also reset the index after optionsTable generation
-    -- to ensure everything is cleaned up nice and tidy
+    -- We also reset the index after the options table is generated
+    -- to ensure that everything is cleaned up nice and tidy
     self:ResetIndex()
     return opts
 end
@@ -1698,12 +572,6 @@ function CraftPresence:UpdateMinimapSetting(newValue)
         self:UpdateMinimapState(true)
         self:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
     end
-end
-
---- Retrieves the default settings for the config menu
---- @return table @ DB_DEFAULTS
-function CraftPresence:GetDefaults()
-    return DB_DEFAULTS
 end
 
 --- Modify the settings in the currently active config profile with the specified arguments

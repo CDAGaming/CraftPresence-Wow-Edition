@@ -33,5 +33,6 @@ Deprecated_Functions.lua
 
 GameUtils.lua
 InstanceInfo.lua
+ProfileInfo.lua
 Config.lua
 RPCDispatch.lua
