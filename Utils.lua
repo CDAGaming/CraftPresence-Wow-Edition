@@ -283,6 +283,7 @@ function CraftPresence:GetConfigComment(str)
 end
 
 --- Return a modified version of the specified string, depending on arguments
+--- Valid Case Types: lower|upper|icon|no-dupes
 ---
 --- @param obj any A table (Format: string, casing) or string to evaluate (Required)
 ---
