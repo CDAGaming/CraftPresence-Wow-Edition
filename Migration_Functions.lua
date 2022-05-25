@@ -288,27 +288,41 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 self:SetToDb("placeholders", nil, placeholderData)
             end
 
-            local oldLargeImageKey = self:GetFromDb("largeImageKey")
-            local oldLargeImageMessage = self:GetFromDb("largeImageMessage")
-            local oldSmallImageKey = self:GetFromDb("smallImageKey")
-            local oldSmallImageMessage = self:GetFromDb("smallImageMessage")
-            local oldDetailsMessage = self:GetFromDb("detailsMessage")
-            local oldGameStateMessage = self:GetFromDb("gameStateMessage")
-
             local presenceData = self:GetFromDb("presence")
+            local defaultPresence = defaults.presence
             if presenceData ~= nil then
                 local newLargeImage = presenceData["largeImage"]
-                newLargeImage.keyCallback = oldLargeImageKey
-                newLargeImage.messageCallback = oldLargeImageMessage
+                local defaultLargeImage = defaultPresence["largeImage"]
+                newLargeImage.keyCallback = self:GetOrDefault(
+                        self:GetFromDb("largeImageKey"), defaultLargeImage.keyCallback
+                )
+                self:SetToDb("largeImageKey", nil, nil)
+                newLargeImage.messageCallback = self:GetOrDefault(
+                        self:GetFromDb("largeImageMessage"), defaultLargeImage.messageCallback
+                )
+                self:SetToDb("largeImageMessage", nil, nil)
                 presenceData["largeImage"] = newLargeImage
 
                 local newSmallImage = presenceData["smallImage"]
-                newSmallImage.keyCallback = oldSmallImageKey
-                newSmallImage.messageCallback = oldSmallImageMessage
+                local defaultSmallImage = defaultPresence["smallImage"]
+                newSmallImage.keyCallback = self:GetOrDefault(
+                        self:GetFromDb("smallImageKey"), defaultSmallImage.keyCallback
+                )
+                self:SetToDb("smallImageKey", nil, nil)
+                newSmallImage.messageCallback = self:GetOrDefault(
+                        self:GetFromDb("smallImageMessage"), defaultSmallImage.messageCallback
+                )
+                self:SetToDb("smallImageMessage", nil, nil)
                 presenceData["smallImage"] = newSmallImage
 
-                presenceData["state"].messageCallback = oldGameStateMessage
-                presenceData["details"].messageCallback = oldDetailsMessage
+                presenceData["state"].messageCallback = self:GetOrDefault(
+                        self:GetFromDb("gameStateMessage"), defaultPresence["state"].messageCallback
+                )
+                self:SetToDb("gameStateMessage", nil, nil)
+                presenceData["details"].messageCallback = self:GetOrDefault(
+                        self:GetFromDb("detailsMessage"), defaultPresence["details"].messageCallback
+                )
+                self:SetToDb("detailsMessage", nil, nil)
 
                 self:SetToDb("presence", nil, presenceData)
             end
