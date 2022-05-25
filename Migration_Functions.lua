@@ -57,7 +57,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
         end
         local defaults = self:GetDefaults().profile
 
-        if self:IsWithinValue(current, 0, 1, true, true) then
+        if self:IsWithinValue(current, 0, 1, true, false) then
             -- Schema Changes (v0 -> v1):
             --  events[k].ignoreCallback has been renamed to events[k].processCallback
             --  We want to rename this accordingly to prevent losing data
@@ -73,7 +73,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 1
         end
 
-        if self:IsWithinValue(current, 1, 2, true, true) then
+        if self:IsWithinValue(current, 1, 2, true, false) then
             -- Schema Changes (v1 -> v2):
             --   Table renamed from customPlaceholders to placeholders
             --   The data field is renamed to processCallback
@@ -153,7 +153,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 2
         end
 
-        if self:IsWithinValue(current, 2, 3, true, true) then
+        if self:IsWithinValue(current, 2, 3, true, false) then
             -- Schema Changes (v2 -> v3):
             --   Adds allowRebasedApi flag for events and placeholders
             local data = self:GetFromDb("placeholders")
@@ -178,7 +178,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 3
         end
 
-        if self:IsWithinValue(current, 3, 4.1, true, true) then
+        if self:IsWithinValue(current, 3, 4.1, true, false) then
             -- Schema Changes (v3 -> v4):
             --   buttons:label,url renamed to buttons:labelCallback,urlCallback
             --   labels:active,inactive renamed to labels:activeCallback,inactiveCallback
@@ -270,7 +270,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 4.1
         end
 
-        if self:IsWithinValue(current, 4.1, 4.5, true, true) then
+        if self:IsWithinValue(current, 4.1, 4.5, true, false) then
             -- Schema Changes (v4.1 -> v5):
             --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolodate logic
             --   General Tab has been refactored to use dynamics; migrate static strings over to new settings
