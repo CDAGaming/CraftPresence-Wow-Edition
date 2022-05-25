@@ -263,8 +263,8 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
 
             if current ~= 4.1 then
                 if can_modify then
-                    self.db.profile.events["CHAT_MSG_SYSTEM"] = defaults.events["CHAT_MSG_SYSTEM"]
-                    self.db.profile.placeholders["player_alliance"] = defaults.placeholders["player_alliance"]
+                    self:SetProperty("events", "CHAT_MSG_SYSTEM", nil, true)
+                    self:SetProperty("placeholders", "player_alliance", nil, true)
                 elseif log_output then
                     self:PrintMigrationMessage(current, target)
                 end

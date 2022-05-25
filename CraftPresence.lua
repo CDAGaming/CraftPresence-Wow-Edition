@@ -625,7 +625,7 @@ function CraftPresence:ChatCommand(input)
             end
             self:UpdateProfile(true, not reset_single, "all")
         elseif command == "minimap" then
-            self:UpdateMinimapSetting(not self.db.profile.showMinimapIcon)
+            self:UpdateMinimapSetting(not self:GetProperty("showMinimapIcon"))
         elseif command == "about" then
             self:PrintAddonInfo()
         elseif command == "status" then

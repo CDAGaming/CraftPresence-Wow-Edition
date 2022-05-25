@@ -79,7 +79,7 @@ function CraftPresence:GetOptions()
                                             self:GetLength(value) == 18
                             )
                             if isValid then
-                                self.db.profile.clientId = value
+                                self:SetProperty("clientId", nil, value)
                                 self:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)
                             else
                                 self:PrintErrorMessage(L["ERROR_CLIENT_ID"])
@@ -111,7 +111,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("showWelcomeMessage")
                             local isValid = (type(value) == "boolean")
                             if isValid then
-                                self.db.profile.showWelcomeMessage = value
+                                self:SetProperty("showWelcomeMessage", nil, value)
                                 self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
                         end
@@ -241,7 +241,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("debugMode")
                             local isValid = (type(value) == "boolean")
                             if isValid then
-                                self.db.profile.debugMode = value
+                                self:SetProperty("debugMode", nil, value)
                                 self:PrintChangedValue(L["TITLE_DEBUG_MODE"], oldValue, value)
                             end
                         end
@@ -257,7 +257,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("verboseMode")
                             local isValid = (type(value) == "boolean")
                             if isValid then
-                                self.db.profile.verboseMode = value
+                                self:SetProperty("verboseMode", nil, value)
                                 self:PrintChangedValue(L["TITLE_VERBOSE_MODE"], oldValue, value)
                             end
                         end
@@ -276,7 +276,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("queuedPipeline")
                             local isValid = (type(value) == "boolean")
                             if isValid then
-                                self.db.profile.queuedPipeline = value
+                                self:SetProperty("queuedPipeline", nil, value)
                                 self:PrintChangedValue(L["TITLE_QUEUED_PIPELINE"], oldValue, value)
                             end
                         end
@@ -292,7 +292,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("optionalMigrations")
                             local isValid = (type(value) == "boolean")
                             if isValid then
-                                self.db.profile.optionalMigrations = value
+                                self:SetProperty("optionalMigrations", nil, value)
                                 self:PrintChangedValue(L["TITLE_OPTIONAL_MIGRATIONS"], oldValue, value)
                             end
                         end
@@ -316,7 +316,7 @@ function CraftPresence:GetOptions()
                                     true, true
                             ))
                             if isValid then
-                                self.db.profile.callbackDelay = value
+                                self:SetProperty("callbackDelay", nil, value)
                                 self:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
@@ -347,7 +347,7 @@ function CraftPresence:GetOptions()
                                     true, true
                             ))
                             if isValid then
-                                self.db.profile.frameClearDelay = value
+                                self:SetProperty("frameClearDelay", nil, value)
                                 self:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
@@ -381,7 +381,7 @@ function CraftPresence:GetOptions()
                                     true, true
                             ))
                             if isValid then
-                                self.db.profile.frameSize = value
+                                self:SetProperty("frameSize", nil, value)
                                 self:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
@@ -459,10 +459,10 @@ end
 --- Updates showMinimapIcon with the specified value
 --- @param newValue boolean The new value to change showMinimapIcon to
 function CraftPresence:UpdateMinimapSetting(newValue)
-    local oldValue = self.db.profile.showMinimapIcon
+    local oldValue = self:GetProperty("showMinimapIcon")
     local isValid = (type(newValue) == "boolean")
     if isValid then
-        self.db.profile.showMinimapIcon = newValue
+        self:SetProperty("showMinimapIcon", nil, newValue)
         self:UpdateMinimapState(true)
         self:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
     end
@@ -485,7 +485,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         self:Print(L["INFO_RESET_CONFIG"])
         self.db:ResetProfile(false, true)
         -- Assign Mandatory Values
-        self.db.profile.schema = self:GetAddOnInfo()["schema"]
+        self:SetProperty("schema", nil, self:GetAddOnInfo()["schema"])
     end
 
     if type(tags) ~= "table" then
