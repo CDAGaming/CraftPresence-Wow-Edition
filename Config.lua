@@ -69,10 +69,10 @@ function CraftPresence:GetOptions()
                         desc = self:GetConfigComment("CLIENT_ID"),
                         usage = L["USAGE_CLIENT_ID"],
                         get = function(_)
-                            return self:GetFromDb("clientId")
+                            return self:GetProperty("clientId")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("clientId")
+                            local oldValue = self:GetProperty("clientId")
                             local isValid = (
                                     value ~= nil and
                                             self:ContainsDigit(value) and
@@ -94,7 +94,7 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_SHOW_MINIMAP_ICON"],
                         desc = self:GetConfigComment("SHOW_MINIMAP_ICON"),
                         get = function(_)
-                            return self:GetFromDb("showMinimapIcon")
+                            return self:GetProperty("showMinimapIcon")
                         end,
                         set = function(_, value)
                             self:UpdateMinimapSetting(value)
@@ -105,10 +105,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_SHOW_WELCOME_MESSAGE"],
                         desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE"),
                         get = function(_)
-                            return self:GetFromDb("showWelcomeMessage")
+                            return self:GetProperty("showWelcomeMessage")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("showWelcomeMessage")
+                            local oldValue = self:GetProperty("showWelcomeMessage")
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self.db.profile.showWelcomeMessage = value
@@ -201,7 +201,7 @@ function CraftPresence:GetOptions()
                             return strformat(L["CATEGORY_COMMENT_EVENTS_INFO"], count, (count == 1 and "") or "s")
                         end,
                         function(root)
-                            root:SyncEvents(root:GetFromDb("events"), root:GetFromDb("debugMode"))
+                            root:SyncEvents(root:GetProperty("events"), root:GetProperty("debugMode"))
                         end
                 )
             },
@@ -235,10 +235,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_DEBUG_MODE"],
                         desc = self:GetConfigComment("DEBUG_MODE"),
                         get = function(_)
-                            return self:GetFromDb("debugMode")
+                            return self:GetProperty("debugMode")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("debugMode")
+                            local oldValue = self:GetProperty("debugMode")
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self.db.profile.debugMode = value
@@ -251,10 +251,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_VERBOSE_MODE"],
                         desc = self:GetConfigComment("VERBOSE_MODE"),
                         get = function(_)
-                            return self:GetFromDb("verboseMode")
+                            return self:GetProperty("verboseMode")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("verboseMode")
+                            local oldValue = self:GetProperty("verboseMode")
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self.db.profile.verboseMode = value
@@ -270,10 +270,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_QUEUED_PIPELINE"],
                         desc = self:GetConfigComment("QUEUED_PIPELINE"),
                         get = function(_)
-                            return self:GetFromDb("queuedPipeline")
+                            return self:GetProperty("queuedPipeline")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("queuedPipeline")
+                            local oldValue = self:GetProperty("queuedPipeline")
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self.db.profile.queuedPipeline = value
@@ -286,10 +286,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_OPTIONAL_MIGRATIONS"],
                         desc = self:GetConfigComment("OPTIONAL_MIGRATIONS"),
                         get = function(_)
-                            return self:GetFromDb("optionalMigrations")
+                            return self:GetProperty("optionalMigrations")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("optionalMigrations")
+                            local oldValue = self:GetProperty("optionalMigrations")
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self.db.profile.optionalMigrations = value
@@ -306,10 +306,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_CALLBACK_DELAY"],
                         desc = self:GetConfigComment("CALLBACK_DELAY"),
                         get = function(_)
-                            return self:GetFromDb("callbackDelay")
+                            return self:GetProperty("callbackDelay")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("callbackDelay")
+                            local oldValue = self:GetProperty("callbackDelay")
                             local isValid = (self:IsWithinValue(
                                     value,
                                     L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"],
@@ -337,10 +337,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_FRAME_CLEAR_DELAY"],
                         desc = self:GetConfigComment("FRAME_CLEAR_DELAY"),
                         get = function(_)
-                            return self:GetFromDb("frameClearDelay")
+                            return self:GetProperty("frameClearDelay")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("frameClearDelay")
+                            local oldValue = self:GetProperty("frameClearDelay")
                             local isValid = (self:IsWithinValue(
                                     value,
                                     L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"],
@@ -371,10 +371,10 @@ function CraftPresence:GetOptions()
                         name = L["TITLE_FRAME_SIZE"],
                         desc = self:GetConfigComment("FRAME_SIZE"),
                         get = function(_)
-                            return self:GetFromDb("frameSize")
+                            return self:GetProperty("frameSize")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("frameSize")
+                            local oldValue = self:GetProperty("frameSize")
                             local isValid = (self:IsWithinValue(
                                     value,
                                     L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"],
@@ -427,7 +427,7 @@ end
 --- Retrieves whether or not logging changed data is allowed
 --- @return boolean @ canLogChanges
 function CraftPresence:CanLogChanges()
-    return self:GetFromDb("verboseMode")
+    return self:GetProperty("verboseMode")
 end
 
 --- Prints change data, if possible, using the specified parameters
@@ -497,10 +497,10 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         tagName = strlower(tagName)
 
         if tagName == "all" or tagName == "events" then
-            self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("verboseMode"))
+            self:SyncEvents(self:GetProperty("events"), self:GetProperty("verboseMode"))
         end
         if tagName == "all" or tagName == "placeholders" or tagName == "buttons" or tagName == "labels" then
-            self:SyncDynamicData(self:GetFromDb("verboseMode"))
+            self:SyncDynamicData(self:GetProperty("verboseMode"))
         end
     end
 

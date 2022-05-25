@@ -927,7 +927,7 @@ end
 --- @param newFunc string The new function to migrate to
 --- @param version string The version the deprecated function will be removed in
 function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
-    if self:GetFromDb("verboseMode") then
+    if self:GetProperty("verboseMode") then
         local dataTable = {
             [L["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, L["TYPE_NONE"]),
             [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
@@ -943,7 +943,7 @@ end
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
     self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
-    if self:GetFromDb("verboseMode") then
+    if self:GetProperty("verboseMode") then
         self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
 end
@@ -986,7 +986,7 @@ end
 function CraftPresence:SetTimerLocked(newValue)
     if self:IsNullOrEmpty(newValue) then return end
     -- This method only executes if we are operating in a non-queue pipeline
-    if not self:GetFromDb("queuedPipeline") then
+    if not self:GetProperty("queuedPipeline") then
         timer_locked = newValue
     end
 end
@@ -1064,7 +1064,7 @@ end
 --- @param reset boolean Whether to reset this property value
 ---
 --- @return any configValue
-function CraftPresence:GetFromDb(grp, key, reset)
+function CraftPresence:GetProperty(grp, key, reset)
     if self:IsNullOrEmpty(grp) then return nil end
     local defaults = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
@@ -1085,7 +1085,7 @@ end
 --- @param key string The config key to retrieve (Optional)
 --- @param newValue any The new config value to set (Leave Empty to reset value)
 --- @param reset boolean Whether to reset this property value
-function CraftPresence:SetToDb(grp, key, newValue, reset)
+function CraftPresence:SetProperty(grp, key, newValue, reset)
     if self:IsNullOrEmpty(grp) then return end
     local defaults = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
@@ -1128,7 +1128,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
             order = self:GetNextIndex(), type = "header", name = titleKey
         }
     }
-    local rootData = self:GetFromDb(rootKey)
+    local rootData = self:GetProperty(rootKey)
     if type(rootData) == "table" then
         for k, v in pairs(rootData) do
             local key, value = k, v

@@ -82,7 +82,7 @@ function CraftPresence:GetEncodedMessage(obj, alt, format, level, display)
             (type(obj) == "string" and obj) or alt,
             L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"]
     )
-    if self:GetFromDb("verboseMode") and not self:IsNullOrEmpty(obj) then
+    if self:GetProperty("verboseMode") and not self:IsNullOrEmpty(obj) then
         output = self:SerializeTable(obj)
     end
     local returnValue = strformat(level, strformat(format, output))
@@ -136,7 +136,7 @@ function CraftPresence:AssertRenderSettings()
 
     if self:GetLength(error_info) > 0 then
         render_warnings = self:SerializeTable(error_info)
-        if self:GetFromDb("verboseMode") or last_render_warnings ~= render_warnings then
+        if self:GetProperty("verboseMode") or last_render_warnings ~= render_warnings then
             self:PrintWarningMessage(L["WARNING_EVENT_RENDERING_ONE"])
             self:PrintWarningMessage(strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings))
         end
@@ -152,7 +152,7 @@ end
 function CraftPresence:CreateFrames(size)
     if not size then return end
     frame_count = floor(GetScreenWidth() / size)
-    if self:GetFromDb("debugMode") then
+    if self:GetProperty("debugMode") then
         self:Print(strformat(L["LOG_DEBUG"], strformat(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
@@ -317,7 +317,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
     update = self:GetOrDefault(update, true)
     clean = self:GetOrDefault(clean, true)
 
-    local defaultEncoded, encodedArgs = self:EncodeConfigData(self:GetFromDb("verboseMode"))
+    local defaultEncoded, encodedArgs = self:EncodeConfigData(self:GetProperty("verboseMode"))
     local encoded = self:GetOrDefault(msg, defaultEncoded)
     local changed = (last_encoded ~= encoded and self:AssertRenderSettings()) or force
     local useTable = self:IsNullOrEmpty(msg)
@@ -333,11 +333,11 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
         self:GetEncodedMessage(
                 (useTable and encodedArgs), encoded,
                 L["DEBUG_SEND_ACTIVITY"], L["LOG_DEBUG"],
-                self:GetFromDb("debugMode")
+                self:GetProperty("debugMode")
         )
         self:PaintSomething(encoded)
         if clean then
-            local delay = self:GetFromDb("frameClearDelay")
+            local delay = self:GetProperty("frameClearDelay")
             if (self:IsWithinValue(
                     delay,
                     max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"],

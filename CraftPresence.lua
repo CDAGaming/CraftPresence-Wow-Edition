@@ -128,11 +128,11 @@ function CraftPresence:OnInitialize()
     })
     self.config:SetDefaultSize(L["ADDON_NAME"], 858, 660)
     self:EnsureCompatibility(
-            self:GetFromDb("schema"), addOnData["schema"], false,
-            self:GetFromDb("optionalMigrations")
+            self:GetProperty("schema"), addOnData["schema"], false,
+            self:GetProperty("optionalMigrations")
     )
     -- Analytics Initialization
-    self:InitializeAnalytics(self:GetFromDb("metrics"))
+    self:InitializeAnalytics(self:GetProperty("metrics"))
     self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
@@ -168,14 +168,14 @@ end
 --- Instructions to be called when the addon is enabled
 function CraftPresence:OnEnable()
     -- Print and set any Initial Data, if allowed
-    if self:GetFromDb("showWelcomeMessage") then
+    if self:GetProperty("showWelcomeMessage") then
         self:PrintAddonInfo()
     end
     -- Command Registration
     self:RegisterChatCommand(L["ADDON_ID"], "ChatCommand")
     self:RegisterChatCommand(L["ADDON_AFFIX"], "ChatCommand")
     -- Create initial frames and initial rpc update
-    self:CreateFrames(self:GetFromDb("frameSize"))
+    self:CreateFrames(self:GetProperty("frameSize"))
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
     -- Register Universal Events
@@ -184,7 +184,7 @@ function CraftPresence:OnEnable()
     else
         self.defaultEventCallback = "DispatchLegacyUpdate"
     end
-    self:SyncEvents(self:GetFromDb("events"), self:GetFromDb("verboseMode"))
+    self:SyncEvents(self:GetProperty("events"), self:GetProperty("verboseMode"))
 end
 
 --- Instructions to be called when the addon is disabled
@@ -195,7 +195,7 @@ function CraftPresence:OnDisable()
     self:UnregisterChatCommand(L["ADDON_ID"])
     self:UnregisterChatCommand(L["ADDON_AFFIX"])
     -- Reset RPC Data to Discord
-    local resetData = self:ConcatTable(L["EVENT_RPC_TAG"], L["ARRAY_SEPARATOR_KEY"], self:GetFromDb("clientId"))
+    local resetData = self:ConcatTable(L["EVENT_RPC_TAG"], L["ARRAY_SEPARATOR_KEY"], self:GetProperty("clientId"))
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
     if icon then
@@ -203,7 +203,7 @@ function CraftPresence:OnDisable()
     end
     -- Un-register all active events
     -- Note: SyncEvents is not used here so that manually added events are also properly cleared
-    self:ModifyTriggers(self.registeredEvents, nil, "remove", self:GetFromDb("verboseMode"))
+    self:ModifyTriggers(self.registeredEvents, nil, "remove", self:GetProperty("verboseMode"))
 end
 
 --- Sync the contents of registeredEvents with the specified event table
@@ -265,12 +265,12 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
     log_output = self:GetOrDefault(log_output, false)
     supply_data = self:GetOrDefault(supply_data, false)
 
-    local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
+    local isVerbose, isDebug = self:GetProperty("verboseMode"), self:GetProperty("debugMode")
 
-    copyTable(self:GetFromDb("placeholders"), self.placeholders)
-    copyTable(self:GetFromDb("presence"), self.presenceData)
-    copyTable(self:GetFromDb("buttons"), self.buttons)
-    copyTable(self:GetFromDb("labels"), self.labels)
+    copyTable(self:GetProperty("placeholders"), self.placeholders)
+    copyTable(self:GetProperty("presence"), self.presenceData)
+    copyTable(self:GetProperty("buttons"), self.buttons)
+    copyTable(self:GetProperty("labels"), self.labels)
 
     for key, value in pairs(self.placeholders) do
         if type(value) == "table" then
@@ -386,7 +386,7 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
         local largeImage = self.presenceData["largeImage"]
         local smallImage = self.presenceData["smallImage"]
         local data = {
-            self:GetFromDb("clientId"),
+            self:GetProperty("clientId"),
             self:GetCaseData({ largeImage.keyResult, "icon" }),
             self:GetCaseData({ largeImage.messageResult, "no-dupes" }),
             self:GetCaseData({ smallImage.keyResult, "icon" }),
@@ -489,7 +489,7 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
     if args ~= nil then
         -- Process Callback Event Data
         -- Format: ignore_event, log_output
-        local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
+        local isVerbose, isDebug = self:GetProperty("verboseMode"), self:GetProperty("debugMode")
         local ignore_event, log_output = false, (isVerbose or isDebug)
 
         for key, value in pairs(self.registeredEvents) do
@@ -539,7 +539,7 @@ CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName
                 -- If we are using a callback delay,
                 -- the timer is locked if in a skip-style pipeline.
                 -- Otherwise, execute the next method normally.
-                local delay = self:GetFromDb("callbackDelay")
+                local delay = self:GetProperty("callbackDelay")
                 if (self:IsWithinValue(
                         delay,
                         max(L["MINIMUM_CALLBACK_DELAY"], 1), L["MAXIMUM_CALLBACK_DELAY"],
@@ -562,7 +562,7 @@ end)
 --- @param log_output boolean Whether to allow logging for this function (Default: true)
 function CraftPresence:UpdateMinimapState(update_state, log_output)
     log_output = self:GetOrDefault(log_output, true)
-    minimapState = { hide = not self:GetFromDb("showMinimapIcon") }
+    minimapState = { hide = not self:GetProperty("showMinimapIcon") }
     if update_state then
         if icon then
             if minimapState["hide"] then
@@ -606,14 +606,14 @@ function CraftPresence:ChatCommand(input)
             local testerMode = false
             if command_query[2] ~= nil then
                 local query = strlower(command_query[2])
-                testerMode = self:GetFromDb("debugMode") and query == "debug"
+                testerMode = self:GetProperty("debugMode") and query == "debug"
             end
             self:PaintMessageWait(true, not testerMode, not testerMode, nil)
         elseif command == "config" then
             if command_query[2] ~= nil and strlower(command_query[2]) == "migrate" then
                 self:EnsureCompatibility(
-                        self:GetFromDb("schema"), addOnData["schema"], true,
-                        self:GetFromDb("optionalMigrations")
+                        self:GetProperty("schema"), addOnData["schema"], true,
+                        self:GetProperty("optionalMigrations")
                 )
             else
                 self:ShowConfig()
@@ -621,7 +621,7 @@ function CraftPresence:ChatCommand(input)
         elseif command == "reset" then
             local reset_single = (command_query[2] ~= nil)
             if reset_single then
-                self:GetFromDb(command_query[2], command_query[3], true)
+                self:GetProperty(command_query[2], command_query[3], true)
             end
             self:UpdateProfile(true, not reset_single, "all")
         elseif command == "minimap" then
@@ -629,7 +629,7 @@ function CraftPresence:ChatCommand(input)
         elseif command == "about" then
             self:PrintAddonInfo()
         elseif command == "status" then
-            if self:GetFromDb("debugMode") then
+            if self:GetProperty("debugMode") then
                 local last_args, last_encoded = self:GetCachedEncodedData()
                 self:GetEncodedMessage(last_args, last_encoded, L["VERBOSE_LAST_ENCODED"], L["LOG_VERBOSE"], true)
             else
@@ -677,7 +677,7 @@ function CraftPresence:ChatCommand(input)
 
                     -- Main Parsing
                     if command_query[3] ~= nil then
-                        local tag_data = self:GetFromDb(tag_table)
+                        local tag_data = self:GetProperty(tag_table)
                         if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(L["COMMAND_CREATE_MODIFY"])
                         else
@@ -714,7 +714,7 @@ function CraftPresence:ChatCommand(input)
                                 }
                             end
                             local eventState = (modify_mode and L["TYPE_MODIFY"]) or L["TYPE_ADDED"]
-                            self:SetToDb(tag_table, nil, tag_data)
+                            self:SetProperty(tag_table, nil, tag_data)
                             self:Print(strformat(
                                     L["COMMAND_CREATE_SUCCESS"], eventState, command_query[3], tag_name,
                                     self:SerializeTable(tag_data[command_query[3]])
@@ -726,16 +726,16 @@ function CraftPresence:ChatCommand(input)
                     end
                 elseif flag_query[1] == "remove" then
                     if command_query[3] ~= nil then
-                        local tag_data = self:GetFromDb(tag_table)
+                        local tag_data = self:GetProperty(tag_table)
                         if tag_data[command_query[3]] then
                             local includeTag = true
                             if tag_name == "events" then
                                 tag_data[command_query[3]].enabled = false
-                                self:SyncEvents(tag_data, self:GetFromDb("verboseMode"))
+                                self:SyncEvents(tag_data, self:GetProperty("verboseMode"))
                                 includeTag = false
                             end
                             tag_data[command_query[3]] = nil
-                            self:SetToDb(tag_table, nil, tag_data)
+                            self:SetProperty(tag_table, nil, tag_data)
                             self:Print(strformat(L["COMMAND_REMOVE_SUCCESS"], tag_name, command_query[3]))
                             self:UpdateProfile(true, false, (includeTag and tag_name or nil))
                         else
@@ -753,7 +753,7 @@ function CraftPresence:ChatCommand(input)
                     local tag_data, visible_data, multi_table, enable_callback, notes = {}, {}, false, nil, ""
                     if tag_name == "placeholders" then
                         -- Ensure Placeholders are synced
-                        self:SyncDynamicData(self:GetFromDb("verboseMode"))
+                        self:SyncDynamicData(self:GetProperty("verboseMode"))
                         tag_data = self.placeholders
                         visible_data = {
                             "processCallback", "processType"
@@ -763,7 +763,7 @@ function CraftPresence:ChatCommand(input)
                         end
                         notes = L["PLACEHOLDERS_NOTE_ONE"] .. "\n" .. L["PLACEHOLDERS_NOTE_TWO"]
                     elseif tag_name == "events" then
-                        tag_data = self:GetFromDb(tag_table)
+                        tag_data = self:GetProperty(tag_table)
                         visible_data = {
                             "enabled"
                         }
@@ -772,7 +772,7 @@ function CraftPresence:ChatCommand(input)
                         end
                     elseif tag_name == "labels" then
                         -- Ensure Labels are synced
-                        self:SyncDynamicData(self:GetFromDb("verboseMode"))
+                        self:SyncDynamicData(self:GetProperty("verboseMode"))
                         tag_data = self.labels
                         visible_data = {
                             "activeCallback", "activeType"
