@@ -293,7 +293,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             local oldDetailsMessage = self:GetFromDb("detailsMessage")
             local oldGameStateMessage = self:GetFromDb("gameStateMessage")
 
-            local presenceData = self:GetOrDefault(self:GetFromDb("presence"), defaults.presence)
+            local presenceData = self:GetFromDb("presence")
             if presenceData ~= nil then
                 local newLargeImage = presenceData["largeImage"]
                 newLargeImage.keyCallback = oldLargeImageKey
