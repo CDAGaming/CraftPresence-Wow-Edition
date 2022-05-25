@@ -1170,7 +1170,7 @@ end
 --- @param errorCallback function The callback to trigger if an error was encountered in changing the value (Optional)
 ---
 --- @return table @ generatedData
-function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changedCallback, validCallback, errorCallback)
+function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, changedCallback, validCallback, errorCallback)
     if self:IsNullOrEmpty(rootKey) then
         return {}
     end
@@ -1253,6 +1253,7 @@ function CraftPresence:GetPlaceholderArgs(rootKey, titleKey, commentKey, changed
 end
 
 --- Retrieve whether or not the specified key is a toggleable tag
+--- (INTERNAL USAGE ONLY)
 ---
 --- @param key string The key to interpret
 ---

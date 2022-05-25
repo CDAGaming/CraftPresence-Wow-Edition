@@ -218,7 +218,7 @@ function CraftPresence:GetOptions()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("buttons", L["CATEGORY_TITLE_BUTTONS_EXTENDED"],
+                args = self:GenerateDynamicTable("buttons", L["CATEGORY_TITLE_BUTTONS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], count, (count == 1 and "") or "s")
                         end,
@@ -242,7 +242,7 @@ function CraftPresence:GetOptions()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("labels", L["CATEGORY_TITLE_LABELS_EXTENDED"],
+                args = self:GenerateDynamicTable("labels", L["CATEGORY_TITLE_LABELS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_LABELS_INFO"], count, (count == 1 and "") or "s")
                         end
@@ -257,7 +257,7 @@ function CraftPresence:GetOptions()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("placeholders", L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"],
+                args = self:GenerateDynamicTable("placeholders", L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"], count, (count == 1 and "") or "s")
                         end
@@ -272,7 +272,7 @@ function CraftPresence:GetOptions()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("events", L["CATEGORY_TITLE_EVENTS_EXTENDED"],
+                args = self:GenerateDynamicTable("events", L["CATEGORY_TITLE_EVENTS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_EVENTS_INFO"], count, (count == 1 and "") or "s")
                         end,
@@ -290,7 +290,7 @@ function CraftPresence:GetOptions()
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GetPlaceholderArgs("metrics", L["CATEGORY_TITLE_METRICS_EXTENDED"],
+                args = self:GenerateDynamicTable("metrics", L["CATEGORY_TITLE_METRICS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_METRICS_INFO"], count, (count == 1 and "") or "s")
                         end
