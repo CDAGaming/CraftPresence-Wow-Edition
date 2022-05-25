@@ -351,20 +351,14 @@ function CraftPresence:SyncDynamicData(log_output, data)
                         data, true, false
                 )
 
-                -- Time Condition Data Setup
+                -- Sync Tag Conditional Data
                 if not self:IsNullOrEmpty(tagValue) then
                     if self:FindMatches(tagValue, "time", false) then
-                        if self:FindMatches(tagValue, "time:start", false) then
+                        if self[tagValue] ~= nil then
                             if self:HasInstanceChanged() then
-                                self.time_start = "generated"
+                                self[tagValue] = "generated"
                             else
-                                self.time_start = "last"
-                            end
-                        elseif self:FindMatches(tagValue, "time:end", false) then
-                            if self:HasInstanceChanged() then
-                                self.time_end = "generated"
-                            else
-                                self.time_end = "last"
+                                self[tagValue] = "last"
                             end
                         end
                     end

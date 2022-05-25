@@ -174,7 +174,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'arena'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -186,7 +186,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'pvp'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -198,7 +198,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'raid'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -212,7 +212,7 @@ end]],
         not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
     )
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -224,7 +224,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'scenario'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]

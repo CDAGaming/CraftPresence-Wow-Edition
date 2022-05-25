@@ -270,6 +270,23 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 4.1
         end
 
+        if self:IsWithinValue(current, 4.1, 4.2, true, true) then
+            -- Schema Changes (v4.1 -> v5):
+            --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolodate logic
+            local placeholderData = self:GetFromDb("placeholders")
+            if placeholderData ~= nil then
+                for k, v in pairs(placeholderData) do
+                    if type(v) == "table" then
+                        v.tagCallback = self:Replace(v.tagCallback, "time:start", "time_start", true)
+                        v.tagCallback = self:Replace(v.tagCallback, "time:end", "time_end", true)
+                    end
+                    placeholderData[k] = v
+                end
+                self:SetToDb("placeholders", nil, placeholderData)
+            end
+            current = 4.2
+        end
+
         self:SetToDb("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end
