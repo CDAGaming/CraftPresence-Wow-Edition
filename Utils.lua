@@ -915,13 +915,17 @@ end
 --- Convert a Version String into a build number
 ---
 --- @param versionStr string The version string to evaluate (Default: fallbackVersion)
+--- @param index number If specified, returns a specific index of the split (Optional)
 ---
 --- @return number @ buildVersion
-function CraftPresence:VersionToBuild(versionStr)
+function CraftPresence:VersionToBuild(versionStr, index)
+    index = self:GetOrDefault(index, -1)
     versionStr = self:GetOrDefault(versionStr, fallbackVersion)
     local buildStr = ""
     local splitData = self:Split(versionStr, ".", true, true)
-    if splitData[1] and splitData[1] == versionStr then
+    if index >= 1 and splitData[index] then
+        buildStr = splitData[index]
+    elseif splitData[1] and splitData[1] == versionStr then
         buildStr = splitData[1]
     else
         for key, value in pairs(splitData) do
