@@ -69,6 +69,7 @@ CraftPresence.registeredEvents = {}
 CraftPresence.registeredMetrics = {}
 CraftPresence.defaultEventCallback = ""
 CraftPresence.placeholders = {}
+CraftPresence.presenceData = {}
 CraftPresence.buttons = {}
 CraftPresence.labels = {}
 
@@ -101,26 +102,10 @@ local isRebasedApi = false
 ---
 --- @return string, table @ newEncodedString, args
 function CraftPresence:EncodeConfigData(log_output)
-    -- Primary Variable Data
     log_output = self:GetOrDefault(log_output, false)
-    -- Secondary Variable Data
-    -- TODO: REDO THIS and purge SetFormats existence before any beta releases for v2.2
-    -- (This code will work for now to preserve existing behaviors)
-    local presenceData = self:GetFromDb("presence")
-    local largeImage = presenceData["largeImage"]
-    local smallImage = presenceData["smallImage"]
-    local rpcData = {
-        self:GetFromDb("clientId"),
-        { largeImage.keyCallback, "icon" },
-        { largeImage.messageCallback, "no-dupes" },
-        { smallImage.keyCallback, "icon" },
-        { smallImage.messageCallback, "no-dupes" },
-        { presenceData["details"].messageCallback, "no-dupes" },
-        { presenceData["state"].messageCallback, "no-dupes" }
-    }
 
     -- Placeholder Syncing
-    rpcData = self:SyncDynamicData(log_output, rpcData)
+    local rpcData = self:SyncDynamicData(log_output, nil, true)
 
     -- Update Instance Status before exiting method
     if self:HasInstanceChanged() then
@@ -273,14 +258,21 @@ end
 --- Sync the contents of dynamic data for readable usage
 ---
 --- @param log_output boolean Whether to allow logging for this function (Default: false)
---- @param data table If supplied, do a sequential replace of applicable data
+--- @param data table If supplied, do a sequential replace of applicable data (Optional)
+--- @param supply_data boolean If true, prepend intial data if prior variable is nil (Default: False)
 ---
 --- @return table @ data_table
-function CraftPresence:SyncDynamicData(log_output, data)
+function CraftPresence:SyncDynamicData(log_output, data, supply_data)
+    log_output = self:GetOrDefault(log_output, false)
+    supply_data = self:GetOrDefault(supply_data, false)
+
     local isVerbose, isDebug = self:GetFromDb("verboseMode"), self:GetFromDb("debugMode")
+
     copyTable(self:GetFromDb("placeholders"), self.placeholders)
+    copyTable(self:GetFromDb("presence"), self.presenceData)
     copyTable(self:GetFromDb("buttons"), self.buttons)
     copyTable(self:GetFromDb("labels"), self.labels)
+
     for key, value in pairs(self.placeholders) do
         if type(value) == "table" then
             -- Sanity Checks
@@ -320,6 +312,43 @@ function CraftPresence:SyncDynamicData(log_output, data)
                         newValue = self:GetDynamicReturnValue(replacement, value.processType, self)
                     end
                 end
+            end
+
+            -- Sync Rich Presence Info
+            for presenceKey, presenceValue in pairs(self.presenceData) do
+                if self:ShouldProcessData(presenceValue) then
+                    if presenceValue.keyCallback then
+                        presenceValue.keyCallback = self:Replace(presenceValue.keyCallback, newKey, self:GetOrDefault(newValue), true)
+                        presenceValue.keyResult = self:GetDynamicReturnValue(presenceValue.keyCallback, presenceValue.keyType, self)
+                    end
+                    if presenceValue.messageCallback then
+                        presenceValue.messageCallback = self:Replace(presenceValue.messageCallback, newKey, self:GetOrDefault(newValue), true)
+                        presenceValue.messageResult = self:GetDynamicReturnValue(presenceValue.messageCallback, presenceValue.messageType, self)
+                    end
+                end
+
+                if presenceValue.keyCallback then
+                    presenceValue.keyResult = self:GetOrDefault(presenceValue.keyResult)
+                end
+                if presenceValue.messageCallback then
+                    presenceValue.messageResult = self:GetOrDefault(presenceValue.messageResult)
+                end
+                self.presenceData[presenceKey] = presenceValue
+            end
+
+            -- Apply Main Presence Fields to data, if allowed
+            if data == nil and supply_data then
+                local largeImage = self.presenceData["largeImage"]
+                local smallImage = self.presenceData["smallImage"]
+                data = {
+                    self:GetFromDb("clientId"),
+                    { largeImage.keyResult, "icon" },
+                    { largeImage.messageResult, "no-dupes" },
+                    { smallImage.keyResult, "icon" },
+                    { smallImage.messageResult, "no-dupes" },
+                    { self.presenceData["details"].messageResult, "no-dupes" },
+                    { self.presenceData["state"].messageResult, "no-dupes" }
+                }
             end
 
             -- Sync Button Info
