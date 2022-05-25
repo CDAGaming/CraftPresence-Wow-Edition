@@ -105,7 +105,7 @@ function CraftPresence:EncodeConfigData(log_output)
     log_output = self:GetOrDefault(log_output, false)
 
     -- Placeholder Syncing
-    local rpcData = self:SyncDynamicData(log_output, nil, true)
+    local rpcData = self:SyncDynamicData(log_output, true)
 
     -- Update Instance Status before exiting method
     if self:HasInstanceChanged() then
@@ -258,11 +258,10 @@ end
 --- Sync the contents of dynamic data for readable usage
 ---
 --- @param log_output boolean Whether to allow logging for this function (Default: false)
---- @param data table If supplied, do a sequential replace of applicable data (Optional)
---- @param supply_data boolean If true, prepend intial data if prior variable is nil (Default: False)
+--- @param supply_data boolean If true, format applicable data into a displayable format for returning (Default: False)
 ---
 --- @return table @ data_table
-function CraftPresence:SyncDynamicData(log_output, data, supply_data)
+function CraftPresence:SyncDynamicData(log_output, supply_data)
     log_output = self:GetOrDefault(log_output, false)
     supply_data = self:GetOrDefault(supply_data, false)
 
@@ -336,21 +335,6 @@ function CraftPresence:SyncDynamicData(log_output, data, supply_data)
                 self.presenceData[presenceKey] = presenceValue
             end
 
-            -- Apply Main Presence Fields to data, if allowed
-            if data == nil and supply_data then
-                local largeImage = self.presenceData["largeImage"]
-                local smallImage = self.presenceData["smallImage"]
-                data = {
-                    self:GetFromDb("clientId"),
-                    { largeImage.keyResult, "icon" },
-                    { largeImage.messageResult, "no-dupes" },
-                    { smallImage.keyResult, "icon" },
-                    { smallImage.messageResult, "no-dupes" },
-                    { self.presenceData["details"].messageResult, "no-dupes" },
-                    { self.presenceData["state"].messageResult, "no-dupes" }
-                }
-            end
-
             -- Sync Button Info
             for buttonKey, buttonValue in pairs(self.buttons) do
                 if self:ShouldProcessData(buttonValue) then
@@ -380,11 +364,7 @@ function CraftPresence:SyncDynamicData(log_output, data, supply_data)
                 self.labels[labelKey] = labelValue
             end
 
-            if data ~= nil then
-                data = self:SetFormats({ newValue, nil, newKey, nil },
-                        data, true, false
-                )
-
+            if supply_data then
                 -- Sync Tag Conditional Data
                 if not self:IsNullOrEmpty(tagValue) then
                     if self:FindMatches(tagValue, "time", false) then
@@ -401,7 +381,19 @@ function CraftPresence:SyncDynamicData(log_output, data, supply_data)
         end
     end
 
-    if data ~= nil then
+    if supply_data then
+        -- Apply Main Presence Fields to data, if allowed
+        local largeImage = self.presenceData["largeImage"]
+        local smallImage = self.presenceData["smallImage"]
+        local data = {
+            self:GetFromDb("clientId"),
+            self:GetCaseData({ largeImage.keyResult, "icon" }),
+            self:GetCaseData({ largeImage.messageResult, "no-dupes" }),
+            self:GetCaseData({ smallImage.keyResult, "icon" }),
+            self:GetCaseData({ smallImage.messageResult, "no-dupes" }),
+            self:GetCaseData({ self.presenceData["details"].messageResult, "no-dupes" }),
+            self:GetCaseData({ self.presenceData["state"].messageResult, "no-dupes" })
+        }
         -- Sync then reset time condition data
         tinsert(data, self:GetOrDefault(self.time_start))
         tinsert(data, self:GetOrDefault(self.time_end))
@@ -413,8 +405,8 @@ function CraftPresence:SyncDynamicData(log_output, data, supply_data)
                 tinsert(data, self:GetCaseData({ value.result, "no-dupes" }))
             end
         end
+        return data
     end
-    return data
 end
 
 --- Modifies the specified event using the subsequent argument values
