@@ -31,17 +31,39 @@ local DB_DEFAULTS = {
     profile = {
         schema = 0,
         clientId = L["DEFAULT_CLIENT_ID"],
-        gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
-        detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
-        largeImageKey = L["DEFAULT_LARGE_IMAGE_KEY"],
-        largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
-        smallImageKey = L["DEFAULT_SMALL_IMAGE_KEY"],
-        smallImageMessage = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
+        showMinimapIcon = true,
+        showWelcomeMessage = true,
+        presence = {
+            ["state"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                messageCallback = L["DEFAULT_STATE_MESSAGE"],
+                messageType = "string",
+                enabled = true
+            },
+            ["details"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                messageCallback = L["DEFAULT_DETAILS_MESSAGE"],
+                messageType = "string",
+                enabled = true
+            },
+            ["largeImage"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                keyCallback = L["DEFAULT_LARGE_IMAGE_KEY"],
+                messageCallback = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
+                keyType = "string", messageType = "string",
+                enabled = true
+            },
+            ["smallImage"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                keyCallback = L["DEFAULT_SMALL_IMAGE_KEY"],
+                messageCallback = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
+                keyType = "string", messageType = "string",
+                enabled = true
+            }
+        },
         debugMode = false,
         verboseMode = false,
-        showMinimapIcon = true,
         queuedPipeline = false,
-        showWelcomeMessage = true,
         optionalMigrations = false,
         callbackDelay = L["DEFAULT_CALLBACK_DELAY"],
         frameSize = L["DEFAULT_FRAME_SIZE"],

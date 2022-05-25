@@ -270,9 +270,10 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 4.1
         end
 
-        if self:IsWithinValue(current, 4.1, 4.2, true, true) then
+        if self:IsWithinValue(current, 4.1, 4.5, true, true) then
             -- Schema Changes (v4.1 -> v5):
             --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolodate logic
+            --   General Tab has been refactored to use dynamics; migrate static strings over to new settings
             local placeholderData = self:GetFromDb("placeholders")
             if placeholderData ~= nil then
                 for k, v in pairs(placeholderData) do
@@ -284,7 +285,32 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 end
                 self:SetToDb("placeholders", nil, placeholderData)
             end
-            current = 4.2
+
+            local oldLargeImageKey = self:GetFromDb("largeImageKey")
+            local oldLargeImageMessage = self:GetFromDb("largeImageMessage")
+            local oldSmallImageKey = self:GetFromDb("smallImageKey")
+            local oldSmallImageMessage = self:GetFromDb("smallImageMessage")
+            local oldDetailsMessage = self:GetFromDb("detailsMessage")
+            local oldGameStateMessage = self:GetFromDb("gameStateMessage")
+
+            local presenceData = self:GetFromDb("presence")
+            if presenceData ~= nil then
+                local newLargeImage = presenceData["largeImage"]
+                newLargeImage.keyCallback = oldLargeImageKey
+                newLargeImage.messageCallback = oldLargeImageMessage
+                presenceData["largeImage"] = newLargeImage
+
+                local newSmallImage = presenceData["smallImage"]
+                newSmallImage.keyCallback = oldSmallImageKey
+                newSmallImage.messageCallback = oldSmallImageMessage
+                presenceData["smallImage"] = newSmallImage
+
+                presenceData["state"].messageCallback = oldGameStateMessage
+                presenceData["details"].messageCallback = oldDetailsMessage
+
+                self:SetToDb("presence", nil, presenceData)
+            end
+            current = 4.5
         end
 
         self:SetToDb("schema", nil, min(current, target))

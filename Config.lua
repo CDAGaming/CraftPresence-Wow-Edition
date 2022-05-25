@@ -89,125 +89,49 @@ function CraftPresence:GetOptions()
                     blank1 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
-                    gameStateMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_GAME_STATE_MESSAGE"],
-                        desc = self:GetConfigComment("GAME_STATE_MESSAGE"),
-                        usage = L["USAGE_GAME_STATE_MESSAGE"],
+                    showMinimapIcon = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = L["TITLE_SHOW_MINIMAP_ICON"],
+                        desc = self:GetConfigComment("SHOW_MINIMAP_ICON"),
                         get = function(_)
-                            return self:GetFromDb("gameStateMessage")
+                            return self:GetFromDb("showMinimapIcon")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("gameStateMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.gameStateMessage = value
-                                self:PrintChangedValue(L["TITLE_GAME_STATE_MESSAGE"], oldValue, value)
-                            end
+                            self:UpdateMinimapSetting(value)
                         end
                     },
-                    blank2 = {
-                        type = "description", order = self:GetNextIndex(), name = ""
-                    },
-                    detailsMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_DETAILS_MESSAGE"],
-                        desc = self:GetConfigComment("DETAILS_MESSAGE"),
-                        usage = L["USAGE_DETAILS_MESSAGE"],
+                    showWelcomeMessage = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = L["TITLE_SHOW_WELCOME_MESSAGE"],
+                        desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE"),
                         get = function(_)
-                            return self:GetFromDb("detailsMessage")
+                            return self:GetFromDb("showWelcomeMessage")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetFromDb("detailsMessage")
-                            local isValid = (type(value) == "string")
+                            local oldValue = self:GetFromDb("showWelcomeMessage")
+                            local isValid = (type(value) == "boolean")
                             if isValid then
-                                self.db.profile.detailsMessage = value
-                                self:PrintChangedValue(L["TITLE_DETAILS_MESSAGE"], oldValue, value)
-                            end
-                        end
-                    },
-                    blank3 = {
-                        type = "description", order = self:GetNextIndex(), name = ""
-                    },
-                    largeImageKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_LARGE_IMAGE_KEY"],
-                        desc = self:GetConfigComment("LARGE_IMAGE_KEY"),
-                        usage = L["USAGE_LARGE_IMAGE_KEY"],
-                        get = function(_)
-                            return self:GetFromDb("largeImageKey")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("largeImageKey")
-                            local isValid = (type(value) == "string") and self:GetLength(value) <= 32
-                            if isValid then
-                                self.db.profile.largeImageKey = value
-                                self:PrintChangedValue(L["TITLE_LARGE_IMAGE_KEY"], oldValue, value)
-                            else
-                                self:PrintErrorMessage(L["ERROR_IMAGE_KEY"])
-                            end
-                        end
-                    },
-                    smallImageKey = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
-                        name = L["TITLE_SMALL_IMAGE_KEY"],
-                        desc = self:GetConfigComment("SMALL_IMAGE_KEY"),
-                        usage = L["USAGE_SMALL_IMAGE_KEY"],
-                        get = function(_)
-                            return self:GetFromDb("smallImageKey")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("smallImageKey")
-                            local isValid = (type(value) == "string") and self:GetLength(value) <= 32
-                            if isValid then
-                                self.db.profile.smallImageKey = value
-                                self:PrintChangedValue(L["TITLE_SMALL_IMAGE_KEY"], oldValue, value)
-                            else
-                                self:PrintErrorMessage(L["ERROR_IMAGE_KEY"])
-                            end
-                        end
-                    },
-                    blank4 = {
-                        type = "description", order = self:GetNextIndex(), name = ""
-                    },
-                    largeImageMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_LARGE_IMAGE_MESSAGE"],
-                        desc = self:GetConfigComment("LARGE_IMAGE_MESSAGE"),
-                        usage = L["USAGE_LARGE_IMAGE_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("largeImageMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("largeImageMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.largeImageMessage = value
-                                self:PrintChangedValue(L["TITLE_LARGE_IMAGE_MESSAGE"], oldValue, value)
-                            end
-                        end
-                    },
-                    blank5 = {
-                        type = "description", order = self:GetNextIndex(), name = ""
-                    },
-                    smallImageMessage = {
-                        type = "input", order = self:GetNextIndex(), width = 3.0,
-                        name = L["TITLE_SMALL_IMAGE_MESSAGE"],
-                        desc = self:GetConfigComment("SMALL_IMAGE_MESSAGE"),
-                        usage = L["USAGE_SMALL_IMAGE_MESSAGE"],
-                        get = function(_)
-                            return self:GetFromDb("smallImageMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("smallImageMessage")
-                            local isValid = (type(value) == "string")
-                            if isValid then
-                                self.db.profile.smallImageMessage = value
-                                self:PrintChangedValue(L["TITLE_SMALL_IMAGE_MESSAGE"], oldValue, value)
+                                self.db.profile.showWelcomeMessage = value
+                                self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
                         end
                     }
                 }
+            },
+            presenceOptions = {
+                type = "group", order = self:GetNextIndex(),
+                name = L["CATEGORY_TITLE_PRESENCE"], desc = L["CATEGORY_COMMENT_PRESENCE"],
+                get = function(info)
+                    return self.db.profile[info[self:GetLength(info)]]
+                end,
+                set = function(info, value)
+                    self.db.profile[info[self:GetLength(info)]] = value
+                end,
+                args = self:GenerateDynamicTable("presence", L["CATEGORY_TITLE_PRESENCE_EXTENDED"],
+                        function(count)
+                            return strformat(L["CATEGORY_COMMENT_PRESENCE_INFO"], count, (count == 1 and "") or "s")
+                        end
+                )
             },
             buttonOptions = {
                 type = "group", order = self:GetNextIndex(),
@@ -341,17 +265,6 @@ function CraftPresence:GetOptions()
                     blank1 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
-                    showMinimapIcon = {
-                        type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_SHOW_MINIMAP_ICON"],
-                        desc = self:GetConfigComment("SHOW_MINIMAP_ICON"),
-                        get = function(_)
-                            return self:GetFromDb("showMinimapIcon")
-                        end,
-                        set = function(_, value)
-                            self:UpdateMinimapSetting(value)
-                        end
-                    },
                     queuedPipeline = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = L["TITLE_QUEUED_PIPELINE"],
@@ -365,25 +278,6 @@ function CraftPresence:GetOptions()
                             if isValid then
                                 self.db.profile.queuedPipeline = value
                                 self:PrintChangedValue(L["TITLE_QUEUED_PIPELINE"], oldValue, value)
-                            end
-                        end
-                    },
-                    blank2 = {
-                        type = "description", order = self:GetNextIndex(), name = ""
-                    },
-                    showWelcomeMessage = {
-                        type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_SHOW_WELCOME_MESSAGE"],
-                        desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE"),
-                        get = function(_)
-                            return self:GetFromDb("showWelcomeMessage")
-                        end,
-                        set = function(_, value)
-                            local oldValue = self:GetFromDb("showWelcomeMessage")
-                            local isValid = (type(value) == "boolean")
-                            if isValid then
-                                self.db.profile.showWelcomeMessage = value
-                                self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
                         end
                     },
@@ -403,7 +297,7 @@ function CraftPresence:GetOptions()
                             end
                         end
                     },
-                    blank3 = {
+                    blank2 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     callbackDelay = {
@@ -468,7 +362,7 @@ function CraftPresence:GetOptions()
                             end
                         end
                     },
-                    blank4 = {
+                    blank3 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     frameSize = {

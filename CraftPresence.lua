@@ -104,14 +104,19 @@ function CraftPresence:EncodeConfigData(log_output)
     -- Primary Variable Data
     log_output = self:GetOrDefault(log_output, false)
     -- Secondary Variable Data
+    -- TODO: REDO THIS and purge SetFormats existence before any beta releases for v2.2
+    -- (This code will work for now to preserve existing behaviors)
+    local presenceData = self:GetFromDb("presence")
+    local largeImage = presenceData["largeImage"]
+    local smallImage = presenceData["smallImage"]
     local rpcData = {
         self:GetFromDb("clientId"),
-        { self:GetFromDb("largeImageKey"), "icon" },
-        { self:GetFromDb("largeImageMessage"), "no-dupes" },
-        { self:GetFromDb("smallImageKey"), "icon" },
-        { self:GetFromDb("smallImageMessage"), "no-dupes" },
-        { self:GetFromDb("detailsMessage"), "no-dupes" },
-        { self:GetFromDb("gameStateMessage"), "no-dupes" }
+        { largeImage.keyCallback, "icon" },
+        { largeImage.messageCallback, "no-dupes" },
+        { smallImage.keyCallback, "icon" },
+        { smallImage.messageCallback, "no-dupes" },
+        { presenceData["details"].messageCallback, "no-dupes" },
+        { presenceData["state"].messageCallback, "no-dupes" }
     }
 
     -- Placeholder Syncing

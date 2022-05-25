@@ -83,6 +83,11 @@ L["LOG_INFO"] = "[Info] %s"
 L["CATEGORY_TITLE_GENERAL"] = "General"
 L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info."
 
+L["CATEGORY_TITLE_PRESENCE"] = "Presence"
+L["CATEGORY_TITLE_PRESENCE_EXTENDED"] = "Rich Presence Fields"
+L["CATEGORY_COMMENT_PRESENCE"] = "Settings for customizing the general display fields of the rich presence."
+L["CATEGORY_COMMENT_PRESENCE_INFO"] = "%s rich presence field%s found! (See the Buttons Tab for more settings)"
+
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Custom Buttons"
 L["CATEGORY_COMMENT_BUTTONS"] = "Settings for customizing additional button data."
@@ -91,22 +96,22 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Custom Labels"
 L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found! (Use /cp labels for more info)."
+L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found! (Use /cp labels for more info)"
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data."
-L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)."
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)"
 
 L["CATEGORY_TITLE_EVENTS"] = "Events"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Available Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
-L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)."
+L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)"
 
 L["CATEGORY_TITLE_METRICS"] = "Metrics"
 L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
 L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
-L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)."
+L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)"
 
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customization options for addon display info."
@@ -122,39 +127,9 @@ L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please ent
         GREEN, GREY
 )
 
-L["TITLE_GAME_STATE_MESSAGE"] = "Game State Message"
-L["COMMENT_GAME_STATE_MESSAGE"] = "The message to be displayed in the Game State area of the RPC."
-L["USAGE_GAME_STATE_MESSAGE"] = "<Your message here>"
-L["DEFAULT_GAME_STATE_MESSAGE"] = setfmt("*scenario**dungeon**raid**battleground**arena**default*", outkey)
-
-L["TITLE_DETAILS_MESSAGE"] = "Details Message"
-L["COMMENT_DETAILS_MESSAGE"] = "The message to be displayed in the Details area of the RPC."
-L["USAGE_DETAILS_MESSAGE"] = "<Your message here>"
-L["DEFAULT_DETAILS_MESSAGE"] = setfmt("*player_info*", inkey)
-
-L["TITLE_LARGE_IMAGE_KEY"] = "Large Image Key"
-L["COMMENT_LARGE_IMAGE_KEY"] = "The image key to be displayed as the Large Image of the RPC."
-L["USAGE_LARGE_IMAGE_KEY"] = "<Your message here>"
-L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
-
-L["TITLE_SMALL_IMAGE_KEY"] = "Small Image Key"
-L["COMMENT_SMALL_IMAGE_KEY"] = "The image key to be displayed as the Small Image of the RPC."
-L["USAGE_SMALL_IMAGE_KEY"] = "<Your message here>"
-L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
-
 L["ERROR_IMAGE_KEY"] = setfmt("Sanity Checks failed for *Image Key|r. Please enter a string ^<= 32|r letters long.",
         GREEN, GREY
 )
-
-L["TITLE_LARGE_IMAGE_MESSAGE"] = "Large Image Message"
-L["COMMENT_LARGE_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Large Image area of the RPC."
-L["USAGE_LARGE_IMAGE_MESSAGE"] = "<Your message here>"
-L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
-
-L["TITLE_SMALL_IMAGE_MESSAGE"] = "Small Image Message"
-L["COMMENT_SMALL_IMAGE_MESSAGE"] = "The message to be displayed when hovering over the Small Image area of the RPC."
-L["USAGE_SMALL_IMAGE_MESSAGE"] = "<Your message here>"
-L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
 
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
@@ -200,11 +175,29 @@ L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 L["DEFAULT_FRAME_SIZE"] = 6
 
+L["TITLE_STATE"] = "Game State"
+L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
+L["DEFAULT_STATE_MESSAGE"] = setfmt("*scenario**dungeon**raid**battleground**arena**default*", outkey)
+
+L["TITLE_DETAILS"] = "Details"
+L["COMMENT_DETAILS"] = "The data to be interpeted for the Details area of the Rich Presence."
+L["DEFAULT_DETAILS_MESSAGE"] = setfmt("*player_info*", inkey)
+
+L["TITLE_LARGEIMAGE"] = "Large Image"
+L["COMMENT_LARGEIMAGE"] = "The data to be interpeted for the Large Image area of the Rich Presence."
+L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
+L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
+
+L["TITLE_SMALLIMAGE"] = "Small Image"
+L["COMMENT_SMALLIMAGE"] = "The data to be interpeted for the Small Image area of the Rich Presence."
+L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
+L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
+
 L["TITLE_PRIMARYBUTTON"] = "Primary Button"
-L["COMMENT_PRIMARYBUTTON"] = "The data to show for the Primary Button area of the Rich Presence."
+L["COMMENT_PRIMARYBUTTON"] = "The data to be interpreted for the Primary Button area of the Rich Presence."
 
 L["TITLE_SECONDARYBUTTON"] = "Secondary Button"
-L["COMMENT_SECONDARYBUTTON"] = "The data to show for the Secondary Button area of the Rich Presence."
+L["COMMENT_SECONDARYBUTTON"] = "The data to be interpreted for the Secondary Button area of the Rich Presence."
 
 L["TITLE_BUTTON_LABEL"] = "Label"
 L["COMMENT_BUTTON_LABEL"] = "The message to show as the label."
@@ -268,6 +261,26 @@ L["COMMENT_BUTTON_INACTIVETYPE"] = setfmt("The variable type the *Inactive Callb
         GREEN
 )
 L["USAGE_BUTTON_INACTIVETYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_KEYCALLBACK"] = "Key Callback"
+L["COMMENT_BUTTON_KEYCALLBACK"] = "The function that, if any, is what will be attached as the key for this field."
+L["USAGE_BUTTON_KEYCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_KEYTYPE"] = "Key Type"
+L["COMMENT_BUTTON_KEYTYPE"] = setfmt("The variable type the *Key Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_KEYTYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_MESSAGECALLBACK"] = "Message Callback"
+L["COMMENT_BUTTON_MESSAGECALLBACK"] = "The function that, if any, is what will be attached as the message for this field."
+L["USAGE_BUTTON_MESSAGECALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_MESSAGETYPE"] = "Message Type"
+L["COMMENT_BUTTON_MESSAGETYPE"] = setfmt("The variable type the *Message Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_MESSAGETYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
 L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."
