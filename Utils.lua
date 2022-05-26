@@ -283,6 +283,7 @@ function CraftPresence:GetConfigComment(str)
 end
 
 --- Return a modified version of the specified string, depending on arguments
+--- Valid Case Types: lower|upper|icon|no-dupes
 ---
 --- @param obj any A table (Format: string, casing) or string to evaluate (Required)
 ---
@@ -339,70 +340,6 @@ end
 --- @return any @ result
 function CraftPresence:vararg(n, f)
     return CP_GlobalUtils:vararg(n, f)
-end
-
---- Parses Multiple arguments through the SetFormat method
----
---- @param format_args table The format arguments to pass to each SetFormat call
---- @param string_args table The strings to parse
---- @param plain boolean Whether or not to forbid pattern matching filters
---- @param set_config boolean Whether to parse and save the resulting values as config data
----
---- @return table, table @ string_args, adjusted_data
-function CraftPresence:SetFormats(format_args, string_args, plain, set_config)
-    local adjusted_data = {}
-    if type(format_args) == "table" and self:GetLength(format_args) <= 4 and type(string_args) == "table" then
-        for key, value in pairs(string_args) do
-            local strValue
-            if type(value) == "table" then
-                if set_config and self:GetLength(value) <= 2 then
-                    strValue = self:GetFromDb(value[1], value[2])
-                elseif not set_config then
-                    if self:GetLength(value) == 2 then
-                        strValue = self:GetCaseData(value)
-                    else
-                        strValue = self:SerializeTable(value)
-                    end
-                end
-            else
-                if set_config then
-                    strValue = self:GetFromDb(value)
-                else
-                    strValue = value
-                end
-            end
-
-            if strValue ~= nil then
-                local newValue = self:SetFormat(
-                        strValue, format_args[1], format_args[2], format_args[3], format_args[4], plain
-                )
-                if strValue ~= newValue then
-                    if type(value) == "table" then
-                        if set_config and self:GetLength(value) <= 2 then
-                            self:SetToDb(value[1], value[2], newValue)
-                        else
-                            if self:GetLength(value) == 2 then
-                                string_args[key] = self:GetCaseData({ newValue, value[2] })
-                            else
-                                self:PrintErrorMessage(strformat(L["ERROR_COMMAND_UNKNOWN"], "SetFormats"))
-                            end
-                        end
-                    else
-                        if set_config then
-                            self:SetToDb(value, nil, newValue)
-                        else
-                            string_args[key] = newValue
-                        end
-                    end
-                    adjusted_data[key] = {
-                        ["old"] = strValue,
-                        ["new"] = newValue
-                    }
-                end
-            end
-        end
-    end
-    return string_args, adjusted_data
 end
 
 --- Determines whether the specified value is within the specified range
@@ -990,7 +927,7 @@ end
 --- @param newFunc string The new function to migrate to
 --- @param version string The version the deprecated function will be removed in
 function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
-    if self:GetFromDb("verboseMode") then
+    if self:GetProperty("verboseMode") then
         local dataTable = {
             [L["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, L["TYPE_NONE"]),
             [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
@@ -1006,7 +943,7 @@ end
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
     self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
-    if self:GetFromDb("verboseMode") then
+    if self:GetProperty("verboseMode") then
         self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
 end
@@ -1049,7 +986,7 @@ end
 function CraftPresence:SetTimerLocked(newValue)
     if self:IsNullOrEmpty(newValue) then return end
     -- This method only executes if we are operating in a non-queue pipeline
-    if not self:GetFromDb("queuedPipeline") then
+    if not self:GetProperty("queuedPipeline") then
         timer_locked = newValue
     end
 end
@@ -1058,6 +995,37 @@ end
 --- @return boolean @ timer_locked
 function CraftPresence:IsTimerLocked()
     return timer_locked
+end
+
+--- Parse the specified string or table dynamically, using GetCaseData or GetDynamicReturnValue
+---
+--- @param obj table The table to interpret (Format: string,format_func,format_type)
+---
+--- @return string @ result
+function CraftPresence:ParseDynamicFormatting(obj)
+    if self:IsNullOrEmpty(obj) then return obj end
+    local value
+    if type(obj) == "table" then
+        local innerValue = obj
+        if self:GetLength(innerValue) >= 1 then
+            value = self:GetOrDefault(innerValue[1])
+            if not self:IsNullOrEmpty(value) and self:GetLength(innerValue) >= 2 then
+                local format_func, format_type = innerValue[2], "string"
+                if self:GetLength(innerValue) >= 3 then
+                    format_type = self:GetOrDefault(innerValue[3])
+                end
+
+                if format_type == "function" then
+                    value = self:GetDynamicReturnValue(format_func, format_type, self, value)
+                else
+                    value = self:GetCaseData({ value, format_func })
+                end
+            end
+        end
+    else
+        value = self:GetOrDefault(obj)
+    end
+    return value
 end
 
 --- Parse a Dynamic Table with the specified filter(s) for any matches
@@ -1127,7 +1095,7 @@ end
 --- @param reset boolean Whether to reset this property value
 ---
 --- @return any configValue
-function CraftPresence:GetFromDb(grp, key, reset)
+function CraftPresence:GetProperty(grp, key, reset)
     if self:IsNullOrEmpty(grp) then return nil end
     local defaults = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
@@ -1148,7 +1116,7 @@ end
 --- @param key string The config key to retrieve (Optional)
 --- @param newValue any The new config value to set (Leave Empty to reset value)
 --- @param reset boolean Whether to reset this property value
-function CraftPresence:SetToDb(grp, key, newValue, reset)
+function CraftPresence:SetProperty(grp, key, newValue, reset)
     if self:IsNullOrEmpty(grp) then return end
     local defaults = self:GetDefaults()
     if self.db.profile[grp] == nil or (reset and not key) then
@@ -1191,7 +1159,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
             order = self:GetNextIndex(), type = "header", name = titleKey
         }
     }
-    local rootData = self:GetFromDb(rootKey)
+    local rootData = self:GetProperty(rootKey)
     if type(rootData) == "table" then
         for k, v in pairs(rootData) do
             local key, value = k, v

@@ -61,7 +61,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             -- Schema Changes (v0 -> v1):
             --  events[k].ignoreCallback has been renamed to events[k].processCallback
             --  We want to rename this accordingly to prevent losing data
-            local events = self:GetFromDb("events")
+            local events = self:GetProperty("events")
             for k, v in pairs(events) do
                 if type(v) == "table" and v.ignoreCallback ~= nil then
                     v.processCallback = v.ignoreCallback
@@ -69,7 +69,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 end
                 events[k] = v
             end
-            self:SetToDb("events", nil, events)
+            self:SetProperty("events", nil, events)
             current = 1
         end
 
@@ -79,7 +79,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             --   The data field is renamed to processCallback
             --   The type field is renamed to processType
             --   Added multiple new fields for placeholders and events to allow better configurability
-            local placeholders = self:GetFromDb("customPlaceholders")
+            local placeholders = self:GetProperty("customPlaceholders")
             if placeholders ~= nil then
                 for k, v in pairs(placeholders) do
                     if type(v) == "table" then
@@ -108,37 +108,37 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                         defaults.placeholders, placeholders
                 )
 
-                local old_global_prefix = self:GetOrDefault(self:GetFromDb("globalPlaceholderKey"))
-                local old_inner_prefix = self:GetOrDefault(self:GetFromDb("innerPlaceholderKey"))
-                if self:GetFromDb("defaultPlaceholderMessage") ~= nil then
+                local old_global_prefix = self:GetOrDefault(self:GetProperty("globalPlaceholderKey"))
+                local old_inner_prefix = self:GetOrDefault(self:GetProperty("innerPlaceholderKey"))
+                if self:GetProperty("defaultPlaceholderMessage") ~= nil then
                     placeholders["default"].prefix = old_global_prefix
                     placeholders["default"].processType = "string"
-                    placeholders["default"].processCallback = self:GetFromDb("defaultPlaceholderMessage")
-                    self:SetToDb("defaultPlaceholderMessage", nil, nil)
+                    placeholders["default"].processCallback = self:GetProperty("defaultPlaceholderMessage")
+                    self:SetProperty("defaultPlaceholderMessage", nil, nil)
                 end
-                if self:GetFromDb("arenaPlaceholderMessage") ~= nil then
+                if self:GetProperty("arenaPlaceholderMessage") ~= nil then
                     placeholders["arena"].prefix = old_global_prefix
                     placeholders["arena"].processType = "string"
-                    placeholders["arena"].processCallback = self:GetFromDb("arenaPlaceholderMessage")
-                    self:SetToDb("arenaPlaceholderMessage", nil, nil)
+                    placeholders["arena"].processCallback = self:GetProperty("arenaPlaceholderMessage")
+                    self:SetProperty("arenaPlaceholderMessage", nil, nil)
                 end
-                if self:GetFromDb("battlegroundPlaceholderMessage") ~= nil then
+                if self:GetProperty("battlegroundPlaceholderMessage") ~= nil then
                     placeholders["battleground"].prefix = old_global_prefix
                     placeholders["battleground"].processType = "string"
-                    placeholders["battleground"].processCallback = self:GetFromDb("battlegroundPlaceholderMessage")
-                    self:SetToDb("battlegroundPlaceholderMessage", nil, nil)
+                    placeholders["battleground"].processCallback = self:GetProperty("battlegroundPlaceholderMessage")
+                    self:SetProperty("battlegroundPlaceholderMessage", nil, nil)
                 end
-                if self:GetFromDb("raidPlaceholderMessage") ~= nil then
+                if self:GetProperty("raidPlaceholderMessage") ~= nil then
                     placeholders["raid"].prefix = old_global_prefix
                     placeholders["raid"].processType = "string"
-                    placeholders["raid"].processCallback = self:GetFromDb("raidPlaceholderMessage")
-                    self:SetToDb("raidPlaceholderMessage", nil, nil)
+                    placeholders["raid"].processCallback = self:GetProperty("raidPlaceholderMessage")
+                    self:SetProperty("raidPlaceholderMessage", nil, nil)
                 end
-                if self:GetFromDb("dungeonPlaceholderMessage") ~= nil then
+                if self:GetProperty("dungeonPlaceholderMessage") ~= nil then
                     placeholders["dungeon"].prefix = old_global_prefix
                     placeholders["dungeon"].processType = "string"
-                    placeholders["dungeon"].processCallback = self:GetFromDb("dungeonPlaceholderMessage")
-                    self:SetToDb("dungeonPlaceholderMessage", nil, nil)
+                    placeholders["dungeon"].processCallback = self:GetProperty("dungeonPlaceholderMessage")
+                    self:SetProperty("dungeonPlaceholderMessage", nil, nil)
                 end
 
                 for k, v in pairs(placeholders) do
@@ -147,8 +147,8 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                     end
                 end
 
-                self:SetToDb("placeholders", nil, placeholders)
-                self:SetToDb("customPlaceholders", nil, nil)
+                self:SetProperty("placeholders", nil, placeholders)
+                self:SetProperty("customPlaceholders", nil, nil)
             end
             current = 2
         end
@@ -156,7 +156,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
         if self:IsWithinValue(current, 2, 3, true, true) then
             -- Schema Changes (v2 -> v3):
             --   Adds allowRebasedApi flag for events and placeholders
-            local data = self:GetFromDb("placeholders")
+            local data = self:GetProperty("placeholders")
             local default = defaults.placeholders
             for k, _ in pairs(data) do
                 data[k].allowRebasedApi = self:GetOrDefault(
@@ -164,9 +164,9 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                         self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
                 )
             end
-            self:SetToDb("placeholders", nil, data)
+            self:SetProperty("placeholders", nil, data)
 
-            data = self:GetFromDb("events")
+            data = self:GetProperty("events")
             default = defaults.events
             for k, _ in pairs(data) do
                 data[k].allowRebasedApi = self:GetOrDefault(
@@ -174,7 +174,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                         self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
                 )
             end
-            self:SetToDb("events", nil, data)
+            self:SetProperty("events", nil, data)
             current = 3
         end
 
@@ -192,7 +192,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             --   `placeholders.player_alliance`
             --      - `minimumTOC` flag removed, was previously marked as supporting rebased/3.2.0 or above
             --      - Added a nil check for the name in `processCallback` to allow TBC and Vanilla Wow client support
-            local buttonData = self:GetFromDb("buttons")
+            local buttonData = self:GetProperty("buttons")
             if buttonData ~= nil then
                 for k, v in pairs(buttonData) do
                     if type(v) == "table" then
@@ -215,9 +215,9 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                     end
                     buttonData[k] = v
                 end
-                self:SetToDb("buttons", nil, buttonData)
+                self:SetProperty("buttons", nil, buttonData)
             end
-            local labelData = self:GetFromDb("labels")
+            local labelData = self:GetProperty("labels")
             local defaultLabels = defaults.labels
             if labelData ~= nil then
                 for k, v in pairs(labelData) do
@@ -245,9 +245,9 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                     end
                     labelData[k] = v
                 end
-                self:SetToDb("labels", nil, labelData)
+                self:SetProperty("labels", nil, labelData)
             end
-            local placeholderData = self:GetFromDb("placeholders")
+            local placeholderData = self:GetProperty("placeholders")
             if placeholderData ~= nil then
                 for k, v in pairs(placeholderData) do
                     if type(v) == "table" then
@@ -258,19 +258,78 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                     end
                     placeholderData[k] = v
                 end
-                self:SetToDb("placeholders", nil, placeholderData)
+                self:SetProperty("placeholders", nil, placeholderData)
             end
 
-            if can_modify then
-                self.db.profile.events["CHAT_MSG_SYSTEM"] = defaults.events["CHAT_MSG_SYSTEM"]
-                self.db.profile.placeholders["player_alliance"] = defaults.placeholders["player_alliance"]
-            elseif log_output then
-                self:PrintMigrationMessage(current, target)
+            if current ~= 4.1 then
+                if can_modify then
+                    self:SetProperty("events", "CHAT_MSG_SYSTEM", nil, true)
+                    self:SetProperty("placeholders", "player_alliance", nil, true)
+                elseif log_output then
+                    self:PrintMigrationMessage(current, target)
+                end
+                current = 4.1
             end
-            current = 4.1
         end
 
-        self:SetToDb("schema", nil, min(current, target))
+        if self:IsWithinValue(current, 4.1, 4.5, true, true) then
+            -- Schema Changes (v4.1 -> v4.5):
+            --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolodate logic
+            --   Rich Presence Fields have been moved into their own tab and made dynamic
+            local placeholderData = self:GetProperty("placeholders")
+            if placeholderData ~= nil then
+                for k, v in pairs(placeholderData) do
+                    if type(v) == "table" then
+                        v.tagCallback = self:Replace(v.tagCallback, "time:start", "time_start", true)
+                        v.tagCallback = self:Replace(v.tagCallback, "time:end", "time_end", true)
+                    end
+                    placeholderData[k] = v
+                end
+                self:SetProperty("placeholders", nil, placeholderData)
+            end
+
+            local presenceData = self:GetProperty("presence")
+            local defaultPresence = defaults.presence
+            if presenceData ~= nil then
+                local newLargeImage = presenceData["largeImage"]
+                local defaultLargeImage = defaultPresence["largeImage"]
+                newLargeImage.keyCallback = self:GetOrDefault(
+                        self:GetProperty("largeImageKey"), defaultLargeImage.keyCallback
+                )
+                self:SetProperty("largeImageKey", nil, nil)
+                newLargeImage.messageCallback = self:GetOrDefault(
+                        self:GetProperty("largeImageMessage"), defaultLargeImage.messageCallback
+                )
+                self:SetProperty("largeImageMessage", nil, nil)
+                presenceData["largeImage"] = newLargeImage
+
+                local newSmallImage = presenceData["smallImage"]
+                local defaultSmallImage = defaultPresence["smallImage"]
+                newSmallImage.keyCallback = self:GetOrDefault(
+                        self:GetProperty("smallImageKey"), defaultSmallImage.keyCallback
+                )
+                self:SetProperty("smallImageKey", nil, nil)
+                newSmallImage.messageCallback = self:GetOrDefault(
+                        self:GetProperty("smallImageMessage"), defaultSmallImage.messageCallback
+                )
+                self:SetProperty("smallImageMessage", nil, nil)
+                presenceData["smallImage"] = newSmallImage
+
+                presenceData["state"].messageCallback = self:GetOrDefault(
+                        self:GetProperty("gameStateMessage"), defaultPresence["state"].messageCallback
+                )
+                self:SetProperty("gameStateMessage", nil, nil)
+                presenceData["details"].messageCallback = self:GetOrDefault(
+                        self:GetProperty("detailsMessage"), defaultPresence["details"].messageCallback
+                )
+                self:SetProperty("detailsMessage", nil, nil)
+
+                self:SetProperty("presence", nil, presenceData)
+            end
+            current = 4.5
+        end
+
+        self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end
 end

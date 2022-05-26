@@ -31,17 +31,47 @@ local DB_DEFAULTS = {
     profile = {
         schema = 0,
         clientId = L["DEFAULT_CLIENT_ID"],
-        gameStateMessage = L["DEFAULT_GAME_STATE_MESSAGE"],
-        detailsMessage = L["DEFAULT_DETAILS_MESSAGE"],
-        largeImageKey = L["DEFAULT_LARGE_IMAGE_KEY"],
-        largeImageMessage = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
-        smallImageKey = L["DEFAULT_SMALL_IMAGE_KEY"],
-        smallImageMessage = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
+        showMinimapIcon = true,
+        showWelcomeMessage = true,
+        presence = {
+            ["state"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                messageCallback = L["DEFAULT_STATE_MESSAGE"],
+                messageFormatCallback = "no-dupes",
+                messageType = "string", messageFormatType = "string",
+                enabled = true
+            },
+            ["details"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                messageCallback = L["DEFAULT_DETAILS_MESSAGE"],
+                messageFormatCallback = "no-dupes",
+                messageType = "string", messageFormatType = "string",
+                enabled = true
+            },
+            ["largeImage"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                keyCallback = L["DEFAULT_LARGE_IMAGE_KEY"],
+                keyFormatCallback = "icon",
+                messageCallback = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
+                messageFormatCallback = "no-dupes",
+                keyType = "string", messageType = "string",
+                keyFormatType = "string", messageFormatType = "string",
+                enabled = true
+            },
+            ["smallImage"] = {
+                minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                keyCallback = L["DEFAULT_SMALL_IMAGE_KEY"],
+                keyFormatCallback = "icon",
+                messageCallback = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
+                messageFormatCallback = "no-dupes",
+                keyType = "string", messageType = "string",
+                keyFormatType = "string", messageFormatType = "string",
+                enabled = true
+            }
+        },
         debugMode = false,
         verboseMode = false,
-        showMinimapIcon = true,
         queuedPipeline = false,
-        showWelcomeMessage = true,
         optionalMigrations = false,
         callbackDelay = L["DEFAULT_CALLBACK_DELAY"],
         frameSize = L["DEFAULT_FRAME_SIZE"],
@@ -50,13 +80,17 @@ local DB_DEFAULTS = {
             ["primaryButton"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 labelCallback = "", urlCallback = "",
+                messageFormatCallback = "no-dupes",
                 labelType = "string", urlType = "string",
+                messageFormatType = "string",
                 enabled = true
             },
             ["secondaryButton"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 labelCallback = "", urlCallback = "",
+                messageFormatCallback = "no-dupes",
                 labelType = "string", urlType = "string",
+                messageFormatType = "string",
                 enabled = true
             }
         },
@@ -174,7 +208,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'arena'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -186,7 +220,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'pvp'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -198,7 +232,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'raid'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -212,7 +246,7 @@ end]],
         not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
     )
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
@@ -224,7 +258,7 @@ end]],
                 registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'scenario'
 end]],
-                tagCallback = "time:start",
+                tagCallback = "time_start",
                 tagType = "string",
                 enabled = true,
                 prefix = L["DEFAULT_GLOBAL_KEY"], suffix = L["DEFAULT_GLOBAL_KEY"]
