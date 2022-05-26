@@ -273,7 +273,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
         end
 
         if self:IsWithinValue(current, 4.1, 4.5, true, true) then
-            -- Schema Changes (v4.1 -> v5):
+            -- Schema Changes (v4.1 -> v4.5):
             --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolodate logic
             --   Rich Presence Fields have been moved into their own tab and made dynamic
             local placeholderData = self:GetProperty("placeholders")
