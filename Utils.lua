@@ -997,6 +997,37 @@ function CraftPresence:IsTimerLocked()
     return timer_locked
 end
 
+--- Parse the specified string or table dynamically, using GetCaseData or GetDynamicReturnValue
+---
+--- @param obj table The table to interpret (Format: string,format_func,format_type)
+---
+--- @return string @ result
+function CraftPresence:ParseDynamicFormatting(obj)
+    if self:IsNullOrEmpty(obj) then return obj end
+    local value
+    if type(obj) == "table" then
+        local innerValue = obj
+        if self:GetLength(innerValue) >= 1 then
+            value = self:GetOrDefault(innerValue[1])
+            if not self:IsNullOrEmpty(value) and self:GetLength(innerValue) >= 2 then
+                local format_func, format_type = innerValue[2], "string"
+                if self:GetLength(innerValue) >= 3 then
+                    format_type = self:GetOrDefault(innerValue[3])
+                end
+
+                if format_type == "function" then
+                    value = self:GetDynamicReturnValue(format_func, format_type, self, value)
+                else
+                    value = self:GetCaseData({ value, format_func })
+                end
+            end
+        end
+    else
+        value = self:GetOrDefault(obj)
+    end
+    return value
+end
+
 --- Parse a Dynamic Table with the specified filter(s) for any matches
 --- (INTERNAL USAGE ONLY)
 ---

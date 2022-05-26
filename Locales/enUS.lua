@@ -272,6 +272,18 @@ L["COMMENT_BUTTON_KEYTYPE"] = setfmt("The variable type the *Key Callback|r shou
 )
 L["USAGE_BUTTON_KEYTYPE"] = "<A variable type name here, can be function|string>"
 
+L["TITLE_BUTTON_KEYFORMATCALLBACK"] = "Key Format Callback"
+L["COMMENT_BUTTON_KEYFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Key Callback|r.",
+        GREEN
+)
+L["USAGE_BUTTON_KEYFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
+
+L["TITLE_BUTTON_KEYFORMATTYPE"] = "Key Format Type"
+L["COMMENT_BUTTON_KEYFORMATTYPE"] = setfmt("The variable type the *Key Format Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_KEYFORMATTYPE"] = "<A variable type name here, can be function|string>"
+
 L["TITLE_BUTTON_MESSAGECALLBACK"] = "Message Callback"
 L["COMMENT_BUTTON_MESSAGECALLBACK"] = "The function that, if any, is what will be attached as the message for this field."
 L["USAGE_BUTTON_MESSAGECALLBACK"] = "<A function or string reference to a function here>"
@@ -281,6 +293,18 @@ L["COMMENT_BUTTON_MESSAGETYPE"] = setfmt("The variable type the *Message Callbac
         GREEN
 )
 L["USAGE_BUTTON_MESSAGETYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_MESSAGEFORMATCALLBACK"] = "Message Format Callback"
+L["COMMENT_BUTTON_MESSAGEFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Message Callback|r.",
+        GREEN
+)
+L["USAGE_BUTTON_MESSAGEFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
+
+L["TITLE_BUTTON_MESSAGEFORMATTYPE"] = "Message Format Type"
+L["COMMENT_BUTTON_MESSAGEFORMATTYPE"] = setfmt("The variable type the *Message Format Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_MESSAGEFORMATTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
 L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."

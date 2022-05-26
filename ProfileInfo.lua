@@ -37,27 +37,35 @@ local DB_DEFAULTS = {
             ["state"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 messageCallback = L["DEFAULT_STATE_MESSAGE"],
-                messageType = "string",
+                messageFormatCallback = "no-dupes",
+                messageType = "string", messageFormatType = "string",
                 enabled = true
             },
             ["details"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 messageCallback = L["DEFAULT_DETAILS_MESSAGE"],
-                messageType = "string",
+                messageFormatCallback = "no-dupes",
+                messageType = "string", messageFormatType = "string",
                 enabled = true
             },
             ["largeImage"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 keyCallback = L["DEFAULT_LARGE_IMAGE_KEY"],
+                keyFormatCallback = "icon",
                 messageCallback = L["DEFAULT_LARGE_IMAGE_MESSAGE"],
+                messageFormatCallback = "no-dupes",
                 keyType = "string", messageType = "string",
+                keyFormatType = "string", messageFormatType = "string",
                 enabled = true
             },
             ["smallImage"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 keyCallback = L["DEFAULT_SMALL_IMAGE_KEY"],
+                keyFormatCallback = "icon",
                 messageCallback = L["DEFAULT_SMALL_IMAGE_MESSAGE"],
+                messageFormatCallback = "no-dupes",
                 keyType = "string", messageType = "string",
+                keyFormatType = "string", messageFormatType = "string",
                 enabled = true
             }
         },
@@ -72,13 +80,17 @@ local DB_DEFAULTS = {
             ["primaryButton"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 labelCallback = "", urlCallback = "",
+                messageFormatCallback = "no-dupes",
                 labelType = "string", urlType = "string",
+                messageFormatType = "string",
                 enabled = true
             },
             ["secondaryButton"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 labelCallback = "", urlCallback = "",
+                messageFormatCallback = "no-dupes",
                 labelType = "string", urlType = "string",
+                messageFormatType = "string",
                 enabled = true
             }
         },

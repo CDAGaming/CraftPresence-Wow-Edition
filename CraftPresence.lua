@@ -342,12 +342,7 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
                     buttonValue.label = self:GetDynamicReturnValue(buttonValue.labelCallback, buttonValue.labelType, self)
                     buttonValue.urlCallback = self:Replace(buttonValue.urlCallback, newKey, self:GetOrDefault(newValue), true)
                     buttonValue.url = self:GetDynamicReturnValue(buttonValue.urlCallback, buttonValue.urlType, self)
-                    buttonValue.result = self:ConcatTable(
-                            nil, L["ARRAY_SPLIT_KEY"],
-                            self:GetOrDefault(buttonValue.label), self:GetOrDefault(buttonValue.url)
-                    )
                 end
-                buttonValue.result = self:GetOrDefault(buttonValue.result)
                 self.buttons[buttonKey] = buttonValue
             end
 
@@ -385,24 +380,31 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
         -- Apply Main Presence Fields to data, if allowed
         local largeImage = self.presenceData["largeImage"]
         local smallImage = self.presenceData["smallImage"]
+        local details = self.presenceData["details"]
+        local state = self.presenceData["state"]
         local data = {
             self:GetProperty("clientId"),
-            self:GetCaseData({ largeImage.keyResult, "icon" }),
-            self:GetCaseData({ largeImage.messageResult, "no-dupes" }),
-            self:GetCaseData({ smallImage.keyResult, "icon" }),
-            self:GetCaseData({ smallImage.messageResult, "no-dupes" }),
-            self:GetCaseData({ self.presenceData["details"].messageResult, "no-dupes" }),
-            self:GetCaseData({ self.presenceData["state"].messageResult, "no-dupes" })
+            self:ParseDynamicFormatting({ largeImage.keyResult, largeImage.keyFormatCallback, largeImage.keyFormatType }),
+            self:ParseDynamicFormatting({ largeImage.messageResult, largeImage.messageFormatCallback, largeImage.messageFormatType }),
+            self:ParseDynamicFormatting({ smallImage.keyResult, smallImage.keyFormatCallback, smallImage.keyFormatType }),
+            self:ParseDynamicFormatting({ smallImage.messageResult, smallImage.messageFormatCallback, smallImage.messageFormatType }),
+            self:ParseDynamicFormatting({ details.messageResult, details.messageFormatCallback, details.messageFormatType }),
+            self:ParseDynamicFormatting({ state.messageResult, state.messageFormatCallback, state.messageFormatType })
         }
         -- Sync then reset time condition data
         tinsert(data, self:GetOrDefault(self.time_start))
         tinsert(data, self:GetOrDefault(self.time_end))
         self.time_start, self.time_end = "", ""
 
-        -- Additional Sanity Checks for Buttons
+        -- Apply Combined Button Fields to data, if allowed
         for _, value in pairs(self.buttons) do
-            if type(value) == "table" and value.result then
-                tinsert(data, self:GetCaseData({ value.result, "no-dupes" }))
+            if type(value) == "table" then
+                value.result = self:ConcatTable(
+                        nil, L["ARRAY_SPLIT_KEY"],
+                        self:ParseDynamicFormatting({ value.label, value.messageFormatCallback, value.messageFormatType }),
+                        self:GetOrDefault(value.url)
+                )
+                tinsert(data, self:GetOrDefault(value.result))
             end
         end
         return data
