@@ -83,6 +83,11 @@ L["LOG_INFO"] = "[Info] %s"
 L["CATEGORY_TITLE_GENERAL"] = "Allgemein"
 L["CATEGORY_COMMENT_GENERAL"] = "Einstellungen für die Anzeige der Rich Presence."
 
+L["CATEGORY_TITLE_PRESENCE"] = "Presence"
+L["CATEGORY_TITLE_PRESENCE_EXTENDED"] = "Rich Presence Fields"
+L["CATEGORY_COMMENT_PRESENCE"] = "Settings for customizing the general display fields of the rich presence."
+L["CATEGORY_COMMENT_PRESENCE_INFO"] = "%s rich presence field%s found! (See the Buttons Tab for more settings)"
+
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Benutzerdefinierte Buttons in Discord"
 L["CATEGORY_COMMENT_BUTTONS"] = "Einstellungen für zusätzliche Buttons in Discord."
@@ -91,22 +96,22 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s benutzerdefinierte Button%s gefunden!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Benutzerdefinierte Label"
 L["CATEGORY_COMMENT_LABELS"] = "Einstellungen für benutzerdefinierte Status (bspw. Im Kampf, AFK, o.ä.)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = "%s Label gefunden! (/cp labels im Chat für mehr Informationen)."
+L["CATEGORY_COMMENT_LABELS_INFO"] = "%s Label gefunden! (/cp labels im Chat für mehr Informationen)"
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Platzhalter"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Benutzerdefinierte Platzhalter"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Einstellungen für benutzerdefinierte Platzhalter"
-L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s Platzhalter gefunden! (/cp placeholders im Chat für mehr Informationen)."
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s Platzhalter gefunden! (/cp placeholders im Chat für mehr Informationen)"
 
 L["CATEGORY_TITLE_EVENTS"] = "Ereignisse"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Gefunden Ereignisse"
 L["CATEGORY_COMMENT_EVENTS"] = "Einstellungen für benutzerdefinierte Ereignisse, auf dessen Auslösen die Rich Presence aktualisiert wird."
-L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s Ereigniss(e) gefunden! (/cp events im Chat für mehr Informationen)."
+L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s Ereigniss(e) gefunden! (/cp events im Chat für mehr Informationen)"
 
 L["CATEGORY_TITLE_METRICS"] = "Metrics"
 L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
 L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
-L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)."
+L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)"
 
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Zusätzliche Einstellungen"
@@ -121,40 +126,6 @@ L["DEFAULT_CLIENT_ID"] = "805124430774272000"
 L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit|r numerical value.",
         GREEN, GREY
 )
-
-L["TITLE_GAME_STATE_MESSAGE"] = "Status"
-L["COMMENT_GAME_STATE_MESSAGE"] = "Der Statustext, der im Statusbereich angezeigt wird."
-L["USAGE_GAME_STATE_MESSAGE"] = "<Dein Statustext hier>"
-L["DEFAULT_GAME_STATE_MESSAGE"] = setfmt("*scenario**dungeon**raid**battleground**arena**default*", outkey)
-
-L["TITLE_DETAILS_MESSAGE"] = "Details"
-L["COMMENT_DETAILS_MESSAGE"] = "Der Statustext, der im Detailbereich angezeigt wird."
-L["USAGE_DETAILS_MESSAGE"] = "<Dein Statustext hier>"
-L["DEFAULT_DETAILS_MESSAGE"] = setfmt("*player_info*", inkey)
-
-L["TITLE_LARGE_IMAGE_KEY"] = "Dateiname eines großen Anzeigebildes"
-L["COMMENT_LARGE_IMAGE_KEY"] = "Dateiname des Anzeigebildes, der als großes Anzeigebild im Status angezeigt werden soll."
-L["USAGE_LARGE_IMAGE_KEY"] = "<Dateiname hier>"
-L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
-
-L["TITLE_SMALL_IMAGE_KEY"] = "Dateiname eines kleinen Anzeigebildes"
-L["COMMENT_SMALL_IMAGE_KEY"] = "Dateiname des Anzeigebildes, der als kleines Anzeigebild im Status angezeigt werden soll."
-L["USAGE_SMALL_IMAGE_KEY"] = "<Dateiname hier>"
-L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
-
-L["ERROR_IMAGE_KEY"] = setfmt("Sanity Checks failed for *Image Key|r. Please enter a string ^<= 32|r letters long.",
-        GREEN, GREY
-)
-
-L["TITLE_LARGE_IMAGE_MESSAGE"] = "Nachricht über dem großen Anzeigebild"
-L["COMMENT_LARGE_IMAGE_MESSAGE"] = "Nachricht, die beim Mouseover über das große Anzeigebild erscheinen soll."
-L["USAGE_LARGE_IMAGE_MESSAGE"] = "<Deine Nachricht hier>"
-L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
-
-L["TITLE_SMALL_IMAGE_MESSAGE"] = "Nachricht über dem kleinen Anzeigebild"
-L["COMMENT_SMALL_IMAGE_MESSAGE"] = "Nachricht, die beim Mouseover über das kleine Anzeigebild erscheinen soll."
-L["USAGE_SMALL_IMAGE_MESSAGE"] = "<Deine Nachricht hier>"
-L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
 
 L["TITLE_DEBUG_MODE"] = "Debug Modus"
 L["COMMENT_DEBUG_MODE"] = "Schaltet die Anzeige von erweiterten (Debug-)Nachrichten im Chat ein/aus."
@@ -199,6 +170,24 @@ L["COMMENT_FRAME_SIZE"] = setfmt([[The size that each event frame pixel should b
 L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 L["DEFAULT_FRAME_SIZE"] = 6
+
+L["TITLE_STATE"] = "Game State"
+L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
+L["DEFAULT_STATE_MESSAGE"] = setfmt("*scenario**dungeon**raid**battleground**arena**default*", outkey)
+
+L["TITLE_DETAILS"] = "Details"
+L["COMMENT_DETAILS"] = "The data to be interpeted for the Details area of the Rich Presence."
+L["DEFAULT_DETAILS_MESSAGE"] = setfmt("*player_info*", inkey)
+
+L["TITLE_LARGEIMAGE"] = "Large Image"
+L["COMMENT_LARGEIMAGE"] = "The data to be interpeted for the Large Image area of the Rich Presence."
+L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
+L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
+
+L["TITLE_SMALLIMAGE"] = "Small Image"
+L["COMMENT_SMALLIMAGE"] = "The data to be interpeted for the Small Image area of the Rich Presence."
+L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
+L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
 
 L["TITLE_PRIMARYBUTTON"] = "Primärer Button"
 L["COMMENT_PRIMARYBUTTON"] = "Einstellungen für den ersten Button in Discord."
@@ -268,6 +257,50 @@ L["COMMENT_BUTTON_INACTIVETYPE"] = setfmt("The variable type the *Inactive Callb
         GREEN
 )
 L["USAGE_BUTTON_INACTIVETYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_KEYCALLBACK"] = "Key Callback"
+L["COMMENT_BUTTON_KEYCALLBACK"] = "The function that, if any, is what will be attached as the key for this field."
+L["USAGE_BUTTON_KEYCALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_KEYTYPE"] = "Key Type"
+L["COMMENT_BUTTON_KEYTYPE"] = setfmt("The variable type the *Key Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_KEYTYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_KEYFORMATCALLBACK"] = "Key Format Callback"
+L["COMMENT_BUTTON_KEYFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Key Callback|r.",
+        GREEN
+)
+L["USAGE_BUTTON_KEYFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
+
+L["TITLE_BUTTON_KEYFORMATTYPE"] = "Key Format Type"
+L["COMMENT_BUTTON_KEYFORMATTYPE"] = setfmt("The variable type the *Key Format Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_KEYFORMATTYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_MESSAGECALLBACK"] = "Message Callback"
+L["COMMENT_BUTTON_MESSAGECALLBACK"] = "The function that, if any, is what will be attached as the message for this field."
+L["USAGE_BUTTON_MESSAGECALLBACK"] = "<A function or string reference to a function here>"
+
+L["TITLE_BUTTON_MESSAGETYPE"] = "Message Type"
+L["COMMENT_BUTTON_MESSAGETYPE"] = setfmt("The variable type the *Message Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_MESSAGETYPE"] = "<A variable type name here, can be function|string>"
+
+L["TITLE_BUTTON_MESSAGEFORMATCALLBACK"] = "Message Format Callback"
+L["COMMENT_BUTTON_MESSAGEFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Message Callback|r.",
+        GREEN
+)
+L["USAGE_BUTTON_MESSAGEFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
+
+L["TITLE_BUTTON_MESSAGEFORMATTYPE"] = "Message Format Type"
+L["COMMENT_BUTTON_MESSAGEFORMATTYPE"] = setfmt("The variable type the *Message Format Callback|r should be interpreted as.",
+        GREEN
+)
+L["USAGE_BUTTON_MESSAGEFORMATTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
 L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."

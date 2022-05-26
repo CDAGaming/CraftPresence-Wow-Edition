@@ -127,10 +127,6 @@ L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please ent
         GREEN, GREY
 )
 
-L["ERROR_IMAGE_KEY"] = setfmt("Sanity Checks failed for *Image Key|r. Please enter a string ^<= 32|r letters long.",
-        GREEN, GREY
-)
-
 L["TITLE_DEBUG_MODE"] = "Debug Mode"
 L["COMMENT_DEBUG_MODE"] = "Toggles the display of verbose and more descriptive logging."
 
