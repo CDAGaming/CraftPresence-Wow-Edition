@@ -379,15 +379,18 @@ end]],
     local genderData = { "Unknown", "Male", "Female" }
     local playerGenderId = 1
     local fallback = genderData[playerGenderId]
-    local playerRace, playerGender = fallback, fallback
+    local playerRace, playerGender = fallback, ''
+    local result = playerRace
+    if UnitRace then
+        playerRace = UnitRace('player')
+        result = self:Replace(playerRace, '%s+', '')
+    end
     if UnitSex then
         playerGenderId = UnitSex('player')
         playerGender = genderData[playerGenderId]
+        result = result .. '_' .. playerGender
     end
-    if UnitRace then
-        playerRace = UnitRace('player')
-    end
-    return self:FormatAsIcon(playerRace .. "_" .. playerGender)
+    return self:FormatAsIcon(result)
 end]],
                 processType = "function",
                 registerCallback = "",
