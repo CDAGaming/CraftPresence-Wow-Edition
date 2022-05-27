@@ -623,7 +623,18 @@ function CraftPresence:ChatCommand(input)
         elseif command == "reset" then
             local reset_single = (command_query[2] ~= nil)
             if reset_single then
-                self:GetProperty(command_query[2], command_query[3], true)
+                local data = {
+                    group = command_query[2],
+                    key = command_query[3]
+                }
+
+                if (not data.key and self.db.profile[data.group]) or
+                        (data.key ~= nil and self.db.profile[data.group] and self.db.profile[data.group][data.key]) then
+                    self:GetProperty(command_query[2], command_query[3], true)
+                    self:Print(strformat(L["INFO_RESET_CONFIG_SINGLE"], self:SerializeTable(data)))
+                else
+                    self:PrintErrorMessage(strformat(L["COMMAND_RESET_NOT_FOUND"], self:SerializeTable(data)))
+                end
             end
             self:UpdateProfile(true, not reset_single, "all")
         elseif command == "minimap" then

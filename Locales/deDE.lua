@@ -369,6 +369,7 @@ L["INFO_EVENT_SKIPPED"] = setfmt("Ereignis übersprungen:\n Name: *%s|r\n Daten:
 L["INFO_EVENT_PROCESSING"] = setfmt("Verarbeite Ereignis:\n Name: *%s|r\n Daten: ^%s|r", GREEN, GREY)
 L["INFO_PLACEHOLDER_PROCESSING"] = setfmt("Verarbeite Platzhalter:\n Name: *%s|r\n Daten: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Setze Konfiguration zurück..."
+L["INFO_RESET_CONFIG_SINGLE"] = "Resetting Config Data with query => %s"
 L["INFO_OUTDATED_CONFIG"] = setfmt("Veraltete Konfiguration erkannt!\n Migriere von Schema *v%s|r zu *v%s|r...", GREEN)
 L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicable for Schema *v%s|r to *v%s|r!",
         GREEN
@@ -419,6 +420,9 @@ L["INTEGRATION_ALREADY_USED"] = setfmt("*Die angegebene Integration wird bereits
 
 -- Command: /cp clear|clean
 L["COMMAND_CLEAR_SUCCESS"] = "Bereinige den aktuellen Frame..."
+
+-- Command: /cp reset
+L["COMMAND_RESET_NOT_FOUND"] = "Config Data matching the following query was not found => %s"
 
 -- Integration: Event Modification
 L["COMMAND_EVENT_SUCCESS"] = setfmt("Aktion ^%s|r erfolgreich auf *%s|r mit der Bindung *%s|r durchgeführt.",
