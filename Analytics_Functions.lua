@@ -32,15 +32,16 @@ function CraftPresence:SyncAnalytics(metric_engines)
     metric_engines = self:GetOrDefault(metric_engines, {})
     for key, data in pairs(metric_engines) do
         if self:ShouldProcessData(data) then
-            if not self.registeredMetrics[key] then
-                -- If this engine wasn't enabled before,
-                -- execute the engine's stateCallback before add it to the registered list.
+            if not self.registeredMetrics[key] or
+                    (self.registeredMetrics[key] and self.registeredMetrics[key].stateCallback ~= data.stateCallback) then
+                -- If this engine wasn't enabled before or the stateCallback has been modified,
+                -- execute the engine's stateCallback before adding it to the registered list.
                 self:GetDynamicReturnValue(data.stateCallback, "function", self)
             end
             self.registeredMetrics[key] = data
         elseif self.registeredMetrics[key] then
             -- If we cannot process data from this engine (Either because it was disabled, checks fail, etc),
-            -- execute the engine's unregisterCallback before clearing it from the list.
+            -- execute the engine's unregisterCallback before clearing it from the registered list.
             self:GetDynamicReturnValue(data.unregisterCallback, "function", self)
             self.registeredMetrics[key] = nil
         end
