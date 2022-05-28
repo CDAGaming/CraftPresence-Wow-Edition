@@ -86,7 +86,11 @@ L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info."
 L["CATEGORY_TITLE_PRESENCE"] = "Presence"
 L["CATEGORY_TITLE_PRESENCE_EXTENDED"] = "Rich Presence Fields"
 L["CATEGORY_COMMENT_PRESENCE"] = "Settings for customizing the general display fields of the rich presence."
-L["CATEGORY_COMMENT_PRESENCE_INFO"] = "%s rich presence field%s found! (See the Buttons Tab for more settings)"
+L["CATEGORY_COMMENT_PRESENCE_INFO"] = setfmt([[%s rich presence field%s found!
+
+*Note:|r See the ^Buttons|r tab for more settings.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Custom Buttons"
@@ -96,22 +100,38 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Custom Labels"
 L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = "%s label%s found! (Use /cp labels for more info)"
+L["CATEGORY_COMMENT_LABELS_INFO"] = setfmt([[%s label%s found!
+
+*Note:|r Use ^/cp labels|r for more info.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data."
-L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s placeholder%s found! (Use /cp placeholders for more info)"
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = setfmt([[%s placeholder%s found!
+
+*Note:|r Use ^/cp placeholders|r for more info.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_EVENTS"] = "Events"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Available Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
-L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s event%s found! (Use /cp events for more info)"
+L["CATEGORY_COMMENT_EVENTS_INFO"] = setfmt([[%s event%s found!
+
+*Note:|r Use ^/cp events|r for more info.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_METRICS"] = "Metrics"
 L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
 L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
-L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)"
+L["CATEGORY_COMMENT_METRICS_INFO"] = setfmt([[%s metric service%s found!.
+
+*Note:|r A ^reload|r may be required for certain settings to take full effect.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Extra customization options for addon display info."
@@ -145,8 +165,8 @@ L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initiali
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = setfmt([[Toggles whether to allow optional config migrations.
 
-*Warning:|r These types of migrations may reset certain config values.]],
-        GOLD
+*Warning:|r These types of migrations may ^reset|r certain config values.]],
+        GOLD, RED
 )
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"

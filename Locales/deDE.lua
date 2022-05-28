@@ -86,7 +86,11 @@ L["CATEGORY_COMMENT_GENERAL"] = "Einstellungen für die Anzeige der Rich Presenc
 L["CATEGORY_TITLE_PRESENCE"] = "Presence"
 L["CATEGORY_TITLE_PRESENCE_EXTENDED"] = "Rich Presence Fields"
 L["CATEGORY_COMMENT_PRESENCE"] = "Settings for customizing the general display fields of the rich presence."
-L["CATEGORY_COMMENT_PRESENCE_INFO"] = "%s rich presence field%s found! (See the Buttons Tab for more settings)"
+L["CATEGORY_COMMENT_PRESENCE_INFO"] = setfmt([[%s rich presence field%s found!
+
+*Note:|r See the ^Buttons|r tab for more settings.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_BUTTONS"] = "Buttons"
 L["CATEGORY_TITLE_BUTTONS_EXTENDED"] = "Benutzerdefinierte Buttons in Discord"
@@ -96,22 +100,38 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s benutzerdefinierte Button%s gefunden!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Benutzerdefinierte Label"
 L["CATEGORY_COMMENT_LABELS"] = "Einstellungen für benutzerdefinierte Status (bspw. Im Kampf, AFK, o.ä.)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = "%s Label gefunden! (/cp labels im Chat für mehr Informationen)"
+L["CATEGORY_COMMENT_LABELS_INFO"] = setfmt([[%s Label gefunden!
+
+*Note:|r ^/cp labels|r im Chat für mehr Informationen.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Platzhalter"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Benutzerdefinierte Platzhalter"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Einstellungen für benutzerdefinierte Platzhalter"
-L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = "%s Platzhalter gefunden! (/cp placeholders im Chat für mehr Informationen)"
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = setfmt([[%s Platzhalter gefunden!
+
+*Note:|r ^/cp placeholders|r im Chat für mehr Informationen.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_EVENTS"] = "Ereignisse"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Gefunden Ereignisse"
 L["CATEGORY_COMMENT_EVENTS"] = "Einstellungen für benutzerdefinierte Ereignisse, auf dessen Auslösen die Rich Presence aktualisiert wird."
-L["CATEGORY_COMMENT_EVENTS_INFO"] = "%s Ereigniss(e) gefunden! (/cp events im Chat für mehr Informationen)"
+L["CATEGORY_COMMENT_EVENTS_INFO"] = setfmt([[%s Ereigniss(e) gefunden!
+
+*Note:|r ^/cp events|r im Chat für mehr Informationen.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_METRICS"] = "Metrics"
 L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
 L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
-L["CATEGORY_COMMENT_METRICS_INFO"] = "%s metric service%s found! (Reload Required to apply changes)"
+L["CATEGORY_COMMENT_METRICS_INFO"] = setfmt([[%s metric service%s found!.
+
+*Note:|r A ^reload|r may be required for certain settings to take full effect.]],
+        GOLD, GREEN
+)
 
 L["CATEGORY_TITLE_EXTRA"] = "Extra"
 L["CATEGORY_COMMENT_EXTRA"] = "Zusätzliche Einstellungen"
@@ -145,8 +165,8 @@ L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Schaltet die initiale Nachricht beim Anmeld
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = setfmt([[Toggles whether to allow optional config migrations.
 
-*Warning:|r These types of migrations may reset certain config values.]],
-        GOLD
+*Warning:|r These types of migrations may ^reset|r certain config values.]],
+        GOLD, RED
 )
 
 L["TITLE_CALLBACK_DELAY"] = "Callback Delay"
@@ -392,7 +412,7 @@ L["ADDON_CLOSE"] = "Beende die Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
-L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by # are global (Can have inner keys)",
+L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),",
         GREEN, outkey
 )
 L["PLACEHOLDERS_NOTE_TWO"] = setfmt("while ones enclosed by *^|r are inner (Cannot have any other keys)",
