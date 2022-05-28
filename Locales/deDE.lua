@@ -330,7 +330,7 @@ L["TITLE_BUTTON_REGISTERCALLBACK"] = "Register Callback"
 L["COMMENT_BUTTON_REGISTERCALLBACK"] = "Eine Funktion, die bei den Rückgabewerten \"any\" oder \"true\" die Registrierung der Daten erlaubt."
 L["USAGE_BUTTON_REGISTERCALLBACK"] = "<Eine Boolean-Funktion hier>"
 
-L["TITLE_BUTTON_UNREGISTERCALLBACK"] = "Un-Register Callback"
+L["TITLE_BUTTON_UNREGISTERCALLBACK"] = "Unregister Callback"
 L["COMMENT_BUTTON_UNREGISTERCALLBACK"] = "The function that, if any, will be executed when the data should be unloaded."
 L["USAGE_BUTTON_UNREGISTERCALLBACK"] = "<A valid function here>"
 
