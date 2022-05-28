@@ -1217,9 +1217,13 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
     end
 
     commentKey = self:GetDynamicReturnValue(commentKey, type(commentKey), found_count)
-    table_args[self:RandomString(8)] = {
+    local commentId = self:RandomString(8)
+    table_args[commentId] = {
         type = "description", order = self:GetNextIndex(), fontSize = "medium",
         name = commentKey
+    }
+    table_args[commentId.."_spacer"] = {
+        type = "description", order = self:GetNextIndex(), name = ""
     }
     return table_args
 end
