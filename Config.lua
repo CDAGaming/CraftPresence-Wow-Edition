@@ -217,6 +217,9 @@ function CraftPresence:GetOptions()
                 args = self:GenerateDynamicTable("metrics", L["CATEGORY_TITLE_METRICS_EXTENDED"],
                         function(count)
                             return strformat(L["CATEGORY_COMMENT_METRICS_INFO"], count, (count == 1 and "") or "s")
+                        end,
+                        function(root)
+                            root:SyncAnalytics(root:GetProperty("metrics"))
                         end
                 )
             },

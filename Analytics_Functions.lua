@@ -29,15 +29,20 @@ local pairs = pairs
 ---
 --- @param metric_engines table The table of metric engines to interpret
 function CraftPresence:SyncAnalytics(metric_engines)
-    -- Clear prior data before method execution
-    self.registeredMetrics = {}
-
     metric_engines = self:GetOrDefault(metric_engines, {})
     for key, data in pairs(metric_engines) do
         if self:ShouldProcessData(data) then
-            -- If enabled, execute the engine's stateCallback then add it to the registered list
-            self:GetDynamicReturnValue(data.stateCallback, "function", self)
+            if not self.registeredMetrics[key] then
+                -- If this engine wasn't enabled before,
+                -- execute the engine's stateCallback before add it to the registered list.
+                self:GetDynamicReturnValue(data.stateCallback, "function", self)
+            end
             self.registeredMetrics[key] = data
+        elseif self.registeredMetrics[key] then
+            -- If we cannot process data from this engine (Either because it was disabled, checks fail, etc),
+            -- execute the engine's unregisterCallback before clearing it from the list.
+            self:GetDynamicReturnValue(data.unregisterCallback, "function", self)
+            self.registeredMetrics[key] = nil
         end
     end
 end

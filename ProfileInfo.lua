@@ -109,6 +109,10 @@ end]],
                 stateCallback = [[function (self)
     self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
 end]],
+                unregisterCallback = [[function (self)
+    if not self.WagoAnalytics then return end
+    self.WagoAnalytics = nil
+end]],
                 enabled = false
             }
         },
