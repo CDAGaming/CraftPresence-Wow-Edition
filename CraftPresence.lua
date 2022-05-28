@@ -132,7 +132,7 @@ function CraftPresence:OnInitialize()
             self:GetProperty("optionalMigrations")
     )
     -- Analytics Initialization
-    self:InitializeAnalytics(self:GetProperty("metrics"))
+    self:SyncAnalytics(self:GetProperty("metrics"))
     self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then

@@ -28,7 +28,10 @@ local pairs = pairs
 --- Analyze the list of metric engines specified, interpreting those that should be processed
 ---
 --- @param metric_engines table The table of metric engines to interpret
-function CraftPresence:InitializeAnalytics(metric_engines)
+function CraftPresence:SyncAnalytics(metric_engines)
+    -- Clear prior data before method execution
+    self.registeredMetrics = {}
+
     metric_engines = self:GetOrDefault(metric_engines, {})
     for key, data in pairs(metric_engines) do
         if self:ShouldProcessData(data) then

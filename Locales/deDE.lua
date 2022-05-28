@@ -332,7 +332,7 @@ L["USAGE_BUTTON_REGISTERCALLBACK"] = "<Eine Boolean-Funktion hier>"
 
 L["TITLE_BUTTON_STATECALLBACK"] = "State Callback"
 L["COMMENT_BUTTON_STATECALLBACK"] = "The function that, if any, defines if the data should be considered active or not."
-L["USAGE_BUTTON_STATECALLBACK"] = "<A boolean function here>"
+L["USAGE_BUTTON_STATECALLBACK"] = "<A valid function here>"
 
 L["TITLE_BUTTON_TAGCALLBACK"] = "Tag Callback"
 L["COMMENT_BUTTON_TAGCALLBACK"] = "Eine Funktion, die es den Daten erlaubt, bestimmte Voraussetzungen zu haben."
