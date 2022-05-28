@@ -652,7 +652,7 @@ end
 function CraftPresence:GetFlavorInfo()
     if not flavor_info then
         flavor_info = {
-            ["retail"] = 90200, -- Latest Retail
+            ["retail"] = 90205, -- Latest Retail
             ["classic"] = 20504, -- Latest Classic
             ["classic_era"] = 11403, -- Latest Classic Era
             ["ptr"] = 90205, -- Latest Retail PTR
