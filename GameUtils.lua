@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, strupper, tostring = string.format, string.upper, tostring
-local tinsert, tconcat, pairs = table.insert, table.concat, pairs
+local tinsert, tconcat, pairs, type = table.insert, table.concat, pairs, type
 
 -- Addon APIs
 local L = CraftPresence.locale
@@ -37,21 +37,29 @@ local cachedUnitData = {}
 --- Retrieves the Player Status for the specified unit
 ---
 --- @param unit string The unit to interpret (Default: player)
---- @param refresh boolean Whether to sync the resulting status to unitData.last_status (Default: false)
 --- @param sync boolean Whether to sync the resulting status to cachedUnitData[unit] (Default: true)
+--- @param refresh boolean Whether to sync dynamic data before method execution (Default: false)
 --- @param prefixFormat string Optional argument to determine the prefix formatting (Default: L["FORMAT_USER_PREFIX"])
 --- @param unitData table Optional argument for forcing certain unit status data
+--- @param separator boolean Optional argument for specifying how unitInfo is segmented into unitData.status (Default: ",")
+--- @param index number Optional argument that, if specified, will only use this argument from detected unitInfo
 ---
 --- @return table @ unitData
-function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData)
+function CraftPresence:GetUnitStatus(unit, sync, refresh, prefixFormat, unitData, separator, index)
     unit = self:GetOrDefault(unit, "player")
-    refresh = self:GetOrDefault(refresh, false)
     sync = self:GetOrDefault(sync, true)
+    refresh = self:GetOrDefault(refresh, false)
     prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
     unitData = self:GetOrDefault(unitData, cachedUnitData[unit] or {})
+    separator = self:GetOrDefault(separator, ",")
 
     local unitInfo = {}
     local unitString = ""
+
+    -- Ensure labels are synced, if allowed
+    if refresh then
+        self:SyncDynamicData(self:GetProperty("verboseMode"))
+    end
 
     for key, value in pairs(self.labels) do
         if self:ShouldProcessData(value) then
@@ -63,8 +71,13 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
         end
     end
 
-    -- Sync Player Name Tweaks
-    unitData.status = tconcat(unitInfo, ",")
+    -- Sync Player Status with unitInfo data
+    unitData.full_status = tconcat(unitInfo, separator)
+    if type(index) == "number" and index >= 1 and self:GetLength(unitInfo) >= index then
+        unitData.status = self:GetOrDefault(unitInfo[index])
+    else
+        unitData.status = unitData.full_status
+    end
     unitData.reason = self:GetOrDefault(unitData.reason or
             (cachedUnitData[unit] and cachedUnitData[unit].reason)
     )
@@ -78,11 +91,11 @@ function CraftPresence:GetUnitStatus(unit, refresh, sync, prefixFormat, unitData
         unitData.reason = ""
     end
 
-    -- Return Data (Syncing if needed)
-    if refresh then
-        unitData.last_status = unitData.status
-    end
+    -- Return Data (Will also cache data if allowed)
     if sync then
+        if unitData.last_status ~= unitData.full_status then
+            unitData.last_status = unitData.full_status
+        end
         cachedUnitData[unit] = unitData
     end
     return unitData

@@ -406,7 +406,7 @@ end]],
             ["player_status"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
-    return self:GetUnitStatus("player", true).status
+    return self:GetUnitStatus("player").status
 end]],
                 processType = "function",
                 registerCallback = "",
@@ -418,7 +418,7 @@ end]],
             ["player_reason"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self)
-    return self:GetUnitStatus("player", true).reason
+    return self:GetUnitStatus("player").reason
 end]],
                 processType = "function",
                 registerCallback = "",
@@ -516,7 +516,7 @@ end]],
                 processCallback = [[function (self)
     -- Player Data
     local playerName = UnitName('player')
-    local playerData = self:GetUnitStatus('player', true)
+    local playerData = self:GetUnitStatus('player')
     -- Extra Player Data
     local unitLevel = UnitLevel('player')
     local unitClass = UnitClass('player')
@@ -1078,8 +1078,7 @@ end]],
             ["PLAYER_FLAGS_CHANGED"] = {
                 minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                 processCallback = [[function (self, lastName, _, args)
-    local unitData = self:GetUnitData()
-    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player' or unitData.last_status == unitData.status
+    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player'
 end]],
                 registerCallback = "",
                 eventCallback = "function(self) return self.defaultEventCallback end",
