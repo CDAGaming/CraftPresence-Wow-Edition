@@ -61,12 +61,16 @@ function CraftPresence:GetUnitStatus(unit, sync, refresh, prefixFormat, unitData
         self:SyncDynamicData(self:GetProperty("verboseMode"))
     end
 
+    -- Prepare (Or reset if present) an info list for unitData to list available messages
+    unitData.info = {}
+
     for key, value in pairs(self.labels) do
         if self:ShouldProcessData(value) then
             unitData[key] = value.state
             unitString = value[L["STATUS_" .. strupper(tostring(value.state))]]
             if not self:IsNullOrEmpty(unitString) then
                 tinsert(unitInfo, unitString)
+                unitData.info[key] = unitString
             end
         end
     end
