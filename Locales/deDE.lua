@@ -215,22 +215,6 @@ L["COMMENT_PRIMARYBUTTON"] = "Einstellungen für den ersten Button in Discord."
 L["TITLE_SECONDARYBUTTON"] = "Sekundärer Button"
 L["COMMENT_SECONDARYBUTTON"] = "Einstellungen für den zweiten Button in Discord"
 
-L["TITLE_BUTTON_LABEL"] = "Label"
-L["COMMENT_BUTTON_LABEL"] = "Der Text, der auf dem Button erscheinen soll."
-L["USAGE_BUTTON_LABEL"] = "<Dein Text hier>"
-
-L["TITLE_BUTTON_URL"] = "Url"
-L["COMMENT_BUTTON_URL"] = "Die URL, die über den Button geöffnet werden soll."
-L["USAGE_BUTTON_URL"] = "<Deine URL hier>"
-
-L["TITLE_BUTTON_ACTIVE"] = "Statustext (wenn aktiv)"
-L["COMMENT_BUTTON_ACTIVE"] = "Der anzuzeigende Text, wenn der Status aktiv ist."
-L["USAGE_BUTTON_ACTIVE"] = "<Dein Text hier>"
-
-L["TITLE_BUTTON_INACTIVE"] = "Statustext (wenn inaktiv)"
-L["COMMENT_BUTTON_INACTIVE"] = "Der anzuzeigende Text, wenn der Status inaktiv ist."
-L["USAGE_BUTTON_INACTIVE"] = "<Dein Text hier>"
-
 L["TITLE_BUTTON_ENABLED"] = "Aktiv"
 L["COMMENT_BUTTON_ENABLED"] = "Ein-/ausschalten dieses Objektes."
 

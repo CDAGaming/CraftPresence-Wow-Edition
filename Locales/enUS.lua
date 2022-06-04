@@ -215,22 +215,6 @@ L["COMMENT_PRIMARYBUTTON"] = "The data to be interpreted for the Primary Button 
 L["TITLE_SECONDARYBUTTON"] = "Secondary Button"
 L["COMMENT_SECONDARYBUTTON"] = "The data to be interpreted for the Secondary Button area of the Rich Presence."
 
-L["TITLE_BUTTON_LABEL"] = "Label"
-L["COMMENT_BUTTON_LABEL"] = "The message to show as the label."
-L["USAGE_BUTTON_LABEL"] = "<Your message here>"
-
-L["TITLE_BUTTON_URL"] = "Url"
-L["COMMENT_BUTTON_URL"] = "The message to show as the url."
-L["USAGE_BUTTON_URL"] = "<Your message here>"
-
-L["TITLE_BUTTON_ACTIVE"] = "Active State Message"
-L["COMMENT_BUTTON_ACTIVE"] = "The message to display when this state is active."
-L["USAGE_BUTTON_ACTIVE"] = "<Your message here>"
-
-L["TITLE_BUTTON_INACTIVE"] = "Inactive State Message"
-L["COMMENT_BUTTON_INACTIVE"] = "The message to display when this state is inactive."
-L["USAGE_BUTTON_INACTIVE"] = "<Your message here>"
-
 L["TITLE_BUTTON_ENABLED"] = "Enabled"
 L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used."
 
