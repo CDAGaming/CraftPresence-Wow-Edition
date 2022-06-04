@@ -65,9 +65,9 @@ function CraftPresence:GetOptions()
                 args = {
                     clientId = {
                         type = "input", order = self:GetNextIndex(), width = 1.25,
-                        name = L["TITLE_CLIENT_ID"],
+                        name = self:GetConfigTitle("CLIENT_ID"),
                         desc = self:GetConfigComment("CLIENT_ID"),
-                        usage = L["USAGE_CLIENT_ID"],
+                        usage = self:GetConfigUsage("CLIENT_ID"),
                         get = function(_)
                             return self:GetProperty("clientId")
                         end,
@@ -91,7 +91,7 @@ function CraftPresence:GetOptions()
                     },
                     showMinimapIcon = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_SHOW_MINIMAP_ICON"],
+                        name = self:GetConfigTitle("SHOW_MINIMAP_ICON"),
                         desc = self:GetConfigComment("SHOW_MINIMAP_ICON"),
                         get = function(_)
                             return self:GetProperty("showMinimapIcon")
@@ -102,7 +102,7 @@ function CraftPresence:GetOptions()
                     },
                     showWelcomeMessage = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_SHOW_WELCOME_MESSAGE"],
+                        name = self:GetConfigTitle("SHOW_WELCOME_MESSAGE"),
                         desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE"),
                         get = function(_)
                             return self:GetProperty("showWelcomeMessage")
@@ -235,7 +235,7 @@ function CraftPresence:GetOptions()
                 args = {
                     debugMode = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_DEBUG_MODE"],
+                        name = self:GetConfigTitle("DEBUG_MODE"),
                         desc = self:GetConfigComment("DEBUG_MODE"),
                         get = function(_)
                             return self:GetProperty("debugMode")
@@ -251,7 +251,7 @@ function CraftPresence:GetOptions()
                     },
                     verboseMode = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_VERBOSE_MODE"],
+                        name = self:GetConfigTitle("VERBOSE_MODE"),
                         desc = self:GetConfigComment("VERBOSE_MODE"),
                         get = function(_)
                             return self:GetProperty("verboseMode")
@@ -270,7 +270,7 @@ function CraftPresence:GetOptions()
                     },
                     queuedPipeline = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_QUEUED_PIPELINE"],
+                        name = self:GetConfigTitle("QUEUED_PIPELINE"),
                         desc = self:GetConfigComment("QUEUED_PIPELINE"),
                         get = function(_)
                             return self:GetProperty("queuedPipeline")
@@ -286,7 +286,7 @@ function CraftPresence:GetOptions()
                     },
                     optionalMigrations = {
                         type = "toggle", order = self:GetNextIndex(),
-                        name = L["TITLE_OPTIONAL_MIGRATIONS"],
+                        name = self:GetConfigTitle("OPTIONAL_MIGRATIONS"),
                         desc = self:GetConfigComment("OPTIONAL_MIGRATIONS"),
                         get = function(_)
                             return self:GetProperty("optionalMigrations")
@@ -306,7 +306,7 @@ function CraftPresence:GetOptions()
                     callbackDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
-                        name = L["TITLE_CALLBACK_DELAY"],
+                        name = self:GetConfigTitle("CALLBACK_DELAY"),
                         desc = self:GetConfigComment("CALLBACK_DELAY"),
                         get = function(_)
                             return self:GetProperty("callbackDelay")
@@ -337,7 +337,7 @@ function CraftPresence:GetOptions()
                     frameClearDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_FRAME_CLEAR_DELAY"], max = L["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
-                        name = L["TITLE_FRAME_CLEAR_DELAY"],
+                        name = self:GetConfigTitle("FRAME_CLEAR_DELAY"),
                         desc = self:GetConfigComment("FRAME_CLEAR_DELAY"),
                         get = function(_)
                             return self:GetProperty("frameClearDelay")
@@ -371,7 +371,7 @@ function CraftPresence:GetOptions()
                     frameSize = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
-                        name = L["TITLE_FRAME_SIZE"],
+                        name = self:GetConfigTitle("FRAME_SIZE"),
                         desc = self:GetConfigComment("FRAME_SIZE"),
                         get = function(_)
                             return self:GetProperty("frameSize")

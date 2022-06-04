@@ -261,32 +261,122 @@ function CraftPresence:FormatWithCasing(str, casing)
     return self:GetCaseData({ str, casing })
 end
 
---- Formats the following config comment to include its default value, if present
+--- Initializes the identifier and tag from a config setting for further usage
+--- (INTERNAL USAGE ONLY)
 ---
---- @param input string The input string to evaluate (Required)
+--- @param identifier string The input string to evaluate (Required)
 --- @param tag string If specified, append this string to the lookup for evaluation (Optional)
 ---
---- @return string @ formattedString
-function CraftPresence:GetConfigComment(input, tag)
-    if self:IsNullOrEmpty(input) then return input end
+--- @return string, string @ formattedIdentifier, concatenatedIdentifier
+function CraftPresence:SetupConfigIdentifier(identifier, tag)
+    if self:IsNullOrEmpty(identifier) then return end
     tag = self:GetOrDefault(tag)
-    local str = strupper(input)
-    local attachment = ""
+    local str = strupper(identifier)
+    local full_str = str
     if not self:IsNullOrEmpty(tag) then
-        attachment = "_" .. tag
+        full_str = full_str .. "_" .. tag
     end
 
-    local value_comment = self:GetOrDefault(L["COMMENT_" .. str .. attachment], L["COMMENT_" .. str])
-    if not self:IsNullOrEmpty(value_comment) then
-        local value_default = self:GetOrDefault(L["DEFAULT_" .. str .. attachment], L["DEFAULT_" .. str])
-        if not self:IsNullOrEmpty(value_default) then
-            return strformat(L["FORMAT_COMMENT"], value_comment, value_default)
-        else
-            return value_comment
-        end
-    else
-        return ""
+    return str, full_str
+end
+
+--- Retrieve the translated config setting title, depending on arguments
+--- (Helper Function for GetConfigMetadata, but can be used seperatly)
+---
+--- If localized text cannot be found, 'TITLE_<identifier>' will be returned.
+---
+--- @param identifier string The input string to evaluate (Required)
+--- @param tag string If specified, append this string to the lookup for evaluation (Optional)
+--- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
+--- @param full_str string See str param for more info. (Optional)
+---
+--- @return string @ formattedTitle
+function CraftPresence:GetConfigTitle(identifier, tag, str, full_str)
+    if self:IsNullOrEmpty(identifier) then return identifier end
+    tag = self:GetOrDefault(tag)
+    if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
+        str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
+
+    local default_locale = "TITLE_" .. str
+    local fallback_title = self:GetOrDefault(L[default_locale], default_locale)
+    local value_title = self:GetOrDefault(L["TITLE_" .. full_str], fallback_title)
+    return value_title
+end
+
+--- Retrieve the translated config setting comment, depending on arguments
+--- (Helper Function for GetConfigMetadata, but can be used seperatly)
+---
+--- If localized text for a 'DEFAULT_' entry is found,
+--- it will also be attached to the returned comment, if a 'COMMENT_' entry exists.
+---
+--- @param identifier string The input string to evaluate (Required)
+--- @param tag string If specified, append this string to the lookup for evaluation (Optional)
+--- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
+--- @param full_str string See str param for more info. (Optional)
+---
+--- @return string @ formattedComment
+function CraftPresence:GetConfigComment(identifier, tag, str, full_str)
+    if self:IsNullOrEmpty(identifier) then return identifier end
+    tag = self:GetOrDefault(tag)
+    if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
+        str, full_str = self:SetupConfigIdentifier(identifier, tag)
+    end
+
+    local value_comment = self:GetOrDefault(L["COMMENT_" .. full_str], L["COMMENT_" .. str])
+    if not self:IsNullOrEmpty(value_comment) then
+        local value_default = self:GetOrDefault(L["DEFAULT_" .. full_str], L["DEFAULT_" .. str])
+        if not self:IsNullOrEmpty(value_default) then
+            value_comment = strformat(L["FORMAT_COMMENT"], value_comment, value_default)
+        end
+    end
+    return value_comment
+end
+
+--- Retrieve the translated config setting usage text, depending on arguments
+--- (Helper Function for GetConfigMetadata, but can be used seperatly)
+---
+--- For Ace3 Tables, a null usage field is still displayable,
+--- so a nil check may be needed afterwords for correctness.
+---
+--- @param identifier string The input string to evaluate (Required)
+--- @param tag string If specified, append this string to the lookup for evaluation (Optional)
+--- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
+--- @param full_str string See str param for more info. (Optional)
+---
+--- @return string @ formattedUsage
+function CraftPresence:GetConfigUsage(identifier, tag, str, full_str)
+    if self:IsNullOrEmpty(identifier) then return identifier end
+    tag = self:GetOrDefault(tag)
+    if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
+        str, full_str = self:SetupConfigIdentifier(identifier, tag)
+    end
+
+    local value_usage = self:GetOrDefault(L["USAGE_" .. full_str], L["USAGE_" .. str])
+    return value_usage
+end
+
+--- Retrieve the setting title, comment, and usage locale info (if possible)
+--- using the identifier, and if specified, a concatenated tag identifier.
+---
+--- @param identifier string The input string to evaluate (Required)
+--- @param tag string If specified, append this string to the lookup for evaluation (Optional)
+--- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
+--- @param full_str string See str param for more info. (Optional)
+---
+--- @return string, string, string @ formattedTitle, formattedComment, formattedUsage
+function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str)
+    if self:IsNullOrEmpty(identifier) then return identifier end
+    tag = self:GetOrDefault(tag)
+    if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
+        str, full_str = self:SetupConfigIdentifier(identifier, tag)
+    end
+
+    local value_title = self:GetConfigTitle(identifier, tag, str, full_str)
+    local value_comment = self:GetConfigComment(identifier, tag, str, full_str)
+    local value_usage = self:GetConfigUsage(identifier, tag, str, full_str)
+
+    return value_title, value_comment, value_usage
 end
 
 --- Return a modified version of the specified string, depending on arguments
@@ -1171,14 +1261,16 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
         for k, v in pairs(rootData) do
             local key, value = k, v
             local value_args = {}
+            local keyName, keyComment = self:GetConfigMetadata(strupper(key))
             if type(value) == "table" then
                 for ik, _ in pairs(value) do
                     local innerKey = ik
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
+                    local valueIdentifier = strupper(valueType) .. "_" .. strupper(innerKey)
+                    local valueName, valueComment, valueUsage = self:GetConfigMetadata(valueIdentifier, strupper(rootKey))
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
-                        name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], innerKey),
-                        desc = self:GetConfigComment("BUTTON_" .. strupper(innerKey), strupper(rootKey)),
+                        name = valueName, desc = valueComment,
                         get = function(_)
                             return self.db.profile[rootKey][key][innerKey]
                         end,
@@ -1206,16 +1298,14 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                                 self:EndsWith(strlower(innerKey), "data") or
                                         self:EndsWith(strlower(innerKey), "callback")
                         ) and L["TYPE_MULTILINE_LENGTH"] or false
-                        local value_usage = self:GetOrDefault(L["USAGE_BUTTON_" .. strupper(innerKey)])
-                        if not self:IsNullOrEmpty(value_usage) then
-                            value_args[innerKey].usage = value_usage
+                        if not self:IsNullOrEmpty(valueUsage) then
+                            value_args[innerKey].usage = valueUsage
                         end
                     end
                 end
             end
             table_args[key] = {
-                name = self:GetOrDefault(L["TITLE_" .. strupper(key)], key),
-                desc = self:GetConfigComment(strupper(key)),
+                name = keyName, desc = keyComment,
                 type = "group", order = self:GetNextIndex(),
                 args = value_args
             }
