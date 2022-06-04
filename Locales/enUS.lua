@@ -127,7 +127,7 @@ L["CATEGORY_COMMENT_EVENTS_INFO"] = setfmt([[%s event%s found!
 L["CATEGORY_TITLE_METRICS"] = "Metrics"
 L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
 L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
-L["CATEGORY_COMMENT_METRICS_INFO"] = setfmt([[%s metric service%s found!.
+L["CATEGORY_COMMENT_METRICS_INFO"] = setfmt([[%s metric service%s found!
 
 *Note:|r A ^reload|r may be required for certain settings to take full effect.]],
         GOLD, GREEN
