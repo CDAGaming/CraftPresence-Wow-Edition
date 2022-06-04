@@ -1170,7 +1170,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
-                        name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], self:FormatWord(innerKey)),
+                        name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], innerKey),
                         desc = self:GetConfigComment("BUTTON_" .. strupper(innerKey)),
                         get = function(_)
                             return self.db.profile[rootKey][key][innerKey]
