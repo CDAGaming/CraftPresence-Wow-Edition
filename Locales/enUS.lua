@@ -215,150 +215,150 @@ L["COMMENT_PRIMARYBUTTON"] = "The data to be interpreted for the Primary Button 
 L["TITLE_SECONDARYBUTTON"] = "Secondary Button"
 L["COMMENT_SECONDARYBUTTON"] = "The data to be interpreted for the Secondary Button area of the Rich Presence."
 
-L["TITLE_BUTTON_ENABLED"] = "Enabled"
-L["COMMENT_BUTTON_ENABLED"] = "Whether this data should be used."
+L["TITLE_TOGGLE_ENABLED"] = "Enabled"
+L["COMMENT_TOGGLE_ENABLED"] = "Whether this data should be used."
 
-L["TITLE_BUTTON_MINIMUMTOC"] = "Minimum TOC"
-L["COMMENT_BUTTON_MINIMUMTOC"] = "The minimum TOC version to register and use this data with."
-L["USAGE_BUTTON_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
-L["DEFAULT_BUTTON_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
+L["TITLE_INPUT_MINIMUMTOC"] = "Minimum TOC"
+L["COMMENT_INPUT_MINIMUMTOC"] = "The minimum TOC version to register and use this data with."
+L["USAGE_INPUT_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
+L["DEFAULT_INPUT_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
 
-L["TITLE_BUTTON_MAXIMUMTOC"] = "Maximum TOC"
-L["COMMENT_BUTTON_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with."
-L["USAGE_BUTTON_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
-L["DEFAULT_BUTTON_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
+L["TITLE_INPUT_MAXIMUMTOC"] = "Maximum TOC"
+L["COMMENT_INPUT_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with."
+L["USAGE_INPUT_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
+L["DEFAULT_INPUT_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
 
-L["TITLE_BUTTON_ALLOWREBASEDAPI"] = "Allow Rebased API"
-L["COMMENT_BUTTON_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions."
-L["DEFAULT_BUTTON_ALLOWREBASEDAPI"] = "false"
+L["TITLE_TOGGLE_ALLOWREBASEDAPI"] = "Allow Rebased API"
+L["COMMENT_TOGGLE_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions."
+L["DEFAULT_TOGGLE_ALLOWREBASEDAPI"] = "false"
 
-L["TITLE_BUTTON_PROCESSCALLBACK"] = "Process Callback"
-L["COMMENT_BUTTON_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon."
-L["USAGE_BUTTON_PROCESSCALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_PROCESSCALLBACK"] = "Process Callback"
+L["COMMENT_INPUT_PROCESSCALLBACK"] = "The function that, if any, is called before the event is triggered in the addon."
+L["USAGE_INPUT_PROCESSCALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_PROCESSTYPE"] = "Process Type"
-L["COMMENT_BUTTON_PROCESSTYPE"] = setfmt("The variable type the *Process Callback|r should be interpreted as.",
+L["TITLE_INPUT_PROCESSTYPE"] = "Process Type"
+L["COMMENT_INPUT_PROCESSTYPE"] = setfmt("The variable type the *Process Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_PROCESSTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_PROCESSTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_ACTIVECALLBACK"] = "Active Callback"
-L["COMMENT_BUTTON_ACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is active."
-L["USAGE_BUTTON_ACTIVECALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_ACTIVECALLBACK"] = "Active Callback"
+L["COMMENT_INPUT_ACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is active."
+L["USAGE_INPUT_ACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_ACTIVETYPE"] = "Active Type"
-L["COMMENT_BUTTON_ACTIVETYPE"] = setfmt("The variable type the *Active Callback|r should be interpreted as.",
+L["TITLE_INPUT_ACTIVETYPE"] = "Active Type"
+L["COMMENT_INPUT_ACTIVETYPE"] = setfmt("The variable type the *Active Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_ACTIVETYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_ACTIVETYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_INACTIVECALLBACK"] = "Inactive Callback"
-L["COMMENT_BUTTON_INACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is inactive."
-L["USAGE_BUTTON_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_INACTIVECALLBACK"] = "Inactive Callback"
+L["COMMENT_INPUT_INACTIVECALLBACK"] = "The function that, if any, is what will be returned when this state is inactive."
+L["USAGE_INPUT_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_INACTIVETYPE"] = "Inactive Type"
-L["COMMENT_BUTTON_INACTIVETYPE"] = setfmt("The variable type the *Inactive Callback|r should be interpreted as.",
+L["TITLE_INPUT_INACTIVETYPE"] = "Inactive Type"
+L["COMMENT_INPUT_INACTIVETYPE"] = setfmt("The variable type the *Inactive Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_INACTIVETYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_INACTIVETYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_KEYCALLBACK"] = "Key Callback"
-L["COMMENT_BUTTON_KEYCALLBACK"] = "The function that, if any, is what will be attached as the key for this field."
-L["USAGE_BUTTON_KEYCALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_KEYCALLBACK"] = "Key Callback"
+L["COMMENT_INPUT_KEYCALLBACK"] = "The function that, if any, is what will be attached as the key for this field."
+L["USAGE_INPUT_KEYCALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_KEYTYPE"] = "Key Type"
-L["COMMENT_BUTTON_KEYTYPE"] = setfmt("The variable type the *Key Callback|r should be interpreted as.",
+L["TITLE_INPUT_KEYTYPE"] = "Key Type"
+L["COMMENT_INPUT_KEYTYPE"] = setfmt("The variable type the *Key Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_KEYTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_KEYTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_KEYFORMATCALLBACK"] = "Key Format Callback"
-L["COMMENT_BUTTON_KEYFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Key Callback|r.",
+L["TITLE_INPUT_KEYFORMATCALLBACK"] = "Key Format Callback"
+L["COMMENT_INPUT_KEYFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Key Callback|r.",
         GREEN
 )
-L["USAGE_BUTTON_KEYFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
+L["USAGE_INPUT_KEYFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
 
-L["TITLE_BUTTON_KEYFORMATTYPE"] = "Key Format Type"
-L["COMMENT_BUTTON_KEYFORMATTYPE"] = setfmt("The variable type the *Key Format Callback|r should be interpreted as.",
+L["TITLE_INPUT_KEYFORMATTYPE"] = "Key Format Type"
+L["COMMENT_INPUT_KEYFORMATTYPE"] = setfmt("The variable type the *Key Format Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_KEYFORMATTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_KEYFORMATTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_MESSAGECALLBACK"] = "Message Callback"
-L["COMMENT_BUTTON_MESSAGECALLBACK"] = "The function that, if any, is what will be attached as the message for this field."
-L["USAGE_BUTTON_MESSAGECALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_MESSAGECALLBACK"] = "Message Callback"
+L["COMMENT_INPUT_MESSAGECALLBACK"] = "The function that, if any, is what will be attached as the message for this field."
+L["USAGE_INPUT_MESSAGECALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_MESSAGETYPE"] = "Message Type"
-L["COMMENT_BUTTON_MESSAGETYPE"] = setfmt("The variable type the *Message Callback|r should be interpreted as.",
+L["TITLE_INPUT_MESSAGETYPE"] = "Message Type"
+L["COMMENT_INPUT_MESSAGETYPE"] = setfmt("The variable type the *Message Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_MESSAGETYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_MESSAGETYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_MESSAGEFORMATCALLBACK"] = "Message Format Callback"
-L["COMMENT_BUTTON_MESSAGEFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Message Callback|r.",
+L["TITLE_INPUT_MESSAGEFORMATCALLBACK"] = "Message Format Callback"
+L["COMMENT_INPUT_MESSAGEFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Message Callback|r.",
         GREEN
 )
-L["USAGE_BUTTON_MESSAGEFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
+L["USAGE_INPUT_MESSAGEFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
 
-L["TITLE_BUTTON_MESSAGEFORMATTYPE"] = "Message Format Type"
-L["COMMENT_BUTTON_MESSAGEFORMATTYPE"] = setfmt("The variable type the *Message Format Callback|r should be interpreted as.",
+L["TITLE_INPUT_MESSAGEFORMATTYPE"] = "Message Format Type"
+L["COMMENT_INPUT_MESSAGEFORMATTYPE"] = setfmt("The variable type the *Message Format Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_MESSAGEFORMATTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_MESSAGEFORMATTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_LABELCALLBACK"] = "Label Callback"
-L["COMMENT_BUTTON_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."
-L["USAGE_BUTTON_LABELCALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_LABELCALLBACK"] = "Label Callback"
+L["COMMENT_INPUT_LABELCALLBACK"] = "The function that, if any, is what will be attached as the label for the state."
+L["USAGE_INPUT_LABELCALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_LABELTYPE"] = "Label Type"
-L["COMMENT_BUTTON_LABELTYPE"] = setfmt("The variable type the *Label Callback|r should be interpreted as.",
+L["TITLE_INPUT_LABELTYPE"] = "Label Type"
+L["COMMENT_INPUT_LABELTYPE"] = setfmt("The variable type the *Label Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_LABELTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_LABELTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_URLCALLBACK"] = "URL Callback"
-L["COMMENT_BUTTON_URLCALLBACK"] = "The function that, if any, is what will be attached as the url for the state."
-L["USAGE_BUTTON_URLCALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_URLCALLBACK"] = "URL Callback"
+L["COMMENT_INPUT_URLCALLBACK"] = "The function that, if any, is what will be attached as the url for the state."
+L["USAGE_INPUT_URLCALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_URLTYPE"] = "URL Type"
-L["COMMENT_BUTTON_URLTYPE"] = setfmt("The variable type the *URL Callback|r should be interpreted as.",
+L["TITLE_INPUT_URLTYPE"] = "URL Type"
+L["COMMENT_INPUT_URLTYPE"] = setfmt("The variable type the *URL Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_URLTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_URLTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_EVENTCALLBACK"] = "Event Callback"
-L["COMMENT_BUTTON_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called."
-L["USAGE_BUTTON_EVENTCALLBACK"] = "<A function or string reference to a function here>"
+L["TITLE_INPUT_EVENTCALLBACK"] = "Event Callback"
+L["COMMENT_INPUT_EVENTCALLBACK"] = "The function that, if any, will trigger when the game event is called."
+L["USAGE_INPUT_EVENTCALLBACK"] = "<A function or string reference to a function here>"
 
-L["TITLE_BUTTON_REGISTERCALLBACK"] = "Register Callback"
-L["COMMENT_BUTTON_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered."
-L["USAGE_BUTTON_REGISTERCALLBACK"] = "<A boolean function here>"
+L["TITLE_INPUT_REGISTERCALLBACK"] = "Register Callback"
+L["COMMENT_INPUT_REGISTERCALLBACK"] = "The function that, if any and true, will allow the data to be registered."
+L["USAGE_INPUT_REGISTERCALLBACK"] = "<A boolean function here>"
 
-L["TITLE_BUTTON_UNREGISTERCALLBACK"] = "Unregister Callback"
-L["COMMENT_BUTTON_UNREGISTERCALLBACK"] = "The function that, if any, will be executed when the data should be unloaded."
-L["USAGE_BUTTON_UNREGISTERCALLBACK"] = "<A valid function here>"
+L["TITLE_INPUT_UNREGISTERCALLBACK"] = "Unregister Callback"
+L["COMMENT_INPUT_UNREGISTERCALLBACK"] = "The function that, if any, will be executed when the data should be unloaded."
+L["USAGE_INPUT_UNREGISTERCALLBACK"] = "<A valid function here>"
 
-L["TITLE_BUTTON_STATECALLBACK"] = "State Callback"
-L["COMMENT_BUTTON_STATECALLBACK"] = "The function that, if any, defines if the data should be considered active or not."
-L["USAGE_BUTTON_STATECALLBACK"] = "<A valid function here>"
+L["TITLE_INPUT_STATECALLBACK"] = "State Callback"
+L["COMMENT_INPUT_STATECALLBACK"] = "The function that, if any, defines if the data should be considered active or not."
+L["USAGE_INPUT_STATECALLBACK"] = "<A valid function here>"
 
-L["TITLE_BUTTON_TAGCALLBACK"] = "Tag Callback"
-L["COMMENT_BUTTON_TAGCALLBACK"] = "The function that, if any, will allow the data to have conditionals."
-L["USAGE_BUTTON_TAGCALLBACK"] = "<A string or string function here>"
+L["TITLE_INPUT_TAGCALLBACK"] = "Tag Callback"
+L["COMMENT_INPUT_TAGCALLBACK"] = "The function that, if any, will allow the data to have conditionals."
+L["USAGE_INPUT_TAGCALLBACK"] = "<A string or string function here>"
 
-L["TITLE_BUTTON_TAGTYPE"] = "Tag Type"
-L["COMMENT_BUTTON_TAGTYPE"] = setfmt("The variable type the *Tag Callback|r should be interpreted as.",
+L["TITLE_INPUT_TAGTYPE"] = "Tag Type"
+L["COMMENT_INPUT_TAGTYPE"] = setfmt("The variable type the *Tag Callback|r should be interpreted as.",
         GREEN
 )
-L["USAGE_BUTTON_TAGTYPE"] = "<A variable type name here, can be function|string>"
+L["USAGE_INPUT_TAGTYPE"] = "<A variable type name here, can be function|string>"
 
-L["TITLE_BUTTON_PREFIX"] = "Prefix"
-L["COMMENT_BUTTON_PREFIX"] = "The prefix to be used for this data."
-L["USAGE_BUTTON_PREFIX"] = "<Your message here>"
+L["TITLE_INPUT_PREFIX"] = "Prefix"
+L["COMMENT_INPUT_PREFIX"] = "The prefix to be used for this data."
+L["USAGE_INPUT_PREFIX"] = "<Your message here>"
 
-L["TITLE_BUTTON_SUFFIX"] = "Suffix"
-L["COMMENT_BUTTON_SUFFIX"] = "The suffix to be used for this data."
-L["USAGE_BUTTON_SUFFIX"] = "<Your message here>"
+L["TITLE_INPUT_SUFFIX"] = "Suffix"
+L["COMMENT_INPUT_SUFFIX"] = "The suffix to be used for this data."
+L["USAGE_INPUT_SUFFIX"] = "<Your message here>"
 
 -- Global Placeholder Defaults
 L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
