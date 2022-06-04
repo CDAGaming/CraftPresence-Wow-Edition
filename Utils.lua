@@ -283,7 +283,7 @@ end
 --- Retrieve the translated config setting title, depending on arguments
 --- (Helper Function for GetConfigMetadata, but can be used seperatly)
 ---
---- If localized text cannot be found, 'TITLE_<identifier>' will be returned.
+--- If localized text cannot be found, '<identifier>' will be returned.
 ---
 --- @param identifier string The input string to evaluate (Required)
 --- @param tag string If specified, append this string to the lookup for evaluation (Optional)
@@ -298,8 +298,7 @@ function CraftPresence:GetConfigTitle(identifier, tag, str, full_str)
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
 
-    local default_locale = "TITLE_" .. str
-    local fallback_title = self:GetOrDefault(L[default_locale], default_locale)
+    local fallback_title = self:GetOrDefault(L["TITLE_" .. str], identifier)
     local value_title = self:GetOrDefault(L["TITLE_" .. full_str], fallback_title)
     return value_title
 end
@@ -1261,7 +1260,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
         for k, v in pairs(rootData) do
             local key, value = k, v
             local value_args = {}
-            local keyName, keyComment = self:GetConfigMetadata(strupper(key))
+            local keyName, keyComment = self:GetConfigMetadata(key)
             if type(value) == "table" then
                 for ik, _ in pairs(value) do
                     local innerKey = ik
