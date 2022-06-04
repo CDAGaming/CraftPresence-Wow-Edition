@@ -263,15 +263,22 @@ end
 
 --- Formats the following config comment to include its default value, if present
 ---
---- @param str string The input string to evaluate (Required)
+--- @param input string The input string to evaluate (Required)
+--- @param tag string If specified, append this string to the lookup for evaluation (Optional)
 ---
 --- @return string @ formattedString
-function CraftPresence:GetConfigComment(str)
-    if self:IsNullOrEmpty(str) then return str end
-    str = strupper(str)
-    local value_comment = self:GetOrDefault(L["COMMENT_" .. str])
+function CraftPresence:GetConfigComment(input, tag)
+    if self:IsNullOrEmpty(input) then return input end
+    tag = self:GetOrDefault(tag)
+    local str = strupper(input)
+    local attachment = ""
+    if not self:IsNullOrEmpty(tag) then
+        attachment = "_" .. tag
+    end
+
+    local value_comment = self:GetOrDefault(L["COMMENT_" .. str .. attachment], L["COMMENT_" .. str])
     if not self:IsNullOrEmpty(value_comment) then
-        local value_default = self:GetOrDefault(L["DEFAULT_" .. str])
+        local value_default = self:GetOrDefault(L["DEFAULT_" .. str .. attachment], L["DEFAULT_" .. str])
         if not self:IsNullOrEmpty(value_default) then
             return strformat(L["FORMAT_COMMENT"], value_comment, value_default)
         else
@@ -1171,7 +1178,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
                         name = self:GetOrDefault(L["TITLE_BUTTON_" .. strupper(innerKey)], innerKey),
-                        desc = self:GetConfigComment("BUTTON_" .. strupper(innerKey)),
+                        desc = self:GetConfigComment("BUTTON_" .. strupper(innerKey), strupper(rootKey)),
                         get = function(_)
                             return self.db.profile[rootKey][key][innerKey]
                         end,
