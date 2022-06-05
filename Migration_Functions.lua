@@ -26,9 +26,6 @@ SOFTWARE.
 local pairs, type = pairs, type
 local strformat, min = string.format, math.min
 
--- Addon APIs
-local L = CraftPresence.locale
-
 --- Ensure Config Compatibility with the specified schema
 --- (Only forwards-compatibility is supported here)
 ---
@@ -53,7 +50,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
 
     if force or current < target then
         if log_output then
-            self:Print(strformat(L["INFO_OUTDATED_CONFIG"], current, target))
+            self:Print(strformat(self.locale["INFO_OUTDATED_CONFIG"], current, target))
         end
         local defaults = self:GetDefaults().profile
 
@@ -142,7 +139,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 end
 
                 for k, v in pairs(placeholders) do
-                    if v.prefix == L["DEFAULT_INNER_KEY"] then
+                    if v.prefix == self.locale["DEFAULT_INNER_KEY"] then
                         placeholders[k].prefix = old_inner_prefix
                     end
                 end

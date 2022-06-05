@@ -28,6 +28,7 @@ local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.f
 local tinsert, strchar, random, next, loadstring = table.insert, string.char, math.random, next, loadstring
 
 -- Addon APIs
+CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 CP_GlobalUtils = {}
 
 --[[ COMPATIBILITY UTILITIES ]]--

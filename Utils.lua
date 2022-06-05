@@ -30,7 +30,6 @@ local strlen, strrep, tgetn, tinsert, tconcat = string.len, string.rep, table.ge
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
 -- Addon APIs
-local L = CraftPresence.locale
 local CP_GlobalUtils = CP_GlobalUtils
 
 --[[ LUA UTILITIES ]]--
@@ -298,8 +297,8 @@ function CraftPresence:GetConfigTitle(identifier, tag, str, full_str)
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
 
-    local fallback_title = self:GetOrDefault(L["TITLE_" .. str], identifier)
-    local value_title = self:GetOrDefault(L["TITLE_" .. full_str], fallback_title)
+    local fallback_title = self:GetOrDefault(self.locale["TITLE_" .. str], identifier)
+    local value_title = self:GetOrDefault(self.locale["TITLE_" .. full_str], fallback_title)
     return value_title
 end
 
@@ -322,11 +321,11 @@ function CraftPresence:GetConfigComment(identifier, tag, str, full_str)
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
 
-    local value_comment = self:GetOrDefault(L["COMMENT_" .. full_str], L["COMMENT_" .. str])
+    local value_comment = self:GetOrDefault(self.locale["COMMENT_" .. full_str], self.locale["COMMENT_" .. str])
     if not self:IsNullOrEmpty(value_comment) then
-        local value_default = self:GetOrDefault(L["DEFAULT_" .. full_str], L["DEFAULT_" .. str])
+        local value_default = self:GetOrDefault(self.locale["DEFAULT_" .. full_str], self.locale["DEFAULT_" .. str])
         if not self:IsNullOrEmpty(value_default) then
-            value_comment = strformat(L["FORMAT_COMMENT"], value_comment, value_default)
+            value_comment = strformat(self.locale["FORMAT_COMMENT"], value_comment, value_default)
         end
     end
     return value_comment
@@ -351,7 +350,7 @@ function CraftPresence:GetConfigUsage(identifier, tag, str, full_str)
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
 
-    local value_usage = self:GetOrDefault(L["USAGE_" .. full_str], L["USAGE_" .. str])
+    local value_usage = self:GetOrDefault(self.locale["USAGE_" .. full_str], self.locale["USAGE_" .. str])
     return value_usage
 end
 
@@ -607,10 +606,10 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
                 local func, err = loadstring(value[1])
                 if not func then
                     local dataTable = {
-                        [L["TITLE_ATTEMPTED_FUNCTION"]] = value[1],
-                        [L["TITLE_FUNCTION_MESSAGE"]] = err
+                        [self.locale["TITLE_ATTEMPTED_FUNCTION"]] = value[1],
+                        [self.locale["TITLE_FUNCTION_MESSAGE"]] = err
                     }
-                    self:PrintErrorMessage(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
+                    self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
                 else
                     value[1] = func
                 end
@@ -695,15 +694,15 @@ function CraftPresence:GetAddOnInfo()
     if not addon_info then
         local version, versionString, schema
         if GetAddOnMetadata then
-            version = GetAddOnMetadata(L["ADDON_NAME"], "Version")
-            schema = GetAddOnMetadata(L["ADDON_NAME"], "X-Schema-ID")
+            version = GetAddOnMetadata(self.locale["ADDON_NAME"], "Version")
+            schema = GetAddOnMetadata(self.locale["ADDON_NAME"], "X-Schema-ID")
         end
 
         if not self:ContainsDigit(version) then
-            self:PrintWarningMessage(strformat(L["WARNING_BUILD_UNSUPPORTED"], version))
+            self:PrintWarningMessage(strformat(self.locale["WARNING_BUILD_UNSUPPORTED"], version))
             version = "v" .. fallbackVersion
         end
-        versionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], version)
+        versionString = strformat(self.locale["ADDON_HEADER_VERSION"], self.locale["ADDON_NAME"], version)
 
         addon_info = {
             ["version"] = version,
@@ -983,10 +982,10 @@ function CraftPresence:ShowConfig()
             InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
             return self.optionsFrame
         else
-            self.config:Open(L["ADDON_NAME"])
+            self.config:Open(self.locale["ADDON_NAME"])
         end
     else
-        self:PrintErrorMessage(strformat(L["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
+        self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
     end
 end
 
@@ -996,7 +995,7 @@ end
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintErrorMessage(logStyle)
     if not self:IsNullOrEmpty(logStyle) then
-        self:Print(strformat(L["LOG_ERROR"], logStyle))
+        self:Print(strformat(self.locale["LOG_ERROR"], logStyle))
     end
 end
 
@@ -1004,7 +1003,7 @@ end
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintWarningMessage(logStyle)
     if not self:IsNullOrEmpty(logStyle) then
-        self:Print(strformat(L["LOG_WARNING"], logStyle))
+        self:Print(strformat(self.locale["LOG_WARNING"], logStyle))
     end
 end
 
@@ -1014,8 +1013,8 @@ end
 function CraftPresence:PrintMigrationMessage(current, target)
     current = self:GetOrDefault(current, 0)
     target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
-    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
-    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_TWO"], L["TITLE_OPTIONAL_MIGRATIONS"]))
+    self:Print(strformat(self.locale["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
+    self:Print(strformat(self.locale["INFO_OPTIONAL_MIGRATION_DATA_TWO"], self.locale["TITLE_OPTIONAL_MIGRATIONS"]))
 end
 
 --- Prints a formatted message, meant to symbolize an deprecated value
@@ -1025,22 +1024,22 @@ end
 function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
     if self:GetProperty("verboseMode") then
         local dataTable = {
-            [L["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, L["TYPE_NONE"]),
-            [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
-            [L["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, L["TYPE_UNKNOWN"])
+            [self.locale["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, self.locale["TYPE_NONE"]),
+            [self.locale["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, self.locale["TYPE_NONE"]),
+            [self.locale["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, self.locale["TYPE_UNKNOWN"])
         }
         self:PrintWarningMessage(
-                strformat(L["ERROR_FUNCTION_DEPRECATED"], self:SerializeTable(dataTable))
+                strformat(self.locale["ERROR_FUNCTION_DEPRECATED"], self:SerializeTable(dataTable))
         )
-        self:PrintWarningMessage(L["ERROR_FUNCTION_REPLACE"])
+        self:PrintWarningMessage(self.locale["ERROR_FUNCTION_REPLACE"])
     end
 end
 
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
-    self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
+    self:Print(strformat(self.locale["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
     if self:GetProperty("verboseMode") then
-        self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
+        self:Print(strformat(self.locale["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
 end
 
@@ -1051,10 +1050,10 @@ end
 function CraftPresence:PrintUsageCommand(usage)
     if self:IsNullOrEmpty(usage) then return end
     self:Print(
-            L["USAGE_CMD_INTRO"] .. "\n" ..
+            self.locale["USAGE_CMD_INTRO"] .. "\n" ..
                     usage .. "\n" ..
-                    strformat(L["USAGE_CMD_NOTE_ONE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                    L["USAGE_CMD_NOTE_TWO"] .. "\n"
+                    strformat(self.locale["USAGE_CMD_NOTE_ONE"], self.locale["ADDON_AFFIX"], self.locale["ADDON_ID"]) .. "\n" ..
+                    self.locale["USAGE_CMD_NOTE_TWO"] .. "\n"
     )
 end
 
@@ -1065,11 +1064,11 @@ end
 --- @param query_tag string The sub-argument to the root name, representing what we want a query from
 function CraftPresence:PrintQueryCommand(root_name, query_tag)
     if self:IsNullOrEmpty(root_name) then return end
-    local usageText = L["USAGE_CMD_" .. strupper(root_name)]
+    local usageText = self.locale["USAGE_CMD_" .. strupper(root_name)]
     if not self:IsNullOrEmpty(query_tag) then
         local localeQuery = "USAGE_CMD_" .. strupper(query_tag) .. "_" .. strupper(root_name)
-        if not self:IsNullOrEmpty(L[localeQuery]) then
-            usageText = usageText .. "\n" .. strformat(L[localeQuery], strlower(query_tag))
+        if not self:IsNullOrEmpty(self.locale[localeQuery]) then
+            usageText = usageText .. "\n" .. strformat(self.locale[localeQuery], strlower(query_tag))
         end
     end
     self:PrintUsageCommand(usageText)
@@ -1173,7 +1172,7 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
                 ) then
                     foundData = true
                     resultString = resultString .. "\n " .. (strformat(
-                            L["DATA_FOUND_DATA"], newKey, newValue
+                            self.locale["DATA_FOUND_DATA"], newKey, newValue
                     ))
                 end
             end
@@ -1296,7 +1295,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                         value_args[innerKey].multiline = (
                                 self:EndsWith(strlower(innerKey), "data") or
                                         self:EndsWith(strlower(innerKey), "callback")
-                        ) and L["TYPE_MULTILINE_LENGTH"] or false
+                        ) and self.locale["TYPE_MULTILINE_LENGTH"] or false
                         if not self:IsNullOrEmpty(valueUsage) then
                             value_args[innerKey].usage = valueUsage
                         end

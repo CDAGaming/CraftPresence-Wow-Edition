@@ -28,8 +28,6 @@ local strformat, strlower = string.format, string.lower
 
 -- Addon APIs
 local LibStub = LibStub
-
-local L = CraftPresence.locale
 local config_registry = LibStub("AceConfigRegistry-3.0")
 
 --- Retrieves the option table to be used in the Config Menu
@@ -55,7 +53,7 @@ function CraftPresence:GetOptions()
         args = {
             generalOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_GENERAL"], desc = L["CATEGORY_COMMENT_GENERAL"],
+                name = self.locale["CATEGORY_TITLE_GENERAL"], desc = self.locale["CATEGORY_COMMENT_GENERAL"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
@@ -80,9 +78,9 @@ function CraftPresence:GetOptions()
                             )
                             if isValid then
                                 self:SetProperty("clientId", nil, value)
-                                self:PrintChangedValue(L["TITLE_CLIENT_ID"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_CLIENT_ID"], oldValue, value)
                             else
-                                self:PrintErrorMessage(L["ERROR_CLIENT_ID"])
+                                self:PrintErrorMessage(self.locale["ERROR_CLIENT_ID"])
                             end
                         end
                     },
@@ -112,7 +110,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("showWelcomeMessage", nil, value)
-                                self:PrintChangedValue(L["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
                         end
                     }
@@ -120,85 +118,85 @@ function CraftPresence:GetOptions()
             },
             presenceOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_PRESENCE"], desc = L["CATEGORY_COMMENT_PRESENCE"],
+                name = self.locale["CATEGORY_TITLE_PRESENCE"], desc = self.locale["CATEGORY_COMMENT_PRESENCE"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GenerateDynamicTable("presence", L["CATEGORY_TITLE_PRESENCE_EXTENDED"],
+                args = self:GenerateDynamicTable("presence", self.locale["CATEGORY_TITLE_PRESENCE_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_PRESENCE_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(self.locale["CATEGORY_COMMENT_PRESENCE_INFO"], count, (count == 1 and "") or "s")
                         end
                 )
             },
             buttonOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_BUTTONS"], desc = L["CATEGORY_COMMENT_BUTTONS"],
+                name = self.locale["CATEGORY_TITLE_BUTTONS"], desc = self.locale["CATEGORY_COMMENT_BUTTONS"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GenerateDynamicTable("buttons", L["CATEGORY_TITLE_BUTTONS_EXTENDED"],
+                args = self:GenerateDynamicTable("buttons", self.locale["CATEGORY_TITLE_BUTTONS_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_BUTTONS_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(self.locale["CATEGORY_COMMENT_BUTTONS_INFO"], count, (count == 1 and "") or "s")
                         end,
                         nil,
                         function(self, newValue)
-                            return not self:FindMatches(tostring(newValue), L["ARRAY_SPLIT_KEY"], false)
+                            return not self:FindMatches(tostring(newValue), self.locale["ARRAY_SPLIT_KEY"], false)
                         end,
                         function(self, fieldName, _, _)
                             self:PrintErrorMessage(
-                                    strformat(L["ERROR_STRING_DEFAULT"], fieldName)
+                                    strformat(self.locale["ERROR_STRING_DEFAULT"], fieldName)
                             )
                         end
                 )
             },
             labelOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_LABELS"], desc = L["CATEGORY_COMMENT_LABELS"],
+                name = self.locale["CATEGORY_TITLE_LABELS"], desc = self.locale["CATEGORY_COMMENT_LABELS"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GenerateDynamicTable("labels", L["CATEGORY_TITLE_LABELS_EXTENDED"],
+                args = self:GenerateDynamicTable("labels", self.locale["CATEGORY_TITLE_LABELS_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_LABELS_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(self.locale["CATEGORY_COMMENT_LABELS_INFO"], count, (count == 1 and "") or "s")
                         end
                 )
             },
             placeholderOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_PLACEHOLDERS"], desc = L["CATEGORY_COMMENT_PLACEHOLDERS"],
+                name = self.locale["CATEGORY_TITLE_PLACEHOLDERS"], desc = self.locale["CATEGORY_COMMENT_PLACEHOLDERS"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GenerateDynamicTable("placeholders", L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"],
+                args = self:GenerateDynamicTable("placeholders", self.locale["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(self.locale["CATEGORY_COMMENT_PLACEHOLDERS_INFO"], count, (count == 1 and "") or "s")
                         end
                 )
             },
             eventOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_EVENTS"], desc = L["CATEGORY_COMMENT_EVENTS"],
+                name = self.locale["CATEGORY_TITLE_EVENTS"], desc = self.locale["CATEGORY_COMMENT_EVENTS"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GenerateDynamicTable("events", L["CATEGORY_TITLE_EVENTS_EXTENDED"],
+                args = self:GenerateDynamicTable("events", self.locale["CATEGORY_TITLE_EVENTS_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_EVENTS_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(self.locale["CATEGORY_COMMENT_EVENTS_INFO"], count, (count == 1 and "") or "s")
                         end,
                         function(root)
                             root:SyncEvents(root:GetProperty("events"), root:GetProperty("debugMode"))
@@ -207,16 +205,16 @@ function CraftPresence:GetOptions()
             },
             metricsOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_METRICS"], desc = L["CATEGORY_COMMENT_METRICS"],
+                name = self.locale["CATEGORY_TITLE_METRICS"], desc = self.locale["CATEGORY_COMMENT_METRICS"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
                 set = function(info, value)
                     self.db.profile[info[self:GetLength(info)]] = value
                 end,
-                args = self:GenerateDynamicTable("metrics", L["CATEGORY_TITLE_METRICS_EXTENDED"],
+                args = self:GenerateDynamicTable("metrics", self.locale["CATEGORY_TITLE_METRICS_EXTENDED"],
                         function(count)
-                            return strformat(L["CATEGORY_COMMENT_METRICS_INFO"], count, (count == 1 and "") or "s")
+                            return strformat(self.locale["CATEGORY_COMMENT_METRICS_INFO"], count, (count == 1 and "") or "s")
                         end,
                         function(root)
                             root:SyncAnalytics(root:GetProperty("metrics"))
@@ -225,7 +223,7 @@ function CraftPresence:GetOptions()
             },
             extraOptions = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_EXTRA"], desc = L["CATEGORY_COMMENT_EXTRA"],
+                name = self.locale["CATEGORY_TITLE_EXTRA"], desc = self.locale["CATEGORY_COMMENT_EXTRA"],
                 get = function(info)
                     return self.db.profile[info[self:GetLength(info)]]
                 end,
@@ -245,7 +243,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("debugMode", nil, value)
-                                self:PrintChangedValue(L["TITLE_DEBUG_MODE"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_DEBUG_MODE"], oldValue, value)
                             end
                         end
                     },
@@ -261,7 +259,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("verboseMode", nil, value)
-                                self:PrintChangedValue(L["TITLE_VERBOSE_MODE"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_VERBOSE_MODE"], oldValue, value)
                             end
                         end
                     },
@@ -280,7 +278,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("queuedPipeline", nil, value)
-                                self:PrintChangedValue(L["TITLE_QUEUED_PIPELINE"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_QUEUED_PIPELINE"], oldValue, value)
                             end
                         end
                     },
@@ -296,7 +294,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("optionalMigrations", nil, value)
-                                self:PrintChangedValue(L["TITLE_OPTIONAL_MIGRATIONS"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_OPTIONAL_MIGRATIONS"], oldValue, value)
                             end
                         end
                     },
@@ -305,7 +303,7 @@ function CraftPresence:GetOptions()
                     },
                     callbackDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
-                        min = L["MINIMUM_CALLBACK_DELAY"], max = L["MAXIMUM_CALLBACK_DELAY"], step = 1,
+                        min = self.locale["MINIMUM_CALLBACK_DELAY"], max = self.locale["MAXIMUM_CALLBACK_DELAY"], step = 1,
                         name = self:GetConfigTitle("CALLBACK_DELAY"),
                         desc = self:GetConfigComment("CALLBACK_DELAY"),
                         get = function(_)
@@ -315,28 +313,28 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("callbackDelay")
                             local isValid = (self:IsWithinValue(
                                     value,
-                                    L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"],
+                                    self.locale["MINIMUM_CALLBACK_DELAY"], self.locale["MAXIMUM_CALLBACK_DELAY"],
                                     true, true
                             ))
                             if isValid then
                                 self:SetProperty("callbackDelay", nil, value)
-                                self:PrintChangedValue(L["TITLE_CALLBACK_DELAY"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_CALLBACK_DELAY"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                            strformat(L["WARNING_VALUE_UNSAFE"], L["TITLE_CALLBACK_DELAY"])
+                                            strformat(self.locale["WARNING_VALUE_UNSAFE"], self.locale["TITLE_CALLBACK_DELAY"])
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                        strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_CALLBACK_DELAY"],
-                                                L["MINIMUM_CALLBACK_DELAY"], L["MAXIMUM_CALLBACK_DELAY"])
+                                        strformat(self.locale["ERROR_RANGE_DEFAULT"], self.locale["TITLE_CALLBACK_DELAY"],
+                                                self.locale["MINIMUM_CALLBACK_DELAY"], self.locale["MAXIMUM_CALLBACK_DELAY"])
                                 )
                             end
                         end
                     },
                     frameClearDelay = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
-                        min = L["MINIMUM_FRAME_CLEAR_DELAY"], max = L["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
+                        min = self.locale["MINIMUM_FRAME_CLEAR_DELAY"], max = self.locale["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
                         name = self:GetConfigTitle("FRAME_CLEAR_DELAY"),
                         desc = self:GetConfigComment("FRAME_CLEAR_DELAY"),
                         get = function(_)
@@ -346,21 +344,21 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("frameClearDelay")
                             local isValid = (self:IsWithinValue(
                                     value,
-                                    L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"],
+                                    self.locale["MINIMUM_FRAME_CLEAR_DELAY"], self.locale["MAXIMUM_FRAME_CLEAR_DELAY"],
                                     true, true
                             ))
                             if isValid then
                                 self:SetProperty("frameClearDelay", nil, value)
-                                self:PrintChangedValue(L["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                            strformat(L["WARNING_VALUE_UNSAFE"], L["TITLE_FRAME_CLEAR_DELAY"])
+                                            strformat(self.locale["WARNING_VALUE_UNSAFE"], self.locale["TITLE_FRAME_CLEAR_DELAY"])
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                        strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_CLEAR_DELAY"],
-                                                L["MINIMUM_FRAME_CLEAR_DELAY"], L["MAXIMUM_FRAME_CLEAR_DELAY"])
+                                        strformat(self.locale["ERROR_RANGE_DEFAULT"], self.locale["TITLE_FRAME_CLEAR_DELAY"],
+                                                self.locale["MINIMUM_FRAME_CLEAR_DELAY"], self.locale["MAXIMUM_FRAME_CLEAR_DELAY"])
                                 )
                             end
                         end
@@ -370,7 +368,7 @@ function CraftPresence:GetOptions()
                     },
                     frameSize = {
                         type = "range", order = self:GetNextIndex(), width = 1.50,
-                        min = L["MINIMUM_FRAME_SIZE"], max = L["MAXIMUM_FRAME_SIZE"], step = 1,
+                        min = self.locale["MINIMUM_FRAME_SIZE"], max = self.locale["MAXIMUM_FRAME_SIZE"], step = 1,
                         name = self:GetConfigTitle("FRAME_SIZE"),
                         desc = self:GetConfigComment("FRAME_SIZE"),
                         get = function(_)
@@ -380,21 +378,21 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("frameSize")
                             local isValid = (self:IsWithinValue(
                                     value,
-                                    L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"],
+                                    self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"],
                                     true, true
                             ))
                             if isValid then
                                 self:SetProperty("frameSize", nil, value)
-                                self:PrintChangedValue(L["TITLE_FRAME_SIZE"], oldValue, value)
+                                self:PrintChangedValue(self.locale["TITLE_FRAME_SIZE"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                            strformat(L["WARNING_VALUE_UNSAFE"], L["TITLE_FRAME_SIZE"])
+                                            strformat(self.locale["WARNING_VALUE_UNSAFE"], self.locale["TITLE_FRAME_SIZE"])
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                        strformat(L["ERROR_RANGE_DEFAULT"], L["TITLE_FRAME_SIZE"],
-                                                L["MINIMUM_FRAME_SIZE"], L["MAXIMUM_FRAME_SIZE"])
+                                        strformat(self.locale["ERROR_RANGE_DEFAULT"], self.locale["TITLE_FRAME_SIZE"],
+                                                self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"])
                                 )
                             end
                         end
@@ -404,18 +402,18 @@ function CraftPresence:GetOptions()
             profiles = profilesGroup,
             about = {
                 type = "group", order = self:GetNextIndex(),
-                name = L["CATEGORY_TITLE_ABOUT"], desc = L["CATEGORY_COMMENT_ABOUT"],
+                name = self.locale["CATEGORY_TITLE_ABOUT"], desc = self.locale["CATEGORY_COMMENT_ABOUT"],
                 args = {
                     summary = {
                         type = "description", order = self:GetNextIndex(), width = "full", fontSize = "medium",
-                        name = L["ADDON_SUMMARY"],
+                        name = self.locale["ADDON_SUMMARY"],
                     },
                     creditsHeader = {
-                        order = self:GetNextIndex(), type = "header", name = L["ADDON_HEADER_CREDITS"]
+                        order = self:GetNextIndex(), type = "header", name = self.locale["ADDON_HEADER_CREDITS"]
                     },
                     description = {
                         type = "description", order = self:GetNextIndex(), fontSize = "medium",
-                        name = L["ADDON_DESCRIPTION"]
+                        name = self.locale["ADDON_DESCRIPTION"]
                     }
                 }
             },
@@ -440,15 +438,15 @@ end
 --- @param value any The new value of the config variable
 --- @param ignoreMetrics boolean Whether or not to ignore metric submission, even if allowed to otherwise
 function CraftPresence:PrintChangedValue(fieldName, oldValue, value, ignoreMetrics)
-    oldValue = self:GetOrDefault(oldValue, L["TYPE_NONE"])
-    value = self:GetOrDefault(value, L["TYPE_NONE"])
+    oldValue = self:GetOrDefault(oldValue, self.locale["TYPE_NONE"])
+    value = self:GetOrDefault(value, self.locale["TYPE_NONE"])
     ignoreMetrics = self:GetOrDefault(ignoreMetrics, false)
     if oldValue ~= value then
         if self:CanLogChanges() then
             self:Print(
                     strformat(
-                            L["LOG_VERBOSE"], strformat(
-                                    L["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
+                            self.locale["LOG_VERBOSE"], strformat(
+                                    self.locale["DEBUG_VALUE_CHANGED"], fieldName, tostring(oldValue), tostring(value)
                             )
                     )
             )
@@ -467,7 +465,7 @@ function CraftPresence:UpdateMinimapSetting(newValue)
     if isValid then
         self:SetProperty("showMinimapIcon", nil, newValue)
         self:UpdateMinimapState(true)
-        self:PrintChangedValue(L["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
+        self:PrintChangedValue(self.locale["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
     end
 end
 
@@ -485,7 +483,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     tags = self:GetOrDefault(tags, {})
 
     if reset then
-        self:Print(L["INFO_RESET_CONFIG"])
+        self:Print(self.locale["INFO_RESET_CONFIG"])
         self.db:ResetProfile(false, true)
         -- Assign Mandatory Values
         self:SetProperty("schema", nil, self:GetAddOnInfo()["schema"])
@@ -508,7 +506,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     end
 
     if notify and canNotify then
-        config_registry:NotifyChange(L["ADDON_NAME"])
+        config_registry:NotifyChange(self.locale["ADDON_NAME"])
     end
 
     if reset then
