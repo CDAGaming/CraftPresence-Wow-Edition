@@ -37,11 +37,12 @@ local inkey, outkey = "@", "#"
 local current_toc = CraftPresence:GetBuildInfo()["toc_version"]
 
 -- Color Codes
-local GREEN = '|cFF00FF7F'
-local GREY = '|cfd9b9b9b'
-local RED = '|cFFFF6060'
-local GOLD = '|cFFFFD700'
-local PALE_CYAN = '|c33c9fcff'
+local COLOR_PREFIX = '|cFF'
+local GREEN = COLOR_PREFIX..'00FF7F'
+local GREY = COLOR_PREFIX..'9b9b9b'
+local RED = COLOR_PREFIX..'FF6060'
+local GOLD = COLOR_PREFIX..'FFD700'
+local PALE_CYAN = COLOR_PREFIX..'c9fcff'
 
 -- Data Default Values (DNT)
 L["DEFAULT_LABEL_AWAY"] = "Away"
