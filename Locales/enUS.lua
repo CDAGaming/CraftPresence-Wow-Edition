@@ -27,11 +27,14 @@ local LibStub = LibStub
 local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true, "raw")
 if not L then return end
 
--- Addon APIs
-local inkey, outkey = "@", "#"
+-- Addon Shim Functions
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
     return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
+
+-- Common Variables
+local inkey, outkey = "@", "#"
+local current_toc = CraftPresence:GetBuildInfo()["toc_version"]
 
 -- Color Codes
 local GREEN = '|cFF00FF7F'
@@ -220,12 +223,12 @@ L["COMMENT_TOGGLE_ENABLED"] = "Whether this data should be used."
 L["TITLE_INPUT_MINIMUMTOC"] = "Minimum TOC"
 L["COMMENT_INPUT_MINIMUMTOC"] = "The minimum TOC version to register and use this data with."
 L["USAGE_INPUT_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
-L["DEFAULT_INPUT_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
+L["DEFAULT_INPUT_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo) => " .. current_toc
 
 L["TITLE_INPUT_MAXIMUMTOC"] = "Maximum TOC"
 L["COMMENT_INPUT_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with."
 L["USAGE_INPUT_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
-L["DEFAULT_INPUT_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
+L["DEFAULT_INPUT_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo) => " .. current_toc
 
 L["TITLE_TOGGLE_ALLOWREBASEDAPI"] = "Allow Rebased API"
 L["COMMENT_TOGGLE_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions."
