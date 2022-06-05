@@ -81,8 +81,6 @@ CraftPresence.externalCache = {}
 -- Addon Dependencies
 CraftPresence.config = LibStub("AceConfigDialog-3.0")
 
-local CP_GlobalUtils = CP_GlobalUtils
-
 -- Critical Data (DNT)
 local CraftPresenceLDB, icon
 local lastEventName
@@ -485,7 +483,7 @@ end
 ---
 --- @param eventName string The name of the event being executed
 --- @param args table The arguments associated with the event execution
-CraftPresence.DispatchUpdate = CP_GlobalUtils:vararg(2, function(self, eventName, args)
+CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName, args)
     eventName = self:GetOrDefault(eventName, self.locale["TYPE_UNKNOWN"])
     if args ~= nil then
         -- Process Callback Event Data

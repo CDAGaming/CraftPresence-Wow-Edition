@@ -93,7 +93,6 @@ globals = {
 	"tostringall",
 
 	-- namespaces
-	"CP_GlobalUtils",
 	"C_ChallengeMode",
 	"C_CVar",
 	"C_Map",

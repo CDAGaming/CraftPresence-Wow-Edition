@@ -29,9 +29,6 @@ local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, s
 local strlen, strrep, tgetn, tinsert, tconcat = string.len, string.rep, table.getn, table.insert, table.concat
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
--- Addon APIs
-local CP_GlobalUtils = CP_GlobalUtils
-
 --[[ LUA UTILITIES ]]--
 
 local lastIndex = 0
@@ -51,24 +48,6 @@ end
 function CraftPresence:ResetIndex()
     lastIndex = 0
     return lastIndex
-end
-
---- Generates a random string of numbers with the specified length
----
---- @param length number The length of the resulting number (Default: 9)
----
---- @return number @ random_string
-function CraftPresence:RandomString(length)
-    return CP_GlobalUtils:RandomString(self:GetOrDefault(length, 9))
-end
-
---- Determines if the specified object is null or empty
----
---- @param obj any The object to interpret
----
---- @return boolean @ is_object_empty
-function CraftPresence:IsNullOrEmpty(obj)
-    return CP_GlobalUtils:IsNullOrEmpty(obj)
 end
 
 --- Return the specified object or a fallback value if nil
@@ -107,18 +86,6 @@ function CraftPresence:GetArgsInRange(data, from, to)
         end
     end
     return resultData
-end
-
---- Replaces the specified area of a string
----
---- @param str string The input string to evaluate
---- @param old string The portion of the string to replace
---- @param new string The string to replace the old portion with
---- @param plain boolean Whether or not to forbid pattern matching filters
----
---- @return string @ formatted_string
-function CraftPresence:Replace(str, old, new, plain)
-    return CP_GlobalUtils:Replace(str, old, new, plain)
 end
 
 --- Trims a String of leading and duplicate spaces
@@ -411,30 +378,6 @@ function CraftPresence:GetCaseData(obj)
         value = self:GetOrDefault(obj)
     end
     return value
-end
-
---- Replaces a String with the specified formatting
----
---- @param str string The input string to evaluate
---- @param replacer_one string The first replacer
---- @param replacer_two string The second replacer
---- @param pattern_one string The first pattern
---- @param pattern_two string The second pattern
---- @param plain boolean Whether or not to forbid pattern matching filters
----
---- @return string @ formatted_string
-function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    return CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-end
-
---- Variable Argument Operation
----
---- @param n number The number of static args
---- @param f function The function to trigger with args
----
---- @return any @ result
-function CraftPresence:vararg(n, f)
-    return CP_GlobalUtils:vararg(n, f)
 end
 
 --- Determines whether the specified value is within the specified range
