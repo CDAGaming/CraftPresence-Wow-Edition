@@ -279,18 +279,24 @@ end
 --- @param tag string If specified, append this string to the lookup for evaluation (Optional)
 --- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
 --- @param full_str string See str param for more info. (Optional)
+--- @param default_value string If specified, use as the value_default return. (Optional)
 ---
 --- @return string @ formattedComment
-function CraftPresence:GetConfigComment(identifier, tag, str, full_str)
+function CraftPresence:GetConfigComment(identifier, tag, str, full_str, default_value)
     if self:IsNullOrEmpty(identifier) then return identifier end
     tag = self:GetOrDefault(tag)
+    default_value = self:GetOrDefault(default_value)
     if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
+    end
+    if not self:IsNullOrEmpty(default_value) then
+        default_value = tostring(default_value)
     end
 
     local value_comment = self:GetOrDefault(self.locale["COMMENT_" .. full_str], self.locale["COMMENT_" .. str])
     if not self:IsNullOrEmpty(value_comment) then
-        local value_default = self:GetOrDefault(self.locale["DEFAULT_" .. full_str], self.locale["DEFAULT_" .. str])
+        local fallback_default = self:GetOrDefault(self.locale["DEFAULT_" .. full_str], self.locale["DEFAULT_" .. str])
+        local value_default = self:GetOrDefault(default_value, fallback_default)
         if not self:IsNullOrEmpty(value_default) then
             value_comment = strformat(self.locale["FORMAT_COMMENT"], value_comment, value_default)
         end
@@ -328,9 +334,10 @@ end
 --- @param tag string If specified, append this string to the lookup for evaluation (Optional)
 --- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
 --- @param full_str string See str param for more info. (Optional)
+--- @param default_value string If specified, use as the value_default in GetConfigComment. (Optional)
 ---
 --- @return string, string, string @ formattedTitle, formattedComment, formattedUsage
-function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str)
+function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str, default_value)
     if self:IsNullOrEmpty(identifier) then return identifier end
     tag = self:GetOrDefault(tag)
     if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
@@ -338,7 +345,7 @@ function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str)
     end
 
     local value_title = self:GetConfigTitle(identifier, tag, str, full_str)
-    local value_comment = self:GetConfigComment(identifier, tag, str, full_str)
+    local value_comment = self:GetConfigComment(identifier, tag, str, full_str, default_value)
     local value_usage = self:GetConfigUsage(identifier, tag, str, full_str)
 
     return value_title, value_comment, value_usage
@@ -1217,6 +1224,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
     validCallback = self:GetOrDefault(validCallback, true)
     errorCallback = self:GetOrDefault(errorCallback)
     local found_count = 0
+    local defaults = self:GetDefaults().profile
 
     titleKey = self:GetDynamicReturnValue(titleKey, type(titleKey), self)
     local table_args = {
@@ -1235,7 +1243,8 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                     local innerKey = ik
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     local valueIdentifier = strupper(valueType) .. "_" .. strupper(innerKey)
-                    local valueName, valueComment, valueUsage = self:GetConfigMetadata(valueIdentifier, strupper(rootKey))
+                    local valueDefault = defaults[rootKey][key][innerKey]
+                    local valueName, valueComment, valueUsage = self:GetConfigMetadata(valueIdentifier, strupper(rootKey), nil, nil, valueDefault)
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
                         name = valueName, desc = valueComment,

@@ -219,6 +219,7 @@ L["COMMENT_SECONDARYBUTTON"] = "Einstellungen für den zweiten Button in Discord
 
 L["TITLE_TOGGLE_ENABLED"] = "Aktiv"
 L["COMMENT_TOGGLE_ENABLED"] = "Ein-/ausschalten dieses Objektes."
+L["DEFAULT_TOGGLE_ENABLED"] = "true"
 
 L["TITLE_INPUT_MINIMUMTOC"] = "Minimale TOC-Version"
 L["COMMENT_INPUT_MINIMUMTOC"] = "Die minimale Version der TOC, die dieses Objekt benötigt."

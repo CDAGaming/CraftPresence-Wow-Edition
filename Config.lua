@@ -33,6 +33,7 @@ function CraftPresence:GetOptions()
     -- Causes NotifyChange to fail from time to time
     local self = CraftPresence
     local profilesGroup = self.libraries.AceDBOptions:GetOptionsTable(self.db)
+    local defaults = self:GetDefaults().profile
 
     -- Ensure Ordering is Correct, by resetting the index before generating the options
     self:ResetIndex()
@@ -60,7 +61,7 @@ function CraftPresence:GetOptions()
                     clientId = {
                         type = "input", order = self:GetNextIndex(), width = 1.25,
                         name = self:GetConfigTitle("CLIENT_ID"),
-                        desc = self:GetConfigComment("CLIENT_ID"),
+                        desc = self:GetConfigComment("CLIENT_ID", nil, nil, nil, defaults.clientId),
                         usage = self:GetConfigUsage("CLIENT_ID"),
                         get = function(_)
                             return self:GetProperty("clientId")
@@ -86,7 +87,7 @@ function CraftPresence:GetOptions()
                     showMinimapIcon = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("SHOW_MINIMAP_ICON"),
-                        desc = self:GetConfigComment("SHOW_MINIMAP_ICON"),
+                        desc = self:GetConfigComment("SHOW_MINIMAP_ICON", nil, nil, nil, defaults.showMinimapIcon),
                         get = function(_)
                             return self:GetProperty("showMinimapIcon")
                         end,
@@ -97,7 +98,7 @@ function CraftPresence:GetOptions()
                     showWelcomeMessage = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("SHOW_WELCOME_MESSAGE"),
-                        desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE"),
+                        desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE", nil, nil, nil, defaults.showWelcomeMessage),
                         get = function(_)
                             return self:GetProperty("showWelcomeMessage")
                         end,
@@ -230,7 +231,7 @@ function CraftPresence:GetOptions()
                     debugMode = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("DEBUG_MODE"),
-                        desc = self:GetConfigComment("DEBUG_MODE"),
+                        desc = self:GetConfigComment("DEBUG_MODE", nil, nil, nil, defaults.debugMode),
                         get = function(_)
                             return self:GetProperty("debugMode")
                         end,
@@ -246,7 +247,7 @@ function CraftPresence:GetOptions()
                     verboseMode = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("VERBOSE_MODE"),
-                        desc = self:GetConfigComment("VERBOSE_MODE"),
+                        desc = self:GetConfigComment("VERBOSE_MODE", nil, nil, nil, defaults.verboseMode),
                         get = function(_)
                             return self:GetProperty("verboseMode")
                         end,
@@ -265,7 +266,7 @@ function CraftPresence:GetOptions()
                     queuedPipeline = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("QUEUED_PIPELINE"),
-                        desc = self:GetConfigComment("QUEUED_PIPELINE"),
+                        desc = self:GetConfigComment("QUEUED_PIPELINE", nil, nil, nil, defaults.queuedPipeline),
                         get = function(_)
                             return self:GetProperty("queuedPipeline")
                         end,
@@ -281,7 +282,7 @@ function CraftPresence:GetOptions()
                     optionalMigrations = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("OPTIONAL_MIGRATIONS"),
-                        desc = self:GetConfigComment("OPTIONAL_MIGRATIONS"),
+                        desc = self:GetConfigComment("OPTIONAL_MIGRATIONS", nil, nil, nil, defaults.optionalMigrations),
                         get = function(_)
                             return self:GetProperty("optionalMigrations")
                         end,
@@ -301,7 +302,7 @@ function CraftPresence:GetOptions()
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = self.locale["MINIMUM_CALLBACK_DELAY"], max = self.locale["MAXIMUM_CALLBACK_DELAY"], step = 1,
                         name = self:GetConfigTitle("CALLBACK_DELAY"),
-                        desc = self:GetConfigComment("CALLBACK_DELAY"),
+                        desc = self:GetConfigComment("CALLBACK_DELAY", nil, nil, nil, defaults.callbackDelay),
                         get = function(_)
                             return self:GetProperty("callbackDelay")
                         end,
@@ -332,7 +333,7 @@ function CraftPresence:GetOptions()
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = self.locale["MINIMUM_FRAME_CLEAR_DELAY"], max = self.locale["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
                         name = self:GetConfigTitle("FRAME_CLEAR_DELAY"),
-                        desc = self:GetConfigComment("FRAME_CLEAR_DELAY"),
+                        desc = self:GetConfigComment("FRAME_CLEAR_DELAY", nil, nil, nil, defaults.frameClearDelay),
                         get = function(_)
                             return self:GetProperty("frameClearDelay")
                         end,
@@ -366,7 +367,7 @@ function CraftPresence:GetOptions()
                         type = "range", order = self:GetNextIndex(), width = 1.50,
                         min = self.locale["MINIMUM_FRAME_SIZE"], max = self.locale["MAXIMUM_FRAME_SIZE"], step = 1,
                         name = self:GetConfigTitle("FRAME_SIZE"),
-                        desc = self:GetConfigComment("FRAME_SIZE"),
+                        desc = self:GetConfigComment("FRAME_SIZE", nil, nil, nil, defaults.frameSize),
                         get = function(_)
                             return self:GetProperty("frameSize")
                         end,

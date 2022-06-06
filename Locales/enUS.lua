@@ -219,6 +219,7 @@ L["COMMENT_SECONDARYBUTTON"] = "The data to be interpreted for the Secondary But
 
 L["TITLE_TOGGLE_ENABLED"] = "Enabled"
 L["COMMENT_TOGGLE_ENABLED"] = "Whether this data should be used."
+L["DEFAULT_TOGGLE_ENABLED"] = "true"
 
 L["TITLE_INPUT_MINIMUMTOC"] = "Minimum TOC"
 L["COMMENT_INPUT_MINIMUMTOC"] = "The minimum TOC version to register and use this data with."
