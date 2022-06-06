@@ -58,6 +58,17 @@ end
 -- Addon APIs
 CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
 
+CraftPresence.libraries = {
+    AceLocale = LibStub("AceLocale-3.0"),
+    AceConfig = LibStub("AceConfig-3.0"),
+    AceConfigCmd = LibStub("AceConfigCmd-3.0"),
+    AceConfigDialog = LibStub("AceConfigDialog-3.0"),
+    AceConfigRegistry = LibStub("AceConfigRegistry-3.0"),
+    AceDB = LibStub("AceDB-3.0"),
+    AceDBOptions = LibStub("AceDBOptions-3.0"),
+    LibDBIcon = nil -- Only used in 1.12.1 or above
+}
+
 --[[ COMPATIBILITY UTILITIES ]]--
 
 local function SecureNext(elements, key)

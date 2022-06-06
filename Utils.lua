@@ -944,7 +944,7 @@ end
 --- Display the addon's config frame
 --- @return any @ frame_object
 function CraftPresence:ShowConfig()
-    if self.config then
+    if self.libraries.AceConfigDialog then
         if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame then
             -- a bug can occur in blizzard's implementation of this call
             -- so it is called twice to workaround it
@@ -952,7 +952,7 @@ function CraftPresence:ShowConfig()
             InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
             return self.optionsFrame
         else
-            self.config:Open(self.locale["ADDON_NAME"])
+            self.libraries.AceConfigDialog:Open(self.locale["ADDON_NAME"])
         end
     else
         self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "ShowConfig"))

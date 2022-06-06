@@ -23,8 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local LibStub = LibStub
-local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "deDE")
+local L = CraftPresence.libraries.AceLocale:NewLocale("CraftPresence", "deDE")
 if not L then return end
 
 -- Addon Shim Functions

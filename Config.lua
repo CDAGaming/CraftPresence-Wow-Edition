@@ -26,17 +26,13 @@ SOFTWARE.
 local pairs, type, tostring = pairs, type, tostring
 local strformat, strlower = string.format, string.lower
 
--- Addon APIs
-local LibStub = LibStub
-local config_registry = LibStub("AceConfigRegistry-3.0")
-
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
 function CraftPresence:GetOptions()
     -- It is necesary to have this value, as calling it with self implied
     -- Causes NotifyChange to fail from time to time
     local self = CraftPresence
-    local profilesGroup = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+    local profilesGroup = self.libraries.AceDBOptions:GetOptionsTable(self.db)
 
     -- Ensure Ordering is Correct, by resetting the index before generating the options
     self:ResetIndex()
@@ -506,7 +502,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     end
 
     if notify and canNotify then
-        config_registry:NotifyChange(self.locale["ADDON_NAME"])
+        self.libraries.AceConfigRegistry:NotifyChange(self.locale["ADDON_NAME"])
     end
 
     if reset then

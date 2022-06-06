@@ -28,7 +28,6 @@ local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
 local pairs, type, max, tostring = pairs, type, math.max, tostring
 
 -- Addon APIs
-local LibStub = LibStub
 
 CraftPresence.locale = {}
 CraftPresence.registeredEvents = {}
@@ -45,11 +44,8 @@ CraftPresence.time_end = ""
 CraftPresence.canUseExternals = false
 CraftPresence.externalCache = {}
 
--- Addon Dependencies
-CraftPresence.config = LibStub("AceConfigDialog-3.0")
-
 -- Critical Data (DNT)
-local CraftPresenceLDB, icon
+local CraftPresenceLDB
 local lastEventName
 local minimapState = { hide = false }
 -- Build and Integration Data
@@ -62,17 +58,17 @@ local isRebasedApi = false
 --- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
     -- Main Initialization
-    self.locale = LibStub("AceLocale-3.0"):GetLocale("CraftPresence")
+    self.locale = self.libraries.AceLocale:GetLocale("CraftPresence")
     addOnData = self:GetAddOnInfo()
     buildData = self:GetBuildInfo()
     compatData = self:GetCompatibilityInfo()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
-    self.db = LibStub("AceDB-3.0"):New(self.locale["ADDON_NAME"] .. "DB", self:GetDefaults())
-    LibStub("AceConfig-3.0"):RegisterOptionsTable(self.locale["ADDON_NAME"], self.GetOptions, {
+    self.db = self.libraries.AceDB:New(self.locale["ADDON_NAME"] .. "DB", self:GetDefaults())
+    self.libraries.AceConfig:RegisterOptionsTable(self.locale["ADDON_NAME"], self.GetOptions, {
         (self.locale["COMMAND_CONFIG"]), (self.locale["COMMAND_CONFIG_ALT"])
     })
-    self.config:SetDefaultSize(self.locale["ADDON_NAME"], 858, 660)
+    self.libraries.AceConfigDialog:SetDefaultSize(self.locale["ADDON_NAME"], 858, 660)
     self:EnsureCompatibility(
             self:GetProperty("schema"), addOnData["schema"], false,
             self:GetProperty("optionalMigrations")
@@ -84,13 +80,13 @@ function CraftPresence:OnInitialize()
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
         if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-            self.optionsFrame = self.config:AddToBlizOptions(self.locale["ADDON_NAME"])
+            self.optionsFrame = self.libraries.AceConfigDialog:AddToBlizOptions(self.locale["ADDON_NAME"])
             self.optionsFrame.default = function()
                 self:UpdateProfile(true, true, "all")
             end
         end
         -- Icon Registration
-        icon = LibStub("LibDBIcon-1.0")
+        self.libraries.LibDBIcon = LibStub("LibDBIcon-1.0")
         CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(self.locale["ADDON_NAME"], {
             type = "launcher",
             text = self.locale["ADDON_NAME"],
@@ -107,7 +103,7 @@ function CraftPresence:OnInitialize()
             end
         })
         self:UpdateMinimapState(false, false)
-        icon:Register(self.locale["ADDON_NAME"], CraftPresenceLDB, minimapState)
+        self.libraries.LibDBIcon:Register(self.locale["ADDON_NAME"], CraftPresenceLDB, minimapState)
     end
 end
 
@@ -144,8 +140,8 @@ function CraftPresence:OnDisable()
     local resetData = self:ConcatTable(self.locale["EVENT_RPC_TAG"], self.locale["ARRAY_SEPARATOR_KEY"], self:GetProperty("clientId"))
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
-    if icon then
-        icon:Hide(self.locale["ADDON_NAME"])
+    if self.libraries.LibDBIcon then
+        self.libraries.LibDBIcon:Hide(self.locale["ADDON_NAME"])
     end
     -- Un-register all active events
     -- Note: SyncEvents is not used here so that manually added events are also properly cleared
@@ -512,11 +508,11 @@ function CraftPresence:UpdateMinimapState(update_state, log_output)
     log_output = self:GetOrDefault(log_output, true)
     minimapState = { hide = not self:GetProperty("showMinimapIcon") }
     if update_state then
-        if icon then
+        if self.libraries.LibDBIcon then
             if minimapState["hide"] then
-                icon:Hide(self.locale["ADDON_NAME"])
+                self.libraries.LibDBIcon:Hide(self.locale["ADDON_NAME"])
             else
-                icon:Show(self.locale["ADDON_NAME"])
+                self.libraries.LibDBIcon:Show(self.locale["ADDON_NAME"])
             end
         elseif log_output then
             self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"))
@@ -761,7 +757,7 @@ function CraftPresence:ChatCommand(input)
         elseif command == "set" then
             local query = command_query
             tremove(query, 1)
-            LibStub("AceConfigCmd-3.0"):HandleCommand(
+            self.libraries.AceConfigCmd:HandleCommand(
                     self.locale["COMMAND_CONFIG"], self.locale["ADDON_NAME"], self:GetOrDefault(tconcat(query, " "))
             )
             self:UpdateProfile(true, false, "all")
