@@ -633,39 +633,50 @@ function CraftPresence:ChatCommand(input)
                     -- Main Parsing
                     if command_query[3] ~= nil then
                         local tag_data = self:GetProperty(tag_table)
+                        local default_data = self:GetDefaults().profile[tag_table][command_query[3]]
                         if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(self.locale["COMMAND_CREATE_MODIFY"])
                         else
                             -- Some Pre-Filled Data is supplied for these areas
                             -- Primarily as some fields are way to long for any command
                             if tag_name == "placeholders" then
+                                local default_rebased = tostring(self:GetOrDefault(default_data.allowRebasedApi, "true"))
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
-                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
-                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
-                                    processCallback = "", processType = "string", registerCallback = "",
-                                    tagCallback = "", tagType = "string",
-                                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"],
-                                    enabled = true
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], default_data.minimumTOC or buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], default_data.maximumTOC or buildData["toc_version"])),
+                                    allowRebasedApi = tostring(self:GetOrDefault(command_query[6], default_rebased)) == "true",
+                                    processCallback = self:GetOrDefault(default_data.processCallback),
+                                    processType = self:GetOrDefault(default_data.processType, "string"),
+                                    registerCallback = self:GetOrDefault(default_data.registerCallback),
+                                    tagCallback = self:GetOrDefault(default_data.tagCallback),
+                                    tagType = self:GetOrDefault(default_data.tagType, "string"),
+                                    prefix = self:GetOrDefault(default_data.prefix, self.locale["DEFAULT_INNER_KEY"]),
+                                    suffix = self:GetOrDefault(default_data.suffix, self.locale["DEFAULT_INNER_KEY"]),
+                                    enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             elseif tag_name == "events" then
+                                local default_rebased = tostring(self:GetOrDefault(default_data.allowRebasedApi, "true"))
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
-                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
-                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
-                                    processCallback = "", registerCallback = "",
-                                    eventCallback = "function(self) return self.defaultEventCallback end",
-                                    enabled = true
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], default_data.minimumTOC or buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], default_data.maximumTOC or buildData["toc_version"])),
+                                    allowRebasedApi = tostring(self:GetOrDefault(command_query[6], default_rebased)) == "true",
+                                    processCallback = self:GetOrDefault(default_data.processCallback),
+                                    registerCallback = self:GetOrDefault(default_data.registerCallback),
+                                    eventCallback = self:GetOrDefault(default_data.eventCallback, "function(self) return self.defaultEventCallback end"),
+                                    enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             elseif tag_name == "labels" then
+                                local default_rebased = tostring(self:GetOrDefault(default_data.allowRebasedApi, "true"))
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], buildData["toc_version"])),
-                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], buildData["toc_version"])),
-                                    allowRebasedApi = (self:GetOrDefault(command_query[6], "true") == "true"),
-                                    activeCallback = "", inactiveCallback = "",
-                                    activeType = "string", inactiveType = "string",
-                                    stateCallback = "",
-                                    enabled = true
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], default_data.minimumTOC or buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], default_data.maximumTOC or buildData["toc_version"])),
+                                    allowRebasedApi = tostring(self:GetOrDefault(command_query[6], default_rebased)) == "true",
+                                    activeCallback = self:GetOrDefault(default_data.activeCallback),
+                                    inactiveCallback = self:GetOrDefault(default_data.inactiveCallback),
+                                    activeType = self:GetOrDefault(default_data.activeType, "string"),
+                                    inactiveType = self:GetOrDefault(default_data.inactiveType, "string"),
+                                    stateCallback = self:GetOrDefault(default_data.stateCallback),
+                                    enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             end
                             local eventState = (modify_mode and self.locale["TYPE_MODIFY"]) or self.locale["TYPE_ADDED"]
