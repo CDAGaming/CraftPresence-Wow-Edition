@@ -102,10 +102,6 @@ function CraftPresence:AssertRenderSettings()
     last_render_warnings = render_warnings
     render_warnings = ""
 
-    local buildData = self:GetBuildInfo()
-    local currentTOC = buildData["toc_version"]
-    local fallbackTOC = buildData["fallback_toc_version"]
-
     local error_info = {}
     for key, data in pairs(render_settings) do
         if type(data) == "table" then
