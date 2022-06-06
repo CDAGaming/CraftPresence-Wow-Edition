@@ -26,7 +26,7 @@ SOFTWARE.
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
 local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
-local max, floor = math.max, math.floor
+local max, floor, unpack = math.max, math.floor, unpack
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
 
 -- Critical Data (DNT)
@@ -297,6 +297,24 @@ function CraftPresence:CleanFrames()
         self:PaintFrame(frames[i], 0, 0, 0, 0)
     end
     CraftPresence.canUseExternals = true
+end
+
+--- Creates and encodes a new RPC event from placeholder and conditional data
+---
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
+---
+--- @return string, table @ newEncodedString, args
+function CraftPresence:EncodeConfigData(log_output)
+    log_output = self:GetOrDefault(log_output, false)
+
+    -- Placeholder Syncing
+    local rpcData = self:SyncDynamicData(log_output, true)
+
+    -- Update Instance Status before exiting method
+    if self:HasInstanceChanged() then
+        self:SetInstanceChanged(false)
+    end
+    return self:ConcatTable(self.locale["EVENT_RPC_TAG"], self.locale["ARRAY_SEPARATOR_KEY"], unpack(rpcData))
 end
 
 --- Displays the currently encoded string as Frames, depending on arguments

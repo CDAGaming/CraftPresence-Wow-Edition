@@ -25,8 +25,7 @@ SOFTWARE.
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
-local pairs, type, max, unpack = pairs, type, math.max, unpack
-local tostring = tostring
+local pairs, type, max, tostring = pairs, type, math.max, tostring
 
 local tsetn = function(t, n)
     setmetatable(t, { __len = function()
@@ -91,24 +90,6 @@ local buildData = {}
 local compatData = {}
 local activeIntegrations = {}
 local isRebasedApi = false
-
---- Creates and encodes a new RPC event from placeholder and conditional data
----
---- @param log_output boolean Whether to allow logging for this function (Default: false)
----
---- @return string, table @ newEncodedString, args
-function CraftPresence:EncodeConfigData(log_output)
-    log_output = self:GetOrDefault(log_output, false)
-
-    -- Placeholder Syncing
-    local rpcData = self:SyncDynamicData(log_output, true)
-
-    -- Update Instance Status before exiting method
-    if self:HasInstanceChanged() then
-        self:SetInstanceChanged(false)
-    end
-    return self:ConcatTable(self.locale["EVENT_RPC_TAG"], self.locale["ARRAY_SEPARATOR_KEY"], unpack(rpcData))
-end
 
 --- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
