@@ -43,7 +43,7 @@ function CraftPresence:GetOptions()
 
     local opts = {
         type = "group", childGroups = "tab",
-        name = self:GetAddOnInfo()["versionString"],
+        name = self:GetAddOnInfo("versionString"),
         get = function(info)
             return self.db.profile[info[self:GetLength(info)]]
         end,
@@ -477,7 +477,7 @@ end
 ---
 --- @return table @ profile
 CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, reset, tags)
-    local canNotify = self:GetBuildInfo()["toc_version"] >= self:GetCompatibilityInfo()["2.0.0"] or self:IsRebasedApi()
+    local canNotify = self:GetBuildInfo("toc_version") >= self:GetCompatibilityInfo("2.0.0") or self:IsRebasedApi()
     notify = self:GetOrDefault(notify, true)
     reset = self:GetOrDefault(reset, false)
     tags = self:GetOrDefault(tags, {})
@@ -486,7 +486,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
         self:Print(self.locale["INFO_RESET_CONFIG"])
         self.db:ResetProfile(false, true)
         -- Assign Mandatory Values
-        self:SetProperty("schema", nil, self:GetAddOnInfo()["schema"])
+        self:SetProperty("schema", nil, self:GetAddOnInfo("schema"))
     end
 
     if type(tags) ~= "table" then

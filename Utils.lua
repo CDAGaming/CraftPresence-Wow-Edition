@@ -610,8 +610,11 @@ local timer_locked = false
 local addon_info, build_info, compatibility_info, flavor_info, extra_build_info
 
 --- Retrieve and/or Synchronize App Build Info
+---
+--- @param key string If specified, attempt to retrieve and return build_info[key]
+---
 --- @return table @ build_info
-function CraftPresence:GetBuildInfo()
+function CraftPresence:GetBuildInfo(key)
     if not build_info then
         local version, build, date, tocversion = fallbackVersion, "0000", "Jan 1 1969", fallbackTOC
         if GetBuildInfo then
@@ -628,12 +631,18 @@ function CraftPresence:GetBuildInfo()
             ["fallback_toc_version"] = fallbackTOC
         }
     end
+    if not self:IsNullOrEmpty(key) and build_info[key] ~= nil then
+        return build_info[key]
+    end
     return build_info
 end
 
 --- Retrieve and/or Synchronize Addon Metadata
+---
+--- @param key string If specified, attempt to retrieve and return addon_info[key]
+---
 --- @return table @ addon_info
-function CraftPresence:GetAddOnInfo()
+function CraftPresence:GetAddOnInfo(key)
     if not addon_info then
         local version, versionString, schema
         if GetAddOnMetadata then
@@ -652,6 +661,9 @@ function CraftPresence:GetAddOnInfo()
             ["versionString"] = versionString,
             ["schema"] = tonumber(schema)
         }
+    end
+    if not self:IsNullOrEmpty(key) and addon_info[key] ~= nil then
+        return addon_info[key]
     end
     return addon_info
 end
@@ -686,8 +698,10 @@ end
 
 --- Retrieve and/or Synchronize Build Flavor Info
 ---
+--- @param key string If specified, attempt to retrieve and return flavor_info[key]
+---
 --- @return table @ flavor_info
-function CraftPresence:GetFlavorInfo()
+function CraftPresence:GetFlavorInfo(key)
     if not flavor_info then
         flavor_info = {
             ["retail"] = 90205, -- Latest Retail
@@ -701,14 +715,19 @@ function CraftPresence:GetFlavorInfo()
             ["classic_era_beta"] = 11403 -- Latest Classic Era Beta
         }
     end
+    if not self:IsNullOrEmpty(key) and flavor_info[key] ~= nil then
+        return flavor_info[key]
+    end
     return flavor_info
 end
 
 --- Retrieve and/or Synchronize App Compatibility Info
 --- (Note that some TOC versions require extra filtering)
 ---
+--- @param key string If specified, attempt to retrieve and return compatibility_info[key]
+---
 --- @return table @ compatibility_info
-function CraftPresence:GetCompatibilityInfo()
+function CraftPresence:GetCompatibilityInfo(key)
     if not compatibility_info then
         compatibility_info = {
             ["10.0.0"] = 100000, -- Dragonflight 10.0.0
@@ -727,18 +746,26 @@ function CraftPresence:GetCompatibilityInfo()
             ["1.12.1"] = 11201 -- Vanilla 1.12.1
         }
     end
+    if not self:IsNullOrEmpty(key) and compatibility_info[key] ~= nil then
+        return compatibility_info[key]
+    end
     return compatibility_info
 end
 
 --- Retrieve and/or Synchronize Extra Build Info
 --- (Note that some TOC versions require extra filtering)
 ---
+--- @param key string If specified, attempt to retrieve and return extra_build_info[key]
+---
 --- @return table @ extra_build_info
-function CraftPresence:GetExtraBuildInfo()
+function CraftPresence:GetExtraBuildInfo(key)
     if not extra_build_info then
         extra_build_info = {
             ["1.15.1"] = 11501 -- TurtleWoW 1.15.1 (Vanilla)
         }
+    end
+    if not self:IsNullOrEmpty(key) and extra_build_info[key] ~= nil then
+        return extra_build_info[key]
     end
     return extra_build_info
 end
@@ -747,8 +774,8 @@ end
 --- @return boolean @ is_classic_rebased
 function CraftPresence:IsClassicRebased()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetCompatibilityInfo()["1.13.0"], self:GetCompatibilityInfo()["2.0.0"],
+            self:GetBuildInfo("toc_version"),
+            self:GetCompatibilityInfo("1.13.0"), self:GetCompatibilityInfo("2.0.0"),
             true, false
     ) and not self:IsSpecialVersion()
 end
@@ -757,8 +784,8 @@ end
 --- @return boolean @ is_tbc_rebased
 function CraftPresence:IsTBCRebased()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetCompatibilityInfo()["2.5.0"], self:GetCompatibilityInfo()["3.0.0"],
+            self:GetBuildInfo("toc_version"),
+            self:GetCompatibilityInfo("2.5.0"), self:GetCompatibilityInfo("3.0.0"),
             true, false
     ) and not self:IsSpecialVersion()
 end
@@ -767,8 +794,8 @@ end
 --- @return boolean @ is_wrath_rebased
 function CraftPresence:IsWrathRebased()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetCompatibilityInfo()["3.4.0"], self:GetCompatibilityInfo()["4.0.0"],
+            self:GetBuildInfo("toc_version"),
+            self:GetCompatibilityInfo("3.4.0"), self:GetCompatibilityInfo("4.0.0"),
             true, false
     ) and not self:IsSpecialVersion()
 end
@@ -776,15 +803,15 @@ end
 --- Determine if this build identifies as the Retail Live Build of the Game
 --- @return boolean @ is_retail_live_build
 function CraftPresence:IsRetailLiveBuild()
-    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["retail"]
+    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("retail")
 end
 
 --- Determine if this build identifies as the Retail PTR Build of the Game
 --- @return boolean @ is_retail_ptr_build
 function CraftPresence:IsRetailPTRBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["retail"], self:GetFlavorInfo()["ptr"],
+            self:GetBuildInfo("toc_version"),
+            self:GetFlavorInfo("retail"), self:GetFlavorInfo("ptr"),
             false, true
     ) and not self:IsSpecialVersion()
 end
@@ -793,8 +820,8 @@ end
 --- @return boolean @ is_retail_beta_build
 function CraftPresence:IsRetailBetaBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["ptr"], self:GetFlavorInfo()["beta"],
+            self:GetBuildInfo("toc_version"),
+            self:GetFlavorInfo("ptr"), self:GetFlavorInfo("beta"),
             false, true
     ) and not self:IsSpecialVersion()
 end
@@ -808,15 +835,15 @@ end
 --- Determine if this build identifies as the Classic Live Build of the Game
 --- @return boolean @ is_classic_live_build
 function CraftPresence:IsClassicLiveBuild()
-    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["classic"]
+    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("classic")
 end
 
 --- Determine if this build identifies as the Classic PTR Build of the Game
 --- @return boolean @ is_classic_ptr_build
 function CraftPresence:IsClassicPTRBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic"], self:GetFlavorInfo()["classic_ptr"],
+            self:GetBuildInfo("toc_version"),
+            self:GetFlavorInfo("classic"), self:GetFlavorInfo("classic_ptr"),
             false, true
     ) and not self:IsSpecialVersion()
 end
@@ -825,8 +852,8 @@ end
 --- @return boolean @ is_classic_beta_build
 function CraftPresence:IsClassicBetaBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic_ptr"], self:GetFlavorInfo()["classic_beta"],
+            self:GetBuildInfo("toc_version"),
+            self:GetFlavorInfo("classic_ptr"), self:GetFlavorInfo("classic_beta"),
             false, true
     ) and not self:IsSpecialVersion()
 end
@@ -840,15 +867,15 @@ end
 --- Determine if this build identifies as the Classic Era Live Build of the Game
 --- @return boolean @ is_classic_era_live_build
 function CraftPresence:IsClassicEraLiveBuild()
-    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["classic_era"]
+    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("classic_era")
 end
 
 --- Determine if this build identifies as the Classic Era PTR Build of the Game
 --- @return boolean @ is_classic_era_ptr_build
 function CraftPresence:IsClassicEraPTRBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic_era"], self:GetFlavorInfo()["classic_era_ptr"],
+            self:GetBuildInfo("toc_version"),
+            self:GetFlavorInfo("classic_era"), self:GetFlavorInfo("classic_era_ptr"),
             false, true
     ) and not self:IsSpecialVersion()
 end
@@ -857,8 +884,8 @@ end
 --- @return boolean @ is_classic_era_beta_build
 function CraftPresence:IsClassicEraBetaBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic_era_ptr"], self:GetFlavorInfo()["classic_era_beta"],
+            self:GetBuildInfo("toc_version"),
+            self:GetFlavorInfo("classic_era_ptr"), self:GetFlavorInfo("classic_era_beta"),
             false, true
     ) and not self:IsSpecialVersion()
 end
@@ -878,7 +905,7 @@ end
 --- Determine if this build is using a special/modified api
 --- @return any @ special_info
 function CraftPresence:IsSpecialVersion()
-    return self:GetExtraBuildInfo()[self:GetBuildInfo()["version"]]
+    return self:GetExtraBuildInfo()[self:GetBuildInfo("version")]
 end
 
 --- Getter for Addon Locale Data
@@ -955,7 +982,7 @@ end
 --- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"])
 function CraftPresence:PrintMigrationMessage(current, target)
     current = self:GetOrDefault(current, 0)
-    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
+    target = self:GetOrDefault(target, self:GetAddOnInfo("schema"))
     self:Print(strformat(self.locale["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
     self:Print(strformat(self.locale["INFO_OPTIONAL_MIGRATION_DATA_TWO"], self.locale["TITLE_OPTIONAL_MIGRATIONS"]))
 end
@@ -980,7 +1007,7 @@ end
 
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
-    self:Print(strformat(self.locale["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
+    self:Print(strformat(self.locale["ADDON_LOAD_INFO"], self:GetAddOnInfo("versionString")))
     if self:GetProperty("verboseMode") then
         self:Print(strformat(self.locale["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end

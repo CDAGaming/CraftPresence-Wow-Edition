@@ -34,7 +34,7 @@ end
 
 -- Common Variables
 local inkey, outkey = "@", "#"
-local current_toc = CraftPresence:GetBuildInfo()["toc_version"]
+local current_toc = CraftPresence:GetBuildInfo("toc_version")
 
 -- Color Codes
 local COLOR_PREFIX = '|cFF'

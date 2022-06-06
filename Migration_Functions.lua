@@ -43,7 +43,7 @@ local strformat, min = string.format, math.min
 --- @param log_output boolean Whether to allow logging for this function (Default: true)
 function CraftPresence:EnsureCompatibility(current, target, force, can_modify, log_output)
     current = self:GetOrDefault(current, 0)
-    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
+    target = self:GetOrDefault(target, self:GetAddOnInfo("schema"))
     force = self:GetOrDefault(force, false)
     can_modify = self:GetOrDefault(can_modify, false)
     log_output = self:GetOrDefault(log_output, true)
