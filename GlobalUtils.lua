@@ -25,7 +25,35 @@ SOFTWARE.
 -- Lua APIs
 local _G = getfenv() or _G or {}
 local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.find, table.getn, assert, table.concat
-local tinsert, strchar, random, next, loadstring = table.insert, string.char, math.random, next, loadstring
+local tinsert, strchar, random, next, loadstring, pairs = table.insert, string.char, math.random, next, loadstring, pairs
+
+local tsetn = function(t, n)
+    setmetatable(t, { __len = function()
+        return n
+    end })
+end
+
+local wipe = (table.wipe or function(table)
+    for k, _ in pairs(table) do
+        table[k] = nil
+    end
+    tsetn(table, 0)
+    return table
+end)
+
+local charset = {}
+do
+    -- [0-9a-zA-Z]
+    for c = 48, 57 do
+        tinsert(charset, strchar(c))
+    end
+    for c = 65, 90 do
+        tinsert(charset, strchar(c))
+    end
+    for c = 97, 122 do
+        tinsert(charset, strchar(c))
+    end
+end
 
 -- Addon APIs
 CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
@@ -93,18 +121,28 @@ end)
 
 --[[ LUA UTILITIES ]]--
 
-local charset = {}
-do
-    -- [0-9a-zA-Z]
-    for c = 48, 57 do
-        tinsert(charset, strchar(c))
+--- Copy the source table contents to the destination table
+---
+--- @param src table The source table to interpret
+--- @param dest table The destination table to be returned
+---
+--- @return table @ result
+function CraftPresence:CopyTable(src, dest)
+    if type(dest) ~= "table" then
+        dest = {}
+    else
+        wipe(dest)
     end
-    for c = 65, 90 do
-        tinsert(charset, strchar(c))
+    if type(src) == "table" then
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                -- try to index the key first so that the metatable creates the defaults, if set, and use that table
+                v = self:CopyTable(v, dest[k])
+            end
+            dest[k] = v
+        end
     end
-    for c = 97, 122 do
-        tinsert(charset, strchar(c))
-    end
+    return dest
 end
 
 --- Generates a random string of numbers

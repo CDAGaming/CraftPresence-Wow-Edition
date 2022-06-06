@@ -27,38 +27,6 @@ local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
 local pairs, type, max, tostring = pairs, type, math.max, tostring
 
-local tsetn = function(t, n)
-    setmetatable(t, { __len = function()
-        return n
-    end })
-end
-
-local wipe = (table.wipe or function(table)
-    for k, _ in pairs(table) do
-        table[k] = nil
-    end
-    tsetn(table, 0)
-    return table
-end)
-
-local function copyTable(src, dest)
-    if type(dest) ~= "table" then
-        dest = {}
-    else
-        wipe(dest)
-    end
-    if type(src) == "table" then
-        for k, v in pairs(src) do
-            if type(v) == "table" then
-                -- try to index the key first so that the metatable creates the defaults, if set, and use that table
-                v = copyTable(v, dest[k])
-            end
-            dest[k] = v
-        end
-    end
-    return dest
-end
-
 -- Addon APIs
 local LibStub = LibStub
 
@@ -245,10 +213,10 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
 
     local isVerbose, isDebug = self:GetProperty("verboseMode"), self:GetProperty("debugMode")
 
-    copyTable(self:GetProperty("placeholders"), self.placeholders)
-    copyTable(self:GetProperty("presence"), self.presenceData)
-    copyTable(self:GetProperty("buttons"), self.buttons)
-    copyTable(self:GetProperty("labels"), self.labels)
+    self:CopyTable(self:GetProperty("placeholders"), self.placeholders)
+    self:CopyTable(self:GetProperty("presence"), self.presenceData)
+    self:CopyTable(self:GetProperty("buttons"), self.buttons)
+    self:CopyTable(self:GetProperty("labels"), self.labels)
 
     for key, value in pairs(self.placeholders) do
         if type(value) == "table" then
