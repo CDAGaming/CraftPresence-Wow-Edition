@@ -884,7 +884,7 @@ end
 --- Getter for Addon Locale Data
 --- @return table @ localeData
 function CraftPresence:GetLocale()
-    return L
+    return self.locale
 end
 
 --- Convert a Version String into a build number
