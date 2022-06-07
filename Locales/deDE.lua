@@ -28,20 +28,20 @@ if not L then return end
 
 -- Addon Shim Functions
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+        return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
- -- Common Variables
+-- Common Variables
 local inkey, outkey = "@", "#"
 local current_toc = CraftPresence:GetBuildInfo("toc_version")
 
 -- Color Codes
 local COLOR_PREFIX = '|cFF'
-local GREEN = COLOR_PREFIX..'00FF7F'
-local GREY = COLOR_PREFIX..'9b9b9b'
-local RED = COLOR_PREFIX..'FF6060'
-local GOLD = COLOR_PREFIX..'FFD700'
-local PALE_CYAN = COLOR_PREFIX..'c9fcff'
+local GREEN = COLOR_PREFIX .. '00FF7F'
+local GREY = COLOR_PREFIX .. '9b9b9b'
+local RED = COLOR_PREFIX .. 'FF6060'
+local GOLD = COLOR_PREFIX .. 'FFD700'
+local PALE_CYAN = COLOR_PREFIX .. 'c9fcff'
 
 -- Data Default Values (DNT)
 L["DEFAULT_LABEL_AWAY"] = "AFK"

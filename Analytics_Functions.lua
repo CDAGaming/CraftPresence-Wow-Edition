@@ -33,7 +33,7 @@ function CraftPresence:SyncAnalytics(metric_engines)
     for key, data in pairs(metric_engines) do
         if self:ShouldProcessData(data) then
             if not self.registeredMetrics[key] or
-                    (self.registeredMetrics[key] and self.registeredMetrics[key].stateCallback ~= data.stateCallback) then
+                (self.registeredMetrics[key] and self.registeredMetrics[key].stateCallback ~= data.stateCallback) then
                 -- If this engine wasn't enabled before or the stateCallback has been modified,
                 -- execute the engine's stateCallback before adding it to the registered list.
                 self:GetDynamicReturnValue(data.stateCallback, "function", self)

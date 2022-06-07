@@ -70,8 +70,8 @@ function CraftPresence:OnInitialize()
     })
     self.libraries.AceConfigDialog:SetDefaultSize(self.locale["ADDON_NAME"], 858, 660)
     self:EnsureCompatibility(
-            self:GetProperty("schema"), addOnData["schema"], false,
-            self:GetProperty("optionalMigrations")
+        self:GetProperty("schema"), addOnData["schema"], false,
+        self:GetProperty("optionalMigrations")
     )
     -- Analytics Initialization
     self:SyncAnalytics(self:GetProperty("metrics"))
@@ -183,15 +183,12 @@ function CraftPresence:ShouldProcessData(data)
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
-        shouldRegister = (
-                self:IsNullOrEmpty(data.registerCallback) or
-                        tostring(self:GetDynamicReturnValue(data.registerCallback, "function", self)) == "true"
-        )
-        local canAccept = shouldRegister and (
-                self:IsWithinValue(
-                        currentTOC, minTOC, maxTOC, true, true, false
-                ) or (data.allowRebasedApi and self:IsRebasedApi())
-        )
+        shouldRegister = (self:IsNullOrEmpty(data.registerCallback) or tostring(
+            self:GetDynamicReturnValue(data.registerCallback, "function", self)
+        ) == "true")
+        local canAccept = shouldRegister and (self:IsWithinValue(
+            currentTOC, minTOC, maxTOC, true, true, false
+        ) or (data.allowRebasedApi and self:IsRebasedApi()))
         shouldEnable = data.enabled and canAccept
     end
     return shouldEnable, shouldRegister
@@ -227,16 +224,15 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
                 local logPrefix = self.locale["INFO_PLACEHOLDER_PROCESSING"]
                 -- Logging is different depending on verbose/debug states
                 local logTemplate = (isVerbose and self.locale["LOG_VERBOSE"]) or
-                        (isDebug and self.locale["LOG_DEBUG"]) or
-                        (log_output and self.locale["LOG_INFO"]) or nil
+                    (isDebug and self.locale["LOG_DEBUG"]) or
+                    (log_output and self.locale["LOG_INFO"]) or nil
                 local logData = not self:IsNullOrEmpty(value.processCallback) and (
-                        (isVerbose and value.processCallback) or "<...>"
-                ) or self.locale["TYPE_NONE"]
+                    (isVerbose and value.processCallback) or "<...>") or self.locale["TYPE_NONE"]
                 if not self:IsNullOrEmpty(logTemplate) and log_output then
                     self:Print(strformat(
-                            logTemplate, strformat(
-                                    logPrefix, newKey, self:GetOrDefault(logData, self.locale["TYPE_UNKNOWN"])
-                            )
+                        logTemplate, strformat(
+                            logPrefix, newKey, self:GetOrDefault(logData, self.locale["TYPE_UNKNOWN"])
+                        )
                     ))
                 end
                 newValue = self:GetDynamicReturnValue(value.processCallback, value.processType, self)
@@ -342,9 +338,9 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
         for _, value in pairs(self.buttons) do
             if type(value) == "table" then
                 value.result = self:ConcatTable(
-                        nil, self.locale["ARRAY_SPLIT_KEY"],
-                        self:ParseDynamicFormatting({ value.label, value.messageFormatCallback, value.messageFormatType }),
-                        self:GetOrDefault(value.url)
+                    nil, self.locale["ARRAY_SPLIT_KEY"],
+                    self:ParseDynamicFormatting({ value.label, value.messageFormatCallback, value.messageFormatType }),
+                    self:GetOrDefault(value.url)
                 )
                 tinsert(data, self:GetOrDefault(value.result))
             end
@@ -384,17 +380,16 @@ function CraftPresence:ModifyTriggers(args, data, mode, log_output)
 
             if mode ~= "remove" and not self:IsNullOrEmpty(trigger) then
                 if not self:IsNullOrEmpty(trigger) then
-                    mode = (
-                            self.registeredEvents[eventName] and
-                                    not self:AreTablesEqual(self.registeredEvents[eventName], data)
-                    ) and "refresh" or "add"
+                    mode = (self.registeredEvents[eventName] and not self:AreTablesEqual(
+                        self.registeredEvents[eventName], data
+                    )) and "refresh" or "add"
 
                     if mode == "refresh" then
                         self:UnregisterEvent(eventName)
                     end
                     if (not self.registeredEvents[eventName] or
-                            not self:AreTablesEqual(self.registeredEvents[eventName], data)
-                    ) then
+                        not self:AreTablesEqual(self.registeredEvents[eventName], data)
+                        ) then
                         self.registeredEvents[eventName] = data
                         self:RegisterEvent(eventName, trigger)
                         if log_output then
@@ -411,7 +406,7 @@ function CraftPresence:ModifyTriggers(args, data, mode, log_output)
                 self:UnregisterEvent(eventName)
                 if log_output then
                     self:Print(strformat(
-                            self.locale["COMMAND_EVENT_SUCCESS"], mode, eventName, self:GetOrDefault(trigger, self.locale["TYPE_NONE"])
+                        self.locale["COMMAND_EVENT_SUCCESS"], mode, eventName, self:GetOrDefault(trigger, self.locale["TYPE_NONE"])
                     ))
                 end
             end
@@ -440,7 +435,7 @@ CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName,
             if eventName == key then
                 if not self:IsNullOrEmpty(value.processCallback) then
                     ignore_event, log_output = self:GetDynamicReturnValue(
-                            value.processCallback, "function", self, lastEventName, eventName, args
+                        value.processCallback, "function", self, lastEventName, eventName, args
                     )
                     ignore_event = self:GetOrDefault(tostring(ignore_event) == "true", false)
                     log_output = self:GetOrDefault(tostring(log_output) == "true", true)
@@ -462,16 +457,15 @@ CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName,
             end
             -- Logging is different depending on verbose/debug states
             local logTemplate = (isVerbose and self.locale["LOG_VERBOSE"]) or
-                    (isDebug and self.locale["LOG_DEBUG"]) or
-                    (log_output and self.locale["LOG_INFO"]) or nil
+                (isDebug and self.locale["LOG_DEBUG"]) or
+                (log_output and self.locale["LOG_INFO"]) or nil
             local logData = self:GetLength(args) > 0 and (
-                    (isVerbose and self:SerializeTable(args)) or "<...>"
-            ) or self.locale["TYPE_NONE"]
+                (isVerbose and self:SerializeTable(args)) or "<...>") or self.locale["TYPE_NONE"]
             if not self:IsNullOrEmpty(logTemplate) and log_output then
                 self:Print(strformat(
-                        logTemplate, strformat(
-                                logPrefix, eventName, self:GetOrDefault(logData, self.locale["TYPE_UNKNOWN"])
-                        )
+                    logTemplate, strformat(
+                        logPrefix, eventName, self:GetOrDefault(logData, self.locale["TYPE_UNKNOWN"])
+                    )
                 ))
             end
 
@@ -485,9 +479,10 @@ CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName,
                 -- Otherwise, execute the next method normally.
                 local delay = self:GetProperty("callbackDelay")
                 if (self:IsWithinValue(
-                        delay,
-                        max(self.locale["MINIMUM_CALLBACK_DELAY"], 1), self.locale["MAXIMUM_CALLBACK_DELAY"],
-                        true, true)) then
+                    delay,
+                    max(self.locale["MINIMUM_CALLBACK_DELAY"], 1), self.locale["MAXIMUM_CALLBACK_DELAY"],
+                    true, true
+                )) then
                     self:SetTimerLocked(true)
                     self:After(delay, function()
                         self:PaintMessageWait()
@@ -526,18 +521,18 @@ function CraftPresence:ChatCommand(input)
     local command_query = self:Split(input, " ", true, true)
     if self:IsNullOrEmpty(input) or (strlower(input) == "help" or strlower(input) == "?") then
         self:PrintUsageCommand(
-                self.locale["USAGE_CMD_HELP"] .. "\n" ..
-                        self.locale["USAGE_CMD_CONFIG"] .. "\n" ..
-                        self.locale["USAGE_CMD_CLEAN"] .. "\n" ..
-                        self.locale["USAGE_CMD_UPDATE"] .. "\n" ..
-                        self.locale["USAGE_CMD_MINIMAP"] .. "\n" ..
-                        self.locale["USAGE_CMD_STATUS"] .. "\n" ..
-                        self.locale["USAGE_CMD_RESET"] .. "\n" ..
-                        self.locale["USAGE_CMD_SET"] .. "\n" ..
-                        self.locale["USAGE_CMD_INTEGRATION"] .. "\n" ..
-                        self.locale["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
-                        self.locale["USAGE_CMD_EVENTS"] .. "\n" ..
-                        self.locale["USAGE_CMD_LABELS"]
+            self.locale["USAGE_CMD_HELP"] .. "\n" ..
+            self.locale["USAGE_CMD_CONFIG"] .. "\n" ..
+            self.locale["USAGE_CMD_CLEAN"] .. "\n" ..
+            self.locale["USAGE_CMD_UPDATE"] .. "\n" ..
+            self.locale["USAGE_CMD_MINIMAP"] .. "\n" ..
+            self.locale["USAGE_CMD_STATUS"] .. "\n" ..
+            self.locale["USAGE_CMD_RESET"] .. "\n" ..
+            self.locale["USAGE_CMD_SET"] .. "\n" ..
+            self.locale["USAGE_CMD_INTEGRATION"] .. "\n" ..
+            self.locale["USAGE_CMD_PLACEHOLDERS"] .. "\n" ..
+            self.locale["USAGE_CMD_EVENTS"] .. "\n" ..
+            self.locale["USAGE_CMD_LABELS"]
         )
     else
         local command = strlower(command_query[1])
@@ -556,8 +551,8 @@ function CraftPresence:ChatCommand(input)
         elseif command == "config" then
             if command_query[2] ~= nil and strlower(command_query[2]) == "migrate" then
                 self:EnsureCompatibility(
-                        self:GetProperty("schema"), addOnData["schema"], true,
-                        self:GetProperty("optionalMigrations")
+                    self:GetProperty("schema"), addOnData["schema"], true,
+                    self:GetProperty("optionalMigrations")
                 )
             else
                 self:ShowConfig()
@@ -571,7 +566,7 @@ function CraftPresence:ChatCommand(input)
                 }
 
                 if (not data.key and self.db.profile[data.group]) or
-                        (data.key ~= nil and self.db.profile[data.group] and self.db.profile[data.group][data.key]) then
+                    (data.key ~= nil and self.db.profile[data.group] and self.db.profile[data.group][data.key]) then
                     self:GetProperty(command_query[2], command_query[3], true)
                     self:Print(strformat(self.locale["INFO_RESET_CONFIG_SINGLE"], self:SerializeTable(data)))
                 else
@@ -608,11 +603,10 @@ function CraftPresence:ChatCommand(input)
             else
                 self:PrintUsageCommand(self.locale["USAGE_CMD_INTEGRATION"])
             end
-        elseif (
-                (command == "placeholders" or command == "placeholder") or
-                        (command == "events" or command == "event") or
-                        (command == "labels" or command == "label")
-        ) then
+        elseif (not self:IsNullOrEmpty(command) and
+            (command == "placeholders" or command == "placeholder") or
+            (command == "events" or command == "event") or
+            (command == "labels" or command == "label")) then
             -- Parse tag name and table target from command input
             local tag_name, tag_table = "", ""
             if command == "placeholders" or command == "placeholder" then
@@ -682,8 +676,8 @@ function CraftPresence:ChatCommand(input)
                             local eventState = (modify_mode and self.locale["TYPE_MODIFY"]) or self.locale["TYPE_ADDED"]
                             self:SetProperty(tag_table, nil, tag_data)
                             self:Print(strformat(
-                                    self.locale["COMMAND_CREATE_SUCCESS"], eventState, command_query[3], tag_name,
-                                    self:SerializeTable(tag_data[command_query[3]])
+                                self.locale["COMMAND_CREATE_SUCCESS"], eventState, command_query[3], tag_name,
+                                self:SerializeTable(tag_data[command_query[3]])
                             ))
                             self:UpdateProfile(true, false, tag_name)
                         end
@@ -749,8 +743,8 @@ function CraftPresence:ChatCommand(input)
                     end
                     -- Iterate through dataTable to form resultString
                     foundAny, resultStr = self:ParseDynamicTable(
-                            tag_name, command_query[3], tag_data, foundAny,
-                            resultStr, multi_table, visible_data, enable_callback
+                        tag_name, command_query[3], tag_data, foundAny,
+                        resultStr, multi_table, visible_data, enable_callback
                     )
 
                     -- Final parsing of resultString before printing
@@ -769,7 +763,7 @@ function CraftPresence:ChatCommand(input)
             local query = command_query
             tremove(query, 1)
             self.libraries.AceConfigCmd:HandleCommand(
-                    self.locale["COMMAND_CONFIG"], self.locale["ADDON_NAME"], self:GetOrDefault(tconcat(query, " "))
+                self.locale["COMMAND_CONFIG"], self.locale["ADDON_NAME"], self:GetOrDefault(tconcat(query, " "))
             )
             self:UpdateProfile(true, false, "all")
         else

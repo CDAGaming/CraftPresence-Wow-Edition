@@ -69,7 +69,7 @@ CraftPresence.libraries = {
     LibDBIcon = nil -- Only used in 1.12.1 or above
 }
 
---[[ COMPATIBILITY UTILITIES ]]--
+-- COMPATIBILITY UTILITIES
 
 local function SecureNext(elements, key)
     return _G.securecall(next, elements, key);
@@ -130,7 +130,7 @@ InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory or (
     end
 end)
 
---[[ LUA UTILITIES ]]--
+-- LUA UTILITIES
 
 --- Copy the source table contents to the destination table
 ---
@@ -178,8 +178,8 @@ end
 --- @return boolean @ is_object_empty
 function CraftPresence:IsNullOrEmpty(obj)
     return obj == nil or
-            (type(obj) == "string" and obj == "") or
-            (type(obj) == "table" and obj == {})
+        (type(obj) == "string" and obj == "") or
+        (type(obj) == "table" and obj == {})
 end
 
 --- Replaces the specified area of a string

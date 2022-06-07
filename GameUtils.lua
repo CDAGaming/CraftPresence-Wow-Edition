@@ -26,7 +26,7 @@ SOFTWARE.
 local strformat, strupper, tostring = string.format, string.upper, tostring
 local tinsert, tconcat, pairs, type = table.insert, table.concat, pairs, type
 
---[[ GAME GETTERS AND SETTERS ]]--
+-- GAME GETTERS AND SETTERS
 
 local hasInstanceChanged, lastInstanceState, lastAreaName
 local cachedUnitData = {}
@@ -80,7 +80,7 @@ function CraftPresence:GetUnitStatus(unit, sync, refresh, prefixFormat, unitData
         unitData.status = unitData.full_status
     end
     unitData.reason = self:GetOrDefault(unitData.reason or
-            (cachedUnitData[unit] and cachedUnitData[unit].reason)
+        (cachedUnitData[unit] and cachedUnitData[unit].reason)
     )
 
     -- Parse Player Status
@@ -108,10 +108,8 @@ function CraftPresence:HasInstanceChanged()
     local has_changed = false
     if GetInstanceInfo then
         local name, instanceType = GetInstanceInfo()
-        has_changed = (
-                ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
-                        ((lastAreaName == nil) or (name ~= lastAreaName))
-        )
+        has_changed = (((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
+            ((lastAreaName == nil) or (name ~= lastAreaName)))
 
         if has_changed then
             lastInstanceState = instanceType
