@@ -64,6 +64,7 @@ function CraftPresence:OnInitialize()
     compatData = self:GetCompatibilityInfo()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
+    self:GenerateDefaults()
     self.db = self.libraries.AceDB:New(self.locale["ADDON_NAME"] .. "DB", self:GetDefaults())
     self.libraries.AceConfig:RegisterOptionsTable(self.locale["ADDON_NAME"], self.GetOptions, {
         (self.locale["COMMAND_CONFIG"]), (self.locale["COMMAND_CONFIG_ALT"])
