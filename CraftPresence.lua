@@ -647,7 +647,7 @@ function CraftPresence:ChatCommand(input)
                     -- Main Parsing
                     if command_query[3] ~= nil then
                         local tag_data = self:GetProperty(tag_table)
-                        local default_data = self:GetDefaults().profile[tag_table][command_query[3]]
+                        local default_data = self:GetOrDefault(self:GetDefaults().profile[tag_table][command_query[3]], {})
                         if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(self.locale["COMMAND_CREATE_MODIFY"])
                         else

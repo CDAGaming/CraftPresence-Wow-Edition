@@ -1241,12 +1241,13 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
             local key, value = k, v
             local value_args = {}
             local keyName, keyComment = self:GetConfigMetadata(key)
+            local keyDefault = self:GetOrDefault(defaults[rootKey][key], {})
             if type(value) == "table" then
                 for ik, _ in pairs(value) do
                     local innerKey = ik
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     local valueIdentifier = strupper(valueType) .. "_" .. strupper(innerKey)
-                    local valueDefault = defaults[rootKey][key][innerKey]
+                    local valueDefault = self:GetOrDefault(keyDefault[innerKey])
                     local valueName, valueComment, valueUsage = self:GetConfigMetadata(valueIdentifier, strupper(rootKey), nil, nil, valueDefault)
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
