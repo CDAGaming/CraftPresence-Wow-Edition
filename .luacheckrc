@@ -93,7 +93,6 @@ globals = {
 	"tostringall",
 
 	-- namespaces
-	"CP_GlobalUtils",
 	"C_ChallengeMode",
 	"C_CVar",
 	"C_Map",
@@ -134,12 +133,10 @@ globals = {
 	"InterfaceOptionsFrame",
 	"InterfaceOptionsFrameAddOns",
 	"InterfaceOptionsFrameCategories",
-	"InterfaceOptionsFrameTab2",
-	"InterfaceOptionsFrame_OnClick",
+	"InterfaceOptions_AddCategory",
 	"InterfaceOptionsFrame_OpenToCategory",
-	"InterfaceOptionsFrame_Show",
+	"InterfaceOptionsFrame_OpenToFrame",
 	"IsInInstance",
-	"OptionsListButtonToggle_OnClick",
 	"ReloadUI",
 	"RequestRaidInfo"
 }

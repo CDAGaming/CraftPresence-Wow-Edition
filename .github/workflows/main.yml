@@ -36,7 +36,7 @@ jobs:
         with:
           # you can specify how much of the commit history you want to fetch,
           # which is useful for controlling the length of the automated changelog
-          fetch-depth: 50
+          fetch-depth: 0
           submodules: "recursive"
 
       # run a luacheck analysis before proceeding with release

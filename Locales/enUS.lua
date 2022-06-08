@@ -23,23 +23,25 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local LibStub = LibStub
-local L = LibStub("AceLocale-3.0"):NewLocale("CraftPresence", "enUS", true, "raw")
+local L = CraftPresence.libraries.AceLocale:NewLocale("CraftPresence", "enUS", true, "raw")
 if not L then return end
 
--- Addon APIs
-local CP_GlobalUtils = CP_GlobalUtils
-local inkey, outkey = "@", "#"
+-- Addon Shim Functions
 local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    return CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+        return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
 end
 
+-- Common Variables
+local inkey, outkey = "@", "#"
+local current_toc = CraftPresence:GetBuildInfo("toc_version")
+
 -- Color Codes
-local GREEN = '|cFF00FF7F'
-local GREY = '|cfd9b9b9b'
-local RED = '|cFFFF6060'
-local GOLD = '|cFFFFD700'
-local PALE_CYAN = '|c33c9fcff'
+local COLOR_PREFIX = '|cFF'
+local GREEN = COLOR_PREFIX .. '00FF7F'
+local GREY = COLOR_PREFIX .. '9b9b9b'
+local RED = COLOR_PREFIX .. 'FF6060'
+local GOLD = COLOR_PREFIX .. 'FFD700'
+local PALE_CYAN = COLOR_PREFIX .. 'c9fcff'
 
 -- Data Default Values (DNT)
 L["DEFAULT_LABEL_AWAY"] = "Away"
@@ -162,6 +164,20 @@ L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate 
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
+L["TITLE_ENFORCE_INTERFACE"] = "Enforce Retail Interface"
+L["COMMENT_ENFORCE_INTERFACE"] = setfmt([[Toggles whether to allow enforcement of Retail Interface settings.
+
+*Notes:|r
+  - This setting is primarily to allow a Retail Interface to display on certain legacy Clients,
+such as the original Classic, TBC, and Wrath Clients often now used for private servers.
+  - Due to the multitude of legacy addons that are still used in these clients, and as this setting
+involves ^resizing|r frames and usage of ^early|r apis, some issues can occur with this option.
+  - This option is disabled in non-applicable clients, since it won't do anything in those versions.
+
+*Warning:|r A ^reload|r is required after setting this option to apply it's changes.]],
+        GOLD, RED
+)
+
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = setfmt([[Toggles whether to allow optional config migrations.
 
@@ -217,16 +233,17 @@ L["COMMENT_SECONDARYBUTTON"] = "The data to be interpreted for the Secondary But
 
 L["TITLE_TOGGLE_ENABLED"] = "Enabled"
 L["COMMENT_TOGGLE_ENABLED"] = "Whether this data should be used."
+L["DEFAULT_TOGGLE_ENABLED"] = "true"
 
 L["TITLE_INPUT_MINIMUMTOC"] = "Minimum TOC"
 L["COMMENT_INPUT_MINIMUMTOC"] = "The minimum TOC version to register and use this data with."
 L["USAGE_INPUT_MINIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
-L["DEFAULT_INPUT_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
+L["DEFAULT_INPUT_MINIMUMTOC"] = "CurrentTOC (From GetBuildInfo) => " .. current_toc
 
 L["TITLE_INPUT_MAXIMUMTOC"] = "Maximum TOC"
 L["COMMENT_INPUT_MAXIMUMTOC"] = "The maximum TOC version to register and use this data with."
 L["USAGE_INPUT_MAXIMUMTOC"] = "<A 5-digit TOC number or Game Version (x.x.x) here>"
-L["DEFAULT_INPUT_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo)"
+L["DEFAULT_INPUT_MAXIMUMTOC"] = "CurrentTOC (From GetBuildInfo) => " .. current_toc
 
 L["TITLE_TOGGLE_ALLOWREBASEDAPI"] = "Allow Rebased API"
 L["COMMENT_TOGGLE_ALLOWREBASEDAPI"] = "Whether to use this data with rebased api client versions."

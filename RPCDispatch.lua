@@ -26,11 +26,8 @@ SOFTWARE.
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
 local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
-local max, floor = math.max, math.floor
+local max, floor, unpack = math.max, math.floor, unpack
 local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
-
--- Addon APIs
-local L = CraftPresence.locale
 
 -- Critical Data (DNT)
 local frame_count = 0
@@ -80,7 +77,7 @@ function CraftPresence:GetEncodedMessage(obj, alt, format, level, display)
     display = self:GetOrDefault(display, false)
     local output = self:Replace(
             (type(obj) == "string" and obj) or alt,
-            L["ARRAY_SEPARATOR_KEY"], L["ARRAY_SEPARATOR_KEY_ALT"]
+            self.locale["ARRAY_SEPARATOR_KEY"], self.locale["ARRAY_SEPARATOR_KEY_ALT"]
     )
     if self:GetProperty("verboseMode") and not self:IsNullOrEmpty(obj) then
         output = self:SerializeTable(obj)
@@ -105,10 +102,6 @@ function CraftPresence:AssertRenderSettings()
     last_render_warnings = render_warnings
     render_warnings = ""
 
-    local buildData = self:GetBuildInfo()
-    local currentTOC = buildData["toc_version"]
-    local fallbackTOC = buildData["fallback_toc_version"]
-
     local error_info = {}
     for key, data in pairs(render_settings) do
         if type(data) == "table" then
@@ -126,19 +119,19 @@ function CraftPresence:AssertRenderSettings()
                 end
 
                 if not is_correct then
-                    tinsert(error_info, strformat(L["FORMAT_SETTING"], key, data.value))
+                    tinsert(error_info, strformat(self.locale["FORMAT_SETTING"], key, data.value))
                 end
             end
         elseif self:GetGameVariable(key, type(data), data) ~= data then
-            tinsert(error_info, strformat(L["FORMAT_SETTING"], key, data))
+            tinsert(error_info, strformat(self.locale["FORMAT_SETTING"], key, data))
         end
     end
 
     if self:GetLength(error_info) > 0 then
         render_warnings = self:SerializeTable(error_info)
         if self:GetProperty("verboseMode") or last_render_warnings ~= render_warnings then
-            self:PrintWarningMessage(L["WARNING_EVENT_RENDERING_ONE"])
-            self:PrintWarningMessage(strformat(L["WARNING_EVENT_RENDERING_TWO"], render_warnings))
+            self:PrintWarningMessage(self.locale["WARNING_EVENT_RENDERING_ONE"])
+            self:PrintWarningMessage(strformat(self.locale["WARNING_EVENT_RENDERING_TWO"], render_warnings))
         end
     end
     return self:IsNullOrEmpty(render_warnings)
@@ -153,7 +146,7 @@ function CraftPresence:CreateFrames(size)
     if not size then return end
     frame_count = floor(GetScreenWidth() / size)
     if self:GetProperty("debugMode") then
-        self:Print(strformat(L["LOG_DEBUG"], strformat(L["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
+        self:Print(strformat(self.locale["LOG_DEBUG"], strformat(self.locale["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
     end
 
     for i = 1, frame_count do
@@ -230,7 +223,7 @@ function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     local text_length = self:GetLength(text)
     if text_length >= max_bytes then
-        self:PrintErrorMessage(strformat(L["ERROR_MESSAGE_OVERFLOW"], tostring(text_length), tostring(max_bytes)))
+        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"], tostring(text_length), tostring(max_bytes)))
         return
     end
 
@@ -306,6 +299,24 @@ function CraftPresence:CleanFrames()
     CraftPresence.canUseExternals = true
 end
 
+--- Creates and encodes a new RPC event from placeholder and conditional data
+---
+--- @param log_output boolean Whether to allow logging for this function (Default: false)
+---
+--- @return string, table @ newEncodedString, args
+function CraftPresence:EncodeConfigData(log_output)
+    log_output = self:GetOrDefault(log_output, false)
+
+    -- Placeholder Syncing
+    local rpcData = self:SyncDynamicData(log_output, true)
+
+    -- Update Instance Status before exiting method
+    if self:HasInstanceChanged() then
+        self:SetInstanceChanged(false)
+    end
+    return self:ConcatTable(self.locale["EVENT_RPC_TAG"], self.locale["ARRAY_SEPARATOR_KEY"], unpack(rpcData))
+end
+
 --- Displays the currently encoded string as Frames, depending on arguments
 ---
 --- @param force boolean Whether or not to force an update regardless of changes (Default: false)
@@ -332,7 +343,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
         end
         self:GetEncodedMessage(
                 (useTable and encodedArgs), encoded,
-                L["DEBUG_SEND_ACTIVITY"], L["LOG_DEBUG"],
+                self.locale["DEBUG_SEND_ACTIVITY"], self.locale["LOG_DEBUG"],
                 self:GetProperty("debugMode")
         )
         self:PaintSomething(encoded)
@@ -340,7 +351,7 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
             local delay = self:GetProperty("frameClearDelay")
             if (self:IsWithinValue(
                     delay,
-                    max(L["MINIMUM_FRAME_CLEAR_DELAY"], 1), L["MAXIMUM_FRAME_CLEAR_DELAY"],
+                    max(self.locale["MINIMUM_FRAME_CLEAR_DELAY"], 1), self.locale["MAXIMUM_FRAME_CLEAR_DELAY"],
                     true, true
             )) then
                 self:After(delay, function()

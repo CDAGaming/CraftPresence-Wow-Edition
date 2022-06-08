@@ -17,15 +17,15 @@
 ## X-WoWI-ID: 25986
 ## X-Wago-ID: R4N2naNL
 
-GlobalUtils.lua
-
 Libraries\Libraries.xml
-Locales\Locales.xml
-
 Libraries\WagoAnalytics\Shim.lua
 
-CraftPresence.lua
+GlobalUtils.lua
 Utils.lua
+
+Locales\Locales.xml
+
+CraftPresence.lua
 
 Analytics_Functions.lua
 Migration_Functions.lua

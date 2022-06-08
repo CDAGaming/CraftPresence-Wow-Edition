@@ -26,10 +26,7 @@ SOFTWARE.
 local strformat, strupper, tostring = string.format, string.upper, tostring
 local tinsert, tconcat, pairs, type = table.insert, table.concat, pairs, type
 
--- Addon APIs
-local L = CraftPresence.locale
-
---[[ GAME GETTERS AND SETTERS ]]--
+-- GAME GETTERS AND SETTERS
 
 local hasInstanceChanged, lastInstanceState, lastAreaName
 local cachedUnitData = {}
@@ -39,7 +36,7 @@ local cachedUnitData = {}
 --- @param unit string The unit to interpret (Default: player)
 --- @param sync boolean Whether to sync the resulting status to cachedUnitData[unit] (Default: true)
 --- @param refresh boolean Whether to sync dynamic data before method execution (Default: false)
---- @param prefixFormat string Optional argument to determine the prefix formatting (Default: L["FORMAT_USER_PREFIX"])
+--- @param prefixFormat string Optional argument to determine the prefix formatting (Default: self.locale["FORMAT_USER_PREFIX"])
 --- @param unitData table Optional argument for forcing certain unit status data
 --- @param separator boolean Optional argument for specifying how unitInfo is segmented into unitData.status (Default: ",")
 --- @param index number Optional argument that, if specified, will only use this argument from detected unitInfo
@@ -49,7 +46,7 @@ function CraftPresence:GetUnitStatus(unit, sync, refresh, prefixFormat, unitData
     unit = self:GetOrDefault(unit, "player")
     sync = self:GetOrDefault(sync, true)
     refresh = self:GetOrDefault(refresh, false)
-    prefixFormat = self:GetOrDefault(prefixFormat, L["FORMAT_USER_PREFIX"])
+    prefixFormat = self:GetOrDefault(prefixFormat, self.locale["FORMAT_USER_PREFIX"])
     unitData = self:GetOrDefault(unitData, cachedUnitData[unit] or {})
     separator = self:GetOrDefault(separator, ",")
 
@@ -67,7 +64,7 @@ function CraftPresence:GetUnitStatus(unit, sync, refresh, prefixFormat, unitData
     for key, value in pairs(self.labels) do
         if self:ShouldProcessData(value) then
             unitData[key] = value.state
-            unitString = value[L["STATUS_" .. strupper(tostring(value.state))]]
+            unitString = value[self.locale["STATUS_" .. strupper(tostring(value.state))]]
             if not self:IsNullOrEmpty(unitString) then
                 tinsert(unitInfo, unitString)
                 unitData.info[key] = unitString
@@ -83,14 +80,14 @@ function CraftPresence:GetUnitStatus(unit, sync, refresh, prefixFormat, unitData
         unitData.status = unitData.full_status
     end
     unitData.reason = self:GetOrDefault(unitData.reason or
-            (cachedUnitData[unit] and cachedUnitData[unit].reason)
+        (cachedUnitData[unit] and cachedUnitData[unit].reason)
     )
 
     -- Parse Player Status
     if not self:IsNullOrEmpty(unitData.status) then
         unitData.prefix = strformat(prefixFormat, unitData.status)
     else
-        unitData.status = L["TYPE_UNKNOWN"]
+        unitData.status = self.locale["TYPE_UNKNOWN"]
         unitData.prefix = ""
         unitData.reason = ""
     end
@@ -111,10 +108,8 @@ function CraftPresence:HasInstanceChanged()
     local has_changed = false
     if GetInstanceInfo then
         local name, instanceType = GetInstanceInfo()
-        has_changed = (
-                ((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
-                        ((lastAreaName == nil) or (name ~= lastAreaName))
-        )
+        has_changed = (((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
+            ((lastAreaName == nil) or (name ~= lastAreaName)))
 
         if has_changed then
             lastInstanceState = instanceType

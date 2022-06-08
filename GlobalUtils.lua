@@ -23,75 +23,22 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local _G = getfenv() or _G or {}
 local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.find, table.getn, assert, table.concat
-local tinsert, strchar, random, next, loadstring = table.insert, string.char, math.random, next, loadstring
+local tinsert, strchar, random, loadstring, pairs = table.insert, string.char, math.random, loadstring, pairs
 
--- Addon APIs
-CP_GlobalUtils = {}
-
---[[ COMPATIBILITY UTILITIES ]]--
-
-local function SecureNext(elements, key)
-    return _G.securecall(next, elements, key);
+local tsetn = function(t, n)
+    setmetatable(t, { __len = function()
+        return n
+    end })
 end
 
-local function AssertFrameSize(frame, expectedWidth, expectedHeight)
-    frame:SetWidth(expectedWidth)
-    frame:SetHeight(expectedHeight)
-end
-
-InterfaceOptionsFrame_Show = function()
-    AssertFrameSize(InterfaceOptionsFrame, 858, 660)
-    AssertFrameSize(InterfaceOptionsFrameCategories, 175, 569)
-    AssertFrameSize(InterfaceOptionsFrameAddOns, 175, 569)
-    if (InterfaceOptionsFrame:IsShown()) then
-        InterfaceOptionsFrame:Hide();
-    else
-        InterfaceOptionsFrame:Show();
+local wipe = (table.wipe or function(table)
+    for k, _ in pairs(table) do
+        table[k] = nil
     end
-end
-
-InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory or (function(panel)
-    local panelName;
-    if (type(panel) == "string") then
-        panelName = panel
-        panel = nil
-    end
-
-    assert(panelName or panel, 'Usage: InterfaceOptionsFrame_OpenToCategory("categoryName" or panel)');
-
-    local elementToDisplay
-
-    for _, element in SecureNext, _G.INTERFACEOPTIONS_ADDONCATEGORIES do
-        if (element == panel or (panelName and element.name and element.name == panelName)) then
-            elementToDisplay = element
-            break
-        end
-    end
-
-    if (not elementToDisplay) then
-        return
-    end
-
-    InterfaceOptionsFrameTab2:Click();
-    local buttons = InterfaceOptionsFrameAddOns.buttons;
-    for i, button in SecureNext, buttons do
-        if (button.element == elementToDisplay) then
-            InterfaceOptionsFrameAddOns.buttons[i]:Click()
-        elseif (elementToDisplay.parent and button.element and (
-                button.element.name == elementToDisplay.parent and button.element.collapsed
-        )) then
-            OptionsListButtonToggle_OnClick(button.toggle)
-        end
-    end
-
-    if (not InterfaceOptionsFrame:IsShown()) then
-        InterfaceOptionsFrame_Show()
-    end
+    tsetn(table, 0)
+    return table
 end)
-
---[[ LUA UTILITIES ]]--
 
 local charset = {}
 do
@@ -107,19 +54,66 @@ do
     end
 end
 
+-- Addon APIs
+CraftPresence = LibStub("AceAddon-3.0"):NewAddon("CraftPresence", "AceConsole-3.0", "AceEvent-3.0")
+
+CraftPresence.libraries = {
+    AceLocale = LibStub("AceLocale-3.0"),
+    AceConfig = LibStub("AceConfig-3.0"),
+    AceConfigCmd = LibStub("AceConfigCmd-3.0"),
+    AceConfigDialog = LibStub("AceConfigDialog-3.0"),
+    AceConfigRegistry = LibStub("AceConfigRegistry-3.0"),
+    AceDB = LibStub("AceDB-3.0"),
+    AceDBOptions = LibStub("AceDBOptions-3.0"),
+    LibDBIcon = nil -- Only used in 1.12.1 or above
+}
+
+-- COMPATIBILITY UTILITIES
+
+function CraftPresence:AssertFrameSize(frame, expectedWidth, expectedHeight)
+    frame:SetWidth(expectedWidth)
+    frame:SetHeight(expectedHeight)
+end
+
+-- LUA UTILITIES
+
+--- Copy the source table contents to the destination table
+---
+--- @param src table The source table to interpret
+--- @param dest table The destination table to be returned
+---
+--- @return table @ result
+function CraftPresence:CopyTable(src, dest)
+    if type(dest) ~= "table" then
+        dest = {}
+    else
+        wipe(dest)
+    end
+    if type(src) == "table" then
+        for k, v in pairs(src) do
+            if type(v) == "table" then
+                -- try to index the key first so that the metatable creates the defaults, if set, and use that table
+                v = self:CopyTable(v, dest[k])
+            end
+            dest[k] = v
+        end
+    end
+    return dest
+end
+
 --- Generates a random string of numbers
 ---
 --- @param length number The length of the resulting number
 ---
 --- @return number @ random_string
-function CP_GlobalUtils:RandomString(length)
+function CraftPresence:RandomString(length)
     if not length or length <= 0 then
         return ''
     end
     if math.randomseed and os then
         math.randomseed(os.clock() ^ 5)
     end
-    return CP_GlobalUtils:RandomString(length - 1) .. charset[random(1, tgetn(charset))]
+    return CraftPresence:RandomString(length - 1) .. charset[random(1, tgetn(charset))]
 end
 
 --- Determines if the specified object is null or empty
@@ -127,10 +121,10 @@ end
 --- @param obj any The object to interpret
 ---
 --- @return boolean @ is_object_empty
-function CP_GlobalUtils:IsNullOrEmpty(obj)
+function CraftPresence:IsNullOrEmpty(obj)
     return obj == nil or
-            (type(obj) == "string" and obj == "") or
-            (type(obj) == "table" and obj == {})
+        (type(obj) == "string" and obj == "") or
+        (type(obj) == "table" and obj == {})
 end
 
 --- Replaces the specified area of a string
@@ -141,8 +135,8 @@ end
 --- @param plain boolean Whether or not to forbid pattern matching filters
 ---
 --- @return string @ formatted_string
-function CP_GlobalUtils:Replace(str, old, new, plain)
-    if CP_GlobalUtils:IsNullOrEmpty(str) then
+function CraftPresence:Replace(str, old, new, plain)
+    if CraftPresence:IsNullOrEmpty(str) then
         return str
     end
 
@@ -150,7 +144,7 @@ function CP_GlobalUtils:Replace(str, old, new, plain)
     if b == nil then
         return str
     else
-        return strsub(str, 1, b - 1) .. new .. CP_GlobalUtils:Replace(strsub(str, e + 1), old, new, plain)
+        return strsub(str, 1, b - 1) .. new .. CraftPresence:Replace(strsub(str, e + 1), old, new, plain)
     end
 end
 
@@ -164,12 +158,12 @@ end
 --- @param plain boolean Whether or not to forbid pattern matching filters
 ---
 --- @return string @ formatted_string
-function CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    if CP_GlobalUtils:IsNullOrEmpty(str) then
+function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
+    if CraftPresence:IsNullOrEmpty(str) then
         return str
     end
-    str = CP_GlobalUtils:Replace(str, pattern_one or "*", replacer_one or "", plain)
-    str = CP_GlobalUtils:Replace(str, pattern_two or "%^", replacer_two or "", plain)
+    str = CraftPresence:Replace(str, pattern_one or "*", replacer_one or "", plain)
+    str = CraftPresence:Replace(str, pattern_two or "%^", replacer_two or "", plain)
     return str
 end
 
@@ -182,7 +176,7 @@ local template_args = supports_ellipsis and "{...}" or "arg"
 --- @param f function The function to trigger with args
 ---
 --- @return any @ result
-function CP_GlobalUtils:vararg(n, f)
+function CraftPresence:vararg(n, f)
     local t = {}
     local params = ""
     if n > 0 then
@@ -199,5 +193,3 @@ function CP_GlobalUtils:vararg(n, f)
     ]]
     return assert(loadstring(code, "=(vararg)"))()(f)
 end
-
-return CP_GlobalUtils

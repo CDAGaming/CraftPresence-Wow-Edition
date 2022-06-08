@@ -26,9 +26,6 @@ SOFTWARE.
 local pairs, type = pairs, type
 local strformat, min = string.format, math.min
 
--- Addon APIs
-local L = CraftPresence.locale
-
 --- Ensure Config Compatibility with the specified schema
 --- (Only forwards-compatibility is supported here)
 ---
@@ -46,14 +43,14 @@ local L = CraftPresence.locale
 --- @param log_output boolean Whether to allow logging for this function (Default: true)
 function CraftPresence:EnsureCompatibility(current, target, force, can_modify, log_output)
     current = self:GetOrDefault(current, 0)
-    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
+    target = self:GetOrDefault(target, self:GetAddOnInfo("schema"))
     force = self:GetOrDefault(force, false)
     can_modify = self:GetOrDefault(can_modify, false)
     log_output = self:GetOrDefault(log_output, true)
 
     if force or current < target then
         if log_output then
-            self:Print(strformat(L["INFO_OUTDATED_CONFIG"], current, target))
+            self:Print(strformat(self.locale["INFO_OUTDATED_CONFIG"], current, target))
         end
         local defaults = self:GetDefaults().profile
 
@@ -142,7 +139,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 end
 
                 for k, v in pairs(placeholders) do
-                    if v.prefix == L["DEFAULT_INNER_KEY"] then
+                    if v.prefix == self.locale["DEFAULT_INNER_KEY"] then
                         placeholders[k].prefix = old_inner_prefix
                     end
                 end

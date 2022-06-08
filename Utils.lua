@@ -29,11 +29,7 @@ local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, s
 local strlen, strrep, tgetn, tinsert, tconcat = string.len, string.rep, table.getn, table.insert, table.concat
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
--- Addon APIs
-local L = CraftPresence.locale
-local CP_GlobalUtils = CP_GlobalUtils
-
---[[ LUA UTILITIES ]]--
+-- LUA UTILITIES
 
 local lastIndex = 0
 
@@ -52,24 +48,6 @@ end
 function CraftPresence:ResetIndex()
     lastIndex = 0
     return lastIndex
-end
-
---- Generates a random string of numbers with the specified length
----
---- @param length number The length of the resulting number (Default: 9)
----
---- @return number @ random_string
-function CraftPresence:RandomString(length)
-    return CP_GlobalUtils:RandomString(self:GetOrDefault(length, 9))
-end
-
---- Determines if the specified object is null or empty
----
---- @param obj any The object to interpret
----
---- @return boolean @ is_object_empty
-function CraftPresence:IsNullOrEmpty(obj)
-    return CP_GlobalUtils:IsNullOrEmpty(obj)
 end
 
 --- Return the specified object or a fallback value if nil
@@ -108,18 +86,6 @@ function CraftPresence:GetArgsInRange(data, from, to)
         end
     end
     return resultData
-end
-
---- Replaces the specified area of a string
----
---- @param str string The input string to evaluate
---- @param old string The portion of the string to replace
---- @param new string The string to replace the old portion with
---- @param plain boolean Whether or not to forbid pattern matching filters
----
---- @return string @ formatted_string
-function CraftPresence:Replace(str, old, new, plain)
-    return CP_GlobalUtils:Replace(str, old, new, plain)
 end
 
 --- Trims a String of leading and duplicate spaces
@@ -298,8 +264,8 @@ function CraftPresence:GetConfigTitle(identifier, tag, str, full_str)
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
 
-    local fallback_title = self:GetOrDefault(L["TITLE_" .. str], identifier)
-    local value_title = self:GetOrDefault(L["TITLE_" .. full_str], fallback_title)
+    local fallback_title = self:GetOrDefault(self.locale["TITLE_" .. str], identifier)
+    local value_title = self:GetOrDefault(self.locale["TITLE_" .. full_str], fallback_title)
     return value_title
 end
 
@@ -313,20 +279,26 @@ end
 --- @param tag string If specified, append this string to the lookup for evaluation (Optional)
 --- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
 --- @param full_str string See str param for more info. (Optional)
+--- @param default_value string If specified, use as the value_default return. (Optional)
 ---
 --- @return string @ formattedComment
-function CraftPresence:GetConfigComment(identifier, tag, str, full_str)
+function CraftPresence:GetConfigComment(identifier, tag, str, full_str, default_value)
     if self:IsNullOrEmpty(identifier) then return identifier end
     tag = self:GetOrDefault(tag)
+    default_value = self:GetOrDefault(default_value)
     if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
+    if not self:IsNullOrEmpty(default_value) then
+        default_value = tostring(default_value)
+    end
 
-    local value_comment = self:GetOrDefault(L["COMMENT_" .. full_str], L["COMMENT_" .. str])
+    local value_comment = self:GetOrDefault(self.locale["COMMENT_" .. full_str], self.locale["COMMENT_" .. str])
     if not self:IsNullOrEmpty(value_comment) then
-        local value_default = self:GetOrDefault(L["DEFAULT_" .. full_str], L["DEFAULT_" .. str])
+        local fallback_default = self:GetOrDefault(self.locale["DEFAULT_" .. full_str], self.locale["DEFAULT_" .. str])
+        local value_default = self:GetOrDefault(default_value, fallback_default)
         if not self:IsNullOrEmpty(value_default) then
-            value_comment = strformat(L["FORMAT_COMMENT"], value_comment, value_default)
+            value_comment = strformat(self.locale["FORMAT_COMMENT"], value_comment, value_default)
         end
     end
     return value_comment
@@ -351,7 +323,7 @@ function CraftPresence:GetConfigUsage(identifier, tag, str, full_str)
         str, full_str = self:SetupConfigIdentifier(identifier, tag)
     end
 
-    local value_usage = self:GetOrDefault(L["USAGE_" .. full_str], L["USAGE_" .. str])
+    local value_usage = self:GetOrDefault(self.locale["USAGE_" .. full_str], self.locale["USAGE_" .. str])
     return value_usage
 end
 
@@ -362,9 +334,10 @@ end
 --- @param tag string If specified, append this string to the lookup for evaluation (Optional)
 --- @param str string If specified alongside full_str, Skip SetupConfigIdentifier (Optional)
 --- @param full_str string See str param for more info. (Optional)
+--- @param default_value string If specified, use as the value_default in GetConfigComment. (Optional)
 ---
 --- @return string, string, string @ formattedTitle, formattedComment, formattedUsage
-function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str)
+function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str, default_value)
     if self:IsNullOrEmpty(identifier) then return identifier end
     tag = self:GetOrDefault(tag)
     if self:IsNullOrEmpty(str) and self:IsNullOrEmpty(full_str) then
@@ -372,7 +345,7 @@ function CraftPresence:GetConfigMetadata(identifier, tag, str, full_str)
     end
 
     local value_title = self:GetConfigTitle(identifier, tag, str, full_str)
-    local value_comment = self:GetConfigComment(identifier, tag, str, full_str)
+    local value_comment = self:GetConfigComment(identifier, tag, str, full_str, default_value)
     local value_usage = self:GetConfigUsage(identifier, tag, str, full_str)
 
     return value_title, value_comment, value_usage
@@ -393,7 +366,7 @@ function CraftPresence:GetCaseData(obj)
             value = self:GetOrDefault(innerValue[1])
             if self:GetLength(innerValue) >= 2 then
                 local command_query = self:Split(innerValue[2], ",", true, true)
-                for k,v in pairs(command_query) do
+                for k, v in pairs(command_query) do
                     local caseType = strlower(self:GetOrDefault(v))
                     if caseType == "lower" or caseType == "icon" then
                         value = strlower(value)
@@ -412,30 +385,6 @@ function CraftPresence:GetCaseData(obj)
         value = self:GetOrDefault(obj)
     end
     return value
-end
-
---- Replaces a String with the specified formatting
----
---- @param str string The input string to evaluate
---- @param replacer_one string The first replacer
---- @param replacer_two string The second replacer
---- @param pattern_one string The first pattern
---- @param pattern_two string The second pattern
---- @param plain boolean Whether or not to forbid pattern matching filters
----
---- @return string @ formatted_string
-function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    return CP_GlobalUtils:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-end
-
---- Variable Argument Operation
----
---- @param n number The number of static args
---- @param f function The function to trigger with args
----
---- @return any @ result
-function CraftPresence:vararg(n, f)
-    return CP_GlobalUtils:vararg(n, f)
 end
 
 --- Determines whether the specified value is within the specified range
@@ -504,7 +453,7 @@ function CraftPresence:SerializeTable(val, name, skipnewlines, depth)
 
         for k, v in pairs(val) do
             tmp = tmp .. self:SerializeTable(
-                    v, k, skipnewlines, depth + 1
+                v, k, skipnewlines, depth + 1
             ) .. "," .. (not skipnewlines and "\n" or "")
         end
 
@@ -571,9 +520,9 @@ function CraftPresence:RemoveDuplicateWords(data, seperator)
     end
 
     local output = {}
-    for i,v in pairs(data) do
-        if data[i-1] ~= v then
-            tinsert(output,v)
+    for i, v in pairs(data) do
+        if data[i - 1] ~= v then
+            tinsert(output, v)
         end
     end
 
@@ -607,10 +556,10 @@ CraftPresence.GetDynamicReturnValue = CraftPresence:vararg(3, function(self, val
                 local func, err = loadstring(value[1])
                 if not func then
                     local dataTable = {
-                        [L["TITLE_ATTEMPTED_FUNCTION"]] = value[1],
-                        [L["TITLE_FUNCTION_MESSAGE"]] = err
+                        [self.locale["TITLE_ATTEMPTED_FUNCTION"]] = value[1],
+                        [self.locale["TITLE_FUNCTION_MESSAGE"]] = err
                     }
-                    self:PrintErrorMessage(strformat(L["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
+                    self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION"], self:SerializeTable(dataTable)))
                 else
                     value[1] = func
                 end
@@ -660,7 +609,7 @@ CraftPresence.CombineTables = CraftPresence:vararg(2, function(self, rootTable, 
     return rootTable
 end)
 
---[[ API UTILITIES ]]--
+-- API UTILITIES
 
 local fallbackVersion, fallbackTOC = "0.0.0", 00000
 local timer_locked = false
@@ -668,8 +617,11 @@ local timer_locked = false
 local addon_info, build_info, compatibility_info, flavor_info, extra_build_info
 
 --- Retrieve and/or Synchronize App Build Info
+---
+--- @param key string If specified, attempt to retrieve and return build_info[key]
+---
 --- @return table @ build_info
-function CraftPresence:GetBuildInfo()
+function CraftPresence:GetBuildInfo(key)
     if not build_info then
         local version, build, date, tocversion = fallbackVersion, "0000", "Jan 1 1969", fallbackTOC
         if GetBuildInfo then
@@ -686,30 +638,39 @@ function CraftPresence:GetBuildInfo()
             ["fallback_toc_version"] = fallbackTOC
         }
     end
+    if not self:IsNullOrEmpty(key) and build_info[key] ~= nil then
+        return build_info[key]
+    end
     return build_info
 end
 
 --- Retrieve and/or Synchronize Addon Metadata
+---
+--- @param key string If specified, attempt to retrieve and return addon_info[key]
+---
 --- @return table @ addon_info
-function CraftPresence:GetAddOnInfo()
+function CraftPresence:GetAddOnInfo(key)
     if not addon_info then
         local version, versionString, schema
         if GetAddOnMetadata then
-            version = GetAddOnMetadata(L["ADDON_NAME"], "Version")
-            schema = GetAddOnMetadata(L["ADDON_NAME"], "X-Schema-ID")
+            version = GetAddOnMetadata(self.locale["ADDON_NAME"], "Version")
+            schema = GetAddOnMetadata(self.locale["ADDON_NAME"], "X-Schema-ID")
         end
 
         if not self:ContainsDigit(version) then
-            self:PrintWarningMessage(strformat(L["WARNING_BUILD_UNSUPPORTED"], version))
+            self:PrintWarningMessage(strformat(self.locale["WARNING_BUILD_UNSUPPORTED"], version))
             version = "v" .. fallbackVersion
         end
-        versionString = strformat(L["ADDON_HEADER_VERSION"], L["ADDON_NAME"], version)
+        versionString = strformat(self.locale["ADDON_HEADER_VERSION"], self.locale["ADDON_NAME"], version)
 
         addon_info = {
             ["version"] = version,
             ["versionString"] = versionString,
             ["schema"] = tonumber(schema)
         }
+    end
+    if not self:IsNullOrEmpty(key) and addon_info[key] ~= nil then
+        return addon_info[key]
     end
     return addon_info
 end
@@ -744,8 +705,10 @@ end
 
 --- Retrieve and/or Synchronize Build Flavor Info
 ---
+--- @param key string If specified, attempt to retrieve and return flavor_info[key]
+---
 --- @return table @ flavor_info
-function CraftPresence:GetFlavorInfo()
+function CraftPresence:GetFlavorInfo(key)
     if not flavor_info then
         flavor_info = {
             ["retail"] = 90205, -- Latest Retail
@@ -759,14 +722,19 @@ function CraftPresence:GetFlavorInfo()
             ["classic_era_beta"] = 11403 -- Latest Classic Era Beta
         }
     end
+    if not self:IsNullOrEmpty(key) and flavor_info[key] ~= nil then
+        return flavor_info[key]
+    end
     return flavor_info
 end
 
 --- Retrieve and/or Synchronize App Compatibility Info
 --- (Note that some TOC versions require extra filtering)
 ---
+--- @param key string If specified, attempt to retrieve and return compatibility_info[key]
+---
 --- @return table @ compatibility_info
-function CraftPresence:GetCompatibilityInfo()
+function CraftPresence:GetCompatibilityInfo(key)
     if not compatibility_info then
         compatibility_info = {
             ["10.0.0"] = 100000, -- Dragonflight 10.0.0
@@ -785,18 +753,26 @@ function CraftPresence:GetCompatibilityInfo()
             ["1.12.1"] = 11201 -- Vanilla 1.12.1
         }
     end
+    if not self:IsNullOrEmpty(key) and compatibility_info[key] ~= nil then
+        return compatibility_info[key]
+    end
     return compatibility_info
 end
 
 --- Retrieve and/or Synchronize Extra Build Info
 --- (Note that some TOC versions require extra filtering)
 ---
+--- @param key string If specified, attempt to retrieve and return extra_build_info[key]
+---
 --- @return table @ extra_build_info
-function CraftPresence:GetExtraBuildInfo()
+function CraftPresence:GetExtraBuildInfo(key)
     if not extra_build_info then
         extra_build_info = {
             ["1.15.1"] = 11501 -- TurtleWoW 1.15.1 (Vanilla)
         }
+    end
+    if not self:IsNullOrEmpty(key) and extra_build_info[key] ~= nil then
+        return extra_build_info[key]
     end
     return extra_build_info
 end
@@ -805,9 +781,9 @@ end
 --- @return boolean @ is_classic_rebased
 function CraftPresence:IsClassicRebased()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetCompatibilityInfo()["1.13.0"], self:GetCompatibilityInfo()["2.0.0"],
-            true, false
+        self:GetBuildInfo("toc_version"),
+        self:GetCompatibilityInfo("1.13.0"), self:GetCompatibilityInfo("2.0.0"),
+        true, false
     ) and not self:IsSpecialVersion()
 end
 
@@ -815,9 +791,9 @@ end
 --- @return boolean @ is_tbc_rebased
 function CraftPresence:IsTBCRebased()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetCompatibilityInfo()["2.5.0"], self:GetCompatibilityInfo()["3.0.0"],
-            true, false
+        self:GetBuildInfo("toc_version"),
+        self:GetCompatibilityInfo("2.5.0"), self:GetCompatibilityInfo("3.0.0"),
+        true, false
     ) and not self:IsSpecialVersion()
 end
 
@@ -825,25 +801,25 @@ end
 --- @return boolean @ is_wrath_rebased
 function CraftPresence:IsWrathRebased()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetCompatibilityInfo()["3.4.0"], self:GetCompatibilityInfo()["4.0.0"],
-            true, false
+        self:GetBuildInfo("toc_version"),
+        self:GetCompatibilityInfo("3.4.0"), self:GetCompatibilityInfo("4.0.0"),
+        true, false
     ) and not self:IsSpecialVersion()
 end
 
 --- Determine if this build identifies as the Retail Live Build of the Game
 --- @return boolean @ is_retail_live_build
 function CraftPresence:IsRetailLiveBuild()
-    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["retail"]
+    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("retail")
 end
 
 --- Determine if this build identifies as the Retail PTR Build of the Game
 --- @return boolean @ is_retail_ptr_build
 function CraftPresence:IsRetailPTRBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["retail"], self:GetFlavorInfo()["ptr"],
-            false, true
+        self:GetBuildInfo("toc_version"),
+        self:GetFlavorInfo("retail"), self:GetFlavorInfo("ptr"),
+        false, true
     ) and not self:IsSpecialVersion()
 end
 
@@ -851,9 +827,9 @@ end
 --- @return boolean @ is_retail_beta_build
 function CraftPresence:IsRetailBetaBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["ptr"], self:GetFlavorInfo()["beta"],
-            false, true
+        self:GetBuildInfo("toc_version"),
+        self:GetFlavorInfo("ptr"), self:GetFlavorInfo("beta"),
+        false, true
     ) and not self:IsSpecialVersion()
 end
 
@@ -866,16 +842,16 @@ end
 --- Determine if this build identifies as the Classic Live Build of the Game
 --- @return boolean @ is_classic_live_build
 function CraftPresence:IsClassicLiveBuild()
-    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["classic"]
+    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("classic")
 end
 
 --- Determine if this build identifies as the Classic PTR Build of the Game
 --- @return boolean @ is_classic_ptr_build
 function CraftPresence:IsClassicPTRBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic"], self:GetFlavorInfo()["classic_ptr"],
-            false, true
+        self:GetBuildInfo("toc_version"),
+        self:GetFlavorInfo("classic"), self:GetFlavorInfo("classic_ptr"),
+        false, true
     ) and not self:IsSpecialVersion()
 end
 
@@ -883,9 +859,9 @@ end
 --- @return boolean @ is_classic_beta_build
 function CraftPresence:IsClassicBetaBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic_ptr"], self:GetFlavorInfo()["classic_beta"],
-            false, true
+        self:GetBuildInfo("toc_version"),
+        self:GetFlavorInfo("classic_ptr"), self:GetFlavorInfo("classic_beta"),
+        false, true
     ) and not self:IsSpecialVersion()
 end
 
@@ -898,16 +874,16 @@ end
 --- Determine if this build identifies as the Classic Era Live Build of the Game
 --- @return boolean @ is_classic_era_live_build
 function CraftPresence:IsClassicEraLiveBuild()
-    return self:GetBuildInfo()["toc_version"] == self:GetFlavorInfo()["classic_era"]
+    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("classic_era")
 end
 
 --- Determine if this build identifies as the Classic Era PTR Build of the Game
 --- @return boolean @ is_classic_era_ptr_build
 function CraftPresence:IsClassicEraPTRBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic_era"], self:GetFlavorInfo()["classic_era_ptr"],
-            false, true
+        self:GetBuildInfo("toc_version"),
+        self:GetFlavorInfo("classic_era"), self:GetFlavorInfo("classic_era_ptr"),
+        false, true
     ) and not self:IsSpecialVersion()
 end
 
@@ -915,9 +891,9 @@ end
 --- @return boolean @ is_classic_era_beta_build
 function CraftPresence:IsClassicEraBetaBuild()
     return self:IsWithinValue(
-            self:GetBuildInfo()["toc_version"],
-            self:GetFlavorInfo()["classic_era_ptr"], self:GetFlavorInfo()["classic_era_beta"],
-            false, true
+        self:GetBuildInfo("toc_version"),
+        self:GetFlavorInfo("classic_era_ptr"), self:GetFlavorInfo("classic_era_beta"),
+        false, true
     ) and not self:IsSpecialVersion()
 end
 
@@ -936,13 +912,13 @@ end
 --- Determine if this build is using a special/modified api
 --- @return any @ special_info
 function CraftPresence:IsSpecialVersion()
-    return self:GetExtraBuildInfo()[self:GetBuildInfo()["version"]]
+    return self:GetExtraBuildInfo()[self:GetBuildInfo("version")]
 end
 
 --- Getter for Addon Locale Data
 --- @return table @ localeData
 function CraftPresence:GetLocale()
-    return L
+    return self.locale
 end
 
 --- Convert a Version String into a build number
@@ -973,30 +949,35 @@ function CraftPresence:VersionToBuild(versionStr, index)
 end
 
 --- Display the addon's config frame
+---
+--- @param force_standalone boolean If specified, use the standalone config frame instead of InterfaceOptions
+---
 --- @return any @ frame_object
-function CraftPresence:ShowConfig()
-    if self.config then
-        if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame then
+function CraftPresence:ShowConfig(force_standalone)
+    force_standalone = self:GetOrDefault(force_standalone, false)
+    if self.libraries.AceConfigDialog then
+        local main_config_func = InterfaceOptionsFrame_OpenToCategory or InterfaceOptionsFrame_OpenToFrame
+        if main_config_func and self.optionsFrame and not force_standalone then
             -- a bug can occur in blizzard's implementation of this call
             -- so it is called twice to workaround it
-            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+            main_config_func(self.optionsFrame)
+            main_config_func(self.optionsFrame)
             return self.optionsFrame
         else
-            self.config:Open(L["ADDON_NAME"])
+            self.libraries.AceConfigDialog:Open(self.locale["ADDON_NAME"])
         end
     else
-        self:PrintErrorMessage(strformat(L["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
+        self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
     end
 end
 
---[[ LOGGING DATA ]]--
+-- LOGGING DATA
 
 --- Prints a formatted message, meant to symbolize an error message
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintErrorMessage(logStyle)
     if not self:IsNullOrEmpty(logStyle) then
-        self:Print(strformat(L["LOG_ERROR"], logStyle))
+        self:Print(strformat(self.locale["LOG_ERROR"], logStyle))
     end
 end
 
@@ -1004,7 +985,7 @@ end
 --- @param logStyle string The log format to follow
 function CraftPresence:PrintWarningMessage(logStyle)
     if not self:IsNullOrEmpty(logStyle) then
-        self:Print(strformat(L["LOG_WARNING"], logStyle))
+        self:Print(strformat(self.locale["LOG_WARNING"], logStyle))
     end
 end
 
@@ -1013,9 +994,9 @@ end
 --- @param target number The new schema number to convert this config against (Default: addOnInfo["schema"])
 function CraftPresence:PrintMigrationMessage(current, target)
     current = self:GetOrDefault(current, 0)
-    target = self:GetOrDefault(target, self:GetAddOnInfo()["schema"])
-    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
-    self:Print(strformat(L["INFO_OPTIONAL_MIGRATION_DATA_TWO"], L["TITLE_OPTIONAL_MIGRATIONS"]))
+    target = self:GetOrDefault(target, self:GetAddOnInfo("schema"))
+    self:Print(strformat(self.locale["INFO_OPTIONAL_MIGRATION_DATA_ONE"], current, target))
+    self:Print(strformat(self.locale["INFO_OPTIONAL_MIGRATION_DATA_TWO"], self.locale["TITLE_OPTIONAL_MIGRATIONS"]))
 end
 
 --- Prints a formatted message, meant to symbolize an deprecated value
@@ -1025,22 +1006,22 @@ end
 function CraftPresence:PrintDeprecationWarning(oldFunc, newFunc, version)
     if self:GetProperty("verboseMode") then
         local dataTable = {
-            [L["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, L["TYPE_NONE"]),
-            [L["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, L["TYPE_NONE"]),
-            [L["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, L["TYPE_UNKNOWN"])
+            [self.locale["TITLE_ATTEMPTED_FUNCTION"]] = self:GetOrDefault(oldFunc, self.locale["TYPE_NONE"]),
+            [self.locale["TITLE_REPLACEMENT_FUNCTION"]] = self:GetOrDefault(newFunc, self.locale["TYPE_NONE"]),
+            [self.locale["TITLE_REMOVAL_VERSION"]] = self:GetOrDefault(version, self.locale["TYPE_UNKNOWN"])
         }
         self:PrintWarningMessage(
-                strformat(L["ERROR_FUNCTION_DEPRECATED"], self:SerializeTable(dataTable))
+            strformat(self.locale["ERROR_FUNCTION_DEPRECATED"], self:SerializeTable(dataTable))
         )
-        self:PrintWarningMessage(L["ERROR_FUNCTION_REPLACE"])
+        self:PrintWarningMessage(self.locale["ERROR_FUNCTION_REPLACE"])
     end
 end
 
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
-    self:Print(strformat(L["ADDON_LOAD_INFO"], self:GetAddOnInfo()["versionString"]))
+    self:Print(strformat(self.locale["ADDON_LOAD_INFO"], self:GetAddOnInfo("versionString")))
     if self:GetProperty("verboseMode") then
-        self:Print(strformat(L["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
+        self:Print(strformat(self.locale["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end
 end
 
@@ -1051,10 +1032,10 @@ end
 function CraftPresence:PrintUsageCommand(usage)
     if self:IsNullOrEmpty(usage) then return end
     self:Print(
-            L["USAGE_CMD_INTRO"] .. "\n" ..
-                    usage .. "\n" ..
-                    strformat(L["USAGE_CMD_NOTE_ONE"], L["ADDON_AFFIX"], L["ADDON_ID"]) .. "\n" ..
-                    L["USAGE_CMD_NOTE_TWO"] .. "\n"
+        self.locale["USAGE_CMD_INTRO"] .. "\n" ..
+        usage .. "\n" ..
+        strformat(self.locale["USAGE_CMD_NOTE_ONE"], self.locale["ADDON_AFFIX"], self.locale["ADDON_ID"]) .. "\n" ..
+        self.locale["USAGE_CMD_NOTE_TWO"] .. "\n"
     )
 end
 
@@ -1065,17 +1046,17 @@ end
 --- @param query_tag string The sub-argument to the root name, representing what we want a query from
 function CraftPresence:PrintQueryCommand(root_name, query_tag)
     if self:IsNullOrEmpty(root_name) then return end
-    local usageText = L["USAGE_CMD_" .. strupper(root_name)]
+    local usageText = self.locale["USAGE_CMD_" .. strupper(root_name)]
     if not self:IsNullOrEmpty(query_tag) then
         local localeQuery = "USAGE_CMD_" .. strupper(query_tag) .. "_" .. strupper(root_name)
-        if not self:IsNullOrEmpty(L[localeQuery]) then
-            usageText = usageText .. "\n" .. strformat(L[localeQuery], strlower(query_tag))
+        if not self:IsNullOrEmpty(self.locale[localeQuery]) then
+            usageText = usageText .. "\n" .. strformat(self.locale[localeQuery], strlower(query_tag))
         end
     end
     self:PrintUsageCommand(usageText)
 end
 
---[[ API GETTERS AND SETTERS ]]--
+-- API GETTERS AND SETTERS
 
 --- Sets whether or not the timer is locked
 --- @param newValue boolean New variable value (Required)
@@ -1149,8 +1130,8 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
     for key, value in pairs(dataTable) do
         if isMultiTable and type(value) == "table" then
             foundData, resultString = self:ParseDynamicTable(
-                    tagName, query, value, foundData,
-                    resultString, not isMultiTable, visibleData, enableCallback
+                tagName, query, value, foundData,
+                resultString, not isMultiTable, visibleData, enableCallback
             )
         else
             local can_process = self:GetOrDefault(enableCallback ~= nil and enableCallback(key, value), true)
@@ -1159,21 +1140,19 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
                 local suffix = self:GetOrDefault(type(value) == "table" and value.suffix)
                 local newKey = prefix .. tostring(key) .. suffix
                 local newValue = self:GetDynamicReturnValue(
-                        (
-                                type(value) == "table" and self:GetLength(visibleData) >= 1 and value[visibleData[1]]
-                        ) or value,
-                        (
-                                type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]
-                        ), self)
+                    (type(value) == "table" and self:GetLength(visibleData) >= 1 and value[visibleData[1]]) or value,
+                    (type(value) == "table" and self:GetLength(visibleData) >= 2 and value[visibleData[2]]), self
+                )
                 -- Assert value_type as string
                 newValue = tostring(newValue)
-                if (self:IsNullOrEmpty(query) or (
-                        self:FindMatches(strlower(newKey), query, false, 1, true) or
-                                self:FindMatches(strlower(newValue), query, false, 1, true))
-                ) then
+                if (self:IsNullOrEmpty(query) or (self:FindMatches(
+                    strlower(newKey), query, false, 1, true
+                ) or self:FindMatches(
+                    strlower(newValue), query, false, 1, true
+                ))) then
                     foundData = true
                     resultString = resultString .. "\n " .. (strformat(
-                            L["DATA_FOUND_DATA"], newKey, newValue
+                        self.locale["DATA_FOUND_DATA"], newKey, newValue
                     ))
                 end
             end
@@ -1182,7 +1161,7 @@ function CraftPresence:ParseDynamicTable(tagName, query, dataTable, foundData,
     return foundData, resultString
 end
 
---[[ CONFIG GETTERS AND SETTERS ]]--
+-- CONFIG GETTERS AND SETTERS
 
 --- Retrieves Config Data based on the specified parameters
 ---
@@ -1248,6 +1227,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
     validCallback = self:GetOrDefault(validCallback, true)
     errorCallback = self:GetOrDefault(errorCallback)
     local found_count = 0
+    local defaults = self:GetDefaults().profile
 
     titleKey = self:GetDynamicReturnValue(titleKey, type(titleKey), self)
     local table_args = {
@@ -1266,7 +1246,8 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                     local innerKey = ik
                     local valueType = (self:IsToggleTag(innerKey) and "toggle") or "input"
                     local valueIdentifier = strupper(valueType) .. "_" .. strupper(innerKey)
-                    local valueName, valueComment, valueUsage = self:GetConfigMetadata(valueIdentifier, strupper(rootKey))
+                    local valueDefault = defaults[rootKey][key][innerKey]
+                    local valueName, valueComment, valueUsage = self:GetConfigMetadata(valueIdentifier, strupper(rootKey), nil, nil, valueDefault)
                     value_args[innerKey] = {
                         type = valueType, order = self:GetNextIndex(), width = 3.0,
                         name = valueName, desc = valueComment,
@@ -1276,9 +1257,9 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                         set = function(_, newValue)
                             local oldValue = self.db.profile[rootKey][key][innerKey]
                             local isValid = (
-                                    (valueType == "toggle" and type(newValue) == "boolean") or
-                                            (type(newValue) == "string")
-                            ) and (type(validCallback) ~= "function" or validCallback(self, newValue) == true)
+                                (valueType == "toggle" and type(newValue) == "boolean") or
+                                    (type(newValue) == "string")
+                                ) and (type(validCallback) ~= "function" or validCallback(self, newValue) == true)
                             local fieldName = (rootKey .. " (" .. key .. ", " .. innerKey .. ")")
                             if isValid then
                                 self.db.profile[rootKey][key][innerKey] = newValue
@@ -1293,10 +1274,11 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                     }
                     -- Apply additional params
                     if valueType == "input" then
-                        value_args[innerKey].multiline = (
-                                self:EndsWith(strlower(innerKey), "data") or
-                                        self:EndsWith(strlower(innerKey), "callback")
-                        ) and L["TYPE_MULTILINE_LENGTH"] or false
+                        value_args[innerKey].multiline = (self:EndsWith(
+                            strlower(innerKey), "data"
+                        ) or self:EndsWith(
+                            strlower(innerKey), "callback"
+                        )) and self.locale["TYPE_MULTILINE_LENGTH"] or false
                         if not self:IsNullOrEmpty(valueUsage) then
                             value_args[innerKey].usage = valueUsage
                         end
@@ -1318,7 +1300,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
         type = "description", order = self:GetNextIndex(), fontSize = "medium",
         name = commentKey
     }
-    table_args[commentId.."_spacer"] = {
+    table_args[commentId .. "_spacer"] = {
         type = "description", order = self:GetNextIndex(), name = ""
     }
     return table_args
@@ -1332,14 +1314,14 @@ end
 --- @return boolean @ isToggleTag
 function CraftPresence:IsToggleTag(key)
     key = strlower(self:GetOrDefault(key))
-    return self:EndsWith(key, "enabled") or (
-            self:FindMatches(key, "allow", false, 1, true) and true or false
-    )
+    return self:EndsWith(key, "enabled") or (self:FindMatches(
+        key, "allow", false, 1, true
+    ) and true or false)
 end
 
---[[ QUEUE SYSTEM UTILITIES ]]--
+-- QUEUE SYSTEM UTILITIES
 
-local queued_data = { }
+local queued_data = {}
 local queue_frame
 
 --- Schedules a function to occur after the specified delay
