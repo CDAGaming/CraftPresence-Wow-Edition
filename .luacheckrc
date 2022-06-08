@@ -135,6 +135,7 @@ globals = {
 	"InterfaceOptionsFrameCategories",
 	"InterfaceOptions_AddCategory",
 	"InterfaceOptionsFrame_OpenToCategory",
+	"InterfaceOptionsFrame_OpenToFrame",
 	"IsInInstance",
 	"ReloadUI",
 	"RequestRaidInfo"

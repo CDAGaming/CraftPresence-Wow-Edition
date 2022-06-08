@@ -81,8 +81,10 @@ function CraftPresence:OnInitialize()
         -- UI Registration
         if InterfaceOptions_AddCategory then
             local can_register = true
-            if not isRebasedApi and buildData["toc_version"] < compatData["4.0.0"] then
-                -- On clients below Cataclysm, the interface options frame size is far too small
+            local minTOC, maxTOC = compatData["2.0.0"], compatData["4.0.0"]
+            local currentTOC = buildData["toc_version"]
+            if not isRebasedApi and (currentTOC >= minTOC and currentTOC < maxTOC) then
+                -- On TBC and Wrath Clients, the interface options frame size is far too small
                 -- to show any meaningful data for addon settings displayed in there.
                 -- If enforceInterface is enabled, we'll adjust the size to retail's counterpart,
                 -- as well as register it to Blizzard's options panel.

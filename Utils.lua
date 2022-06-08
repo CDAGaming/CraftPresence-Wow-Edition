@@ -956,11 +956,12 @@ end
 function CraftPresence:ShowConfig(force_standalone)
     force_standalone = self:GetOrDefault(force_standalone, false)
     if self.libraries.AceConfigDialog then
-        if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame and not force_standalone then
+        local main_config_func = InterfaceOptionsFrame_OpenToCategory or InterfaceOptionsFrame_OpenToFrame
+        if main_config_func and self.optionsFrame and not force_standalone then
             -- a bug can occur in blizzard's implementation of this call
             -- so it is called twice to workaround it
-            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
-            InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)
+            main_config_func(self.optionsFrame)
+            main_config_func(self.optionsFrame)
             return self.optionsFrame
         else
             self.libraries.AceConfigDialog:Open(self.locale["ADDON_NAME"])
