@@ -133,12 +133,9 @@ globals = {
 	"InterfaceOptionsFrame",
 	"InterfaceOptionsFrameAddOns",
 	"InterfaceOptionsFrameCategories",
-	"InterfaceOptionsFrameTab2",
-	"InterfaceOptionsFrame_OnClick",
+	"InterfaceOptions_AddCategory",
 	"InterfaceOptionsFrame_OpenToCategory",
-	"InterfaceOptionsFrame_Show",
 	"IsInInstance",
-	"OptionsListButtonToggle_OnClick",
 	"ReloadUI",
 	"RequestRaidInfo"
 }

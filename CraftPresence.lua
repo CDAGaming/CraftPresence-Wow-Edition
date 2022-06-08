@@ -79,10 +79,26 @@ function CraftPresence:OnInitialize()
     -- Version-Specific Registration
     if buildData["toc_version"] >= compatData["1.12.1"] then
         -- UI Registration
-        if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
-            self.optionsFrame = self.libraries.AceConfigDialog:AddToBlizOptions(self.locale["ADDON_NAME"])
-            self.optionsFrame.default = function()
-                self:UpdateProfile(true, true, "all")
+        if InterfaceOptions_AddCategory then
+            local can_register = true
+            if not isRebasedApi and buildData["toc_version"] < compatData["4.0.0"] then
+                -- On clients below Cataclysm, the interface options frame size is far too small
+                -- to show any meaningful data for addon settings displayed in there.
+                -- If optionalMigrations are enabled, we'll adjust the size to retail's counterpart
+                -- Otherwise, we'll use the legacy UI to prevent sizing/accessibility issues.
+                if self:GetProperty("optionalMigrations") then
+                    self:AssertFrameSize(InterfaceOptionsFrame, 858, 660)
+                    self:AssertFrameSize(InterfaceOptionsFrameCategories, 175, 569)
+                    self:AssertFrameSize(InterfaceOptionsFrameAddOns, 175, 569)
+                else
+                    can_register = false
+                end
+            end
+            if can_register then
+                self.optionsFrame = self.libraries.AceConfigDialog:AddToBlizOptions(self.locale["ADDON_NAME"])
+                self.optionsFrame.default = function()
+                    self:UpdateProfile(true, true, "all")
+                end
             end
         end
         -- Icon Registration

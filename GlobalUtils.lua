@@ -23,9 +23,8 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local _G = getfenv() or _G or {}
 local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.find, table.getn, assert, table.concat
-local tinsert, strchar, random, next, loadstring, pairs = table.insert, string.char, math.random, next, loadstring, pairs
+local tinsert, strchar, random, loadstring, pairs = table.insert, string.char, math.random, loadstring, pairs
 
 local tsetn = function(t, n)
     setmetatable(t, { __len = function()
@@ -71,64 +70,10 @@ CraftPresence.libraries = {
 
 -- COMPATIBILITY UTILITIES
 
-local function SecureNext(elements, key)
-    return _G.securecall(next, elements, key);
-end
-
-local function AssertFrameSize(frame, expectedWidth, expectedHeight)
+function CraftPresence:AssertFrameSize(frame, expectedWidth, expectedHeight)
     frame:SetWidth(expectedWidth)
     frame:SetHeight(expectedHeight)
 end
-
-InterfaceOptionsFrame_Show = function()
-    AssertFrameSize(InterfaceOptionsFrame, 858, 660)
-    AssertFrameSize(InterfaceOptionsFrameCategories, 175, 569)
-    AssertFrameSize(InterfaceOptionsFrameAddOns, 175, 569)
-    if (InterfaceOptionsFrame:IsShown()) then
-        InterfaceOptionsFrame:Hide();
-    else
-        InterfaceOptionsFrame:Show();
-    end
-end
-
-InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory or (function(panel)
-    local panelName;
-    if (type(panel) == "string") then
-        panelName = panel
-        panel = nil
-    end
-
-    assert(panelName or panel, 'Usage: InterfaceOptionsFrame_OpenToCategory("categoryName" or panel)');
-
-    local elementToDisplay
-
-    for _, element in SecureNext, _G.INTERFACEOPTIONS_ADDONCATEGORIES do
-        if (element == panel or (panelName and element.name and element.name == panelName)) then
-            elementToDisplay = element
-            break
-        end
-    end
-
-    if (not elementToDisplay) then
-        return
-    end
-
-    InterfaceOptionsFrameTab2:Click();
-    local buttons = InterfaceOptionsFrameAddOns.buttons;
-    for i, button in SecureNext, buttons do
-        if (button.element == elementToDisplay) then
-            InterfaceOptionsFrameAddOns.buttons[i]:Click()
-        elseif (elementToDisplay.parent and button.element and (
-                button.element.name == elementToDisplay.parent and button.element.collapsed
-        )) then
-            OptionsListButtonToggle_OnClick(button.toggle)
-        end
-    end
-
-    if (not InterfaceOptionsFrame:IsShown()) then
-        InterfaceOptionsFrame_Show()
-    end
-end)
 
 -- LUA UTILITIES
 
