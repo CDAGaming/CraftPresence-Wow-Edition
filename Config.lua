@@ -114,9 +114,13 @@ function CraftPresence:GetOptions()
                     },
                     enforceInterface = {
                         type = "toggle", order = self:GetNextIndex(),
-                        disabled = function ()
+                        disabled = function()
+                            local minTOC = self:GetCompatibilityInfo("1.12.1")
                             local maxTOC = self:GetCompatibilityInfo("4.0.0")
-                            return self:IsRebasedApi() or self:GetBuildInfo("toc_version") >= maxTOC
+                            local currentTOC = self:GetBuildInfo("toc_version")
+                            return (self:IsRebasedApi() or
+                                currentTOC >= maxTOC or
+                                currentTOC <= minTOC)
                         end,
                         name = self:GetConfigTitle("ENFORCE_INTERFACE"),
                         desc = self:GetConfigComment("ENFORCE_INTERFACE", nil, nil, nil, defaults.enforceInterface),
