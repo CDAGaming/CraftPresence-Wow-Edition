@@ -84,9 +84,10 @@ function CraftPresence:OnInitialize()
             if not isRebasedApi and buildData["toc_version"] < compatData["4.0.0"] then
                 -- On clients below Cataclysm, the interface options frame size is far too small
                 -- to show any meaningful data for addon settings displayed in there.
-                -- If optionalMigrations are enabled, we'll adjust the size to retail's counterpart
+                -- If enforceInterface is enabled, we'll adjust the size to retail's counterpart,
+                -- as well as register it to Blizzard's options panel.
                 -- Otherwise, we'll use the legacy UI to prevent sizing/accessibility issues.
-                if self:GetProperty("optionalMigrations") then
+                if self:GetProperty("enforceInterface") then
                     self:AssertFrameSize(InterfaceOptionsFrame, 858, 660)
                     self:AssertFrameSize(InterfaceOptionsFrameCategories, 175, 569)
                     self:AssertFrameSize(InterfaceOptionsFrameAddOns, 175, 569)
@@ -565,13 +566,14 @@ function CraftPresence:ChatCommand(input)
             end
             self:PaintMessageWait(true, not testerMode, not testerMode, nil)
         elseif command == "config" then
-            if command_query[2] ~= nil and strlower(command_query[2]) == "migrate" then
+            local has_argument = not self:IsNullOrEmpty(command_query[2])
+            if has_argument and strlower(command_query[2]) == "migrate" then
                 self:EnsureCompatibility(
                     self:GetProperty("schema"), addOnData["schema"], true,
                     self:GetProperty("optionalMigrations")
                 )
             else
-                self:ShowConfig()
+                self:ShowConfig(has_argument and strlower(command_query[2]) == "standalone")
             end
         elseif command == "reset" then
             local reset_single = (command_query[2] ~= nil)

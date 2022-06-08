@@ -949,10 +949,14 @@ function CraftPresence:VersionToBuild(versionStr, index)
 end
 
 --- Display the addon's config frame
+---
+--- @param force_standalone boolean If specified, use the standalone config frame instead of InterfaceOptions
+---
 --- @return any @ frame_object
-function CraftPresence:ShowConfig()
+function CraftPresence:ShowConfig(force_standalone)
+    force_standalone = self:GetOrDefault(force_standalone, false)
     if self.libraries.AceConfigDialog then
-        if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame then
+        if InterfaceOptionsFrame_OpenToCategory and self.optionsFrame and not force_standalone then
             -- a bug can occur in blizzard's implementation of this call
             -- so it is called twice to workaround it
             InterfaceOptionsFrame_OpenToCategory(self.optionsFrame)

@@ -35,6 +35,7 @@ function CraftPresence:GetDefaults()
                 clientId = self.locale["DEFAULT_CLIENT_ID"],
                 showMinimapIcon = true,
                 showWelcomeMessage = true,
+                enforceInterface = false,
                 presence = {
                     ["state"] = {
                         minimumTOC = "", maximumTOC = "", allowRebasedApi = true,

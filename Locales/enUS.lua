@@ -164,6 +164,20 @@ L["COMMENT_QUEUED_PIPELINE"] = "Toggles whether the callback delay will operate 
 L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
+L["TITLE_ENFORCE_INTERFACE"] = "Enforce Retail Interface"
+L["COMMENT_ENFORCE_INTERFACE"] = setfmt([[Toggles whether to allow enforcement of Retail Interface settings.
+
+*Notes:|r
+  - This setting is primarily to allow a Retail Interface to display on certain legacy Clients,
+such as the original Classic, TBC, and Wrath Clients often now used for private servers.
+  - Due to the multitude of legacy addons that are still used in these clients, and as this setting
+involves ^resizing|r frames and usage of ^early|r apis, some issues can occur with this option.
+  - This option is disabled in non-applicable clients, since it won't do anything in those versions.
+
+*Warning:|r A ^reload|r is required after setting this option to apply it's changes.]],
+        GOLD, RED
+)
+
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
 L["COMMENT_OPTIONAL_MIGRATIONS"] = setfmt([[Toggles whether to allow optional config migrations.
 

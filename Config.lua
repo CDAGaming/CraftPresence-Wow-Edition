@@ -108,6 +108,29 @@ function CraftPresence:GetOptions()
                                 self:PrintChangedValue(self.locale["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
                         end
+                    },
+                    blank2 = {
+                        type = "description", order = self:GetNextIndex(), name = ""
+                    },
+                    enforceInterface = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        disabled = function ()
+                            local maxTOC = self:GetCompatibilityInfo("4.0.0")
+                            return self:IsRebasedApi() or self:GetBuildInfo("toc_version") >= maxTOC
+                        end,
+                        name = self:GetConfigTitle("ENFORCE_INTERFACE"),
+                        desc = self:GetConfigComment("ENFORCE_INTERFACE", nil, nil, nil, defaults.enforceInterface),
+                        get = function(_)
+                            return self:GetProperty("enforceInterface")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("enforceInterface")
+                            local isValid = (type(value) == "boolean")
+                            if isValid then
+                                self:SetProperty("enforceInterface", nil, value)
+                                self:PrintChangedValue(self.locale["TITLE_ENFORCE_INTERFACE"], oldValue, value)
+                            end
+                        end
                     }
                 }
             },
