@@ -382,7 +382,7 @@ L["ERROR_COMMAND_UNKNOWN"] = "Unbekannter Befehl! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "Du nutzt eine nicht unterstützte Version von CraftPresence (%s)! (Ignoriere dies, wenn Du die Variante von GitLab verwendest)"
 L["WARNING_EVENT_RENDERING_ONE"] = "Einige Deiner Einstellungen können unter Umständen Probleme bei der Generierung der Rich-Presence-Daten verursachen. Bitte überprüfe Deine Einstellungen."
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
-L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r geladen.\n Nutze */cp|r oder */craftpresence|r für Chatbefehle.", self.colors.GREEN, self.colors.CYAN)
+L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r geladen.\n Nutze */cp|r oder */craftpresence|r für Chatbefehle.", self.colors.GREEN, self.colors.LIGHT_BLUE)
 L["ADDON_CLOSE"] = "Beende die Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
@@ -527,7 +527,7 @@ L["USAGE_CMD_NOTE_TWO"] = self:SetFormat("Optionale Parameter werden mit der Syn
 )
 
 -- Frame Text Data
-L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.CYAN)
+L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.LIGHT_BLUE)
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
@@ -540,4 +540,4 @@ Special thanks to *the-emerald/python-discord-rpc|r and *Attk4/wow-discord-rich-
 )
 
 L["ADDON_TOOLTIP_THREE"] = "Klicke hier um die Addon-Konfiguration zuzugreifen."
-L["ADDON_TOOLTIP_FIVE"] = self:SetFormat("Schalte das Minimap-Symbol mit */cp minimap|r um", self.colors.CYAN)
+L["ADDON_TOOLTIP_FIVE"] = self:SetFormat("Schalte das Minimap-Symbol mit */cp minimap|r um", self.colors.LIGHT_BLUE)

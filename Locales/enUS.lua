@@ -382,7 +382,7 @@ L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"
 L["WARNING_EVENT_RENDERING_ONE"] = "Some of your Game Settings may interfere with Rich Presence Event Generation"
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
-L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r Loaded.\n Use */cp|r or */craftpresence|r for commands.", self.colors.GREEN, self.colors.CYAN)
+L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r Loaded.\n Use */cp|r or */craftpresence|r for commands.", self.colors.GREEN, self.colors.LIGHT_BLUE)
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
@@ -527,7 +527,7 @@ L["USAGE_CMD_NOTE_TWO"] = self:SetFormat("Optional arguments in commands are rep
 )
 
 -- Frame Text Data
-L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.CYAN)
+L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.LIGHT_BLUE)
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
@@ -540,4 +540,4 @@ Special thanks to *the-emerald/python-discord-rpc|r and *Attk4/wow-discord-rich-
 )
 
 L["ADDON_TOOLTIP_THREE"] = "Click to access config data."
-L["ADDON_TOOLTIP_FIVE"] = self:SetFormat("Toggle minimap button by typing */cp minimap|r", self.colors.CYAN)
+L["ADDON_TOOLTIP_FIVE"] = self:SetFormat("Toggle minimap button by typing */cp minimap|r", self.colors.LIGHT_BLUE)

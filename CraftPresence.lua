@@ -106,8 +106,9 @@ function CraftPresence:OnInitialize()
             end
         end
         -- Icon Registration
-        self.libraries.LibDBIcon = LibStub("LibDBIcon-1.0")
-        CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(self.internals.name, {
+        self.libraries.LDBIcon = LibStub("LibDBIcon-1.0")
+        self.libraries.LDB = LibStub:GetLibrary("LibDataBroker-1.1")
+        CraftPresenceLDB = self.libraries.LDB:NewDataObject(self.internals.name, {
             type = "launcher",
             text = self.internals.name,
             icon = strformat("Interface\\Addons\\%s\\Images\\icon.blp", self.internals.name),
@@ -123,7 +124,7 @@ function CraftPresence:OnInitialize()
             end
         })
         self:UpdateMinimapState(false, false)
-        self.libraries.LibDBIcon:Register(self.internals.name, CraftPresenceLDB, minimapState)
+        self.libraries.LDBIcon:Register(self.internals.name, CraftPresenceLDB, minimapState)
     end
 end
 
@@ -160,8 +161,8 @@ function CraftPresence:OnDisable()
     local resetData = self:ConcatTable(self.internals.rpc.eventTag, self.internals.rpc.eventSeperator, self:GetProperty("clientId"))
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
-    if self.libraries.LibDBIcon then
-        self.libraries.LibDBIcon:Hide(self.internals.name)
+    if self.libraries.LDBIcon then
+        self.libraries.LDBIcon:Hide(self.internals.name)
     end
     -- Un-register all active events
     -- Note: SyncEvents is not used here so that manually added events are also properly cleared
@@ -523,11 +524,11 @@ function CraftPresence:UpdateMinimapState(update_state, log_output)
     log_output = self:GetOrDefault(log_output, true)
     minimapState = { hide = not self:GetProperty("showMinimapIcon") }
     if update_state then
-        if self.libraries.LibDBIcon then
+        if self.libraries.LDBIcon then
             if minimapState["hide"] then
-                self.libraries.LibDBIcon:Hide(self.internals.name)
+                self.libraries.LDBIcon:Hide(self.internals.name)
             else
-                self.libraries.LibDBIcon:Show(self.internals.name)
+                self.libraries.LDBIcon:Show(self.internals.name)
             end
         elseif log_output then
             self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"))

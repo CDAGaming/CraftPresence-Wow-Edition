@@ -66,7 +66,8 @@ CraftPresence.libraries = {
     AceConfigRegistry = LibStub("AceConfigRegistry-3.0"),
     AceDB = LibStub("AceDB-3.0"),
     AceDBOptions = LibStub("AceDBOptions-3.0"),
-    LibDBIcon = nil -- Only used in 1.12.1 or above
+    LDB = nil, -- Only used in 1.12.1 or above
+    LDBIcon = nil -- Only used in 1.12.1 or above
 }
 
 CraftPresence.internals = {
@@ -93,7 +94,7 @@ CraftPresence.colors = {
     GREY = CraftPresence.internals.defaultColorPrefix .. "9B9B9B",
     RED = CraftPresence.internals.defaultColorPrefix .. "FF6060",
     GOLD = CraftPresence.internals.defaultColorPrefix .. "FFD700",
-    CYAN = CraftPresence.internals.defaultColorPrefix .. "7DF8FF"
+    LIGHT_BLUE = CraftPresence.internals.defaultColorPrefix .. "69CCF0"
 }
 
 -- LUA UTILITIES
