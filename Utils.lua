@@ -26,7 +26,7 @@ SOFTWARE.
 local type, pairs, tonumber, loadstring, unpack = type, pairs, tonumber, loadstring, unpack
 local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, string.format, string.gsub
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
-local strlen, strrep, tgetn, tinsert, tconcat = string.len, string.rep, table.getn, table.insert, table.concat
+local strrep, tinsert, tconcat = string.rep, table.insert, table.concat
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
 
 -- LUA UTILITIES
@@ -102,21 +102,6 @@ function CraftPresence:TrimString(str)
     return str
 end
 
---- Retrieves the length of the specified object
----
---- @param obj any The object to evaluate
----
---- @return number @ object_length
-function CraftPresence:GetLength(obj)
-    local index = 0
-    if tgetn and type(obj) == "table" then
-        index = tgetn(obj)
-    elseif type(obj) == "string" then
-        index = strlen(obj)
-    end
-    return index
-end
-
 --- Locate one or multiple matches for the specified pattern
 ---
 --- @param str string The input string to evaluate
@@ -153,44 +138,6 @@ function CraftPresence:ContainsDigit(str)
     return self:FindMatches(str, "%d", false) and true or false
 end
 
---- Determines whether the specified string starts with the specified pattern
----
---- @param str string The input string to evaluate (Required)
---- @param expected string The expected string to locate
----
---- @return boolean @ startsWith
-function CraftPresence:StartsWith(str, expected)
-    if self:IsNullOrEmpty(str) then return false end
-    return self:ContainsAt(str, expected, 1, self:GetLength(expected))
-end
-
---- Determines whether the specified string ends with the specified pattern
----
---- @param str string The input string to evaluate (Required)
---- @param expected string The expected string to locate
----
---- @return boolean @ endsWith
-function CraftPresence:EndsWith(str, expected)
-    if self:IsNullOrEmpty(str) then return false end
-    local start_len = (self:GetLength(str) - self:GetLength(expected)) + 1
-    return self:ContainsAt(str, expected, start_len, self:GetLength(str))
-end
-
---- Determines whether the specified string includes the specified pattern at the given position
----
---- @param str string The input string to evaluate (Required)
---- @param expected string The expected string to locate
---- @param start_len number The beginning length to iterate at (Default: 1)
---- @param end_len number The ending length to iterate at (Default: input string length)
----
---- @return boolean @ containsAt
-function CraftPresence:ContainsAt(str, expected, start_len, end_len)
-    if self:IsNullOrEmpty(str) then return false end
-    start_len = self:GetOrDefault(start_len, 1)
-    end_len = self:GetOrDefault(end_len, self:GetLength(str))
-    return strsub(str, start_len, end_len) == expected
-end
-
 --- Formats the following word to proper casing (Xxxx)
 ---
 --- @param str string The input string to evaluate (Required)
@@ -200,6 +147,19 @@ function CraftPresence:FormatWord(str)
     if self:IsNullOrEmpty(str) then return str end
     str = strlower(str)
     return (strupper(strsub(str, 1, 1)) .. strsub(str, 2))
+end
+
+--- Formats the following hex code to proper formatting
+---
+--- @param hex string The input hex code to evaluate (Required)
+--- @param prefix string If specified, use a custom prefix in formatting
+---
+--- @return string @ formattedColorCode
+function CraftPresence:FormatColor(hex, prefix)
+    if self:IsNullOrEmpty(hex) then return hex end
+    if self:StartsWith(hex, "#") then hex = strsub(hex, 2) end
+    prefix = prefix or self.internals.defaultColorPrefix
+    return prefix .. strupper(hex)
 end
 
 --- Formats the following word to proper icon casing
@@ -631,6 +591,7 @@ function CraftPresence:GetBuildInfo(key)
 
         build_info = {
             ["version"] = version,
+            ["extended_version"] = (version .. " (" .. tocversion .. ")"),
             ["fallback_version"] = fallbackVersion,
             ["build"] = build,
             ["date"] = date,
@@ -653,15 +614,15 @@ function CraftPresence:GetAddOnInfo(key)
     if not addon_info then
         local version, versionString, schema
         if GetAddOnMetadata then
-            version = GetAddOnMetadata(self.locale["ADDON_NAME"], "Version")
-            schema = GetAddOnMetadata(self.locale["ADDON_NAME"], "X-Schema-ID")
+            version = GetAddOnMetadata(self.internals.name, "Version")
+            schema = GetAddOnMetadata(self.internals.name, "X-Schema-ID")
         end
 
         if not self:ContainsDigit(version) then
             self:PrintWarningMessage(strformat(self.locale["WARNING_BUILD_UNSUPPORTED"], version))
             version = "v" .. fallbackVersion
         end
-        versionString = strformat(self.locale["ADDON_HEADER_VERSION"], self.locale["ADDON_NAME"], version)
+        versionString = strformat(self.locale["ADDON_HEADER_VERSION"], self.internals.name, version)
 
         addon_info = {
             ["version"] = version,
@@ -964,7 +925,7 @@ function CraftPresence:ShowConfig(force_standalone)
             main_config_func(self.optionsFrame)
             return self.optionsFrame
         else
-            self.libraries.AceConfigDialog:Open(self.locale["ADDON_NAME"])
+            self.libraries.AceConfigDialog:Open(self.internals.name)
         end
     else
         self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "ShowConfig"))
@@ -1034,7 +995,7 @@ function CraftPresence:PrintUsageCommand(usage)
     self:Print(
         self.locale["USAGE_CMD_INTRO"] .. "\n" ..
         usage .. "\n" ..
-        strformat(self.locale["USAGE_CMD_NOTE_ONE"], self.locale["ADDON_AFFIX"], self.locale["ADDON_ID"]) .. "\n" ..
+        strformat(self.locale["USAGE_CMD_NOTE_ONE"], self.internals.affix, self.internals.identifier) .. "\n" ..
         self.locale["USAGE_CMD_NOTE_TWO"] .. "\n"
     )
 end
@@ -1279,7 +1240,7 @@ function CraftPresence:GenerateDynamicTable(rootKey, titleKey, commentKey, chang
                             strlower(innerKey), "data"
                         ) or self:EndsWith(
                             strlower(innerKey), "callback"
-                        )) and self.locale["TYPE_MULTILINE_LENGTH"] or false
+                        )) and self.internals.lengths.multiline or false
                         if not self:IsNullOrEmpty(valueUsage) then
                             value_args[innerKey].usage = valueUsage
                         end

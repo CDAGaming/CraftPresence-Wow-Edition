@@ -58,18 +58,18 @@ local isRebasedApi = false
 --- Instructions to be called when the addon is loaded
 function CraftPresence:OnInitialize()
     -- Main Initialization
-    self.locale = self.libraries.AceLocale:GetLocale("CraftPresence")
+    self.locale = self.libraries.AceLocale:GetLocale(self.internals.name)
     addOnData = self:GetAddOnInfo()
     buildData = self:GetBuildInfo()
     compatData = self:GetCompatibilityInfo()
     isRebasedApi = self:IsRebasedApi()
     -- Options Initialization
     self:GenerateDefaults()
-    self.db = self.libraries.AceDB:New(self.locale["ADDON_NAME"] .. "DB", self:GetDefaults())
-    self.libraries.AceConfig:RegisterOptionsTable(self.locale["ADDON_NAME"], self.GetOptions, {
-        (self.locale["COMMAND_CONFIG"]), (self.locale["COMMAND_CONFIG_ALT"])
+    self.db = self.libraries.AceDB:New(self.internals.name .. "DB", self:GetDefaults())
+    self.libraries.AceConfig:RegisterOptionsTable(self.internals.name, self.GetOptions, {
+        (self.internals.name .. " set"), (self.internals.affix .. " set")
     })
-    self.libraries.AceConfigDialog:SetDefaultSize(self.locale["ADDON_NAME"], 858, 660)
+    self.libraries.AceConfigDialog:SetDefaultSize(self.internals.name, 858, 660)
     self:EnsureCompatibility(
         self:GetProperty("schema"), addOnData["schema"], false,
         self:GetProperty("optionalMigrations")
@@ -99,7 +99,7 @@ function CraftPresence:OnInitialize()
                 end
             end
             if can_register then
-                self.optionsFrame = self.libraries.AceConfigDialog:AddToBlizOptions(self.locale["ADDON_NAME"])
+                self.optionsFrame = self.libraries.AceConfigDialog:AddToBlizOptions(self.internals.name)
                 self.optionsFrame.default = function()
                     self:UpdateProfile(true, true, "all")
                 end
@@ -107,10 +107,10 @@ function CraftPresence:OnInitialize()
         end
         -- Icon Registration
         self.libraries.LibDBIcon = LibStub("LibDBIcon-1.0")
-        CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(self.locale["ADDON_NAME"], {
+        CraftPresenceLDB = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject(self.internals.name, {
             type = "launcher",
-            text = self.locale["ADDON_NAME"],
-            icon = strformat("Interface\\Addons\\%s\\Images\\icon.blp", self.locale["ADDON_NAME"]),
+            text = self.internals.name,
+            icon = strformat("Interface\\Addons\\%s\\Images\\icon.blp", self.internals.name),
             OnClick = function(_, _)
                 self:ShowConfig()
             end,
@@ -123,7 +123,7 @@ function CraftPresence:OnInitialize()
             end
         })
         self:UpdateMinimapState(false, false)
-        self.libraries.LibDBIcon:Register(self.locale["ADDON_NAME"], CraftPresenceLDB, minimapState)
+        self.libraries.LibDBIcon:Register(self.internals.name, CraftPresenceLDB, minimapState)
     end
 end
 
@@ -134,8 +134,8 @@ function CraftPresence:OnEnable()
         self:PrintAddonInfo()
     end
     -- Command Registration
-    self:RegisterChatCommand(self.locale["ADDON_ID"], "ChatCommand")
-    self:RegisterChatCommand(self.locale["ADDON_AFFIX"], "ChatCommand")
+    self:RegisterChatCommand(self.internals.identifier, "ChatCommand")
+    self:RegisterChatCommand(self.internals.affix, "ChatCommand")
     -- Create initial frames and initial rpc update
     self:CreateFrames(self:GetProperty("frameSize"))
     self:PaintMessageWait()
@@ -154,14 +154,14 @@ function CraftPresence:OnDisable()
     -- Print Closing Message
     self:Print(self.locale["ADDON_CLOSE"])
     -- Command Un-registration
-    self:UnregisterChatCommand(self.locale["ADDON_ID"])
-    self:UnregisterChatCommand(self.locale["ADDON_AFFIX"])
+    self:UnregisterChatCommand(self.internals.identifier)
+    self:UnregisterChatCommand(self.internals.affix)
     -- Reset RPC Data to Discord
-    local resetData = self:ConcatTable(self.locale["EVENT_RPC_TAG"], self.locale["ARRAY_SEPARATOR_KEY"], self:GetProperty("clientId"))
+    local resetData = self:ConcatTable(self.internals.rpc.eventTag, self.internals.rpc.eventSeperator, self:GetProperty("clientId"))
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
     if self.libraries.LibDBIcon then
-        self.libraries.LibDBIcon:Hide(self.locale["ADDON_NAME"])
+        self.libraries.LibDBIcon:Hide(self.internals.name)
     end
     -- Un-register all active events
     -- Note: SyncEvents is not used here so that manually added events are also properly cleared
@@ -358,7 +358,7 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
         for _, value in pairs(self.buttons) do
             if type(value) == "table" then
                 value.result = self:ConcatTable(
-                    nil, self.locale["ARRAY_SPLIT_KEY"],
+                    nil, self.internals.rpc.buttonsSplitKey,
                     self:ParseDynamicFormatting({ value.label, value.messageFormatCallback, value.messageFormatType }),
                     self:GetOrDefault(value.url)
                 )
@@ -525,9 +525,9 @@ function CraftPresence:UpdateMinimapState(update_state, log_output)
     if update_state then
         if self.libraries.LibDBIcon then
             if minimapState["hide"] then
-                self.libraries.LibDBIcon:Hide(self.locale["ADDON_NAME"])
+                self.libraries.LibDBIcon:Hide(self.internals.name)
             else
-                self.libraries.LibDBIcon:Show(self.locale["ADDON_NAME"])
+                self.libraries.LibDBIcon:Show(self.internals.name)
             end
         elseif log_output then
             self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "UpdateMinimapState"))
@@ -665,8 +665,8 @@ function CraftPresence:ChatCommand(input)
                                     registerCallback = self:GetOrDefault(default_data.registerCallback),
                                     tagCallback = self:GetOrDefault(default_data.tagCallback),
                                     tagType = self:GetOrDefault(default_data.tagType, "string"),
-                                    prefix = self:GetOrDefault(default_data.prefix, self.locale["DEFAULT_INNER_KEY"]),
-                                    suffix = self:GetOrDefault(default_data.suffix, self.locale["DEFAULT_INNER_KEY"]),
+                                    prefix = self:GetOrDefault(default_data.prefix, self.internals.defaultInnerKey),
+                                    suffix = self:GetOrDefault(default_data.suffix, self.internals.defaultInnerKey),
                                     enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             elseif tag_name == "events" then
@@ -784,7 +784,7 @@ function CraftPresence:ChatCommand(input)
             local query = command_query
             tremove(query, 1)
             self.libraries.AceConfigCmd:HandleCommand(
-                self.locale["COMMAND_CONFIG"], self.locale["ADDON_NAME"], self:GetOrDefault(tconcat(query, " "))
+                (self.internals.name .. " " .. command), self.internals.name, self:GetOrDefault(tconcat(query, " "))
             )
             self:UpdateProfile(true, false, "all")
         else

@@ -23,8 +23,9 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local type, strsub, strfind, tgetn, assert, tconcat = type, string.sub, string.find, table.getn, assert, table.concat
+local type, tgetn, assert, tconcat = type, table.getn, assert, table.concat
 local tinsert, strchar, random, loadstring, pairs = table.insert, string.char, math.random, loadstring, pairs
+local strlen, strsub, strfind = string.len, string.sub, string.find
 
 local tsetn = function(t, n)
     setmetatable(t, { __len = function()
@@ -68,14 +69,65 @@ CraftPresence.libraries = {
     LibDBIcon = nil -- Only used in 1.12.1 or above
 }
 
--- COMPATIBILITY UTILITIES
+CraftPresence.internals = {
+    name = "CraftPresence",
+    identifier = "craftpresence",
+    affix = "cp",
+    defaultInnerKey = "@",
+    defaultGlobalKey = "#",
+    defaultColorPrefix = "|cFF",
+    lengths = {
+        rpc = 11,
+        multiline = 12
+    },
+    rpc = {
+        buttonsSplitKey = "==",
+        eventTag = "$RPCEvent$",
+        eventSeperator = "|",
+        chatSeperator = "||"
+    }
+}
 
-function CraftPresence:AssertFrameSize(frame, expectedWidth, expectedHeight)
-    frame:SetWidth(expectedWidth)
-    frame:SetHeight(expectedHeight)
-end
+CraftPresence.colors = {
+    GREEN = CraftPresence.internals.defaultColorPrefix .. "00FF7F",
+    GREY = CraftPresence.internals.defaultColorPrefix .. "9B9B9B",
+    RED = CraftPresence.internals.defaultColorPrefix .. "FF6060",
+    GOLD = CraftPresence.internals.defaultColorPrefix .. "FFD700",
+    CYAN = CraftPresence.internals.defaultColorPrefix .. "7DF8FF"
+}
 
 -- LUA UTILITIES
+
+--- Set the width and height of the specified frame
+--- (INTERNAL USAGE ONLY)
+---
+--- @param frame any The specified frame to interpret (Required)
+--- @param expectedWidth number The specified width to be set
+--- @param expectedHeight number The specified height to be set
+function CraftPresence:AssertFrameSize(frame, expectedWidth, expectedHeight)
+    if not frame then return end
+    if expectedWidth then
+        frame:SetWidth(expectedWidth)
+    end
+    if expectedHeight then
+        frame:SetHeight(expectedHeight)
+    end
+end
+
+--- Retrieves the length of the specified object
+---
+--- @param obj any The object to evaluate
+---
+--- @return number @ object_length
+function CraftPresence:GetLength(obj)
+    local index = 0
+    if tgetn and type(obj) == "table" then
+        index = tgetn(obj)
+    elseif type(obj) == "string" then
+        index = strlen(obj)
+    end
+    return index
+end
 
 --- Copy the source table contents to the destination table
 ---
@@ -113,7 +165,7 @@ function CraftPresence:RandomString(length)
     if math.randomseed and os then
         math.randomseed(os.clock() ^ 5)
     end
-    return CraftPresence:RandomString(length - 1) .. charset[random(1, tgetn(charset))]
+    return self:RandomString(length - 1) .. charset[random(1, tgetn(charset))]
 end
 
 --- Determines if the specified object is null or empty
@@ -136,7 +188,7 @@ end
 ---
 --- @return string @ formatted_string
 function CraftPresence:Replace(str, old, new, plain)
-    if CraftPresence:IsNullOrEmpty(str) then
+    if self:IsNullOrEmpty(str) then
         return str
     end
 
@@ -144,8 +196,23 @@ function CraftPresence:Replace(str, old, new, plain)
     if b == nil then
         return str
     else
-        return strsub(str, 1, b - 1) .. new .. CraftPresence:Replace(strsub(str, e + 1), old, new, plain)
+        return strsub(str, 1, b - 1) .. new .. self:Replace(strsub(str, e + 1), old, new, plain)
     end
+end
+
+--- Determines whether the specified string includes the specified pattern at the given position
+---
+--- @param str string The input string to evaluate (Required)
+--- @param expected string The expected string to locate
+--- @param start_len number The beginning length to iterate at (Default: 1)
+--- @param end_len number The ending length to iterate at (Default: input string length)
+---
+--- @return boolean @ containsAt
+function CraftPresence:ContainsAt(str, expected, start_len, end_len)
+    if self:IsNullOrEmpty(str) then return false end
+    start_len = self:GetOrDefault(start_len, 1)
+    end_len = self:GetOrDefault(end_len, self:GetLength(str))
+    return strsub(str, start_len, end_len) == expected
 end
 
 --- Replaces a String with the specified formatting
@@ -159,12 +226,35 @@ end
 ---
 --- @return string @ formatted_string
 function CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-    if CraftPresence:IsNullOrEmpty(str) then
+    if self:IsNullOrEmpty(str) then
         return str
     end
-    str = CraftPresence:Replace(str, pattern_one or "*", replacer_one or "", plain)
-    str = CraftPresence:Replace(str, pattern_two or "%^", replacer_two or "", plain)
+    str = self:Replace(str, pattern_one or "*", replacer_one or "", plain)
+    str = self:Replace(str, pattern_two or "%^", replacer_two or "", plain)
     return str
+end
+
+--- Determines whether the specified string starts with the specified pattern
+---
+--- @param str string The input string to evaluate (Required)
+--- @param expected string The expected string to locate
+---
+--- @return boolean @ startsWith
+function CraftPresence:StartsWith(str, expected)
+    if self:IsNullOrEmpty(str) then return false end
+    return self:ContainsAt(str, expected, 1, self:GetLength(expected))
+end
+
+--- Determines whether the specified string ends with the specified pattern
+---
+--- @param str string The input string to evaluate (Required)
+--- @param expected string The expected string to locate
+---
+--- @return boolean @ endsWith
+function CraftPresence:EndsWith(str, expected)
+    if self:IsNullOrEmpty(str) then return false end
+    local start_len = (self:GetLength(str) - self:GetLength(expected)) + 1
+    return self:ContainsAt(str, expected, start_len, self:GetLength(str))
 end
 
 local supports_ellipsis = loadstring("return ...") ~= nil

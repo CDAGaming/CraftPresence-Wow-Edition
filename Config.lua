@@ -168,7 +168,7 @@ function CraftPresence:GetOptions()
                     end,
                     nil,
                     function(self, newValue)
-                        return not self:FindMatches(tostring(newValue), self.locale["ARRAY_SPLIT_KEY"], false)
+                        return not self:FindMatches(tostring(newValue), self.internals.rpc.buttonsSplitKey, false)
                     end,
                     function(self, fieldName, _, _)
                         self:PrintErrorMessage(
@@ -528,7 +528,7 @@ CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, res
     end
 
     if notify and canNotify then
-        self.libraries.AceConfigRegistry:NotifyChange(self.locale["ADDON_NAME"])
+        self.libraries.AceConfigRegistry:NotifyChange(self.internals.name)
     end
 
     if reset then

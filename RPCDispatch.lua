@@ -77,7 +77,7 @@ function CraftPresence:GetEncodedMessage(obj, alt, format, level, display)
     display = self:GetOrDefault(display, false)
     local output = self:Replace(
             (type(obj) == "string" and obj) or alt,
-            self.locale["ARRAY_SEPARATOR_KEY"], self.locale["ARRAY_SEPARATOR_KEY_ALT"]
+            self.internals.rpc.eventSeperator, self.internals.rpc.chatSeperator
     )
     if self:GetProperty("verboseMode") and not self:IsNullOrEmpty(obj) then
         output = self:SerializeTable(obj)
@@ -314,7 +314,7 @@ function CraftPresence:EncodeConfigData(log_output)
     if self:HasInstanceChanged() then
         self:SetInstanceChanged(false)
     end
-    return self:ConcatTable(self.locale["EVENT_RPC_TAG"], self.locale["ARRAY_SEPARATOR_KEY"], unpack(rpcData))
+    return self:ConcatTable(self.internals.rpc.eventTag, self.internals.rpc.eventSeperator, unpack(rpcData))
 end
 
 --- Displays the currently encoded string as Frames, depending on arguments

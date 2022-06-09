@@ -108,7 +108,7 @@ function CraftPresence:GenerateDefaults()
         end
     end]]            ,
                     stateCallback = [[function (self)
-        self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.locale['ADDON_NAME'], 'X-Wago-ID'))
+        self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.internals.name, 'X-Wago-ID'))
     end]]            ,
                     unregisterCallback = [[function (self)
         if not self.WagoAnalytics then return end
@@ -204,7 +204,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_GLOBAL_KEY"], suffix = self.locale["DEFAULT_GLOBAL_KEY"]
+                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
                 },
                 ["arena"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -216,7 +216,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_GLOBAL_KEY"], suffix = self.locale["DEFAULT_GLOBAL_KEY"]
+                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
                 },
                 ["battleground"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -228,7 +228,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_GLOBAL_KEY"], suffix = self.locale["DEFAULT_GLOBAL_KEY"]
+                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
                 },
                 ["raid"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -240,7 +240,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_GLOBAL_KEY"], suffix = self.locale["DEFAULT_GLOBAL_KEY"]
+                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
                 },
                 ["dungeon"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -254,7 +254,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_GLOBAL_KEY"], suffix = self.locale["DEFAULT_GLOBAL_KEY"]
+                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
                 },
                 ["scenario"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -266,7 +266,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_GLOBAL_KEY"], suffix = self.locale["DEFAULT_GLOBAL_KEY"]
+                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
                 },
                 ["player_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -278,7 +278,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["title_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -290,7 +290,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_level"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -302,7 +302,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_realm"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -318,7 +318,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_region"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -335,7 +335,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_class"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -347,7 +347,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_race"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -359,7 +359,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_gender"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -376,7 +376,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_icon"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -402,7 +402,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_status"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -414,7 +414,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_reason"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -426,7 +426,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["difficulty_info"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -444,7 +444,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_faction"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -459,7 +459,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_alliance"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -493,7 +493,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_covenant"] = {
                     minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
@@ -510,7 +510,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -555,7 +555,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_spec_name"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
@@ -581,7 +581,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_spec_role"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
@@ -607,7 +607,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["realm_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -630,7 +630,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["player_covenant_renown"] = {
                     minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
@@ -642,7 +642,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["localized_name"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -654,7 +654,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["instance_type"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -666,7 +666,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["instance_difficulty"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -678,7 +678,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["difficulty_name"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -690,7 +690,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["current_players"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -712,7 +712,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["max_players"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -724,7 +724,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["dynamic_difficulty"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -736,7 +736,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["is_dynamic"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -748,7 +748,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["instance_id"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = true,
@@ -760,7 +760,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["instance_group_size"] = {
                     minimumTOC = "50400", maximumTOC = "", allowRebasedApi = true,
@@ -772,7 +772,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["lfg_dungeon_id"] = {
                     minimumTOC = "80000", maximumTOC = "", allowRebasedApi = true,
@@ -784,7 +784,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["zone_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -796,7 +796,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["sub_zone_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -808,7 +808,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["zone_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -835,7 +835,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["item_level"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -851,7 +851,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["item_level_equipped"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -867,7 +867,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["item_level_pvp"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -883,7 +883,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["active_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -895,7 +895,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["active_keystone_affixes"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -907,7 +907,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["active_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -919,7 +919,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["external_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -931,7 +931,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["internal_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -943,7 +943,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["owned_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -955,7 +955,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["lockout_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -970,7 +970,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["lockout_current_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -985,7 +985,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["lockout_total_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -1000,7 +1000,7 @@ function CraftPresence:GenerateDefaults()
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.locale["DEFAULT_INNER_KEY"], suffix = self.locale["DEFAULT_INNER_KEY"]
+                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 }
             },
             events = {
