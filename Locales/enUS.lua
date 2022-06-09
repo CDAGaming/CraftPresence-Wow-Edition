@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local self = CraftPresence
-local L = self.libraries.AceLocale:NewLocale("CraftPresence", "enUS", true, "raw")
+local L = self.libraries.AceLocale:NewLocale(self.internals.name, "enUS", true, "raw")
 if not L then return end
 
 -- Type Identifier Data
@@ -382,7 +382,7 @@ L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"
 L["WARNING_EVENT_RENDERING_ONE"] = "Some of your Game Settings may interfere with Rich Presence Event Generation"
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
-L["ADDON_LOAD_INFO"] = self:SetFormat("%s Loaded.\n Use */cp|r or */craftpresence|r for commands.", self.colors.GREEN, self.colors.GREY)
+L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r Loaded.\n Use */cp|r or */craftpresence|r for commands.", self.colors.GREEN, self.colors.CYAN)
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 

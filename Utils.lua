@@ -980,7 +980,7 @@ end
 
 --- Print initial addon info, depending on platform and config data
 function CraftPresence:PrintAddonInfo()
-    self:Print(strformat(self.locale["ADDON_LOAD_INFO"], self:GetAddOnInfo("versionString")))
+    self:Print(strformat(self.locale["ADDON_LOAD_INFO"], self:GetAddOnInfo("version")))
     if self:GetProperty("verboseMode") then
         self:Print(strformat(self.locale["ADDON_BUILD_INFO"], self:SerializeTable(self:GetBuildInfo())))
     end

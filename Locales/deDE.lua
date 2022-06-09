@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local self = CraftPresence
-local L = self.libraries.AceLocale:NewLocale("CraftPresence", "deDE")
+local L = self.libraries.AceLocale:NewLocale(self.internals.name, "deDE")
 if not L then return end
 
 -- Type Identifier Data
@@ -382,7 +382,7 @@ L["ERROR_COMMAND_UNKNOWN"] = "Unbekannter Befehl! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "Du nutzt eine nicht unterstützte Version von CraftPresence (%s)! (Ignoriere dies, wenn Du die Variante von GitLab verwendest)"
 L["WARNING_EVENT_RENDERING_ONE"] = "Einige Deiner Einstellungen können unter Umständen Probleme bei der Generierung der Rich-Presence-Daten verursachen. Bitte überprüfe Deine Einstellungen."
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
-L["ADDON_LOAD_INFO"] = self:SetFormat("%s geladen.\n Nutze */cp|r oder */craftpresence|r für Chatbefehle.", self.colors.GREEN, self.colors.GREY)
+L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r geladen.\n Nutze */cp|r oder */craftpresence|r für Chatbefehle.", self.colors.GREEN, self.colors.CYAN)
 L["ADDON_CLOSE"] = "Beende die Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
