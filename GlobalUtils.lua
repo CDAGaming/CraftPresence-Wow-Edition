@@ -270,14 +270,14 @@ function CraftPresence:vararg(n, f)
     local t = {}
     local params = ""
     if n > 0 then
-        for i = 1, n do t[ i ] = "_"..i end
+        for i = 1, n do t[i] = "_" .. i end
         params = tconcat(t, ", ", 1, n)
         params = params .. ", "
     end
     local code = [[
         return function( f )
-        return function( ]]..params..[[... )
-            return f( ]]..params..template_args..[[ )
+        return function( ]] .. params .. [[... )
+            return f( ]] .. params .. template_args .. [[ )
         end
         end
     ]]

@@ -76,8 +76,8 @@ function CraftPresence:GetEncodedMessage(obj, alt, format, level, display)
     level = self:GetOrDefault(level, "%s")
     display = self:GetOrDefault(display, false)
     local output = self:Replace(
-            (type(obj) == "string" and obj) or alt,
-            self.internals.rpc.eventSeperator, self.internals.rpc.chatSeperator
+        (type(obj) == "string" and obj) or alt,
+        self.internals.rpc.eventSeperator, self.internals.rpc.chatSeperator
     )
     if self:GetProperty("verboseMode") and not self:IsNullOrEmpty(obj) then
         output = self:SerializeTable(obj)
@@ -342,17 +342,17 @@ function CraftPresence:PaintMessageWait(force, update, clean, msg)
             end
         end
         self:GetEncodedMessage(
-                (useTable and encodedArgs), encoded,
-                self.locale["DEBUG_SEND_ACTIVITY"], self.locale["LOG_DEBUG"],
-                self:GetProperty("debugMode")
+            (useTable and encodedArgs), encoded,
+            self.locale["DEBUG_SEND_ACTIVITY"], self.locale["LOG_DEBUG"],
+            self:GetProperty("debugMode")
         )
         self:PaintSomething(encoded)
         if clean then
             local delay = self:GetProperty("frameClearDelay")
             if (self:IsWithinValue(
-                    delay,
-                    max(self.locale["MINIMUM_FRAME_CLEAR_DELAY"], 1), self.locale["MAXIMUM_FRAME_CLEAR_DELAY"],
-                    true, true
+                delay,
+                max(self.locale["MINIMUM_FRAME_CLEAR_DELAY"], 1), self.locale["MAXIMUM_FRAME_CLEAR_DELAY"],
+                true, true
             )) then
                 self:After(delay, function()
                     self:CleanFrames()
