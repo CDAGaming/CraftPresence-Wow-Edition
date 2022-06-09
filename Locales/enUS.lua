@@ -23,17 +23,13 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local L = CraftPresence.libraries.AceLocale:NewLocale("CraftPresence", "enUS", true, "raw")
+local self = CraftPresence
+local L = self.libraries.AceLocale:NewLocale("CraftPresence", "enUS", true, "raw")
 if not L then return end
-
--- Addon Shim Functions
-local setfmt = function(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-        return CraftPresence:SetFormat(str, replacer_one, replacer_two, pattern_one, pattern_two, plain)
-end
 
 -- Common Variables
 local inkey, outkey = "@", "#"
-local current_toc = CraftPresence:GetBuildInfo("toc_version")
+local current_toc = self:GetBuildInfo("toc_version")
 
 -- Color Codes
 local COLOR_PREFIX = '|cFF'
@@ -43,12 +39,6 @@ local RED = COLOR_PREFIX .. 'FF6060'
 local GOLD = COLOR_PREFIX .. 'FFD700'
 local PALE_CYAN = COLOR_PREFIX .. 'c9fcff'
 
--- Data Default Values (DNT)
-L["DEFAULT_LABEL_AWAY"] = "Away"
-L["DEFAULT_LABEL_BUSY"] = "Busy"
-L["DEFAULT_LABEL_DEAD"] = "Dead"
-L["DEFAULT_LABEL_GHOST"] = "Ghost"
-L["DEFAULT_LABEL_COMBAT"] = "In Combat"
 -- Internal Values (DNT)
 L["ARRAY_SPLIT_KEY"] = "=="
 L["ARRAY_SEPARATOR_KEY"] = "|"
@@ -60,13 +50,11 @@ L["ADDON_ID"] = "craftpresence"
 L["ADDON_AFFIX"] = "cp"
 L["COMMAND_CONFIG"] = "cp set"
 L["COMMAND_CONFIG_ALT"] = "craftpresence set"
-L["FORMAT_LEVEL"] = "Level %s"
-L["FORMAT_SETTING"] = "%s (Should be %s)"
-L["FORMAT_COMMENT"] = setfmt("%s|r\n\n*Default:|r %s", GREEN)
-L["FORMAT_USER_PREFIX"] = "(%s) "
 L["EVENT_RPC_TAG"] = "$RPCEvent$"
 L["EVENT_RPC_LENGTH"] = 11
 L["TYPE_MULTILINE_LENGTH"] = 12
+
+-- Type Identifier Data
 L["TYPE_UNKNOWN"] = "Unknown"
 L["TYPE_NONE"] = "None"
 L["TYPE_ADDED"] = "Added"
@@ -74,11 +62,17 @@ L["TYPE_MODIFY"] = "Modified"
 L["STATUS_TRUE"] = "active"
 L["STATUS_FALSE"] = "inactive"
 
+-- Formatting Data
+L["FORMAT_LEVEL"] = "Level %s"
+L["FORMAT_SETTING"] = "%s (Should be %s)"
+L["FORMAT_COMMENT"] = self:SetFormat("%s|r\n\n*Default:|r %s", GREEN)
+L["FORMAT_USER_PREFIX"] = "(%s) "
+
 -- Primary Logging Data
-L["LOG_DEBUG"] = setfmt("*[Debug]|r %s", GREY)
-L["LOG_VERBOSE"] = setfmt("*[Verbose]|r %s", GREY)
-L["LOG_ERROR"] = setfmt("*[Error]|r %s", RED)
-L["LOG_WARNING"] = setfmt("*[Warning]|r %s", GOLD)
+L["LOG_DEBUG"] = self:SetFormat("*[Debug]|r %s", GREY)
+L["LOG_VERBOSE"] = self:SetFormat("*[Verbose]|r %s", GREY)
+L["LOG_ERROR"] = self:SetFormat("*[Error]|r %s", RED)
+L["LOG_WARNING"] = self:SetFormat("*[Warning]|r %s", GOLD)
 L["LOG_INFO"] = "[Info] %s"
 
 -- Config Category Data
@@ -88,7 +82,7 @@ L["CATEGORY_COMMENT_GENERAL"] = "General settings for display info."
 L["CATEGORY_TITLE_PRESENCE"] = "Presence"
 L["CATEGORY_TITLE_PRESENCE_EXTENDED"] = "Rich Presence Fields"
 L["CATEGORY_COMMENT_PRESENCE"] = "Settings for customizing the general display fields of the rich presence."
-L["CATEGORY_COMMENT_PRESENCE_INFO"] = setfmt([[%s rich presence field%s found!
+L["CATEGORY_COMMENT_PRESENCE_INFO"] = self:SetFormat([[%s rich presence field%s found!
 
 *Note:|r See the ^Buttons|r tab for more settings.]],
         GOLD, GREEN
@@ -102,7 +96,7 @@ L["CATEGORY_COMMENT_BUTTONS_INFO"] = "%s custom button%s found!"
 L["CATEGORY_TITLE_LABELS"] = "Labels"
 L["CATEGORY_TITLE_LABELS_EXTENDED"] = "Custom Labels"
 L["CATEGORY_COMMENT_LABELS"] = "Settings for customizing unit states (Such as In Combat, Away, etc)."
-L["CATEGORY_COMMENT_LABELS_INFO"] = setfmt([[%s label%s found!
+L["CATEGORY_COMMENT_LABELS_INFO"] = self:SetFormat([[%s label%s found!
 
 *Note:|r Use ^/cp labels|r for more info.]],
         GOLD, GREEN
@@ -111,7 +105,7 @@ L["CATEGORY_COMMENT_LABELS_INFO"] = setfmt([[%s label%s found!
 L["CATEGORY_TITLE_PLACEHOLDERS"] = "Placeholders"
 L["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"] = "Custom Placeholders"
 L["CATEGORY_COMMENT_PLACEHOLDERS"] = "Settings for customizing placeholder data."
-L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = setfmt([[%s placeholder%s found!
+L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = self:SetFormat([[%s placeholder%s found!
 
 *Note:|r Use ^/cp placeholders|r for more info.]],
         GOLD, GREEN
@@ -120,7 +114,7 @@ L["CATEGORY_COMMENT_PLACEHOLDERS_INFO"] = setfmt([[%s placeholder%s found!
 L["CATEGORY_TITLE_EVENTS"] = "Events"
 L["CATEGORY_TITLE_EVENTS_EXTENDED"] = "Available Events"
 L["CATEGORY_COMMENT_EVENTS"] = "Settings for customizing events to trigger Rich Presence updates on."
-L["CATEGORY_COMMENT_EVENTS_INFO"] = setfmt([[%s event%s found!
+L["CATEGORY_COMMENT_EVENTS_INFO"] = self:SetFormat([[%s event%s found!
 
 *Note:|r Use ^/cp events|r for more info.]],
         GOLD, GREEN
@@ -129,7 +123,7 @@ L["CATEGORY_COMMENT_EVENTS_INFO"] = setfmt([[%s event%s found!
 L["CATEGORY_TITLE_METRICS"] = "Metrics"
 L["CATEGORY_TITLE_METRICS_EXTENDED"] = "Available Metric Services"
 L["CATEGORY_COMMENT_METRICS"] = "Settings for customizing 3rd party metric data collection."
-L["CATEGORY_COMMENT_METRICS_INFO"] = setfmt([[%s metric service%s found!
+L["CATEGORY_COMMENT_METRICS_INFO"] = self:SetFormat([[%s metric service%s found!
 
 *Note:|r A ^reload|r may be required for certain settings to take full effect.]],
         GOLD, GREEN
@@ -145,7 +139,7 @@ L["TITLE_CLIENT_ID"] = "Client ID"
 L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles."
 L["USAGE_CLIENT_ID"] = "<18-digit numerical id here>"
 L["DEFAULT_CLIENT_ID"] = "805124430774272000"
-L["ERROR_CLIENT_ID"] = setfmt("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit|r numerical value.",
+L["ERROR_CLIENT_ID"] = self:SetFormat("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit|r numerical value.",
         GREEN, GREY
 )
 
@@ -165,7 +159,7 @@ L["TITLE_SHOW_WELCOME_MESSAGE"] = "Show Welcome Message"
 L["COMMENT_SHOW_WELCOME_MESSAGE"] = "Toggles the display of the addon's initialization logging."
 
 L["TITLE_ENFORCE_INTERFACE"] = "Enforce Retail Interface"
-L["COMMENT_ENFORCE_INTERFACE"] = setfmt([[Toggles whether to allow enforcement of Retail Interface settings.
+L["COMMENT_ENFORCE_INTERFACE"] = self:SetFormat([[Toggles whether to allow enforcement of Retail Interface settings.
 
 *Notes:|r
   - This setting is primarily to allow a Retail Interface to display on certain legacy Clients,
@@ -179,7 +173,7 @@ involves ^resizing|r frames and usage of ^early|r apis, some issues can occur wi
 )
 
 L["TITLE_OPTIONAL_MIGRATIONS"] = "Optional Migrations"
-L["COMMENT_OPTIONAL_MIGRATIONS"] = setfmt([[Toggles whether to allow optional config migrations.
+L["COMMENT_OPTIONAL_MIGRATIONS"] = self:SetFormat([[Toggles whether to allow optional config migrations.
 
 *Warning:|r These types of migrations may ^reset|r certain config values.]],
         GOLD, RED
@@ -198,7 +192,7 @@ L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
 
 L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_SIZE"] = setfmt([[The size that each event frame pixel should be rendered at.
+L["COMMENT_FRAME_SIZE"] = self:SetFormat([[The size that each event frame pixel should be rendered at.
 
 *Note:|r This value should be equal to the python script's ^pixel_size|r property.]],
         GOLD, GREEN
@@ -209,21 +203,21 @@ L["DEFAULT_FRAME_SIZE"] = 6
 
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
-L["DEFAULT_STATE_MESSAGE"] = setfmt("*scenario**dungeon**raid**battleground**arena**default*", outkey)
+L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", outkey)
 
 L["TITLE_DETAILS"] = "Details"
 L["COMMENT_DETAILS"] = "The data to be interpeted for the Details area of the Rich Presence."
-L["DEFAULT_DETAILS_MESSAGE"] = setfmt("*player_info*", inkey)
+L["DEFAULT_DETAILS_MESSAGE"] = self:SetFormat("*player_info*", inkey)
 
 L["TITLE_LARGEIMAGE"] = "Large Image"
 L["COMMENT_LARGEIMAGE"] = "The data to be interpeted for the Large Image area of the Rich Presence."
 L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
-L["DEFAULT_LARGE_IMAGE_MESSAGE"] = setfmt("*realm_info*", inkey)
+L["DEFAULT_LARGE_IMAGE_MESSAGE"] = self:SetFormat("*realm_info*", inkey)
 
 L["TITLE_SMALLIMAGE"] = "Small Image"
 L["COMMENT_SMALLIMAGE"] = "The data to be interpeted for the Small Image area of the Rich Presence."
-L["DEFAULT_SMALL_IMAGE_KEY"] = setfmt("*player_alliance*", inkey)
-L["DEFAULT_SMALL_IMAGE_MESSAGE"] = setfmt("*player_alliance*", inkey)
+L["DEFAULT_SMALL_IMAGE_KEY"] = self:SetFormat("*player_alliance*", inkey)
+L["DEFAULT_SMALL_IMAGE_MESSAGE"] = self:SetFormat("*player_alliance*", inkey)
 
 L["TITLE_PRIMARYBUTTON"] = "Primary Button"
 L["COMMENT_PRIMARYBUTTON"] = "The data to be interpreted for the Primary Button area of the Rich Presence."
@@ -254,7 +248,7 @@ L["COMMENT_INPUT_PROCESSCALLBACK"] = "The function that, if any, is called befor
 L["USAGE_INPUT_PROCESSCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_PROCESSTYPE"] = "Process Type"
-L["COMMENT_INPUT_PROCESSTYPE"] = setfmt("The variable type the *Process Callback|r should be interpreted as.",
+L["COMMENT_INPUT_PROCESSTYPE"] = self:SetFormat("The variable type the *Process Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_PROCESSTYPE"] = "<A variable type name here, can be function|string>"
@@ -264,7 +258,7 @@ L["COMMENT_INPUT_ACTIVECALLBACK"] = "The function that, if any, is what will be 
 L["USAGE_INPUT_ACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_ACTIVETYPE"] = "Active Type"
-L["COMMENT_INPUT_ACTIVETYPE"] = setfmt("The variable type the *Active Callback|r should be interpreted as.",
+L["COMMENT_INPUT_ACTIVETYPE"] = self:SetFormat("The variable type the *Active Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_ACTIVETYPE"] = "<A variable type name here, can be function|string>"
@@ -274,7 +268,7 @@ L["COMMENT_INPUT_INACTIVECALLBACK"] = "The function that, if any, is what will b
 L["USAGE_INPUT_INACTIVECALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_INACTIVETYPE"] = "Inactive Type"
-L["COMMENT_INPUT_INACTIVETYPE"] = setfmt("The variable type the *Inactive Callback|r should be interpreted as.",
+L["COMMENT_INPUT_INACTIVETYPE"] = self:SetFormat("The variable type the *Inactive Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_INACTIVETYPE"] = "<A variable type name here, can be function|string>"
@@ -284,19 +278,19 @@ L["COMMENT_INPUT_KEYCALLBACK"] = "The function that, if any, is what will be att
 L["USAGE_INPUT_KEYCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_KEYTYPE"] = "Key Type"
-L["COMMENT_INPUT_KEYTYPE"] = setfmt("The variable type the *Key Callback|r should be interpreted as.",
+L["COMMENT_INPUT_KEYTYPE"] = self:SetFormat("The variable type the *Key Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_KEYTYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_INPUT_KEYFORMATCALLBACK"] = "Key Format Callback"
-L["COMMENT_INPUT_KEYFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Key Callback|r.",
+L["COMMENT_INPUT_KEYFORMATCALLBACK"] = self:SetFormat("The function that, if any, will be used for formatting the *Key Callback|r.",
         GREEN
 )
 L["USAGE_INPUT_KEYFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
 
 L["TITLE_INPUT_KEYFORMATTYPE"] = "Key Format Type"
-L["COMMENT_INPUT_KEYFORMATTYPE"] = setfmt("The variable type the *Key Format Callback|r should be interpreted as.",
+L["COMMENT_INPUT_KEYFORMATTYPE"] = self:SetFormat("The variable type the *Key Format Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_KEYFORMATTYPE"] = "<A variable type name here, can be function|string>"
@@ -306,19 +300,19 @@ L["COMMENT_INPUT_MESSAGECALLBACK"] = "The function that, if any, is what will be
 L["USAGE_INPUT_MESSAGECALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_MESSAGETYPE"] = "Message Type"
-L["COMMENT_INPUT_MESSAGETYPE"] = setfmt("The variable type the *Message Callback|r should be interpreted as.",
+L["COMMENT_INPUT_MESSAGETYPE"] = self:SetFormat("The variable type the *Message Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_MESSAGETYPE"] = "<A variable type name here, can be function|string>"
 
 L["TITLE_INPUT_MESSAGEFORMATCALLBACK"] = "Message Format Callback"
-L["COMMENT_INPUT_MESSAGEFORMATCALLBACK"] = setfmt("The function that, if any, will be used for formatting the *Message Callback|r.",
+L["COMMENT_INPUT_MESSAGEFORMATCALLBACK"] = self:SetFormat("The function that, if any, will be used for formatting the *Message Callback|r.",
         GREEN
 )
 L["USAGE_INPUT_MESSAGEFORMATCALLBACK"] = "<A function or valid string type for GetCaseData here>"
 
 L["TITLE_INPUT_MESSAGEFORMATTYPE"] = "Message Format Type"
-L["COMMENT_INPUT_MESSAGEFORMATTYPE"] = setfmt("The variable type the *Message Format Callback|r should be interpreted as.",
+L["COMMENT_INPUT_MESSAGEFORMATTYPE"] = self:SetFormat("The variable type the *Message Format Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_MESSAGEFORMATTYPE"] = "<A variable type name here, can be function|string>"
@@ -328,7 +322,7 @@ L["COMMENT_INPUT_LABELCALLBACK"] = "The function that, if any, is what will be a
 L["USAGE_INPUT_LABELCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_LABELTYPE"] = "Label Type"
-L["COMMENT_INPUT_LABELTYPE"] = setfmt("The variable type the *Label Callback|r should be interpreted as.",
+L["COMMENT_INPUT_LABELTYPE"] = self:SetFormat("The variable type the *Label Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_LABELTYPE"] = "<A variable type name here, can be function|string>"
@@ -338,7 +332,7 @@ L["COMMENT_INPUT_URLCALLBACK"] = "The function that, if any, is what will be att
 L["USAGE_INPUT_URLCALLBACK"] = "<A function or string reference to a function here>"
 
 L["TITLE_INPUT_URLTYPE"] = "URL Type"
-L["COMMENT_INPUT_URLTYPE"] = setfmt("The variable type the *URL Callback|r should be interpreted as.",
+L["COMMENT_INPUT_URLTYPE"] = self:SetFormat("The variable type the *URL Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_URLTYPE"] = "<A variable type name here, can be function|string>"
@@ -364,7 +358,7 @@ L["COMMENT_INPUT_TAGCALLBACK"] = "The function that, if any, will allow the data
 L["USAGE_INPUT_TAGCALLBACK"] = "<A string or string function here>"
 
 L["TITLE_INPUT_TAGTYPE"] = "Tag Type"
-L["COMMENT_INPUT_TAGTYPE"] = setfmt("The variable type the *Tag Callback|r should be interpreted as.",
+L["COMMENT_INPUT_TAGTYPE"] = self:SetFormat("The variable type the *Tag Callback|r should be interpreted as.",
         GREEN
 )
 L["USAGE_INPUT_TAGTYPE"] = "<A variable type name here, can be function|string>"
@@ -378,28 +372,35 @@ L["COMMENT_INPUT_SUFFIX"] = "The suffix to be used for this data."
 L["USAGE_INPUT_SUFFIX"] = "<Your message here>"
 
 -- Global Placeholder Defaults
-L["DEFAULT_DUNGEON_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
-L["DEFAULT_RAID_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", inkey)
-L["DEFAULT_SCENARIO_MESSAGE"] = setfmt("*zone_name* - In *difficulty_info* Scenario *lockout_encounters*", inkey)
-L["DEFAULT_BATTLEGROUND_MESSAGE"] = setfmt("*zone_name* - In Battleground", inkey)
-L["DEFAULT_ARENA_MESSAGE"] = setfmt("*zone_name* - In Arena", inkey)
-L["DEFAULT_FALLBACK_MESSAGE"] = setfmt("*zone_info*", inkey)
+L["DEFAULT_DUNGEON_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", inkey)
+L["DEFAULT_RAID_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", inkey)
+L["DEFAULT_SCENARIO_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Scenario *lockout_encounters*", inkey)
+L["DEFAULT_BATTLEGROUND_MESSAGE"] = self:SetFormat("*zone_name* - In Battleground", inkey)
+L["DEFAULT_ARENA_MESSAGE"] = self:SetFormat("*zone_name* - In Arena", inkey)
+L["DEFAULT_FALLBACK_MESSAGE"] = self:SetFormat("*zone_info*", inkey)
+
+-- Global Label Defaults
+L["DEFAULT_LABEL_AWAY"] = "Away"
+L["DEFAULT_LABEL_BUSY"] = "Busy"
+L["DEFAULT_LABEL_DEAD"] = "Dead"
+L["DEFAULT_LABEL_GHOST"] = "Ghost"
+L["DEFAULT_LABEL_COMBAT"] = "In Combat"
 
 -- Logging Data
 L["VERBOSE_LAST_ENCODED"] = "Last sent activity => %s"
 L["DEBUG_SEND_ACTIVITY"] = "Sending activity => %s"
 L["DEBUG_MAX_BYTES"] = "Max bytes that can be stored: %s"
-L["DEBUG_VALUE_CHANGED"] = setfmt("*%s|r changed from ^%s|r to ^%s|r", GREEN, GREY)
-L["INFO_EVENT_SKIPPED"] = setfmt("Event Skipped:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
-L["INFO_EVENT_PROCESSING"] = setfmt("Event Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
-L["INFO_PLACEHOLDER_PROCESSING"] = setfmt("Placeholder Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
+L["DEBUG_VALUE_CHANGED"] = self:SetFormat("*%s|r changed from ^%s|r to ^%s|r", GREEN, GREY)
+L["INFO_EVENT_SKIPPED"] = self:SetFormat("Event Skipped:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
+L["INFO_EVENT_PROCESSING"] = self:SetFormat("Event Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
+L["INFO_PLACEHOLDER_PROCESSING"] = self:SetFormat("Placeholder Processing:\n Name: *%s|r\n Data: ^%s|r", GREEN, GREY)
 L["INFO_RESET_CONFIG"] = "Resetting Config Data..."
 L["INFO_RESET_CONFIG_SINGLE"] = "Resetting Config Data with query => %s"
-L["INFO_OUTDATED_CONFIG"] = setfmt("Outdated Config Detected!\n Migrating from Schema *v%s|r to *v%s|r...", GREEN)
-L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = setfmt("Optional Migrations are applicable for Schema *v%s|r to *v%s|r!",
+L["INFO_OUTDATED_CONFIG"] = self:SetFormat("Outdated Config Detected!\n Migrating from Schema *v%s|r to *v%s|r...", GREEN)
+L["INFO_OPTIONAL_MIGRATION_DATA_ONE"] = self:SetFormat("Optional Migrations are applicable for Schema *v%s|r to *v%s|r!",
         GREEN
 )
-L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = setfmt("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
+L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = self:SetFormat("Please enable *%s|r and run ^/cp config migrate|r to apply them.",
         GREEN, GREY
 )
 L["ERROR_MESSAGE_OVERFLOW"] = "An RPC message cannot be processed due to exceeding the maximum bytes allowed (%s/%s)"
@@ -408,40 +409,40 @@ L["ERROR_COMMAND_UNKNOWN"] = "Unknown Command! (Input: %s)"
 L["WARNING_BUILD_UNSUPPORTED"] = "You are running an unsupported build of CraftPresence (%s)! (Ignore if Source Build)"
 L["WARNING_EVENT_RENDERING_ONE"] = "Some of your Game Settings may interfere with Rich Presence Event Generation"
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
-L["ADDON_LOAD_INFO"] = setfmt("%s Loaded.\n Use */cp|r or */craftpresence|r for commands.", GREEN, GREY)
+L["ADDON_LOAD_INFO"] = self:SetFormat("%s Loaded.\n Use */cp|r or */craftpresence|r for commands.", GREEN, GREY)
 L["ADDON_CLOSE"] = "Shutting down Discord Rich Presence..."
 L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
-L["PLACEHOLDERS_NOTE_ONE"] = setfmt("NOTE: Keys enclosed by *^|r are global (Can have inner keys),",
+L["PLACEHOLDERS_NOTE_ONE"] = self:SetFormat("NOTE: Keys enclosed by *^|r are global (Can have inner keys),",
         GREEN, outkey
 )
-L["PLACEHOLDERS_NOTE_TWO"] = setfmt("while ones enclosed by *^|r are inner (Cannot have any other keys)",
+L["PLACEHOLDERS_NOTE_TWO"] = self:SetFormat("while ones enclosed by *^|r are inner (Cannot have any other keys)",
         GREY, inkey
 )
 
 -- Dynamic Data - Access
-L["DATA_QUERY"] = setfmt("Searching for %s containing *%s|r...", GREY)
-L["DATA_FOUND_INTRO"] = setfmt("Available %s (*<key>|r => ^<value>|r):", GREEN, GREY)
-L["DATA_FOUND_NONE"] = setfmt("*No %s found within specified parameters|r", RED)
-L["DATA_FOUND_DATA"] = setfmt("*%s|r => ^%s|r", GREEN, GREY)
+L["DATA_QUERY"] = self:SetFormat("Searching for %s containing *%s|r...", GREY)
+L["DATA_FOUND_INTRO"] = self:SetFormat("Available %s (*<key>|r => ^<value>|r):", GREEN, GREY)
+L["DATA_FOUND_NONE"] = self:SetFormat("*No %s found within specified parameters|r", RED)
+L["DATA_FOUND_DATA"] = self:SetFormat("*%s|r => ^%s|r", GREEN, GREY)
 
 -- Dynamic Data - Creation
-L["COMMAND_CREATE_SUCCESS"] = setfmt("%s custom tag *%s|r for ^%s|r with the following data: ^%s|r",
+L["COMMAND_CREATE_SUCCESS"] = self:SetFormat("%s custom tag *%s|r for ^%s|r with the following data: ^%s|r",
         GREEN, GREY
 )
 L["COMMAND_CREATE_MODIFY"] = "Specified arguments will replace other data, please use the create:modify cmd"
 
 -- Dynamic Data - Removal
-L["COMMAND_REMOVE_SUCCESS"] = setfmt("Removed key within ^%s|r => *%s|r",
+L["COMMAND_REMOVE_SUCCESS"] = self:SetFormat("Removed key within ^%s|r => *%s|r",
         GREEN, GREY
 )
 L["COMMAND_REMOVE_NO_MATCH"] = "No matches found for specified arguments"
 
 -- Command: /cp integration
-L["INTEGRATION_QUERY"] = setfmt("Enabling integrations for *%s|r...", GREY)
-L["INTEGRATION_NOT_FOUND"] = setfmt("*No integrations to enable within specified parameters|r", RED)
-L["INTEGRATION_ALREADY_USED"] = setfmt("*Specified integration has already been used|r", RED)
+L["INTEGRATION_QUERY"] = self:SetFormat("Enabling integrations for *%s|r...", GREY)
+L["INTEGRATION_NOT_FOUND"] = self:SetFormat("*No integrations to enable within specified parameters|r", RED)
+L["INTEGRATION_ALREADY_USED"] = self:SetFormat("*Specified integration has already been used|r", RED)
 
 -- Command: /cp clear|clean
 L["COMMAND_CLEAR_SUCCESS"] = "Clearing active frame data..."
@@ -450,114 +451,114 @@ L["COMMAND_CLEAR_SUCCESS"] = "Clearing active frame data..."
 L["COMMAND_RESET_NOT_FOUND"] = "Config Data matching the following query was not found => %s"
 
 -- Integration: Event Modification
-L["COMMAND_EVENT_SUCCESS"] = setfmt("Successfully performed operation ^%s|r on *%s|r with binding *%s|r",
+L["COMMAND_EVENT_SUCCESS"] = self:SetFormat("Successfully performed operation ^%s|r on *%s|r with binding *%s|r",
         GREEN, GREY
 )
-L["COMMAND_EVENT_NO_TRIGGER"] = setfmt("Unable to perform operation ^%s|r on *%s|r (Invalid trigger)",
+L["COMMAND_EVENT_NO_TRIGGER"] = self:SetFormat("Unable to perform operation ^%s|r on *%s|r (Invalid trigger)",
         GREEN, GREY
 )
 
 -- Config Error Standards
-L["ERROR_RANGE_DEFAULT"] = setfmt("Sanity Checks failed for *%s|r. Please enter a number between ^%s|r and ^%s|r.",
+L["ERROR_RANGE_DEFAULT"] = self:SetFormat("Sanity Checks failed for *%s|r. Please enter a number between ^%s|r and ^%s|r.",
         GREEN, GREY
 )
-L["ERROR_STRING_DEFAULT"] = setfmt("Sanity Checks failed for *%s|r. Please enter a valid string.",
+L["ERROR_STRING_DEFAULT"] = self:SetFormat("Sanity Checks failed for *%s|r. Please enter a valid string.",
         GREEN, GREY
 )
 
 -- Config Warning Standards
-L["WARNING_VALUE_UNSAFE"] = setfmt("The value selected for *%s|r can cause malformed behavior in some cases.",
+L["WARNING_VALUE_UNSAFE"] = self:SetFormat("The value selected for *%s|r can cause malformed behavior in some cases.",
         GREEN
 )
 
 -- Function Error Standards
 L["ERROR_FUNCTION_DISABLED"] = "This function (%s) is disabled in this Client Version, please try other methods..."
-L["ERROR_FUNCTION_DEPRECATED"] = setfmt("A function your using is marked as deprecated, with the following info: *%s|r",
+L["ERROR_FUNCTION_DEPRECATED"] = self:SetFormat("A function your using is marked as deprecated, with the following info: *%s|r",
         GREY
 )
-L["ERROR_FUNCTION"] = setfmt("A function your using has encountered an error, with the following info: *%s|r",
+L["ERROR_FUNCTION"] = self:SetFormat("A function your using has encountered an error, with the following info: *%s|r",
         GREY
 )
 L["TITLE_ATTEMPTED_FUNCTION"] = "Attempted Function"
 L["TITLE_REPLACEMENT_FUNCTION"] = "Replacement Function"
 L["TITLE_REMOVAL_VERSION"] = "Removal Version"
 L["TITLE_FUNCTION_MESSAGE"] = "Message"
-L["ERROR_FUNCTION_REPLACE"] = setfmt("To fix this issue, please use the newer function or do */cp reset|r if unsure",
+L["ERROR_FUNCTION_REPLACE"] = self:SetFormat("To fix this issue, please use the newer function or do */cp reset|r if unsure",
         GREY
 )
 
 -- General Command Data
 L["USAGE_CMD_INTRO"] = "Command Usage =>"
-L["USAGE_CMD_HELP"] = setfmt(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
+L["USAGE_CMD_HELP"] = self:SetFormat(" */cp|r ^help|r or */cp|r ^?|r  -  Displays this helpful menu.",
         GREEN, GREY
 )
-L["USAGE_CMD_CONFIG"] = setfmt(" */cp|r ^config [migrate]|r  -  Displays/Migrates the *ConfigUI|r.",
+L["USAGE_CMD_CONFIG"] = self:SetFormat(" */cp|r ^config [migrate]|r  -  Displays/Migrates the *ConfigUI|r.",
         GREEN, GREY
 )
-L["USAGE_CMD_CLEAN"] = setfmt(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",
+L["USAGE_CMD_CLEAN"] = self:SetFormat(" */cp|r ^clean|r or */cp|r ^clear|r  -  Reset addon frames.",
         GREEN, GREY
 )
-L["USAGE_CMD_UPDATE"] = setfmt(" */cp|r ^update [debug]|r  -  Force or Debug a Rich Presence update.",
+L["USAGE_CMD_UPDATE"] = self:SetFormat(" */cp|r ^update [debug]|r  -  Force or Debug a Rich Presence update.",
         GREEN, GREY
 )
-L["USAGE_CMD_MINIMAP"] = setfmt(" */cp|r ^minimap|r  -  Toggles the minimap button.",
+L["USAGE_CMD_MINIMAP"] = self:SetFormat(" */cp|r ^minimap|r  -  Toggles the minimap button.",
         GREEN, GREY
 )
-L["USAGE_CMD_STATUS"] = setfmt(" */cp|r ^status|r  -  Views the last sent Rich Presence event.",
+L["USAGE_CMD_STATUS"] = self:SetFormat(" */cp|r ^status|r  -  Views the last sent Rich Presence event.",
         GREEN, GREY
 )
-L["USAGE_CMD_RESET"] = setfmt(" */cp|r ^reset [grp,key]|r  -  Reset options in the *ConfigUI|r.",
+L["USAGE_CMD_RESET"] = self:SetFormat(" */cp|r ^reset [grp,key]|r  -  Reset options in the *ConfigUI|r.",
         GREEN, GREY
 )
-L["USAGE_CMD_SET"] = setfmt(" */cp|r ^set [grp,key]|r  -  Set options in the *ConfigUI|r.",
+L["USAGE_CMD_SET"] = self:SetFormat(" */cp|r ^set [grp,key]|r  -  Set options in the *ConfigUI|r.",
         GREEN, GREY
 )
-L["USAGE_CMD_INTEGRATION"] = setfmt(" */cp|r ^integration [query]|r  -  Enable integrations.",
+L["USAGE_CMD_INTEGRATION"] = self:SetFormat(" */cp|r ^integration [query]|r  -  Enable integrations.",
         GREEN, GREY
 )
-L["USAGE_CMD_PLACEHOLDERS"] = setfmt(" */cp|r ^placeholders [create,remove,list][query]|r  -  Access placeholders.",
+L["USAGE_CMD_PLACEHOLDERS"] = self:SetFormat(" */cp|r ^placeholders [create,remove,list][query]|r  -  Access placeholders.",
         GREEN, GREY
 )
-L["USAGE_CMD_EVENTS"] = setfmt(" */cp|r ^events [create,remove,list] [query]|r  -  Access events.",
+L["USAGE_CMD_EVENTS"] = self:SetFormat(" */cp|r ^events [create,remove,list] [query]|r  -  Access events.",
         GREEN, GREY
 )
-L["USAGE_CMD_LABELS"] = setfmt(" */cp|r ^labels [create,remove,list][query]|r  -  Access player labels.",
-        GREEN, GREY
-)
-
-L["USAGE_CMD_CREATE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
-        GREEN, GREY
-)
-L["USAGE_CMD_CREATE_EVENTS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
-        GREEN, GREY
-)
-L["USAGE_CMD_CREATE_LABELS"] = setfmt(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
+L["USAGE_CMD_LABELS"] = self:SetFormat(" */cp|r ^labels [create,remove,list][query]|r  -  Access player labels.",
         GREEN, GREY
 )
 
-L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = setfmt(" *Query:|r %s ^<name>|r.",
+L["USAGE_CMD_CREATE_PLACEHOLDERS"] = self:SetFormat(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
 )
-L["USAGE_CMD_REMOVE_EVENTS"] = setfmt(" *Query:|r %s ^<name>|r.",
+L["USAGE_CMD_CREATE_EVENTS"] = self:SetFormat(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
 )
-L["USAGE_CMD_REMOVE_LABELS"] = setfmt(" *Query:|r %s ^<name>|r.",
+L["USAGE_CMD_CREATE_LABELS"] = self:SetFormat(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         GREEN, GREY
 )
 
-L["USAGE_CMD_NOTE_ONE"] = setfmt("NOTE: All commands must be prefixed with either */%s|r or */%s|r.",
+L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = self:SetFormat(" *Query:|r %s ^<name>|r.",
         GREEN, GREY
 )
-L["USAGE_CMD_NOTE_TWO"] = setfmt("Optional arguments in commands are represented by *[syntax]|r.",
+L["USAGE_CMD_REMOVE_EVENTS"] = self:SetFormat(" *Query:|r %s ^<name>|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_REMOVE_LABELS"] = self:SetFormat(" *Query:|r %s ^<name>|r.",
+        GREEN, GREY
+)
+
+L["USAGE_CMD_NOTE_ONE"] = self:SetFormat("NOTE: All commands must be prefixed with either */%s|r or */%s|r.",
+        GREEN, GREY
+)
+L["USAGE_CMD_NOTE_TWO"] = self:SetFormat("Optional arguments in commands are represented by *[syntax]|r.",
         GREEN, GREY
 )
 
 -- Frame Text Data
-L["ADDON_HEADER_VERSION"] = setfmt("%s *%s|r", PALE_CYAN)
+L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", PALE_CYAN)
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
-L["ADDON_DESCRIPTION"] = setfmt([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)
+L["ADDON_DESCRIPTION"] = self:SetFormat([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)
 
 Thanks to *Attka|r and *wowdim|r on Github for the original base project, that makes this possible.
 
@@ -566,4 +567,4 @@ Special thanks to *the-emerald/python-discord-rpc|r and *Attk4/wow-discord-rich-
 )
 
 L["ADDON_TOOLTIP_THREE"] = "Click to access config data."
-L["ADDON_TOOLTIP_FIVE"] = setfmt("Toggle minimap button by typing */cp minimap|r", PALE_CYAN)
+L["ADDON_TOOLTIP_FIVE"] = self:SetFormat("Toggle minimap button by typing */cp minimap|r", PALE_CYAN)
