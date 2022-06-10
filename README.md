@@ -132,6 +132,7 @@ These types of placeholders are designed for specialized pieces of information, 
 *   `@player_status@` - The player's current in-game status
     *   Refer to the `Labels` section of the Config UI
     *   By default, this functions for Away, Busy, and Dead/Alive player states
+    *   Will return `Unknown` if there is no applicable data
 *   `@player_reason@` - The player's current in-game reason message
     *   While normally empty, certain player states (Such as being AFK or Busy) can supply the reason string to be used here.
 *   `@player_faction@` - [The player's current faction name][UnitFactionGroup]
