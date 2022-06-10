@@ -5,7 +5,7 @@ Completely customize the way others see you play World of Warcraft via Discord's
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/9f6a38f53cd148aebb307112c7ccd947)](https://www.codacy.com/gl/CDAGaming/CraftPresence-Wow-Edition/dashboard?utm_source=gitlab.com&amp;utm_medium=referral&amp;utm_content=CDAGaming/CraftPresence-Wow-Edition&amp;utm_campaign=Badge_Grade)
 [![CraftPresence Workflow](https://github.com/CDAGaming/CraftPresence-Wow-Edition/actions/workflows/main.yml/badge.svg)](https://gitlab.com/CDAGaming/CraftPresence-Wow-Edition/-/commits/master)
 
-[![CurseForge-Downloads](http://cf.way2muchnoise.eu/full_457334_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
+[![CurseForge-Downloads](https://cf.way2muchnoise.eu/full_457334_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 [![CurseForge-Availability](https://cf.way2muchnoise.eu/versions/457334.svg)](https://www.curseforge.com/minecraft/mc-mods/craftpresence)
 
 ## How To Install
@@ -110,7 +110,9 @@ These types of placeholders are designed for specialized pieces of information, 
 *   `@realm_info@` - The player's current region and realm in use
 *   `@zone_info@` - The player's current location, formatted with zone and sub-zone info as applicable
 *   `@difficulty_info@` - The player's current difficulty info, formatted with keystone and difficulty data as applicable
+    *   Availability: 3.2.0 clients and above (Or rebased clients)
 *   `@lockout_encounters@` - The player's current lockout info within an instance, if applicable, containing total and current data
+    *   Availability: 6.0.0 clients and above
 
 #### __Direct Info__
 
