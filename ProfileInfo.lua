@@ -921,10 +921,10 @@ function CraftPresence:GenerateDefaults()
                     enabled = true,
                     prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
-                ["external_keystone_rating"] = {
+                ["internal_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(self:GetActiveKeystone().external_rating)
+        return tostring(self:GetActiveKeystone().internal_rating)
     end]]            ,
                     processType = "function",
                     registerCallback = "",
@@ -933,10 +933,10 @@ function CraftPresence:GenerateDefaults()
                     enabled = true,
                     prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
-                ["internal_keystone_rating"] = {
+                ["external_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(self:GetActiveKeystone().internal_rating)
+        return tostring(self:GetActiveKeystone().external_rating)
     end]]            ,
                     processType = "function",
                     registerCallback = "",
