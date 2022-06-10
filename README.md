@@ -284,6 +284,7 @@ The terms of service for using Discord as a service can additionally be located 
 [GetCurrentRegion]: https://wowpedia.fandom.com/wiki/API_GetCurrentRegion
 [UnitClass]: https://wowpedia.fandom.com/wiki/API_UnitClass
 [UnitRace]: https://wowpedia.fandom.com/wiki/API_UnitRace
+[UnitSex]: https://wowpedia.fandom.com/wiki/API_UnitSex
 [UnitFactionGroup]: https://wowpedia.fandom.com/wiki/API_UnitFactionGroup
 [C_Covenants.GetCovenantData]: https://wowpedia.fandom.com/wiki/API_C_Covenants.GetCovenantData
 [GetSpecialization]: https://wowpedia.fandom.com/wiki/API_GetSpecialization
