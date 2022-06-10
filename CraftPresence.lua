@@ -158,7 +158,10 @@ function CraftPresence:OnDisable()
     self:UnregisterChatCommand(self.internals.identifier)
     self:UnregisterChatCommand(self.internals.affix)
     -- Reset RPC Data to Discord
-    local resetData = self:ConcatTable(self.internals.rpc.eventTag, self.internals.rpc.eventSeperator, self:GetProperty("clientId"))
+    local resetData = self:ConcatTable(
+        self.internals.rpc.eventTag, self.internals.rpc.eventSeperator,
+        self:GetProperty("clientId")
+    )
     self:PaintMessageWait(true, false, true, resetData)
     -- Hide Minimap Icon
     if self.libraries.LDBIcon then
