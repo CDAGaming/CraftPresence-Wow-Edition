@@ -248,7 +248,7 @@ end]]                ,
                     processType = "string",
                     registerCallback = [[function (self)
     return select(2, GetInstanceInfo()) == 'party' and (
-        not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
+        not self:FindMatches(self:GetCurrentInstanceName(true), 'Garrison', false)
     )
 end]]                ,
                     tagCallback = "time_start",
@@ -467,7 +467,7 @@ end]]                ,
     -- Covenant and Faction Setup
     -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
     -- Then use the Faction as the Alliance; otherwise use Covenant Data
-    local name = GetInstanceInfo and select(1, GetInstanceInfo()) or nil
+    local name = self:GetOrDefault(self:GetCurrentInstanceName(true))
     local englishFaction, localizedFaction = UnitFactionGroup('player')
     englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
     localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
@@ -477,7 +477,7 @@ end]]                ,
         playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
     end
     -- Covenant and/or Faction data is only updated if the instance is changed
-    if (playerCovenantId == 0 or name == nil or not (
+    if (playerCovenantId == 0 or self:IsNullOrEmpty(name) or not (
             (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
                     (self:FindMatches(name, 'Zereth Mortis', false, 1, false)) or
                     (self:FindMatches(name, 'Torghast', false, 1, false)) or
@@ -645,9 +645,9 @@ end]]                ,
                     prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
                 },
                 ["localized_name"] = {
-                    minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
+                    minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-    return select(1, GetInstanceInfo())
+    return self:GetOrDefault(self:GetCurrentInstanceName(true), self.locale['TYPE_UNKNOWN'])
 end]]                ,
                     processType = "function",
                     registerCallback = "",

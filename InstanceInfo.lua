@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local pairs, max = pairs, math.max
+local pairs, max, select = pairs, math.max, select
 local strlower = string.lower
 
 -- Lockout Data Storage
@@ -117,6 +117,27 @@ function CraftPresence:GetCurrentInstanceTier()
     -- Perform the actual search, scanning by instanceID, returning UnknownTier
     -- if said instance is unable to be located in the table
     return InstanceTable[instanceID] or "UnknownTier"
+end
+
+--- Determine the Current Instance Name (Or continent name if not applicable)
+---
+--- @param ensure_accuracy boolean Whether extra API functions should be used to ensure correctness
+---
+--- @return string result
+function CraftPresence:GetCurrentInstanceName(ensure_accuracy)
+    local result = nil
+    if GetInstanceInfo then
+        result = select(1, GetInstanceInfo())
+    end
+
+    if self:IsNullOrEmpty(result) and self:GetBuildInfo("toc_version") < self:GetCompatibilityInfo("3.0.0") then
+        if ensure_accuracy then
+            SetMapToCurrentZone()
+        end
+        local continents = { GetMapContinents() }
+        result = continents[GetCurrentMapContinent()]
+    end
+    return result
 end
 
 --- Retrieve current Instance/Scenario Lockout Data

@@ -207,9 +207,9 @@ function CraftPresence:ShouldProcessData(data)
             maxTOC = self:VersionToBuild(maxTOC)
         end
 
-        shouldRegister = (self:IsNullOrEmpty(data.registerCallback) or tostring(
+        shouldRegister = (self:IsNullOrEmpty(data.registerCallback) or self:IsValueTrue(
             self:GetDynamicReturnValue(data.registerCallback, "function", self)
-        ) == "true")
+        ))
         local canAccept = shouldRegister and (self:IsWithinValue(
             currentTOC, minTOC, maxTOC, true, true, false
         ) or (data.allowRebasedApi and self:IsRebasedApi()))
@@ -316,7 +316,7 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
                     labelValue.inactiveCallback = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
                     labelValue.inactive = self:GetDynamicReturnValue(labelValue.inactiveCallback, labelValue.inactiveType, self)
                     labelValue.stateCallback = self:Replace(labelValue.stateCallback, newKey, self:GetOrDefault(newValue), true)
-                    labelValue.state = tostring(self:GetDynamicReturnValue(labelValue.stateCallback, "function", self)) == "true"
+                    labelValue.state = self:IsValueTrue(self:GetDynamicReturnValue(labelValue.stateCallback, "function", self))
                 end
                 self.labels[labelKey] = labelValue
             end
@@ -453,7 +453,7 @@ CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName,
         -- Process Callback Event Data
         -- Format: ignore_event, log_output
         local isVerbose, isDebug = self:GetProperty("verboseMode"), self:GetProperty("debugMode")
-        local ignore_event, log_output = false, (isVerbose or isDebug)
+        local ignore_event, log_output = false, false
 
         for key, value in pairs(self.registeredEvents) do
             if eventName == key then
@@ -461,8 +461,8 @@ CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName,
                     ignore_event, log_output = self:GetDynamicReturnValue(
                         value.processCallback, "function", self, lastEventName, eventName, args
                     )
-                    ignore_event = self:GetOrDefault(tostring(ignore_event) == "true", false)
-                    log_output = self:GetOrDefault(tostring(log_output) == "true", true)
+                    ignore_event = self:IsValueTrue(ignore_event)
+                    log_output = self:IsValueTrue(log_output)
                 end
                 break
             end
@@ -485,7 +485,7 @@ CraftPresence.DispatchUpdate = CraftPresence:vararg(2, function(self, eventName,
                 (log_output and self.locale["LOG_INFO"]) or nil
             local logData = self:GetLength(args) > 0 and (
                 (isVerbose and self:SerializeTable(args)) or "<...>") or self.locale["TYPE_NONE"]
-            if not self:IsNullOrEmpty(logTemplate) and log_output then
+            if not self:IsNullOrEmpty(logTemplate) then
                 self:Print(strformat(
                     logTemplate, strformat(
                         logPrefix, eventName, self:GetOrDefault(logData, self.locale["TYPE_UNKNOWN"])

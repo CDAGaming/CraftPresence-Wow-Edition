@@ -50,6 +50,18 @@ function CraftPresence:ResetIndex()
     return lastIndex
 end
 
+--- Determines if the specified object identifies as a "true" value
+--- (Meaning either a 1 or true)
+---
+--- @param obj any The object to interpret
+---
+--- @return boolean @ result
+function CraftPresence:IsValueTrue(obj)
+    if self:IsNullOrEmpty(obj) then return false end
+    obj = tostring(obj)
+    return obj == "true" or obj == "1"
+end
+
 --- Return the specified object or a fallback value if nil
 ---
 --- @param obj any The object to interpret

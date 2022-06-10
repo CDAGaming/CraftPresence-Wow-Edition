@@ -124,8 +124,10 @@ globals = {
 	"UIParent",
 	"GetAddOnMetadata",
 	"GetBuildInfo",
+	"GetCurrentMapContinent",
 	"GetCVar",
 	"GetInstanceInfo",
+	"GetMapContinents",
 	"GetNumSavedInstances",
 	"GetSavedInstanceInfo",
 	"GetScreenWidth",
@@ -138,5 +140,6 @@ globals = {
 	"InterfaceOptionsFrame_OpenToFrame",
 	"IsInInstance",
 	"ReloadUI",
-	"RequestRaidInfo"
+	"RequestRaidInfo",
+	"SetMapToCurrentZone"
 }
