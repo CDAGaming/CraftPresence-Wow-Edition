@@ -99,21 +99,21 @@ function CraftPresence:GenerateDefaults()
                 ["WagoAnalytics"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self, fieldName, oldValue, value)
-        if not self.WagoAnalytics then return end
-        if type(value) == 'boolean' then
-            self.WagoAnalytics:Switch(fieldName, value)
-        end
-        if type(value) == 'number' then
-            self.WagoAnalytics:SetCounter(fieldName, value)
-        end
-    end]]            ,
+    if not self.WagoAnalytics then return end
+    if type(value) == 'boolean' then
+        self.WagoAnalytics:Switch(fieldName, value)
+    end
+    if type(value) == 'number' then
+        self.WagoAnalytics:SetCounter(fieldName, value)
+    end
+end]]                ,
                     stateCallback = [[function (self)
-        self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.internals.name, 'X-Wago-ID'))
-    end]]            ,
+    self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.internals.name, 'X-Wago-ID'))
+end]]                ,
                     unregisterCallback = [[function (self)
-        if not self.WagoAnalytics then return end
-        self.WagoAnalytics = nil
-    end]]            ,
+    if not self.WagoAnalytics then return end
+    self.WagoAnalytics = nil
+end]]                ,
                     enabled = false
                 }
             },
@@ -123,11 +123,11 @@ function CraftPresence:GenerateDefaults()
                     activeCallback = self.locale["DEFAULT_LABEL_AWAY"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
-        return self:GetOrDefault(
-            (UnitIsAFK and UnitIsAFK('player')),
-            (self:GetUnitData('player').away) or false
-        )
-    end]]            ,
+    return self:GetOrDefault(
+        (UnitIsAFK and UnitIsAFK('player')),
+        (self:GetUnitData('player').away) or false
+    )
+end]]                ,
                     enabled = true
                 },
                 ["busy"] = {
@@ -135,11 +135,11 @@ function CraftPresence:GenerateDefaults()
                     activeCallback = self.locale["DEFAULT_LABEL_BUSY"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
-        return self:GetOrDefault(
-            (UnitIsDND and UnitIsDND('player')),
-            (self:GetUnitData('player').busy) or false
-        )
-    end]]            ,
+    return self:GetOrDefault(
+        (UnitIsDND and UnitIsDND('player')),
+        (self:GetUnitData('player').busy) or false
+    )
+end]]                ,
                     enabled = true
                 },
                 ["dead"] = {
@@ -147,11 +147,11 @@ function CraftPresence:GenerateDefaults()
                     activeCallback = self.locale["DEFAULT_LABEL_DEAD"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
-        return self:GetOrDefault(
-            (UnitIsDead and UnitIsDead('player')),
-            (self:GetUnitData('player').dead) or false
-        )
-    end]]            ,
+    return self:GetOrDefault(
+        (UnitIsDead and UnitIsDead('player')),
+        (self:GetUnitData('player').dead) or false
+    )
+end]]                ,
                     enabled = true
                 },
                 ["ghost"] = {
@@ -159,11 +159,11 @@ function CraftPresence:GenerateDefaults()
                     activeCallback = self.locale["DEFAULT_LABEL_GHOST"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
-        return self:GetOrDefault(
-            (UnitIsGhost and UnitIsGhost('player')),
-            (self:GetUnitData('player').ghost) or false
-        )
-    end]]            ,
+    return self:GetOrDefault(
+        (UnitIsGhost and UnitIsGhost('player')),
+        (self:GetUnitData('player').ghost) or false
+    )
+end]]                ,
                     enabled = true
                 },
                 ["in_combat"] = {
@@ -171,11 +171,11 @@ function CraftPresence:GenerateDefaults()
                     activeCallback = self.locale["DEFAULT_LABEL_COMBAT"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
-        return self:GetOrDefault(
-            (UnitAffectingCombat and UnitAffectingCombat('player')),
-            (self:GetUnitData('player').in_combat) or false
-        )
-    end]]            ,
+    return self:GetOrDefault(
+        (UnitAffectingCombat and UnitAffectingCombat('player')),
+        (self:GetUnitData('player').in_combat) or false
+    )
+end]]                ,
                     enabled = true
                 },
                 ["online"] = {
@@ -183,11 +183,11 @@ function CraftPresence:GenerateDefaults()
                     activeCallback = "", inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
-        return self:GetOrDefault(
-            (UnitIsConnected and UnitIsConnected('player')),
-            (self:GetUnitData('player').online) or false
-        )
-    end]]            ,
+    return self:GetOrDefault(
+        (UnitIsConnected and UnitIsConnected('player')),
+        (self:GetUnitData('player').online) or false
+    )
+end]]                ,
                     enabled = true
                 }
             },
@@ -197,10 +197,10 @@ function CraftPresence:GenerateDefaults()
                     processCallback = self.locale["DEFAULT_FALLBACK_MESSAGE"],
                     processType = "string",
                     registerCallback = [[function (self)
-        return GetInstanceInfo == nil or select(2, GetInstanceInfo()) == 'none' or (
-            self:IsNullOrEmpty(select(2, GetInstanceInfo()))
-        )
-    end]]            ,
+    return GetInstanceInfo == nil or select(2, GetInstanceInfo()) == 'none' or (
+        self:IsNullOrEmpty(select(2, GetInstanceInfo()))
+    )
+end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
@@ -211,8 +211,8 @@ function CraftPresence:GenerateDefaults()
                     processCallback = self.locale["DEFAULT_ARENA_MESSAGE"],
                     processType = "string",
                     registerCallback = [[function (self)
-        return select(2, GetInstanceInfo()) == 'arena'
-    end]]            ,
+    return select(2, GetInstanceInfo()) == 'arena'
+end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
@@ -223,8 +223,8 @@ function CraftPresence:GenerateDefaults()
                     processCallback = self.locale["DEFAULT_BATTLEGROUND_MESSAGE"],
                     processType = "string",
                     registerCallback = [[function (self)
-        return select(2, GetInstanceInfo()) == 'pvp'
-    end]]            ,
+    return select(2, GetInstanceInfo()) == 'pvp'
+end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
@@ -235,8 +235,8 @@ function CraftPresence:GenerateDefaults()
                     processCallback = self.locale["DEFAULT_RAID_MESSAGE"],
                     processType = "string",
                     registerCallback = [[function (self)
-        return select(2, GetInstanceInfo()) == 'raid'
-    end]]            ,
+    return select(2, GetInstanceInfo()) == 'raid'
+end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
@@ -247,10 +247,10 @@ function CraftPresence:GenerateDefaults()
                     processCallback = self.locale["DEFAULT_DUNGEON_MESSAGE"],
                     processType = "string",
                     registerCallback = [[function (self)
-        return select(2, GetInstanceInfo()) == 'party' and (
-            not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
-        )
-    end]]            ,
+    return select(2, GetInstanceInfo()) == 'party' and (
+        not self:FindMatches(select(1, GetInstanceInfo()), 'Garrison', false)
+    )
+end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
@@ -261,8 +261,8 @@ function CraftPresence:GenerateDefaults()
                     processCallback = self.locale["DEFAULT_SCENARIO_MESSAGE"],
                     processType = "string",
                     registerCallback = [[function (self)
-        return select(2, GetInstanceInfo()) == 'scenario'
-    end]]            ,
+    return select(2, GetInstanceInfo()) == 'scenario'
+end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
@@ -271,8 +271,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return UnitName('player')
-    end]]            ,
+    return UnitName('player')
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -283,8 +283,8 @@ function CraftPresence:GenerateDefaults()
                 ["title_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return UnitPVPName('player')
-    end]]            ,
+    return UnitPVPName('player')
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -295,8 +295,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_level"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return UnitLevel('player')
-    end]]            ,
+    return UnitLevel('player')
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -307,12 +307,12 @@ function CraftPresence:GenerateDefaults()
                 ["player_realm"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local playerRealm = self.locale['TYPE_UNKNOWN']
-        if GetRealmName then
-            playerRealm = GetRealmName()
-        end
-        return playerRealm
-    end]]            ,
+    local playerRealm = self.locale['TYPE_UNKNOWN']
+    if GetRealmName then
+        playerRealm = GetRealmName()
+    end
+    return playerRealm
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -323,13 +323,13 @@ function CraftPresence:GenerateDefaults()
                 ["player_region"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local realmData = { "US", "KR", "EU", "TW", "CH" }
-        local playerRegionId = 1
-        if GetCurrentRegion then
-            playerRegionId = GetCurrentRegion()
-        end
-        return realmData[playerRegionId]
-    end]]            ,
+    local realmData = { "US", "KR", "EU", "TW", "CH" }
+    local playerRegionId = 1
+    if GetCurrentRegion then
+        playerRegionId = GetCurrentRegion()
+    end
+    return realmData[playerRegionId]
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -340,8 +340,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_class"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return UnitClass('player')
-    end]]            ,
+    return UnitClass('player')
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -352,8 +352,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_race"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return UnitRace('player')
-    end]]            ,
+    return UnitRace('player')
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -364,13 +364,13 @@ function CraftPresence:GenerateDefaults()
                 ["player_gender"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local genderData = { "Unknown", "Male", "Female" }
-        local playerGenderId = 1
-        if UnitSex then
-            playerGenderId = UnitSex('player')
-        end
-        return genderData[playerGenderId]
-    end]]            ,
+    local genderData = { "Unknown", "Male", "Female" }
+    local playerGenderId = 1
+    if UnitSex then
+        playerGenderId = UnitSex('player')
+    end
+    return genderData[playerGenderId]
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -381,22 +381,22 @@ function CraftPresence:GenerateDefaults()
                 ["player_icon"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local genderData = { "Unknown", "Male", "Female" }
-        local playerGenderId = 1
-        local fallback = genderData[playerGenderId]
-        local playerRace, playerGender = fallback, ''
-        local result = playerRace
-        if UnitRace then
-            playerRace = UnitRace('player')
-            result = self:Replace(playerRace, '%s+', '')
-        end
-        if UnitSex then
-            playerGenderId = UnitSex('player')
-            playerGender = genderData[playerGenderId]
-            result = result .. '_' .. playerGender
-        end
-        return self:FormatAsIcon(result)
-    end]]            ,
+    local genderData = { "Unknown", "Male", "Female" }
+    local playerGenderId = 1
+    local fallback = genderData[playerGenderId]
+    local playerRace, playerGender = fallback, ''
+    local result = playerRace
+    if UnitRace then
+        playerRace = UnitRace('player')
+        result = self:Replace(playerRace, '%s+', '')
+    end
+    if UnitSex then
+        playerGenderId = UnitSex('player')
+        playerGender = genderData[playerGenderId]
+        result = result .. '_' .. playerGender
+    end
+    return self:FormatAsIcon(result)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -407,8 +407,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_status"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetUnitStatus("player").status
-    end]]            ,
+    return self:GetUnitStatus("player").status
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -419,8 +419,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_reason"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetUnitStatus("player").reason
-    end]]            ,
+    return self:GetUnitStatus("player").reason
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -431,14 +431,14 @@ function CraftPresence:GenerateDefaults()
                 ["difficulty_info"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local difficultyInfo = select(4, GetInstanceInfo())
-        -- Keystone Data
-        local activeKeystoneData = self:GetActiveKeystone()
-        if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
-            difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
-        end
-        return difficultyInfo
-    end]]            ,
+    local difficultyInfo = select(4, GetInstanceInfo())
+    -- Keystone Data
+    local activeKeystoneData = self:GetActiveKeystone()
+    if (activeKeystoneData ~= nil and not self:IsNullOrEmpty(activeKeystoneData.formattedLevel)) then
+        difficultyInfo = (difficultyInfo .. " (" .. activeKeystoneData.formattedLevel .. ")")
+    end
+    return difficultyInfo
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -449,11 +449,11 @@ function CraftPresence:GenerateDefaults()
                 ["player_faction"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local englishFaction, localizedFaction = UnitFactionGroup('player')
-        englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
-        localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
-        return localizedFaction
-    end]]            ,
+    local englishFaction, localizedFaction = UnitFactionGroup('player')
+    englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
+    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
+    return localizedFaction
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -464,30 +464,30 @@ function CraftPresence:GenerateDefaults()
                 ["player_alliance"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        -- Covenant and Faction Setup
-        -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
-        -- Then use the Faction as the Alliance; otherwise use Covenant Data
-        local name = GetInstanceInfo and select(1, GetInstanceInfo()) or nil
-        local englishFaction, localizedFaction = UnitFactionGroup('player')
-        englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
-        localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
-        local playerCovenantId, playerCovenantData = 0
-        if C_Covenants then
-            playerCovenantId = C_Covenants.GetActiveCovenantID()
-            playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
-        end
-        -- Covenant and/or Faction data is only updated if the instance is changed
-        if (playerCovenantId == 0 or name == nil or not (
-                (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
-                        (self:FindMatches(name, 'Zereth Mortis', false, 1, false)) or
-                        (self:FindMatches(name, 'Torghast', false, 1, false)) or
-                        (self:FindMatches(self:GetCurrentInstanceTier(), 'Shadowlands', false, 1, false))
-        )) then
-            return localizedFaction
-        else
-            return playerCovenantData.name
-        end
-    end]]            ,
+    -- Covenant and Faction Setup
+    -- Retail: If not in a covenant, or cannot identify that this instance belongs to Shadowlands
+    -- Then use the Faction as the Alliance; otherwise use Covenant Data
+    local name = GetInstanceInfo and select(1, GetInstanceInfo()) or nil
+    local englishFaction, localizedFaction = UnitFactionGroup('player')
+    englishFaction = self:GetOrDefault(englishFaction, self.locale['TYPE_NONE'])
+    localizedFaction = self:GetOrDefault(localizedFaction, englishFaction)
+    local playerCovenantId, playerCovenantData = 0
+    if C_Covenants then
+        playerCovenantId = C_Covenants.GetActiveCovenantID()
+        playerCovenantData = C_Covenants.GetCovenantData(playerCovenantId)
+    end
+    -- Covenant and/or Faction data is only updated if the instance is changed
+    if (playerCovenantId == 0 or name == nil or not (
+            (self:FindMatches(name, 'Shadowlands', false, 1, false)) or
+                    (self:FindMatches(name, 'Zereth Mortis', false, 1, false)) or
+                    (self:FindMatches(name, 'Torghast', false, 1, false)) or
+                    (self:FindMatches(self:GetCurrentInstanceTier(), 'Shadowlands', false, 1, false))
+    )) then
+        return localizedFaction
+    else
+        return playerCovenantData.name
+    end
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -498,13 +498,13 @@ function CraftPresence:GenerateDefaults()
                 ["player_covenant"] = {
                     minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        local covenantId = C_Covenants.GetActiveCovenantID()
-        if covenantId == 0 then
-            return self.locale['TYPE_NONE']
-        else
-            return C_Covenants.GetCovenantData(covenantId).name
-        end
-    end]]            ,
+    local covenantId = C_Covenants.GetActiveCovenantID()
+    if covenantId == 0 then
+        return self.locale['TYPE_NONE']
+    else
+        return C_Covenants.GetCovenantData(covenantId).name
+    end
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -515,41 +515,41 @@ function CraftPresence:GenerateDefaults()
                 ["player_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        -- Player Data
-        local playerName = UnitName('player')
-        local playerData = self:GetUnitStatus('player')
-        -- Extra Player Data
-        local unitLevel = UnitLevel('player')
-        local unitClass = UnitClass('player')
-        local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
-        -- Specialization Info (5.0.4 and above)
-        if GetSpecialization then
-            local specInfo, specId, specName, roleName = GetSpecialization()
-            --
-            -- Hotfix: Prevent a null-case with Spec Info
-            --
-            -- This only happens if events fire too quickly for into to populate,
-            -- or if you don't have a spec learned or available.
-            if specInfo ~= nil then
-                specId, specName = GetSpecializationInfo(specInfo)
-                if specId ~= nil then
-                    roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-                else
-                    specName = self.locale["TYPE_NONE"]
-                end
-            end
-            --
-            -- Trim and Adjust User Data
-            if not self:IsNullOrEmpty(specName) then
-                userInfo = (userInfo .. ' ' .. specName)
+    -- Player Data
+    local playerName = UnitName('player')
+    local playerData = self:GetUnitStatus('player')
+    -- Extra Player Data
+    local unitLevel = UnitLevel('player')
+    local unitClass = UnitClass('player')
+    local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
+    -- Specialization Info (5.0.4 and above)
+    if GetSpecialization then
+        local specInfo, specId, specName, roleName = GetSpecialization()
+        --
+        -- Hotfix: Prevent a null-case with Spec Info
+        --
+        -- This only happens if events fire too quickly for into to populate,
+        -- or if you don't have a spec learned or available.
+        if specInfo ~= nil then
+            specId, specName = GetSpecializationInfo(specInfo)
+            if specId ~= nil then
+                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+            else
+                specName = self.locale["TYPE_NONE"]
             end
         end
-        -- Final Parsing
-        if not self:IsNullOrEmpty(unitClass) then
-                userInfo = (userInfo .. ' ' .. unitClass)
+        --
+        -- Trim and Adjust User Data
+        if not self:IsNullOrEmpty(specName) then
+            userInfo = (userInfo .. ' ' .. specName)
         end
-        return userInfo
-    end]]            ,
+    end
+    -- Final Parsing
+    if not self:IsNullOrEmpty(unitClass) then
+            userInfo = (userInfo .. ' ' .. unitClass)
+    end
+    return userInfo
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -560,22 +560,22 @@ function CraftPresence:GenerateDefaults()
                 ["player_spec_name"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        local specInfo, specId, specName, roleName = GetSpecialization()
-        --
-        -- Hotfix: Prevent a null-case with Spec Info
-        --
-        -- This only happens if events fire too quickly for into to populate,
-        -- or if you don't have a spec learned or available.
-        if specInfo ~= nil then
-            specId, specName = GetSpecializationInfo(GetSpecialization())
-            if specId ~= nil then
-                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-            else
-                specName = self.locale["TYPE_NONE"]
-            end
+    local specInfo, specId, specName, roleName = GetSpecialization()
+    --
+    -- Hotfix: Prevent a null-case with Spec Info
+    --
+    -- This only happens if events fire too quickly for into to populate,
+    -- or if you don't have a spec learned or available.
+    if specInfo ~= nil then
+        specId, specName = GetSpecializationInfo(GetSpecialization())
+        if specId ~= nil then
+            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        else
+            specName = self.locale["TYPE_NONE"]
         end
-        return specName
-    end]]            ,
+    end
+    return specName
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -586,22 +586,22 @@ function CraftPresence:GenerateDefaults()
                 ["player_spec_role"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        local specInfo, specId, specName, roleName = GetSpecialization()
-        --
-        -- Hotfix: Prevent a null-case with Spec Info
-        --
-        -- This only happens if events fire too quickly for into to populate,
-        -- or if you don't have a spec learned or available.
-        if specInfo ~= nil then
-            specId, specName = GetSpecializationInfo(GetSpecialization())
-            if specId ~= nil then
-                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-            else
-                specName = self.locale["TYPE_NONE"]
-            end
+    local specInfo, specId, specName, roleName = GetSpecialization()
+    --
+    -- Hotfix: Prevent a null-case with Spec Info
+    --
+    -- This only happens if events fire too quickly for into to populate,
+    -- or if you don't have a spec learned or available.
+    if specInfo ~= nil then
+        specId, specName = GetSpecializationInfo(GetSpecialization())
+        if specId ~= nil then
+            roleName = self:FormatWord(GetSpecializationRoleByID(specId))
+        else
+            specName = self.locale["TYPE_NONE"]
         end
-        return roleName
-    end]]            ,
+    end
+    return roleName
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -612,19 +612,19 @@ function CraftPresence:GenerateDefaults()
                 ["realm_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        -- Get Player Info
-        local realmData = { "US", "KR", "EU", "TW", "CH" }
-        local playerRealm = self.locale['TYPE_UNKNOWN']
-        local playerRegionId = 1
-        if GetRealmName then
-            playerRealm = GetRealmName()
-        end
-        if GetCurrentRegion then
-            playerRegionId = GetCurrentRegion()
-        end
-        local playerRegion = realmData[playerRegionId]
-        return (playerRegion .. ' - ' .. playerRealm)
-    end]]            ,
+    -- Get Player Info
+    local realmData = { "US", "KR", "EU", "TW", "CH" }
+    local playerRealm = self.locale['TYPE_UNKNOWN']
+    local playerRegionId = 1
+    if GetRealmName then
+        playerRealm = GetRealmName()
+    end
+    if GetCurrentRegion then
+        playerRegionId = GetCurrentRegion()
+    end
+    local playerRegion = realmData[playerRegionId]
+    return (playerRegion .. ' - ' .. playerRealm)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -635,8 +635,8 @@ function CraftPresence:GenerateDefaults()
                 ["player_covenant_renown"] = {
                     minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        return tostring(C_CovenantSanctumUI.GetRenownLevel())
-    end]]            ,
+    return tostring(C_CovenantSanctumUI.GetRenownLevel())
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -647,8 +647,8 @@ function CraftPresence:GenerateDefaults()
                 ["localized_name"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return select(1, GetInstanceInfo())
-    end]]            ,
+    return select(1, GetInstanceInfo())
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -659,8 +659,8 @@ function CraftPresence:GenerateDefaults()
                 ["instance_type"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return select(2, GetInstanceInfo())
-    end]]            ,
+    return select(2, GetInstanceInfo())
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -671,8 +671,8 @@ function CraftPresence:GenerateDefaults()
                 ["instance_difficulty"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(3, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(3, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -683,8 +683,8 @@ function CraftPresence:GenerateDefaults()
                 ["difficulty_name"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return select(4, GetInstanceInfo())
-    end]]            ,
+    return select(4, GetInstanceInfo())
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -695,18 +695,18 @@ function CraftPresence:GenerateDefaults()
                 ["current_players"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local current = 0
-        if GetNumGroupMembers then
-            current = GetNumGroupMembers()
-        else
-            if UnitInParty("player") and GetNumPartyMembers then
-                current = GetNumPartyMembers()
-            elseif UnitInRaid("player") and GetNumRaidMembers then
-                current = GetNumRaidMembers()
-            end
+    local current = 0
+    if GetNumGroupMembers then
+        current = GetNumGroupMembers()
+    else
+        if UnitInParty("player") and GetNumPartyMembers then
+            current = GetNumPartyMembers()
+        elseif UnitInRaid("player") and GetNumRaidMembers then
+            current = GetNumRaidMembers()
         end
-        return tostring(current)
-    end]]            ,
+    end
+    return tostring(current)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -717,8 +717,8 @@ function CraftPresence:GenerateDefaults()
                 ["max_players"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(5, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(5, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -729,8 +729,8 @@ function CraftPresence:GenerateDefaults()
                 ["dynamic_difficulty"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(6, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(6, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -741,8 +741,8 @@ function CraftPresence:GenerateDefaults()
                 ["is_dynamic"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(7, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(7, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -753,8 +753,8 @@ function CraftPresence:GenerateDefaults()
                 ["instance_id"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(8, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(8, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -765,8 +765,8 @@ function CraftPresence:GenerateDefaults()
                 ["instance_group_size"] = {
                     minimumTOC = "50400", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(9, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(9, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -777,8 +777,8 @@ function CraftPresence:GenerateDefaults()
                 ["lfg_dungeon_id"] = {
                     minimumTOC = "80000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(select(10, GetInstanceInfo()))
-    end]]            ,
+    return tostring(select(10, GetInstanceInfo()))
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -789,8 +789,8 @@ function CraftPresence:GenerateDefaults()
                 ["zone_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetOrDefault(GetRealZoneText(), self.locale['TYPE_UNKNOWN'])
-    end]]            ,
+    return self:GetOrDefault(GetRealZoneText(), self.locale['TYPE_UNKNOWN'])
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -801,8 +801,8 @@ function CraftPresence:GenerateDefaults()
                 ["sub_zone_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetOrDefault(GetSubZoneText(), self.locale["TYPE_UNKNOWN"])
-    end]]            ,
+    return self:GetOrDefault(GetSubZoneText(), self.locale["TYPE_UNKNOWN"])
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -813,23 +813,23 @@ function CraftPresence:GenerateDefaults()
                 ["zone_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        -- Zone Data
-        local formatted_zone_info
-        local zone_name = GetRealZoneText()
-        local sub_name = GetSubZoneText()
-        -- Null-Case to ensure Zone Name always equals something
-        if self:IsNullOrEmpty(zone_name) then
-            zone_name = self.locale['TYPE_UNKNOWN']
-        end
-        -- Format the zone info based on zone data
-        if self:IsNullOrEmpty(sub_name) then
-            formatted_zone_info = zone_name
-            sub_name = self.locale['TYPE_UNKNOWN']
-        else
-            formatted_zone_info = (sub_name .. ' - ' .. zone_name)
-        end
-        return formatted_zone_info
-    end]]            ,
+    -- Zone Data
+    local formatted_zone_info
+    local zone_name = GetRealZoneText()
+    local sub_name = GetSubZoneText()
+    -- Null-Case to ensure Zone Name always equals something
+    if self:IsNullOrEmpty(zone_name) then
+        zone_name = self.locale['TYPE_UNKNOWN']
+    end
+    -- Format the zone info based on zone data
+    if self:IsNullOrEmpty(sub_name) then
+        formatted_zone_info = zone_name
+        sub_name = self.locale['TYPE_UNKNOWN']
+    else
+        formatted_zone_info = (sub_name .. ' - ' .. zone_name)
+    end
+    return formatted_zone_info
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -840,12 +840,12 @@ function CraftPresence:GenerateDefaults()
                 ["item_level"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-        if GetAverageItemLevel then
-            avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-        end
-        return string.format("%.2f", avgItemLevel or 0)
-    end]]            ,
+    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
+    if GetAverageItemLevel then
+        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    end
+    return string.format("%.2f", avgItemLevel or 0)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -856,12 +856,12 @@ function CraftPresence:GenerateDefaults()
                 ["item_level_equipped"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-        if GetAverageItemLevel then
-            avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-        end
-        return string.format("%.2f", avgItemLevelEquipped or 0)
-    end]]            ,
+    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
+    if GetAverageItemLevel then
+        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    end
+    return string.format("%.2f", avgItemLevelEquipped or 0)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -872,12 +872,12 @@ function CraftPresence:GenerateDefaults()
                 ["item_level_pvp"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
-        if GetAverageItemLevel then
-            avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
-        end
-        return string.format("%.2f", avgItemLevelPvp or 0)
-    end]]            ,
+    local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
+    if GetAverageItemLevel then
+        avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    end
+    return string.format("%.2f", avgItemLevelPvp or 0)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -888,8 +888,8 @@ function CraftPresence:GenerateDefaults()
                 ["active_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetActiveKeystone().formattedLevel
-    end]]            ,
+    return self:GetActiveKeystone().formattedLevel
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -900,8 +900,8 @@ function CraftPresence:GenerateDefaults()
                 ["active_keystone_affixes"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetActiveKeystone().formattedAffixes
-    end]]            ,
+    return self:GetActiveKeystone().formattedAffixes
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -912,8 +912,8 @@ function CraftPresence:GenerateDefaults()
                 ["active_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(self:GetActiveKeystone().rating)
-    end]]            ,
+    return tostring(self:GetActiveKeystone().rating)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -924,8 +924,8 @@ function CraftPresence:GenerateDefaults()
                 ["internal_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(self:GetActiveKeystone().internal_rating)
-    end]]            ,
+    return tostring(self:GetActiveKeystone().internal_rating)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -936,8 +936,8 @@ function CraftPresence:GenerateDefaults()
                 ["external_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return tostring(self:GetActiveKeystone().external_rating)
-    end]]            ,
+    return tostring(self:GetActiveKeystone().external_rating)
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -948,8 +948,8 @@ function CraftPresence:GenerateDefaults()
                 ["owned_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-        return self:GetOwnedKeystone().formattedLevel
-    end]]            ,
+    return self:GetOwnedKeystone().formattedLevel
+end]]                ,
                     processType = "function",
                     registerCallback = "",
                     tagCallback = "",
@@ -960,13 +960,13 @@ function CraftPresence:GenerateDefaults()
                 ["lockout_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        return self:GetCurrentLockoutData(true).formattedEncounterData
-    end]]            ,
+    return self:GetCurrentLockoutData(true).formattedEncounterData
+end]]                ,
                     processType = "function",
                     registerCallback = [[function (self)
-        local lockoutData = self:GetCurrentLockoutData(true)
-        return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
-    end]]            ,
+    local lockoutData = self:GetCurrentLockoutData(true)
+    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
+end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
@@ -975,13 +975,13 @@ function CraftPresence:GenerateDefaults()
                 ["lockout_current_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        return self:GetCurrentLockoutData(true).currentEncounters
-    end]]            ,
+    return self:GetCurrentLockoutData(true).currentEncounters
+end]]                ,
                     processType = "function",
                     registerCallback = [[function (self)
-        local lockoutData = self:GetCurrentLockoutData(true)
-        return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
-    end]]            ,
+    local lockoutData = self:GetCurrentLockoutData(true)
+    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
+end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
@@ -990,13 +990,13 @@ function CraftPresence:GenerateDefaults()
                 ["lockout_total_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
-        return self:GetCurrentLockoutData(true).totalEncounters
-    end]]            ,
+    return self:GetCurrentLockoutData(true).totalEncounters
+end]]                ,
                     processType = "function",
                     registerCallback = [[function (self)
-        local lockoutData = self:GetCurrentLockoutData(true)
-        return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
-    end]]            ,
+    local lockoutData = self:GetCurrentLockoutData(true)
+    return lockoutData ~= nil and lockoutData.currentEncounters > 0 and lockoutData.totalEncounters > 0
+end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
@@ -1007,22 +1007,22 @@ function CraftPresence:GenerateDefaults()
                 ["CHAT_MSG_SYSTEM"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self, _, _, args)
-        local splitMessage = self:Split(args[1], ':', false, true)
-        local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
-        local isAfkStatus = args[1] == CLEARED_AFK or args[1] == MARKED_AFK or self:StartsWith(args[1], afkFormat[1])
-        local busyFormat = self:Split(MARKED_DND, ':', false, true)
-        local isBusyStatus = args[1] == CLEARED_DND or self:StartsWith(args[1], busyFormat[1])
-        if isAfkStatus then
-            self:SetCachedUnitData('player', 'away', args[1] ~= CLEARED_AFK and isAfkStatus)
-            self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_AFK_MESSAGE))
-        elseif isBusyStatus then
-            self:SetCachedUnitData('player', 'busy', args[1] ~= CLEARED_DND and isBusyStatus)
-            self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_DND_MESSAGE))
-        else
-            self:SetCachedUnitData('player', 'reason', '')
-        end
-        return not (isAfkStatus or isBusyStatus)
-    end]]            ,
+    local splitMessage = self:Split(args[1], ':', false, true)
+    local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
+    local isAfkStatus = args[1] == CLEARED_AFK or args[1] == MARKED_AFK or self:StartsWith(args[1], afkFormat[1])
+    local busyFormat = self:Split(MARKED_DND, ':', false, true)
+    local isBusyStatus = args[1] == CLEARED_DND or self:StartsWith(args[1], busyFormat[1])
+    if isAfkStatus then
+        self:SetCachedUnitData('player', 'away', args[1] ~= CLEARED_AFK and isAfkStatus)
+        self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_AFK_MESSAGE))
+    elseif isBusyStatus then
+        self:SetCachedUnitData('player', 'busy', args[1] ~= CLEARED_DND and isBusyStatus)
+        self:SetCachedUnitData('player', 'reason', self:GetOrDefault(splitMessage[2], DEFAULT_DND_MESSAGE))
+    else
+        self:SetCachedUnitData('player', 'reason', '')
+    end
+    return not (isAfkStatus or isBusyStatus)
+end]]                ,
                     registerCallback = "",
                     eventCallback = "function(self) return self.defaultEventCallback end",
                     enabled = true
@@ -1079,8 +1079,8 @@ function CraftPresence:GenerateDefaults()
                 ["PLAYER_FLAGS_CHANGED"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self, lastName, _, args)
-        return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player'
-    end]]            ,
+    return lastName == 'CHAT_MSG_SYSTEM' or args[1] ~= 'player'
+end]]                ,
                     registerCallback = "",
                     eventCallback = "function(self) return self.defaultEventCallback end",
                     enabled = true
