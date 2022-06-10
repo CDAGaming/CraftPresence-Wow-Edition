@@ -97,7 +97,7 @@ function CraftPresence:GetCurrentInstanceTier()
         return "NotAnInstance"
     end
 
-    local _, instanceType, _, _ = GetInstanceInfo()
+    local instanceType = select(2, GetInstanceInfo())
     local unitMapID = C_Map.GetBestMapForUnit("player")
     if not unitMapID then
         unitMapID = C_Map.GetFallbackWorldMapID()
@@ -126,16 +126,14 @@ end
 --- @return string result
 function CraftPresence:GetCurrentInstanceName(ensure_accuracy)
     local result = nil
-    if GetInstanceInfo then
-        result = select(1, GetInstanceInfo())
-    end
-
-    if self:IsNullOrEmpty(result) and self:GetBuildInfo("toc_version") < self:GetCompatibilityInfo("3.0.0") then
+    if self:GetBuildInfo("toc_version") < self:GetCompatibilityInfo("3.0.0") then
         if ensure_accuracy then
             SetMapToCurrentZone()
         end
         local continents = { GetMapContinents() }
         result = continents[GetCurrentMapContinent()]
+    elseif GetInstanceInfo then
+        result = select(1, GetInstanceInfo())
     end
     return result
 end

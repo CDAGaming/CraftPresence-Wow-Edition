@@ -24,7 +24,8 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, strupper, tostring = string.format, string.upper, tostring
-local tinsert, tconcat, pairs, type = table.insert, table.concat, pairs, type
+local tinsert, tconcat = table.insert, table.concat
+local pairs, type, select = pairs, type, select
 
 -- GAME GETTERS AND SETTERS
 
@@ -105,16 +106,16 @@ end
 --- Retrieves whether the instance has (or should be marked as) recently changed
 --- @return boolean @ hasInstanceChanged
 function CraftPresence:HasInstanceChanged()
-    local has_changed = false
-    if GetInstanceInfo then
-        local name, instanceType = GetInstanceInfo()
-        has_changed = (((lastInstanceState == nil) or (instanceType ~= lastInstanceState)) or
-            ((lastAreaName == nil) or (name ~= lastAreaName)))
+    local has_changed, areaName, instanceState = false, self:GetCurrentInstanceName(true), nil
+    if self:GetBuildInfo("toc_version") >= self:GetCompatibilityInfo("3.0.0") then
+        instanceState = select(2, GetInstanceInfo())
+    end
 
-        if has_changed then
-            lastInstanceState = instanceType
-            lastAreaName = name
-        end
+    has_changed = (((lastInstanceState == nil) or (instanceState ~= lastInstanceState)) or
+            ((lastAreaName == nil) or (areaName ~= lastAreaName)))
+    if has_changed then
+        lastInstanceState = instanceState
+        lastAreaName = areaName
     end
     return self:GetOrDefault(hasInstanceChanged or has_changed, false)
 end
