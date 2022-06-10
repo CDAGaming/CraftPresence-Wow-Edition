@@ -465,7 +465,7 @@ L["USAGE_CMD_INTRO"] = "Benutzung =>"
 L["USAGE_CMD_HELP"] = self:SetFormat(" */cp|r ^help|r or */cp|r ^?|r  -  Zeigt dieses hilfreiche Menü an.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_CONFIG"] = self:SetFormat(" */cp|r ^config [migrate]|r  -  Displays/Migrates the *ConfigUI|r.",
+L["USAGE_CMD_CONFIG"] = self:SetFormat(" */cp|r ^config [migrate,standalone]|r  -  Displays/Migrates the *ConfigUI|r.",
         self.colors.GREEN, self.colors.GREY
 )
 L["USAGE_CMD_CLEAN"] = self:SetFormat(" */cp|r ^clean|r or */cp|r ^clear|r  -  Setzt die Addon-Frames zurück.",
