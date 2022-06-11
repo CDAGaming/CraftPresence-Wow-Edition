@@ -107,7 +107,7 @@ end
 --- @return boolean @ hasInstanceChanged
 function CraftPresence:HasInstanceChanged()
     local has_changed, areaName, instanceState = false, self:GetCurrentInstanceName(true), nil
-    if self:GetBuildInfo("toc_version") >= self:GetCompatibilityInfo("3.0.0") then
+    if self:IsRebasedApi() or self:GetBuildInfo("toc_version") >= self:GetCompatibilityInfo("3.0.0") then
         instanceState = select(2, GetInstanceInfo())
     end
 
