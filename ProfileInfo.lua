@@ -866,7 +866,7 @@ end]]                ,
         local target = "player"
         _, avgItemLevel = GearScore_GetScore(UnitName(target), target)
     end
-    return string.format("%.2f", avgItemLevelEquipped or 0)
+    return string.format("%.2f", avgItemLevelEquipped or avgItemLevel)
 end]]                ,
                     processType = "function",
                     registerCallback = "",
@@ -885,7 +885,7 @@ end]]                ,
         local target = "player"
         _, avgItemLevel = GearScore_GetScore(UnitName(target), target)
     end
-    return string.format("%.2f", avgItemLevelPvp or 0)
+    return string.format("%.2f", avgItemLevelPvp or avgItemLevel)
 end]]                ,
                     processType = "function",
                     registerCallback = "",
