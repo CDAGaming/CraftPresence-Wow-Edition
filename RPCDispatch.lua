@@ -300,7 +300,7 @@ function CraftPresence:CleanFrames()
     for i = 1, frame_count do
         self:PaintFrame(frames[i], 0, 0, 0, 0)
     end
-    CraftPresence.canUseExternals = true
+    self.canUseExternals = true
 end
 
 --- Creates and encodes a new RPC event from placeholder and conditional data
