@@ -131,7 +131,7 @@ These types of placeholders are designed for specialized pieces of information, 
     *   `genderData` can be tweaked to customize the result, if desired
 *   `@player_status@` - The player's current in-game status
     *   Refer to the `Labels` section of the Config UI
-    *   By default, this functions for Away, Busy, and Dead/Alive player states
+    *   By default, this function supports Away, Busy, and Dead/Alive player states
     *   Will return `Unknown` if there is no applicable data
 *   `@player_reason@` - The player's current in-game reason message
     *   While normally empty, certain player states (Such as being AFK or Busy) can supply the reason string to be used here.
@@ -156,8 +156,9 @@ These types of placeholders are designed for specialized pieces of information, 
     *   Availability: 9.0.0 clients and above
 *   `@localized_name@` - The player's current in-game map instance name
     *   This can be otherwise known as the continent name
-    *   Uses the 1st return value from [GetInstanceInfo]
-    *   Availability: 3.2.0 clients and above (Or rebased clients)
+    *   Returns `Unknown` if there is no applicable data
+    *   For Clients at 3.2.0 or above (Or clients that are rebased), this function uses the 1st return value from [GetInstanceInfo]
+    *   For Clients below 3.2.0 that are not rebased, this function uses the World Map's continent name
 *   `@instance_type@` - The player's current in-game instance type
     *   Uses the 2nd return value from [GetInstanceInfo]
     *   Availability: 3.2.0 clients and above (Or rebased clients)
@@ -193,13 +194,13 @@ These types of placeholders are designed for specialized pieces of information, 
     *   Returns `Unknown` if in an indeterminable sub-zone
 *   `@item_level@` - The player's current item level
     *   Uses the 1st return value from [GetAverageItemLevel]
-    *   Returns `0` is function is not available or result is null
+    *   Returns `0` if the function is not available or result is null
 *   `@item_level_equipped@` - The player's currently equipped item level
     *   Uses the 2nd return value from [GetAverageItemLevel]
-    *   Returns `0` is function is not available or result is null
+    *   Returns `@item_level@` if the function is not available or result is null
 *   `@item_level_pvp@` - The player's currently scaled item level, for pvp scenarios
     *   Uses the 3rd return value from [GetAverageItemLevel]
-    *   Returns `0` is function is not available or result is null
+    *   Returns `@item_level@` if the function is not available or result is null
 *   `@active_keystone_level@` - The player's currently active keystone level
     *   See [CraftPresence/InstanceInfo] for more info on retrieving this output
     *   Availability: 5.0.0 clients and above
