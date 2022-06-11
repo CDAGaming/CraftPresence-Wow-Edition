@@ -843,6 +843,9 @@ end]]                ,
     local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
     if GetAverageItemLevel then
         avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    elseif GearScore_GetScore then
+        local target = "player"
+        _, avgItemLevel = GearScore_GetScore(UnitName(target), target)
     end
     return string.format("%.2f", avgItemLevel or 0)
 end]]                ,
@@ -859,6 +862,9 @@ end]]                ,
     local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
     if GetAverageItemLevel then
         avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    elseif GearScore_GetScore then
+        local target = "player"
+        _, avgItemLevel = GearScore_GetScore(UnitName(target), target)
     end
     return string.format("%.2f", avgItemLevelEquipped or 0)
 end]]                ,
@@ -875,6 +881,9 @@ end]]                ,
     local avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = 0, 0, 0
     if GetAverageItemLevel then
         avgItemLevel, avgItemLevelEquipped, avgItemLevelPvp = GetAverageItemLevel()
+    elseif GearScore_GetScore then
+        local target = "player"
+        _, avgItemLevel = GearScore_GetScore(UnitName(target), target)
     end
     return string.format("%.2f", avgItemLevelPvp or 0)
 end]]                ,
