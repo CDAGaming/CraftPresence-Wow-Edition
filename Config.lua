@@ -203,7 +203,8 @@ function CraftPresence:GetOptions()
                 end,
                 args = self:GenerateDynamicTable("placeholders", self.locale["CATEGORY_TITLE_PLACEHOLDERS_EXTENDED"],
                     function(count)
-                        return strformat(self.locale["CATEGORY_COMMENT_PLACEHOLDERS_INFO"], count, (count == 1 and "") or "s")
+                        return strformat(self.locale["CATEGORY_COMMENT_PLACEHOLDERS_INFO"], count,
+                            (count == 1 and "") or "s")
                     end
                 )
             },
@@ -324,8 +325,8 @@ function CraftPresence:GetOptions()
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     callbackDelay = {
-                        type = "range", order = self:GetNextIndex(), width = 1.50,
-                        min = self.locale["MINIMUM_CALLBACK_DELAY"], max = self.locale["MAXIMUM_CALLBACK_DELAY"], step = 1,
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = self.locale["MINIMUM_CALLBACK_DELAY"], max = self.locale["MAXIMUM_CALLBACK_DELAY"],
                         name = self:GetConfigTitle("CALLBACK_DELAY"),
                         desc = self:GetConfigComment("CALLBACK_DELAY", nil, nil, nil, defaults.callbackDelay),
                         get = function(_)
@@ -343,7 +344,8 @@ function CraftPresence:GetOptions()
                                 self:PrintChangedValue(self.locale["TITLE_CALLBACK_DELAY"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self.locale["TITLE_CALLBACK_DELAY"])
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"],
+                                            self.locale["TITLE_CALLBACK_DELAY"])
                                     )
                                 end
                             else
@@ -355,8 +357,8 @@ function CraftPresence:GetOptions()
                         end
                     },
                     frameClearDelay = {
-                        type = "range", order = self:GetNextIndex(), width = 1.50,
-                        min = self.locale["MINIMUM_FRAME_CLEAR_DELAY"], max = self.locale["MAXIMUM_FRAME_CLEAR_DELAY"], step = 1,
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = self.locale["MINIMUM_FRAME_CLEAR_DELAY"], max = self.locale["MAXIMUM_FRAME_CLEAR_DELAY"],
                         name = self:GetConfigTitle("FRAME_CLEAR_DELAY"),
                         desc = self:GetConfigComment("FRAME_CLEAR_DELAY", nil, nil, nil, defaults.frameClearDelay),
                         get = function(_)
@@ -374,13 +376,17 @@ function CraftPresence:GetOptions()
                                 self:PrintChangedValue(self.locale["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self.locale["TITLE_FRAME_CLEAR_DELAY"])
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"],
+                                            self.locale["TITLE_FRAME_CLEAR_DELAY"])
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self.locale["TITLE_FRAME_CLEAR_DELAY"],
-                                        self.locale["MINIMUM_FRAME_CLEAR_DELAY"], self.locale["MAXIMUM_FRAME_CLEAR_DELAY"])
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"],
+                                        self.locale["TITLE_FRAME_CLEAR_DELAY"],
+                                        self.locale["MINIMUM_FRAME_CLEAR_DELAY"],
+                                        self.locale["MAXIMUM_FRAME_CLEAR_DELAY"]
+                                    )
                                 )
                             end
                         end
@@ -389,8 +395,8 @@ function CraftPresence:GetOptions()
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     frameSize = {
-                        type = "range", order = self:GetNextIndex(), width = 1.50,
-                        min = self.locale["MINIMUM_FRAME_SIZE"], max = self.locale["MAXIMUM_FRAME_SIZE"], step = 1,
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = self.locale["MINIMUM_FRAME_SIZE"], max = self.locale["MAXIMUM_FRAME_SIZE"],
                         name = self:GetConfigTitle("FRAME_SIZE"),
                         desc = self:GetConfigComment("FRAME_SIZE", nil, nil, nil, defaults.frameSize),
                         get = function(_)

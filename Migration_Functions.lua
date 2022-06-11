@@ -102,7 +102,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 end
 
                 placeholders = self:CombineTables(
-                        defaults.placeholders, placeholders
+                    defaults.placeholders, placeholders
                 )
 
                 local old_global_prefix = self:GetOrDefault(self:GetProperty("globalPlaceholderKey"))
@@ -157,8 +157,8 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             local default = defaults.placeholders
             for k, _ in pairs(data) do
                 data[k].allowRebasedApi = self:GetOrDefault(
-                        data[k].allowRebasedApi,
-                        self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
+                    data[k].allowRebasedApi,
+                    self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
                 )
             end
             self:SetProperty("placeholders", nil, data)
@@ -167,8 +167,8 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             default = defaults.events
             for k, _ in pairs(data) do
                 data[k].allowRebasedApi = self:GetOrDefault(
-                        data[k].allowRebasedApi,
-                        self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
+                    data[k].allowRebasedApi,
+                    self:GetOrDefault((default[k] and default[k].allowRebasedApi), false)
                 )
             end
             self:SetProperty("events", nil, data)
@@ -232,8 +232,8 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                             v.inactive = nil
                         end
                         v.stateCallback = self:GetOrDefault(
-                                v.stateCallback,
-                                self:GetOrDefault(defaultLabels[k] and defaultLabels[k].stateCallback)
+                            v.stateCallback,
+                            self:GetOrDefault(defaultLabels[k] and defaultLabels[k].stateCallback)
                         )
                         v.enabled = self:GetOrDefault(v.enabled, true)
                         v.minimumTOC = self:GetOrDefault(v.minimumTOC)
@@ -249,8 +249,8 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 for k, v in pairs(placeholderData) do
                     if type(v) == "table" then
                         v.suffix = self:GetOrDefault(
-                                v.suffix,
-                                self:GetOrDefault(v.prefix)
+                            v.suffix,
+                            self:GetOrDefault(v.prefix)
                         )
                     end
                     placeholderData[k] = v
@@ -291,11 +291,11 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 local newLargeImage = presenceData["largeImage"]
                 local defaultLargeImage = defaultPresence["largeImage"]
                 newLargeImage.keyCallback = self:GetOrDefault(
-                        self:GetProperty("largeImageKey"), defaultLargeImage.keyCallback
+                    self:GetProperty("largeImageKey"), defaultLargeImage.keyCallback
                 )
                 self:SetProperty("largeImageKey", nil, nil)
                 newLargeImage.messageCallback = self:GetOrDefault(
-                        self:GetProperty("largeImageMessage"), defaultLargeImage.messageCallback
+                    self:GetProperty("largeImageMessage"), defaultLargeImage.messageCallback
                 )
                 self:SetProperty("largeImageMessage", nil, nil)
                 presenceData["largeImage"] = newLargeImage
@@ -303,21 +303,21 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 local newSmallImage = presenceData["smallImage"]
                 local defaultSmallImage = defaultPresence["smallImage"]
                 newSmallImage.keyCallback = self:GetOrDefault(
-                        self:GetProperty("smallImageKey"), defaultSmallImage.keyCallback
+                    self:GetProperty("smallImageKey"), defaultSmallImage.keyCallback
                 )
                 self:SetProperty("smallImageKey", nil, nil)
                 newSmallImage.messageCallback = self:GetOrDefault(
-                        self:GetProperty("smallImageMessage"), defaultSmallImage.messageCallback
+                    self:GetProperty("smallImageMessage"), defaultSmallImage.messageCallback
                 )
                 self:SetProperty("smallImageMessage", nil, nil)
                 presenceData["smallImage"] = newSmallImage
 
                 presenceData["state"].messageCallback = self:GetOrDefault(
-                        self:GetProperty("gameStateMessage"), defaultPresence["state"].messageCallback
+                    self:GetProperty("gameStateMessage"), defaultPresence["state"].messageCallback
                 )
                 self:SetProperty("gameStateMessage", nil, nil)
                 presenceData["details"].messageCallback = self:GetOrDefault(
-                        self:GetProperty("detailsMessage"), defaultPresence["details"].messageCallback
+                    self:GetProperty("detailsMessage"), defaultPresence["details"].messageCallback
                 )
                 self:SetProperty("detailsMessage", nil, nil)
 

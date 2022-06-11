@@ -112,7 +112,7 @@ function CraftPresence:HasInstanceChanged()
     end
 
     has_changed = (((lastInstanceState == nil) or (instanceState ~= lastInstanceState)) or
-            ((lastAreaName == nil) or (areaName ~= lastAreaName)))
+        ((lastAreaName == nil) or (areaName ~= lastAreaName)))
     if has_changed then
         lastInstanceState = instanceState
         lastAreaName = areaName

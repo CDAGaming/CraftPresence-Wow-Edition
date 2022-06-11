@@ -146,7 +146,9 @@ function CraftPresence:CreateFrames(size)
     if not size then return end
     frame_count = floor(GetScreenWidth() / size)
     if self:GetProperty("debugMode") then
-        self:Print(strformat(self.locale["LOG_DEBUG"], strformat(self.locale["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))))
+        self:Print(strformat(self.locale["LOG_DEBUG"],
+            strformat(self.locale["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))
+        ))
     end
 
     for i = 1, frame_count do
@@ -223,7 +225,9 @@ function CraftPresence:PaintSomething(text)
     local max_bytes = (frame_count - 1) * 3
     local text_length = self:GetLength(text)
     if text_length >= max_bytes then
-        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"], tostring(text_length), tostring(max_bytes)))
+        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"],
+            tostring(text_length), tostring(max_bytes)
+        ))
         return
     end
 

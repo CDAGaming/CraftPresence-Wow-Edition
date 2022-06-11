@@ -279,12 +279,16 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
             for presenceKey, presenceValue in pairs(self.presenceData) do
                 if self:ShouldProcessData(presenceValue) then
                     if presenceValue.keyCallback then
-                        presenceValue.keyCallback = self:Replace(presenceValue.keyCallback, newKey, self:GetOrDefault(newValue), true)
-                        presenceValue.keyResult = self:GetDynamicReturnValue(presenceValue.keyCallback, presenceValue.keyType, self)
+                        presenceValue.keyCallback = self:Replace(presenceValue.keyCallback, newKey,
+                            self:GetOrDefault(newValue), true)
+                        presenceValue.keyResult = self:GetDynamicReturnValue(presenceValue.keyCallback,
+                            presenceValue.keyType, self)
                     end
                     if presenceValue.messageCallback then
-                        presenceValue.messageCallback = self:Replace(presenceValue.messageCallback, newKey, self:GetOrDefault(newValue), true)
-                        presenceValue.messageResult = self:GetDynamicReturnValue(presenceValue.messageCallback, presenceValue.messageType, self)
+                        presenceValue.messageCallback = self:Replace(presenceValue.messageCallback, newKey,
+                            self:GetOrDefault(newValue), true)
+                        presenceValue.messageResult = self:GetDynamicReturnValue(presenceValue.messageCallback,
+                            presenceValue.messageType, self)
                     end
                 end
 
@@ -300,9 +304,11 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
             -- Sync Button Info
             for buttonKey, buttonValue in pairs(self.buttons) do
                 if self:ShouldProcessData(buttonValue) then
-                    buttonValue.labelCallback = self:Replace(buttonValue.labelCallback, newKey, self:GetOrDefault(newValue), true)
+                    buttonValue.labelCallback = self:Replace(buttonValue.labelCallback, newKey,
+                        self:GetOrDefault(newValue), true)
                     buttonValue.label = self:GetDynamicReturnValue(buttonValue.labelCallback, buttonValue.labelType, self)
-                    buttonValue.urlCallback = self:Replace(buttonValue.urlCallback, newKey, self:GetOrDefault(newValue), true)
+                    buttonValue.urlCallback = self:Replace(buttonValue.urlCallback, newKey,
+                        self:GetOrDefault(newValue), true)
                     buttonValue.url = self:GetDynamicReturnValue(buttonValue.urlCallback, buttonValue.urlType, self)
                 end
                 self.buttons[buttonKey] = buttonValue
@@ -311,12 +317,17 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
             -- Sync Label Info
             for labelKey, labelValue in pairs(self.labels) do
                 if self:ShouldProcessData(labelValue) then
-                    labelValue.activeCallback = self:Replace(labelValue.activeCallback, newKey, self:GetOrDefault(newValue), true)
+                    labelValue.activeCallback = self:Replace(labelValue.activeCallback, newKey,
+                        self:GetOrDefault(newValue), true)
                     labelValue.active = self:GetDynamicReturnValue(labelValue.activeCallback, labelValue.activeType, self)
-                    labelValue.inactiveCallback = self:Replace(labelValue.inactiveCallback, newKey, self:GetOrDefault(newValue), true)
-                    labelValue.inactive = self:GetDynamicReturnValue(labelValue.inactiveCallback, labelValue.inactiveType, self)
-                    labelValue.stateCallback = self:Replace(labelValue.stateCallback, newKey, self:GetOrDefault(newValue), true)
-                    labelValue.state = self:IsValueTrue(self:GetDynamicReturnValue(labelValue.stateCallback, "function", self))
+                    labelValue.inactiveCallback = self:Replace(labelValue.inactiveCallback, newKey,
+                        self:GetOrDefault(newValue), true)
+                    labelValue.inactive = self:GetDynamicReturnValue(labelValue.inactiveCallback,
+                        labelValue.inactiveType, self)
+                    labelValue.stateCallback = self:Replace(labelValue.stateCallback, newKey,
+                        self:GetOrDefault(newValue), true)
+                    labelValue.state = self:IsValueTrue(self:GetDynamicReturnValue(labelValue.stateCallback,
+                        "function", self))
                 end
                 self.labels[labelKey] = labelValue
             end
@@ -346,12 +357,18 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
         local state = self.presenceData["state"]
         local data = {
             self:GetProperty("clientId"),
-            self:ParseDynamicFormatting({ largeImage.keyResult, largeImage.keyFormatCallback, largeImage.keyFormatType }),
-            self:ParseDynamicFormatting({ largeImage.messageResult, largeImage.messageFormatCallback, largeImage.messageFormatType }),
-            self:ParseDynamicFormatting({ smallImage.keyResult, smallImage.keyFormatCallback, smallImage.keyFormatType }),
-            self:ParseDynamicFormatting({ smallImage.messageResult, smallImage.messageFormatCallback, smallImage.messageFormatType }),
-            self:ParseDynamicFormatting({ details.messageResult, details.messageFormatCallback, details.messageFormatType }),
-            self:ParseDynamicFormatting({ state.messageResult, state.messageFormatCallback, state.messageFormatType })
+            self:ParseDynamicFormatting({ largeImage.keyResult,
+                largeImage.keyFormatCallback, largeImage.keyFormatType }),
+            self:ParseDynamicFormatting({ largeImage.messageResult,
+                largeImage.messageFormatCallback, largeImage.messageFormatType }),
+            self:ParseDynamicFormatting({ smallImage.keyResult,
+                smallImage.keyFormatCallback, smallImage.keyFormatType }),
+            self:ParseDynamicFormatting({ smallImage.messageResult,
+                smallImage.messageFormatCallback, smallImage.messageFormatType }),
+            self:ParseDynamicFormatting({ details.messageResult,
+                details.messageFormatCallback, details.messageFormatType }),
+            self:ParseDynamicFormatting({ state.messageResult,
+                state.messageFormatCallback, state.messageFormatType })
         }
         -- Sync then reset time condition data
         tinsert(data, self:GetOrDefault(self.time_start))
@@ -430,7 +447,8 @@ function CraftPresence:ModifyTriggers(args, data, mode, log_output)
                 self:UnregisterEvent(eventName)
                 if log_output then
                     self:Print(strformat(
-                        self.locale["COMMAND_EVENT_SUCCESS"], mode, eventName, self:GetOrDefault(trigger, self.locale["TYPE_NONE"])
+                        self.locale["COMMAND_EVENT_SUCCESS"], mode, eventName,
+                        self:GetOrDefault(trigger, self.locale["TYPE_NONE"])
                     ))
                 end
             end
@@ -606,7 +624,8 @@ function CraftPresence:ChatCommand(input)
         elseif command == "status" then
             if self:GetProperty("debugMode") then
                 local last_args, last_encoded = self:GetCachedEncodedData()
-                self:GetEncodedMessage(last_args, last_encoded, self.locale["VERBOSE_LAST_ENCODED"], self.locale["LOG_VERBOSE"], true)
+                self:GetEncodedMessage(last_args, last_encoded, self.locale["VERBOSE_LAST_ENCODED"],
+                    self.locale["LOG_VERBOSE"], true)
             else
                 self:PrintErrorMessage(strformat(self.locale["ERROR_COMMAND_CONFIG"], self.locale["TITLE_DEBUG_MODE"]))
             end
@@ -652,7 +671,10 @@ function CraftPresence:ChatCommand(input)
                     -- Main Parsing
                     if command_query[3] ~= nil then
                         local tag_data = self:GetProperty(tag_table)
-                        local default_data = self:GetOrDefault(self:GetDefaults().profile[tag_table][command_query[3]], {})
+                        local default_data = self:GetOrDefault(
+                            self:GetDefaults().profile[tag_table][command_query[3]],
+                            {}
+                        )
                         if tag_data[command_query[3]] and not modify_mode then
                             self:PrintErrorMessage(self.locale["COMMAND_CREATE_MODIFY"])
                         else
@@ -661,9 +683,12 @@ function CraftPresence:ChatCommand(input)
                             if tag_name == "placeholders" then
                                 local default_rebased = tostring(self:GetOrDefault(default_data.allowRebasedApi, "true"))
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], default_data.minimumTOC or buildData["toc_version"])),
-                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], default_data.maximumTOC or buildData["toc_version"])),
-                                    allowRebasedApi = tostring(self:GetOrDefault(command_query[6], default_rebased)) == "true",
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4],
+                                        default_data.minimumTOC or buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5],
+                                        default_data.maximumTOC or buildData["toc_version"])),
+                                    allowRebasedApi = self:IsValueTrue(self:GetOrDefault(command_query[6],
+                                        default_rebased)),
                                     processCallback = self:GetOrDefault(default_data.processCallback),
                                     processType = self:GetOrDefault(default_data.processType, "string"),
                                     registerCallback = self:GetOrDefault(default_data.registerCallback),
@@ -676,20 +701,27 @@ function CraftPresence:ChatCommand(input)
                             elseif tag_name == "events" then
                                 local default_rebased = tostring(self:GetOrDefault(default_data.allowRebasedApi, "true"))
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], default_data.minimumTOC or buildData["toc_version"])),
-                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], default_data.maximumTOC or buildData["toc_version"])),
-                                    allowRebasedApi = tostring(self:GetOrDefault(command_query[6], default_rebased)) == "true",
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4],
+                                        default_data.minimumTOC or buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5],
+                                        default_data.maximumTOC or buildData["toc_version"])),
+                                    allowRebasedApi = self:IsValueTrue(self:GetOrDefault(command_query[6],
+                                        default_rebased)),
                                     processCallback = self:GetOrDefault(default_data.processCallback),
                                     registerCallback = self:GetOrDefault(default_data.registerCallback),
-                                    eventCallback = self:GetOrDefault(default_data.eventCallback, "function(self) return self.defaultEventCallback end"),
+                                    eventCallback = self:GetOrDefault(default_data.eventCallback,
+                                        "function(self) return self.defaultEventCallback end"),
                                     enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             elseif tag_name == "labels" then
                                 local default_rebased = tostring(self:GetOrDefault(default_data.allowRebasedApi, "true"))
                                 tag_data[command_query[3]] = {
-                                    minimumTOC = tostring(self:GetOrDefault(command_query[4], default_data.minimumTOC or buildData["toc_version"])),
-                                    maximumTOC = tostring(self:GetOrDefault(command_query[5], default_data.maximumTOC or buildData["toc_version"])),
-                                    allowRebasedApi = tostring(self:GetOrDefault(command_query[6], default_rebased)) == "true",
+                                    minimumTOC = tostring(self:GetOrDefault(command_query[4],
+                                        default_data.minimumTOC or buildData["toc_version"])),
+                                    maximumTOC = tostring(self:GetOrDefault(command_query[5],
+                                        default_data.maximumTOC or buildData["toc_version"])),
+                                    allowRebasedApi = self:IsValueTrue(self:GetOrDefault(command_query[6],
+                                        default_rebased)),
                                     activeCallback = self:GetOrDefault(default_data.activeCallback),
                                     inactiveCallback = self:GetOrDefault(default_data.inactiveCallback),
                                     activeType = self:GetOrDefault(default_data.activeType, "string"),
