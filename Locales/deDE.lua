@@ -379,7 +379,12 @@ L["INFO_OPTIONAL_MIGRATION_DATA_TWO"] = self:SetFormat("Please enable *%s|r and 
 L["ERROR_MESSAGE_OVERFLOW"] = "An RPC message cannot be processed due to exceeding the maximum bytes allowed (%s/%s)"
 L["ERROR_COMMAND_CONFIG"] = "Dir fehlt eine bestimmte Konfiguration um diesen Befehl ausführen zu können. (Aktiviere %s)"
 L["ERROR_COMMAND_UNKNOWN"] = "Unbekannter Befehl! (Input: %s)"
-L["WARNING_BUILD_UNSUPPORTED"] = "Du nutzt eine nicht unterstützte Version von CraftPresence (%s)! (Ignoriere dies, wenn Du die Variante von GitLab verwendest)"
+L["WARNING_BUILD_UNSUPPORTED"] = self:SetFormat([[You are currently running an *unsupported|r build of CraftPresence!
+
+Detected Version: ^%s|r
+Note: This message can be safely ignored if this is a Source Build.]],
+        self.colors.RED, self.colors.LIGHT_BLUE
+)
 L["WARNING_EVENT_RENDERING_ONE"] = "Einige Deiner Einstellungen können unter Umständen Probleme bei der Generierung der Rich-Presence-Daten verursachen. Bitte überprüfe Deine Einstellungen."
 L["WARNING_EVENT_RENDERING_TWO"] = "Please check and adjust the following options: %s"
 L["ADDON_LOAD_INFO"] = self:SetFormat("^%s|r geladen.\n Nutze */cp|r oder */craftpresence|r für Chatbefehle.", self.colors.GREEN, self.colors.LIGHT_BLUE)
@@ -462,67 +467,66 @@ L["ERROR_FUNCTION_REPLACE"] = self:SetFormat("Um dies zu beheben, nutze bitte ei
 
 -- General Command Data
 L["USAGE_CMD_INTRO"] = "Benutzung =>"
-L["USAGE_CMD_HELP"] = self:SetFormat(" */cp|r ^help|r or */cp|r ^?|r  -  Zeigt dieses hilfreiche Menü an.",
+L["USAGE_CMD_HELP"] = self:SetFormat("  */cp|r ^help|r or */cp|r ^?|r  -  Zeigt dieses hilfreiche Menü an.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_CONFIG"] = self:SetFormat(" */cp|r ^config [migrate,standalone]|r  -  Displays/Migrates the *ConfigUI|r.",
+L["USAGE_CMD_CONFIG"] = self:SetFormat("  */cp|r ^config [migrate,standalone]|r  -  Displays/Migrates the *ConfigUI|r.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_CLEAN"] = self:SetFormat(" */cp|r ^clean|r or */cp|r ^clear|r  -  Setzt die Addon-Frames zurück.",
+L["USAGE_CMD_CLEAN"] = self:SetFormat("  */cp|r ^clean|r or */cp|r ^clear|r  -  Setzt die Addon-Frames zurück.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_UPDATE"] = self:SetFormat(" */cp|r ^update [debug]|r  -  Forciere oder debugge Rich-Presence-Updates.",
+L["USAGE_CMD_UPDATE"] = self:SetFormat("  */cp|r ^update [debug]|r  -  Forciere oder debugge Rich-Presence-Updates.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_MINIMAP"] = self:SetFormat(" */cp|r ^minimap|r  -  Schaltet das Minimap Symbol um.",
+L["USAGE_CMD_MINIMAP"] = self:SetFormat("  */cp|r ^minimap|r  -  Schaltet das Minimap Symbol um.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_STATUS"] = self:SetFormat(" */cp|r ^status|r  -  Zeigt das letzte gesendete Rich-Presence-Update an.",
+L["USAGE_CMD_STATUS"] = self:SetFormat("  */cp|r ^status|r  -  Zeigt das letzte gesendete Rich-Presence-Update an.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_RESET"] = self:SetFormat(" */cp|r ^reset [grp,key]|r  -  Setze die Einstellungen im *ConfigUI|r zurück.",
+L["USAGE_CMD_RESET"] = self:SetFormat("  */cp|r ^reset [grp,key]|r  -  Setze die Einstellungen im *ConfigUI|r zurück.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_SET"] = self:SetFormat(" */cp|r ^set [grp,key]|r  -  Setze die angegebene Option im *ConfigUI|r.",
+L["USAGE_CMD_SET"] = self:SetFormat("  */cp|r ^set [grp,key]|r  -  Setze die angegebene Option im *ConfigUI|r.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_INTEGRATION"] = self:SetFormat(" */cp|r ^integration [query]|r  -  Aktiviere Integrationen.",
+L["USAGE_CMD_INTEGRATION"] = self:SetFormat("  */cp|r ^integration [query]|r  -  Aktiviere Integrationen.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_PLACEHOLDERS"] = self:SetFormat(" */cp|r ^placeholders [create,remove,list][query]|r  -  Verwalte die Platzhalter.",
+L["USAGE_CMD_PLACEHOLDERS"] = self:SetFormat("  */cp|r ^placeholders [create,remove,list][query]|r  -  Verwalte die Platzhalter.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_EVENTS"] = self:SetFormat(" */cp|r ^events [create,remove,list] [query]|r  -  Verwalte die Ereignisse..",
+L["USAGE_CMD_EVENTS"] = self:SetFormat("  */cp|r ^events [create,remove,list] [query]|r  -  Verwalte die Ereignisse..",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_LABELS"] = self:SetFormat(" */cp|r ^labels [create,remove,list][query]|r  -  Access player labels.",
-        self.colors.GREEN, self.colors.GREY
-)
-
-L["USAGE_CMD_CREATE_PLACEHOLDERS"] = self:SetFormat(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
-        self.colors.GREEN, self.colors.GREY
-)
-L["USAGE_CMD_CREATE_EVENTS"] = self:SetFormat(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
-        self.colors.GREEN, self.colors.GREY
-)
-L["USAGE_CMD_CREATE_LABELS"] = self:SetFormat(" *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
+L["USAGE_CMD_LABELS"] = self:SetFormat("  */cp|r ^labels [create,remove,list][query]|r  -  Access player labels.",
         self.colors.GREEN, self.colors.GREY
 )
 
-L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = self:SetFormat(" *Query:|r %s ^<name>|r.",
+L["USAGE_CMD_CREATE_PLACEHOLDERS"] = self:SetFormat("  *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_REMOVE_EVENTS"] = self:SetFormat(" *Query:|r %s ^<name>|r.",
+L["USAGE_CMD_CREATE_EVENTS"] = self:SetFormat("  *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_REMOVE_LABELS"] = self:SetFormat(" *Query:|r %s ^<name>|r.",
+L["USAGE_CMD_CREATE_LABELS"] = self:SetFormat("  *Query:|r %s ^[name,minVersion,maxVersion,allowRebasedApi]|r.",
         self.colors.GREEN, self.colors.GREY
 )
 
-L["USAGE_CMD_NOTE_ONE"] = self:SetFormat("NOTE: Alle Befehle müssen mit  */%s|r oder */%s|r beginnen.",
+L["USAGE_CMD_REMOVE_PLACEHOLDERS"] = self:SetFormat("  *Query:|r %s ^<name>|r.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_NOTE_TWO"] = self:SetFormat("Optionale Parameter werden mit der Syntax *[syntax]|r dargestellt.",
+L["USAGE_CMD_REMOVE_EVENTS"] = self:SetFormat("  *Query:|r %s ^<name>|r.",
+        self.colors.GREEN, self.colors.GREY
+)
+L["USAGE_CMD_REMOVE_LABELS"] = self:SetFormat("  *Query:|r %s ^<name>|r.",
+        self.colors.GREEN, self.colors.GREY
+)
+
+L["USAGE_CMD_NOTE"] = self:SetFormat([[Notes:
+  - Alle Befehle müssen mit  */%s|r oder */%s|r beginnen.
+  - Optionale Parameter werden mit der Syntax ^[syntax]|r dargestellt.]],
         self.colors.GREEN, self.colors.GREY
 )
 

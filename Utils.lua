@@ -1007,8 +1007,7 @@ function CraftPresence:PrintUsageCommand(usage)
     self:Print(
         self.locale["USAGE_CMD_INTRO"] .. "\n" ..
         usage .. "\n" ..
-        strformat(self.locale["USAGE_CMD_NOTE_ONE"], self.internals.affix, self.internals.identifier) .. "\n" ..
-        self.locale["USAGE_CMD_NOTE_TWO"] .. "\n"
+        strformat(self.locale["USAGE_CMD_NOTE"], self.internals.affix, self.internals.identifier)
     )
 end
 
