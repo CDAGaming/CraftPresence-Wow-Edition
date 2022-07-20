@@ -190,9 +190,9 @@ end
 ---
 --- @param data table The data table to interpret (Required)
 ---
---- @return boolean, boolean @ shouldEnable, shouldRegister
+--- @return boolean, boolean @ shouldEnable, shouldRegister, shouldAccept
 function CraftPresence:ShouldProcessData(data)
-    local shouldEnable, shouldRegister = false, false
+    local shouldEnable, shouldRegister, shouldAccept = false, false, false
 
     if type(data) == "table" then
         local currentTOC = buildData["toc_version"]
@@ -210,12 +210,12 @@ function CraftPresence:ShouldProcessData(data)
         shouldRegister = (self:IsNullOrEmpty(data.registerCallback) or self:IsValueTrue(
             self:GetDynamicReturnValue(data.registerCallback, "function", self)
         ))
-        local canAccept = shouldRegister and (self:IsWithinValue(
+        shouldAccept = shouldRegister and (self:IsWithinValue(
             currentTOC, minTOC, maxTOC, true, true, false
         ) or (data.allowRebasedApi and self:IsRebasedApi()))
-        shouldEnable = data.enabled and canAccept
+        shouldEnable = data.enabled and shouldAccept
     end
-    return shouldEnable, shouldRegister
+    return shouldEnable, shouldRegister, shouldAccept
 end
 
 --- Sync the contents of dynamic data for readable usage
