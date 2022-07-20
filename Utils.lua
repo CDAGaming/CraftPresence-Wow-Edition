@@ -679,26 +679,71 @@ end
 --- Retrieve and/or Synchronize Build Flavor Info
 ---
 --- @param key string If specified, attempt to retrieve and return flavor_info[key]
+--- @param value string If specified, attempt to retrieve and return flavor_info[key][value]
 ---
 --- @return table @ flavor_info
-function CraftPresence:GetFlavorInfo(key)
+function CraftPresence:GetFlavorInfo(key, value)
     if not flavor_info then
         flavor_info = {
-            ["retail"] = 90205, -- Latest Retail
-            ["classic"] = 20504, -- Latest Classic
-            ["classic_era"] = 11403, -- Latest Classic Era
-            ["ptr"] = 90207, -- Latest Retail PTR
-            ["beta"] = 100000, -- Latest Retail Beta
-            ["classic_ptr"] = 20504, -- Latest Classic PTR
-            ["classic_beta"] = 30400, -- Latest Classic Beta
-            ["classic_era_ptr"] = 11403, -- Latest Classic Era PTR
-            ["classic_era_beta"] = 11403 -- Latest Classic Era Beta
+            ["retail"] = {
+                ["toc"] = 90205,
+                ["name"] = "World of Warcraft",
+                ["product_id"] = "retail"
+            },
+            ["classic"] = {
+                ["toc"] = 20504,
+                ["name"] = "Burning Crusade Classic",
+                ["product_id"] = "classic"
+            },
+            ["classic_era"] = {
+                ["toc"] = 11403,
+                ["name"] = "World of Warcraft Classic",
+                ["product_id"] = "classic_era"
+            },
+            ["ptr"] = {
+                ["toc"] = 90207,
+                ["name"] = "Public Test Realm",
+                ["product_id"] = "ptr"
+            },
+            ["beta"] = {
+                ["toc"] = 100000,
+                ["name"] = "Dragonflight Beta",
+                ["product_id"] = "beta"
+            },
+            ["classic_ptr"] = {
+                ["toc"] = 20504,
+                ["name"] = "Public Test Realm (Classic BCC)",
+                ["product_id"] = "classic_ptr"
+            },
+            ["classic_beta"] = {
+                ["toc"] = 30400,
+                ["name"] = "Wrath of the Lich King Classic Beta",
+                ["product_id"] = "classic_beta"
+            },
+            ["classic_era_ptr"] = {
+                ["toc"] = 11403,
+                ["name"] = "Classic Season of Mastery PTR",
+                ["product_id"] = "classic_era_ptr"
+            }
         }
     end
     if not self:IsNullOrEmpty(key) and flavor_info[key] ~= nil then
+        if not self:IsNullOrEmpty(value) and flavor_info[key][value] ~= nil then
+            return flavor_info[key][value]
+        end
         return flavor_info[key]
     end
     return flavor_info
+end
+
+--- Retrieve and/or Synchronize Build Flavor TOC Info
+--- (Helper Function for GetFlavorInfo)
+---
+--- @param key string If specified, attempt to retrieve and return flavor_info[key]
+---
+--- @return table @ flavor_info
+function CraftPresence:GetFlavorTOC(key)
+    return self:GetFlavorInfo(key, "toc")
 end
 
 --- Retrieve and/or Synchronize App Compatibility Info
@@ -783,7 +828,7 @@ end
 --- Determine if this build identifies as the Retail Live Build of the Game
 --- @return boolean @ is_retail_live_build
 function CraftPresence:IsRetailLiveBuild()
-    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("retail")
+    return self:GetBuildInfo("toc_version") == self:GetFlavorTOC("retail")
 end
 
 --- Determine if this build identifies as the Retail PTR Build of the Game
@@ -791,7 +836,7 @@ end
 function CraftPresence:IsRetailPTRBuild()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetFlavorInfo("retail"), self:GetFlavorInfo("ptr"),
+        self:GetFlavorTOC("retail"), self:GetFlavorTOC("ptr"),
         false, true
     ) and not self:IsSpecialVersion()
 end
@@ -801,7 +846,7 @@ end
 function CraftPresence:IsRetailBetaBuild()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetFlavorInfo("ptr"), self:GetFlavorInfo("beta"),
+        self:GetFlavorTOC("ptr"), self:GetFlavorTOC("beta"),
         false, true
     ) and not self:IsSpecialVersion()
 end
@@ -815,7 +860,7 @@ end
 --- Determine if this build identifies as the Classic Live Build of the Game
 --- @return boolean @ is_classic_live_build
 function CraftPresence:IsClassicLiveBuild()
-    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("classic")
+    return self:GetBuildInfo("toc_version") == self:GetFlavorTOC("classic")
 end
 
 --- Determine if this build identifies as the Classic PTR Build of the Game
@@ -823,7 +868,7 @@ end
 function CraftPresence:IsClassicPTRBuild()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetFlavorInfo("classic"), self:GetFlavorInfo("classic_ptr"),
+        self:GetFlavorTOC("classic"), self:GetFlavorTOC("classic_ptr"),
         false, true
     ) and not self:IsSpecialVersion()
 end
@@ -833,7 +878,7 @@ end
 function CraftPresence:IsClassicBetaBuild()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetFlavorInfo("classic_ptr"), self:GetFlavorInfo("classic_beta"),
+        self:GetFlavorTOC("classic_ptr"), self:GetFlavorTOC("classic_beta"),
         false, true
     ) and not self:IsSpecialVersion()
 end
@@ -847,7 +892,7 @@ end
 --- Determine if this build identifies as the Classic Era Live Build of the Game
 --- @return boolean @ is_classic_era_live_build
 function CraftPresence:IsClassicEraLiveBuild()
-    return self:GetBuildInfo("toc_version") == self:GetFlavorInfo("classic_era")
+    return self:GetBuildInfo("toc_version") == self:GetFlavorTOC("classic_era")
 end
 
 --- Determine if this build identifies as the Classic Era PTR Build of the Game
@@ -855,7 +900,7 @@ end
 function CraftPresence:IsClassicEraPTRBuild()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetFlavorInfo("classic_era"), self:GetFlavorInfo("classic_era_ptr"),
+        self:GetFlavorTOC("classic_era"), self:GetFlavorTOC("classic_era_ptr"),
         false, true
     ) and not self:IsSpecialVersion()
 end
@@ -865,7 +910,7 @@ end
 function CraftPresence:IsClassicEraBetaBuild()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetFlavorInfo("classic_era_ptr"), self:GetFlavorInfo("classic_era_beta"),
+        self:GetFlavorTOC("classic_era_ptr"), self:GetFlavorTOC("classic_era_beta"),
         false, true
     ) and not self:IsSpecialVersion()
 end
@@ -882,10 +927,10 @@ function CraftPresence:IsRebasedApi()
     return self:IsClassicRebased() or self:IsTBCRebased() or self:IsWrathRebased()
 end
 
---- Determine if this build is using a special/modified api
+--- Determine if this build is using a special or modified api
 --- @return any @ special_info
 function CraftPresence:IsSpecialVersion()
-    return self:GetExtraBuildInfo()[self:GetBuildInfo("version")]
+    return self:GetExtraBuildInfo()[self:VersionToBuild(self:GetBuildInfo("version"), nil, 2)]
 end
 
 --- Getter for Addon Locale Data
@@ -898,9 +943,10 @@ end
 ---
 --- @param versionStr string The version string to evaluate (Default: fallbackVersion)
 --- @param index number If specified, returns a specific index of the split (Optional)
+--- @param terminator number If specified, determines where the split should end (Optional)
 ---
 --- @return number @ buildVersion
-function CraftPresence:VersionToBuild(versionStr, index)
+function CraftPresence:VersionToBuild(versionStr, index, terminator)
     index = self:GetOrDefault(index, -1)
     versionStr = self:GetOrDefault(versionStr, fallbackVersion)
     local buildStr = ""
@@ -911,10 +957,12 @@ function CraftPresence:VersionToBuild(versionStr, index)
         buildStr = splitData[1]
     else
         for key, value in pairs(splitData) do
-            if key > 1 then
-                buildStr = buildStr .. strformat("%02d", value)
-            else
-                buildStr = buildStr .. value
+            if type(terminator) ~= "number" or key <= terminator then
+                if key > 1 then
+                    buildStr = buildStr .. strformat("%02d", value)
+                else
+                    buildStr = buildStr .. value
+                end
             end
         end
     end
