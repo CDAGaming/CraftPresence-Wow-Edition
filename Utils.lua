@@ -931,7 +931,7 @@ end
 --- Determine if this build is using a special or modified api
 --- @return any @ special_info
 function CraftPresence:IsSpecialVersion()
-    return self:GetExtraBuildInfo()[self:VersionToBuild(self:GetBuildInfo("version"), nil, 2)]
+    return self:GetExtraBuildInfo()[self:GetBuildInfo("version")]
 end
 
 --- Getter for Addon Locale Data
