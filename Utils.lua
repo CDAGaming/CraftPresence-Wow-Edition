@@ -768,7 +768,7 @@ function CraftPresence:GetCompatibilityInfo(key)
             ["2.0.0"] = 20000, -- TBC 2.0.0
             ["1.14.0"] = 11400, -- Vanilla Classic (SOM) 1.14.0
             ["1.13.0"] = 11300, -- Vanilla Classic (Original) 1.13.0
-            ["1.12.1"] = 11201 -- Vanilla 1.12.1
+            ["1.12.0"] = 11200 -- Vanilla 1.12.0
         }
     end
     if not self:IsNullOrEmpty(key) and compatibility_info[key] ~= nil then
@@ -786,6 +786,7 @@ end
 function CraftPresence:GetExtraBuildInfo(key)
     if not extra_build_info then
         extra_build_info = {
+            ["1.16.0"] = 11600, -- TurtleWoW 1.16.0 (Vanilla)
             ["1.15.1"] = 11501 -- TurtleWoW 1.15.1 (Vanilla)
         }
     end

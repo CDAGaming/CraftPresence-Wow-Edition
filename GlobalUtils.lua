@@ -66,8 +66,8 @@ CraftPresence.libraries = {
     AceConfigRegistry = LibStub("AceConfigRegistry-3.0"),
     AceDB = LibStub("AceDB-3.0"),
     AceDBOptions = LibStub("AceDBOptions-3.0"),
-    LDB = nil, -- Only used in 1.12.1 or above
-    LDBIcon = nil -- Only used in 1.12.1 or above
+    LDB = nil, -- Only used in 1.12.x or above
+    LDBIcon = nil -- Only used in 1.12.x or above
 }
 
 CraftPresence.internals = {

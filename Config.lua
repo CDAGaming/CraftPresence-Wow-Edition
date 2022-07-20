@@ -115,7 +115,7 @@ function CraftPresence:GetOptions()
                     enforceInterface = {
                         type = "toggle", order = self:GetNextIndex(),
                         disabled = function()
-                            local minTOC = self:GetCompatibilityInfo("1.12.1")
+                            local minTOC = self:GetCompatibilityInfo("1.12.0")
                             local maxTOC = self:GetCompatibilityInfo("4.0.0")
                             local currentTOC = self:GetBuildInfo("toc_version")
                             return (self:IsRebasedApi() or

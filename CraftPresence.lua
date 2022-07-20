@@ -78,7 +78,7 @@ function CraftPresence:OnInitialize()
     self:SyncAnalytics(self:GetProperty("metrics"))
     self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
     -- Version-Specific Registration
-    if buildData["toc_version"] >= compatData["1.12.1"] then
+    if buildData["toc_version"] >= compatData["1.12.0"] then
         -- UI Registration
         if InterfaceOptions_AddCategory then
             local can_register = true
