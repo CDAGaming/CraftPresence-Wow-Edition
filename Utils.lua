@@ -583,7 +583,6 @@ end)
 
 -- API UTILITIES
 
-local fallbackVersion, fallbackTOC = "0.0.0", 00000
 local timer_locked = false
 
 --- Retrieve and/or Synchronize App Build Info
@@ -593,7 +592,10 @@ local timer_locked = false
 --- @return table @ build_info
 function CraftPresence:GetBuildInfo(key)
     if not self.cache.build_info then
-        local version, build, date, tocversion = fallbackVersion, "0000", "Jan 1 1969", fallbackTOC
+        local version = self.internals.defaults.version
+        local build = self.internals.defaults.build
+        local date = self.internals.defaults.date
+        local tocversion = self.internals.defaults.toc
         if GetBuildInfo then
             version, build, date, tocversion = GetBuildInfo()
             tocversion = tocversion or self:VersionToBuild(version)
@@ -602,11 +604,9 @@ function CraftPresence:GetBuildInfo(key)
         self.cache.build_info = {
             ["version"] = version,
             ["extended_version"] = (version .. " (" .. tocversion .. ")"),
-            ["fallback_version"] = fallbackVersion,
             ["build"] = build,
             ["date"] = date,
             ["toc_version"] = tocversion,
-            ["fallback_toc_version"] = fallbackTOC
         }
     end
     if not self:IsNullOrEmpty(key) and self.cache.build_info[key] ~= nil then
@@ -630,7 +630,7 @@ function CraftPresence:GetAddOnInfo(key)
 
         if not self:ContainsDigit(version) then
             self:PrintWarningMessage(strformat(self.locale["WARNING_BUILD_UNSUPPORTED"], version))
-            version = "v" .. fallbackVersion
+            version = "v" .. self.internals.defaults.version
         end
         versionString = strformat(self.locale["ADDON_HEADER_VERSION"], self.internals.name, version)
 
@@ -1125,7 +1125,7 @@ end
 --- @return number @ buildVersion
 function CraftPresence:VersionToBuild(versionStr, index, terminator)
     index = self:GetOrDefault(index, -1)
-    versionStr = self:GetOrDefault(versionStr, fallbackVersion)
+    versionStr = self:GetOrDefault(versionStr, self.internals.defaults.version)
     local buildStr = ""
     local splitData = self:Split(versionStr, ".", true, true)
     if index >= 1 and splitData[index] then
@@ -1143,7 +1143,7 @@ function CraftPresence:VersionToBuild(versionStr, index, terminator)
             end
         end
     end
-    return self:GetOrDefault(tonumber(buildStr), fallbackTOC)
+    return self:GetOrDefault(tonumber(buildStr), self.internals.defaults.toc)
 end
 
 --- Display the addon's config frame

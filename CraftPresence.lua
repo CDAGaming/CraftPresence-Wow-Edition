@@ -696,8 +696,8 @@ function CraftPresence:ChatCommand(input)
                                     registerCallback = self:GetOrDefault(default_data.registerCallback),
                                     tagCallback = self:GetOrDefault(default_data.tagCallback),
                                     tagType = self:GetOrDefault(default_data.tagType, "string"),
-                                    prefix = self:GetOrDefault(default_data.prefix, self.internals.defaultInnerKey),
-                                    suffix = self:GetOrDefault(default_data.suffix, self.internals.defaultInnerKey),
+                                    prefix = self:GetOrDefault(default_data.prefix, self.internals.defaults.innerKey),
+                                    suffix = self:GetOrDefault(default_data.suffix, self.internals.defaults.innerKey),
                                     enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             elseif tag_name == "events" then
