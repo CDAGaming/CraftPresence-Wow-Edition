@@ -189,13 +189,15 @@ end
 --- Interprets the contents of a dynamic data table to ensure validity and obtain enable level
 ---
 --- @param data table The data table to interpret (Required)
+--- @param tocOverride number If specified, use as the currentTOC value to check against (Optional)
 ---
 --- @return boolean, boolean @ shouldEnable, shouldRegister, shouldAccept
-function CraftPresence:ShouldProcessData(data)
+function CraftPresence:ShouldProcessData(data, tocOverride)
+    if tocOverride ~= nil and type(tocOverride) ~= "number" then tocOverride = nil end
     local shouldEnable, shouldRegister, shouldAccept = false, false, false
 
     if type(data) == "table" then
-        local currentTOC = buildData["toc_version"]
+        local currentTOC = self:GetOrDefault(tocOverride, buildData["toc_version"])
         local fallbackTOC = buildData["fallback_toc_version"]
 
         local minTOC = self:GetOrDefault(data.minimumTOC, fallbackTOC)

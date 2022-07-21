@@ -736,18 +736,18 @@ function CraftPresence:GetFlavorInfo(key, value)
     return flavor_info
 end
 
---- Retrieve and/or Synchronize Build Flavor TOC Info
+--- Attempt to retrieve Build Flavor TOC Info for the specified version
 --- (Helper Function for GetFlavorInfo)
 ---
---- @param key string If specified, attempt to retrieve and return flavor_info[key]
+--- @param key any The version or toc number to attempt to locate within GetFlavorInfo.
 ---
---- @return table @ flavor_info
+--- @return number @ result
 function CraftPresence:GetFlavorTOC(key)
     return self:GetFlavorInfo(key, "toc")
 end
 
 --- Retrieve and/or Synchronize App Compatibility Info
---- (Note that some TOC versions require extra filtering)
+--- (Note: Some TOC versions may require extra filtering)
 ---
 --- @param key string If specified, attempt to retrieve and return compatibility_info[key]
 ---
