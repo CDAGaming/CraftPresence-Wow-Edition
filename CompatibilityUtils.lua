@@ -315,12 +315,10 @@ function CraftPresence:IsFeatureSupported(feature, version, checkOverride)
         self.cache.features[version] = {}
     end
 
-    self:Print("Checking for " .. feature .. " @ " .. version .. " (Checking Override: " .. checkOverride .. ")")
     local foundData = self:FindCompatibilityInfo(checkOverride)
     local featureAbsent = (foundData.features == nil) or (foundData.features[feature] == nil)
     local featureSupported = false
     if not featureAbsent then
-        self:Print("Found Feature: " .. feature .. " => " .. self:SerializeTable(foundData.features[feature]) .. " for version " .. version)
         featureSupported = self:ShouldProcessData(foundData.features[feature], version)
         self.cache.features[version][feature] = featureSupported
     end
