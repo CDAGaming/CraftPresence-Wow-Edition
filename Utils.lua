@@ -585,8 +585,6 @@ end)
 
 local fallbackVersion, fallbackTOC = "0.0.0", 00000
 local timer_locked = false
--- Compatibility Data
-local addon_info, build_info, compatibility_info, compatibility_attachments, flavor_info
 
 --- Retrieve and/or Synchronize App Build Info
 ---
@@ -594,14 +592,14 @@ local addon_info, build_info, compatibility_info, compatibility_attachments, fla
 ---
 --- @return table @ build_info
 function CraftPresence:GetBuildInfo(key)
-    if not build_info then
+    if not self.cache.build_info then
         local version, build, date, tocversion = fallbackVersion, "0000", "Jan 1 1969", fallbackTOC
         if GetBuildInfo then
             version, build, date, tocversion = GetBuildInfo()
             tocversion = tocversion or self:VersionToBuild(version)
         end
 
-        build_info = {
+        self.cache.build_info = {
             ["version"] = version,
             ["extended_version"] = (version .. " (" .. tocversion .. ")"),
             ["fallback_version"] = fallbackVersion,
@@ -611,10 +609,10 @@ function CraftPresence:GetBuildInfo(key)
             ["fallback_toc_version"] = fallbackTOC
         }
     end
-    if not self:IsNullOrEmpty(key) and build_info[key] ~= nil then
-        return build_info[key]
+    if not self:IsNullOrEmpty(key) and self.cache.build_info[key] ~= nil then
+        return self.cache.build_info[key]
     end
-    return build_info
+    return self.cache.build_info
 end
 
 --- Retrieve and/or Synchronize Addon Metadata
@@ -623,7 +621,7 @@ end
 ---
 --- @return table @ addon_info
 function CraftPresence:GetAddOnInfo(key)
-    if not addon_info then
+    if not self.cache.addon_info then
         local version, versionString, schema
         if GetAddOnMetadata then
             version = GetAddOnMetadata(self.internals.name, "Version")
@@ -636,16 +634,16 @@ function CraftPresence:GetAddOnInfo(key)
         end
         versionString = strformat(self.locale["ADDON_HEADER_VERSION"], self.internals.name, version)
 
-        addon_info = {
+        self.cache.addon_info = {
             ["version"] = version,
             ["versionString"] = versionString,
             ["schema"] = tonumber(schema)
         }
     end
-    if not self:IsNullOrEmpty(key) and addon_info[key] ~= nil then
-        return addon_info[key]
+    if not self:IsNullOrEmpty(key) and self.cache.addon_info[key] ~= nil then
+        return self.cache.addon_info[key]
     end
-    return addon_info
+    return self.cache.addon_info
 end
 
 --- Retrieve the specified Game Variable
@@ -683,8 +681,8 @@ end
 ---
 --- @return table @ flavor_info
 function CraftPresence:GetFlavorInfo(key, value)
-    if not flavor_info then
-        flavor_info = {
+    if not self.cache.flavors then
+        self.cache.flavors = {
             ["retail"] = {
                 ["toc"] = 90205,
                 ["name"] = "World of Warcraft",
@@ -727,13 +725,13 @@ function CraftPresence:GetFlavorInfo(key, value)
             }
         }
     end
-    if not self:IsNullOrEmpty(key) and flavor_info[key] ~= nil then
-        if not self:IsNullOrEmpty(value) and flavor_info[key][value] ~= nil then
-            return flavor_info[key][value]
+    if not self:IsNullOrEmpty(key) and self.cache.flavors[key] ~= nil then
+        if not self:IsNullOrEmpty(value) and self.cache.flavors[key][value] ~= nil then
+            return self.cache.flavors[key][value]
         end
-        return flavor_info[key]
+        return self.cache.flavors[key]
     end
-    return flavor_info
+    return self.cache.flavors
 end
 
 --- Attempt to retrieve Build Flavor TOC Info for the specified version
@@ -756,8 +754,8 @@ end
 ---
 --- @return table @ compatibility_info
 function CraftPresence:GetCompatibilityInfo(key, value)
-    if not compatibility_info then
-        compatibility_info = {
+    if not self.cache.compatibility_info then
+        self.cache.compatibility_info = {
             ["10.x"] = {
                 ["minimumTOC"] = 100000,
                 ["baseTOC"] = 90000,
@@ -874,14 +872,14 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             }
         }
         -- Special Builds
-        compatibility_info["1.16.x"] = {
+        self.cache.compatibility_info["1.16.x"] = {
             ["minimumTOC"] = 11600,
             ["maximumTOC"] = 11600,
             ["name"] = "TurtleWow 1.16.x",
             ["is_special"] = true,
             ["baseTOC"] = 11201
         }
-        compatibility_info["1.15.x"] = {
+        self.cache.compatibility_info["1.15.x"] = {
             ["minimumTOC"] = 11500,
             ["maximumTOC"] = 11501,
             ["name"] = "TurtleWow 1.15.x",
@@ -889,13 +887,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             ["baseTOC"] = 11201
         }
     end
-    if not self:IsNullOrEmpty(key) and compatibility_info[key] ~= nil then
-        if not self:IsNullOrEmpty(value) and compatibility_info[key][value] ~= nil then
-            return compatibility_info[key][value]
+    if not self:IsNullOrEmpty(key) and self.cache.compatibility_info[key] ~= nil then
+        if not self:IsNullOrEmpty(value) and self.cache.compatibility_info[key][value] ~= nil then
+            return self.cache.compatibility_info[key][value]
         end
-        return compatibility_info[key]
+        return self.cache.compatibility_info[key]
     end
-    return compatibility_info
+    return self.cache.compatibility_info
 end
 
 --- Retrieve and/or Synchronize App Compatibility Info
@@ -908,7 +906,7 @@ end
 ---
 --- @return table @ compatibility_info
 function CraftPresence:FindCompatibilityInfo(version, field)
-    if not compatibility_attachments then compatibility_attachments = {} end
+    if not self.cache.compatibility_attachments then self.cache.compatibility_attachments = {} end
     if self:IsNullOrEmpty(version) then
         return self:GetCompatibilityInfo()
     else
@@ -919,11 +917,11 @@ function CraftPresence:FindCompatibilityInfo(version, field)
         end
     end
 
-    if not compatibility_attachments[version] then
+    if not self.cache.compatibility_attachments[version] then
         for key, value in pairs(self:GetCompatibilityInfo()) do
             local _, _, shouldAccept = self:ShouldProcessData(value, version)
             if shouldAccept then
-                compatibility_attachments[version] = key
+                self.cache.compatibility_attachments[version] = key
                 if not self:IsNullOrEmpty(field) and value[field] ~= nil then
                     return value[field]
                 end
@@ -931,7 +929,7 @@ function CraftPresence:FindCompatibilityInfo(version, field)
             end
         end
     end
-    return self:GetCompatibilityInfo(compatibility_attachments[version], field)
+    return self:GetCompatibilityInfo(self.cache.compatibility_attachments[version], field)
 end
 
 --- Attempt to retrieve App Compatibility TOC Info for the specified version

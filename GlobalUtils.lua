@@ -90,7 +90,12 @@ CraftPresence.internals = {
 }
 
 CraftPresence.cache = {
-    features = {}
+    features = nil,
+    flavors = nil,
+    addon_info = nil,
+    build_info = nil,
+    compatibility_info = nil,
+    compatibility_attachments = nil
 }
 
 CraftPresence.colors = {
