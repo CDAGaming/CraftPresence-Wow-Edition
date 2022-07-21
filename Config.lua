@@ -115,8 +115,8 @@ function CraftPresence:GetOptions()
                     enforceInterface = {
                         type = "toggle", order = self:GetNextIndex(),
                         disabled = function()
-                            local minTOC = self:GetCompatibilityInfo("1.12.0")
-                            local maxTOC = self:GetCompatibilityInfo("4.0.0")
+                            local minTOC = self:FindCompatibilityTOC("1.12.x")
+                            local maxTOC = self:FindCompatibilityTOC("4.x")
                             local currentTOC = self:GetBuildInfo("toc_version")
                             return (self:IsRebasedApi() or
                                 currentTOC >= maxTOC or
@@ -505,7 +505,7 @@ end
 ---
 --- @return table @ profile
 CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, reset, tags)
-    local canNotify = self:GetBuildInfo("toc_version") >= self:GetCompatibilityInfo("2.0.0") or self:IsRebasedApi()
+    local canNotify = self:GetBuildInfo("toc_version") >= self:FindCompatibilityTOC("2.x") or self:IsRebasedApi()
     notify = self:GetOrDefault(notify, true)
     reset = self:GetOrDefault(reset, false)
     tags = self:GetOrDefault(tags, {})

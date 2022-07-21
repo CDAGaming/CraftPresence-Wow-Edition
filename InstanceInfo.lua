@@ -126,7 +126,7 @@ end
 --- @return string result
 function CraftPresence:GetCurrentInstanceName(ensure_accuracy)
     local result = nil
-    if not self:IsRebasedApi() and self:GetBuildInfo("toc_version") < self:GetCompatibilityInfo("3.0.0") then
+    if not self:IsRebasedApi() and self:GetBuildInfo("toc_version") < self:FindCompatibilityTOC("3.x") then
         if ensure_accuracy then
             SetMapToCurrentZone()
         end

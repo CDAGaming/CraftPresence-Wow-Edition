@@ -586,7 +586,7 @@ end)
 local fallbackVersion, fallbackTOC = "0.0.0", 00000
 local timer_locked = false
 -- Compatibility Data
-local addon_info, build_info, compatibility_info, flavor_info, extra_build_info
+local addon_info, build_info, compatibility_info, compatibility_attachments, flavor_info
 
 --- Retrieve and/or Synchronize App Build Info
 ---
@@ -749,51 +749,176 @@ end
 --- Retrieve and/or Synchronize App Compatibility Info
 --- (Note: Some TOC versions may require extra filtering)
 ---
+--- Note: This function should only be used internally; Use Helper Functions for more consumer-style usage
+---
 --- @param key string If specified, attempt to retrieve and return compatibility_info[key]
+--- @param value string If specified, attempt to retrieve and return compatibility_info[key][value]
 ---
 --- @return table @ compatibility_info
-function CraftPresence:GetCompatibilityInfo(key)
+function CraftPresence:GetCompatibilityInfo(key, value)
     if not compatibility_info then
         compatibility_info = {
-            ["10.0.0"] = 100000, -- Dragonflight 10.0.0
-            ["9.0.0"] = 90000, -- Shadowlands 9.0.0
-            ["8.0.0"] = 80000, -- BFA 8.0.0
-            ["7.0.0"] = 70000, -- Legion 7.0.0
-            ["6.0.0"] = 60000, -- WOD 6.0.0
-            ["5.0.0"] = 50000, -- MOP 5.0.0
-            ["4.0.0"] = 40000, -- CATA 4.0.0
-            ["3.4.0"] = 30400, -- WOTLK Classic 3.4.0
-            ["3.0.0"] = 30000, -- WOTLK 3.0.0
-            ["2.5.0"] = 20500, -- TBC Classic 2.5.0
-            ["2.0.0"] = 20000, -- TBC 2.0.0
-            ["1.14.0"] = 11400, -- Vanilla Classic (SOM) 1.14.0
-            ["1.13.0"] = 11300, -- Vanilla Classic (Original) 1.13.0
-            ["1.12.0"] = 11200 -- Vanilla 1.12.0
+            ["10.x"] = {
+                ["minimumTOC"] = 100000,
+                ["name"] = "Dragonflight"
+            },
+            ["9.x"] = {
+                ["minimumTOC"] = 90000,
+                ["maximumTOC"] = 90207,
+                ["name"] = "Shadowlands"
+            },
+            ["8.x"] = {
+                ["minimumTOC"] = 80000,
+                ["maximumTOC"] = 80307,
+                ["name"] = "Battle for Azeroth"
+            },
+            ["7.x"] = {
+                ["minimumTOC"] = 70000,
+                ["maximumTOC"] = 70305,
+                ["name"] = "Legion"
+            },
+            ["6.x"] = {
+                ["minimumTOC"] = 60000,
+                ["maximumTOC"] = 60204,
+                ["name"] = "Warlords of Draenor"
+            },
+            ["5.x"] = {
+                ["minimumTOC"] = 50000,
+                ["maximumTOC"] = 50408,
+                ["name"] = "Mists of Pandaria"
+            },
+            ["4.x"] = {
+                ["minimumTOC"] = 40000,
+                ["maximumTOC"] = 40304,
+                ["name"] = "Cataclysm"
+            },
+            ["3.4.x"] = {
+                ["minimumTOC"] = 30400,
+                ["baseTOC"] = 90205,
+                ["name"] = "Wrath of the Lich King Classic"
+            },
+            ["3.x"] = {
+                ["minimumTOC"] = 30000,
+                ["maximumTOC"] = 30305,
+                ["name"] = "Wrath of the Lich King"
+            },
+            ["2.5.x"] = {
+                ["minimumTOC"] = 20500,
+                ["maximumTOC"] = 20504,
+                ["baseTOC"] = 90005,
+                ["name"] = "Burning Crusade Classic"
+            },
+            ["2.x"] = {
+                ["minimumTOC"] = 20000,
+                ["maximumTOC"] = 20403,
+                ["name"] = "Burning Crusade"
+            },
+            ["1.14.x"] = {
+                ["minimumTOC"] = 11400,
+                ["maximumTOC"] = 11403,
+                ["baseTOC"] = 20502,
+                ["name"] = "Classic Season of Mastery"
+            },
+            ["1.13.x"] = {
+                ["minimumTOC"] = 11300,
+                ["maximumTOC"] = 11307,
+                ["baseTOC"] = 80100,
+                ["name"] = "Classic"
+            },
+            ["1.12.x"] = {
+                ["minimumTOC"] = 11200,
+                ["maximumTOC"] = 11203,
+                ["name"] = "Vanilla"
+            }
+        }
+        -- Special Builds
+        compatibility_info["1.16.x"] = {
+            ["minimumTOC"] = 11600,
+            ["name"] = "TurtleWow 1.16.x",
+            ["is_special"] = true,
+            ["baseTOC"] = 11201
+        }
+        compatibility_info["1.15.x"] = {
+            ["minimumTOC"] = 11500,
+            ["maximumTOC"] = 11501,
+            ["name"] = "TurtleWow 1.15.x",
+            ["is_special"] = true,
+            ["baseTOC"] = 11201
         }
     end
     if not self:IsNullOrEmpty(key) and compatibility_info[key] ~= nil then
+        if not self:IsNullOrEmpty(value) and compatibility_info[key][value] ~= nil then
+            return compatibility_info[key][value]
+        end
         return compatibility_info[key]
     end
     return compatibility_info
 end
 
---- Retrieve and/or Synchronize Extra Build Info
---- (Note that some TOC versions require extra filtering)
+--- Retrieve and/or Synchronize App Compatibility Info
+--- (Note: Some TOC versions may require extra filtering)
 ---
---- @param key string If specified, attempt to retrieve and return extra_build_info[key]
+--- Note: This is a consumer-friendly helper function for GetCompatibilityInfo
 ---
---- @return table @ extra_build_info
-function CraftPresence:GetExtraBuildInfo(key)
-    if not extra_build_info then
-        extra_build_info = {
-            ["1.16.0"] = 11600, -- TurtleWoW 1.16.0 (Vanilla)
-            ["1.15.1"] = 11501 -- TurtleWoW 1.15.1 (Vanilla)
-        }
+--- @param version any The version or toc number to attempt to locate within GetCompatibilityInfo (Required)
+--- @param field any If specified, the field value to locate within GetCompatibilityInfo[version], if found. (Optional)
+---
+--- @return table @ compatibility_info
+function CraftPresence:FindCompatibilityInfo(version, field)
+    if not compatibility_attachments then compatibility_attachments = {} end
+    if self:IsNullOrEmpty(version) then
+        return self:GetCompatibilityInfo()
+    else
+        if self:GetCompatibilityInfo()[version] ~= nil then
+            return self:GetCompatibilityInfo(version, field)
+        else
+            version = self:VersionToBuild(version)
+        end
     end
-    if not self:IsNullOrEmpty(key) and extra_build_info[key] ~= nil then
-        return extra_build_info[key]
+
+    if not compatibility_attachments[version] then
+        for key, value in pairs(self:GetCompatibilityInfo()) do
+            local _, _, shouldAccept = self:ShouldProcessData(value, version)
+            if shouldAccept then
+                compatibility_attachments[version] = key
+                if not self:IsNullOrEmpty(field) and value[field] ~= nil then
+                    return value[field]
+                end
+                return value
+            end
+        end
     end
-    return extra_build_info
+    return self:GetCompatibilityInfo(compatibility_attachments[version], field)
+end
+
+--- Attempt to retrieve App Compatibility TOC Info for the specified version
+--- (Helper Function for FindCompatibilityInfo)
+---
+--- @param key any The version or toc number to attempt to locate within FindCompatibilityInfo.
+---
+--- @return number, number @ minimumTOC, maximumTOC
+function CraftPresence:FindCompatibilityTOC(key)
+    return self:FindCompatibilityInfo(key, "minimumTOC"), self:FindCompatibilityInfo(key, "maximumTOC")
+end
+
+--- Determine if a function or feature is marked as supported in the specified version (Or it's based version)
+---
+--- @param feature string The feature name to attempt to lookup (Required)
+--- @param version any The version or toc number to attempt to locate within FindCompatibilityInfo. (Default: currentTOC)
+---
+--- @return boolean @ is_feature_supported
+function CraftPresence:IsFeatureSupported(feature, version)
+    if self:IsNullOrEmpty(feature) then return false end
+    if self:IsNullOrEmpty(version) then
+        version = self:GetBuildInfo("toc_version")
+    end
+    local foundData = self:FindCompatibilityInfo(version)
+    local featureAbsent = (foundData.features == nil) or (foundData.features[feature] == nil)
+    local featureSupported = true
+    if not featureAbsent then
+        featureSupported = self:ShouldProcessData(foundData.features[feature], version)
+    end
+    return featureSupported or (foundData.base ~= nil and self:IsFeatureSupported(feature, foundData.baseTOC))
 end
 
 --- Determine if this build identifies as Vanilla Classic
@@ -801,7 +926,7 @@ end
 function CraftPresence:IsClassicRebased()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetCompatibilityInfo("1.13.0"), self:GetCompatibilityInfo("2.0.0"),
+        self:FindCompatibilityTOC("1.13.x"), self:FindCompatibilityTOC("2.x"),
         true, false
     ) and not self:IsSpecialVersion()
 end
@@ -811,7 +936,7 @@ end
 function CraftPresence:IsTBCRebased()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetCompatibilityInfo("2.5.0"), self:GetCompatibilityInfo("3.0.0"),
+        self:FindCompatibilityTOC("2.5.x"), self:FindCompatibilityTOC("3.x"),
         true, false
     ) and not self:IsSpecialVersion()
 end
@@ -821,7 +946,7 @@ end
 function CraftPresence:IsWrathRebased()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:GetCompatibilityInfo("3.4.0"), self:GetCompatibilityInfo("4.0.0"),
+        self:FindCompatibilityTOC("3.4.x"), self:FindCompatibilityTOC("4.x"),
         true, false
     ) and not self:IsSpecialVersion()
 end
@@ -921,7 +1046,7 @@ end
 --- Determine if this build is using a special or modified api
 --- @return any @ special_info
 function CraftPresence:IsSpecialVersion()
-    return self:GetExtraBuildInfo()[self:GetBuildInfo("version")]
+    return self:FindCompatibilityInfo(self:GetBuildInfo("version"), "is_special")
 end
 
 --- Getter for Addon Locale Data

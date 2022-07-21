@@ -78,11 +78,11 @@ function CraftPresence:OnInitialize()
     self:SyncAnalytics(self:GetProperty("metrics"))
     self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
     -- Version-Specific Registration
-    if buildData["toc_version"] >= compatData["1.12.0"] then
+    if buildData["toc_version"] >= self:FindCompatibilityTOC("1.12.x") then
         -- UI Registration
         if InterfaceOptions_AddCategory then
             local can_register = true
-            local minTOC, maxTOC = compatData["2.0.0"], compatData["4.0.0"]
+            local minTOC, maxTOC = self:FindCompatibilityTOC("2.x"), self:FindCompatibilityTOC("4.x")
             local currentTOC = buildData["toc_version"]
             if not isRebasedApi and (currentTOC >= minTOC and currentTOC < maxTOC) then
                 -- On TBC and Wrath Clients, the interface options frame size is far too small
@@ -142,7 +142,7 @@ function CraftPresence:OnEnable()
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
     -- Register Universal Events
-    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+    if buildData["toc_version"] >= self:FindCompatibilityTOC("2.x") or isRebasedApi then
         self.defaultEventCallback = "DispatchUpdate"
     else
         self.defaultEventCallback = "DispatchLegacyUpdate"
