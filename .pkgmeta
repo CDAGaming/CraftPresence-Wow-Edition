@@ -8,6 +8,7 @@ embedded-libraries:
   - ace3
 
 ignore:
+  - *.jpg
   - *.png
   - Libraries/Ace3/Ace3.lua
   - Libraries/Ace3/Ace3.toc
