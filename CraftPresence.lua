@@ -75,17 +75,17 @@ function CraftPresence:OnInitialize()
         self:GetProperty("optionalMigrations")
     )
     -- Analytics Initialization
+    local currentTOC = buildData["toc_version"]
     self:SyncAnalytics(self:GetProperty("metrics"))
-    self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
+    self:LogChangedValue("currentTOC", nil, currentTOC)
     -- Version-Specific Registration
-    if buildData["toc_version"] >= self:FindCompatibilityTOC("1.12.x") then
+    if self:IsFeatureSupported("registerUI", currentTOC) then
         -- UI Registration
         if InterfaceOptions_AddCategory then
             local can_register = true
-            local minTOC, maxTOC = self:FindCompatibilityTOC("2.x"), self:FindCompatibilityTOC("4.x")
             local currentTOC = buildData["toc_version"]
-            if not isRebasedApi and (currentTOC >= minTOC and currentTOC < maxTOC) then
-                -- On TBC and Wrath Clients, the interface options frame size is far too small
+            if self:IsFeatureSupported("enforceInterface", currentTOC) then
+                -- On some Clients, the interface options frame size is far too small
                 -- to show any meaningful data for addon settings displayed in there.
                 -- If enforceInterface is enabled, we'll adjust the size to retail's counterpart,
                 -- as well as register it to Blizzard's options panel.
@@ -142,7 +142,7 @@ function CraftPresence:OnEnable()
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
     -- Register Universal Events
-    if buildData["toc_version"] >= self:FindCompatibilityTOC("2.x") or isRebasedApi then
+    if self:IsFeatureSupported("modernDispatcher", buildData["toc_version"]) then
         self.defaultEventCallback = "DispatchUpdate"
     else
         self.defaultEventCallback = "DispatchLegacyUpdate"

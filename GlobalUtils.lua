@@ -89,6 +89,10 @@ CraftPresence.internals = {
     }
 }
 
+CraftPresence.cache = {
+    features = {}
+}
+
 CraftPresence.colors = {
     GREEN = CraftPresence.internals.defaultColorPrefix .. "00FF7F",
     GREY = CraftPresence.internals.defaultColorPrefix .. "9B9B9B",

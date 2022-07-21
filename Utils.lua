@@ -760,47 +760,63 @@ function CraftPresence:GetCompatibilityInfo(key, value)
         compatibility_info = {
             ["10.x"] = {
                 ["minimumTOC"] = 100000,
+                ["baseTOC"] = 90000,
                 ["name"] = "Dragonflight"
             },
             ["9.x"] = {
                 ["minimumTOC"] = 90000,
                 ["maximumTOC"] = 90207,
+                ["baseTOC"] = 80000,
                 ["name"] = "Shadowlands"
             },
             ["8.x"] = {
                 ["minimumTOC"] = 80000,
                 ["maximumTOC"] = 80307,
+                ["baseTOC"] = 70000,
                 ["name"] = "Battle for Azeroth"
             },
             ["7.x"] = {
                 ["minimumTOC"] = 70000,
                 ["maximumTOC"] = 70305,
+                ["baseTOC"] = 60000,
                 ["name"] = "Legion"
             },
             ["6.x"] = {
                 ["minimumTOC"] = 60000,
                 ["maximumTOC"] = 60204,
+                ["baseTOC"] = 50000,
                 ["name"] = "Warlords of Draenor"
             },
             ["5.x"] = {
                 ["minimumTOC"] = 50000,
                 ["maximumTOC"] = 50408,
+                ["baseTOC"] = 40000,
                 ["name"] = "Mists of Pandaria"
             },
             ["4.x"] = {
                 ["minimumTOC"] = 40000,
                 ["maximumTOC"] = 40304,
+                ["baseTOC"] = 30000,
                 ["name"] = "Cataclysm"
             },
             ["3.4.x"] = {
                 ["minimumTOC"] = 30400,
+                ["maximumTOC"] = 30400,
                 ["baseTOC"] = 90205,
                 ["name"] = "Wrath of the Lich King Classic"
             },
             ["3.x"] = {
                 ["minimumTOC"] = 30000,
                 ["maximumTOC"] = 30305,
-                ["name"] = "Wrath of the Lich King"
+                ["baseTOC"] = 20000,
+                ["name"] = "Wrath of the Lich King",
+                ["features"] = {
+                    ["modernInstanceState"] = {
+                        ["minimumTOC"] = 30000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    }
+                }
             },
             ["2.5.x"] = {
                 ["minimumTOC"] = 20500,
@@ -811,7 +827,26 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             ["2.x"] = {
                 ["minimumTOC"] = 20000,
                 ["maximumTOC"] = 20403,
-                ["name"] = "Burning Crusade"
+                ["baseTOC"] = 11200,
+                ["name"] = "Burning Crusade",
+                ["features"] = {
+                    ["enforceInterface"] = {
+                        ["minimumTOC"] = 20000,
+                        ["maximumTOC"] = 40000,
+                        ["allowRebasedApi"] = false,
+                        ["enabled"] = true
+                    },
+                    ["notifyOnChange"] = {
+                        ["minimumTOC"] = 20000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    },
+                    ["modernDispatcher"] = {
+                        ["minimumTOC"] = 20000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    }
+                }
             },
             ["1.14.x"] = {
                 ["minimumTOC"] = 11400,
@@ -828,12 +863,20 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             ["1.12.x"] = {
                 ["minimumTOC"] = 11200,
                 ["maximumTOC"] = 11203,
-                ["name"] = "Vanilla"
+                ["name"] = "Vanilla",
+                ["features"] = {
+                    ["registerUI"] = {
+                        ["minimumTOC"] = 11200,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    }
+                }
             }
         }
         -- Special Builds
         compatibility_info["1.16.x"] = {
             ["minimumTOC"] = 11600,
+            ["maximumTOC"] = 11600,
             ["name"] = "TurtleWow 1.16.x",
             ["is_special"] = true,
             ["baseTOC"] = 11201
@@ -907,18 +950,38 @@ end
 --- @param version any The version or toc number to attempt to locate within FindCompatibilityInfo. (Default: currentTOC)
 ---
 --- @return boolean @ is_feature_supported
-function CraftPresence:IsFeatureSupported(feature, version)
+function CraftPresence:IsFeatureSupported(feature, version, checkOverride)
+    if not self.cache.features then self.cache.features = {} end
     if self:IsNullOrEmpty(feature) then return false end
     if self:IsNullOrEmpty(version) then
         version = self:GetBuildInfo("toc_version")
     end
-    local foundData = self:FindCompatibilityInfo(version)
-    local featureAbsent = (foundData.features == nil) or (foundData.features[feature] == nil)
-    local featureSupported = true
-    if not featureAbsent then
-        featureSupported = self:ShouldProcessData(foundData.features[feature], version)
+    checkOverride = self:GetOrDefault(checkOverride, version)
+
+    if self.cache.features[version] ~= nil then
+        if self.cache.features[version][feature] ~= nil then
+            return self.cache.features[version][feature]
+        end
+    else
+        self.cache.features[version] = {}
     end
-    return featureSupported or (foundData.base ~= nil and self:IsFeatureSupported(feature, foundData.baseTOC))
+
+    self:Print("Checking for " .. feature .. " @ " .. version .. " (Checking Override: " .. checkOverride .. ")")
+    local foundData = self:FindCompatibilityInfo(checkOverride)
+    local featureAbsent = (foundData.features == nil) or (foundData.features[feature] == nil)
+    local featureSupported = false
+    if not featureAbsent then
+        self:Print("Found Feature: " .. feature .. " => " .. self:SerializeTable(foundData.features[feature]) .. " for version " .. version)
+        featureSupported = self:ShouldProcessData(foundData.features[feature], version)
+        self.cache.features[version][feature] = featureSupported
+    end
+
+    if foundData.baseTOC == nil then
+        self.cache.features[version][feature] = featureSupported
+        return featureSupported
+    else
+        return self:IsFeatureSupported(feature, version, foundData.baseTOC)
+    end
 end
 
 --- Determine if this build identifies as Vanilla Classic

@@ -115,12 +115,8 @@ function CraftPresence:GetOptions()
                     enforceInterface = {
                         type = "toggle", order = self:GetNextIndex(),
                         disabled = function()
-                            local minTOC = self:FindCompatibilityTOC("1.12.x")
-                            local maxTOC = self:FindCompatibilityTOC("4.x")
                             local currentTOC = self:GetBuildInfo("toc_version")
-                            return (self:IsRebasedApi() or
-                                currentTOC >= maxTOC or
-                                currentTOC <= minTOC)
+                            return not self:IsFeatureSupported("enforceInterface", currentTOC)
                         end,
                         name = self:GetConfigTitle("ENFORCE_INTERFACE"),
                         desc = self:GetConfigComment("ENFORCE_INTERFACE", nil, nil, nil, defaults.enforceInterface),
@@ -505,7 +501,8 @@ end
 ---
 --- @return table @ profile
 CraftPresence.UpdateProfile = CraftPresence:vararg(3, function(self, notify, reset, tags)
-    local canNotify = self:GetBuildInfo("toc_version") >= self:FindCompatibilityTOC("2.x") or self:IsRebasedApi()
+    local currentTOC = self:GetBuildInfo("toc_version")
+    local canNotify = self:IsFeatureSupported("notifyOnChange", currentTOC)
     notify = self:GetOrDefault(notify, true)
     reset = self:GetOrDefault(reset, false)
     tags = self:GetOrDefault(tags, {})
