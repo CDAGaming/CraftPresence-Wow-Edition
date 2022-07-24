@@ -523,7 +523,7 @@ end]]                ,
     local unitClass = UnitClass('player')
     local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
     -- Specialization Info (5.0.4 and above)
-    if GetSpecialization then
+    if GetSpecialization and GetSpecializationInfo then
         local specInfo, specId, specName, roleName = GetSpecialization()
         --
         -- Hotfix: Prevent a null-case with Spec Info
