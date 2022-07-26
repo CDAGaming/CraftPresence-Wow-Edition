@@ -70,7 +70,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("clientId")
                             local isValid = (value ~= nil and
                                 self:ContainsDigit(value) and
-                                self:GetLength(value) == 18)
+                                self:GetLength(value) >= 18)
                             if isValid then
                                 self:SetProperty("clientId", nil, value)
                                 self:PrintChangedValue(self.locale["TITLE_CLIENT_ID"], oldValue, value)
