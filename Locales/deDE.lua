@@ -110,9 +110,9 @@ L["CATEGORY_COMMENT_ABOUT"] = "Informationen zum Addon."
 -- Config Variable Data
 L["TITLE_CLIENT_ID"] = "Client ID"
 L["COMMENT_CLIENT_ID"] = "Discord Client ID um die Rich Presence zu aktivieren."
-L["USAGE_CLIENT_ID"] = "<18-digit numerical id here>"
+L["USAGE_CLIENT_ID"] = "<18-digit (or higher) numerical id here>"
 L["DEFAULT_CLIENT_ID"] = "805124430774272000"
-L["ERROR_CLIENT_ID"] = self:SetFormat("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit|r numerical value.",
+L["ERROR_CLIENT_ID"] = self:SetFormat("Sanity Checks failed for *Client ID|r. Please enter an ^18-digit (or higher)|r numerical value.",
         self.colors.GREEN, self.colors.GREY
 )
 
