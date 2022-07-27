@@ -74,8 +74,6 @@ CraftPresence.internals = {
     name = "CraftPresence",
     identifier = "craftpresence",
     affix = "cp",
-    defaultInnerKey = "@",
-    defaultGlobalKey = "#",
     defaultColorPrefix = "|cFF",
     lengths = {
         rpc = 11,
@@ -86,7 +84,24 @@ CraftPresence.internals = {
         eventTag = "$RPCEvent$",
         eventSeperator = "|",
         chatSeperator = "||"
+    },
+    defaults = {
+        innerKey = "@",
+        globalKey = "#",
+        version = "0.0.0",
+        build = "0000",
+        date = "Jan 1 1969",
+        toc = 00000
     }
+}
+
+CraftPresence.cache = {
+    features = nil,
+    flavors = nil,
+    addon_info = nil,
+    build_info = nil,
+    compatibility_info = nil,
+    compatibility_attachments = nil
 }
 
 CraftPresence.colors = {

@@ -23,6 +23,8 @@ Libraries\WagoAnalytics\Shim.lua
 GlobalUtils.lua
 Utils.lua
 
+CompatibilityUtils.lua
+
 Locales\Locales.xml
 
 ProfileInfo.lua

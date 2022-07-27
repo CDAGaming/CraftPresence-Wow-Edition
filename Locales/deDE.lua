@@ -176,21 +176,21 @@ L["DEFAULT_FRAME_SIZE"] = 6
 
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
-L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaultGlobalKey)
+L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaults.globalKey)
 
 L["TITLE_DETAILS"] = "Details"
 L["COMMENT_DETAILS"] = "The data to be interpeted for the Details area of the Rich Presence."
-L["DEFAULT_DETAILS_MESSAGE"] = self:SetFormat("*player_info*", self.internals.defaultInnerKey)
+L["DEFAULT_DETAILS_MESSAGE"] = self:SetFormat("*player_info*", self.internals.defaults.innerKey)
 
 L["TITLE_LARGEIMAGE"] = "Large Image"
 L["COMMENT_LARGEIMAGE"] = "The data to be interpeted for the Large Image area of the Rich Presence."
 L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
-L["DEFAULT_LARGE_IMAGE_MESSAGE"] = self:SetFormat("*realm_info*", self.internals.defaultInnerKey)
+L["DEFAULT_LARGE_IMAGE_MESSAGE"] = self:SetFormat("*realm_info*", self.internals.defaults.innerKey)
 
 L["TITLE_SMALLIMAGE"] = "Small Image"
 L["COMMENT_SMALLIMAGE"] = "The data to be interpeted for the Small Image area of the Rich Presence."
-L["DEFAULT_SMALL_IMAGE_KEY"] = self:SetFormat("*player_alliance*", self.internals.defaultInnerKey)
-L["DEFAULT_SMALL_IMAGE_MESSAGE"] = self:SetFormat("*player_alliance*", self.internals.defaultInnerKey)
+L["DEFAULT_SMALL_IMAGE_KEY"] = self:SetFormat("*player_alliance*", self.internals.defaults.innerKey)
+L["DEFAULT_SMALL_IMAGE_MESSAGE"] = self:SetFormat("*player_alliance*", self.internals.defaults.innerKey)
 
 L["TITLE_PRIMARYBUTTON"] = "Primärer Button"
 L["COMMENT_PRIMARYBUTTON"] = "Einstellungen für den ersten Button in Discord."
@@ -345,12 +345,12 @@ L["COMMENT_INPUT_SUFFIX"] = "Suffix für diese Daten."
 L["USAGE_INPUT_SUFFIX"] = "<Dein Text hier>"
 
 -- Global Placeholder Defaults
-L["DEFAULT_DUNGEON_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", self.internals.defaultInnerKey)
-L["DEFAULT_RAID_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", self.internals.defaultInnerKey)
-L["DEFAULT_SCENARIO_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Szenario *lockout_encounters*", self.internals.defaultInnerKey)
-L["DEFAULT_BATTLEGROUND_MESSAGE"] = self:SetFormat("*zone_name* - Auf Schlachtfeld", self.internals.defaultInnerKey)
-L["DEFAULT_ARENA_MESSAGE"] = self:SetFormat("*zone_name* - In Arena", self.internals.defaultInnerKey)
-L["DEFAULT_FALLBACK_MESSAGE"] = self:SetFormat("*zone_info*", self.internals.defaultInnerKey)
+L["DEFAULT_DUNGEON_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Dungeon *lockout_encounters*", self.internals.defaults.innerKey)
+L["DEFAULT_RAID_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Raid *lockout_encounters*", self.internals.defaults.innerKey)
+L["DEFAULT_SCENARIO_MESSAGE"] = self:SetFormat("*zone_name* - In *difficulty_info* Szenario *lockout_encounters*", self.internals.defaults.innerKey)
+L["DEFAULT_BATTLEGROUND_MESSAGE"] = self:SetFormat("*zone_name* - Auf Schlachtfeld", self.internals.defaults.innerKey)
+L["DEFAULT_ARENA_MESSAGE"] = self:SetFormat("*zone_name* - In Arena", self.internals.defaults.innerKey)
+L["DEFAULT_FALLBACK_MESSAGE"] = self:SetFormat("*zone_info*", self.internals.defaults.innerKey)
 
 -- Global Label Defaults
 L["DEFAULT_LABEL_AWAY"] = "AFK"
@@ -393,10 +393,10 @@ L["ADDON_BUILD_INFO"] = "Build Info: %s"
 
 -- Command: /cp placeholders
 L["PLACEHOLDERS_NOTE_ONE"] = self:SetFormat("NOTE: Keys enclosed by *^|r are global (Can have inner keys),",
-        self.colors.GREEN, self.internals.defaultGlobalKey
+        self.colors.GREEN, self.internals.defaults.globalKey
 )
 L["PLACEHOLDERS_NOTE_TWO"] = self:SetFormat("while ones enclosed by *^|r are inner (Cannot have any other keys)",
-        self.colors.GREY, self.internals.defaultInnerKey
+        self.colors.GREY, self.internals.defaults.innerKey
 )
 
 -- Dynamic Data - Access

@@ -75,17 +75,17 @@ function CraftPresence:OnInitialize()
         self:GetProperty("optionalMigrations")
     )
     -- Analytics Initialization
+    local currentTOC = buildData["toc_version"]
     self:SyncAnalytics(self:GetProperty("metrics"))
-    self:LogChangedValue("currentTOC", nil, buildData["toc_version"])
+    self:LogChangedValue("currentTOC", nil, currentTOC)
     -- Version-Specific Registration
-    if buildData["toc_version"] >= compatData["1.12.0"] then
+    if self:IsFeatureSupported("registerUI", currentTOC) then
         -- UI Registration
         if InterfaceOptions_AddCategory then
             local can_register = true
-            local minTOC, maxTOC = compatData["2.0.0"], compatData["4.0.0"]
             local currentTOC = buildData["toc_version"]
-            if not isRebasedApi and (currentTOC >= minTOC and currentTOC < maxTOC) then
-                -- On TBC and Wrath Clients, the interface options frame size is far too small
+            if self:IsFeatureSupported("enforceInterface", currentTOC) then
+                -- On some Clients, the interface options frame size is far too small
                 -- to show any meaningful data for addon settings displayed in there.
                 -- If enforceInterface is enabled, we'll adjust the size to retail's counterpart,
                 -- as well as register it to Blizzard's options panel.
@@ -142,7 +142,7 @@ function CraftPresence:OnEnable()
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
     -- Register Universal Events
-    if buildData["toc_version"] >= compatData["2.0.0"] or isRebasedApi then
+    if self:IsFeatureSupported("modernDispatcher", buildData["toc_version"]) then
         self.defaultEventCallback = "DispatchUpdate"
     else
         self.defaultEventCallback = "DispatchLegacyUpdate"
@@ -696,8 +696,8 @@ function CraftPresence:ChatCommand(input)
                                     registerCallback = self:GetOrDefault(default_data.registerCallback),
                                     tagCallback = self:GetOrDefault(default_data.tagCallback),
                                     tagType = self:GetOrDefault(default_data.tagType, "string"),
-                                    prefix = self:GetOrDefault(default_data.prefix, self.internals.defaultInnerKey),
-                                    suffix = self:GetOrDefault(default_data.suffix, self.internals.defaultInnerKey),
+                                    prefix = self:GetOrDefault(default_data.prefix, self.internals.defaults.innerKey),
+                                    suffix = self:GetOrDefault(default_data.suffix, self.internals.defaults.innerKey),
                                     enabled = self:GetOrDefault(default_data.enabled, true)
                                 }
                             elseif tag_name == "events" then

@@ -139,7 +139,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
                 end
 
                 for k, v in pairs(placeholders) do
-                    if v.prefix == self.internals.defaultInnerKey then
+                    if v.prefix == self.internals.defaults.innerKey then
                         placeholders[k].prefix = old_inner_prefix
                     end
                 end

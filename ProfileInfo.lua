@@ -204,7 +204,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
+                    prefix = self.internals.defaults.globalKey, suffix = self.internals.defaults.globalKey
                 },
                 ["arena"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -216,7 +216,7 @@ end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
+                    prefix = self.internals.defaults.globalKey, suffix = self.internals.defaults.globalKey
                 },
                 ["battleground"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -228,7 +228,7 @@ end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
+                    prefix = self.internals.defaults.globalKey, suffix = self.internals.defaults.globalKey
                 },
                 ["raid"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -240,7 +240,7 @@ end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
+                    prefix = self.internals.defaults.globalKey, suffix = self.internals.defaults.globalKey
                 },
                 ["dungeon"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -254,7 +254,7 @@ end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
+                    prefix = self.internals.defaults.globalKey, suffix = self.internals.defaults.globalKey
                 },
                 ["scenario"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -266,7 +266,7 @@ end]]                ,
                     tagCallback = "time_start",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultGlobalKey, suffix = self.internals.defaultGlobalKey
+                    prefix = self.internals.defaults.globalKey, suffix = self.internals.defaults.globalKey
                 },
                 ["player_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -278,7 +278,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["title_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -290,7 +290,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_level"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -302,7 +302,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_realm"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -318,7 +318,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_region"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -335,7 +335,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_class"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -347,7 +347,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_race"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -359,7 +359,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_gender"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -376,7 +376,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_icon"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -402,7 +402,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_status"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -414,7 +414,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_reason"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -426,7 +426,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["difficulty_info"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -444,7 +444,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_faction"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -459,7 +459,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_alliance"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -493,7 +493,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_covenant"] = {
                     minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
@@ -510,7 +510,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -555,7 +555,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_spec_name"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
@@ -581,7 +581,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_spec_role"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
@@ -607,7 +607,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["realm_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -630,7 +630,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["player_covenant_renown"] = {
                     minimumTOC = "90000", maximumTOC = "", allowRebasedApi = false,
@@ -642,7 +642,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["localized_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -654,7 +654,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["instance_type"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -666,7 +666,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["instance_difficulty"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -678,7 +678,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["difficulty_name"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -690,7 +690,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["current_players"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -712,7 +712,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["max_players"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -724,7 +724,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["dynamic_difficulty"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -736,7 +736,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["is_dynamic"] = {
                     minimumTOC = "30200", maximumTOC = "", allowRebasedApi = true,
@@ -748,7 +748,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["instance_id"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = true,
@@ -760,7 +760,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["instance_group_size"] = {
                     minimumTOC = "50400", maximumTOC = "", allowRebasedApi = true,
@@ -772,7 +772,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["lfg_dungeon_id"] = {
                     minimumTOC = "80000", maximumTOC = "", allowRebasedApi = true,
@@ -784,7 +784,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["zone_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -796,7 +796,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["sub_zone_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -808,7 +808,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["zone_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -835,7 +835,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["item_level"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -854,7 +854,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["item_level_equipped"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -873,7 +873,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["item_level_pvp"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
@@ -892,7 +892,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["active_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -904,7 +904,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["active_keystone_affixes"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -916,7 +916,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["active_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -928,7 +928,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["internal_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -940,7 +940,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["external_keystone_rating"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -952,7 +952,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["owned_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
@@ -964,7 +964,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["lockout_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -979,7 +979,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["lockout_current_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -994,7 +994,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
                 ["lockout_total_encounters"] = {
                     minimumTOC = "60000", maximumTOC = "", allowRebasedApi = false,
@@ -1009,7 +1009,7 @@ end]]                ,
                     tagCallback = "",
                     tagType = "string",
                     enabled = true,
-                    prefix = self.internals.defaultInnerKey, suffix = self.internals.defaultInnerKey
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 }
             },
             events = {
