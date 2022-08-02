@@ -160,9 +160,10 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["baseTOC"] = 20000,
                 ["name"] = "Wrath of the Lich King",
                 ["features"] = {
-                    ["modernInstanceState"] = {
+                    ["enforceInterface"] = {
                         ["minimumTOC"] = 30000,
-                        ["allowRebasedApi"] = true,
+                        ["maximumTOC"] = 30305,
+                        ["allowRebasedApi"] = false,
                         ["enabled"] = true
                     }
                 }
@@ -181,18 +182,8 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["features"] = {
                     ["enforceInterface"] = {
                         ["minimumTOC"] = 20000,
-                        ["maximumTOC"] = 40000,
+                        ["maximumTOC"] = 20403,
                         ["allowRebasedApi"] = false,
-                        ["enabled"] = true
-                    },
-                    ["notifyOnChange"] = {
-                        ["minimumTOC"] = 20000,
-                        ["allowRebasedApi"] = true,
-                        ["enabled"] = true
-                    },
-                    ["modernDispatcher"] = {
-                        ["minimumTOC"] = 20000,
-                        ["allowRebasedApi"] = true,
                         ["enabled"] = true
                     }
                 }
@@ -214,6 +205,21 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["maximumTOC"] = 11203,
                 ["name"] = "Vanilla",
                 ["features"] = {
+                    ["modernInstanceState"] = {
+                        ["minimumTOC"] = 30000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    },
+                    ["notifyOnChange"] = {
+                        ["minimumTOC"] = 20000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    },
+                    ["modernDispatcher"] = {
+                        ["minimumTOC"] = 20000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    },
                     ["registerUI"] = {
                         ["minimumTOC"] = 11200,
                         ["allowRebasedApi"] = true,
@@ -454,7 +460,8 @@ function CraftPresence:IsRebasedApi()
 end
 
 --- Determine if this build is using a special or modified api
---- @return any @ special_info
+--- @return boolean @ is_special_version
 function CraftPresence:IsSpecialVersion()
-    return self:FindCompatibilityInfo(self:GetBuildInfo("version"), "is_special")
+    local data = self:FindCompatibilityInfo(self:GetBuildInfo("version"), "is_special")
+    return type(data) == "boolean" and data == true
 end
