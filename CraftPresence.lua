@@ -190,11 +190,14 @@ end
 ---
 --- @param data table The data table to interpret (Required)
 --- @param tocOverride number If specified, use as the currentTOC value to check against (Optional)
+--- @param ignoreExtraChecks boolean If specified, only check critical functions to ensure validity (Default: false)
 ---
---- @return boolean, boolean @ shouldEnable, shouldRegister, shouldAccept
-function CraftPresence:ShouldProcessData(data, tocOverride)
+--- @return boolean, boolean, boolean @ shouldEnable, shouldRegister, shouldAccept
+function CraftPresence:ShouldProcessData(data, tocOverride, ignoreExtraChecks)
     if tocOverride ~= nil and type(tocOverride) ~= "number" then tocOverride = nil end
+    ignoreExtraChecks = self:GetOrDefault(ignoreExtraChecks, false)
     local shouldEnable, shouldRegister, shouldAccept = false, false, false
+    local withinTOCLimits, canPass = false, false
 
     if type(data) == "table" then
         local currentTOC = self:GetOrDefault(tocOverride, buildData["toc_version"])
@@ -212,9 +215,22 @@ function CraftPresence:ShouldProcessData(data, tocOverride)
         shouldRegister = (self:IsNullOrEmpty(data.registerCallback) or self:IsValueTrue(
             self:GetDynamicReturnValue(data.registerCallback, "function", self)
         ))
-        shouldAccept = shouldRegister and (self:IsWithinValue(
+        withinTOCLimits = self:IsWithinValue(
             currentTOC, minTOC, maxTOC, true, true, false
-        ) or (data.allowRebasedApi and self:IsRebasedApi()))
+        )
+
+        -- ignoreExtraChecks => canPass logic
+        canPass = withinTOCLimits
+        if not ignoreExtraChecks then
+            local isRebasedApi = self:IsRebasedApi()
+            if data.allowRebasedApi then
+                canPass = canPass or isRebasedApi
+            else
+                canPass = canPass and not isRebasedApi
+            end
+        end
+
+        shouldAccept = shouldRegister and canPass
         shouldEnable = data.enabled and shouldAccept
     end
     return shouldEnable, shouldRegister, shouldAccept

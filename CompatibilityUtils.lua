@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local pairs = pairs
+local pairs, type = pairs, type
 
 --- Retrieve and/or Synchronize Build Flavor Info
 ---
@@ -151,6 +151,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             ["3.4.x"] = {
                 ["minimumTOC"] = 30400,
                 ["maximumTOC"] = 30400,
+                ["build_tag"] = "rebased",
                 ["baseTOC"] = 90205,
                 ["name"] = "Wrath of the Lich King Classic"
             },
@@ -158,19 +159,12 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["minimumTOC"] = 30000,
                 ["maximumTOC"] = 30305,
                 ["baseTOC"] = 20000,
-                ["name"] = "Wrath of the Lich King",
-                ["features"] = {
-                    ["enforceInterface"] = {
-                        ["minimumTOC"] = 30000,
-                        ["maximumTOC"] = 30305,
-                        ["allowRebasedApi"] = false,
-                        ["enabled"] = true
-                    }
-                }
+                ["name"] = "Wrath of the Lich King"
             },
             ["2.5.x"] = {
                 ["minimumTOC"] = 20500,
                 ["maximumTOC"] = 20504,
+                ["build_tag"] = "rebased",
                 ["baseTOC"] = 90005,
                 ["name"] = "Burning Crusade Classic"
             },
@@ -182,7 +176,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["features"] = {
                     ["enforceInterface"] = {
                         ["minimumTOC"] = 20000,
-                        ["maximumTOC"] = 20403,
+                        ["maximumTOC"] = 40000,
                         ["allowRebasedApi"] = false,
                         ["enabled"] = true
                     }
@@ -191,12 +185,14 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             ["1.14.x"] = {
                 ["minimumTOC"] = 11400,
                 ["maximumTOC"] = 11403,
+                ["build_tag"] = "rebased",
                 ["baseTOC"] = 20502,
                 ["name"] = "Classic Season of Mastery"
             },
             ["1.13.x"] = {
                 ["minimumTOC"] = 11300,
                 ["maximumTOC"] = 11307,
+                ["build_tag"] = "rebased",
                 ["baseTOC"] = 80100,
                 ["name"] = "Classic"
             },
@@ -233,14 +229,14 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             ["minimumTOC"] = 11600,
             ["maximumTOC"] = 11600,
             ["name"] = "TurtleWow 1.16.x",
-            ["is_special"] = true,
+            ["build_tag"] = "special",
             ["baseTOC"] = 11201
         }
         self.cache.compatibility_info["1.15.x"] = {
             ["minimumTOC"] = 11500,
             ["maximumTOC"] = 11501,
             ["name"] = "TurtleWow 1.15.x",
-            ["is_special"] = true,
+            ["build_tag"] = "special",
             ["baseTOC"] = 11201
         }
     end
@@ -276,7 +272,7 @@ function CraftPresence:FindCompatibilityInfo(version, field)
 
     if not self.cache.compatibility_attachments[version] then
         for key, value in pairs(self:GetCompatibilityInfo()) do
-            local _, _, shouldAccept = self:ShouldProcessData(value, version)
+            local _, _, shouldAccept = self:ShouldProcessData(value, version, true)
             if shouldAccept then
                 self.cache.compatibility_attachments[version] = key
                 if not self:IsNullOrEmpty(field) and value[field] ~= nil then
@@ -453,15 +449,24 @@ function CraftPresence:IsClassicEraBuild()
     return self:IsClassicEraLiveBuild() or self:IsClassicEraPTRBuild()
 end
 
+--- Retrieve the Build Tag, if specified within compatibility info
+--- @return string build_tag
+function CraftPresence:GetBuildTag()
+    if self.cache.build_tag == nil then
+        local data = self:FindCompatibilityInfo(self:GetBuildInfo("version"), "build_tag", true)
+        self.cache.build_tag = (type(data) == "string" and data)
+    end
+    return self.cache.build_tag
+end
+
 --- Determine if this build is using a rebased api
 --- @return boolean @ is_rebased_api
 function CraftPresence:IsRebasedApi()
-    return self:IsClassicRebased() or self:IsTBCRebased() or self:IsWrathRebased()
+    return self:GetBuildTag() == "rebased"
 end
 
 --- Determine if this build is using a special or modified api
 --- @return boolean @ is_special_version
 function CraftPresence:IsSpecialVersion()
-    local data = self:FindCompatibilityInfo(self:GetBuildInfo("version"), "is_special")
-    return type(data) == "boolean" and data == true
+    return self:GetBuildTag() == "special"
 end

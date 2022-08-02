@@ -100,6 +100,7 @@ CraftPresence.cache = {
     flavors = nil,
     addon_info = nil,
     build_info = nil,
+    build_tag = nil,
     compatibility_info = nil,
     compatibility_attachments = nil
 }

@@ -606,7 +606,7 @@ function CraftPresence:GetBuildInfo(key)
             ["extended_version"] = (version .. " (" .. tocversion .. ")"),
             ["build"] = build,
             ["date"] = date,
-            ["toc_version"] = tocversion,
+            ["toc_version"] = tocversion
         }
     end
     if not self:IsNullOrEmpty(key) and self.cache.build_info[key] ~= nil then
