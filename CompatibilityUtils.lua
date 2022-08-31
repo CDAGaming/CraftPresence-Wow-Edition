@@ -40,8 +40,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 20504,
-                ["name"] = "Burning Crusade Classic",
+                ["toc"] = 30400,
+                ["name"] = "Wrath of the Lich King Classic",
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
@@ -60,8 +60,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "beta"
             },
             ["classic_ptr"] = {
-                ["toc"] = 20504,
-                ["name"] = "Public Test Realm (Classic BCC)",
+                ["toc"] = 30400,
+                ["name"] = "Public Test Realm (Wrath Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_beta"] = {
