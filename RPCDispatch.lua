@@ -158,7 +158,7 @@ function CraftPresence:CreateFrames(size)
         frames[i]:SetHeight(size)
 
         -- initialise pixels as null data (RBGA all 0'd)
-        local t = frames[i]:CreateTexture(nil, "TOOLTIP")
+        local t = frames[i]:CreateTexture(nil, "OVERLAY")
         if t.SetColorTexture then
             t:SetColorTexture(0, 0, 0, 0)
         else
