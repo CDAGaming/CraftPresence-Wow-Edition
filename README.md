@@ -248,7 +248,7 @@ If so, you can make a request on my [Issue Tracker](https://gitlab.com/CDAGaming
 *   If requesting an icon to be modified or removed from the Default Client ID, please specify a reason why
     *   Mostly just so it can be logged why it was changed for future reference
 
-Additionally, you can also create your own Set of Icons by following [this guide](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Making-your-Own-Client-ID---Using-your-own-Images)
+Additionally, you can also create your own Set of Icons by following [this guide](https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Making-your-Own-Client-ID-+-Using-your-own-Images)
 
 ### Support
 Need some assistance with one of my mods or wish to provide feedback?
