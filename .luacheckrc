@@ -106,6 +106,7 @@ globals = {
 	"LibStub",
 	"CraftPresence",
 	"RaiderIO",
+	"Settings",
 
 	-- events
 	"arg1",
