@@ -216,6 +216,11 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                         ["allowRebasedApi"] = true,
                         ["enabled"] = true
                     },
+                    ["modernConfigUI"] = {
+                        ["minimumTOC"] = 20000,
+                        ["allowRebasedApi"] = true,
+                        ["enabled"] = true
+                    },
                     ["registerUI"] = {
                         ["minimumTOC"] = 11200,
                         ["allowRebasedApi"] = true,

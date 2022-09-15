@@ -718,7 +718,23 @@ end
 function CraftPresence:ShowConfig(force_standalone)
     force_standalone = self:GetOrDefault(force_standalone, false)
     if self.libraries.AceConfigDialog then
-        local main_config_func = InterfaceOptionsFrame_OpenToCategory or InterfaceOptionsFrame_OpenToFrame
+        local main_config_func = nil
+        if Settings and Settings.OpenToCategory then
+            -- 10.x API Compatibility
+            main_config_func = function(categoryNameOrFrame)
+                if type(categoryNameOrFrame) == "string" then
+                    return Settings.OpenToCategory(categoryNameOrFrame);
+                elseif type(categoryNameOrFrame) == "table" then
+                    local category = categoryNameOrFrame.name;
+                    if type(category) == "string" then
+                        return Settings.OpenToCategory(category);
+                    end
+                end
+            end
+        else
+            -- Legacy API Compatibility
+            main_config_func = InterfaceOptionsFrame_OpenToCategory or InterfaceOptionsFrame_OpenToFrame
+        end
         if main_config_func and self.optionsFrame and not force_standalone then
             -- a bug can occur in blizzard's implementation of this call
             -- so it is called twice to workaround it

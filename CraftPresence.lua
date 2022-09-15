@@ -81,9 +81,8 @@ function CraftPresence:OnInitialize()
     -- Version-Specific Registration
     if self:IsFeatureSupported("registerUI", currentTOC) then
         -- UI Registration
-        if InterfaceOptions_AddCategory then
-            local can_register = true
-            local currentTOC = buildData["toc_version"]
+        local can_register = self:IsFeatureSupported("modernConfigUI", currentTOC)
+        if can_register then
             if self:IsFeatureSupported("enforceInterface", currentTOC) then
                 -- On some Clients, the interface options frame size is far too small
                 -- to show any meaningful data for addon settings displayed in there.
