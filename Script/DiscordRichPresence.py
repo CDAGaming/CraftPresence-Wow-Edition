@@ -18,8 +18,9 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.5.3"
+process_version = "v1.5.5"
 process_hwnd = None
+is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
 help_url = "https://gitlab.com/CDAGaming/CraftPresence/-/wikis/Install-Guide-for-World-of-Warcraft"
 
@@ -106,9 +107,11 @@ def setup_logging(config=None, debug_mode=False):
 
 def callback(hwnd, extra):
     global process_hwnd
+    global is_process_running
     if (win32gui.GetWindowText(hwnd) == config["process_name"] and
             win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
         process_hwnd = hwnd
+        is_process_running = True
 
 
 def main(debug_mode=False):
@@ -117,12 +120,14 @@ def main(debug_mode=False):
     """
     # Global Definitions
     global process_hwnd
+    global is_process_running
     # Primary Variables
     event_key = "$RPCEvent$"
     event_length = 11
     array_split_key = "=="
     array_separator_key = "|"
     process_hwnd = None
+    is_process_running = False
 
     # RPC Data
     rpc_obj = None
@@ -138,22 +143,23 @@ def main(debug_mode=False):
 
     while True:
         process_hwnd = None
+        is_process_running = False
         if is_windows:
             win32gui.EnumWindows(callback, None)
         else:
-            process_hwnd = is_running(config["process_name"])
+            is_process_running = is_running(config["process_name"])
 
         if debug_mode:
             # if in DEBUG mode, squares are read, the image with the dot matrix is
             # shown and then the script quits.
-            if process_hwnd:
+            if is_process_running:
                 root_logger.debug('DEBUG: Reading squares. Please check result image for verification...')
                 read_squares(process_hwnd, event_length, event_key, array_separator_key, debug_mode)
             else:
-                root_logger.debug("DEBUG: Unable to locate target process.")
+                root_logger.debug("DEBUG: Unable to locate target process \"" + config["process_name"] + "\".")
             input("Press Enter to continue...")
             break
-        elif process_hwnd:
+        elif is_process_running:
             lines = read_squares(process_hwnd, event_length, event_key, array_separator_key, debug_mode)
 
             if not lines:
@@ -260,7 +266,7 @@ def main(debug_mode=False):
                         last_decoded = [None] * event_length
                         last_activity = {}
                         rpc_obj = None
-        elif not process_hwnd and rpc_obj:
+        elif not is_process_running and rpc_obj:
             root_logger.info('Target process is no longer active, disconnecting...')
             rpc_obj.close()
             rpc_obj = None
@@ -419,7 +425,7 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
     return im
 
 
-def read_squares(hwnd, event_length=0, event_key='', array_separator_key='', debug_mode=False):
+def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key='', debug_mode=False):
     """
     Interpret a set of pixels, using the offsets and sizing from the config (Also perform sanity checks, if applicable).
     """
