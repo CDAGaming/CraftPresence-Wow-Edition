@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.5.5"
+process_version = "v1.6.0"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -447,16 +447,16 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
             root_logger.error('Unable to retrieve enough Image Data, try resizing your window perhaps?')
             return
     else:
-        im = ImageGrab.grab()
-        im_width, im_height = im.size
+        hwnd = pwc.getWindowsWithTitle(config["process_name"])[0]
+        left, top, right, bottom = hwnd.left, hwnd.right, (hwnd.left + hwnd.width), (hwnd.top + hwnd.height)
         left, top, right, bottom = interpret_offsets(
-            0, 0, im_width, im_height,
+            left, top, right, bottom,
             config["left_offset"], config["left_specific"],
             config["top_offset"], config["top_specific"],
             config["right_offset"], config["right_specific"],
             config["bottom_offset"], config["pixel_size"]
         )
-        im = im.crop((left, top, right, bottom))
+        im = ImageGrab.grab(bbox=(left, top, right, bottom))
 
     read = []
     current_decoded = ""
@@ -508,6 +508,7 @@ try:
         import psutil
     from PIL import Image, ImageGrab
     from pypresence import Presence
+    import pywinctl as pwc
     # Universal Modules
     import json
     import logging
