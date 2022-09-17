@@ -431,7 +431,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
     """
     waiting_for_null = False
     im = None
-    if is_windows:
+    if is_windows and hwnd:
         try:
             im = take_screenshot(
                 hwnd, config["window_type"],
