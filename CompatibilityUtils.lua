@@ -55,7 +55,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["beta"] = {
-                ["toc"] = 100000,
+                ["toc"] = 100002,
                 ["name"] = "Dragonflight Beta",
                 ["product_id"] = "beta"
             },
