@@ -721,14 +721,12 @@ function CraftPresence:ShowConfig(force_standalone)
         local main_config_func = nil
         if Settings and Settings.OpenToCategory then
             -- 10.x API Compatibility
-            main_config_func = function(categoryNameOrFrame)
-                if type(categoryNameOrFrame) == "string" then
-                    return Settings.OpenToCategory(categoryNameOrFrame);
-                elseif type(categoryNameOrFrame) == "table" then
-                    local category = categoryNameOrFrame.name;
-                    if type(category) == "string" then
-                        return Settings.OpenToCategory(category);
-                    end
+            main_config_func = function(categoryIDOrFrame)
+                if type(categoryIDOrFrame) == "table" then
+                    local categoryID = categoryIDOrFrame.name
+                    return Settings.OpenToCategory(categoryID)
+                else
+                    return Settings.OpenToCategory(categoryIDOrFrame)
                 end
             end
         else
