@@ -50,7 +50,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 90207,
+                ["toc"] = 100000,
                 ["name"] = "Public Test Realm",
                 ["product_id"] = "ptr"
             },
