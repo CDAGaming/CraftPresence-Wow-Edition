@@ -277,10 +277,18 @@ local function createButton(name, object, db)
 		local animOut = button.fadeOut:CreateAnimation("Alpha")
 		animOut:SetOrder(1)
 		animOut:SetDuration(0.2)
-		animOut:SetFromAlpha(1)
-		animOut:SetToAlpha(0)
+		if animOut.SetFromAlpha and animOut.SetToAlpha then
+			animOut:SetFromAlpha(1)
+			animOut:SetToAlpha(0)
+		else
+			animOut:SetChange(-1)
+		end
 		animOut:SetStartDelay(1)
-		button.fadeOut:SetToFinalAlpha(true)
+		if button.fadeOut.SetToFinalAlpha then
+			button.fadeOut:SetToFinalAlpha(true)
+		else
+			button:SetAlpha(1)
+		end
 	end
 
 	lib.objects[name] = button
@@ -487,10 +495,18 @@ for name, button in next, lib.objects do
 		local animOut = button.fadeOut:CreateAnimation("Alpha")
 		animOut:SetOrder(1)
 		animOut:SetDuration(0.2)
-		animOut:SetFromAlpha(1)
-		animOut:SetToAlpha(0)
+		if animOut.SetFromAlpha and animOut.SetToAlpha then
+			animOut:SetFromAlpha(1)
+			animOut:SetToAlpha(0)
+		else
+			animOut:SetChange(-1)
+		end
 		animOut:SetStartDelay(1)
-		button.fadeOut:SetToFinalAlpha(true)
+		if button.fadeOut.SetToFinalAlpha then
+			button.fadeOut:SetToFinalAlpha(true)
+		else
+			button:SetAlpha(1)
+		end
 	end
 end
 lib:SetButtonRadius(lib.radius) -- Upgrade to 40
