@@ -448,6 +448,10 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         except ValueError:
             root_logger.error('Unable to retrieve enough Image Data, try resizing your window perhaps?')
             return
+    elif is_linux and os.environ.get('XDG_SESSION_TYPE') == 'wayland':
+        # this can be removed once Pillow supports xdg-desktop-portal: https://github.com/python-pillow/Pillow/issues/6392
+        root_logger.error('Running on Linux/Wayland is not supported!')
+        exit(1)
     else:
         hwnd = pwc.getWindowsWithTitle(config["window_title"])[0]
         left, top, right, bottom = hwnd.left, hwnd.right, (hwnd.left + hwnd.width), (hwnd.top + hwnd.height)
