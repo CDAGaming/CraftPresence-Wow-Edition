@@ -454,7 +454,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         exit(1)
     else:
         hwnd = pwc.getWindowsWithTitle(config["process_name"])[0]
-        left, top, right, bottom = hwnd.left, hwnd.right, (hwnd.left + hwnd.width), (hwnd.top + hwnd.height)
+        left, top, right, bottom = hwnd.left, hwnd.top, (hwnd.left + hwnd.width), (hwnd.top + hwnd.height)
         left, top, right, bottom = interpret_offsets(
             left, top, right, bottom,
             config["left_offset"], config["left_specific"],
