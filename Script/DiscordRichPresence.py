@@ -470,7 +470,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         x = int(square_idx * config["pixel_size"] / 2)
         y = int(config["pixel_size"] / 2)
         try:
-            r, g, b, _ = im.getpixel((x, y))
+            r, g, b = im.getpixel((x, y))
         except IndexError:
             break
 
