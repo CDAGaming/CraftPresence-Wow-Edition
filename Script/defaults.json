@@ -4,7 +4,7 @@
   "pixel_size": 6,
   "refresh_rate": 5,
   "scan_rate": 3,
-  "process_name": "World of Warcraft",
+  "window_title": "World of Warcraft",
   "window_type": 3,
   "left_offset": 0,
   "left_specific": 0,
