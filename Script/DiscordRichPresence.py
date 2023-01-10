@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.6.1"
+process_version = "v1.6.2"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -224,14 +224,14 @@ def main(debug_mode=False):
                 if not null_or_empty(lines[9]):
                     button_data = parse_button_data(lines[9], array_split_key)
                     if len(button_data) == 2:
-                        button_label = button_data[0] if (len(button_data[0]) <= 32) else '<...>'
+                        button_label = button_data[0] if (len(button_data[0]) <= 32) else None
                         button_url = button_data[1] if (len(button_data[1]) <= 512) else None
                         if not null_or_empty(button_label) and not null_or_empty(button_url):
                             button_info.append({"label": button_label, "url": button_url})
                 if not null_or_empty(lines[10]):
                     button_data = parse_button_data(lines[10], array_split_key)
                     if len(button_data) == 2:
-                        button_label = button_data[0] if (len(button_data[0]) <= 32) else '<...>'
+                        button_label = button_data[0] if (len(button_data[0]) <= 32) else None
                         button_url = button_data[1] if (len(button_data[1]) <= 512) else None
                         if not null_or_empty(button_label) and not null_or_empty(button_url):
                             button_info.append({"label": button_label, "url": button_url})
