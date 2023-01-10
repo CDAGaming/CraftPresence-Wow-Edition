@@ -462,7 +462,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
             config["right_offset"], config["right_specific"],
             config["bottom_offset"], config["pixel_size"]
         )
-        im = ImageGrab.grab(bbox=(left, top, right, bottom)).convert('RGB')
+        im = ImageGrab.grab(bbox=(left, top, right, bottom))
 
     read = []
     current_decoded = ""
