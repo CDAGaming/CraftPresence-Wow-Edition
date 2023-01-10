@@ -464,9 +464,11 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         )
         im = ImageGrab.grab(bbox=(left, top, right, bottom))
 
+    if im.mode == 'RGBA':
+        im = im.convert('RGB')
+
     read = []
     current_decoded = ""
-    im = im.convert('RGB')
     for square_idx in range(im.width):
         x = int(square_idx * config["pixel_size"] / 2)
         y = int(config["pixel_size"] / 2)
