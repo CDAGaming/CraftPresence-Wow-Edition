@@ -108,7 +108,7 @@ def setup_logging(config=None, debug_mode=False):
 def callback(hwnd, extra):
     global process_hwnd
     global is_process_running
-    if (win32gui.GetWindowText(hwnd) == config["window_title"] and
+    if (win32gui.GetWindowText(hwnd) == config["process_name"] and
             win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
         process_hwnd = hwnd
         is_process_running = True
@@ -137,7 +137,7 @@ def main(debug_mode=False):
     # Initial Welcome Messages
     root_logger.info("========== DiscordRichPresence Service - " + process_version + " ==========")
     root_logger.info("System Info: \"" + sys.version + "\"")
-    root_logger.info("Started DiscordRichPresence Service for \"" + config["window_title"] + "\"")
+    root_logger.info("Started DiscordRichPresence Service for \"" + config["process_name"] + "\"")
     root_logger.info("Note: Please keep this script open while logging and sending Rich Presence updates.")
     root_logger.info("==========================================================")
 
@@ -147,7 +147,7 @@ def main(debug_mode=False):
         if is_windows:
             win32gui.EnumWindows(callback, None)
         else:
-            is_process_running = is_running(config["window_title"])
+            is_process_running = is_running(config["process_name"])
 
         if debug_mode:
             # if in DEBUG mode, squares are read, the image with the dot matrix is
@@ -156,7 +156,7 @@ def main(debug_mode=False):
                 root_logger.debug('DEBUG: Reading squares. Please check result image for verification...')
                 read_squares(process_hwnd, event_length, event_key, array_separator_key, debug_mode)
             else:
-                root_logger.debug("DEBUG: Unable to locate target process \"" + config["window_title"] + "\".")
+                root_logger.debug("DEBUG: Unable to locate target process \"" + config["process_name"] + "\".")
             input("Press Enter to continue...")
             break
         elif is_process_running:
@@ -453,7 +453,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         root_logger.error('Running on Linux/Wayland is not supported!')
         exit(1)
     else:
-        hwnd = pwc.getWindowsWithTitle(config["window_title"])[0]
+        hwnd = pwc.getWindowsWithTitle(config["process_name"])[0]
         left, top, right, bottom = hwnd.left, hwnd.right, (hwnd.left + hwnd.width), (hwnd.top + hwnd.height)
         left, top, right, bottom = interpret_offsets(
             left, top, right, bottom,
