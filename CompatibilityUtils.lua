@@ -40,7 +40,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 30400,
+                ["toc"] = 30401,
                 ["name"] = "Wrath of the Lich King Classic",
                 ["product_id"] = "classic"
             },
@@ -50,22 +50,22 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 100002,
+                ["toc"] = 100005,
                 ["name"] = "Public Test Realm",
                 ["product_id"] = "ptr"
             },
             ["beta"] = {
-                ["toc"] = 100002,
+                ["toc"] = 100005,
                 ["name"] = "Dragonflight Beta",
                 ["product_id"] = "beta"
             },
             ["classic_ptr"] = {
-                ["toc"] = 30400,
+                ["toc"] = 30401,
                 ["name"] = "Public Test Realm (Wrath Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_beta"] = {
-                ["toc"] = 30400,
+                ["toc"] = 30401,
                 ["name"] = "Wrath of the Lich King Classic Beta",
                 ["product_id"] = "classic_beta"
             },
@@ -150,7 +150,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["3.4.x"] = {
                 ["minimumTOC"] = 30400,
-                ["maximumTOC"] = 30400,
+                ["maximumTOC"] = 30401,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 90205,
                 ["name"] = "Wrath of the Lich King Classic"
