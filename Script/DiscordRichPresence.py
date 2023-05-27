@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.6.4"
+process_version = "v1.6.5"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -198,13 +198,13 @@ def main(debug_mode=False):
                 activity = {}
                 # Asset Data Sync
                 if not null_or_empty(lines[1]):
-                    asset_data["large_image"] = lines[1]
+                    asset_data["large_image"] = sanitize_placeholder(lines[1], 256)
                     if not null_or_empty(lines[2]):
-                        asset_data["large_text"] = lines[2]
+                        asset_data["large_text"] = sanitize_placeholder(lines[2], 128)
                 if not null_or_empty(lines[3]):
-                    asset_data["small_image"] = lines[3]
+                    asset_data["small_image"] = sanitize_placeholder(lines[3], 256)
                     if not null_or_empty(lines[4]):
-                        asset_data["small_text"] = lines[4]
+                        asset_data["small_text"] = sanitize_placeholder(lines[4], 128)
                 # Start Timer Data Setup
                 if "generated" in lines[7]:
                     lines[7] = round(time.time())
@@ -224,22 +224,22 @@ def main(debug_mode=False):
                 if not null_or_empty(lines[9]):
                     button_data = parse_button_data(lines[9], array_split_key)
                     if len(button_data) == 2:
-                        button_label = button_data[0] if (len(button_data[0]) <= 32) else None
-                        button_url = button_data[1] if (len(button_data[1]) <= 512) else None
+                        button_label = sanitize_placeholder(button_data[0], 32)
+                        button_url = sanitize_placeholder(button_data[1], 512)
                         if not null_or_empty(button_label) and not null_or_empty(button_url):
                             button_info.append({"label": button_label, "url": button_url})
                 if not null_or_empty(lines[10]):
                     button_data = parse_button_data(lines[10], array_split_key)
                     if len(button_data) == 2:
-                        button_label = button_data[0] if (len(button_data[0]) <= 32) else None
-                        button_url = button_data[1] if (len(button_data[1]) <= 512) else None
+                        button_label = sanitize_placeholder(button_data[0], 32)
+                        button_url = sanitize_placeholder(button_data[1], 512)
                         if not null_or_empty(button_label) and not null_or_empty(button_url):
                             button_info.append({"label": button_label, "url": button_url})
                 # Activity Data Sync
                 if not null_or_empty(lines[5]):
-                    activity["details"] = lines[5]
+                    activity["details"] = sanitize_placeholder(lines[5], 128)
                 if not null_or_empty(lines[6]):
-                    activity["state"] = lines[6]
+                    activity["state"] = sanitize_placeholder(lines[6], 128)
 
                 activity["assets"] = asset_data
                 activity["timestamps"] = timer_data
@@ -276,6 +276,17 @@ def main(debug_mode=False):
             last_decoded = [None] * event_length
             last_activity = {}
         time.sleep(config["scan_rate"])
+
+def sanitize_placeholder(input: str, length: int, fallback="", encoding='utf-8'):
+    """
+    Removes any invalid data from a placeholder argument
+    """
+    result = fallback
+    if not null_or_empty(input):
+        if len(input) >= 2 and len(input.encode(encoding)) < length:
+            result = input
+
+    return result
 
 
 def decode_read_data(read: list, encoding='utf-8'):
