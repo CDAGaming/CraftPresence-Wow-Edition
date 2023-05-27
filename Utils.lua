@@ -392,14 +392,16 @@ function CraftPresence:IsWithinValue(value, min, max, contains_min, contains_max
             max = 0
         end
     end
-    -- Contains Checks
-    if not contains_min then
-        min = min + 1
+    -- Checking value within range based on contains_min and contains_max
+    if contains_min and contains_max then
+        return (value >= min and value <= max)
+    elseif contains_min then
+        return (value >= min and value < max)
+    elseif contains_max then
+        return (value > min and value <= max)
+    else
+        return (value > min and value < max)
     end
-    if not contains_max then
-        max = max - 1
-    end
-    return (value >= min and value <= max)
 end
 
 --- Parse and Serialize a table into a printable string
