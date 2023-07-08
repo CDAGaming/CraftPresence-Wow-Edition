@@ -326,6 +326,15 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 4.5
         end
 
+        if self:IsWithinValue(current, 4.5, 5, true, false) then
+            -- Schema Changes (v4.5 -> v5):
+            --   Reset the `placeholders.realm_info` and `placeholders.player_region` properties due to a discrepency between the way Ace3 retrieved the region and ours
+            --   This does not use the `can_modify` flag, due to this previously causing an error with WoW PTR Region Calculation
+            self:SetProperty("placeholders", "player_region", nil, true)
+            self:SetProperty("placeholders", "realm_info", nil, true)
+            current = 5
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end

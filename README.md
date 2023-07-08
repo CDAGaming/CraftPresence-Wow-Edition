@@ -122,8 +122,8 @@ These types of placeholders are designed for specialized pieces of information, 
 *   `@player_realm@` - [The player's current realm in use][GetRealmName]
     *   Will return `Unknown` if function is not available
 *   `@player_region@` - [The player's current region in use][GetCurrentRegion]
-    *   Returns `realmData[playerRegionId or 1]` as the output
-    *   `realmData` can be tweaked to customize the abbreviations, if desired
+    *   Returns `regionTable[playerRegionId]` or `TR` as the output
+    *   `regionTable` can be tweaked to customize the abbreviations, if desired
 *   `@player_class@` - [The player's current in-game class name][UnitClass]
 *   `@player_race@` - [The player's current in-game race name][UnitRace]
 *   `@player_gender@` - [The player's current in-game gender name][UnitSex]

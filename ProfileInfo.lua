@@ -323,12 +323,9 @@ end]]                ,
                 ["player_region"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-    local realmData = { "US", "KR", "EU", "TW", "CH" }
-    local playerRegionId = 1
-    if GetCurrentRegion then
-        playerRegionId = GetCurrentRegion()
-    end
-    return realmData[playerRegionId]
+    local regionTable = { "US", "KR", "EU", "TW", "CH" }
+    local playerRegion = (_G["GetCurrentRegion"] and regionTable[GetCurrentRegion()]) or (_G["GetCurrentRegionName"] and GetCurrentRegionName()) or strupper(strsub(GetCVar("realmList"), 1, 2)) or "TR"
+    return playerRegion
 end]]                ,
                     processType = "function",
                     registerCallback = "",
@@ -613,16 +610,12 @@ end]]                ,
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
     -- Get Player Info
-    local realmData = { "US", "KR", "EU", "TW", "CH" }
+    local regionTable = { "US", "KR", "EU", "TW", "CH" }
     local playerRealm = self.locale['TYPE_UNKNOWN']
-    local playerRegionId = 1
     if GetRealmName then
         playerRealm = GetRealmName()
     end
-    if GetCurrentRegion then
-        playerRegionId = GetCurrentRegion()
-    end
-    local playerRegion = realmData[playerRegionId]
+    local playerRegion = (_G["GetCurrentRegion"] and regionTable[GetCurrentRegion()]) or (_G["GetCurrentRegionName"] and GetCurrentRegionName()) or strupper(strsub(GetCVar("realmList"), 1, 2)) or "TR"
     return (playerRegion .. ' - ' .. playerRealm)
 end]]                ,
                     processType = "function",
