@@ -189,10 +189,10 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.14.x"] = {
                 ["minimumTOC"] = 11400,
-                ["maximumTOC"] = 11403,
+                ["maximumTOC"] = 11404,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 20502,
-                ["name"] = "Classic Season of Mastery"
+                ["name"] = "Classic Era"
             },
             ["1.13.x"] = {
                 ["minimumTOC"] = 11300,
