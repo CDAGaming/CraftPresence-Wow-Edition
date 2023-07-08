@@ -979,8 +979,9 @@ function CraftPresence:SetProperty(grp, key, newValue, reset)
     else
         if self.db.profile[grp][key] == nil or reset then
             self.db.profile[grp][key] = defaults.profile[grp][key]
+        else
+            self.db.profile[grp][key] = newValue
         end
-        self.db.profile[grp][key] = newValue
     end
 end
 
