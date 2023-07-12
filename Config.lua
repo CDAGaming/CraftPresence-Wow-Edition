@@ -163,12 +163,12 @@ function CraftPresence:GetOptions()
                         return strformat(self.locale["CATEGORY_COMMENT_BUTTONS_INFO"], count, (count == 1 and "") or "s")
                     end,
                     nil,
-                    function(self, newValue)
-                        return not self:FindMatches(tostring(newValue), self.internals.rpc.buttonsSplitKey, false)
+                    function(ref, newValue)
+                        return not ref:FindMatches(tostring(newValue), ref.internals.rpc.buttonsSplitKey, false)
                     end,
-                    function(self, fieldName, _, _)
-                        self:PrintErrorMessage(
-                            strformat(self.locale["ERROR_STRING_DEFAULT"], fieldName)
+                    function(ref, fieldName, _, _)
+                        ref:PrintErrorMessage(
+                            strformat(ref.locale["ERROR_STRING_DEFAULT"], fieldName)
                         )
                     end
                 )

@@ -221,7 +221,6 @@ function CraftPresence:ShouldProcessData(data, tocOverride, ignoreExtraChecks)
         -- ignoreExtraChecks => canPass logic
         canPass = withinTOCLimits
         if not ignoreExtraChecks then
-            local isRebasedApi = self:IsRebasedApi()
             if data.allowRebasedApi then
                 canPass = canPass or isRebasedApi
             else

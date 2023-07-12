@@ -125,7 +125,7 @@ end
 ---
 --- @return string result
 function CraftPresence:GetCurrentInstanceName(ensure_accuracy)
-    local result = nil
+    local result
     if not self:IsFeatureSupported("modernInstanceState", self:GetBuildInfo("toc_version")) then
         if ensure_accuracy then
             SetMapToCurrentZone()

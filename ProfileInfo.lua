@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- DB_DEFAULTS
-local DB_DEFAULTS = nil
+local DB_DEFAULTS
 
 -- Generates the default database settings, to ensure availability
 function CraftPresence:GenerateDefaults()

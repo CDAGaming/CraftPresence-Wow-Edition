@@ -720,7 +720,7 @@ end
 function CraftPresence:ShowConfig(force_standalone)
     force_standalone = self:GetOrDefault(force_standalone, false)
     if self.libraries.AceConfigDialog then
-        local main_config_func = nil
+        local main_config_func
         if Settings and Settings.OpenToCategory then
             -- 10.x API Compatibility
             main_config_func = function(categoryIDOrFrame)
