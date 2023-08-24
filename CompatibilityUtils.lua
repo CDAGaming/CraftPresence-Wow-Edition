@@ -45,13 +45,13 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11403,
+                ["toc"] = 11404,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 100100,
-                ["name"] = "Public Test Realm (DF 10.1.0)",
+                ["toc"] = 100107,
+                ["name"] = "Public Test Realm (DF 10.1.7)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
@@ -65,7 +65,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 100105,
+                ["toc"] = 11404,
                 ["name"] = "WoW Classic Era PTR",
                 ["product_id"] = "classic_era_ptr"
             }
