@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 100105,
+                ["toc"] = 100107,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -55,12 +55,12 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 100105,
-                ["name"] = "Public Test Realm (DF 10.1.5)",
+                ["toc"] = 100200,
+                ["name"] = "Public Test Realm (DF 10.2.0)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 30402,
+                ["toc"] = 30403,
                 ["name"] = "Public Test Realm (Wrath Classic)",
                 ["product_id"] = "classic_ptr"
             },
