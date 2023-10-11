@@ -40,7 +40,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 30402,
+                ["toc"] = 30403,
                 ["name"] = "Wrath of the Lich King Classic",
                 ["product_id"] = "classic"
             },
@@ -145,7 +145,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["3.4.x"] = {
                 ["minimumTOC"] = 30400,
-                ["maximumTOC"] = 30402,
+                ["maximumTOC"] = 30403,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 90205,
                 ["name"] = "Wrath of the Lich King Classic"
