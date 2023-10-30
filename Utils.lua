@@ -344,6 +344,7 @@ function CraftPresence:GetCaseData(obj)
                         value = strlower(value)
                         if caseType == "icon" then
                             value = self:Replace(value, "%s+", "_")
+                            value = self:Replace(value, "[^a-zA-Z0-9_-]", "_")
                         end
                     elseif caseType == "upper" then
                         value = strupper(value)
