@@ -65,7 +65,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11404,
+                ["toc"] = 11500,
                 ["name"] = "WoW Classic Era PTR",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -177,6 +177,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                     }
                 }
             },
+            ["1.15.x"] = {
+                ["minimumTOC"] = 11500,
+                ["maximumTOC"] = 11500,
+                ["build_tag"] = "rebased",
+                ["baseTOC"] = 30403,
+                ["name"] = "Classic Season of Discovery"
+            },
             ["1.14.x"] = {
                 ["minimumTOC"] = 11400,
                 ["maximumTOC"] = 11404,
@@ -223,21 +230,6 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                     }
                 }
             }
-        }
-        -- Special Builds
-        self.cache.compatibility_info["1.16.x"] = {
-            ["minimumTOC"] = 11600,
-            ["maximumTOC"] = 11600,
-            ["name"] = "TurtleWow 1.16.x",
-            ["build_tag"] = "special",
-            ["baseTOC"] = 11201
-        }
-        self.cache.compatibility_info["1.15.x"] = {
-            ["minimumTOC"] = 11500,
-            ["maximumTOC"] = 11501,
-            ["name"] = "TurtleWow 1.15.x",
-            ["build_tag"] = "special",
-            ["baseTOC"] = 11201
         }
     end
     if not self:IsNullOrEmpty(key) and self.cache.compatibility_info[key] ~= nil then
