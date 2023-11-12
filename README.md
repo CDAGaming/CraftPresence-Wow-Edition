@@ -277,30 +277,30 @@ As with other RPC Mods, this Mod uses your in-game data to send display informat
 
 The terms of service relating to Creating a Discord ID for icons can be found [here](https://discord.com/developers/docs/legal)
 
-The terms of service for using Discord as a service can additionally be located [here](https://discord.com/new/terms)
+The terms of service for using Discord as a service can additionally be located [here](https://discord.com/terms)
 
-[UnitName]: https://wowpedia.fandom.com/wiki/API_UnitName
-[UnitPVPName]: https://wowpedia.fandom.com/wiki/API_UnitPVPName
-[UnitLevel]: https://wowpedia.fandom.com/wiki/API_UnitLevel
-[GetRealmName]: https://wowpedia.fandom.com/wiki/API_GetRealmName
-[GetCurrentRegion]: https://wowpedia.fandom.com/wiki/API_GetCurrentRegion
-[UnitClass]: https://wowpedia.fandom.com/wiki/API_UnitClass
-[UnitRace]: https://wowpedia.fandom.com/wiki/API_UnitRace
-[UnitSex]: https://wowpedia.fandom.com/wiki/API_UnitSex
-[UnitFactionGroup]: https://wowpedia.fandom.com/wiki/API_UnitFactionGroup
-[C_Covenants.GetCovenantData]: https://wowpedia.fandom.com/wiki/API_C_Covenants.GetCovenantData
-[GetSpecialization]: https://wowpedia.fandom.com/wiki/API_GetSpecialization
-[GetSpecializationInfo]: https://wowpedia.fandom.com/wiki/API_GetSpecializationInfo
-[GetSpecializationRoleByID]: https://wowpedia.fandom.com/wiki/API_GetSpecializationRoleByID
-[C_CovenantSanctumUI.GetRenownLevel]: https://wowpedia.fandom.com/wiki/API_C_CovenantSanctumUI.GetRenownLevel
-[GetInstanceInfo]: https://wowpedia.fandom.com/wiki/API_GetInstanceInfo
-[GetNumGroupMembers]: https://wowpedia.fandom.com/wiki/API_GetNumGroupMembers
-[GetNumPartyMembers]: https://wowpedia.fandom.com/wiki/API_GetNumPartyMembers
-[GetNumRaidMembers]: https://wowpedia.fandom.com/wiki/API_GetNumRaidMembers
-[GetRealZoneText]: https://wowpedia.fandom.com/wiki/API_GetRealZoneText
-[GetSubZoneText]: https://wowpedia.fandom.com/wiki/API_GetSubZoneText
-[GetAverageItemLevel]: https://wowpedia.fandom.com/wiki/API_GetAverageItemLevel
-[C_ChallengeMode.GetOverallDungeonScore]: https://wowpedia.fandom.com/wiki/API_C_ChallengeMode.GetOverallDungeonScore
+[UnitName]: https://warcraft.wiki.gg/wiki/API_UnitName
+[UnitPVPName]: https://warcraft.wiki.gg/wiki/API_UnitPVPName
+[UnitLevel]: https://warcraft.wiki.gg/wiki/API_UnitLevel
+[GetRealmName]: https://warcraft.wiki.gg/wiki/API_GetRealmName
+[GetCurrentRegion]: https://warcraft.wiki.gg/wiki/API_GetCurrentRegion
+[UnitClass]: https://warcraft.wiki.gg/wiki/API_UnitClass
+[UnitRace]: https://warcraft.wiki.gg/wiki/API_UnitRace
+[UnitSex]: https://warcraft.wiki.gg/wiki/API_UnitSex
+[UnitFactionGroup]: https://warcraft.wiki.gg/wiki/API_UnitFactionGroup
+[C_Covenants.GetCovenantData]: https://warcraft.wiki.gg/wiki/API_C_Covenants.GetCovenantData
+[GetSpecialization]: https://warcraft.wiki.gg/wiki/API_GetSpecialization
+[GetSpecializationInfo]: https://warcraft.wiki.gg/wiki/API_GetSpecializationInfo
+[GetSpecializationRoleByID]: https://warcraft.wiki.gg/wiki/API_GetSpecializationRoleByID
+[C_CovenantSanctumUI.GetRenownLevel]: https://warcraft.wiki.gg/wiki/API_C_CovenantSanctumUI.GetRenownLevel
+[GetInstanceInfo]: https://warcraft.wiki.gg/wiki/API_GetInstanceInfo
+[GetNumGroupMembers]: https://warcraft.wiki.gg/wiki/API_GetNumGroupMembers
+[GetNumPartyMembers]: https://warcraft.wiki.gg/wiki/API_GetNumPartyMembers
+[GetNumRaidMembers]: https://warcraft.wiki.gg/wiki/API_GetNumRaidMembers
+[GetRealZoneText]: https://warcraft.wiki.gg/wiki/API_GetRealZoneText
+[GetSubZoneText]: https://warcraft.wiki.gg/wiki/API_GetSubZoneText
+[GetAverageItemLevel]: https://warcraft.wiki.gg/wiki/API_GetAverageItemLevel
+[C_ChallengeMode.GetOverallDungeonScore]: https://warcraft.wiki.gg/wiki/API_C_ChallengeMode.GetOverallDungeonScore
 
 [CraftPresence/InstanceInfo]: https://gitlab.com/CDAGaming/CraftPresence-Wow-Edition/-/raw/master/InstanceInfo.lua
 
