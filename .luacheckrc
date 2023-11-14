@@ -105,6 +105,7 @@ globals = {
 	"EJ_SelectTier",
 	"LibStub",
 	"CraftPresence",
+	"CraftPresenceIconDB",
 	"RaiderIO",
 	"Settings",
 
