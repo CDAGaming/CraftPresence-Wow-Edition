@@ -231,6 +231,14 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 }
             }
         }
+        -- Special Builds
+        self.cache.compatibility_info["1.17.x"] = {
+            ["minimumTOC"] = 11700,
+            ["maximumTOC"] = 11701,
+            ["name"] = "TurtleWow 1.17.x",
+            ["build_tag"] = "special",
+            ["baseTOC"] = 11201
+        }
     end
     if not self:IsNullOrEmpty(key) and self.cache.compatibility_info[key] ~= nil then
         if not self:IsNullOrEmpty(value) and self.cache.compatibility_info[key][value] ~= nil then
