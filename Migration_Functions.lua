@@ -335,6 +335,14 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 5
         end
 
+        if self:IsWithinValue(current, 5, 6, true, false) then
+            -- Schema Changes (v5 -> v6):
+            --   Reset the `labels` property due to a critical discrepency fix for legacy client behavior
+            --   This does not use the `can_modify` flag, due to the severity of this issue
+            self:SetProperty("labels", nil, nil, true)
+            current = 6
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end

@@ -124,7 +124,7 @@ end]]                ,
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
     return self:GetOrDefault(
-        (UnitIsAFK and UnitIsAFK('player')),
+        (UnitIsAFK and (UnitIsAFK('player') or false)),
         (self:GetUnitData('player').away) or false
     )
 end]]                ,
@@ -136,7 +136,7 @@ end]]                ,
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
     return self:GetOrDefault(
-        (UnitIsDND and UnitIsDND('player')),
+        (UnitIsDND and (UnitIsDND('player') or false)),
         (self:GetUnitData('player').busy) or false
     )
 end]]                ,
@@ -148,7 +148,7 @@ end]]                ,
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
     return self:GetOrDefault(
-        (UnitIsDead and UnitIsDead('player')),
+        (UnitIsDead and (UnitIsDead('player') or false)),
         (self:GetUnitData('player').dead) or false
     )
 end]]                ,
@@ -160,7 +160,7 @@ end]]                ,
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
     return self:GetOrDefault(
-        (UnitIsGhost and UnitIsGhost('player')),
+        (UnitIsGhost and (UnitIsGhost('player') or false)),
         (self:GetUnitData('player').ghost) or false
     )
 end]]                ,
@@ -172,7 +172,7 @@ end]]                ,
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
     return self:GetOrDefault(
-        (UnitAffectingCombat and UnitAffectingCombat('player')),
+        (UnitAffectingCombat and (UnitAffectingCombat('player') or false)),
         (self:GetUnitData('player').in_combat) or false
     )
 end]]                ,
@@ -184,7 +184,7 @@ end]]                ,
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
     return self:GetOrDefault(
-        (UnitIsConnected and UnitIsConnected('player')),
+        (UnitIsConnected and (UnitIsConnected('player') or false)),
         (self:GetUnitData('player').online) or false
     )
 end]]                ,
