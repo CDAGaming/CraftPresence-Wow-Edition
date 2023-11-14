@@ -47,7 +47,6 @@ CraftPresence.externalCache = {}
 -- Critical Data (DNT)
 local CraftPresenceLDB
 local lastEventName
-local minimapState = { hide = false }
 -- Build and Integration Data
 local addOnData = {}
 local buildData = {}
@@ -107,6 +106,7 @@ function CraftPresence:OnInitialize()
         -- Icon Registration
         self.libraries.LDBIcon = LibStub("LibDBIcon-1.0")
         self.libraries.LDB = LibStub:GetLibrary("LibDataBroker-1.1")
+        if not CraftPresenceIconDB then CraftPresenceIconDB = { hide = false } end
         CraftPresenceLDB = self.libraries.LDB:NewDataObject(self.internals.name, {
             type = "launcher",
             text = self.internals.name,
@@ -123,7 +123,7 @@ function CraftPresence:OnInitialize()
             end
         })
         self:UpdateMinimapState(false, false)
-        self.libraries.LDBIcon:Register(self.internals.name, CraftPresenceLDB, minimapState)
+        self.libraries.LDBIcon:Register(self.internals.name, CraftPresenceLDB, CraftPresenceIconDB)
     end
 end
 
@@ -559,10 +559,10 @@ end)
 --- @param log_output boolean Whether to allow logging for this function (Default: true)
 function CraftPresence:UpdateMinimapState(update_state, log_output)
     log_output = self:GetOrDefault(log_output, true)
-    minimapState = { hide = not self:GetProperty("showMinimapIcon") }
+    CraftPresenceIconDB.hide = not self:GetProperty("showMinimapIcon")
     if update_state then
         if self.libraries.LDBIcon then
-            if minimapState["hide"] then
+            if CraftPresenceIconDB.hide then
                 self.libraries.LDBIcon:Hide(self.internals.name)
             else
                 self.libraries.LDBIcon:Show(self.internals.name)
