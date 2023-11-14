@@ -125,6 +125,9 @@ L["COMMENT_VERBOSE_MODE"] = "Schaltet die Anzeige von erweiterten (Verbose-)Nach
 L["TITLE_SHOW_MINIMAP_ICON"] = "Zeige Minimap Symbol"
 L["COMMENT_SHOW_MINIMAP_ICON"] = "Schaltet das Minimap Symbol ein/aus, über das diese Konfiguration aufgerufen werden kann."
 
+L["TITLE_SHOW_COMPARTMENT_ENTRY"] = "Show Compartment Entry"
+L["COMMENT_SHOW_COMPARTMENT_ENTRY"] = "Toggles the display of the addon compartment entry, used to access the config."
+
 L["TITLE_QUEUED_PIPELINE"] = "Queued Pipeline"
 L["COMMENT_QUEUED_PIPELINE"] = "Schaltet die Ereignis-Pipeline zwischen \"skip\" und \"queue\" um."
 

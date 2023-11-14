@@ -96,6 +96,23 @@ function CraftPresence:GetOptions()
                             self:UpdateMinimapSetting(value)
                         end
                     },
+                    showCompartmentEntry = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        disabled = function()
+                            return not self:IsCompartmentSupported()
+                        end,
+                        name = self:GetConfigTitle("SHOW_COMPARTMENT_ENTRY"),
+                        desc = self:GetConfigComment("SHOW_COMPARTMENT_ENTRY", nil, nil, nil, defaults.showMinimapIcon),
+                        get = function(_)
+                            return self:GetProperty("showCompartmentEntry")
+                        end,
+                        set = function(_, value)
+                            self:UpdateCompartmentSetting(value)
+                        end
+                    },
+                    blank2 = {
+                        type = "description", order = self:GetNextIndex(), name = ""
+                    },
                     showWelcomeMessage = {
                         type = "toggle", order = self:GetNextIndex(),
                         name = self:GetConfigTitle("SHOW_WELCOME_MESSAGE"),
@@ -111,9 +128,6 @@ function CraftPresence:GetOptions()
                                 self:PrintChangedValue(self.locale["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
                             end
                         end
-                    },
-                    blank2 = {
-                        type = "description", order = self:GetNextIndex(), name = ""
                     },
                     enforceInterface = {
                         type = "toggle", order = self:GetNextIndex(),
@@ -493,6 +507,18 @@ function CraftPresence:UpdateMinimapSetting(newValue)
         self:SetProperty("showMinimapIcon", nil, newValue)
         self:UpdateMinimapState(true)
         self:PrintChangedValue(self.locale["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
+    end
+end
+
+--- Updates showCompartmentEntry with the specified value
+--- @param newValue boolean The new value to change showCompartmentEntry to
+function CraftPresence:UpdateCompartmentSetting(newValue)
+    local oldValue = self:GetProperty("showCompartmentEntry")
+    local isValid = (type(newValue) == "boolean")
+    if isValid then
+        self:SetProperty("showCompartmentEntry", nil, newValue)
+        self:UpdateCompartmentState(true)
+        self:PrintChangedValue(self.locale["TITLE_SHOW_COMPARTMENT_ENTRY"], oldValue, newValue)
     end
 end
 

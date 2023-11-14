@@ -32,6 +32,7 @@ function CraftPresence:GenerateDefaults()
             schema = 0,
             clientId = self.locale["DEFAULT_CLIENT_ID"],
             showMinimapIcon = true,
+            showCompartmentEntry = true,
             showWelcomeMessage = true,
             enforceInterface = false,
             presence = {

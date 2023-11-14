@@ -123,6 +123,7 @@ function CraftPresence:OnInitialize()
             end
         })
         self:UpdateMinimapState(false, false)
+        self:UpdateCompartmentState(false, false)
         self.libraries.LDBIcon:Register(self.internals.name, CraftPresenceLDB, CraftPresenceIconDB)
     end
 end
@@ -140,6 +141,7 @@ function CraftPresence:OnEnable()
     self:CreateFrames(self:GetProperty("frameSize"))
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
+    self:UpdateCompartmentState(true, false)
     -- Register Universal Events
     if self:IsFeatureSupported("modernDispatcher", buildData["toc_version"]) then
         self.defaultEventCallback = "DispatchUpdate"
@@ -573,6 +575,36 @@ function CraftPresence:UpdateMinimapState(update_state, log_output)
     end
 end
 
+--- Determines if the addon compartment feature is available
+---
+--- @return boolean @ is_compartment_supported
+function CraftPresence:IsCompartmentSupported()
+    if self.libraries.LDBIcon then
+        return self.libraries.LDBIcon.IsButtonCompartmentAvailable and self.libraries.LDBIcon.IsButtonCompartmentAvailable()
+    end
+    return false
+end
+
+--- Updates the addon compartment status with config data
+---
+--- @param update_state boolean Whether or not to update the compartment state
+--- @param log_output boolean Whether to allow logging for this function (Default: true)
+function CraftPresence:UpdateCompartmentState(update_state, log_output)
+    log_output = self:GetOrDefault(log_output, true)
+    CraftPresenceIconDB.showInCompartment = self:GetProperty("showCompartmentEntry")
+    if update_state then
+        if self:IsCompartmentSupported() then
+            if CraftPresenceIconDB.showInCompartment then
+                self.libraries.LDBIcon:AddButtonToCompartment(self.internals.name)
+            else
+                self.libraries.LDBIcon:RemoveButtonFromCompartment(self.internals.name)
+            end
+        elseif log_output then
+            self:PrintErrorMessage(strformat(self.locale["ERROR_FUNCTION_DISABLED"], "UpdateCompartmentState"))
+        end
+    end
+end
+
 --- Interprets the specified input to perform specific commands
 --- @param input string The specified input to evaluate
 function CraftPresence:ChatCommand(input)
@@ -635,6 +667,8 @@ function CraftPresence:ChatCommand(input)
             self:UpdateProfile(true, not reset_single, "all")
         elseif command == "minimap" and self.libraries.LDBIcon then
             self:UpdateMinimapSetting(not self:GetProperty("showMinimapIcon"))
+        elseif command == "compartment" and self:IsCompartmentSupported() then
+            self:UpdateCompartmentSetting(not self:GetProperty("showCompartmentEntry"))
         elseif command == "about" then
             self:PrintAddonInfo()
         elseif command == "status" then

@@ -59,6 +59,7 @@ ___
 *   `/cp (clear,clean)` - Reset all frames to their original positions and colors.
 *   `/cp update (debug)` - Force or Debug an RPC update
 *   `/cp minimap` - Toggles the display of the minimap button
+*   `/cp compartment` - Toggles the display of the addon compartment entry
 *   `/cp status` - Displays your last sent RPC Data, in text form (Requires `Verbose Mode`)
 *   `/cp reset (grp,key)` - Resets all (or a specific) setting(s) within the config menu.
 *   `/cp set (grp,key)` - Sets specific setting(s) within the config menu manually.
