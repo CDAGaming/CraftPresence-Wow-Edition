@@ -633,7 +633,7 @@ function CraftPresence:ChatCommand(input)
                 end
             end
             self:UpdateProfile(true, not reset_single, "all")
-        elseif command == "minimap" then
+        elseif command == "minimap" and self.libraries.LDBIcon then
             self:UpdateMinimapSetting(not self:GetProperty("showMinimapIcon"))
         elseif command == "about" then
             self:PrintAddonInfo()

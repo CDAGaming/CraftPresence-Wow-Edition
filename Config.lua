@@ -84,6 +84,9 @@ function CraftPresence:GetOptions()
                     },
                     showMinimapIcon = {
                         type = "toggle", order = self:GetNextIndex(),
+                        disabled = function()
+                            return self.libraries.LDBIcon == nil
+                        end,
                         name = self:GetConfigTitle("SHOW_MINIMAP_ICON"),
                         desc = self:GetConfigComment("SHOW_MINIMAP_ICON", nil, nil, nil, defaults.showMinimapIcon),
                         get = function(_)
