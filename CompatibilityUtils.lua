@@ -45,13 +45,13 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11404,
+                ["toc"] = 11500,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 100200,
-                ["name"] = "Public Test Realm (DF 10.1.7)",
+                ["toc"] = 100205,
+                ["name"] = "Public Test Realm (DF 10.2.5)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
