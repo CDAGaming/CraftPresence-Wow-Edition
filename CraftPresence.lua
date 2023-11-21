@@ -677,7 +677,7 @@ function CraftPresence:ChatCommand(input)
                 self:GetEncodedMessage(last_args, last_encoded, self.locale["VERBOSE_LAST_ENCODED"],
                     self.locale["LOG_VERBOSE"], true)
             else
-                self:PrintErrorMessage(strformat(self.locale["ERROR_COMMAND_CONFIG"], self.locale["TITLE_DEBUG_MODE"]))
+                self:PrintErrorMessage(strformat(self.locale["ERROR_COMMAND_CONFIG"], self:GetConfigTitle("DEBUG_MODE")))
             end
         elseif command == "integration" then
             if command_query[2] ~= nil then

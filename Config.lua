@@ -73,7 +73,7 @@ function CraftPresence:GetOptions()
                                 self:GetLength(value) >= 18)
                             if isValid then
                                 self:SetProperty("clientId", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_CLIENT_ID"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("CLIENT_ID"), oldValue, value)
                             else
                                 self:PrintErrorMessage(self.locale["ERROR_CLIENT_ID"])
                             end
@@ -125,7 +125,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("showWelcomeMessage", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_SHOW_WELCOME_MESSAGE"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("SHOW_WELCOME_MESSAGE"), oldValue, value)
                             end
                         end
                     },
@@ -145,7 +145,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("enforceInterface", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_ENFORCE_INTERFACE"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("ENFORCE_INTERFACE"), oldValue, value)
                             end
                         end
                     }
@@ -279,7 +279,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("debugMode", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_DEBUG_MODE"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("DEBUG_MODE"), oldValue, value)
                             end
                         end
                     },
@@ -295,7 +295,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("verboseMode", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_VERBOSE_MODE"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("VERBOSE_MODE"), oldValue, value)
                             end
                         end
                     },
@@ -314,7 +314,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("queuedPipeline", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_QUEUED_PIPELINE"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("QUEUED_PIPELINE"), oldValue, value)
                             end
                         end
                     },
@@ -330,7 +330,7 @@ function CraftPresence:GetOptions()
                             local isValid = (type(value) == "boolean")
                             if isValid then
                                 self:SetProperty("optionalMigrations", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_OPTIONAL_MIGRATIONS"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("OPTIONAL_MIGRATIONS"), oldValue, value)
                             end
                         end
                     },
@@ -354,16 +354,16 @@ function CraftPresence:GetOptions()
                             ))
                             if isValid then
                                 self:SetProperty("callbackDelay", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_CALLBACK_DELAY"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("CALLBACK_DELAY"), oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
                                         strformat(self.locale["WARNING_VALUE_UNSAFE"],
-                                            self.locale["TITLE_CALLBACK_DELAY"])
+                                        self:GetConfigTitle("CALLBACK_DELAY"))
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self.locale["TITLE_CALLBACK_DELAY"],
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("CALLBACK_DELAY"),
                                         self.locale["MINIMUM_CALLBACK_DELAY"], self.locale["MAXIMUM_CALLBACK_DELAY"])
                                 )
                             end
@@ -386,17 +386,17 @@ function CraftPresence:GetOptions()
                             ))
                             if isValid then
                                 self:SetProperty("frameClearDelay", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_FRAME_CLEAR_DELAY"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_CLEAR_DELAY"), oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
                                         strformat(self.locale["WARNING_VALUE_UNSAFE"],
-                                            self.locale["TITLE_FRAME_CLEAR_DELAY"])
+                                        self:GetConfigTitle("FRAME_CLEAR_DELAY"))
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
                                     strformat(self.locale["ERROR_RANGE_DEFAULT"],
-                                        self.locale["TITLE_FRAME_CLEAR_DELAY"],
+                                        self:GetConfigTitle("FRAME_CLEAR_DELAY"),
                                         self.locale["MINIMUM_FRAME_CLEAR_DELAY"],
                                         self.locale["MAXIMUM_FRAME_CLEAR_DELAY"]
                                     )
@@ -424,15 +424,15 @@ function CraftPresence:GetOptions()
                             ))
                             if isValid then
                                 self:SetProperty("frameSize", nil, value)
-                                self:PrintChangedValue(self.locale["TITLE_FRAME_SIZE"], oldValue, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_SIZE"), oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self.locale["TITLE_FRAME_SIZE"])
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_SIZE"))
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self.locale["TITLE_FRAME_SIZE"],
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_SIZE"),
                                         self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"])
                                 )
                             end
@@ -506,7 +506,7 @@ function CraftPresence:UpdateMinimapSetting(newValue)
     if isValid then
         self:SetProperty("showMinimapIcon", nil, newValue)
         self:UpdateMinimapState(true)
-        self:PrintChangedValue(self.locale["TITLE_SHOW_MINIMAP_ICON"], oldValue, newValue)
+        self:PrintChangedValue(self:GetConfigTitle("SHOW_MINIMAP_ICON"), oldValue, newValue)
     end
 end
 
@@ -518,7 +518,7 @@ function CraftPresence:UpdateCompartmentSetting(newValue)
     if isValid then
         self:SetProperty("showCompartmentEntry", nil, newValue)
         self:UpdateCompartmentState(true)
-        self:PrintChangedValue(self.locale["TITLE_SHOW_COMPARTMENT_ENTRY"], oldValue, newValue)
+        self:PrintChangedValue(self:GetConfigTitle("SHOW_COMPARTMENT_ENTRY"), oldValue, newValue)
     end
 end
 
