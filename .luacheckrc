@@ -133,6 +133,7 @@ globals = {
 	"GetNumSavedInstances",
 	"GetSavedInstanceInfo",
 	"GetScreenWidth",
+	"GetScreenHeight",
 	"GetTime",
 	"InterfaceOptionsFrame",
 	"InterfaceOptionsFrameAddOns",
