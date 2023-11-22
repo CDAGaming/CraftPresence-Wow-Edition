@@ -151,7 +151,7 @@ end
 function CraftPresence:CreateFrames(size, anchor, is_vertical, start_x, start_y)
     if not size then return end
     anchor = self:GetOrDefault(anchor, "TOPLEFT")
-    is_vertical = self:GetOrDefault(is_vertical, true)
+    is_vertical = self:GetOrDefault(is_vertical, false)
     start_x = self:GetOrDefault(start_x, 0)
     start_y = self:GetOrDefault(start_y, 0)
     frames = {}
