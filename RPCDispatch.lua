@@ -153,7 +153,7 @@ function CraftPresence:CreateFrames(size, anchor, is_vertical, start_x, start_y)
     anchor = self:GetOrDefault(anchor, "TOPLEFT")
     is_vertical = self:GetOrDefault(is_vertical, true)
     start_x = self:GetOrDefault(start_x, 0)
-    start_y = self:GetOrDefault(start_y, 460)
+    start_y = self:GetOrDefault(start_y, 0)
     frames = {}
     frame_count = floor(((is_vertical and (GetScreenHeight() - start_y)) or (GetScreenWidth() - start_x)) / size)
     if self:GetProperty("debugMode") then
