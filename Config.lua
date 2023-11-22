@@ -437,6 +437,22 @@ function CraftPresence:GetOptions()
                                 )
                             end
                         end
+                    },
+                    frameAnchor = {
+                        type = "select", order = self:GetNextIndex(), values = self:GetValidAnchors(), width = 1.25,
+                        name = self:GetConfigTitle("FRAME_ANCHOR"),
+                        desc = self:GetConfigComment("FRAME_ANCHOR", nil, nil, nil, self:GetValidAnchors()[defaults.frameAnchor]),
+                        get = function(_)
+                            return self:GetProperty("frameAnchor")
+                        end,
+                        set = function(_, value)
+                            local values = self:GetValidAnchors()
+                            local oldValue = values[self:GetProperty("frameAnchor")]
+                            self:SetProperty("frameAnchor", nil, value)
+                            self:PrintChangedValue(self:GetConfigTitle("FRAME_ANCHOR"), oldValue, values[value])
+                            -- Apply Change immediatly to avoid reload
+                            self:ChatCommand("clear true")
+                        end
                     }
                 }
             },

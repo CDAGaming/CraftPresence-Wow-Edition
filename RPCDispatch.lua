@@ -55,6 +55,7 @@ local render_settings = {
         enabled = true
     }
 }
+local valid_anchors = { "TOPLEFT", "BOTTOMLEFT" }
 
 --- Convert an encoded RPCEvent message into a displayable format
 ---
@@ -137,13 +138,19 @@ function CraftPresence:AssertRenderSettings()
     return self:IsNullOrEmpty(render_warnings)
 end
 
---- Creates an array of frames with the specified size at the TOPLEFT of screen
+function CraftPresence:GetValidAnchors()
+    return valid_anchors
+end
+
+--- Creates an array of frames with the specified size at the specified anchor of screen
 ---
 --- @param size number The width and height of the frames (Required)
+--- @param anchor string The relative anchor point for the frame (Default: 'TOPLEFT')
 ---
 --- @return table @ frames
-function CraftPresence:CreateFrames(size)
+function CraftPresence:CreateFrames(size, anchor)
     if not size then return end
+    anchor = self:GetOrDefault(anchor, "TOPLEFT")
     frames = {}
     frame_count = floor(GetScreenWidth() / size)
     if self:GetProperty("debugMode") then
@@ -168,7 +175,7 @@ function CraftPresence:CreateFrames(size)
         t:SetAllPoints(frames[i])
         frames[i].texture = t
 
-        frames[i]:SetPoint("TOPLEFT", (i - 1) * size, 0)
+        frames[i]:SetPoint(anchor, (i - 1) * size, 0)
         frames[i]:Show()
     end
     return frames

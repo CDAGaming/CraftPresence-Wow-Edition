@@ -77,6 +77,7 @@ function CraftPresence:GenerateDefaults()
             optionalMigrations = false,
             callbackDelay = self.locale["DEFAULT_CALLBACK_DELAY"],
             frameSize = self.locale["DEFAULT_FRAME_SIZE"],
+            frameAnchor = self.locale["DEFAULT_FRAME_ANCHOR"], -- self:GetValidAnchors(); "TOPLEFT"
             frameClearDelay = self.locale["DEFAULT_FRAME_CLEAR_DELAY"],
             buttons = {
                 ["primaryButton"] = {

@@ -177,6 +177,14 @@ L["MINIMUM_FRAME_SIZE"] = 5
 L["MAXIMUM_FRAME_SIZE"] = 15
 L["DEFAULT_FRAME_SIZE"] = 6
 
+L["TITLE_FRAME_ANCHOR"] = "Frame Anchor Point"
+L["COMMENT_FRAME_ANCHOR"] = self:SetFormat([[The relative anchor point each event frame pixel should begin being rendered at.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["DEFAULT_FRAME_ANCHOR"] = 1
+
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
 L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaults.globalKey)
