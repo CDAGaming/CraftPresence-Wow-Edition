@@ -27,7 +27,7 @@ local strformat, tostring, type, pairs = string.format, tostring, type, pairs
 local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
 local max, floor, unpack = math.max, math.floor, unpack
-local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
+local CreateFrame, UIParent, GetScreenWidth, GetScreenHeight = CreateFrame, UIParent, GetScreenWidth, GetScreenHeight
 
 -- Critical Data (DNT)
 local frame_count = 0
@@ -148,11 +148,14 @@ end
 --- @param anchor string The relative anchor point for the frame (Default: 'TOPLEFT')
 ---
 --- @return table @ frames
-function CraftPresence:CreateFrames(size, anchor)
+function CraftPresence:CreateFrames(size, anchor, is_vertical, start_x, start_y)
     if not size then return end
     anchor = self:GetOrDefault(anchor, "TOPLEFT")
+    is_vertical = self:GetOrDefault(is_vertical, true)
+    start_x = self:GetOrDefault(start_x, 0)
+    start_y = self:GetOrDefault(start_y, 460)
     frames = {}
-    frame_count = floor(GetScreenWidth() / size)
+    frame_count = floor(((is_vertical and (GetScreenHeight() - start_y)) or (GetScreenWidth() - start_x)) / size)
     if self:GetProperty("debugMode") then
         self:Print(strformat(self.locale["LOG_DEBUG"],
             strformat(self.locale["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))
@@ -175,7 +178,16 @@ function CraftPresence:CreateFrames(size, anchor)
         t:SetAllPoints(frames[i])
         frames[i].texture = t
 
-        frames[i]:SetPoint(anchor, (i - 1) * size, 0)
+        -- Set Frame Position (x,y)
+        local pos_x, pos_y = start_x, start_y
+        local default_pos = (i - 1) * size
+        if not is_vertical then
+            pos_x = start_x + default_pos
+        else
+            pos_y = -(start_y + default_pos)
+        end
+
+        frames[i]:SetPoint(anchor, pos_x, pos_y)
         frames[i]:Show()
     end
     return frames
