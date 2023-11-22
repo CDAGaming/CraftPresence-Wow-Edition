@@ -616,6 +616,7 @@ function CraftPresence:ChatCommand(input)
             self.locale["USAGE_CMD_CLEAN"] .. "\n" ..
             self.locale["USAGE_CMD_UPDATE"] .. "\n" ..
             self.locale["USAGE_CMD_MINIMAP"] .. "\n" ..
+            self.locale["USAGE_CMD_COMPARTMENT"] .. "\n" ..
             self.locale["USAGE_CMD_STATUS"] .. "\n" ..
             self.locale["USAGE_CMD_RESET"] .. "\n" ..
             self.locale["USAGE_CMD_SET"] .. "\n" ..

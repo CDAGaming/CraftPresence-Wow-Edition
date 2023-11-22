@@ -485,6 +485,9 @@ L["USAGE_CMD_UPDATE"] = self:SetFormat("  */cp|r ^update [debug]|r  -  Forciere 
 L["USAGE_CMD_MINIMAP"] = self:SetFormat("  */cp|r ^minimap|r  -  Schaltet das Minimap Symbol um.",
         self.colors.GREEN, self.colors.GREY
 )
+L["USAGE_CMD_COMPARTMENT"] = self:SetFormat("  */cp|r ^compartment|r  -  Toggles the addon compartment entry.",
+        self.colors.GREEN, self.colors.GREY
+)
 L["USAGE_CMD_STATUS"] = self:SetFormat("  */cp|r ^status|r  -  Zeigt das letzte gesendete Rich-Presence-Update an.",
         self.colors.GREEN, self.colors.GREY
 )

@@ -144,6 +144,7 @@ end
 --- @return table @ frames
 function CraftPresence:CreateFrames(size)
     if not size then return end
+    frames = {}
     frame_count = floor(GetScreenWidth() / size)
     if self:GetProperty("debugMode") then
         self:Print(strformat(self.locale["LOG_DEBUG"],
