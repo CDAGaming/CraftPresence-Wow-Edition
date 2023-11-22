@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.6.5"
+process_version = "v1.6.6"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -451,7 +451,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
                 config["left_offset"], config["left_specific"],
                 config["top_offset"], config["top_specific"],
                 config["right_offset"], config["right_specific"],
-                config["bottom_offset"], config["pixel_size"]
+                config["bottom_offset"], config["bottom_specific"]
             )
         except win32ui.error:
             root_logger.debug('win32ui.error', exc_info=True)
@@ -471,7 +471,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
             config["left_offset"], config["left_specific"],
             config["top_offset"], config["top_specific"],
             config["right_offset"], config["right_specific"],
-            config["bottom_offset"], config["pixel_size"]
+            config["bottom_offset"], config["bottom_specific"]
         )
         im = ImageGrab.grab(bbox=(left, top, right, bottom))
 
