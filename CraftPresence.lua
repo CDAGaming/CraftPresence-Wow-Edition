@@ -629,9 +629,15 @@ function CraftPresence:ChatCommand(input)
         local command = strlower(command_query[1])
 
         if command == "clean" or command == "clear" then
+            local has_argument = not self:IsNullOrEmpty(command_query[2])
+
             self:Print(self.locale["COMMAND_CLEAR_SUCCESS"])
             self:CleanFrames()
             self:SetTimerLocked(false)
+
+            if has_argument and strlower(command_query[2]) == "true" then
+                self:CreateFrames(self:GetProperty("frameSize"))
+            end
         elseif command == "update" then
             local testerMode = false
             if command_query[2] ~= nil then

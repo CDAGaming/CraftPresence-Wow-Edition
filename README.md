@@ -56,7 +56,7 @@ ___
 
 *   `/cp (help | ?)` - Help Command to display the below commands and these explanations
 *   `/cp config (migrate,standalone)` - Displays the Config menu to customize options and placeholder data
-*   `/cp (clear,clean)` - Reset all frames to their original positions and colors.
+*   `/cp (clear,clean) (reset)` - Reset all frames to their original positions and colors.
 *   `/cp update (debug)` - Force or Debug an RPC update
 *   `/cp minimap` - Toggles the display of the minimap button
 *   `/cp compartment` - Toggles the display of the addon compartment entry
