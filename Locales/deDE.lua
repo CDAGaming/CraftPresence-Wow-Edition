@@ -476,7 +476,7 @@ L["USAGE_CMD_HELP"] = self:SetFormat("  */cp|r ^help|r or */cp|r ^?|r  -  Zeigt 
 L["USAGE_CMD_CONFIG"] = self:SetFormat("  */cp|r ^config [migrate,standalone]|r  -  Displays/Migrates the *ConfigUI|r.",
         self.colors.GREEN, self.colors.GREY
 )
-L["USAGE_CMD_CLEAN"] = self:SetFormat("  */cp|r ^clean|r or */cp|r ^clear|r  -  Setzt die Addon-Frames zurück.",
+L["USAGE_CMD_CLEAN"] = self:SetFormat("  */cp|r ^[clean,clear] [reset]|r  -  Setzt die Addon-Frames zurück.",
         self.colors.GREEN, self.colors.GREY
 )
 L["USAGE_CMD_UPDATE"] = self:SetFormat("  */cp|r ^update [debug]|r  -  Forciere oder debugge Rich-Presence-Updates.",
