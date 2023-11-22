@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.6.6"
+process_version = "v1.7.0"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -480,16 +480,18 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
 
     read = []
     current_decoded = ""
-    for square_idx in range(im.width):
+    is_vertical = config["is_vertical"]
+    for square_idx in range(im.width if not (is_vertical) else im.height):
         x = int(square_idx * config["pixel_size"] / 2)
         y = int(config["pixel_size"] / 2)
+        pos = (x, y) if not (is_vertical) else (y, x)
         try:
-            r, g, b = im.getpixel((x, y))
+            r, g, b = im.getpixel(pos)
         except IndexError:
             break
 
         if debug_mode:
-            im.putpixel((x, y), (255, 255, 255))
+            im.putpixel(pos, (255, 255, 255))
 
         if r == g == b == 0:
             waiting_for_null = False

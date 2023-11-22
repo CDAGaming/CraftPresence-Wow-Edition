@@ -13,5 +13,6 @@
   "right_offset": 0,
   "right_specific": 0,
   "bottom_offset": 0,
-  "bottom_specific": 6
+  "bottom_specific": 6,
+  "is_vertical": false
 }
