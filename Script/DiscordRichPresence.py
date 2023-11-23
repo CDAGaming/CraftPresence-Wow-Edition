@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.7.0"
+process_version = "v1.7.1"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -403,11 +403,6 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
         # Note: This is just a failsafe to prevent it from crashing
         left, top, right, bottom = left_specific, top_specific, right_specific, bottom_specific
 
-    # Calculate offsets and final width and height
-    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset,
-                                                 top_specific,
-                                                 right_offset, right_specific, bottom_offset, bottom_specific)
-
     width = right - left
     height = bottom - top
 
@@ -435,7 +430,15 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
     mfc_dc.DeleteDC()
     win32gui.ReleaseDC(hwnd, hwnd_dc)
 
-    return im
+    # Calculate offsets and final width and height
+    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset,
+                                                 top_specific,
+                                                 right_offset, right_specific, bottom_offset, bottom_specific)
+
+    # Crop the image, using the calculated offsets
+    cropped_im = im.crop((left, top, right, bottom))
+
+    return cropped_im
 
 
 def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key='', debug_mode=False):
