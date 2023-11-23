@@ -138,6 +138,8 @@ function CraftPresence:AssertRenderSettings()
     return self:IsNullOrEmpty(render_warnings)
 end
 
+--- Helper function for getting valid_anchors
+--- @return table @ valid_anchors
 function CraftPresence:GetValidAnchors()
     return valid_anchors
 end
@@ -146,6 +148,9 @@ end
 ---
 --- @param size number The width and height of the frames (Required)
 --- @param anchor string The relative anchor point for the frame (Default: 'TOPLEFT')
+--- @param is_vertical boolean Whether frames should generate in a vertical fashion (Default: false)
+--- @param start_x number The starting x position to begin rendering frames (Default: 0)
+--- @param start_y number The starting y position to begin rendering frames (Default: 0)
 ---
 --- @return table @ frames
 function CraftPresence:CreateFrames(size, anchor, is_vertical, start_x, start_y)

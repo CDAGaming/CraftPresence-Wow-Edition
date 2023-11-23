@@ -138,7 +138,10 @@ function CraftPresence:OnEnable()
     self:RegisterChatCommand(self.internals.identifier, "ChatCommand")
     self:RegisterChatCommand(self.internals.affix, "ChatCommand")
     -- Create initial frames and initial rpc update
-    self:CreateFrames(self:GetProperty("frameSize"), self:GetValidAnchors()[self:GetProperty("frameAnchor")])
+    self:CreateFrames(
+        self:GetProperty("frameSize"),
+        self:GetValidAnchors()[self:GetProperty("frameAnchor")]
+    )
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
     self:UpdateCompartmentState(true, false)
@@ -636,7 +639,10 @@ function CraftPresence:ChatCommand(input)
             self:SetTimerLocked(false)
 
             if has_argument and strlower(command_query[2]) == "true" then
-                self:CreateFrames(self:GetProperty("frameSize"), self:GetValidAnchors()[self:GetProperty("frameAnchor")])
+                self:CreateFrames(
+                    self:GetProperty("frameSize"),
+                    self:GetValidAnchors()[self:GetProperty("frameAnchor")]
+                )
             end
         elseif command == "update" then
             local testerMode = false
