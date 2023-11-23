@@ -23,8 +23,9 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local pairs, type, tostring = pairs, type, tostring
+local pairs, type, tostring, tonumber = pairs, type, tostring, tonumber
 local strformat, strlower = string.format, string.lower
+local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
 
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
@@ -438,8 +439,11 @@ function CraftPresence:GetOptions()
                             end
                         end
                     },
+                    advancedFrameHeader = {
+                        order = self:GetNextIndex(), type = "header", name = self.locale["ADDON_HEADER_ADVANCED_FRAME"]
+                    },
                     frameAnchor = {
-                        type = "select", order = self:GetNextIndex(), values = self:GetValidAnchors(), width = 1.25,
+                        type = "select", order = self:GetNextIndex(), values = self:GetValidAnchors(), width = 1.50,
                         name = self:GetConfigTitle("FRAME_ANCHOR"),
                         desc = self:GetConfigComment("FRAME_ANCHOR", nil, nil, nil, self:GetValidAnchors()[defaults.frameAnchor]),
                         get = function(_)
@@ -452,6 +456,83 @@ function CraftPresence:GetOptions()
                             self:PrintChangedValue(self:GetConfigTitle("FRAME_ANCHOR"), oldValue, values[value])
                             -- Apply Change immediatly to avoid reload
                             self:ChatCommand("clear true")
+                        end
+                    },
+                    verticalFrames = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = self:GetConfigTitle("VERTICAL_FRAMES"),
+                        desc = self:GetConfigComment("VERTICAL_FRAMES", nil, nil, nil, defaults.verticalFrames),
+                        get = function(_)
+                            return self:GetProperty("verticalFrames")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("verticalFrames")
+                            local isValid = (type(value) == "boolean")
+                            if isValid then
+                                self:SetProperty("verticalFrames", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("VERTICAL_FRAMES"), oldValue, value)
+                                -- Apply Change immediatly to avoid reload
+                                self:ChatCommand("clear true")
+                            end
+                        end
+                    },
+                    blank4 = {
+                        type = "description", order = self:GetNextIndex(), name = ""
+                    },
+                    frameStartX = {
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
+                        name = self:GetConfigTitle("FRAME_START_X"),
+                        desc = self:GetConfigComment("FRAME_START_X", nil, nil, nil, defaults.frameStartX),
+                        usage = self:GetConfigUsage("FRAME_START_X"),
+                        get = function(_)
+                            return self:GetProperty("frameStartX")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("frameStartX")
+                            local isValid = (self:IsWithinValue(
+                                tonumber(value),
+                                0, GetScreenWidth(),
+                                true, true
+                            ))
+                            if isValid then
+                                self:SetProperty("frameStartX", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_START_X"), oldValue, value)
+                                -- Apply Change immediatly to avoid reload
+                                self:ChatCommand("clear true")
+                            else
+                                self:PrintErrorMessage(
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_START_X"),
+                                        0, GetScreenWidth())
+                                )
+                            end
+                        end
+                    },
+                    frameStartY = {
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
+                        name = self:GetConfigTitle("FRAME_START_Y"),
+                        desc = self:GetConfigComment("FRAME_START_Y", nil, nil, nil, defaults.frameStartY),
+                        usage = self:GetConfigUsage("FRAME_START_Y"),
+                        get = function(_)
+                            return self:GetProperty("frameStartY")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("frameStartY")
+                            local isValid = (self:IsWithinValue(
+                                tonumber(value),
+                                0, GetScreenHeight(),
+                                true, true
+                            ))
+                            if isValid then
+                                self:SetProperty("frameStartY", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_START_Y"), oldValue, value)
+                                -- Apply Change immediatly to avoid reload
+                                self:ChatCommand("clear true")
+                            else
+                                self:PrintErrorMessage(
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_START_Y"),
+                                        0, GetScreenHeight())
+                                )
+                            end
                         end
                     }
                 }

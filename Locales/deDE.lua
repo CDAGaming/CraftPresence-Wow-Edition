@@ -185,6 +185,31 @@ L["COMMENT_FRAME_ANCHOR"] = self:SetFormat([[The relative anchor point each even
 )
 L["DEFAULT_FRAME_ANCHOR"] = 1
 
+L["TITLE_VERTICAL_FRAMES"] = "Use Vertical Frames"
+L["COMMENT_VERTICAL_FRAMES"] = self:SetFormat([[Whether frames should generate in a vertical orientation.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+
+L["TITLE_FRAME_START_X"] = "Starting Frame X Position"
+L["COMMENT_FRAME_START_X"] = self:SetFormat([[The starting x-axis position to begin rendering frames.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["USAGE_FRAME_START_X"] = "<Number between one and your screen's width here>"
+L["DEFAULT_FRAME_START_X"] = "0"
+
+L["TITLE_FRAME_START_Y"] = "Starting Frame Y Position"
+L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to begin rendering frames.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["USAGE_FRAME_START_Y"] = "<Number between one and your screen's height here>"
+L["DEFAULT_FRAME_START_Y"] = "0"
+
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
 L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaults.globalKey)
@@ -547,6 +572,7 @@ L["USAGE_CMD_NOTE"] = self:SetFormat([[Notes:
 -- Frame Text Data
 L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.LIGHT_BLUE)
 L["ADDON_HEADER_CREDITS"] = "Credits"
+L["ADDON_HEADER_ADVANCED_FRAME"] = "Advanced Frame Settings"
 
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
 L["ADDON_DESCRIPTION"] = self:SetFormat([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)

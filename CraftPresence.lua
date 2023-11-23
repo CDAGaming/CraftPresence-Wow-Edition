@@ -25,7 +25,7 @@ SOFTWARE.
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
-local pairs, type, max, tostring = pairs, type, math.max, tostring
+local pairs, type, max, tostring, tonumber = pairs, type, math.max, tostring, tonumber
 
 -- Addon APIs
 
@@ -140,7 +140,10 @@ function CraftPresence:OnEnable()
     -- Create initial frames and initial rpc update
     self:CreateFrames(
         self:GetProperty("frameSize"),
-        self:GetValidAnchors()[self:GetProperty("frameAnchor")]
+        self:GetValidAnchors()[self:GetProperty("frameAnchor")],
+        self:GetProperty("verticalFrames"),
+        tonumber(self:GetProperty("frameStartX")),
+        tonumber(self:GetProperty("frameStartY"))
     )
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
@@ -641,7 +644,10 @@ function CraftPresence:ChatCommand(input)
             if has_argument and strlower(command_query[2]) == "true" then
                 self:CreateFrames(
                     self:GetProperty("frameSize"),
-                    self:GetValidAnchors()[self:GetProperty("frameAnchor")]
+                    self:GetValidAnchors()[self:GetProperty("frameAnchor")],
+                    self:GetProperty("verticalFrames"),
+                    tonumber(self:GetProperty("frameStartX")),
+                    tonumber(self:GetProperty("frameStartY"))
                 )
             end
         elseif command == "update" then
