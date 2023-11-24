@@ -139,7 +139,8 @@ function CraftPresence:OnEnable()
     self:RegisterChatCommand(self.internals.affix, "ChatCommand")
     -- Create initial frames and initial rpc update
     self:CreateFrames(
-        self:GetProperty("frameSize"),
+        self:GetProperty("frameWidth"),
+        self:GetProperty("frameHeight"),
         self:GetValidAnchors()[self:GetProperty("frameAnchor")],
         self:GetProperty("verticalFrames"),
         tonumber(self:GetProperty("frameStartX")),
@@ -643,7 +644,8 @@ function CraftPresence:ChatCommand(input)
 
             if has_argument and strlower(command_query[2]) == "true" then
                 self:CreateFrames(
-                    self:GetProperty("frameSize"),
+                    self:GetProperty("frameWidth"),
+                    self:GetProperty("frameHeight"),
                     self:GetValidAnchors()[self:GetProperty("frameAnchor")],
                     self:GetProperty("verticalFrames"),
                     tonumber(self:GetProperty("frameStartX")),

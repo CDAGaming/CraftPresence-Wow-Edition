@@ -343,6 +343,17 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 6
         end
 
+        if self:IsWithinValue(current, 6, 7, true, false) then
+            -- Schema Changes (v6 -> v7):
+            --   Replaced `frameSize` property with a `frameWidth` and `frameHeight` property
+            local oldValue = self:GetProperty("frameSize")
+            if oldValue ~= nil then
+                self:SetProperty("frameWidth", nil, oldValue)
+                self:SetProperty("frameHeight", nil, oldValue)
+            end
+            current = 7
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end

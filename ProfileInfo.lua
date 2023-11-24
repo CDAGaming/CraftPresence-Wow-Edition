@@ -76,7 +76,8 @@ function CraftPresence:GenerateDefaults()
             queuedPipeline = false,
             optionalMigrations = false,
             callbackDelay = self.locale["DEFAULT_CALLBACK_DELAY"],
-            frameSize = self.locale["DEFAULT_FRAME_SIZE"],
+            frameWidth = self.locale["DEFAULT_FRAME_WIDTH"],
+            frameHeight = self.locale["DEFAULT_FRAME_HEIGHT"],
             frameAnchor = self.locale["DEFAULT_FRAME_ANCHOR"], -- self:GetValidAnchors(); "TOPLEFT"
             verticalFrames = false,
             frameStartX = self.locale["DEFAULT_FRAME_START_X"],

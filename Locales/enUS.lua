@@ -167,15 +167,25 @@ L["MINIMUM_FRAME_CLEAR_DELAY"] = 3
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
 
-L["TITLE_FRAME_SIZE"] = "Frame Render Size"
-L["COMMENT_FRAME_SIZE"] = self:SetFormat([[The size that each event frame pixel should be rendered at.
+L["TITLE_FRAME_WIDTH"] = "Frame Width"
+L["COMMENT_FRAME_WIDTH"] = self:SetFormat([[The width that each event frame pixel should be rendered at.
 
-*Note:|r This value should be equal to the python script's ^pixel_size|r property.]],
+*Note:|r This value should be equal to the python script's ^pixel_width|r property.]],
         self.colors.GOLD, self.colors.GREEN
 )
-L["MINIMUM_FRAME_SIZE"] = 5
-L["MAXIMUM_FRAME_SIZE"] = 15
-L["DEFAULT_FRAME_SIZE"] = 6
+L["MINIMUM_FRAME_WIDTH"] = 3
+L["MAXIMUM_FRAME_WIDTH"] = 15
+L["DEFAULT_FRAME_WIDTH"] = 6
+
+L["TITLE_FRAME_HEIGHT"] = "Frame Height"
+L["COMMENT_FRAME_HEIGHT"] = self:SetFormat([[The height that each event frame pixel should be rendered at.
+
+*Note:|r This value should be equal to the python script's ^pixel_height|r property.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["MINIMUM_FRAME_HEIGHT"] = 1
+L["MAXIMUM_FRAME_HEIGHT"] = 15
+L["DEFAULT_FRAME_HEIGHT"] = 6
 
 L["TITLE_FRAME_ANCHOR"] = "Frame Anchor Point"
 L["COMMENT_FRAME_ANCHOR"] = self:SetFormat([[The relative anchor point each event frame pixel should begin being rendered at.

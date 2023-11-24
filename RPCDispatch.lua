@@ -26,7 +26,7 @@ SOFTWARE.
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
 local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
-local max, floor, unpack = math.max, math.floor, unpack
+local max, floor, abs, unpack = math.max, math.floor, math.abs, unpack
 local CreateFrame, UIParent, GetScreenWidth, GetScreenHeight = CreateFrame, UIParent, GetScreenWidth, GetScreenHeight
 
 -- Critical Data (DNT)
@@ -144,34 +144,63 @@ function CraftPresence:GetValidAnchors()
     return valid_anchors
 end
 
+--- Helper function for getting the scaled screen width
+--- @return number @ screen_width
+function CraftPresence:GetScaledWidth()
+    return GetScreenWidth() * UIParent:GetEffectiveScale()
+end
+
+--- Helper function for getting the scaled screen height
+--- @return number @ screen_height
+function CraftPresence:GetScaledHeight()
+    return GetScreenHeight() * UIParent:GetEffectiveScale()
+end
+
 --- Creates an array of frames with the specified size at the specified anchor of screen
 ---
---- @param size number The width and height of the frames (Required)
+--- @param width number The width of the frames (Required)
+--- @param height number The height of the frames (Required)
 --- @param anchor string The relative anchor point for the frame (Default: 'TOPLEFT')
 --- @param is_vertical boolean Whether frames should generate in a vertical orientation (Default: false)
 --- @param start_x number The starting x-axis position to begin rendering frames (Default: 0)
 --- @param start_y number The starting y-axis position to begin rendering frames (Default: 0)
 ---
 --- @return table @ frames
-function CraftPresence:CreateFrames(size, anchor, is_vertical, start_x, start_y)
-    if not size then return end
+function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x, start_y)
+    if not width then return end
+    if not height then return end
     anchor = self:GetOrDefault(anchor, "TOPLEFT")
     is_vertical = self:GetOrDefault(is_vertical, false)
     start_x = self:GetOrDefault(start_x, 0)
     start_y = self:GetOrDefault(start_y, 0)
     frames = {}
-    frame_count = floor(((is_vertical and (GetScreenHeight() - start_y)) or (GetScreenWidth() - start_x)) / size)
+    frame_count = 0
+    if is_vertical then
+        frame_count = (self:GetScaledHeight() - start_y) / height
+    else
+        frame_count = (self:GetScaledWidth() - start_x) / width
+    end
+    frame_count = floor(frame_count)
     if self:GetProperty("debugMode") then
         self:Print(strformat(self.locale["LOG_DEBUG"],
-            strformat(self.locale["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))
+            strformat(self.locale["DEBUG_MAX_BYTES"], tostring(frame_count * 3))
         ))
     end
 
     for i = 1, frame_count do
         frames[i] = CreateFrame("Frame", nil, UIParent)
-        frames[i]:SetFrameStrata("TOOLTIP")
-        frames[i]:SetWidth(size)
-        frames[i]:SetHeight(size)
+        -- Make it independent of UI Scale
+        if abs(frames[i]:GetEffectiveScale() - 1) > 0.01 then -- Frame is not full size
+            frames[i]:SetScale(1 / frames[i]:GetParent():GetEffectiveScale()) -- Rescale the frame to be full size
+        end
+        -- Alternation of frame strata helps to reduce amount of blur between frames
+        if i % 2 == 0 then
+            frames[i]:SetFrameStrata("TOOLTIP")
+        else
+            frames[i]:SetFrameStrata("FULLSCREEN_DIALOG")
+        end
+        frames[i]:SetWidth(width)
+        frames[i]:SetHeight(height)
 
         -- initialise pixels as null data (RBGA all 0'd)
         local t = frames[i]:CreateTexture(nil, "OVERLAY")
@@ -185,11 +214,10 @@ function CraftPresence:CreateFrames(size, anchor, is_vertical, start_x, start_y)
 
         -- Set Frame Position (x,y)
         local pos_x, pos_y = start_x, start_y
-        local default_pos = (i - 1) * size
         if not is_vertical then
-            pos_x = start_x + default_pos
+            pos_x = start_x + ((i - 1) * width)
         else
-            pos_y = -(start_y + default_pos)
+            pos_y = -(start_y + ((i - 1) * height))
         end
 
         frames[i]:SetPoint(anchor, pos_x, pos_y)
@@ -247,14 +275,6 @@ end
 --- @param text string The text to be interpreted and converted (Required)
 function CraftPresence:PaintSomething(text)
     if self:IsNullOrEmpty(text) then return end
-    local max_bytes = (frame_count - 1) * 3
-    local text_length = self:GetLength(text)
-    if text_length >= max_bytes then
-        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"],
-            tostring(text_length), tostring(max_bytes)
-        ))
-        return
-    end
 
     -- clean all frames before repainting
     self:CleanFrames()
@@ -297,6 +317,15 @@ function CraftPresence:PaintSomething(text)
             squares_painted = squares_painted + 1
             self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
         end
+    end
+
+    local current_bytes = (squares_painted * 3)
+    local max_bytes = (frame_count * 3)
+    if current_bytes > max_bytes then
+        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"],
+            tostring(current_bytes), tostring(max_bytes)
+        ))
+        self:CleanFrames()
     end
 end
 

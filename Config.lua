@@ -25,7 +25,6 @@ SOFTWARE.
 -- Lua APIs
 local pairs, type, tostring, tonumber = pairs, type, tostring, tonumber
 local strformat, strlower = string.format, string.lower
-local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
 
 --- Retrieves the option table to be used in the Config Menu
 --- @return table @ opts
@@ -408,33 +407,68 @@ function CraftPresence:GetOptions()
                     blank3 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
-                    frameSize = {
+                    frameWidth = {
                         type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
-                        min = self.locale["MINIMUM_FRAME_SIZE"], max = self.locale["MAXIMUM_FRAME_SIZE"],
-                        name = self:GetConfigTitle("FRAME_SIZE"),
-                        desc = self:GetConfigComment("FRAME_SIZE", nil, nil, nil, defaults.frameSize),
+                        min = self.locale["MINIMUM_FRAME_WIDTH"], max = self.locale["MAXIMUM_FRAME_WIDTH"],
+                        name = self:GetConfigTitle("FRAME_WIDTH"),
+                        desc = self:GetConfigComment("FRAME_WIDTH", nil, nil, nil, defaults.frameWidth),
                         get = function(_)
-                            return self:GetProperty("frameSize")
+                            return self:GetProperty("frameWidth")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetProperty("frameSize")
+                            local oldValue = self:GetProperty("frameWidth")
                             local isValid = (self:IsWithinValue(
                                 value,
-                                self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"],
+                                self.locale["MINIMUM_FRAME_WIDTH"], self.locale["MAXIMUM_FRAME_WIDTH"],
                                 true, true
                             ))
                             if isValid then
-                                self:SetProperty("frameSize", nil, value)
-                                self:PrintChangedValue(self:GetConfigTitle("FRAME_SIZE"), oldValue, value)
+                                self:SetProperty("frameWidth", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_WIDTH"), oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_SIZE"))
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_WIDTH"))
                                     )
                                 end
+                                -- Apply Change immediatly to avoid reload
+                                self:ChatCommand("clear true")
                             else
                                 self:PrintErrorMessage(
-                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_SIZE"),
-                                        self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"])
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_WIDTH"),
+                                        self.locale["MINIMUM_FRAME_WIDTH"], self.locale["MAXIMUM_FRAME_WIDTH"])
+                                )
+                            end
+                        end
+                    },
+                    frameHeight = {
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = self.locale["MINIMUM_FRAME_HEIGHT"], max = self.locale["MAXIMUM_FRAME_HEIGHT"],
+                        name = self:GetConfigTitle("FRAME_HEIGHT"),
+                        desc = self:GetConfigComment("FRAME_HEIGHT", nil, nil, nil, defaults.frameHeight),
+                        get = function(_)
+                            return self:GetProperty("frameHeight")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("frameHeight")
+                            local isValid = (self:IsWithinValue(
+                                value,
+                                self.locale["MINIMUM_FRAME_HEIGHT"], self.locale["MAXIMUM_FRAME_HEIGHT"],
+                                true, true
+                            ))
+                            if isValid then
+                                self:SetProperty("frameHeight", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_HEIGHT"), oldValue, value)
+                                if value <= 0 then
+                                    self:PrintWarningMessage(
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_HEIGHT"))
+                                    )
+                                end
+                                -- Apply Change immediatly to avoid reload
+                                self:ChatCommand("clear true")
+                            else
+                                self:PrintErrorMessage(
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_HEIGHT"),
+                                        self.locale["MINIMUM_FRAME_HEIGHT"], self.locale["MAXIMUM_FRAME_HEIGHT"])
                                 )
                             end
                         end
@@ -491,7 +525,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("frameStartX")
                             local isValid = (self:IsWithinValue(
                                 tonumber(value),
-                                0, GetScreenWidth(),
+                                0, self:GetScaledWidth(),
                                 true, true
                             ))
                             if isValid then
@@ -502,7 +536,7 @@ function CraftPresence:GetOptions()
                             else
                                 self:PrintErrorMessage(
                                     strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_START_X"),
-                                        0, GetScreenWidth())
+                                        0, self:GetScaledWidth())
                                 )
                             end
                         end
@@ -519,7 +553,7 @@ function CraftPresence:GetOptions()
                             local oldValue = self:GetProperty("frameStartY")
                             local isValid = (self:IsWithinValue(
                                 tonumber(value),
-                                0, GetScreenHeight(),
+                                0, self:GetScaledHeight(),
                                 true, true
                             ))
                             if isValid then
@@ -530,7 +564,7 @@ function CraftPresence:GetOptions()
                             else
                                 self:PrintErrorMessage(
                                     strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_START_Y"),
-                                        0, GetScreenHeight())
+                                        0, self:GetScaledHeight())
                                 )
                             end
                         end
