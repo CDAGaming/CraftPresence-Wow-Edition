@@ -122,7 +122,7 @@ def main(debug_mode=False):
     global process_hwnd
     global is_process_running
     # Primary Variables
-    event_key = "$RPCEvent$"
+    event_key = "$$$"
     event_length = 11
     array_split_key = "=="
     array_separator_key = "|"
@@ -276,6 +276,7 @@ def main(debug_mode=False):
             last_decoded = [None] * event_length
             last_activity = {}
         time.sleep(config["scan_rate"])
+
 
 def sanitize_placeholder(input: str, length: int, fallback="", encoding='utf-8'):
     """
@@ -484,7 +485,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
     read = []
     current_decoded = ""
     is_vertical = config["is_vertical"]
-    for square_idx in range(im.width if not (is_vertical) else im.height):
+    for square_idx in range(int(im.width if not (is_vertical) else im.height)):
         x = int(square_idx * config["pixel_width"] / 2)
         y = int(config["pixel_height"] / 2)
         pos = (x, y) if not (is_vertical) else (y, x)

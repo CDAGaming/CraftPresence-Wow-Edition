@@ -81,7 +81,7 @@ CraftPresence.internals = {
     },
     rpc = {
         buttonsSplitKey = "==",
-        eventTag = "$RPCEvent$",
+        eventTag = "$$$",
         eventSeperator = "|",
         chatSeperator = "||"
     },
