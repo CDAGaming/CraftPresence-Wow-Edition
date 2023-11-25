@@ -147,13 +147,13 @@ end
 --- Helper function for getting the scaled screen width
 --- @return number @ screen_width
 function CraftPresence:GetScaledWidth()
-    return GetScreenWidth() * UIParent:GetEffectiveScale()
+    return floor((GetScreenWidth() * UIParent:GetEffectiveScale()) + 0.5)
 end
 
 --- Helper function for getting the scaled screen height
 --- @return number @ screen_height
 function CraftPresence:GetScaledHeight()
-    return GetScreenHeight() * UIParent:GetEffectiveScale()
+    return floor((GetScreenHeight() * UIParent:GetEffectiveScale()) + 0.5)
 end
 
 --- Creates an array of frames with the specified size at the specified anchor of screen
