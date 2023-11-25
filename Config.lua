@@ -23,7 +23,7 @@ SOFTWARE.
 --]]
 
 -- Lua APIs
-local pairs, type, tostring, tonumber = pairs, type, tostring, tonumber
+local pairs, type, tostring = pairs, type, tostring
 local strformat, strlower = string.format, string.lower
 
 --- Retrieves the option table to be used in the Config Menu
@@ -514,17 +514,17 @@ function CraftPresence:GetOptions()
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     frameStartX = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = 0, max = self:GetScaledWidth(),
                         name = self:GetConfigTitle("FRAME_START_X"),
                         desc = self:GetConfigComment("FRAME_START_X", nil, nil, nil, defaults.frameStartX),
-                        usage = self:GetConfigUsage("FRAME_START_X"),
                         get = function(_)
                             return self:GetProperty("frameStartX")
                         end,
                         set = function(_, value)
                             local oldValue = self:GetProperty("frameStartX")
                             local isValid = (self:IsWithinValue(
-                                tonumber(value),
+                                value,
                                 0, self:GetScaledWidth(),
                                 true, true
                             ))
@@ -542,17 +542,17 @@ function CraftPresence:GetOptions()
                         end
                     },
                     frameStartY = {
-                        type = "input", order = self:GetNextIndex(), width = 1.50,
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = 0, max = self:GetScaledHeight(),
                         name = self:GetConfigTitle("FRAME_START_Y"),
                         desc = self:GetConfigComment("FRAME_START_Y", nil, nil, nil, defaults.frameStartY),
-                        usage = self:GetConfigUsage("FRAME_START_Y"),
                         get = function(_)
                             return self:GetProperty("frameStartY")
                         end,
                         set = function(_, value)
                             local oldValue = self:GetProperty("frameStartY")
                             local isValid = (self:IsWithinValue(
-                                tonumber(value),
+                                value,
                                 0, self:GetScaledHeight(),
                                 true, true
                             ))

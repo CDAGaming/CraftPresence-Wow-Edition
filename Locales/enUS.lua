@@ -209,7 +209,7 @@ L["COMMENT_FRAME_START_X"] = self:SetFormat([[The starting x-axis position to be
         self.colors.GOLD, self.colors.GREEN
 )
 L["USAGE_FRAME_START_X"] = "<Number between one and your screen's width here>"
-L["DEFAULT_FRAME_START_X"] = "0"
+L["DEFAULT_FRAME_START_X"] = 0
 
 L["TITLE_FRAME_START_Y"] = "Starting Frame Y Position"
 L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to begin rendering frames.
@@ -218,7 +218,7 @@ L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to be
         self.colors.GOLD, self.colors.GREEN
 )
 L["USAGE_FRAME_START_Y"] = "<Number between one and your screen's height here>"
-L["DEFAULT_FRAME_START_Y"] = "0"
+L["DEFAULT_FRAME_START_Y"] = 0
 
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."

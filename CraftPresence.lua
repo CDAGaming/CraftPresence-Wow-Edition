@@ -25,7 +25,7 @@ SOFTWARE.
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
 local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
-local pairs, type, max, tostring, tonumber = pairs, type, math.max, tostring, tonumber
+local pairs, type, max, tostring = pairs, type, math.max, tostring
 
 -- Addon APIs
 
@@ -143,8 +143,8 @@ function CraftPresence:OnEnable()
         self:GetProperty("frameHeight"),
         self:GetValidAnchors()[self:GetProperty("frameAnchor")],
         self:GetProperty("verticalFrames"),
-        tonumber(self:GetProperty("frameStartX")),
-        tonumber(self:GetProperty("frameStartY"))
+        self:GetProperty("frameStartX"),
+        self:GetProperty("frameStartY")
     )
     self:PaintMessageWait()
     self:UpdateMinimapState(true, false)
@@ -648,8 +648,8 @@ function CraftPresence:ChatCommand(input)
                     self:GetProperty("frameHeight"),
                     self:GetValidAnchors()[self:GetProperty("frameAnchor")],
                     self:GetProperty("verticalFrames"),
-                    tonumber(self:GetProperty("frameStartX")),
-                    tonumber(self:GetProperty("frameStartY"))
+                    self:GetProperty("frameStartX"),
+                    self:GetProperty("frameStartY")
                 )
             end
         elseif command == "update" then
