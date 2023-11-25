@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.7.3"
+process_version = "v1.7.5"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -446,7 +446,6 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
     """
     Interpret a set of pixels, using the offsets and sizing from the config (Also perform sanity checks, if applicable).
     """
-    waiting_for_null = False
     im = None
     if is_windows and hwnd:
         try:
@@ -483,32 +482,47 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         im = im.convert('RGB')
 
     read = []
+    skipped_pixels_counter = 0
     current_decoded = ""
     is_vertical = config["is_vertical"]
     for square_idx in range(int(im.width if not (is_vertical) else im.height)):
-        x = int((square_idx if not (is_vertical) else 1) * config["pixel_width"] / 2)
-        y = int((square_idx if (is_vertical) else 1) * config["pixel_height"] / 2)
+        x = int(square_idx if not (is_vertical) else 0)
+        y = int(square_idx if (is_vertical) else 0)
         pos = (x, y)
         try:
-            r, g, b = im.getpixel(pos)
+            current_pixel_colors = im.getpixel(pos)
         except IndexError:
+            break
+
+        if current_pixel_colors[0] == 255 or current_pixel_colors[1] == 255 or current_pixel_colors[2] == 255:
             break
 
         if debug_mode:
             im.putpixel(pos, (255, 255, 255))
 
-        if r == g == b == 0:
-            waiting_for_null = False
-        elif not waiting_for_null:
-            read.append(r)
-            read.append(g)
-            read.append(b)
+        # When in-game width is set to 3 or more, we will skip two "bad" pixels.
+        # First next pixel is 100% bad, second is 50/50, third one is 100% good, so we will get its color
+        if 0 < skipped_pixels_counter < 3:
+            skipped_pixels_counter += 1
+            continue
 
-            current_decoded = decode_read_data(read)
-            if verify_read_data(current_decoded, event_length, event_key, array_separator_key):
-                break
-            else:
-                waiting_for_null = True
+        next_x = int((square_idx + 1) if not (is_vertical) else 0)
+        next_y = int((square_idx + 1) if (is_vertical) else 0)
+        next_pos = (next_x, next_y) if not (is_vertical) else (next_y, next_x)
+        try:
+            next_pixel_colors = im.getpixel(next_pos)
+        except IndexError:
+            break
+        # If we've found difference in pixels, there's a good chance these are
+        # "smoothed" pixels and they can't be decoded as they don't represent any data
+        if current_pixel_colors != next_pixel_colors:
+            # ...so we will save the latest good pixel and skip the next two
+            read += [color for color in current_pixel_colors]
+            skipped_pixels_counter = 1
+
+        current_decoded = decode_read_data(read)
+        if verify_read_data(current_decoded, event_length, event_key, array_separator_key):
+            break
 
     parts = get_decoded_chunks(current_decoded, event_key, array_separator_key)
 

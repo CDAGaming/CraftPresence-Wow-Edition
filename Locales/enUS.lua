@@ -587,9 +587,9 @@ L["ADDON_HEADER_ADVANCED_FRAME"] = "Advanced Frame Settings"
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
 L["ADDON_DESCRIPTION"] = self:SetFormat([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)
 
-Thanks to *Attka|r and *wowdim|r on Github for the original base project, that makes this possible.
+Thanks to *AipNooBest|r and *wowdim|r on Github for the original base project, that makes this possible.
 
-Special thanks to *the-emerald/python-discord-rpc|r and *Attk4/wow-discord-rich-presence|r]],
+Special thanks to *the-emerald/python-discord-rpc|r and *AipNooBest/wow-discord-rpc|r]],
         self.colors.GREEN
 )
 
