@@ -202,15 +202,8 @@ function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x,
         frames[i]:SetWidth(width)
         frames[i]:SetHeight(height)
 
-        -- initialise pixels as null data (RBGA all 0'd)
-        local t = frames[i]:CreateTexture(nil, "OVERLAY")
-        if t.SetColorTexture then
-            t:SetColorTexture(0, 0, 0, 0)
-        else
-            t:SetTexture(0, 0, 0, 0)
-        end
-        t:SetAllPoints(frames[i])
-        frames[i].texture = t
+        -- Initialise the frame as null data (RBGA all 0s)
+        self:PaintFrame(frames[i], 0, 0, 0, 0)
 
         -- Set Frame Position (x,y)
         local pos_x, pos_y = start_x, start_y
@@ -236,6 +229,9 @@ end
 --- @param force number Force index (Sets alpha to 1 if rgb ~= 0 and force ~= 0 and force ~= nil))
 function CraftPresence:PaintFrame(frame, r, g, b, force)
     if frame == nil then return end
+    if not frame.texture and frame.CreateTexture then
+        frame.texture = frame:CreateTexture(nil, "OVERLAY")
+    end
     -- set pixel to black if they are null
     if r == nil then
         r = 0
