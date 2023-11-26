@@ -386,12 +386,6 @@ function CraftPresence:IsWithinValue(value, min, max, contains_min, contains_max
         if max < min then
             max = min
         end
-        if min < 0 then
-            min = 0
-        end
-        if max < 0 then
-            max = 0
-        end
     end
     -- Checking value within range based on contains_min and contains_max
     if contains_min and contains_max then
