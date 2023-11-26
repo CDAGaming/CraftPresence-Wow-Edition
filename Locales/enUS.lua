@@ -220,6 +220,12 @@ L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to be
 L["USAGE_FRAME_START_Y"] = "<Number between one and your screen's height here>"
 L["DEFAULT_FRAME_START_Y"] = 0
 
+L["TITLE_RELOAD_FRAMES"] = "Reload Frames"
+L["COMMENT_RELOAD_FRAMES"] = "Discards and re-creates active frame data."
+
+L["TITLE_RELOAD_UI"] = "Reload UI"
+L["COMMENT_RELOAD_UI"] = "Reloads the User Interface."
+
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
 L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaults.globalKey)
@@ -582,7 +588,13 @@ L["USAGE_CMD_NOTE"] = self:SetFormat([[Notes:
 -- Frame Text Data
 L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.LIGHT_BLUE)
 L["ADDON_HEADER_CREDITS"] = "Credits"
+
 L["ADDON_HEADER_ADVANCED_FRAME"] = "Advanced Frame Settings"
+L["ADDON_SUMMARY_ADVANCED_FRAME"] = self:SetFormat([[These options are designed for *Advanced Usage Only|r.
+
+*Note:|r These settings require a ^client reload|r as well as adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
 
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
 L["ADDON_DESCRIPTION"] = self:SetFormat([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)
