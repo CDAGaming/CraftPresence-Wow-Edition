@@ -208,9 +208,9 @@ function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x,
         -- Set Frame Position (x,y)
         local pos_x, pos_y = start_x, start_y
         if not is_vertical then
-            pos_x = start_x + ((i - 1) * width)
+            pos_x = pos_x + ((i - 1) * width)
         else
-            pos_y = -(start_y + ((i - 1) * height))
+            pos_y = -(pos_y + ((i - 1) * height))
         end
 
         frames[i]:SetPoint(anchor, pos_x, pos_y)
