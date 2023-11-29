@@ -55,7 +55,11 @@ local render_settings = {
         enabled = true
     }
 }
-local valid_anchors = { "TOPLEFT", "BOTTOMLEFT" }
+local valid_anchors = {
+    "TOPLEFT", "TOPRIGHT",
+    "BOTTOMLEFT", "BOTTOMRIGHT",
+    "TOP", "BOTTOM", "LEFT", "RIGHT"
+}
 
 --- Convert an encoded RPCEvent message into a displayable format
 ---
@@ -175,10 +179,39 @@ function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x,
     start_y = self:GetOrDefault(start_y, 0)
     frames = {}
     frame_count = 0
+    -- Set Baseline Positioning based on anchor
+    -- TOP -> y=0
+    --   TOPLEFT -> x=0
+    --   TOPRIGHT -> x=GetScaledWidth()
+    --   CENTER -> x=GetScaledWidth()/2
+    -- BOTTOM -> y=GetScaledHeight()
+    --   BOTTOMLEFT -> x=0
+    --   BOTTOMRIGHT -> x=GetScaledWidth()
+    --   CENTER -> x=GetScaledWidth()/2
+    -- LEFT -> x=0, y=GetScaledHeight()/2
+    -- RIGHT -> x=GetScaledWidth(), y=GetScaledHeight()/2
+    -- CENTER -> x=GetScaledWidth()/2, y=GetScaledHeight()/2
+    local base_width, base_height = self:GetScaledWidth(), self:GetScaledHeight()
+    local base_x, base_y = 0,0
+    if self:EndsWith(anchor, "RIGHT") then
+        base_x = base_width
+    end
+    if self:StartsWith(anchor, "BOTTOM") then
+        base_y = base_height
+    end
+    if anchor == "TOP" or anchor == "BOTTOM" or anchor == "CENTER" then
+        base_x = base_width / 2
+    end
+    if anchor == "LEFT" or anchor == "RIGHT" or anchor == "CENTER" then
+        base_y = base_height / 2
+    end
+    local real_x = base_x + start_x
+    local real_y = base_y + start_y
+    -- Calculate Maximum Frames based on *real* position data
     if is_vertical then
-        frame_count = (self:GetScaledHeight() - start_y) / height
+        frame_count = (base_height - real_y) / height
     else
-        frame_count = (self:GetScaledWidth() - start_x) / width
+        frame_count = (base_width - real_x) / width
     end
     frame_count = floor(frame_count)
     if self:GetProperty("debugMode") then
