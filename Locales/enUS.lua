@@ -220,9 +220,6 @@ L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to be
 L["USAGE_FRAME_START_Y"] = "<Number between one and your screen's height here>"
 L["DEFAULT_FRAME_START_Y"] = 0
 
-L["TITLE_RELOAD_FRAMES"] = "Reload Frames"
-L["COMMENT_RELOAD_FRAMES"] = "Discards and re-creates active frame data."
-
 L["TITLE_RELOAD_UI"] = "Reload UI"
 L["COMMENT_RELOAD_UI"] = "Reloads the User Interface."
 

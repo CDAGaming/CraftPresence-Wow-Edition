@@ -564,14 +564,6 @@ function CraftPresence:GetOptions()
                     blank5 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
-                    reloadFrames = {
-                        type = "execute", order = self:GetNextIndex(), width = 1.50,
-                        name = self:GetConfigTitle("RELOAD_FRAMES"),
-                        desc = self:GetConfigComment("RELOAD_FRAMES"),
-                        func = function (_)
-                            self:ChatCommand("clear true")
-                        end
-                    },
                     reloadUi = {
                         type = "execute", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("RELOAD_UI"),
