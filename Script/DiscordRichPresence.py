@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.7.5"
+process_version = "v1.7.6"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -508,7 +508,7 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
 
         next_x = int((square_idx + 1) if not (is_vertical) else 0)
         next_y = int((square_idx + 1) if (is_vertical) else 0)
-        next_pos = (next_x, next_y) if not (is_vertical) else (next_y, next_x)
+        next_pos = (next_x, next_y)
         try:
             next_pixel_colors = im.getpixel(next_pos)
         except IndexError:

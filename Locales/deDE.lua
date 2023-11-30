@@ -183,7 +183,7 @@ L["COMMENT_FRAME_HEIGHT"] = self:SetFormat([[The height that each event frame pi
 *Note:|r This value should be equal to the python script's ^pixel_height|r property.]],
         self.colors.GOLD, self.colors.GREEN
 )
-L["MINIMUM_FRAME_HEIGHT"] = 1
+L["MINIMUM_FRAME_HEIGHT"] = 3
 L["MAXIMUM_FRAME_HEIGHT"] = 15
 L["DEFAULT_FRAME_HEIGHT"] = 6
 
