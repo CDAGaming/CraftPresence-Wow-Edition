@@ -404,38 +404,172 @@ function CraftPresence:GetOptions()
                             end
                         end
                     },
+                    advancedFrameHeader = {
+                        order = self:GetNextIndex(), type = "header", name = self.locale["ADDON_HEADER_ADVANCED_FRAME"]
+                    },
+                    advancedFrameSummary = {
+                        type = "description", order = self:GetNextIndex(), width = "full", fontSize = "medium",
+                        name = self.locale["ADDON_SUMMARY_ADVANCED_FRAME"],
+                    },
+                    frameAnchor = {
+                        type = "select", order = self:GetNextIndex(), values = self:GetValidAnchors(), width = 1.50,
+                        name = self:GetConfigTitle("FRAME_ANCHOR"),
+                        desc = self:GetConfigComment("FRAME_ANCHOR", nil, nil, nil, self:GetValidAnchors()[defaults.frameAnchor]),
+                        get = function(_)
+                            return self:GetProperty("frameAnchor")
+                        end,
+                        set = function(_, value)
+                            local values = self:GetValidAnchors()
+                            local oldValue = values[self:GetProperty("frameAnchor")]
+                            self:SetProperty("frameAnchor", nil, value)
+                            self:PrintChangedValue(self:GetConfigTitle("FRAME_ANCHOR"), oldValue, values[value])
+                        end
+                    },
+                    verticalFrames = {
+                        type = "toggle", order = self:GetNextIndex(),
+                        name = self:GetConfigTitle("VERTICAL_FRAMES"),
+                        desc = self:GetConfigComment("VERTICAL_FRAMES", nil, nil, nil, defaults.verticalFrames),
+                        get = function(_)
+                            return self:GetProperty("verticalFrames")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("verticalFrames")
+                            local isValid = (type(value) == "boolean")
+                            if isValid then
+                                self:SetProperty("verticalFrames", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("VERTICAL_FRAMES"), oldValue, value)
+                            end
+                        end
+                    },
                     blank3 = {
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
-                    frameSize = {
+                    frameStartX = {
                         type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
-                        min = self.locale["MINIMUM_FRAME_SIZE"], max = self.locale["MAXIMUM_FRAME_SIZE"],
-                        name = self:GetConfigTitle("FRAME_SIZE"),
-                        desc = self:GetConfigComment("FRAME_SIZE", nil, nil, nil, defaults.frameSize),
+                        min = -self:GetScaledWidth(), max = self:GetScaledWidth(),
+                        name = self:GetConfigTitle("FRAME_START_X"),
+                        desc = self:GetConfigComment("FRAME_START_X", nil, nil, nil, defaults.frameStartX),
                         get = function(_)
-                            return self:GetProperty("frameSize")
+                            return self:GetProperty("frameStartX")
                         end,
                         set = function(_, value)
-                            local oldValue = self:GetProperty("frameSize")
+                            local oldValue = self:GetProperty("frameStartX")
                             local isValid = (self:IsWithinValue(
                                 value,
-                                self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"],
+                                -self:GetScaledWidth(), self:GetScaledWidth(),
                                 true, true
                             ))
                             if isValid then
-                                self:SetProperty("frameSize", nil, value)
-                                self:PrintChangedValue(self:GetConfigTitle("FRAME_SIZE"), oldValue, value)
+                                self:SetProperty("frameStartX", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_START_X"), oldValue, value)
+                            else
+                                self:PrintErrorMessage(
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_START_X"),
+                                        0, self:GetScaledWidth())
+                                )
+                            end
+                        end
+                    },
+                    frameStartY = {
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = -self:GetScaledHeight(), max = self:GetScaledHeight(),
+                        name = self:GetConfigTitle("FRAME_START_Y"),
+                        desc = self:GetConfigComment("FRAME_START_Y", nil, nil, nil, defaults.frameStartY),
+                        get = function(_)
+                            return self:GetProperty("frameStartY")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("frameStartY")
+                            local isValid = (self:IsWithinValue(
+                                value,
+                                -self:GetScaledHeight(), self:GetScaledHeight(),
+                                true, true
+                            ))
+                            if isValid then
+                                self:SetProperty("frameStartY", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_START_Y"), oldValue, value)
+                            else
+                                self:PrintErrorMessage(
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_START_Y"),
+                                        0, self:GetScaledHeight())
+                                )
+                            end
+                        end
+                    },
+                    blank4 = {
+                        type = "description", order = self:GetNextIndex(), name = ""
+                    },
+                    frameWidth = {
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = self.locale["MINIMUM_FRAME_WIDTH"], max = self.locale["MAXIMUM_FRAME_WIDTH"],
+                        name = self:GetConfigTitle("FRAME_WIDTH"),
+                        desc = self:GetConfigComment("FRAME_WIDTH", nil, nil, nil, defaults.frameWidth),
+                        get = function(_)
+                            return self:GetProperty("frameWidth")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("frameWidth")
+                            local isValid = (self:IsWithinValue(
+                                value,
+                                self.locale["MINIMUM_FRAME_WIDTH"], self.locale["MAXIMUM_FRAME_WIDTH"],
+                                true, true
+                            ))
+                            if isValid then
+                                self:SetProperty("frameWidth", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_WIDTH"), oldValue, value)
                                 if value <= 0 then
                                     self:PrintWarningMessage(
-                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_SIZE"))
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_WIDTH"))
                                     )
                                 end
                             else
                                 self:PrintErrorMessage(
-                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_SIZE"),
-                                        self.locale["MINIMUM_FRAME_SIZE"], self.locale["MAXIMUM_FRAME_SIZE"])
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_WIDTH"),
+                                        self.locale["MINIMUM_FRAME_WIDTH"], self.locale["MAXIMUM_FRAME_WIDTH"])
                                 )
                             end
+                        end
+                    },
+                    frameHeight = {
+                        type = "range", order = self:GetNextIndex(), width = 1.50, step = 1,
+                        min = self.locale["MINIMUM_FRAME_HEIGHT"], max = self.locale["MAXIMUM_FRAME_HEIGHT"],
+                        name = self:GetConfigTitle("FRAME_HEIGHT"),
+                        desc = self:GetConfigComment("FRAME_HEIGHT", nil, nil, nil, defaults.frameHeight),
+                        get = function(_)
+                            return self:GetProperty("frameHeight")
+                        end,
+                        set = function(_, value)
+                            local oldValue = self:GetProperty("frameHeight")
+                            local isValid = (self:IsWithinValue(
+                                value,
+                                self.locale["MINIMUM_FRAME_HEIGHT"], self.locale["MAXIMUM_FRAME_HEIGHT"],
+                                true, true
+                            ))
+                            if isValid then
+                                self:SetProperty("frameHeight", nil, value)
+                                self:PrintChangedValue(self:GetConfigTitle("FRAME_HEIGHT"), oldValue, value)
+                                if value <= 0 then
+                                    self:PrintWarningMessage(
+                                        strformat(self.locale["WARNING_VALUE_UNSAFE"], self:GetConfigTitle("FRAME_HEIGHT"))
+                                    )
+                                end
+                            else
+                                self:PrintErrorMessage(
+                                    strformat(self.locale["ERROR_RANGE_DEFAULT"], self:GetConfigTitle("FRAME_HEIGHT"),
+                                        self.locale["MINIMUM_FRAME_HEIGHT"], self.locale["MAXIMUM_FRAME_HEIGHT"])
+                                )
+                            end
+                        end
+                    },
+                    blank5 = {
+                        type = "description", order = self:GetNextIndex(), name = ""
+                    },
+                    reloadUi = {
+                        type = "execute", order = self:GetNextIndex(), width = 1.50,
+                        name = self:GetConfigTitle("RELOAD_UI"),
+                        desc = self:GetConfigComment("RELOAD_UI"),
+                        func = function (_)
+                            self:ChatCommand("integration reload")
                         end
                     }
                 }

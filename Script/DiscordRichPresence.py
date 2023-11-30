@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.6.6"
+process_version = "v1.7.6"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -122,7 +122,7 @@ def main(debug_mode=False):
     global process_hwnd
     global is_process_running
     # Primary Variables
-    event_key = "$RPCEvent$"
+    event_key = "$$$"
     event_length = 11
     array_split_key = "=="
     array_separator_key = "|"
@@ -277,6 +277,7 @@ def main(debug_mode=False):
             last_activity = {}
         time.sleep(config["scan_rate"])
 
+
 def sanitize_placeholder(input: str, length: int, fallback="", encoding='utf-8'):
     """
     Removes any invalid data from a placeholder argument
@@ -403,11 +404,6 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
         # Note: This is just a failsafe to prevent it from crashing
         left, top, right, bottom = left_specific, top_specific, right_specific, bottom_specific
 
-    # Calculate offsets and final width and height
-    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset,
-                                                 top_specific,
-                                                 right_offset, right_specific, bottom_offset, bottom_specific)
-
     width = right - left
     height = bottom - top
 
@@ -435,14 +431,21 @@ def take_screenshot(hwnd, window_type=0, left_offset=0, left_specific=0, top_off
     mfc_dc.DeleteDC()
     win32gui.ReleaseDC(hwnd, hwnd_dc)
 
-    return im
+    # Calculate offsets and final width and height
+    left, top, right, bottom = interpret_offsets(left, top, right, bottom, left_offset, left_specific, top_offset,
+                                                 top_specific,
+                                                 right_offset, right_specific, bottom_offset, bottom_specific)
+
+    # Crop the image, using the calculated offsets
+    cropped_im = im.crop((left, top, right, bottom))
+
+    return cropped_im
 
 
 def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key='', debug_mode=False):
     """
     Interpret a set of pixels, using the offsets and sizing from the config (Also perform sanity checks, if applicable).
     """
-    waiting_for_null = False
     im = None
     if is_windows and hwnd:
         try:
@@ -479,30 +482,47 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         im = im.convert('RGB')
 
     read = []
+    skipped_pixels_counter = 0
     current_decoded = ""
-    for square_idx in range(im.width):
-        x = int(square_idx * config["pixel_size"] / 2)
-        y = int(config["pixel_size"] / 2)
+    is_vertical = config["is_vertical"]
+    for square_idx in range(int(im.width if not (is_vertical) else im.height)):
+        x = int(square_idx if not (is_vertical) else 0)
+        y = int(square_idx if (is_vertical) else 0)
+        pos = (x, y)
         try:
-            r, g, b = im.getpixel((x, y))
+            current_pixel_colors = im.getpixel(pos)
         except IndexError:
             break
 
+        if current_pixel_colors[0] == 255 or current_pixel_colors[1] == 255 or current_pixel_colors[2] == 255:
+            break
+
         if debug_mode:
-            im.putpixel((x, y), (255, 255, 255))
+            im.putpixel(pos, (255, 255, 255))
 
-        if r == g == b == 0:
-            waiting_for_null = False
-        elif not waiting_for_null:
-            read.append(r)
-            read.append(g)
-            read.append(b)
+        # When in-game width is set to 3 or more, we will skip two "bad" pixels.
+        # First next pixel is 100% bad, second is 50/50, third one is 100% good, so we will get its color
+        if 0 < skipped_pixels_counter < 3:
+            skipped_pixels_counter += 1
+            continue
 
-            current_decoded = decode_read_data(read)
-            if verify_read_data(current_decoded, event_length, event_key, array_separator_key):
-                break
-            else:
-                waiting_for_null = True
+        next_x = int((square_idx + 1) if not (is_vertical) else 0)
+        next_y = int((square_idx + 1) if (is_vertical) else 0)
+        next_pos = (next_x, next_y)
+        try:
+            next_pixel_colors = im.getpixel(next_pos)
+        except IndexError:
+            break
+        # If we've found difference in pixels, there's a good chance these are
+        # "smoothed" pixels and they can't be decoded as they don't represent any data
+        if current_pixel_colors != next_pixel_colors:
+            # ...so we will save the latest good pixel and skip the next two
+            read += [color for color in current_pixel_colors]
+            skipped_pixels_counter = 1
+
+        current_decoded = decode_read_data(read)
+        if verify_read_data(current_decoded, event_length, event_key, array_separator_key):
+            break
 
     parts = get_decoded_chunks(current_decoded, event_key, array_separator_key)
 

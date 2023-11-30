@@ -26,8 +26,8 @@ SOFTWARE.
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
 local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
-local max, floor, unpack = math.max, math.floor, unpack
-local CreateFrame, UIParent, GetScreenWidth = CreateFrame, UIParent, GetScreenWidth
+local max, floor, abs, unpack = math.max, math.floor, math.abs, unpack
+local CreateFrame, UIParent, GetScreenWidth, GetScreenHeight = CreateFrame, UIParent, GetScreenWidth, GetScreenHeight
 
 -- Critical Data (DNT)
 local frame_count = 0
@@ -54,6 +54,11 @@ local render_settings = {
         allowRebasedApi = true,
         enabled = true
     }
+}
+local valid_anchors = {
+    "TOPLEFT", "TOPRIGHT",
+    "BOTTOMLEFT", "BOTTOMRIGHT",
+    "TOP", "BOTTOM", "LEFT", "RIGHT"
 }
 
 --- Convert an encoded RPCEvent message into a displayable format
@@ -137,38 +142,111 @@ function CraftPresence:AssertRenderSettings()
     return self:IsNullOrEmpty(render_warnings)
 end
 
---- Creates an array of frames with the specified size at the TOPLEFT of screen
+--- Helper function for getting valid_anchors
+--- @return table @ valid_anchors
+function CraftPresence:GetValidAnchors()
+    return valid_anchors
+end
+
+--- Helper function for getting the scaled screen width
+--- @return number @ screen_width
+function CraftPresence:GetScaledWidth()
+    return floor((GetScreenWidth() * UIParent:GetEffectiveScale()) + 0.5)
+end
+
+--- Helper function for getting the scaled screen height
+--- @return number @ screen_height
+function CraftPresence:GetScaledHeight()
+    return floor((GetScreenHeight() * UIParent:GetEffectiveScale()) + 0.5)
+end
+
+--- Creates an array of frames with the specified size at the specified anchor of screen
 ---
---- @param size number The width and height of the frames (Required)
+--- @param width number The width of the frames (Required)
+--- @param height number The height of the frames (Required)
+--- @param anchor string The relative anchor point for the frame (Default: 'TOPLEFT')
+--- @param is_vertical boolean Whether frames should generate in a vertical orientation (Default: false)
+--- @param start_x number The starting x-axis position to begin rendering frames (Default: 0)
+--- @param start_y number The starting y-axis position to begin rendering frames (Default: 0)
 ---
 --- @return table @ frames
-function CraftPresence:CreateFrames(size)
-    if not size then return end
+function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x, start_y)
+    if not width then return end
+    if not height then return end
+    anchor = self:GetOrDefault(anchor, "TOPLEFT")
+    is_vertical = self:GetOrDefault(is_vertical, false)
+    start_x = self:GetOrDefault(start_x, 0)
+    start_y = self:GetOrDefault(start_y, 0)
     frames = {}
-    frame_count = floor(GetScreenWidth() / size)
+    frame_count = 0
+    -- Set Baseline Positioning based on anchor
+    -- TOP -> y=0
+    --   TOPLEFT -> x=0
+    --   TOPRIGHT -> x=GetScaledWidth()-frameWidth
+    --   CENTER -> x=GetScaledWidth()/2
+    -- BOTTOM -> y=GetScaledHeight()-frameHeight
+    --   BOTTOMLEFT -> x=0
+    --   BOTTOMRIGHT -> x=GetScaledWidth()-frameWidth
+    --   CENTER -> x=GetScaledWidth()/2
+    -- LEFT -> x=0, y=GetScaledHeight()/2
+    -- RIGHT -> x=GetScaledWidth()-frameWidth, y=GetScaledHeight()/2
+    -- CENTER -> x=GetScaledWidth()/2, y=GetScaledHeight()/2
+    local base_width, base_height = self:GetScaledWidth(), self:GetScaledHeight()
+    local base_x, base_y = 0,0
+    if self:EndsWith(anchor, "RIGHT") then
+        base_x = base_width - width
+    end
+    if self:StartsWith(anchor, "BOTTOM") then
+        base_y = base_height - height
+    end
+    if anchor == "TOP" or anchor == "BOTTOM" or anchor == "CENTER" then
+        base_x = base_width / 2
+    end
+    if anchor == "LEFT" or anchor == "RIGHT" or anchor == "CENTER" then
+        base_y = base_height / 2
+    end
+    local real_x = base_x + start_x
+    local real_y = base_y + start_y
+    -- Calculate Maximum Frames based on *real* position data
+    if is_vertical then
+        frame_count = (base_height - real_y) / height
+    else
+        frame_count = (base_width - real_x) / width
+    end
+    frame_count = floor(frame_count)
     if self:GetProperty("debugMode") then
         self:Print(strformat(self.locale["LOG_DEBUG"],
-            strformat(self.locale["DEBUG_MAX_BYTES"], tostring((frame_count * 3) - 1))
+            strformat(self.locale["DEBUG_MAX_BYTES"], tostring(frame_count * 3))
         ))
     end
 
     for i = 1, frame_count do
         frames[i] = CreateFrame("Frame", nil, UIParent)
-        frames[i]:SetFrameStrata("TOOLTIP")
-        frames[i]:SetWidth(size)
-        frames[i]:SetHeight(size)
-
-        -- initialise pixels as null data (RBGA all 0'd)
-        local t = frames[i]:CreateTexture(nil, "OVERLAY")
-        if t.SetColorTexture then
-            t:SetColorTexture(0, 0, 0, 0)
-        else
-            t:SetTexture(0, 0, 0, 0)
+        -- Make it independent of UI Scale
+        if abs(frames[i]:GetEffectiveScale() - 1) > 0.01 then -- Frame is not full size
+            frames[i]:SetScale(1 / frames[i]:GetParent():GetEffectiveScale()) -- Rescale the frame to be full size
         end
-        t:SetAllPoints(frames[i])
-        frames[i].texture = t
+        -- Alternation of frame strata helps to reduce amount of blur between frames
+        if i % 2 == 0 then
+            frames[i]:SetFrameStrata("TOOLTIP")
+        else
+            frames[i]:SetFrameStrata("FULLSCREEN_DIALOG")
+        end
+        frames[i]:SetWidth(width)
+        frames[i]:SetHeight(height)
 
-        frames[i]:SetPoint("TOPLEFT", (i - 1) * size, 0)
+        -- Initialise the frame as null data (RBGA all 0s)
+        self:PaintFrame(frames[i], 0, 0, 0, 0)
+
+        -- Set Frame Position (x,y)
+        local pos_x, pos_y = start_x, start_y
+        if not is_vertical then
+            pos_x = pos_x + ((i - 1) * width)
+        else
+            pos_y = -(pos_y + ((i - 1) * height))
+        end
+
+        frames[i]:SetPoint(anchor, pos_x, pos_y)
         frames[i]:Show()
     end
     return frames
@@ -184,6 +262,9 @@ end
 --- @param force number Force index (Sets alpha to 1 if rgb ~= 0 and force ~= 0 and force ~= nil))
 function CraftPresence:PaintFrame(frame, r, g, b, force)
     if frame == nil then return end
+    if not frame.texture and frame.CreateTexture then
+        frame.texture = frame:CreateTexture(nil, "OVERLAY")
+    end
     -- set pixel to black if they are null
     if r == nil then
         r = 0
@@ -223,14 +304,6 @@ end
 --- @param text string The text to be interpreted and converted (Required)
 function CraftPresence:PaintSomething(text)
     if self:IsNullOrEmpty(text) then return end
-    local max_bytes = (frame_count - 1) * 3
-    local text_length = self:GetLength(text)
-    if text_length >= max_bytes then
-        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"],
-            tostring(text_length), tostring(max_bytes)
-        ))
-        return
-    end
 
     -- clean all frames before repainting
     self:CleanFrames()
@@ -258,21 +331,16 @@ function CraftPresence:PaintSomething(text)
         end
         squares_painted = squares_painted + 1
         self:PaintFrame(frames[squares_painted], r, g, b)
-        -- print the next frame black to signal a separator
-        -- if the pixel before it is allocated
-        if r == nil then
-            r = 0
-        end
-        if g == nil then
-            g = 0
-        end
-        if b == nil then
-            b = 0
-        end
-        if not (r == 0 and b == 0 and g == 0) then
-            squares_painted = squares_painted + 1
-            self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
-        end
+    end
+    self:PaintFrame(frames[squares_painted], 255, 255, 255, 1)
+
+    local current_bytes = (squares_painted * 3)
+    local max_bytes = (frame_count * 3)
+    if current_bytes > max_bytes then
+        self:PrintErrorMessage(strformat(self.locale["ERROR_MESSAGE_OVERFLOW"],
+            tostring(current_bytes), tostring(max_bytes)
+        ))
+        self:CleanFrames()
     end
 end
 

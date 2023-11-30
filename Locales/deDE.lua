@@ -167,15 +167,59 @@ L["MINIMUM_FRAME_CLEAR_DELAY"] = 3
 L["MAXIMUM_FRAME_CLEAR_DELAY"] = 15
 L["DEFAULT_FRAME_CLEAR_DELAY"] = 5
 
-L["TITLE_FRAME_SIZE"] = "Größe der Frames"
-L["COMMENT_FRAME_SIZE"] = self:SetFormat([[The size that each event frame pixel should be rendered at.
+L["TITLE_FRAME_WIDTH"] = "Frame Width"
+L["COMMENT_FRAME_WIDTH"] = self:SetFormat([[The width that each event frame pixel should be rendered at.
 
-*Note:|r This value should be equal to the python script's ^pixel_size|r property.]],
+*Note:|r This value should be equal to the python script's ^pixel_width|r property.]],
         self.colors.GOLD, self.colors.GREEN
 )
-L["MINIMUM_FRAME_SIZE"] = 5
-L["MAXIMUM_FRAME_SIZE"] = 15
-L["DEFAULT_FRAME_SIZE"] = 6
+L["MINIMUM_FRAME_WIDTH"] = 3
+L["MAXIMUM_FRAME_WIDTH"] = 15
+L["DEFAULT_FRAME_WIDTH"] = 6
+
+L["TITLE_FRAME_HEIGHT"] = "Frame Height"
+L["COMMENT_FRAME_HEIGHT"] = self:SetFormat([[The height that each event frame pixel should be rendered at.
+
+*Note:|r This value should be equal to the python script's ^pixel_height|r property.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["MINIMUM_FRAME_HEIGHT"] = 3
+L["MAXIMUM_FRAME_HEIGHT"] = 15
+L["DEFAULT_FRAME_HEIGHT"] = 6
+
+L["TITLE_FRAME_ANCHOR"] = "Frame Anchor Point"
+L["COMMENT_FRAME_ANCHOR"] = self:SetFormat([[The relative anchor point each event frame pixel should begin being rendered at.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["DEFAULT_FRAME_ANCHOR"] = 1
+
+L["TITLE_VERTICAL_FRAMES"] = "Use Vertical Frames"
+L["COMMENT_VERTICAL_FRAMES"] = self:SetFormat([[Whether frames should generate in a vertical orientation.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+
+L["TITLE_FRAME_START_X"] = "Starting Frame X Position"
+L["COMMENT_FRAME_START_X"] = self:SetFormat([[The starting x-axis position to begin rendering frames.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["DEFAULT_FRAME_START_X"] = 0
+
+L["TITLE_FRAME_START_Y"] = "Starting Frame Y Position"
+L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to begin rendering frames.
+
+*Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+L["DEFAULT_FRAME_START_Y"] = 0
+
+L["TITLE_RELOAD_UI"] = "Reload UI"
+L["COMMENT_RELOAD_UI"] = "Reloads the User Interface."
 
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
@@ -540,12 +584,19 @@ L["USAGE_CMD_NOTE"] = self:SetFormat([[Notes:
 L["ADDON_HEADER_VERSION"] = self:SetFormat("%s *%s|r", self.colors.LIGHT_BLUE)
 L["ADDON_HEADER_CREDITS"] = "Credits"
 
+L["ADDON_HEADER_ADVANCED_FRAME"] = "Advanced Frame Settings"
+L["ADDON_SUMMARY_ADVANCED_FRAME"] = self:SetFormat([[These options are designed for *Advanced Usage Only|r.
+
+*Note:|r These settings require a ^client reload|r as well as adjusting the python script's ^orientation|r properties.]],
+        self.colors.GOLD, self.colors.GREEN
+)
+
 L["ADDON_SUMMARY"] = "CraftPresence allows you to customize the way others see you play with Discord Rich Presence."
 L["ADDON_DESCRIPTION"] = self:SetFormat([[Created by *CDAGaming|r (https://gitlab.com/CDAGaming)
 
-Thanks to *Attka|r and *wowdim|r on Github for the original base project, that makes this possible.
+Thanks to *AipNooBest|r and *wowdim|r on Github for the original base project, that makes this possible.
 
-Special thanks to *the-emerald/python-discord-rpc|r and *Attk4/wow-discord-rich-presence|r]],
+Special thanks to *the-emerald/python-discord-rpc|r and *AipNooBest/wow-discord-rpc|r]],
         self.colors.GREEN
 )
 
