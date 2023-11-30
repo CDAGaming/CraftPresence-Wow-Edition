@@ -51,6 +51,7 @@ local lastEventName
 local addOnData = {}
 local buildData = {}
 local compatData = {}
+local optionsData = {}
 local activeIntegrations = {}
 local isRebasedApi = false
 
@@ -65,7 +66,8 @@ function CraftPresence:OnInitialize()
     -- Options Initialization
     self:GenerateDefaults()
     self.db = self.libraries.AceDB:New(self.internals.name .. "DB", self:GetDefaults())
-    self.libraries.AceConfig:RegisterOptionsTable(self.internals.name, self.GetOptions, {
+    optionsData = self:GetOptions()
+    self.libraries.AceConfig:RegisterOptionsTable(self.internals.name, optionsData, {
         (self.internals.name .. " set"), (self.internals.affix .. " set")
     })
     self.libraries.AceConfigDialog:SetDefaultSize(self.internals.name, 858, 660)

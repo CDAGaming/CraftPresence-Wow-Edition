@@ -26,9 +26,11 @@ SOFTWARE.
 local pairs, type, tostring = pairs, type, tostring
 local strformat, strlower = string.format, string.lower
 
---- Retrieves the option table to be used in the Config Menu
---- @return table @ opts
-function CraftPresence:GetOptions()
+-- DB_OPTIONS
+local DB_OPTIONS
+
+--- Generates the option table to be used in the Config Menu
+function CraftPresence:GenerateOptions()
     -- It is necesary to have this value, as calling it with self implied
     -- Causes NotifyChange to fail from time to time
     local self = CraftPresence
@@ -38,7 +40,7 @@ function CraftPresence:GetOptions()
     -- Ensure Ordering is Correct, by resetting the index before generating the options
     self:ResetIndex()
 
-    local opts = {
+    DB_OPTIONS = {
         type = "group", childGroups = "tab",
         name = self:GetAddOnInfo("versionString"),
         get = function(info)
@@ -597,7 +599,15 @@ function CraftPresence:GetOptions()
     -- We also reset the index after the options table is generated
     -- to ensure that everything is cleaned up nice and tidy
     self:ResetIndex()
-    return opts
+end
+
+--- Retrieves the option table to be used in the Config Menu
+--- @return table @ opts
+function CraftPresence:GetOptions()
+    if not DB_OPTIONS then
+        self:GenerateOptions()
+    end
+    return DB_OPTIONS
 end
 
 --- Retrieves whether or not logging changed data is allowed
