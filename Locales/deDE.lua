@@ -208,7 +208,6 @@ L["COMMENT_FRAME_START_X"] = self:SetFormat([[The starting x-axis position to be
 *Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
         self.colors.GOLD, self.colors.GREEN
 )
-L["USAGE_FRAME_START_X"] = "<Number between one and your screen's width here>"
 L["DEFAULT_FRAME_START_X"] = 0
 
 L["TITLE_FRAME_START_Y"] = "Starting Frame Y Position"
@@ -217,7 +216,6 @@ L["COMMENT_FRAME_START_Y"] = self:SetFormat([[The starting y-axis position to be
 *Note:|r This value requires adjusting the python script's ^orientation|r properties.]],
         self.colors.GOLD, self.colors.GREEN
 )
-L["USAGE_FRAME_START_Y"] = "<Number between one and your screen's height here>"
 L["DEFAULT_FRAME_START_Y"] = 0
 
 L["TITLE_RELOAD_UI"] = "Reload UI"
