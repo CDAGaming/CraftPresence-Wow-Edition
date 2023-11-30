@@ -59,7 +59,7 @@ function CraftPresence:GetOptions()
                 end,
                 args = {
                     clientId = {
-                        type = "input", order = self:GetNextIndex(), width = 1.25,
+                        type = "input", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("CLIENT_ID"),
                         desc = self:GetConfigComment("CLIENT_ID", nil, nil, nil, defaults.clientId),
                         usage = self:GetConfigUsage("CLIENT_ID"),
@@ -83,7 +83,7 @@ function CraftPresence:GetOptions()
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     showMinimapIcon = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         disabled = function()
                             return self.libraries.LDBIcon == nil
                         end,
@@ -97,7 +97,7 @@ function CraftPresence:GetOptions()
                         end
                     },
                     showCompartmentEntry = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         disabled = function()
                             return not self:IsCompartmentSupported()
                         end,
@@ -114,7 +114,7 @@ function CraftPresence:GetOptions()
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     showWelcomeMessage = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("SHOW_WELCOME_MESSAGE"),
                         desc = self:GetConfigComment("SHOW_WELCOME_MESSAGE", nil, nil, nil, defaults.showWelcomeMessage),
                         get = function(_)
@@ -130,7 +130,7 @@ function CraftPresence:GetOptions()
                         end
                     },
                     enforceInterface = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         disabled = function()
                             local currentTOC = self:GetBuildInfo("toc_version")
                             return not self:IsFeatureSupported("enforceInterface", currentTOC)
@@ -268,7 +268,7 @@ function CraftPresence:GetOptions()
                 end,
                 args = {
                     debugMode = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("DEBUG_MODE"),
                         desc = self:GetConfigComment("DEBUG_MODE", nil, nil, nil, defaults.debugMode),
                         get = function(_)
@@ -284,7 +284,7 @@ function CraftPresence:GetOptions()
                         end
                     },
                     verboseMode = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("VERBOSE_MODE"),
                         desc = self:GetConfigComment("VERBOSE_MODE", nil, nil, nil, defaults.verboseMode),
                         get = function(_)
@@ -303,7 +303,7 @@ function CraftPresence:GetOptions()
                         type = "description", order = self:GetNextIndex(), name = ""
                     },
                     queuedPipeline = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("QUEUED_PIPELINE"),
                         desc = self:GetConfigComment("QUEUED_PIPELINE", nil, nil, nil, defaults.queuedPipeline),
                         get = function(_)
@@ -319,7 +319,7 @@ function CraftPresence:GetOptions()
                         end
                     },
                     optionalMigrations = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("OPTIONAL_MIGRATIONS"),
                         desc = self:GetConfigComment("OPTIONAL_MIGRATIONS", nil, nil, nil, defaults.optionalMigrations),
                         get = function(_)
@@ -426,7 +426,7 @@ function CraftPresence:GetOptions()
                         end
                     },
                     verticalFrames = {
-                        type = "toggle", order = self:GetNextIndex(),
+                        type = "toggle", order = self:GetNextIndex(), width = 1.50,
                         name = self:GetConfigTitle("VERTICAL_FRAMES"),
                         desc = self:GetConfigComment("VERTICAL_FRAMES", nil, nil, nil, defaults.verticalFrames),
                         get = function(_)
