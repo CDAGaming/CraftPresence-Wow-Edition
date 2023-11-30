@@ -182,22 +182,22 @@ function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x,
     -- Set Baseline Positioning based on anchor
     -- TOP -> y=0
     --   TOPLEFT -> x=0
-    --   TOPRIGHT -> x=GetScaledWidth()
+    --   TOPRIGHT -> x=GetScaledWidth()-frameWidth
     --   CENTER -> x=GetScaledWidth()/2
-    -- BOTTOM -> y=GetScaledHeight()
+    -- BOTTOM -> y=GetScaledHeight()-frameHeight
     --   BOTTOMLEFT -> x=0
-    --   BOTTOMRIGHT -> x=GetScaledWidth()
+    --   BOTTOMRIGHT -> x=GetScaledWidth()-frameWidth
     --   CENTER -> x=GetScaledWidth()/2
     -- LEFT -> x=0, y=GetScaledHeight()/2
-    -- RIGHT -> x=GetScaledWidth(), y=GetScaledHeight()/2
+    -- RIGHT -> x=GetScaledWidth()-frameWidth, y=GetScaledHeight()/2
     -- CENTER -> x=GetScaledWidth()/2, y=GetScaledHeight()/2
     local base_width, base_height = self:GetScaledWidth(), self:GetScaledHeight()
     local base_x, base_y = 0,0
     if self:EndsWith(anchor, "RIGHT") then
-        base_x = base_width
+        base_x = base_width - width
     end
     if self:StartsWith(anchor, "BOTTOM") then
-        base_y = base_height
+        base_y = base_height - height
     end
     if anchor == "TOP" or anchor == "BOTTOM" or anchor == "CENTER" then
         base_x = base_width / 2
