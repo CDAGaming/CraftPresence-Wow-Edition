@@ -24,7 +24,7 @@ SOFTWARE.
 
 -- Lua APIs
 local strformat, strlower, strupper = string.format, string.lower, string.upper
-local tinsert, tremove, tconcat = table.insert, table.remove, table.concat
+local tinsert, tremove, tconcat, tsort = table.insert, table.remove, table.concat, table.sort
 local pairs, type, max, tostring = pairs, type, math.max, tostring
 
 -- Addon APIs
@@ -102,6 +102,24 @@ function CraftPresence:OnInitialize()
                 self.optionsFrame = self.libraries.AceConfigDialog:AddToBlizOptions(self.internals.name)
                 self.optionsFrame.default = function()
                     self:UpdateProfile(true, true, "all")
+                end
+
+                -- Add Additional Category Support when using Blizzard's Options panel
+                local option_elements = {}
+                for key, data in pairs(optionsData.args) do
+                    tinsert(option_elements, {
+                        id = key,
+                        info = data
+                    })
+                end
+                -- Sort the formatted array via order value, same way as Ace3 (*mostly*)
+                tsort(option_elements, function(a, b) return (a.info.order or 100) < (b.info.order or 100) end)
+                for _, value in pairs(option_elements) do
+                    local key = value.id
+                    local data = value.info
+                    local appName = self.internals.name .. "/" .. key
+                    self.libraries.AceConfig:RegisterOptionsTable(appName, data)
+                    self.optionsFrame[key] = self.libraries.AceConfigDialog:AddToBlizOptions(appName, data.name, self.internals.name)
                 end
             end
         end
