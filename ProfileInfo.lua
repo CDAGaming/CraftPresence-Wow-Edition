@@ -953,6 +953,23 @@ end]]                ,
                     enabled = true,
                     prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
                 },
+                ["owned_keystone_name"] = {
+                    minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
+                    processCallback = [[function (self)
+    local dungeon_info = self:GetOwnedKeystone().dungeon
+    local result
+    if dungeon_info ~= nil then
+        result = dungeon_info.name
+    end
+    return self:GetOrDefault(result)
+end]]                ,
+                    processType = "function",
+                    registerCallback = "",
+                    tagCallback = "",
+                    tagType = "string",
+                    enabled = true,
+                    prefix = self.internals.defaults.innerKey, suffix = self.internals.defaults.innerKey
+                },
                 ["owned_keystone_level"] = {
                     minimumTOC = "50000", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)

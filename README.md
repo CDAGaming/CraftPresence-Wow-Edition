@@ -221,6 +221,9 @@ These types of placeholders are designed for specialized pieces of information, 
     *   The external rating involves the usage of 3rd party addon api's, such as [RaiderIO]
     *   If this function is not present, it will fallback to `@internal_keystone_rating@`
     *   Availability: 5.0.0 clients and above
+*   `@owned_keystone_name@` - The player's currently owned keystone name
+    *   See [CraftPresence/InstanceInfo] for more info on retrieving this output
+    *   Availability: 5.0.0 clients and above
 *   `@owned_keystone_level@` - The player's currently owned keystone level
     *   See [CraftPresence/InstanceInfo] for more info on retrieving this output
     *   Availability: 5.0.0 clients and above
