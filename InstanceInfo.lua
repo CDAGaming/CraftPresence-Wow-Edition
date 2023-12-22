@@ -212,7 +212,7 @@ end
 ---
 --- Format:
 --- keystoneInfo {
----     string @ dungeon,
+---     table @ dungeon,
 ---     number @ level,
 ---     string @ formattedLevel
 --- }
