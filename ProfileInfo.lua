@@ -959,7 +959,7 @@ end]]                ,
     local dungeon_info = self:GetOwnedKeystone().dungeon
     local result
     if dungeon_info ~= nil then
-        result = dungeon_info.name
+        result = select(1, dungeon_info)
     end
     return self:GetOrDefault(result)
 end]]                ,
