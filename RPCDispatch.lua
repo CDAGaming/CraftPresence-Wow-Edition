@@ -26,7 +26,7 @@ SOFTWARE.
 local strformat, tostring, type, pairs = string.format, tostring, type, pairs
 local tinsert, tconcat = table.insert, table.concat
 local strbyte, strsub = string.byte, string.sub
-local max, floor, abs, unpack = math.max, math.floor, math.abs, unpack
+local max, floor, abs, unpack, mod = math.max, math.floor, math.abs, unpack, (math.mod or math.fmod)
 local CreateFrame, UIParent, GetScreenWidth, GetScreenHeight = CreateFrame, UIParent, GetScreenWidth, GetScreenHeight
 
 -- Critical Data (DNT)
@@ -227,7 +227,7 @@ function CraftPresence:CreateFrames(width, height, anchor, is_vertical, start_x,
             frames[i]:SetScale(1 / frames[i]:GetParent():GetEffectiveScale()) -- Rescale the frame to be full size
         end
         -- Alternation of frame strata helps to reduce amount of blur between frames
-        if i % 2 == 0 then
+        if mod(i, 2) == 0 then
             frames[i]:SetFrameStrata("TOOLTIP")
         else
             frames[i]:SetFrameStrata("FULLSCREEN_DIALOG")
