@@ -1,5 +1,5 @@
-## Interface: 100200
-## Interface-Retail: 100200
+## Interface: 100205
+## Interface-Retail: 100205
 ## Interface-Classic: 11500
 ## Interface-BCC: 20504
 ## Interface-Wrath: 30403
@@ -13,7 +13,7 @@
 ## IconTexture: Interface\AddOns\CraftPresence\Images\icon.blp
 ## X-Schema-ID: 7
 ## X-Embeds: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
-## X-Credits: Attka
+## X-Credits: AipNooBest
 ## X-Curse-Project-ID: 457334
 ## X-WoWI-ID: 25986
 ## X-Wago-ID: R4N2naNL
