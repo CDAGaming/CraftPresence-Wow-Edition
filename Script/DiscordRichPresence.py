@@ -29,7 +29,7 @@ def load_config(path=current_path, default_path='/defaults.json', user_path='/co
     """
     Load the config and default_settings data from the specified paths, if applicable.
     """
-    default_settings = open(path + default_path)
+    default_settings = open(path + default_path, 'r', encoding='utf-8')
     user_settings = default_settings
     config = json.load(user_settings)
     try:
