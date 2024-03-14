@@ -137,6 +137,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["baseTOC"] = 40000,
                 ["name"] = "Mists of Pandaria"
             },
+            ["4.4.x"] = {
+                ["minimumTOC"] = 40400,
+                ["maximumTOC"] = 40400,
+                ["build_tag"] = "rebased",
+                ["baseTOC"] = 100107,
+                ["name"] = "Cataclysm Classic"
+            },
             ["4.x"] = {
                 ["minimumTOC"] = 40000,
                 ["maximumTOC"] = 40304,

@@ -69,3 +69,9 @@ jobs:
         uses: BigWigsMods/packager@master
         with:
           args: -g wrath
+
+      # Release - Cataclysm Classic
+      - name: Package and release for Cataclysm Classic
+        uses: BigWigsMods/packager@master
+        with:
+          args: -g cata
