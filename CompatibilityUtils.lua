@@ -45,7 +45,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11501,
+                ["toc"] = 11502,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
@@ -55,8 +55,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 100200,
-                ["name"] = "Public Test Realm (DF 10.2.0)",
+                ["toc"] = 100206,
+                ["name"] = "Public Test Realm (DF 10.2.6)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
@@ -65,7 +65,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11501,
+                ["toc"] = 11502,
                 ["name"] = "WoW Classic Era PTR",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -186,7 +186,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11501,
+                ["maximumTOC"] = 11502,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
