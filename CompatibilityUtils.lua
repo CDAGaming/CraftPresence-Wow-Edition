@@ -50,8 +50,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 100205,
-                ["name"] = "Public Test Realm (DF 10.2.5)",
+                ["toc"] = 100207,
+                ["name"] = "Public Test Realm (DF 10.2.7)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
@@ -60,7 +60,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 30403,
+                ["toc"] = 40400,
                 ["name"] = "Public Test Realm (Wrath Classic)",
                 ["product_id"] = "classic_ptr"
             },
