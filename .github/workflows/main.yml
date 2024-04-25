@@ -58,12 +58,6 @@ jobs:
         with:
           args: -g classic
 
-      # Release - TBC Classic
-      - name: Package and release for TBC Classic
-        uses: BigWigsMods/packager@master
-        with:
-          args: -g bcc
-
       # Release - Wrath Classic
       - name: Package and release for Wrath Classic
         uses: BigWigsMods/packager@master
