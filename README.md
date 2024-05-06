@@ -25,6 +25,7 @@ CraftPresence will detect and adjust its abilities towards the following version
 
 | Version                           | Status | Download | Notes           |
 |-----------------------------------|--------|----------|-----------------|
+| The War Within (11.x)             | PENDING| Any      | N/A             |
 | Dragonflight (10.x)               | OK     | Any      | N/A             |
 | Shadowlands (9.x)                 | OK     | Any      | N/A             |
 | BFA (8.x)                         | OK     | Any      | N/A             |

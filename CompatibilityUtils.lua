@@ -40,8 +40,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 30403,
-                ["name"] = "Wrath of the Lich King Classic",
+                ["toc"] = 40400,
+                ["name"] = "Cataclysm Classic",
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
@@ -102,8 +102,14 @@ end
 function CraftPresence:GetCompatibilityInfo(key, value)
     if not self.cache.compatibility_info then
         self.cache.compatibility_info = {
+            ["11.x"] = {
+                ["minimumTOC"] = 110000,
+                ["baseTOC"] = 100000,
+                ["name"] = "The War Within"
+            },
             ["10.x"] = {
                 ["minimumTOC"] = 100000,
+                ["maximumTOC"] = 100207,
                 ["baseTOC"] = 90000,
                 ["name"] = "Dragonflight"
             },
@@ -237,14 +243,6 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                     }
                 }
             }
-        }
-        -- Special Builds
-        self.cache.compatibility_info["1.17.x"] = {
-            ["minimumTOC"] = 11700,
-            ["maximumTOC"] = 11701,
-            ["name"] = "TurtleWow 1.17.x",
-            ["build_tag"] = "special",
-            ["baseTOC"] = 11201
         }
     end
     if not self:IsNullOrEmpty(key) and self.cache.compatibility_info[key] ~= nil then
