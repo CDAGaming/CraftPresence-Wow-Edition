@@ -93,6 +93,7 @@ globals = {
 	"tostringall",
 
 	-- namespaces
+	"C_AddOns",
 	"C_ChallengeMode",
 	"C_CVar",
 	"C_Map",
