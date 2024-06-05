@@ -28,6 +28,7 @@ local strgmatch, strgfind, strformat, strgsub = string.gmatch, string.gfind, str
 local strsub, strfind, strlower, strupper, tostring = string.sub, string.find, string.lower, string.upper, tostring
 local strrep, tinsert, tconcat = string.rep, table.insert, table.concat
 local CreateFrame, UIParent, GetTime = CreateFrame, UIParent, GetTime
+local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata
 
 -- LUA UTILITIES
 

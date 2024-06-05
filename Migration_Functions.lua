@@ -354,6 +354,13 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 7
         end
 
+        if self:IsWithinValue(current, 7, 8, true, false) then
+            -- Schema Changes (v7 -> v8):
+            --   Reset the `metrics.WagoAnalytics` property for the `GetAddOnMetadata` deprecation
+            self:SetProperty("metrics", "WagoAnalytics", nil, true)
+            current = 8
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end

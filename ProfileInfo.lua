@@ -114,6 +114,7 @@ function CraftPresence:GenerateDefaults()
     end
 end]]                ,
                     stateCallback = [[function (self)
+    local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata
     self.WagoAnalytics = LibStub('WagoAnalytics'):Register(GetAddOnMetadata(self.internals.name, 'X-Wago-ID'))
 end]]                ,
                     unregisterCallback = [[function (self)
