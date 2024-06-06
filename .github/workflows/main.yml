@@ -46,26 +46,6 @@ jobs:
           args: "--no-color -q"
           annotate: warning
 
-      # Release - Retail
-      - name: Package and release for Retail
+      # Release addon
+      - name: Package and release addon
         uses: BigWigsMods/packager@master
-        with:
-          args: -g retail
-
-      # Release - Vanilla Classic
-      - name: Package and release for Classic
-        uses: BigWigsMods/packager@master
-        with:
-          args: -g classic
-
-      # Release - Wrath Classic
-      - name: Package and release for Wrath Classic
-        uses: BigWigsMods/packager@master
-        with:
-          args: -g wrath
-
-      # Release - Cataclysm Classic
-      - name: Package and release for Cataclysm Classic
-        uses: BigWigsMods/packager@master
-        with:
-          args: -g cata
