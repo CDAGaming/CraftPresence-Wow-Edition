@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.7.7"
+process_version = "v1.7.8"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -108,8 +108,7 @@ def setup_logging(config=None, debug_mode=False):
 def callback(hwnd, extra):
     global process_hwnd
     global is_process_running
-    if (win32gui.GetWindowText(hwnd) == config["process_name"] and
-            win32gui.GetClassName(hwnd).startswith('GxWindowClass')):
+    if (win32gui.GetWindowText(hwnd) == config["process_name"]):
         process_hwnd = hwnd
         is_process_running = True
 
