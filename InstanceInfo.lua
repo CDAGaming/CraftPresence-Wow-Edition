@@ -167,7 +167,13 @@ function CraftPresence:GetCurrentLockoutData(sync)
             if steps > 0 then
                 local completedSteps = 0
                 for i = 1, steps do
-                    local _, _, completed, _, _, _, _, _, _, _, _, _, _ = C_Scenario.GetCriteriaInfo(i)
+                    local completed = false
+                    if C_ScenarioInfo and C_ScenarioInfo.GetCriteriaInfo then
+                        completed = C_ScenarioInfo.GetCriteriaInfo(i).completed
+                    elseif C_Scenario.GetCriteriaInfo then
+                        completed = select(3, C_Scenario.GetCriteriaInfo(i))
+                    end
+
                     if completed then
                         completedSteps = completedSteps + 1
                     end
