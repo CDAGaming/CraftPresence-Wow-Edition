@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.7.8"
+process_version = "v1.8.0"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -87,7 +87,7 @@ def setup_logging(config=None, debug_mode=False):
     if "full" in log_modes or "multiple_files" in log_modes or "files" in log_modes:
         if not os.path.exists(log_path):
             os.makedirs(log_path)
-        staged_handler = TimedRotatingFileHandler(single_log_path, when="midnight", interval=1)
+        staged_handler = TimedRotatingFileHandler(single_log_path, when="midnight", interval=1, encoding='utf-8')
         staged_handler.suffix = start_timestamp
         staged_handler.namer = lambda name: name.replace(log_ext, "") + log_ext
         should_roll_over = os.path.isfile(single_log_path)
@@ -97,7 +97,7 @@ def setup_logging(config=None, debug_mode=False):
         staged_handler.setLevel(log_level)
         root_logger.addHandler(staged_handler)
     elif "v1" in log_modes or "single_file" in log_modes or "file" in log_modes:
-        file_handler = logging.FileHandler(single_log_path, mode='w')
+        file_handler = logging.FileHandler(single_log_path, mode='w', encoding='utf-8')
         file_handler.setFormatter(log_formatter)
         file_handler.setLevel(log_level)
         root_logger.addHandler(file_handler)
