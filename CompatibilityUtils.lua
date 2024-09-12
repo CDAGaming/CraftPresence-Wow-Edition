@@ -55,17 +55,17 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 110000,
+                ["toc"] = 110005,
                 ["name"] = "PTR (TWW 11.0)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 40400,
+                ["toc"] = 40401,
                 ["name"] = "PTR (Cataclysm Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11503,
+                ["toc"] = 11504,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -145,7 +145,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["4.4.x"] = {
                 ["minimumTOC"] = 40400,
-                ["maximumTOC"] = 40400,
+                ["maximumTOC"] = 40401,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 100107,
                 ["name"] = "Cataclysm Classic"
@@ -192,7 +192,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11503,
+                ["maximumTOC"] = 11504,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
