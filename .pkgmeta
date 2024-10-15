@@ -1,7 +1,5 @@
 package-as: CraftPresence
 
-enable-toc-creation: yes
-
 embedded-libraries:
   - libstub
   - callbackhandler

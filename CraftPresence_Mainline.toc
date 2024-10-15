@@ -1,4 +1,4 @@
-## Interface: 110002
+## Interface: 110005, 110002, 110000
 
 ## Title: CraftPresence
 ## Author: CDAGaming
