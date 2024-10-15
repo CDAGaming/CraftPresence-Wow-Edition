@@ -45,7 +45,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11503,
+                ["toc"] = 11504,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
