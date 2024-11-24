@@ -35,28 +35,28 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110002,
+                ["toc"] = 110005,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 40400,
+                ["toc"] = 40401,
                 ["name"] = "Cataclysm Classic",
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11504,
+                ["toc"] = 11505,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 110002,
-                ["name"] = "PTR (DF 11.0.2)",
+                ["toc"] = 110007,
+                ["name"] = "PTR (TWW 11.0.7)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
                 ["toc"] = 110005,
-                ["name"] = "PTR (TWW 11.0)",
+                ["name"] = "PTR (TWW 11.0.5)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
@@ -65,7 +65,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11504,
+                ["toc"] = 11505,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -192,7 +192,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11504,
+                ["maximumTOC"] = 11505,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
