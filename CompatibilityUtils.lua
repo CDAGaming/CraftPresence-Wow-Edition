@@ -1,7 +1,7 @@
 --[[
 MIT License
 
-Copyright (c) 2018 - 2024 CDAGaming (cstack2011@yahoo.com)
+Copyright (c) 2018 - 2025 CDAGaming (cstack2011@yahoo.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110005,
+                ["toc"] = 110007,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -65,7 +65,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11505,
+                ["toc"] = 11506,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -192,7 +192,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11505,
+                ["maximumTOC"] = 11506,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
