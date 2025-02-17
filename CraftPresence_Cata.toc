@@ -1,4 +1,4 @@
-## Interface: 40401, 40400
+## Interface: 40402, 40401, 40400
 
 ## Title: CraftPresence
 ## Author: CDAGaming

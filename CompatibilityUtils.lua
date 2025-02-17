@@ -145,7 +145,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["4.4.x"] = {
                 ["minimumTOC"] = 40400,
-                ["maximumTOC"] = 40401,
+                ["maximumTOC"] = 40402,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 100107,
                 ["name"] = "Cataclysm Classic"
