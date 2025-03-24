@@ -35,37 +35,37 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110007,
+                ["toc"] = 110100,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 40401,
+                ["toc"] = 40402,
                 ["name"] = "Cataclysm Classic",
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11505,
+                ["toc"] = 11506,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 110007,
-                ["name"] = "PTR (TWW 11.0.7)",
+                ["toc"] = 110105,
+                ["name"] = "PTR (TWW 11.1.5)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 110005,
-                ["name"] = "PTR (TWW 11.0.5)",
+                ["toc"] = 110100,
+                ["name"] = "PTR (TWW 11.1.0)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 40401,
+                ["toc"] = 40402,
                 ["name"] = "PTR (Cataclysm Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11506,
+                ["toc"] = 11507,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -192,7 +192,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11506,
+                ["maximumTOC"] = 11507,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
