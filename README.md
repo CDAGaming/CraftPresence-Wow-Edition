@@ -31,7 +31,8 @@ CraftPresence will detect and adjust its abilities towards the following version
 | BFA (8.x)                         | OK     | Any      | N/A             |
 | Legion (7.x)                      | OK     | Any      | v0.5.4 or above |
 | WOD (6.x)                         | OK     | Any      | v0.5.4 or above |
-| MOP (5.x)                         | OK     | Any      | v0.5.4 or above |
+| MOP Classic (5.5.x)               | OK     | Any      | N/A             |
+| MOP (5.0.x - 5.4.x)               | OK     | Any      | v0.5.4 or above |
 | Cataclysm Classic (4.4.x)         | OK     | Any      | N/A             |
 | Cataclysm (4.0.x - 4.3.x)         | OK     | Any      | v0.5.4 or above |
 | WOTLK Classic (3.4.x)             | OK     | Any      | N/A             |

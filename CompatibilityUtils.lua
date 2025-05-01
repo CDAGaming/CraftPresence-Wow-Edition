@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110100,
+                ["toc"] = 110105,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -45,13 +45,13 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11506,
+                ["toc"] = 11507,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 110105,
-                ["name"] = "PTR (TWW 11.1.5)",
+                ["toc"] = 110107,
+                ["name"] = "PTR (TWW 11.1.7)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
@@ -136,6 +136,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["maximumTOC"] = 60204,
                 ["baseTOC"] = 50000,
                 ["name"] = "Warlords of Draenor"
+            },
+            ["5.5.x"] = {
+                ["minimumTOC"] = 50500,
+                ["maximumTOC"] = 50500,
+                ["build_tag"] = "rebased",
+                ["baseTOC"] = 110107,
+                ["name"] = "Mists of Pandaria Classic"
             },
             ["5.x"] = {
                 ["minimumTOC"] = 50000,
@@ -368,6 +375,26 @@ function CraftPresence:IsWrathRebased()
     ) and not self:IsSpecialVersion()
 end
 
+--- Determine if this build identifies as Cata Classic
+--- @return boolean @ is_wrath_rebased
+function CraftPresence:IsCataRebased()
+    return self:IsWithinValue(
+        self:GetBuildInfo("toc_version"),
+        self:FindCompatibilityTOC("4.4.x"), self:FindCompatibilityTOC("5.x"),
+        true, false
+    ) and not self:IsSpecialVersion()
+end
+
+--- Determine if this build identifies as Mists Classic
+--- @return boolean @ is_wrath_rebased
+function CraftPresence:IsMistsRebased()
+    return self:IsWithinValue(
+        self:GetBuildInfo("toc_version"),
+        self:FindCompatibilityTOC("5.5.x"), self:FindCompatibilityTOC("6.x"),
+        true, false
+    ) and not self:IsSpecialVersion()
+end
+
 --- Determine if this build identifies as the Retail Live Build of the Game
 --- @return boolean @ is_retail_live_build
 function CraftPresence:IsRetailLiveBuild()
@@ -384,20 +411,10 @@ function CraftPresence:IsRetailPTRBuild()
     ) and not self:IsSpecialVersion()
 end
 
---- Determine if this build identifies as the Retail Beta Build of the Game
---- @return boolean @ is_retail_beta_build
-function CraftPresence:IsRetailBetaBuild()
-    return self:IsWithinValue(
-        self:GetBuildInfo("toc_version"),
-        self:GetFlavorTOC("ptr"), self:GetFlavorTOC("beta"),
-        false, true
-    ) and not self:IsSpecialVersion()
-end
-
 --- Determine if this build identifies as a Retail Build of the Game
 --- @return boolean @ is_retail_build
 function CraftPresence:IsRetailBuild()
-    return self:IsRetailLiveBuild() or self:IsRetailPTRBuild() or self:IsRetailBetaBuild()
+    return self:IsRetailLiveBuild() or self:IsRetailPTRBuild()
 end
 
 --- Determine if this build identifies as the Classic Live Build of the Game
@@ -416,20 +433,10 @@ function CraftPresence:IsClassicPTRBuild()
     ) and not self:IsSpecialVersion()
 end
 
---- Determine if this build identifies as the Classic Beta Build of the Game
---- @return boolean @ is_classic_beta_build
-function CraftPresence:IsClassicBetaBuild()
-    return self:IsWithinValue(
-        self:GetBuildInfo("toc_version"),
-        self:GetFlavorTOC("classic_ptr"), self:GetFlavorTOC("classic_beta"),
-        false, true
-    ) and not self:IsSpecialVersion()
-end
-
 --- Determine if this build identifies as a Classic Build of the Game
 --- @return boolean @ is_classic_build
 function CraftPresence:IsClassicBuild()
-    return self:IsClassicLiveBuild() or self:IsClassicPTRBuild() or self:IsClassicBetaBuild()
+    return self:IsClassicLiveBuild() or self:IsClassicPTRBuild()
 end
 
 --- Determine if this build identifies as the Classic Era Live Build of the Game
