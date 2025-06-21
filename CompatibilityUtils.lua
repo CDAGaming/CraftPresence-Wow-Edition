@@ -55,12 +55,12 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 110100,
-                ["name"] = "PTR (TWW 11.1.0)",
+                ["toc"] = 110200,
+                ["name"] = "PTR (TWW 11.2.0)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 40402,
+                ["toc"] = 50500,
                 ["name"] = "PTR (Cataclysm Classic)",
                 ["product_id"] = "classic_ptr"
             },
