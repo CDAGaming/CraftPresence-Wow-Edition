@@ -40,7 +40,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 40402,
+                ["toc"] = 50500,
                 ["name"] = "Cataclysm Classic",
                 ["product_id"] = "classic"
             },
@@ -61,7 +61,7 @@ function CraftPresence:GetFlavorInfo(key, value)
             },
             ["classic_ptr"] = {
                 ["toc"] = 50500,
-                ["name"] = "PTR (Cataclysm Classic)",
+                ["name"] = "PTR (MoP Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
@@ -165,7 +165,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["3.4.x"] = {
                 ["minimumTOC"] = 30400,
-                ["maximumTOC"] = 30403,
+                ["maximumTOC"] = 30405,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 90205,
                 ["name"] = "Wrath of the Lich King Classic"
