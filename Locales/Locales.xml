@@ -2,4 +2,5 @@
 https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
 	<Script file="enUS.lua"/>
 	<Script file="deDE.lua"/>
+	<Script file="ruRU.lua"/>
 </Ui>

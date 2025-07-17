@@ -107,6 +107,7 @@ L["CATEGORY_COMMENT_EXTRA"] = "Extra customization options for addon display inf
 
 L["CATEGORY_TITLE_ABOUT"] = "About"
 L["CATEGORY_COMMENT_ABOUT"] = "View information about this addon."
+
 -- Config Variable Data
 L["TITLE_CLIENT_ID"] = "Client ID"
 L["COMMENT_CLIENT_ID"] = "Client ID used for retrieving assets, icon keys, and titles."
@@ -226,16 +227,16 @@ L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the 
 L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaults.globalKey)
 
 L["TITLE_DETAILS"] = "Details"
-L["COMMENT_DETAILS"] = "The data to be interpeted for the Details area of the Rich Presence."
+L["COMMENT_DETAILS"] = "The data to be interpreted for the Details area of the Rich Presence."
 L["DEFAULT_DETAILS_MESSAGE"] = self:SetFormat("*player_info*", self.internals.defaults.innerKey)
 
 L["TITLE_LARGEIMAGE"] = "Large Image"
-L["COMMENT_LARGEIMAGE"] = "The data to be interpeted for the Large Image area of the Rich Presence."
+L["COMMENT_LARGEIMAGE"] = "The data to be interpreted for the Large Image area of the Rich Presence."
 L["DEFAULT_LARGE_IMAGE_KEY"] = "wow_icon"
 L["DEFAULT_LARGE_IMAGE_MESSAGE"] = self:SetFormat("*realm_info*", self.internals.defaults.innerKey)
 
 L["TITLE_SMALLIMAGE"] = "Small Image"
-L["COMMENT_SMALLIMAGE"] = "The data to be interpeted for the Small Image area of the Rich Presence."
+L["COMMENT_SMALLIMAGE"] = "The data to be interpreted for the Small Image area of the Rich Presence."
 L["DEFAULT_SMALL_IMAGE_KEY"] = self:SetFormat("*player_alliance*", self.internals.defaults.innerKey)
 L["DEFAULT_SMALL_IMAGE_MESSAGE"] = self:SetFormat("*player_alliance*", self.internals.defaults.innerKey)
 
