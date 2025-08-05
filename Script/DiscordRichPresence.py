@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.8.0"
+process_version = "v1.8.1"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -145,6 +145,11 @@ def main(debug_mode=False):
         is_process_running = False
         if is_windows:
             win32gui.EnumWindows(callback, None)
+        elif is_linux and os.environ.get('XDG_SESSION_TYPE') == 'wayland':
+            # this can be removed once Pillow supports xdg-desktop-portal: https://github.com/python-pillow/Pillow/issues/6392
+            # pywinctl also throws issues with wayland: https://gitlab.com/CDAGaming/CraftPresence-Wow-Edition/-/issues/2
+            root_logger.error('Running on Linux/Wayland is not supported!')
+            exit(1)
         else:
             is_process_running = is_running(config["process_name"])
 
@@ -461,10 +466,6 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         except ValueError:
             root_logger.error('Unable to retrieve enough Image Data, try resizing your window perhaps?')
             return
-    elif is_linux and os.environ.get('XDG_SESSION_TYPE') == 'wayland':
-        # this can be removed once Pillow supports xdg-desktop-portal: https://github.com/python-pillow/Pillow/issues/6392
-        root_logger.error('Running on Linux/Wayland is not supported!')
-        exit(1)
     else:
         hwnd = pwc.getWindowsWithTitle(config["process_name"])[0]
         left, top, right, bottom = hwnd.left, hwnd.top, (hwnd.left + hwnd.width), (hwnd.top + hwnd.height)
