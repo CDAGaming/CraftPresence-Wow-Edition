@@ -35,13 +35,13 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110107,
+                ["toc"] = 110200,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
             ["classic"] = {
                 ["toc"] = 50500,
-                ["name"] = "Cataclysm Classic",
+                ["name"] = "Mists of Pandaria Classic",
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
