@@ -50,8 +50,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 110107,
-                ["name"] = "PTR (TWW 11.1.7)",
+                ["toc"] = 110205,
+                ["name"] = "PTR (TWW 11.2.5)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
@@ -60,7 +60,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 50500,
+                ["toc"] = 50501,
                 ["name"] = "PTR (MoP Classic)",
                 ["product_id"] = "classic_ptr"
             },
@@ -139,7 +139,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["5.5.x"] = {
                 ["minimumTOC"] = 50500,
-                ["maximumTOC"] = 50500,
+                ["maximumTOC"] = 50501,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 110107,
                 ["name"] = "Mists of Pandaria Classic"
