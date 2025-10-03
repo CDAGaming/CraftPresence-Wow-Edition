@@ -7,7 +7,7 @@
 ## SavedVariables: CraftPresenceDB, CraftPresenceIconDB
 ## OptionalDeps: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3, WagoAnalytics
 ## IconTexture: Interface\AddOns\CraftPresence\Images\icon.blp
-## X-Schema-ID: 8
+## X-Schema-ID: 8.1
 ## X-Embeds: LibStub, CallbackHandler, LibDataBroker-1-1, LibDBIcon-1-0, Ace3
 ## X-Credits: AipNooBest
 ## X-Curse-Project-ID: 457334

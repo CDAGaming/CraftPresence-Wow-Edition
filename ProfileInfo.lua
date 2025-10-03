@@ -526,6 +526,9 @@ end]]                ,
     local unitLevel = UnitLevel('player')
     local unitClass = UnitClass('player')
     local userInfo = playerData.prefix .. playerName .. ' - ' .. (string.format(self.locale['FORMAT_LEVEL'], unitLevel))
+    -- Specialization API Calls (Version-dependent)
+    local GetSpecialization = C_SpecializationInfo and C_SpecializationInfo.GetSpecialization or GetSpecialization
+    local GetSpecializationInfo = C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfo or GetSpecializationInfo
     -- Specialization Info (5.0.4 and above)
     if GetSpecialization and GetSpecializationInfo then
         local specInfo, specId, specName, roleName = GetSpecialization()
@@ -564,6 +567,10 @@ end]]                ,
                 ["player_spec_name"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
+    -- Specialization API Calls (Version-dependent)
+    local GetSpecialization = C_SpecializationInfo and C_SpecializationInfo.GetSpecialization or GetSpecialization
+    local GetSpecializationInfo = C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfo or GetSpecializationInfo
+    -- Main Function Logic
     local specInfo, specId, specName, roleName = GetSpecialization()
     --
     -- Hotfix: Prevent a null-case with Spec Info
@@ -590,6 +597,10 @@ end]]                ,
                 ["player_spec_role"] = {
                     minimumTOC = "50004", maximumTOC = "", allowRebasedApi = false,
                     processCallback = [[function (self)
+    -- Specialization API Calls (Version-dependent)
+    local GetSpecialization = C_SpecializationInfo and C_SpecializationInfo.GetSpecialization or GetSpecialization
+    local GetSpecializationInfo = C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfo or GetSpecializationInfo
+    -- Main Function Logic
     local specInfo, specId, specName, roleName = GetSpecialization()
     --
     -- Hotfix: Prevent a null-case with Spec Info

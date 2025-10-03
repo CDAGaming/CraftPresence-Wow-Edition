@@ -271,7 +271,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
 
         if self:IsWithinValue(current, 4.1, 4.5, true, false) then
             -- Schema Changes (v4.1 -> v4.5):
-            --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolodate logic
+            --   Renamed `time:start` and `time:end` to match their actual variable names in order to consolidate logic
             --   Rich Presence Fields have been moved into their own tab and made dynamic
             local placeholderData = self:GetProperty("placeholders")
             if placeholderData ~= nil then
@@ -328,7 +328,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
 
         if self:IsWithinValue(current, 4.5, 5, true, false) then
             -- Schema Changes (v4.5 -> v5):
-            --   Reset the `placeholders.realm_info` and `placeholders.player_region` properties due to a discrepency between the way Ace3 retrieved the region and ours
+            --   Reset the `placeholders.realm_info` and `placeholders.player_region` properties due to a discrepancy between the way Ace3 retrieved the region and ours
             --   This does not use the `can_modify` flag, due to this previously causing an error with WoW PTR Region Calculation
             self:SetProperty("placeholders", "player_region", nil, true)
             self:SetProperty("placeholders", "realm_info", nil, true)
@@ -337,7 +337,7 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
 
         if self:IsWithinValue(current, 5, 6, true, false) then
             -- Schema Changes (v5 -> v6):
-            --   Reset the `labels` property due to a critical discrepency fix for legacy client behavior
+            --   Reset the `labels` property due to a critical discrepancy fix for legacy client behavior
             --   This does not use the `can_modify` flag, due to the severity of this issue
             self:SetProperty("labels", nil, nil, true)
             current = 6
@@ -359,6 +359,15 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             --   Reset the `metrics.WagoAnalytics` property for the `GetAddOnMetadata` deprecation
             self:SetProperty("metrics", "WagoAnalytics", nil, true)
             current = 8
+        end
+
+        if self:IsWithinValue(current, 8, 8.1, true, false) then
+            -- Schema Changes (v8 -> v8.1):
+            --   Reset the `player_info`, `player_spec_name`, and `player_spec_role` properties from `placeholders` for `GetSpecialization` and `GetSpecializationInfo` deprecations
+            self:SetProperty("placeholders", "player_info", nil, true)
+            self:SetProperty("placeholders", "player_spec_name", nil, true)
+            self:SetProperty("placeholders", "player_spec_role", nil, true)
+            current = 8.1
         end
 
         self:SetProperty("schema", nil, min(current, target))

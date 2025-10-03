@@ -40,7 +40,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 50500,
+                ["toc"] = 50501,
                 ["name"] = "Mists of Pandaria Classic",
                 ["product_id"] = "classic"
             },
@@ -102,8 +102,14 @@ end
 function CraftPresence:GetCompatibilityInfo(key, value)
     if not self.cache.compatibility_info then
         self.cache.compatibility_info = {
+            ["12.x"] = {
+                ["minimumTOC"] = 120000,
+                ["baseTOC"] = 110000,
+                ["name"] = "Midnight"
+            },
             ["11.x"] = {
                 ["minimumTOC"] = 110000,
+                ["maximumTOC"] = 110207,
                 ["baseTOC"] = 100000,
                 ["name"] = "The War Within"
             },
