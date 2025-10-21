@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110200,
+                ["toc"] = 110205,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -45,7 +45,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11507,
+                ["toc"] = 11508,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
@@ -55,17 +55,17 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 110200,
-                ["name"] = "PTR (TWW 11.2.0)",
+                ["toc"] = 110207,
+                ["name"] = "PTR (TWW 11.2.7)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 50501,
+                ["toc"] = 50502,
                 ["name"] = "PTR (MoP Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11507,
+                ["toc"] = 11508,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -145,7 +145,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["5.5.x"] = {
                 ["minimumTOC"] = 50500,
-                ["maximumTOC"] = 50501,
+                ["maximumTOC"] = 50502,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 110107,
                 ["name"] = "Mists of Pandaria Classic"
@@ -205,7 +205,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11507,
+                ["maximumTOC"] = 11508,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
