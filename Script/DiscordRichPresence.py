@@ -13,12 +13,33 @@ def assert_compatibility(required_version=0):
         raise Exception("Python " + str(required_version) + " or a more recent version is required."
                                                             " (Using: " + str(sys.version_info[0]) + ")")
 
+def assert_module_version(module_name: str, current: str, required: str):
+    """
+    Determine whether the current version of a module meets or exceeds the required version.
+    Raises an exception if it does not.
+    """
+    def to_tuple(v):
+        return tuple(int(x) for x in v.split("."))
+
+    current_parts = to_tuple(current)
+    required_parts = to_tuple(required)
+
+    # Pad shorter versions (e.g. "4.6" → (4,6,0))
+    length = max(len(current_parts), len(required_parts))
+    current_parts += (0,) * (length - len(current_parts))
+    required_parts += (0,) * (length - len(required_parts))
+
+    if current_parts < required_parts:
+        raise Exception(
+            f"{module_name} {required} or newer is required. (Using: {current})"
+        )
+
 
 assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.8.2"
+process_version = "v1.9.0"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -548,6 +569,7 @@ try:
         import pywintypes
     from PIL import Image, ImageGrab
     from pypresence import Presence
+    import pypresence as pyp
     import pywinctl as pwc
     # Universal Modules
     import json
@@ -566,6 +588,8 @@ except ModuleNotFoundError as err:
     exit(1)
 else:
     if __name__ == '__main__':
+        # Assert Module Compatibility
+        assert_module_version('pypresence', pyp.__version__, '4.6.0')
         # Main Entrypoint Execution
         config = load_config()
         root_logger = setup_logging(config, config["debug"])
