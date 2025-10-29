@@ -40,7 +40,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 50501,
+                ["toc"] = 50502,
                 ["name"] = "Mists of Pandaria Classic",
                 ["product_id"] = "classic"
             },
