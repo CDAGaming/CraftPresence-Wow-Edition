@@ -60,12 +60,12 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 50502,
+                ["toc"] = 50503,
                 ["name"] = "PTR (MoP Classic)",
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 11508,
+                ["toc"] = 20505,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             }
@@ -145,7 +145,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["5.5.x"] = {
                 ["minimumTOC"] = 50500,
-                ["maximumTOC"] = 50502,
+                ["maximumTOC"] = 50503,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 110107,
                 ["name"] = "Mists of Pandaria Classic"
@@ -168,6 +168,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["maximumTOC"] = 40304,
                 ["baseTOC"] = 30000,
                 ["name"] = "Cataclysm"
+            },
+            ["3.80.x"] = {
+                ["minimumTOC"] = 38000,
+                ["maximumTOC"] = 38000,
+                ["build_tag"] = "rebased",
+                ["baseTOC"] = 50503,
+                ["name"] = "Wrath of the Lich King Titan"
             },
             ["3.4.x"] = {
                 ["minimumTOC"] = 30400,

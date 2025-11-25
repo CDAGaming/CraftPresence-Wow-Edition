@@ -1,4 +1,4 @@
-## Interface: 50502, 50501, 50500
+## Interface: 50503, 50502, 50501, 50500
 
 ## Title: CraftPresence
 ## Author: CDAGaming
