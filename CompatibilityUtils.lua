@@ -189,6 +189,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                 ["baseTOC"] = 20000,
                 ["name"] = "Wrath of the Lich King"
             },
+            ["2.5.5"] = {
+                ["minimumTOC"] = 20505,
+                ["maximumTOC"] = 20505,
+                ["build_tag"] = "rebased",
+                ["baseTOC"] = 110207,
+                ["name"] = "Burning Crusade Classic 20th Anniversary"
+            },
             ["2.5.x"] = {
                 ["minimumTOC"] = 20500,
                 ["maximumTOC"] = 20504,
