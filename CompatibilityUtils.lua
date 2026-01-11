@@ -1,7 +1,7 @@
 --[[
 MIT License
 
-Copyright (c) 2018 - 2025 CDAGaming (cstack2011@yahoo.com)
+Copyright (c) 2018 - 2026 CDAGaming (cstack2011@yahoo.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,12 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110205,
+                ["toc"] = 110207,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 50502,
+                ["toc"] = 50503,
                 ["name"] = "Mists of Pandaria Classic",
                 ["product_id"] = "classic"
             },
@@ -50,8 +50,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 110205,
-                ["name"] = "PTR (TWW 11.2.5)",
+                ["toc"] = 120000,
+                ["name"] = "PTR (Midnight)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
