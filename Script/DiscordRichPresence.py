@@ -18,7 +18,7 @@ assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.8.1"
+process_version = "v1.8.2"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -176,6 +176,7 @@ def main(debug_mode=False):
                 if not rpc_obj or has_id_changed:
                     if rpc_obj:
                         root_logger.info("The client id has been changed, reconnecting with new ID %s..." % lines[0])
+                        rpc_obj.clear()
                         rpc_obj.close()
                     else:
                         root_logger.info("Not connected to Discord, connecting to ID %s..." % lines[0])
@@ -274,6 +275,7 @@ def main(debug_mode=False):
                         rpc_obj = None
         elif not is_process_running and rpc_obj:
             root_logger.info('Target process is no longer active, disconnecting...')
+            rpc_obj.clear()
             rpc_obj.close()
             rpc_obj = None
             # clear these so it gets re-read and resubmitted upon reconnection
