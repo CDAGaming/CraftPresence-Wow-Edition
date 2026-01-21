@@ -68,6 +68,11 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["toc"] = 20505,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
+            },
+            ["anniversary"] = {
+                ["toc"] = 20505,
+                ["name"] = "Burning Crusade Anniversary",
+                ["product_id"] = "anniversary"
             }
         }
     end
