@@ -222,6 +222,12 @@ L["DEFAULT_FRAME_START_Y"] = 0
 L["TITLE_RELOAD_UI"] = "Reload UI"
 L["COMMENT_RELOAD_UI"] = "Reloads the User Interface."
 
+L["TITLE_ACTIVITYTYPE"] = "Activity Type"
+L["COMMENT_ACTIVITYTYPE"] = "The data to be interpreted for the Activity Type area of the Rich Presence."
+
+L["TITLE_STATUSDISPLAYTYPE"] = "Status Display Type"
+L["COMMENT_STATUSDISPLAYTYPE"] = "The data to be interpreted for the Status Display Type area of the Rich Presence."
+
 L["TITLE_STATE"] = "Game State"
 L["COMMENT_STATE"] = "The data to be interpreted for the Game State area of the Rich Presence."
 L["DEFAULT_STATE_MESSAGE"] = self:SetFormat("*scenario**dungeon**raid**battleground**arena**default*", self.internals.defaults.globalKey)
@@ -239,6 +245,9 @@ L["TITLE_SMALLIMAGE"] = "Small Image"
 L["COMMENT_SMALLIMAGE"] = "The data to be interpreted for the Small Image area of the Rich Presence."
 L["DEFAULT_SMALL_IMAGE_KEY"] = self:SetFormat("*player_alliance*", self.internals.defaults.innerKey)
 L["DEFAULT_SMALL_IMAGE_MESSAGE"] = self:SetFormat("*player_alliance*", self.internals.defaults.innerKey)
+
+L["TITLE_APPNAME"] = "Application Name"
+L["COMMENT_APPNAME"] = "The application name to be used in the Rich Presence."
 
 L["TITLE_PRIMARYBUTTON"] = "Primary Button"
 L["COMMENT_PRIMARYBUTTON"] = "The data to be interpreted for the Primary Button area of the Rich Presence."

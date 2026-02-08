@@ -313,6 +313,10 @@ function CraftPresence:PaintSomething(text)
     local g
     local b
 
+    local old_r
+    local old_g
+    local old_b
+
     -- Locate and parse matches for pattern
     -- (Pattern will split string into pairs of up to 3 characters)
 
@@ -329,6 +333,15 @@ function CraftPresence:PaintSomething(text)
         else
             b = 0
         end
+        if r == old_r and g == old_g and b == old_b then
+            -- if the current pixel is the same as the last pixel,
+            -- print a black frame to signal a separator, before continuing
+            squares_painted = squares_painted + 1
+            self:PaintFrame(frames[squares_painted], 0, 0, 0, 1)
+        end
+        old_r = r
+        old_g = g
+        old_b = b
         squares_painted = squares_painted + 1
         self:PaintFrame(frames[squares_painted], r, g, b)
     end

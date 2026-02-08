@@ -40,6 +40,7 @@ function CraftPresence:GenerateDefaults()
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     messageCallback = self.locale["DEFAULT_STATE_MESSAGE"],
                     messageFormatCallback = "no-dupes",
+                    urlCallback = "", urlType = "string",
                     messageType = "string", messageFormatType = "string",
                     enabled = true
                 },
@@ -47,6 +48,7 @@ function CraftPresence:GenerateDefaults()
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     messageCallback = self.locale["DEFAULT_DETAILS_MESSAGE"],
                     messageFormatCallback = "no-dupes",
+                    urlCallback = "", urlType = "string",
                     messageType = "string", messageFormatType = "string",
                     enabled = true
                 },
@@ -56,6 +58,7 @@ function CraftPresence:GenerateDefaults()
                     keyFormatCallback = "icon",
                     messageCallback = self.locale["DEFAULT_LARGE_IMAGE_MESSAGE"],
                     messageFormatCallback = "no-dupes",
+                    urlCallback = "", urlType = "string",
                     keyType = "string", messageType = "string",
                     keyFormatType = "string", messageFormatType = "string",
                     enabled = true
@@ -66,8 +69,28 @@ function CraftPresence:GenerateDefaults()
                     keyFormatCallback = "icon",
                     messageCallback = self.locale["DEFAULT_SMALL_IMAGE_MESSAGE"],
                     messageFormatCallback = "no-dupes",
+                    urlCallback = "", urlType = "string",
                     keyType = "string", messageType = "string",
                     keyFormatType = "string", messageFormatType = "string",
+                    enabled = true
+                },
+                ["activityType"] = {
+                    minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                    messageCallback = "",
+                    messageType = "string",
+                    enabled = true
+                },
+                ["statusDisplayType"] = {
+                    minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                    messageCallback = "",
+                    messageType = "string",
+                    enabled = true
+                },
+                ["appName"] = {
+                    minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
+                    messageCallback = "",
+                    messageFormatCallback = "no-dupes",
+                    messageType = "string", messageFormatType = "string",
                     enabled = true
                 }
             },

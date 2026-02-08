@@ -13,12 +13,33 @@ def assert_compatibility(required_version=0):
         raise Exception("Python " + str(required_version) + " or a more recent version is required."
                                                             " (Using: " + str(sys.version_info[0]) + ")")
 
+def assert_module_version(module_name: str, current: str, required: str):
+    """
+    Determine whether the current version of a module meets or exceeds the required version.
+    Raises an exception if it does not.
+    """
+    def to_tuple(v):
+        return tuple(int(x) for x in v.split("."))
+
+    current_parts = to_tuple(current)
+    required_parts = to_tuple(required)
+
+    # Pad shorter versions (e.g. "4.6" → (4,6,0))
+    length = max(len(current_parts), len(required_parts))
+    current_parts += (0,) * (length - len(current_parts))
+    required_parts += (0,) * (length - len(required_parts))
+
+    if current_parts < required_parts:
+        raise Exception(
+            f"{module_name} {required} or newer is required. (Using: {current})"
+        )
+
 
 assert_compatibility(3)
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.8.2"
+process_version = "v1.9.0"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -122,7 +143,7 @@ def main(debug_mode=False):
     global is_process_running
     # Primary Variables
     event_key = "$$$"
-    event_length = 11
+    event_length = 18
     array_split_key = "=="
     array_separator_key = "|"
     process_hwnd = None
@@ -206,45 +227,60 @@ def main(debug_mode=False):
                     asset_data["large_image"] = sanitize_placeholder(lines[1], 256)
                     if not null_or_empty(lines[2]):
                         asset_data["large_text"] = sanitize_placeholder(lines[2], 128)
-                if not null_or_empty(lines[3]):
-                    asset_data["small_image"] = sanitize_placeholder(lines[3], 256)
-                    if not null_or_empty(lines[4]):
-                        asset_data["small_text"] = sanitize_placeholder(lines[4], 128)
+                    if not null_or_empty(lines[3]):
+                        asset_data["large_url"] = sanitize_placeholder(lines[3], 256)
+                if not null_or_empty(lines[4]):
+                    asset_data["small_image"] = sanitize_placeholder(lines[4], 256)
+                    if not null_or_empty(lines[5]):
+                        asset_data["small_text"] = sanitize_placeholder(lines[5], 128)
+                    if not null_or_empty(lines[6]):
+                        asset_data["small_url"] = sanitize_placeholder(lines[6], 256)
                 # Start Timer Data Setup
-                if "generated" in lines[7]:
-                    lines[7] = round(time.time())
-                elif "last" in lines[7]:
-                    lines[7] = last_decoded[7] or round(time.time())
+                if "generated" in lines[11]:
+                    lines[11] = round(time.time())
+                elif "last" in lines[11]:
+                    lines[11] = last_decoded[11] or round(time.time())
                 # End Timer Data Setup
-                if "generated" in lines[8]:
-                    lines[8] = round(time.time())
-                elif "last" in lines[8]:
-                    lines[8] = last_decoded[8] or round(time.time())
+                if "generated" in lines[12]:
+                    lines[12] = round(time.time())
+                elif "last" in lines[12]:
+                    lines[12] = last_decoded[12] or round(time.time())
                 # Timer Data Sync
-                if not null_or_empty(lines[7]):
-                    timer_data["start"] = lines[7]
-                    if not null_or_empty(lines[8]):
-                        timer_data["end"] = lines[8]
+                if not null_or_empty(lines[11]):
+                    timer_data["start"] = lines[11]
+                    if not null_or_empty(lines[12]):
+                        timer_data["end"] = lines[12]
+                # Extra Data Sync
+                if not null_or_empty(lines[13]):
+                    activity["name"] = sanitize_placeholder(lines[13], 128)
+                if not null_or_empty(lines[14]):
+                    activity["activity_type"] = lines[14]
+                if not null_or_empty(lines[15]):
+                    activity["status_display_type"] = lines[15]
                 # Buttons Data Sync
-                if not null_or_empty(lines[9]):
-                    button_data = parse_button_data(lines[9], array_split_key)
+                if not null_or_empty(lines[16]):
+                    button_data = parse_button_data(lines[16], array_split_key)
                     if len(button_data) == 2:
                         button_label = sanitize_placeholder(button_data[0], 32)
                         button_url = sanitize_placeholder(button_data[1], 512)
                         if not null_or_empty(button_label) and not null_or_empty(button_url):
                             button_info.append({"label": button_label, "url": button_url})
-                if not null_or_empty(lines[10]):
-                    button_data = parse_button_data(lines[10], array_split_key)
+                if not null_or_empty(lines[17]):
+                    button_data = parse_button_data(lines[17], array_split_key)
                     if len(button_data) == 2:
                         button_label = sanitize_placeholder(button_data[0], 32)
                         button_url = sanitize_placeholder(button_data[1], 512)
                         if not null_or_empty(button_label) and not null_or_empty(button_url):
                             button_info.append({"label": button_label, "url": button_url})
                 # Activity Data Sync
-                if not null_or_empty(lines[5]):
-                    activity["details"] = sanitize_placeholder(lines[5], 128)
-                if not null_or_empty(lines[6]):
-                    activity["state"] = sanitize_placeholder(lines[6], 128)
+                if not null_or_empty(lines[7]):
+                    activity["details"] = sanitize_placeholder(lines[7], 128)
+                    if not null_or_empty(lines[8]):
+                        activity["details_url"] = sanitize_placeholder(lines[8], 256)
+                if not null_or_empty(lines[9]):
+                    activity["state"] = sanitize_placeholder(lines[9], 128)
+                    if not null_or_empty(lines[10]):
+                        activity["state_url"] = sanitize_placeholder(lines[10], 256)
 
                 activity["assets"] = asset_data
                 activity["timestamps"] = timer_data
@@ -255,14 +291,21 @@ def main(debug_mode=False):
 
                     try:
                         rpc_obj.update(
+                            activity_type=get_activity_type(activity.get("activity_type") or "Playing"),
+                            status_display_type=get_status_display_type(activity.get("status_display_type") or "Name"),
                             state=activity.get("state") or None,
+                            #state_url=activity.get("state_url") or None,
                             details=activity.get("details") or None,
+                            #details_url=activity.get("details_url") or None,
                             start=timer_data.get("start") or None,
                             end=timer_data.get("end") or None,
+                            name=activity.get("name") or None,
                             large_image=asset_data.get("large_image") or None,
                             large_text=asset_data.get("large_text") or None,
+                            #large_url=asset_data.get("large_url") or None,
                             small_image=asset_data.get("small_image") or None,
                             small_text=asset_data.get("small_text") or None,
+                            #small_url=asset_data.get("small_url") or None,
                             buttons=activity.get("buttons") or None
                         )
                         last_activity = activity
@@ -282,6 +325,28 @@ def main(debug_mode=False):
             last_decoded = [None] * event_length
             last_activity = {}
         time.sleep(config["scan_rate"])
+
+
+def get_activity_type(value: str) -> "ActivityType":
+    if value is None:
+        raise ValueError("ActivityType string cannot be None")
+
+    key = value.strip().upper()
+    try:
+        return ActivityType[key]
+    except KeyError:
+        raise ValueError(f"Invalid ActivityType: {value!r}")
+
+
+def get_status_display_type(value: str) -> "StatusDisplayType":
+    if value is None:
+        raise ValueError("StatusDisplayType string cannot be None")
+
+    key = value.strip().upper()
+    try:
+        return StatusDisplayType[key]
+    except KeyError:
+        raise ValueError(f"Invalid StatusDisplayType: {value!r}")
 
 
 def sanitize_placeholder(input: str, length: int, fallback="", encoding='utf-8'):
@@ -519,8 +584,11 @@ def read_squares(hwnd=None, event_length=0, event_key='', array_separator_key=''
         # "smoothed" pixels and they can't be decoded as they don't represent any data
         if current_pixel_colors != next_pixel_colors:
             # ...so we will save the latest good pixel and skip the next two
-            read += [color for color in current_pixel_colors]
             skipped_pixels_counter = 1
+            if current_pixel_colors[0] == 0 and current_pixel_colors[1] == 0 and current_pixel_colors[2] == 0:
+                # We reserve black pixels as separators, in the event of intended repeat pairs
+                continue
+            read += [color for color in current_pixel_colors]
 
         current_decoded = decode_read_data(read)
         if verify_read_data(current_decoded, event_length, event_key, array_separator_key):
@@ -548,6 +616,8 @@ try:
         import pywintypes
     from PIL import Image, ImageGrab
     from pypresence import Presence
+    from pypresence.types import ActivityType, StatusDisplayType
+    import pypresence as pyp
     import pywinctl as pwc
     # Universal Modules
     import json
@@ -566,6 +636,8 @@ except ModuleNotFoundError as err:
     exit(1)
 else:
     if __name__ == '__main__':
+        # Assert Module Compatibility
+        assert_module_version('pypresence', pyp.__version__, '4.6.0')
         # Main Entrypoint Execution
         config = load_config()
         root_logger = setup_logging(config, config["debug"])

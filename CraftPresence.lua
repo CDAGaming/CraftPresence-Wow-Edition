@@ -335,6 +335,12 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
                         presenceValue.messageResult = self:GetDynamicReturnValue(presenceValue.messageCallback,
                             presenceValue.messageType, self)
                     end
+                    if presenceValue.urlCallback then
+                        presenceValue.urlCallback = self:Replace(presenceValue.urlCallback, newKey,
+                            self:GetOrDefault(newValue), true)
+                        presenceValue.urlResult = self:GetDynamicReturnValue(presenceValue.urlCallback,
+                            presenceValue.urlType, self)
+                    end
                 end
 
                 if presenceValue.keyCallback then
@@ -406,19 +412,32 @@ function CraftPresence:SyncDynamicData(log_output, supply_data)
                 largeImage.keyFormatCallback, largeImage.keyFormatType }),
             self:ParseDynamicFormatting({ largeImage.messageResult,
                 largeImage.messageFormatCallback, largeImage.messageFormatType }),
+            self:GetOrDefault(largeImage.urlResult),
             self:ParseDynamicFormatting({ smallImage.keyResult,
                 smallImage.keyFormatCallback, smallImage.keyFormatType }),
             self:ParseDynamicFormatting({ smallImage.messageResult,
                 smallImage.messageFormatCallback, smallImage.messageFormatType }),
+            self:GetOrDefault(smallImage.urlResult),
             self:ParseDynamicFormatting({ details.messageResult,
                 details.messageFormatCallback, details.messageFormatType }),
+            self:GetOrDefault(details.urlResult),
             self:ParseDynamicFormatting({ state.messageResult,
-                state.messageFormatCallback, state.messageFormatType })
+                state.messageFormatCallback, state.messageFormatType }),
+            self:GetOrDefault(state.urlResult)
         }
         -- Sync then reset time condition data
         tinsert(data, self:GetOrDefault(self.time_start))
         tinsert(data, self:GetOrDefault(self.time_end))
         self.time_start, self.time_end = "", ""
+
+        -- Sync extra data
+        local appName = self.presenceData["appName"]
+        local activityType = self.presenceData["activityType"]
+        local statusDisplayType = self.presenceData["statusDisplayType"]
+        tinsert(data, self:ParseDynamicFormatting({ appName.messageResult,
+                appName.messageFormatCallback, appName.messageFormatType }))
+        tinsert(data, self:GetOrDefault(activityType.messageResult))
+        tinsert(data, self:GetOrDefault(statusDisplayType.messageResult))
 
         -- Apply Combined Button Fields to data, if allowed
         for _, value in pairs(self.buttons) do
