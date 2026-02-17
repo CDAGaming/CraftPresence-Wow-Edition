@@ -153,8 +153,15 @@ end]]                ,
                     activeCallback = self.locale["DEFAULT_LABEL_AWAY"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
+    local apiStatus = false
+    if UnitIsAFK then
+        apiStatus = UnitIsAFK('player')
+        if not self:CanAccessValue(apiStatus) then
+            apiStatus = false
+        end
+    end
     return self:GetOrDefault(
-        (UnitIsAFK and (UnitIsAFK('player') or false)),
+        apiStatus,
         (self:GetUnitData('player').away) or false
     )
 end]]                ,
@@ -165,8 +172,15 @@ end]]                ,
                     activeCallback = self.locale["DEFAULT_LABEL_BUSY"], inactiveCallback = "",
                     activeType = "string", inactiveType = "string",
                     stateCallback = [[function (self)
+    local apiStatus = false
+    if UnitIsDND then
+        apiStatus = UnitIsDND('player')
+        if not self:CanAccessValue(apiStatus) then
+            apiStatus = false
+        end
+    end
     return self:GetOrDefault(
-        (UnitIsDND and (UnitIsDND('player') or false)),
+        apiStatus,
         (self:GetUnitData('player').busy) or false
     )
 end]]                ,
@@ -1067,6 +1081,7 @@ end]]                ,
                 ["CHAT_MSG_SYSTEM"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self, _, _, args)
+    if not self:CanAccessValue(args[1]) then return true end
     local splitMessage = self:Split(args[1], ':', false, true)
     local afkFormat = self:Split(MARKED_AFK_MESSAGE, ':', false, true)
     local isAfkStatus = args[1] == CLEARED_AFK or args[1] == MARKED_AFK or self:StartsWith(args[1], afkFormat[1])

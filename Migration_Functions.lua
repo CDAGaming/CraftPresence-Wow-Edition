@@ -370,6 +370,16 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 8.1
         end
 
+        if self:IsWithinValue(current, 8.1, 8.2, true, false) then
+            -- Schema Changes (v8.1 -> v8.2):
+            --   Reset the `labels.afk`, `labels.busy`, and `events.CHAT_MSG_SYSTEM` properties due to new API restrictions
+            --   This does not use the `can_modify` flag, due to this causing a taint error with the new "secret value" restrictions
+            self:SetProperty("labels", "afk", nil, nil, true)
+            self:SetProperty("labels", "busy", nil, nil, true)
+            self:SetProperty("events", "CHAT_MSG_SYSTEM", nil, nil, true)
+            current = 8.2
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end

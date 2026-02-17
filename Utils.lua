@@ -583,6 +583,22 @@ end)
 
 local timer_locked = false
 
+--- Retrieve whether we can access the specified value from the Game API
+--- (Used for secure values that may throw errors when accessed)
+--- 
+--- @param value any The value to check access for
+---
+--- @return boolean @ canAccess
+function CraftPresence:CanAccessValue(value)
+    if canaccessvalue then
+        return canaccessvalue(value)
+    end
+    if issecretvalue then
+        return not issecretvalue(value)
+    end
+    return true
+end
+
 --- Retrieve and/or Synchronize App Build Info
 ---
 --- @param key string If specified, attempt to retrieve and return build_info[key]
