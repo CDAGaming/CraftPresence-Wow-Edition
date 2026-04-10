@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 110207,
+                ["toc"] = 120001,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -50,13 +50,13 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 120000,
-                ["name"] = "PTR (Midnight)",
+                ["toc"] = 120005,
+                ["name"] = "PTR (Midnight 12.0.5)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 110207,
-                ["name"] = "PTR (TWW 11.2.7)",
+                ["toc"] = 120001,
+                ["name"] = "PTR (Midnight 12.0.1)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
@@ -176,7 +176,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["3.80.x"] = {
                 ["minimumTOC"] = 38000,
-                ["maximumTOC"] = 38000,
+                ["maximumTOC"] = 38001,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 50503,
                 ["name"] = "Wrath of the Lich King Titan"
