@@ -35,12 +35,12 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 120001,
+                ["toc"] = 120007,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
             ["classic"] = {
-                ["toc"] = 50503,
+                ["toc"] = 50504,
                 ["name"] = "Mists of Pandaria Classic",
                 ["product_id"] = "classic"
             },
@@ -55,12 +55,12 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 120001,
-                ["name"] = "PTR (Midnight 12.0.1)",
+                ["toc"] = 120007,
+                ["name"] = "PTR (Midnight 12.0.7)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
-                ["toc"] = 50503,
+                ["toc"] = 50504,
                 ["name"] = "PTR (MoP Classic)",
                 ["product_id"] = "classic_ptr"
             },
@@ -150,7 +150,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["5.5.x"] = {
                 ["minimumTOC"] = 50500,
-                ["maximumTOC"] = 50503,
+                ["maximumTOC"] = 50504,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 110107,
                 ["name"] = "Mists of Pandaria Classic"
