@@ -50,8 +50,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 120005,
-                ["name"] = "PTR (Midnight 12.0.5)",
+                ["toc"] = 120100,
+                ["name"] = "PTR (Midnight 12.1.0)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
@@ -65,12 +65,12 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_ptr"
             },
             ["classic_era_ptr"] = {
-                ["toc"] = 20505,
+                ["toc"] = 20506,
                 ["name"] = "PTR (Classic Era)",
                 ["product_id"] = "classic_era_ptr"
             },
             ["anniversary"] = {
-                ["toc"] = 20505,
+                ["toc"] = 20506,
                 ["name"] = "Burning Crusade Anniversary",
                 ["product_id"] = "anniversary"
             }
@@ -196,7 +196,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["2.5.5"] = {
                 ["minimumTOC"] = 20505,
-                ["maximumTOC"] = 20505,
+                ["maximumTOC"] = 20506,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 110207,
                 ["name"] = "Burning Crusade Classic 20th Anniversary"
@@ -224,7 +224,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
-                ["maximumTOC"] = 11508,
+                ["maximumTOC"] = 11509,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 30403,
                 ["name"] = "Classic Season of Discovery"
