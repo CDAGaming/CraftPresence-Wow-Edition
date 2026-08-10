@@ -151,6 +151,7 @@ def main(debug_mode=False):
 
     # RPC Data
     rpc_obj = None
+    connected_id = None
     last_decoded = [None] * event_length
     last_activity = {}
 
@@ -191,7 +192,7 @@ def main(debug_mode=False):
                 time.sleep(config["scan_rate"])
                 continue
 
-            has_id_changed = lines[0] != last_decoded[0]
+            has_id_changed = lines[0] != connected_id
 
             if has_id_changed or lines != last_decoded:
                 if not rpc_obj or has_id_changed:
@@ -217,6 +218,14 @@ def main(debug_mode=False):
                             break
                         else:
                             break
+
+                    # The connection attempt failed, so skip this cycle entirely rather than
+                    # falling through to an update on a connection that was never established.
+                    if not rpc_obj:
+                        connected_id = None
+                        continue
+
+                    connected_id = lines[0]
 
                 timer_data = {}
                 asset_data = {}
@@ -316,11 +325,13 @@ def main(debug_mode=False):
                         last_decoded = [None] * event_length
                         last_activity = {}
                         rpc_obj = None
+                        connected_id = None
         elif not is_process_running and rpc_obj:
             root_logger.info('Target process is no longer active, disconnecting...')
             rpc_obj.clear()
             rpc_obj.close()
             rpc_obj = None
+            connected_id = None
             # clear these so it gets re-read and resubmitted upon reconnection
             last_decoded = [None] * event_length
             last_activity = {}
