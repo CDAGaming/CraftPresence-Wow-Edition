@@ -380,6 +380,20 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             current = 8.2
         end
 
+        if self:IsWithinValue(current, 8.2, 8.3, true, false) then
+            -- Schema Changes (v8.2 -> v8.3):
+            --   Reset the `player_info` property, if `can_modify` is true, due to changes for non-rebased clients below 5.0.4
+            --   Ref: https://gitlab.com/CDAGaming/CraftPresence-Wow-Edition/-/merge_requests/8
+            if current ~= 8.3 then
+                if can_modify then
+                    self:SetProperty("placeholders", "player_info", nil, true)
+                elseif log_output then
+                    self:PrintMigrationMessage(current, 8.3)
+                end
+                current = 8.3
+            end
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end
