@@ -45,7 +45,7 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic"
             },
             ["classic_era"] = {
-                ["toc"] = 11508,
+                ["toc"] = 11509,
                 ["name"] = "World of Warcraft Classic",
                 ["product_id"] = "classic_era"
             },
@@ -176,7 +176,7 @@ function CraftPresence:GetCompatibilityInfo(key, value)
             },
             ["3.80.x"] = {
                 ["minimumTOC"] = 38000,
-                ["maximumTOC"] = 38001,
+                ["maximumTOC"] = 38002,
                 ["build_tag"] = "rebased",
                 ["baseTOC"] = 50503,
                 ["name"] = "Wrath of the Lich King Titan"
