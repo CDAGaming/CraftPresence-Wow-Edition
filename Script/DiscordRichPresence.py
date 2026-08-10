@@ -5,13 +5,15 @@ import os
 import sys
 
 
-def assert_compatibility(required_version=0):
+def assert_compatibility(required_version=(0, 0)):
     """
     Determine whether the current python version matches required_version, and if not throws an exception.
     """
-    if sys.version_info[0] < required_version:
-        raise Exception("Python " + str(required_version) + " or a more recent version is required."
-                                                            " (Using: " + str(sys.version_info[0]) + ")")
+    if sys.version_info < required_version:
+        raise Exception(
+            f"Python {required_version[0]}.{required_version[1]} or newer is required. "
+            f"(Using: {sys.version_info.major}.{sys.version_info.minor})"
+        )
 
 def assert_module_version(module_name: str, current: str, required: str):
     """
@@ -35,11 +37,11 @@ def assert_module_version(module_name: str, current: str, required: str):
         )
 
 
-assert_compatibility(3)
+assert_compatibility((3, 9))
 is_windows = sys.platform.startswith('win')
 is_linux = sys.platform.startswith('linux')
 is_macos = sys.platform.startswith('darwin')
-process_version = "v1.9.0"
+process_version = "v1.9.1"
 process_hwnd = None
 is_process_running = False
 current_path = os.path.dirname(os.path.realpath(__file__))
@@ -246,14 +248,14 @@ def main(debug_mode=False):
                         asset_data["small_url"] = sanitize_placeholder(lines[6], 256)
                 # Start Timer Data Setup
                 if "generated" in lines[11]:
-                    lines[11] = round(time.time())
+                    lines[11] = get_current_time()
                 elif "last" in lines[11]:
-                    lines[11] = last_decoded[11] or round(time.time())
+                    lines[11] = last_decoded[11] or get_current_time()
                 # End Timer Data Setup
                 if "generated" in lines[12]:
-                    lines[12] = round(time.time())
+                    lines[12] = get_current_time()
                 elif "last" in lines[12]:
-                    lines[12] = last_decoded[12] or round(time.time())
+                    lines[12] = last_decoded[12] or get_current_time()
                 # Timer Data Sync
                 if not null_or_empty(lines[11]):
                     timer_data["start"] = lines[11]
@@ -303,18 +305,18 @@ def main(debug_mode=False):
                             activity_type=get_activity_type(activity.get("activity_type") or "Playing"),
                             status_display_type=get_status_display_type(activity.get("status_display_type") or "Name"),
                             state=activity.get("state") or None,
-                            #state_url=activity.get("state_url") or None,
+                            state_url=activity.get("state_url") or None,
                             details=activity.get("details") or None,
-                            #details_url=activity.get("details_url") or None,
+                            details_url=activity.get("details_url") or None,
                             start=timer_data.get("start") or None,
                             end=timer_data.get("end") or None,
                             name=activity.get("name") or None,
                             large_image=asset_data.get("large_image") or None,
                             large_text=asset_data.get("large_text") or None,
-                            #large_url=asset_data.get("large_url") or None,
+                            large_url=asset_data.get("large_url") or None,
                             small_image=asset_data.get("small_image") or None,
                             small_text=asset_data.get("small_text") or None,
-                            #small_url=asset_data.get("small_url") or None,
+                            small_url=asset_data.get("small_url") or None,
                             buttons=activity.get("buttons") or None
                         )
                         last_activity = activity
@@ -370,6 +372,13 @@ def sanitize_placeholder(input: str, length: int, fallback="", encoding='utf-8')
             result = input
 
     return result
+
+
+def get_current_time():
+    """
+    Returns the current time in milliseconds.
+    """
+    return int(time.time_ns() / 1000000)
 
 
 def decode_read_data(read: list, encoding='utf-8'):
@@ -648,7 +657,7 @@ except ModuleNotFoundError as err:
 else:
     if __name__ == '__main__':
         # Assert Module Compatibility
-        assert_module_version('pypresence', pyp.__version__, '4.6.0')
+        assert_module_version('pypresence', pyp.__version__, '4.6.2')
         # Main Entrypoint Execution
         config = load_config()
         root_logger = setup_logging(config, config["debug"])
