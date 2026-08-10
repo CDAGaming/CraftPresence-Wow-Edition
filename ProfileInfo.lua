@@ -369,7 +369,7 @@ end]]                ,
                     processCallback = [[function (self)
     local regionTable = { "US", "KR", "EU", "TW", "CH" }
     local playerRegion = (_G["GetCurrentRegion"] and regionTable[GetCurrentRegion()]) or (_G["GetCurrentRegionName"] and GetCurrentRegionName()) or strupper(strsub(GetCVar("realmList"), 1, 2)) or "TR"
-    return playerRegion
+    return self:GetOrDefault(playerRegion, "TR")
 end]]                ,
                     processType = "function",
                     registerCallback = "",
@@ -739,7 +739,7 @@ end]]                ,
         playerRealm = GetRealmName()
     end
     local playerRegion = (_G["GetCurrentRegion"] and regionTable[GetCurrentRegion()]) or (_G["GetCurrentRegionName"] and GetCurrentRegionName()) or strupper(strsub(GetCVar("realmList"), 1, 2)) or "TR"
-    return (playerRegion .. ' - ' .. playerRealm)
+    return (self:GetOrDefault(playerRegion, "TR") .. ' - ' .. playerRealm)
 end]]                ,
                     processType = "function",
                     registerCallback = "",
