@@ -566,27 +566,95 @@ end]]                ,
     -- Specialization API Calls (Version-dependent)
     local GetSpecialization = C_SpecializationInfo and C_SpecializationInfo.GetSpecialization or GetSpecialization
     local GetSpecializationInfo = C_SpecializationInfo and C_SpecializationInfo.GetSpecializationInfo or GetSpecializationInfo
-    -- Specialization Info (5.0.4 and above)
-    if GetSpecialization and GetSpecializationInfo then
-        local specInfo, specId, specName, roleName = GetSpecialization()
-        --
-        -- Hotfix: Prevent a null-case with Spec Info
-        --
-        -- This only happens if events fire too quickly for into to populate,
-        -- or if you don't have a spec learned or available.
-        if specInfo ~= nil then
-            specId, specName = GetSpecializationInfo(specInfo)
-            if specId ~= nil then
-                roleName = self:FormatWord(GetSpecializationRoleByID(specId))
-            else
-                specName = self.locale["TYPE_NONE"]
+    local specName
+    --
+    -- Rebased clients expose the specialization API even where the game itself has no
+    -- specializations. In that case it reports the first talent tree no matter whether any
+    -- points have been spent, so the interface version decides which source can be trusted.
+    --
+    if self:GetBuildInfo("toc_version") >= self:VersionToBuild("5.0.4") then
+        -- Specialization Info (5.0.4 and above)
+        if GetSpecialization and GetSpecializationInfo then
+            local specInfo = GetSpecialization()
+            --
+            -- Hotfix: Prevent a null-case with Spec Info
+            --
+            -- This only happens if events fire too quickly for into to populate,
+            -- or if you don't have a spec learned or available.
+            if specInfo ~= nil then
+                local specId
+                specId, specName = GetSpecializationInfo(specInfo)
+                if specId == nil then
+                    specName = self.locale["TYPE_NONE"]
+                end
             end
         end
+    elseif GetNumTalentTabs and GetTalentTabInfo then
+        -- Talent Info (Below 5.0.4)
         --
-        -- Trim and Adjust User Data
-        if not self:IsNullOrEmpty(specName) then
-            userInfo = (userInfo .. ' ' .. specName)
+        -- These clients have no specializations, only talent trees that points can be spread
+        -- freely across, so the build is named after wherever those points actually went.
+        -- Nothing is named until a point has been spent, as no build exists before then.
+        --
+        -- Rebased clients return (id, name, description, icon, pointsSpent, ...) here, while the
+        -- original clients return (name, icon, pointsSpent, ...), so the layout is detected.
+        -- The leading id is only present on the rebased layout, and a tree name is never numeric
+        local function GetTalentTreeData(index)
+            local first, second, third, _, fifth = GetTalentTabInfo(index)
+            if type(first) == "number" and type(second) == "string" then
+                return second, fifth
+            end
+            return first, third
         end
+
+        local trees, totalPoints = {}, 0
+        for i = 1, (GetNumTalentTabs() or 0) do
+            local treeName, pointsSpent = GetTalentTreeData(i)
+            pointsSpent = pointsSpent or 0
+            if not self:IsNullOrEmpty(treeName) and pointsSpent > 0 then
+                table.insert(trees, { name = treeName, points = pointsSpent, index = i })
+                totalPoints = (totalPoints + pointsSpent)
+            end
+        end
+
+        -- Order by points spent, so the primary tree always leads. Ties fall back to tab order,
+        -- to keep an even split from reordering itself between dispatches.
+        table.sort(trees, function(left, right)
+            if left.points == right.points then
+                return left.index < right.index
+            end
+            return left.points > right.points
+        end)
+
+        -- These cutoffs come from how builds of this era are actually named. A second tree only
+        -- earns a mention past 35% of the spent points: the many real 41/20 builds (Beast Mastery,
+        -- Discipline, Elemental and so on) all sit at 32.8% and are named after their deep tree
+        -- alone, while Arms/Fury (45.9%) and Disc/Holy (37.7%) are named after both.
+        --
+        -- An even spread across every tree is not meaningfully any one of them, which needs the
+        -- lower cutoff of its own, as three trees can never each hold 35% of the same pool.
+        local secondaryCutoff, evenCutoff = 0.35, 0.25
+
+        local namedTrees, isEvenSpread = {}, (#trees >= 3)
+        for _, tree in ipairs(trees) do
+            if tree.points < (totalPoints * evenCutoff) then
+                isEvenSpread = false
+            end
+            if tree.points >= (totalPoints * secondaryCutoff) then
+                table.insert(namedTrees, tree.name)
+            end
+        end
+
+        if isEvenSpread then
+            specName = self.locale["TYPE_HYBRID"]
+        else
+            specName = table.concat(namedTrees, '/')
+        end
+    end
+    --
+    -- Trim and Adjust User Data
+    if not self:IsNullOrEmpty(specName) then
+        userInfo = (userInfo .. ' ' .. specName)
     end
     -- Final Parsing
     if not self:IsNullOrEmpty(unitClass) then

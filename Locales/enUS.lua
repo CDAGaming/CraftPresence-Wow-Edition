@@ -30,6 +30,7 @@ if not L then return end
 -- Type Identifier Data
 L["TYPE_UNKNOWN"] = "Unknown"
 L["TYPE_NONE"] = "None"
+L["TYPE_HYBRID"] = "Hybrid"
 L["TYPE_ADDED"] = "Added"
 L["TYPE_MODIFY"] = "Modified"
 L["STATUS_TRUE"] = "active"
