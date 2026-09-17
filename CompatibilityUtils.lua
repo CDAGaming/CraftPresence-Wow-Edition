@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 120007,
+                ["toc"] = 120100,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -55,8 +55,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
-                ["toc"] = 120007,
-                ["name"] = "PTR (Midnight 12.0.7)",
+                ["toc"] = 120105,
+                ["name"] = "PTR (Midnight 12.1.5)",
                 ["product_id"] = "xptr"
             },
             ["classic_ptr"] = {
@@ -221,6 +221,13 @@ function CraftPresence:GetCompatibilityInfo(key, value)
                         ["enabled"] = true
                     }
                 }
+            },
+            ["1.60.x"] = {
+                ["minimumTOC"] = 16000,
+                ["maximumTOC"] = 17000,
+                ["build_tag"] = "rebased",
+                ["baseTOC"] = 120105,
+                ["name"] = "Classic Forever"
             },
             ["1.15.x"] = {
                 ["minimumTOC"] = 11500,
