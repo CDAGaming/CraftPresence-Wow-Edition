@@ -397,6 +397,21 @@ function CraftPresence:EnsureCompatibility(current, target, force, can_modify, l
             end
         end
 
+        if self:IsWithinValue(current, 8.3, 8.4, true, false) then
+            -- Schema Changes (v8.3 -> v8.4):
+            --   Reset the `realm_info` and `player_realm` properties, if `can_modify` is true, due to changes for retrieving the realm name in WoW Forever clients
+            --   Ref: https://github.com/WoWUIDev/Ace3/commit/1e98fc00874779334d7a3f0cb399c7ae9a15fead
+            if current ~= 8.4 then
+                if can_modify then
+                    self:SetProperty("placeholders", "player_realm", nil, true)
+                    self:SetProperty("placeholders", "realm_info", nil, true)
+                elseif log_output then
+                    self:PrintMigrationMessage(current, 8.4)
+                end
+                current = 8.4
+            end
+        end
+
         self:SetProperty("schema", nil, min(current, target))
         self:UpdateProfile(true, false, "all")
     end

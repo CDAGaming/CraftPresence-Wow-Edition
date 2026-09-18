@@ -427,6 +427,16 @@ function CraftPresence:IsMistsRebased()
     ) and not self:IsSpecialVersion()
 end
 
+--- Determine if this build identifies as WoW Forever
+--- @return boolean @ is_wow_forever
+function CraftPresence:IsWowForever()
+    return self:IsWithinValue(
+        self:GetBuildInfo("toc_version"),
+        self:FindCompatibilityTOC("1.6.x"), self:FindCompatibilityTOC("1.7.x"),
+        true, false
+    ) and not self:IsSpecialVersion()
+end
+
 --- Determine if this build identifies as the Retail Live Build of the Game
 --- @return boolean @ is_retail_live_build
 function CraftPresence:IsRetailLiveBuild()

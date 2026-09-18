@@ -352,7 +352,17 @@ end]]                ,
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
     local playerRealm = self.locale['TYPE_UNKNOWN']
-    if GetRealmName then
+    if self:IsWowForever() then
+        if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
+			playerRealm = "Hardcore"
+		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+			playerRealm = "RP"
+		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+			playerRealm = "PvP"
+		else
+			playerRealm = "PvE"
+		end
+    elseif GetRealmName then
         playerRealm = GetRealmName()
     end
     return playerRealm
@@ -735,7 +745,17 @@ end]]                ,
     -- Get Player Info
     local regionTable = { "US", "KR", "EU", "TW", "CH" }
     local playerRealm = self.locale['TYPE_UNKNOWN']
-    if GetRealmName then
+    if self:IsWowForever() then
+        if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
+			playerRealm = "Hardcore"
+		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+			playerRealm = "RP"
+		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+			playerRealm = "PvP"
+		else
+			playerRealm = "PvE"
+		end
+    elseif GetRealmName then
         playerRealm = GetRealmName()
     end
     local playerRegion = (_G["GetCurrentRegion"] and regionTable[GetCurrentRegion()]) or (_G["GetCurrentRegionName"] and GetCurrentRegionName()) or strupper(strsub(GetCVar("realmList"), 1, 2)) or "TR"
