@@ -432,7 +432,7 @@ end
 function CraftPresence:IsWowForever()
     return self:IsWithinValue(
         self:GetBuildInfo("toc_version"),
-        self:FindCompatibilityTOC("1.6.x"), self:FindCompatibilityTOC("1.7.x"),
+        self:FindCompatibilityTOC("1.60.x"), self:FindCompatibilityTOC("2.x"),
         true, false
     ) and not self:IsSpecialVersion()
 end

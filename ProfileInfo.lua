@@ -354,14 +354,14 @@ end]]                ,
     local playerRealm = self.locale['TYPE_UNKNOWN']
     if self:IsWowForever() then
         if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
-			playerRealm = "Hardcore"
-		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
-			playerRealm = "RP"
-		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
-			playerRealm = "PvP"
-		else
-			playerRealm = "PvE"
-		end
+            playerRealm = "Hardcore"
+        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+            playerRealm = "RP"
+        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+            playerRealm = "PvP"
+        else
+            playerRealm = "PvE"
+        end
     elseif GetRealmName then
         playerRealm = GetRealmName()
     end
@@ -747,14 +747,14 @@ end]]                ,
     local playerRealm = self.locale['TYPE_UNKNOWN']
     if self:IsWowForever() then
         if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
-			playerRealm = "Hardcore"
-		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
-			playerRealm = "RP"
-		elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
-			playerRealm = "PvP"
-		else
-			playerRealm = "PvE"
-		end
+            playerRealm = "Hardcore"
+        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+            playerRealm = "RP"
+        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+            playerRealm = "PvP"
+        else
+            playerRealm = "PvE"
+        end
     elseif GetRealmName then
         playerRealm = GetRealmName()
     end
