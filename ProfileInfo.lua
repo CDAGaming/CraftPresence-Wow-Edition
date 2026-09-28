@@ -315,7 +315,16 @@ end]]                ,
                 ["player_name"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
-    return UnitName('player')
+    local UnitNameUnmodified = UnitNameUnmodified or UnitName
+    if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
+        local name, surname = UnitNameUnmodified('player')
+        if not self:IsNullOrEmpty(surname) then
+            return name .. ' ' .. surname
+        else
+            return name
+        end
+    end
+    return UnitNameUnmodified('player')
 end]]                ,
                     processType = "function",
                     registerCallback = "",
@@ -352,7 +361,7 @@ end]]                ,
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
     local playerRealm = self.locale['TYPE_UNKNOWN']
-    if self:IsWowForever() then
+    if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
         if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
             playerRealm = "Hardcore"
         elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
@@ -566,8 +575,20 @@ end]]                ,
                 ["player_info"] = {
                     minimumTOC = "", maximumTOC = "", allowRebasedApi = true,
                     processCallback = [[function (self)
+    -- Player Name
+    local playerName
+    local UnitNameUnmodified = UnitNameUnmodified or UnitName
+    if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
+        local name, surname = UnitNameUnmodified('player')
+        if not self:IsNullOrEmpty(surname) then
+            playerName = name .. ' ' .. surname
+        else
+            playerName = name
+        end
+    else
+        playerName = UnitNameUnmodified('player')
+    end
     -- Player Data
-    local playerName = UnitName('player')
     local playerData = self:GetUnitStatus('player')
     -- Extra Player Data
     local unitLevel = UnitLevel('player')
