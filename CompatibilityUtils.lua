@@ -35,7 +35,7 @@ function CraftPresence:GetFlavorInfo(key, value)
     if not self.cache.flavors then
         self.cache.flavors = {
             ["retail"] = {
-                ["toc"] = 120100,
+                ["toc"] = 120105,
                 ["name"] = "World of Warcraft",
                 ["product_id"] = "retail"
             },
@@ -50,8 +50,8 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["product_id"] = "classic_era"
             },
             ["ptr"] = {
-                ["toc"] = 120100,
-                ["name"] = "PTR (Midnight 12.1.0)",
+                ["toc"] = 120107,
+                ["name"] = "PTR (Midnight 12.1.7)",
                 ["product_id"] = "ptr"
             },
             ["xptr"] = {
@@ -73,6 +73,11 @@ function CraftPresence:GetFlavorInfo(key, value)
                 ["toc"] = 20506,
                 ["name"] = "Burning Crusade Anniversary",
                 ["product_id"] = "anniversary"
+            },
+            ["forever"] = {
+                ["toc"] = 16001,
+                ["name"] = "WoW: Forever",
+                ["product_id"] = "forever"
             }
         }
     end

@@ -40,6 +40,7 @@ CraftPresence will detect and adjust its abilities towards the following version
 | WOTLK (3.0.x - 3.3.x)             | OK     | Any      | v0.5.4 or above |
 | TBC Classic (2.5.x)               | OK     | Any      | N/A             |
 | TBC (2.0.x - 2.4.x)               | OK     | Any      | v0.5.4 or above |
+| WoW: Forever (1.60.x)             | OK     | Any      | N/A             |
 | Vanilla Classic (1.13.x - 1.15.x) | OK     | Any      | N/A             |
 | Vanilla (1.12.x and below)        | OK     | Any      | v0.7.8 or above |
 
