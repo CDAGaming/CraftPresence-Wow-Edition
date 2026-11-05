@@ -318,11 +318,7 @@ end]]                ,
     local UnitNameUnmodified = UnitNameUnmodified or UnitName
     if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
         local name, surname = UnitNameUnmodified('player')
-        if not self:IsNullOrEmpty(surname) then
-            return name .. ' ' .. surname
-        else
-            return name
-        end
+        return name .. ' ' .. surname
     end
     return UnitNameUnmodified('player')
 end]]                ,
@@ -362,11 +358,15 @@ end]]                ,
                     processCallback = [[function (self)
     local playerRealm = self.locale['TYPE_UNKNOWN']
     if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
+        local isRP = C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset)
+        local isPVP = C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset)
         if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
             playerRealm = "Hardcore"
-        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+        elseif isRP and isPVP then
+            playerRealm = "RP-PvP"
+        elseif isRP then
             playerRealm = "RP"
-        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+        elseif isPVP then
             playerRealm = "PvP"
         else
             playerRealm = "PvE"
@@ -580,11 +580,7 @@ end]]                ,
     local UnitNameUnmodified = UnitNameUnmodified or UnitName
     if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
         local name, surname = UnitNameUnmodified('player')
-        if not self:IsNullOrEmpty(surname) then
-            playerName = name .. ' ' .. surname
-        else
-            playerName = name
-        end
+        playerName = name .. ' ' .. surname
     else
         playerName = UnitNameUnmodified('player')
     end
@@ -766,12 +762,16 @@ end]]                ,
     -- Get Player Info
     local regionTable = { "US", "KR", "EU", "TW", "CH" }
     local playerRealm = self.locale['TYPE_UNKNOWN']
-    if self:IsWowForever() then
+    if RegionalUniqueNamesEnabled and RegionalUniqueNamesEnabled() then
+        local isRP = C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset)
+        local isPVP = C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset)
         if C_GameRules.IsGameRuleActive(Enum.GameRule.HardcoreRuleset) then
             playerRealm = "Hardcore"
-        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.RPRuleset) then
+        elseif isRP and isPVP then
+            playerRealm = "RP-PvP"
+        elseif isRP then
             playerRealm = "RP"
-        elseif C_GameRules.IsGameRuleActive(Enum.GameRule.PvPRuleset) then
+        elseif isPVP then
             playerRealm = "PvP"
         else
             playerRealm = "PvE"
